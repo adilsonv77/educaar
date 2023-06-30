@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Getting Started</title>
+  </head>
+  <body>
+    <input type="button" value="RUN!" class="button_compiler"/>
+    <input type="button" value="RUN2!" class="button_compiler"/>
+    <input type="button" value="RUN3!" class="button_compiler"/>
+
+    <input type="button" value="RUN4!" id="content_4" class="button_compiler"/>
+
+    
+    <script>
+  let buttons = document.getElementsByClassName('button_compiler');
+
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function(evt) {
+        console.log("No HTML > "+evt.target.id);
+        
+        var contentid =document.getElementById("content_id");
+        if (contentid != null)
+          document.body.removeChild(contentid);
+        
+        contentid = document.createElement("span");
+        contentid.id = "content_id";
+        contentid.innerText = "100";
+        contentid.style.display = "none";
+
+        document.body.appendChild(contentid);
+        
+        var ul = document.getElementById("imagens_compilar");
+        if (ul != null)
+          document.body.removeChild(ul);
+       
+        ul = document.createElement("span");
+        ul.id = "imagens_compilar";
+        ul.style.display = "none";
+
+        for (let j = 0; j < 2; j++) {
+          var li = document.createElement("li");
+          li.innerText = "http://localhost:8000/marcadores/1680721738.jpeg";
+          ul.appendChild(li);
+        }
+
+        document.body.appendChild(ul);
+
+        // nao executa
+        /*
+        var b = document.getElementById(evt.target.id);
+        b.addEventListener('click', function(evt) {
+          var a  = document.getElementById("mind_compilado");
+          a.download = "mind"+evt.target.id;
+          a.click();
+          window.URL.revokeObjectURL(a.href);
+        });
+        */
+      });
+    }
+    </script>
+    <script src="./js/compilarimagens.js" type="module">
+      
+    </script>
+
+ 
+
+
+  </body>
+</html>

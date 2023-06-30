@@ -1,0 +1,12 @@
+
+.form-inline .form-control {
+    width: 80%;
+}
+
+.form-inline {
+    justify-content: space-between;
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+}

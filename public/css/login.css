@@ -1,0 +1,79 @@
+ .h-100{
+    /* background-color: cyan; */
+    
+
+}
+
+
+.card{
+    display:flex;
+    box-shadow: 5px 5px 5px darkgrey;
+
+}
+
+
+
+.btn-primary{
+
+    width: 50% ;
+}
+
+
+
+
+
+
+
+
+
+.item-row{
+   display:flex;
+   
+   justify-content:flex;
+   align-content: space-between;
+   width: 100%;
+   
+   
+   
+}
+
+
+
+@media screen and (max-width: 600px) {}
+
+
+@media screen and (min-width: 768px) and (max-width: 992px) {
+.content-body {
+
+
+padding-right: 20%;
+}
+
+
+}
+
+
+@media screen and (min-width: 992px) {
+.content-body {
+text-align: center;
+
+padding-right: 30%;
+padding-left: 12%;
+}
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

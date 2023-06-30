@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\School;
+use App\Models\AnoLetivo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class ConfigController extends Controller
+{
+
+    public function index(Request $request)
+    {
+         
+        if(Auth::user()->type != 'admin') {
+            return redirect('/');
+        }
+
+        $school = School::find(Auth::user()->school_id);
+        $anosletivos = AnoLetivo::where('school_id', $school->id)->get();
+
+        $beforeId = 0;
+        foreach ($anosletivos as $anoletivo) {
+            if ($anoletivo->bool_atual == TRUE) {
+                $beforeId = $anoletivo->id;
+                break;
+            }
+        }
+
+        $params = [
+            'schoolName' => $school->name,
+            'beforeId' => $beforeId,
+            'anosletivos' => $anosletivos
+
+        ];
+
+        return view('pages.config.edit', $params);
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->all();
+
+       if ($data['beforeId'] <> $data['anoLetivoAtual'])
+        {
+            $anoletivo = AnoLetivo::find($data['beforeId']);
+            $anoletivo->bool_atual = 0;
+            $anoletivo->update();
+    
+            $anoletivo = AnoLetivo::find($data['anoLetivoAtual']);
+            $anoletivo->bool_atual = 1;
+            $anoletivo->update();
+        }
+
+        $school = School::find(Auth::user()->school_id);
+        $school->name = $data['schoolName'];
+        $school->update();
+
+        return redirect('/');
+
+    }
+
+}
+?>

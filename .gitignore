@@ -1,0 +1,22 @@
+/node_modules
+/backup
+/public/hot
+/public/storage
+/public/uploads
+/public/markers
+/public/patterns
+/public/marcadores/*.*
+/public/modelos3d/*.*
+/public/mind/*.*
+/storage/*.key
+# .env
+# .env.backup
+.phpunit.result.cache
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+composer.lock
+package-lock.json
+public/info.php
+database/modelos/modelo01.mwb.bak

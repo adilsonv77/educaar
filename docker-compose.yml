@@ -1,0 +1,67 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: educaar
+    container_name: educaar-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - educaar
+
+  db:
+    image: mysql:8.0
+    container_name: educaar-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_TCP_PORT: ${DB_PORT}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3307:3307"
+    networks:
+      - educaar
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: ${DB_HOST}
+      PMA_PORT: ${DB_PORT}
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - "3308:80"
+    networks:
+      - educaar
+
+
+  nginx:
+    image: nginx:alpine
+    container_name: educaar-nginx
+    restart: unless-stopped
+    ports:
+      - 9000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - educaar
+
+networks:
+  educaar:
+    driver: bridge
