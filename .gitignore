@@ -5,9 +5,6 @@
 /public/uploads
 /public/markers
 /public/patterns
-/public/marcadores/*.*
-/public/modelos3d/*.*
-/public/mind/*.*
 /storage/*.key
 # .env
 # .env.backup
