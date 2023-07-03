@@ -9,10 +9,13 @@ services:
       dockerfile: Dockerfile
     image: educaar
     container_name: educaar-app
+    depends_on:
+      - nginx
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./:/var/www
+      - ./docker-compose/php/php.ini:/usr/local/etc/php/php.ini
     networks:
       - educaar
 
