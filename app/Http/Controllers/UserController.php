@@ -208,7 +208,7 @@ class UserController extends Controller
 
 
 
-        return view('pages.Turma.matricula', compact('titulo', 'turmas', 'turma_id'));
+        return view('pages.turma.matricula', compact('titulo', 'turmas', 'turma_id'));
     }
 
 
