@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\URL;
 
 use App\Models\User;
 use App\Models\Disciplina;
@@ -29,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (env('FORCE_HTTPS',false)) {
+        if (env('FORCE_HTTPS', false)) {
             URL::forceScheme('https');
         }
 
@@ -45,14 +46,14 @@ class AppServiceProvider extends ServiceProvider
             $inputs = $validator->getData();
             $username = $inputs['username'];
             $userid = $inputs['id'];
- 
+
             $users = User::all();
             foreach ($users as $user) {
                 if ($username == $user->username && $user->id != $userid) {
                     return false;
                 }
             }
-    
+
             return true;
         }, 'Login já existe. Por favor, digite novamente.');
 
@@ -60,14 +61,14 @@ class AppServiceProvider extends ServiceProvider
             $inputs = $validator->getData();
             $username = $inputs['email'];
             $userid = $inputs['id'];
- 
+
             $users = User::all();
             foreach ($users as $user) {
                 if ($username == $user->email && $user->id != $userid) {
                     return false;
                 }
             }
-    
+
             return true;
         }, 'E-mail já existe. Por favor, digite novamente.');
 
@@ -75,14 +76,14 @@ class AppServiceProvider extends ServiceProvider
             $inputs = $validator->getData();
             $name = $inputs['name'];
             $id = $inputs['id'];
- 
+
             $disciplinas = Disciplina::where('school_id', Auth::user()->school_id)->get();
             foreach ($disciplinas as $disciplina) {
                 if ($name == $disciplina->name && $disciplina->id != $id) {
                     return false;
                 }
             }
-    
+
             return true;
         }, 'Disciplina já existe. Por favor, digite novamente.');
 
@@ -90,26 +91,27 @@ class AppServiceProvider extends ServiceProvider
             $inputs = $validator->getData();
             $name = $inputs['name'];
             $id = $inputs['id'];
- 
+
             $anosletivos = AnoLetivo::where('school_id', Auth::user()->school_id)->get();
             foreach ($anosletivos as $anoletivo) {
                 if ($name == $anoletivo->name && $anoletivo->id != $id) {
                     return false;
                 }
             }
-    
+
             return true;
         }, 'Ano Letivo já existe. Por favor, digite novamente.');
 
-        
-       Validator::extend('extensao_invalida', function ($attribute, $value, $parameters, $validator) {
-           // dd($attribute, $value, $parameters);
+
+        Validator::extend('extensao_invalida', function ($attribute, $value, $parameters, $validator) {
+            // dd($attribute, $value, $parameters);
 
             $extensao = \Illuminate\Support\Str::afterLast($value->getClientOriginalName(), '.');
 
-            $extensao= strtolower($extensao);
-            $validator->addReplacer('extensao_invalida', 
-                function($message, $attribute, $rule, $parameters) use ($extensao) {
+            $extensao = strtolower($extensao);
+            $validator->addReplacer(
+                'extensao_invalida',
+                function ($message, $attribute, $rule, $parameters) use ($extensao) {
                     return \str_replace(':custom_message', $extensao, $message);
                 }
             );
@@ -119,9 +121,7 @@ class AppServiceProvider extends ServiceProvider
             }
             return false;
         }, 'Extensão inválida  (:custom_message). Selecione outro arquivo.');
-        
-   
-     }
+    }
 }
 
 
