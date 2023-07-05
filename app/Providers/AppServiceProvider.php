@@ -29,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (app()->environment('remote')) {
+            URL::forceScheme('https');
+        }
+
         Validator::extend('senhas_nao_conferem', function ($attribute, $value, $parameters, $validator) {
             $inputs = $validator->getData();
             $senha = $inputs['password'];
