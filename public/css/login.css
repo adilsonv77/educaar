@@ -1,8 +1,8 @@
  .h-100{
-    /* background-color: cyan; */
+     
     
-
 }
+
 
 
 .card{
@@ -12,34 +12,58 @@
 }
 
 
+.card-body{
+    padding-left: 30%;
+    box-shadow: 5px 5px 5px darkgrey;
+    
 
-.btn-primary{
-
-    width: 50% ;
 }
 
 
 
-
-
-
-
-
-
-.item-row{
+.item-row.login{
    display:flex;
    
-   justify-content:flex;
-   align-content: space-between;
-   width: 100%;
+   width: 90%;
+
+   margin-left: 20%;
    
    
    
 }
 
+.item-row.password{
+    display:flex;
+ 
+    width: 90%;
+ 
+    margin-left: 20%;
+    
+    
+    
+    
+    
+ }
+
+.btn.btn-primary{
+
+    width: 150px;
+    
+
+}
 
 
-@media screen and (max-width: 600px) {}
+
+@media screen and (max-width: 600px) {
+
+
+    .btn.btn-primary{
+
+        width: 150px;
+        margin-left: 100px;
+    
+    }
+}
 
 
 @media screen and (min-width: 768px) and (max-width: 992px) {

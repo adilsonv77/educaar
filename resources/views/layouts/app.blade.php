@@ -36,7 +36,7 @@
         @auth
             <div class="nav-header">
                 <a href="/" class="brand-logo">
-
+                    {{-- <i class="fa-brands fa-unity"></i> --}}
                 </a>
 
                 <div class="nav-control">
@@ -238,6 +238,19 @@
         </div>
 
     @endauth
+
+    {{-- @section('style')
+        <style>
+            .brand-logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+    @endsection --}}
+
+
+
 
     <div class="content-body">
 

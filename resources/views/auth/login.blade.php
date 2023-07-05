@@ -23,27 +23,27 @@
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
 
-                    {{-- <div class="form-group row"> --}}
-                    {{-- <div class="item-row edinaldo"> --}}
-                    <div class="col-9">
-                        <label for="login" class="input-icon">
-                            <i class="fa-solid fa-user"></i>
-                            <input id="login" type="text"
-                                class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
-                                name="login" value="{{ old('username') ?: old('email') }}" required autofocus
-                                placeholder="Login">
-                        </label>
-                        @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                    <div class="form-group row">
+                        <div class="item-row login">
+                            <div class="col-9">
+
+
+                                <input id="login" type="text"
+                                    class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
+                                    name="login" value="{{ old('username') ?: old('email') }}" required autofocus
+                                    placeholder="Login">
+                                </label>
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
-                    {{-- </div> --}}
-                    {{-- </div> --}}
 
                     <div class="form-group row">
-                        <div class="item-row pereira">
+                        <div class="item-row password">
 
                             <div class="col-9">
 
@@ -74,9 +74,6 @@
         {{-- </div> --}}
         {{-- </div> --}}
     </div>
-
-
-
 @endsection
 
 
