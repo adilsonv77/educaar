@@ -1,6 +1,7 @@
 
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const THREE = window.MINDAR.IMAGE.THREE;
 var buttonAR = null;
@@ -31,7 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
  
       const {renderer, scene, camera} = mindarThree;
-  
+      const controls = new OrbitControls( camera, renderer.domElement );
+
       const light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
       scene.add(light);
       
@@ -75,9 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
   
       }
 
- 
+      controls.update();
       await mindarThree.start();
       renderer.setAnimationLoop(() => {
+        controls.update();
         renderer.render(scene, camera);
       });
     }
