@@ -28,6 +28,8 @@ class CreateStudentGradesTable extends Migration
             $table->integer('correctQuestions')->nullable();
             $table->integer('wrongQuestions')->nullable();
 
+            $table->integer('numberQuestions')->nullable();
+
             $table->timestamps();
         });
     }

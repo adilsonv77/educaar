@@ -22,7 +22,12 @@ class CreateStudentAnswersTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
 
+            $table->unsignedBigInteger('activity_id')->nullable();
+            $table->foreign('activity_id')->references('id')->on('activities');
+
             $table->string('alternative_answered', 100)->nullable();
+
+            $table->boolean('correct')->nullable();
 
             $table->timestamps();
         });

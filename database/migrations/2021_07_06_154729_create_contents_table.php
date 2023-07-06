@@ -24,6 +24,7 @@ class CreateContentsTable extends Migration
             $table->foreign('disciplina_id')->references('disciplina_id')->on('disciplinas_turmas_modelos');
             $table->unsignedBigInteger('turma_id');
             $table->foreign('turma_id')->references('turma_modelo_id')->on('disciplinas_turmas_modelos');
+            $table->boolean('fechado');
             $table->timestamps();
         });
     }

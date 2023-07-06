@@ -73,7 +73,6 @@ Route::middleware(['auth'])->group(function () {
     //fechar
     Route::resource('fechar', App\Http\Controllers\FecharController::class);
     Route::get('/fecharstore', [App\Http\Controllers\FecharController::class, 'store'])->name('fecharconteudo.store');
-
 });
 
 //webservice para receber o arquivo mind
@@ -92,9 +91,7 @@ Route::get('/alunoteste', function () {
     if (DB::table('schools')->count() == 0) {
         DB::table('schools')->insert([
             [
-                'name' => 'Escola X',
-                'qr_letra' => 'A',
-                'qr_numero' => 1
+                'name' => 'Escola X'
             ]
         ]);
     }
