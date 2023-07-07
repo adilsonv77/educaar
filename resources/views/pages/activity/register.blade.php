@@ -45,7 +45,9 @@
             document.getElementById("marcador").disabled = !alt.checked;
             document.getElementById("glb").disabled = !alt.checked;
 
-
+            document.getElementById("marcador").required = alt.checked;
+            document.getElementById("glb").required = alt.checked;
+            
          }
 
     </script>
@@ -98,13 +100,13 @@
                         <label for="">Modelo 3D (GLB ou GLTF->ZIP)*</label>
                         <span class="alert-danger">Tamanho máximo: 40MB</span>
                         <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="glb"
-                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit') disabled @endif/>
+                            id="glb" accept=".glb, .zip" onchange="upload_check()"/>
                 </div>
 
                 <div class="form-group">
                         <label for="">Marcador (PNG ou JPEG ou JPG)*</label>
                         <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="marcador"
-                            id="marcador" accept=".png, .jpeg, .jpg" @if($acao === 'edit') disabled @endif>
+                            id="marcador" accept=".png, .jpeg, .jpg">
                 </div>
 
                 <div class="form-group mt-4">
@@ -115,5 +117,11 @@
             </form>
         </div>
     </div>
+    <script>
+         @if($acao === 'edit') 
+            document.getElementById("glb").disabled = true;
+            document.getElementById("marcador").disabled = true;
+        @endif
+    </script>
 @endsection
  
