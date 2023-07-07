@@ -12,6 +12,7 @@ class StudentAnswer extends Model
     protected $fillable = [
         'question_id',
         'user_id',
+        'activity_id',
         'alternative_answered',
         'correct'
     ];

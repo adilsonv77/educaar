@@ -77,25 +77,34 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-        $datasess = session()->get('questoes');
+        $questions = session()->get('questoes');
 
         $datareq = $request->all();
-
-        $s  = "";
-        foreach ($datasess as $questao) {
-
+        // dd($datareq);
+        // $s  = "";
+        foreach ($questions as $questao) {
+            $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
             $respop = $datareq["questao" . $questao->id];
-
-
+            $data['question_id'] = $questao->id;
+            $data['user_id'] =  Auth::user()->id;
+            $data['activity_id'] =  $questao->activity_id;
             $opcao = $questao->options[$respop];
-            $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
+
+            $data['alternative_answered'] =  $opcao;
+            // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
+
+            if ($opcao == $questao->a) {
+                $data['correct'] = true;
+            } else {
+                $data['correct'] = false;
+            }
+            // dd($data);
             // gravar no banco uma linha da resposta
-            StudentAnswer::create(['question_id' => $questao->id, 'user_id' => Auth::user()->id, 'alternative_answered' => $opcao, 'correct' => $questao->a]);
+            StudentAnswer::create($data);
 
 
             // $opcao == $questao->a
         }
-        dd($s);
 
 
         //dd($opcao == $datasess[0]->a);
@@ -118,6 +127,9 @@ class StudentController extends Controller
 
     public function questoes(Request $request)
     {
+
+        // buscar da tabela student_answers uma questao respondida da activity_id, question_id, user_id
+
         $activity_id = $request->id;
         $questions = DB::table('questions')
             ->where("activity_id", $activity_id)
@@ -131,10 +143,16 @@ class StudentController extends Controller
         }
         session()->put('questoes', $questions);
 
+        $respondida = DB::table('student_answers')
+            ->where([
+                ['activity_id', '=', $activity_id],
+                ['question_id', '=', $questions->first()->id],
+                ['user_id', '=', Auth::user()->id]
+            ])->exists();
 
-        // dd($questions);
+        // dd($respondida);
 
-        return view('student.atividadeAr', compact('questions'));
+        return view('student.atividadeAr', compact('questions', 'respondida'));
     }
 
     public function alternatives(Request $request)

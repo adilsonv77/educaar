@@ -32,7 +32,8 @@
                 </div>
         @endforeach
         <div class="form-group mt-4 d-flex justify-content-center mb-4">
-            <input type="submit" value="Salvar" class="btn btn-success" id="btn_save">
+            <input type="submit" value="Salvar"@if ($respondida) disabled @endif class="btn btn-success"
+                id="btn_save">
         </div>
     </form>
 @section('style')
@@ -50,4 +51,5 @@
         }
     </style>
 @endsection
+
 @endsection
