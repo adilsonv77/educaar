@@ -52,4 +52,11 @@
     </style>
 @endsection
 
+@section('script')
+    <script>
+        history.forward();
+    </script>
+
+@endsection
+
 @endsection

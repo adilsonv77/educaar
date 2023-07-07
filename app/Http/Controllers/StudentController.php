@@ -116,9 +116,7 @@ class StudentController extends Controller
         // $id = session()->get('activity_id');
         // # dd($activity);
         // #return view('pages.questions.index', $id);
-        // return redirect(route('questions.index', 'activity=' . $id));
-
-
+        return redirect('/students/activity');
     }
 
 
