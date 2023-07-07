@@ -1,94 +1,145 @@
- .h-100{
-     
-    
-}
-
-
 
 .card{
     display:flex;
-    box-shadow: 5px 5px 5px darkgrey;
+    box-shadow: 10px 10px 10px darkgrey;
 
 }
 
-
-.card-body{
-    padding-left: 30%;
-    box-shadow: 5px 5px 5px darkgrey;
-    
-
-}
-
-
-
-.item-row.login{
-   display:flex;
-   
-   width: 90%;
-
-   margin-left: 20%;
-   
-   
-   
-}
-
-.item-row.password{
-    display:flex;
- 
-    width: 90%;
- 
-    margin-left: 20%;
-    
-    
-    
-    
-    
- }
-
-.btn.btn-primary{
-
-    width: 150px;
-    
+.img-wrapper{
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    right:250px;
+    /* transform: translateX(-50%); */
 
 }
 
 
 
+
+/* Telas de celular */
 @media screen and (max-width: 600px) {
+    .img-wrapper{
+        width: 200px;
+        display: flex;
+        flex-direction: row;
+        position: fixed;
+        bottom: 0;
+        right:220px;
+        /* transform: translateX(-50%); */
+    
+    }
 
+    .item-row.login{
+        display:flex;
+        margin-left: 65px;
+        width: 250px;
+       
+     }
+
+    .item-row.password{
+        display:flex;
+        margin-left: 65px;
+        max-width: 250px;
+     
+        /* margin-left: 20%; */
+     
+     }
 
     .btn.btn-primary{
 
-        width: 150px;
-        margin-left: 100px;
+        width: 90px;
+        margin-left: 130px;
     
     }
 }
 
-
+/* Tela grande minimo de 768px e maximo de 992px */
 @media screen and (min-width: 768px) and (max-width: 992px) {
-.content-body {
 
+    /* .content-body{
+        width: 750px;
+        margin-left: 30%;
+        
+    
+    } */
+    
+    
+    .item-row.login{
+        display:flex;
+        margin-left: 125px;
+        width: 400px;
+     
+        /* margin-left: 10%; */
+        
+        
+        
+     }
+     
+     .item-row.password{
+         display:flex;
+         margin-left: 125px;
+         width: 400px;
+      
+         /* margin-left: 20%; */
+      
+      }
+    
+      .btn.btn-primary{
+    
+        margin-left: 225px;
+        width: 150px;
+      }
+    }
 
-padding-right: 20%;
-}
-
-
-}
-
+/* Tela grande minimo de 992px */
 
 @media screen and (min-width: 992px) {
-.content-body {
-text-align: center;
-
-padding-right: 30%;
-padding-left: 12%;
-}
-
-
-
+    
+.content-body{
+    width: 750px;
+    margin-left: 30%;
+    
 
 }
+
+
+.item-row.login{
+    display:flex;
+    margin-left: 125px;
+    width: 400px;
+ 
+    /* margin-left: 10%; */
+    
+    
+    
+ }
+ 
+ .item-row.password{
+     display:flex;
+     margin-left: 125px;
+     width: 400px;
+  
+     /* margin-left: 20%; */
+  
+  }
+
+  .btn.btn-primary{
+
+    margin-left: 225px;
+    width: 150px;
+    
+
+} 
+
+
+
+}   
+
+
+
 
 
 

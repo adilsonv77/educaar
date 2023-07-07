@@ -37,7 +37,7 @@
         @auth
             <div class="nav-header">
                 <a href="/" class="brand-logo">
-
+                    <i class="fa-brands fa-unity"></i>
                 </a>
             </div>
             <div class="header">
@@ -106,6 +106,8 @@
         </div>
 
     @endauth
+
+
 
     <div class="content-body">
         @yield('content')

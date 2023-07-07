@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
+
+
     public function novasAtividades()
     {
         $user_id = auth()->user()->id;
@@ -29,6 +31,9 @@ class StudentController extends Controller
 
         return view('student.realizadas', compact('activities', 'student_answers', 'user_id'));
     }
+
+
+
     public function indexContentStudent(Request $request)
     {
 
