@@ -274,6 +274,7 @@ class UserController extends Controller
         foreach ($lines as $line) {
             if ($count != 0) {
                 $campos = explode(";", $line);
+                try{
                 $user['username'] = $campos[1];
                 $user['name'] = utf8_encode($campos[2]);
                 $user['type'] = 'student';
@@ -286,9 +287,14 @@ class UserController extends Controller
                     'turma_id' => $turma,
                     'aluno_id'  => $aluno->id
                 ]);
+
+                }catch (\Illuminate\Database\QueryException $e) {
+                    continue;
+                }
             }
             $count++;
         }
+
         return redirect('/user');
     }
 }
