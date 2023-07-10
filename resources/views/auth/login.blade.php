@@ -9,8 +9,11 @@
         {{-- <div class="row justify-content-center"> --}}
         {{-- <div class="col-md-4"> --}}
         <div class="img-wrapper">
+
             <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
+
             <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">
+
 
         </div>
         <div class="card">

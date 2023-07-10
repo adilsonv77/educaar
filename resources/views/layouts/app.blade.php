@@ -35,9 +35,9 @@
     <div id="main-wrapper">
         @auth
             <div class="nav-header">
-                <a href="/" class="brand-logo">
+                {{-- <a href="/" class="brand-logo">
                     <i class="fa-brands fa-unity"></i>
-                </a>
+                </a> --}}
 
                 <div class="nav-control">
                     <div class="hamburger">

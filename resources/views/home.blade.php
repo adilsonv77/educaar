@@ -56,7 +56,6 @@
 
                 </div>
             </div>
-
         @endcan
         @can('student')
             <div class="card">

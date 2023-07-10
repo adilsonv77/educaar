@@ -10373,7 +10373,7 @@ readers do not read off random characters that represent icons */
   background-color: #079ad9;
 }
 
-@media (max-width: 767.98px) {
+/* @media (max-width: 767.98px) {
   .questoes label {
     font-size: 25px;
     margin-bottom: 2%;
@@ -10399,7 +10399,7 @@ readers do not read off random characters that represent icons */
     font-size: 2rem;
     font-weight: 600;
   }
-}
+} */
 .nav-header {
   background-color: #8743DF;
 }
