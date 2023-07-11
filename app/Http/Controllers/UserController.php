@@ -265,6 +265,18 @@ class UserController extends Controller
     {
         $data = $request->all();
         $arquivo = $data['csv'];
+        // dd($arquivo);
+        $validation = Validator::make(
+            $request->all(),
+            $rules = [
+                'csv' => 'required|file|mimes:csv,txt'
+            ]
+        );
+
+        if ($validation->fails()) {
+            return redirect()->back()->withInput()->withErrors($validation);
+        }
+
         $turma = $data['turma_id'];
         $count = 0;
         $user = array();
