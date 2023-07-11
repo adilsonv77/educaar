@@ -223,4 +223,25 @@ class TurmaController extends Controller
 
         return redirect('/turmas');
     }
+    public function turmasAlunosIndex(Request $request){
+        $data= $request->all(); 
+        
+//         SELECT u.name from users as u 
+// 	inner join alunos_turmas as at 
+//     on at.aluno_id= u.id
+//   where at.turma_id= 4 and u.type= 'student';
+
+        $alunos= DB::table('users')
+        ->select('users.name','users.id')
+        ->join('alunos_turmas as at','at.aluno_id','=','users.id')
+        ->where([
+            ['at.turma_id','=',$data['turma_id']],
+            ['users.type','=','student']])
+        ->get();
+
+        $turma= Turma::find($data['turma_id'])->nome;
+        
+
+        return view('pages.turma.alunosTurma', compact('alunos','turma'));
+    }
 }

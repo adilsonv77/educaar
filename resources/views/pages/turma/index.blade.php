@@ -50,6 +50,13 @@
                                         </form>
                                     </td>
                                     <td>
+                                        <form action="{{ route('turmas.turmasAlunosIndex', $item->id) }}">
+                                            @csrf
+                                            <input type="hidden" name="turma_id" value="{{ $item->id }}">
+                                            <button type="submit" class="btn btn-primary">Alunos</button>
+                                        </form>
+                                    </td>
+                                    <td>
                                         <form action="{{ route('turmas.disciplinasIndex', $item->id) }}">
                                             @csrf
                                             <input type="hidden" name="turma_id" value="{{ $item->id }}">

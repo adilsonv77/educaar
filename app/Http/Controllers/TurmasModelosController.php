@@ -75,17 +75,19 @@ class TurmasModelosController extends Controller
             $turma = TurmaModelo::create($data);
         } else {
 
-            $turma = TurmaModelo::find($data['id']);
+            $turma = TurmaModelo::find($data['id']); 
             $turma->update($data);
             $deleted = DB::table('disciplinas_turmas_modelos')->where('turma_modelo_id', $turma->id)->delete();
         }
 
         // Adicionar as disciplinas em disciplinas_turmasmodelo
         foreach ($discs as $disc) {
-            $disc_turmamodelo = DisciplinaTurmaModelo::create([
-                'disciplina_id' => $disc,
-                'turma_modelo_id'  => $turma->id
-            ]);
+
+                $disc_turmamodelo = DisciplinaTurmaModelo::create([
+                    'disciplina_id' => $disc,
+                    'turma_modelo_id'  => $turma->id
+                ]);
+
 
             //$disc_turmamodelo->save();
         }
