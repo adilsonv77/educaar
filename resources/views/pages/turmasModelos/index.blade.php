@@ -46,12 +46,12 @@
                                         <form action="{{ route('turmasmodelos.edit', $item->id) }}">
                                             @csrf
                                             <button type="submit"
-                                                class="btn btn-warning"@if ($item->qntTurmas > 0) disabled @endif>Editar</button>
+                                                class="btn btn-warning"@if ($item->qntTurmas > 0|| $item->conteudos > 0) disabled @endif>Editar</button>
                                         </form>
                                     </td>
                                     <td>
                                         <button type="button"
-                                            class="btn btn-danger"@if ($item->qntTurmas > 0) disabled @endif
+                                            class="btn btn-danger"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif
                                             data-toggle="modal" data-target="#modal{{ $item->id }}">
                                             Excluir
                                         </button>

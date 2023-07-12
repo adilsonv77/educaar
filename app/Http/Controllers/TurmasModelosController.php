@@ -27,13 +27,11 @@ class TurmasModelosController extends Controller
                     'conteudos'=> DB::table('disciplinas_turmas_modelos as dtm')
                     ->selectRaw('count(*)')
                 ->join('contents as c','c.disciplina_id','=','dtm.disciplina_id')
-                ->where('dtm.turma_modelo_id','=','turmas_modelo.id')]);
+                ->whereColumn('dtm.turma_modelo_id','=','id')]);
                 
                 
                 // select * from turmas_modelo_disciplina tmd  join contents c 
                 // on c.disciplina_id = tmd.disciplina_id where tmd.turma_id = ?
-
-                dd($where->get());
         $turmas = $where->paginate(20);
         return view('pages.turmasModelos.index', compact('turmas'));
     }
