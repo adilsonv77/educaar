@@ -45,16 +45,30 @@
 
 @section('script')	
 
+<!--
     <script type="importmap">
+        
     {
       "imports": {
-	"three": "https://unpkg.com/three@0.147.0/build/three.module.js",
-	"three/addons/": "https://unpkg.com/three@0.147.0/examples/jsm/"
+          "three": "https://unpkg.com/three@0.154.0/build/three.module.js",
+	      "three/addons/": "https://unpkg.com/three@0.154.0/examples/jsm/",
+          "mindar-image-three":"https://cdn.jsdelivr.net/npm/mind-ar@1.2.3/dist/mindar-image-three.prod.js"
       }
     }
     </script>
-    <script src="../js/mind-ar/mindar-image-three.prod.js"></script>
-    
+-->
+
+<script type="importmap">
+        
+        {
+          "imports": {
+              "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+              "three/addons/": "https://unpkg.com/three@0.147.0/examples/jsm/",
+              "mindar-image-three":"https://cdn.jsdelivr.net/npm/mind-ar@1.2.0/dist/mindar-image-three.prod.js"
+          }
+        }
+        </script>
+  
     <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
     
 @endsection 

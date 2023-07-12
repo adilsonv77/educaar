@@ -1,9 +1,11 @@
 
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-const THREE = window.MINDAR.IMAGE.THREE;
+import * as THREE from 'three';
+import { MindARThree } from 'mindar-image-three';
+
+//const THREE = window.MINDAR.IMAGE.THREE;
 var buttonAR = null;
 
 const loadGLTF = (path) => {
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const mind = document.getElementById("mind");
 
 
-      const mindarThree = new window.MINDAR.IMAGE.MindARThree({
+      const mindarThree = new MindARThree({
 //      const mindarThree = new MindARThree({
         container: document.getElementById("my-ar-container"),
 
