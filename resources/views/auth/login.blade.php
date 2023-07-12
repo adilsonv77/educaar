@@ -8,6 +8,11 @@
         {{-- <div class="h-100 align-items-center"> --}}
         {{-- <div class="row justify-content-center"> --}}
         {{-- <div class="col-md-4"> --}}
+        <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
+        <div class="background-image">
+            <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fluid">
+        </div>
+
         <div class="img-wrapper">
 
             <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
@@ -16,6 +21,16 @@
 
 
         </div>
+        {{-- <div class="img-wrapper">
+            <div class="image-container">
+                <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
+                <span class="image-text">Texto 1</span>
+            </div>
+            <div class="image-container">
+                <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">
+                <span class="image-text">Texto 2</span>
+            </div>
+        </div> --}}
         <div class="card">
             <div class="card-header">{{ __('Login') }}</div>
             <div class="card-body">

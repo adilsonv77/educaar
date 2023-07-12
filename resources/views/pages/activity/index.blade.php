@@ -8,16 +8,23 @@
 
 @section('content')
 
-<head>
+    <head>
         <link rel="stylesheet" href="/css/list_content.css">
     </head>
 
     <form action="{{ route('activity.index') }}" method="GET">
-        <div class="form-inline">
+        {{-- <div class="form-inline">
             <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $activity }}"
                 list="historico" />
             <section class="itens-group">
                 <button class="btn btn-primary "type="submit">Pesquisar</button>
+            </section>
+        </div> --}}
+        <div class="form-inline d-flex justify-content-center align-items-center">
+            <input class="form-control mx-5" type="text" name="titulo" id="titulo" value="{{ $activity }}"
+                list="historico" />
+            <section class="itens-group">
+                <button class="btn btn-primary" type="submit">Pesquisar</button>
             </section>
         </div>
         <datalist id="historico">
@@ -50,8 +57,8 @@
                             @foreach ($activities as $item)
                                 <tr>
                                     <td style="width: 60%;">{{ $item->name }}</td>
-                                    <td style="width: 25%;"><img src="/marcadores/{{ $item->marcador }}" alt=""width="200"
-                                            height="200"></td>
+                                    <td style="width: 25%;"><img src="/marcadores/{{ $item->marcador }}"
+                                            alt=""width="200" height="200"></td>
                                     <td style="width: 10%;"><a href="/activity/{{ $item->id }}"
                                             class="btn btn-primary">Visualizar</a></td>
 
@@ -68,7 +75,8 @@
                                     <td style="width: 70px;">
                                         <form action="{{ route('activity.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning" text-align: center>Editar</button>
+                                            <button type="submit" class="btn btn-warning" text-align:
+                                                center>Editar</button>
                                         </form>
                                     </td>
 

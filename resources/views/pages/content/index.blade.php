@@ -17,9 +17,11 @@
             <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}"
                 list="historico" />
             <section class="itens-group">
-                <button class="btn btn-primary "type="submit">Pesquisar</button>
+                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
             </section>
         </div>
+
+
         <datalist id="historico">
             @foreach ($contents as $content)
                 <option value="{{ $content->pesq_name }}">{{ $content->pesq_name }}</option>
@@ -46,7 +48,7 @@
 
                             @foreach ($contents as $item)
                                 <tr>
-                                    
+
                                     <td>{{ $item->content_name }}</td>
                                     <td>{{ $item->disc_name }}</td>
                                     <td>{{ $item->turma_name }}</td>
@@ -61,15 +63,13 @@
                                         <form action="{{ route('fechar.index') }}">
                                             @csrf
                                             <input type="hidden" name="content" value="{{ $item->id }}">
-                                            <button type="submit"
-                                                id="FecharConteudo"
-                                                class="btn btn-info" @if (($item->qtasatividades == 0 or $item->fechado)) disabled @endif  
-                                            >
+                                            <button type="submit" id="FecharConteudo" class="btn btn-info"
+                                                @if ($item->qtasatividades == 0 or $item->fechado) disabled @endif>
                                                 Fechar ({{ $item->qtasatividades }})
-                                                
+
                                             </button>
-                                         </form>
-                                       
+                                        </form>
+
 
                                     </td>
                                     <td>
@@ -85,7 +85,8 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-body">
-                                                <h3>Você tem certeza que deseja excluir o conteúdo {{ $item->content_name }}?</h3>
+                                                <h3>Você tem certeza que deseja excluir o conteúdo
+                                                    {{ $item->content_name }}?</h3>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
@@ -115,4 +116,7 @@
             @endif
         </div>
     </div>
+
+
+
 @endsection

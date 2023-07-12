@@ -38,7 +38,7 @@
                 {{-- <a href="/" class="brand-logo">
                     <i class="fa-brands fa-unity"></i>
                 </a> --}}
-
+                <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">{{-- So pra teste --}}
                 <div class="nav-control">
                     <div class="hamburger">
                         <span class="line"></span><span class="line"></span><span class="line"></span>
@@ -104,15 +104,15 @@
                                             </a>
                                     </a>
                         </div>
+                        {{-- </div> --}}
+
+                        </a>
+
+                        </li>
+                        </ul>
                 </div>
-
-                </a>
-
-                </li>
-                </ul>
+                </nav>
             </div>
-            </nav>
-        </div>
         </div>
 
         <div class="deznav">
