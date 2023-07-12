@@ -27,7 +27,7 @@
 
 
 @section('content')
-<!-- display: none; -->
+
     <span id="mind" style="display: none;">/mind/{{$content_id}}.mind</span>
 
     <span id="glbs" style="display: none;"> 
@@ -39,12 +39,6 @@
     <div id="my-ar-container">
         <a id="button-ar" class="flaticon-381-list-1" data-href="{{ route('student.questoes') }}"></a>
     </div>
-   <!--
-    <script src="https://unpkg.com/three@0.147.0/build/three.module.js"></script>
-	<script src="https://unpkg.com/three@0.147.0/examples/jsm/"></script>
-    ,
-	"mindar-image-three":"../js/mind-ar/mindar-image-three.prod.js"
-        -->
 
     
 @endsection
@@ -61,6 +55,6 @@
     </script>
     <script src="../js/mind-ar/mindar-image-three.prod.js"></script>
     
-    <script src="../js/main-mindar.js" type="module"></script>
-
-@endsection
+    <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
+    
+@endsection 

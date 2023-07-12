@@ -32,12 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
  
       const {renderer, scene, camera} = mindarThree;
-      const controls = new OrbitControls( camera, renderer.domElement );
 
       const light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
       scene.add(light);
       
       const glbs = document.getElementById("glbs");
+
+      var mixer = null;
+      var action = null;
 
       for (var i = 0; i<glbs.childElementCount; i++) {
         var li = glbs.children[i];
@@ -61,26 +63,44 @@ document.addEventListener('DOMContentLoaded', () => {
         glbScene.position.copy(sceneCenter).multiplyScalar(-1);
 
         const anchor = mindarThree.addAnchor(i);
+        anchor.glb = glb;
         anchor.activityid = li.id.split("_")[1];
         anchor.group.add(glbScene);
     
         anchor.onTargetFound = () => {
             buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
            
+            if (anchor.glb.animations.length > 0) {
+
+              mixer = new THREE.AnimationMixer(anchor.glb.scene);
+              action = mixer.clipAction(anchor.glb.animations[0]);
+              action.play();
+            }
+
             buttonAR.style.display = 'block';
         }
         
-       anchor.addEventListener
+        //anchor.addEventListener
         anchor.onTargetLost = () => {
           buttonAR.style.display = 'none';
+          if (action != null) {
+            action.stop();
+            action = null;
+            mixer = null;
+  
+          }
         }
   
       }
 
-      controls.update();
+      const clock = new THREE.Clock();
       await mindarThree.start();
+
       renderer.setAnimationLoop(() => {
-        controls.update();
+        if (mixer != null) {
+          const delta = clock.getDelta();
+          mixer.update(delta);
+        }
         renderer.render(scene, camera);
       });
     }
