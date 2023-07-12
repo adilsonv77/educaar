@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Turma;
 use App\Models\TurmaModelo;
+use App\Models\Content;
 use App\Models\DisciplinaTurmaModelo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -21,9 +22,18 @@ class TurmasModelosController extends Controller
             ->where('school_id', Auth::user()->school_id)
             ->addSelect([
                 'qntTurmas' => Turma::selectRaw('count(*)')
-                    ->whereColumn('turmas_modelos.id', '=', 'turma_modelo_id')
-            ]);
+                    ->whereColumn('turmas_modelos.id', '=', 'turma_modelo_id')])
+            ->addSelect([
+                    'conteudos'=> DB::table('disciplinas_turmas_modelos as dtm')
+                    ->selectRaw('count(*)')
+                ->join('contents as c','c.disciplina_id','=','dtm.disciplina_id')
+                ->where('dtm.turma_modelo_id','=','turmas_modelo.id')]);
+                
+                
+                // select * from turmas_modelo_disciplina tmd  join contents c 
+                // on c.disciplina_id = tmd.disciplina_id where tmd.turma_id = ?
 
+                dd($where->get());
         $turmas = $where->paginate(20);
         return view('pages.turmasModelos.index', compact('turmas'));
     }
