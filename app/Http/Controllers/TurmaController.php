@@ -230,18 +230,30 @@ class TurmaController extends Controller
 // 	inner join alunos_turmas as at 
 //     on at.aluno_id= u.id
 //   where at.turma_id= 4 and u.type= 'student';
+        $turma= Turma::find($data['turma_id']);
 
         $alunos= DB::table('users')
         ->select('users.name','users.id')
         ->join('alunos_turmas as at','at.aluno_id','=','users.id')
         ->where([
-            ['at.turma_id','=',$data['turma_id']],
-            ['users.type','=','student']])
+            ['at.turma_id','=',$turma->id],
+            ['users.type','=','student'],
+            ['users.school_id','=',$turma->school_id]])
+        ->orderBy('users.name')
         ->get();
 
         $turma= Turma::find($data['turma_id'])->nome;
         
 
         return view('pages.turma.alunosTurma', compact('alunos','turma'));
+    }
+    public function desmatricular(Request $request){
+        $data= $request->all();
+
+        $query= DB::table('alunos_turmas')
+                ->where('alunos_turmas.aluno_id','=',$data['aluno_id'])
+                ->delete();
+        
+        return redirect('/turmas');
     }
 }

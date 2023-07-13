@@ -39,10 +39,12 @@ Route::middleware(['auth'])->group(function () {
     //turmas 
     Route::resource('turmas', App\Http\Controllers\TurmaController::class);
     Route::get('/turmasAlunosIndex', [App\Http\Controllers\TurmaController::class, 'turmasAlunosIndex'])->name('turmas.turmasAlunosIndex');
+    Route::post('/desmatricular', [App\Http\Controllers\TurmaController::class, 'desmatricular'])->name('turmas.desmatricular');
     Route::get('/disciplinasIndex', [App\Http\Controllers\TurmaController::class, 'disciplinasIndex'])->name('turmas.disciplinasIndex');
     Route::post('/storeDisciplinaProf', [App\Http\Controllers\TurmaController::class, 'storeDisciplinaProf'])->name('turmas.storeDisciplinaProf');
     Route::get('/novoAlunoTurma', [App\Http\Controllers\TurmaController::class, 'novoAlunoTurma'])->name('turmas.novoAlunoTurma');
     Route::post('/novoAlunoTurmaStore', [App\Http\Controllers\TurmaController::class, 'novoAlunoTurmaStore'])->name('turmas.novoAlunoTurmaStore');
+   
 
     //content
     Route::resource('content', App\Http\Controllers\ContentController::class);
