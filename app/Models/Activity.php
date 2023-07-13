@@ -11,7 +11,6 @@ class Activity extends Model
 
     protected $fillable = ['name', 'content_id', 'glb', 'marcador', 'disciplina_id', 'professor_id', 'turma_id'];
 
-
     public function questions()
     {
         return $this->hasMany(Question::class);

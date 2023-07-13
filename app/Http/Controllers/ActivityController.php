@@ -20,6 +20,8 @@ use Illuminate\Validation\Rule;
 use App\DAO\ContentDAO;
 use App\DAO\ActivityDAO;
 
+use Illuminate\Support\Facades\Storage;
+
 class ActivityController extends Controller
 {
     /**
@@ -131,15 +133,30 @@ class ActivityController extends Controller
         ]);
 
 
-
-
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
+        /*
+        Foi alterada a lógica de armazenar marcadores e modelos3d para reduzir o consumo do espaço em disco nas alterações.
+        Existem algumas situações que podem levar a um pouco de desperdício:
+        + o marcador anterior era de um tipo e o novo é de outro tipo
+        + o modelo anterior era de um tipo e o novo é de outro tipo
+
+        Como são situações mais raras, melhorou imenso essa nova solução.
+        */
+
+        $baseFileName = time();
+        if ($data['acao'] == 'edit') {
+            $baseFileName = $data['id'];
+        }
+
+        $zipdir = "";
+        $achou = "";
         if (array_key_exists('glb', $data)) {
 
             $filename = time();
+
             if ($request->glb->getClientOriginalExtension() == "zip") {
                 $zipArchive = new \ZipArchive();
                 $result = $zipArchive->open($request->glb);
@@ -149,7 +166,7 @@ class ActivityController extends Controller
 
                     $files = scandir(public_path('modelos3d/'.$filename));
 
-                    $achou = "";
+                    
                     foreach($files as $file) {
                         if (str_ends_with($file, ".gltf")) {
                             $achou = $file;
@@ -157,6 +174,7 @@ class ActivityController extends Controller
                         }
                     }
 
+                    $zipdir = $filename;
                     if ($achou == "") {
                         self::deleteDir(public_path('modelos3d/'.$filename));
                         return redirect()->back()->withErrors(['msg' => 'Arquivo GLTF incompatível.']);
@@ -170,8 +188,8 @@ class ActivityController extends Controller
                 }
                 
             } else {
-
-                $glbFile = $filename . '.' . $request->glb->getClientOriginalExtension();
+                
+                $glbFile = $baseFileName . '.' . $request->glb->getClientOriginalExtension();
                 $request->glb->move(public_path('modelos3d'), $glbFile);
 
                 $data['glb'] = $glbFile;
@@ -180,20 +198,46 @@ class ActivityController extends Controller
         }
 
         if (array_key_exists('marcador', $data)) {
-            /*
-            */
-            $imgFile = time() . '.' . $request->marcador->getClientOriginalExtension();
+
+            $imgFile = $baseFileName . '.' . $request->marcador->getClientOriginalExtension();
             $request->marcador->move(public_path('marcadores'), $imgFile);
 
             $data['marcador'] = $imgFile;
+ 
         }
 
         if ($data['acao'] == 'insert') {
             $data['professor_id'] =  Auth::user()->id;
-            Activity::create($data);
+            $activity = Activity::create($data);
+
+            $data['marcador'] = $activity->id . '.' . $request->marcador->getClientOriginalExtension();
+            $public_path = public_path('marcadores');
+            rename($public_path .'/'. $imgFile, $public_path .'/'.  $data['marcador']);
+
+            $public_path = public_path('modelos3d');
+            if ($zipdir === "") {
+                $data['glb'] = $activity->id . '.' . $request->glb->getClientOriginalExtension();
+                
+                rename($public_path .'/'. $glbFile, $public_path .'/'.  $data['glb']);
+            } else {
+                $data['glb'] = $activity->id."/".$achou;
+                rename($public_path . '/' . $zipdir, $public_path .'/'.  $activity->id);
+            }
+
+            $activity->update($data);
         } else {
             $activity = Activity::find($data['id']);
+
+            if ($zipdir !== "") {
+                self::deleteDir(public_path('modelos3d/'.$activity->id));
+                $data['glb'] = $activity->id."/".$achou;
+                $public_path = public_path('modelos3d');
+                rename($public_path . '/' . $zipdir, $public_path .'/'.  $activity->id);
+            }
+            
             $activity->update($data);
+
+
         }
 
         $content = Content::find($data["content_id"]);
