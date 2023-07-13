@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
       const mindarThree = new MindARThree({
-//      const mindarThree = new MindARThree({
+
         container: document.getElementById("my-ar-container"),
-
-
         imageTargetSrc: mind.textContent,
+        filterMinCF: 0.0001,
+        filterBeta: 0.001
       });
  
       const {renderer, scene, camera} = mindarThree;
