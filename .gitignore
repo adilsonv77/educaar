@@ -11,8 +11,6 @@
 !/mind/README.md
 !/uploads/README.md
 !/modelos3d/README.md
-.env
-# .env.backup
 .phpunit.result.cache
 npm-debug.log
 yarn-error.log
@@ -22,3 +20,4 @@ composer.lock
 package-lock.json
 public/info.php
 database/modelos/modelo01.mwb.bak
+.env
