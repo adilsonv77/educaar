@@ -44,10 +44,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/novoAlunoTurma', [App\Http\Controllers\TurmaController::class, 'novoAlunoTurma'])->name('turmas.novoAlunoTurma');
     Route::post('/novoAlunoTurmaStore', [App\Http\Controllers\TurmaController::class, 'novoAlunoTurmaStore'])->name('turmas.novoAlunoTurmaStore');
 
-
-    //professores no ano letivo
-    Route::resource('profanoletivo', App\Http\Controllers\ProfAnoLetivoController::class);
-
     //content
     Route::resource('content', App\Http\Controllers\ContentController::class);
     Route::get('/content/list', [App\Http\Controllers\ContentController::class, 'listOfContents'])->name('content.list');
