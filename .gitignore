@@ -3,7 +3,15 @@
 /public/hot
 /public/storage
 /storage/*.key
-# .env
+/marcadores/*
+/mind/*
+/uploads/*
+/modelos3d/*
+!/marcadores/README.md
+!/mind/README.md
+!/uploads/README.md
+!/modelos3d/README.md
+.env
 # .env.backup
 .phpunit.result.cache
 npm-debug.log
