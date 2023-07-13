@@ -16,12 +16,7 @@
                 </div>
             @endif
 
-            @if ($acao == 'edit')
-            {{-- <div class="alert alert-danger" >
-                {{-- <ul> As disciplinas que forem desmarcadas perderão seu professores associados. </ul> 
-            </div> --}}
-            @endif
-            <form method="POST" action="{{ route('anoletivo.store') }}">
+           <form method="POST" action="{{ route('anoletivo.store') }}">
                 @csrf
                 <input name="id" type="hidden" value="{{$id}}"/>
                 <input name="acao" type="hidden" value="{{$acao}}"/>
@@ -35,24 +30,6 @@
 
                     </div>
                 </div>               
-
-                {{-- <table class="table table-hover table-responsive-sm">
-                    <tbody>
-
-
-                    <div class="form-group">
-                    <label for="">Conteúdo*</label>
-                    <select class="form-control" name="content_id" aria-label="">
-                       
-                        @foreach ($disciplinas as $item)
-                            <option value="{{ $item->id }}" @if ($item->id === $disciplinas) selected="selected" @endif>{{ $item->name }}</option>
-                        @endforeach
-                    </select>
-
-                </div>
-                        
-                    </tbody>
-                </table> --}}
 
 
                 <div class="form-group row mb-0">
