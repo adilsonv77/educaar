@@ -24,12 +24,18 @@ class TurmasModelosController extends Controller
                 'qntTurmas' => Turma::selectRaw('count(*)')
                     ->whereColumn('turmas_modelos.id', '=', 'turma_modelo_id')])
             ->addSelect([
-                    'conteudos'=> DB::table('disciplinas_turmas_modelos as dtm')
-                    ->selectRaw('count(*)')
-                ->join('contents as c','c.disciplina_id','=','dtm.disciplina_id')
-                ->whereColumn('dtm.turma_modelo_id','=','id')]);
+                    'conteudos'=> DB::table('contents as c')
+                    ->selectRaw('count(c.id)')
+                ->join('disciplinas_turmas_modelos as dtm','c.disciplina_id','=','dtm.disciplina_id')
+                ->whereColumn('dtm.turma_modelo_id','=','turmas_modelos.id')]);
                 
+
                 
+            //     'conteudos'=> DB::table('disciplinas_turmas_modelos as dtm')
+            //     ->selectRaw('count(*)')
+            // ->join('contents as c','c.disciplina_id','=','dtm.disciplina_id')
+            // ->whereColumn('dtm.turma_modelo_id','=','id')]
+            
                 // select * from turmas_modelo_disciplina tmd  join contents c 
                 // on c.disciplina_id = tmd.disciplina_id where tmd.turma_id = ?
         $turmas = $where->paginate(20);
