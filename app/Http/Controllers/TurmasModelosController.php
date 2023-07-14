@@ -22,22 +22,34 @@ class TurmasModelosController extends Controller
             ->where('school_id', Auth::user()->school_id)
             ->addSelect([
                 'qntTurmas' => Turma::selectRaw('count(*)')
-                    ->whereColumn('turmas_modelos.id', '=', 'turma_modelo_id')])
+                    ->whereColumn([['turmas_modelos.id', '=', 'turma_modelo_id'],
+                                    ['turmas_modelos.school_id','=','school_id']])])
             ->addSelect([
                     'conteudos'=> DB::table('contents as c')
                     ->selectRaw('count(c.id)')
+<<<<<<< Updated upstream
                 ->join('disciplinas_turmas_modelos as dtm','c.disciplina_id','=','dtm.disciplina_id')
                 ->whereColumn('dtm.turma_modelo_id','=','c.turma_id')]);
+=======
+                    ->join('disciplinas_turmas_modelos as dtm', function($join) {
+                        $join->on('dtm.disciplina_id', '=', 'c.disciplina_id');
+                        $join->on('dtm.turma_modelo_id', '=', 'c.turma_id');
+                    })->whereColumn('dtm.turma_modelo_id','=','turmas_modelos.id')
+                ]);
+>>>>>>> Stashed changes
                 
 
                 
-            //     'conteudos'=> DB::table('disciplinas_turmas_modelos as dtm')
-            //     ->selectRaw('count(*)')
-            // ->join('contents as c','c.disciplina_id','=','dtm.disciplina_id')
-            // ->whereColumn('dtm.turma_modelo_id','=','id')]
+                // ->join('disciplinas_turmas_modelos as dtm','c.disciplina_id','=','dtm.disciplina_id')
+                // ->whereColumn('dtm.turma_modelo_id','=','turmas_modelos.id')])
+
+
+                // dd($where->get());
             
                 // select * from turmas_modelo_disciplina tmd  join contents c 
                 // on c.disciplina_id = tmd.disciplina_id where tmd.turma_id = ?
+
+
         $turmas = $where->paginate(20);
         //dd(DB::getQueryLog());
         return view('pages.turmasModelos.index', compact('turmas'));
