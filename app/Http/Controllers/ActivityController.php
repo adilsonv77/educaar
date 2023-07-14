@@ -297,18 +297,6 @@ class ActivityController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Activity  $activity
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Activity $activity)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Activity  $activity
@@ -318,14 +306,25 @@ class ActivityController extends Controller
     {
         $activity = Activity::find($id);
 
-        //$currentContent = Content::where('id', $activity->content_id)->first();
+        if ($activity != null) {
 
-        //Content::where('id', $currentContent->id)->update(['hasActivity' => null]);
-        $activity->delete();
+            unlink(public_path('marcadores'). "/" . $activity->marcador);
 
-        $content = Content::find($activity->content_id);
-        $content ->update(['fechado' => 0]);
-
+            if (str_contains($activity->glb, "/")) {
+                $posbarra = strpos($activity->glb, "/");
+                $dirname = substr($activity->glb, 0, $posbarra);
+                self::deleteDir(public_path('modelos3d')."/".$dirname);
+    
+            } else {
+                unlink(public_path('modelos3d') . "/" . $activity->glb);
+            }
+    
+            $activity->delete();
+    
+            $content = Content::find($activity->content_id);
+            $content ->update(['fechado' => 0]);
+        
+        }
 
         return redirect(route('activity.index'));
     }
