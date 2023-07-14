@@ -16,6 +16,7 @@ class VerifyCsrfToken extends Middleware
         //
     ];
 
+    // resolve o problema do page expired no logout
     public function handle($request, Closure $next)
     {
         if($request->route()->named('logout')) {
@@ -30,4 +31,5 @@ class VerifyCsrfToken extends Middleware
 
         return parent::handle($request, $next);
     }
+
 }
