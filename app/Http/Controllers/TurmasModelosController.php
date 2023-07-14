@@ -17,7 +17,7 @@ class TurmasModelosController extends Controller
     //
     public function index()
     {
-
+        DB::connection()->enableQueryLog();
         $where = DB::table('turmas_modelos')
             ->where('school_id', Auth::user()->school_id)
             ->addSelect([
@@ -27,7 +27,7 @@ class TurmasModelosController extends Controller
                     'conteudos'=> DB::table('contents as c')
                     ->selectRaw('count(c.id)')
                 ->join('disciplinas_turmas_modelos as dtm','c.disciplina_id','=','dtm.disciplina_id')
-                ->whereColumn('dtm.turma_modelo_id','=','turmas_modelos.id')]);
+                ->whereColumn('dtm.turma_modelo_id','=','c.turma_id')]);
                 
 
                 
@@ -39,6 +39,7 @@ class TurmasModelosController extends Controller
                 // select * from turmas_modelo_disciplina tmd  join contents c 
                 // on c.disciplina_id = tmd.disciplina_id where tmd.turma_id = ?
         $turmas = $where->paginate(20);
+        //dd(DB::getQueryLog());
         return view('pages.turmasModelos.index', compact('turmas'));
     }
     public function create()

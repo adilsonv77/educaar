@@ -99,7 +99,7 @@ class ActivityController extends Controller
 
     public static function deleteDir($dirPath) {
         if (! is_dir($dirPath)) {
-            throw new InvalidArgumentException("$dirPath must be a directory");
+            return;
         }
         if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
             $dirPath .= '/';
@@ -235,10 +235,18 @@ class ActivityController extends Controller
                 rename($public_path . '/' . $zipdir, $public_path .'/'.  $activity->id);
             }
             
+  
+            @unlink(public_path('mind')."/".$activity->content_id.".mind");
+
+            $content = Content::find($activity->content_id);
+            $content ->update(['fechado' => 0]);
+            
             $activity->update($data);
 
-
         }
+
+
+        @unlink(public_path('mind')."/".$data["content_id"].".mind");
 
         $content = Content::find($data["content_id"]);
         $content ->update(['fechado' => 0]);
@@ -308,7 +316,7 @@ class ActivityController extends Controller
 
         if ($activity != null) {
 
-            unlink(public_path('marcadores'). "/" . $activity->marcador);
+            @unlink(public_path('marcadores'). "/" . $activity->marcador);
 
             if (str_contains($activity->glb, "/")) {
                 $posbarra = strpos($activity->glb, "/");
@@ -316,11 +324,14 @@ class ActivityController extends Controller
                 self::deleteDir(public_path('modelos3d')."/".$dirname);
     
             } else {
-                unlink(public_path('modelos3d') . "/" . $activity->glb);
+                @unlink(public_path('modelos3d') . "/" . $activity->glb);
             }
     
             $activity->delete();
-    
+        
+
+            @unlink(public_path('mind')."/".$activity->content_id.".mind");
+ 
             $content = Content::find($activity->content_id);
             $content ->update(['fechado' => 0]);
         

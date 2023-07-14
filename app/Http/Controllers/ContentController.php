@@ -190,6 +190,7 @@ class ContentController extends Controller
 
             $content = Content::find($data['id']);
             $content->update($data);
+
         }
 
         return redirect('/content');
