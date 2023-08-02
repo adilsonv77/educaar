@@ -27,16 +27,11 @@ class TurmasModelosController extends Controller
             ->addSelect([
                     'conteudos'=> DB::table('contents as c')
                     ->selectRaw('count(c.id)')
-<<<<<<< Updated upstream
-                ->join('disciplinas_turmas_modelos as dtm','c.disciplina_id','=','dtm.disciplina_id')
-                ->whereColumn('dtm.turma_modelo_id','=','c.turma_id')]);
-=======
                     ->join('disciplinas_turmas_modelos as dtm', function($join) {
                         $join->on('dtm.disciplina_id', '=', 'c.disciplina_id');
                         $join->on('dtm.turma_modelo_id', '=', 'c.turma_id');
                     })->whereColumn('dtm.turma_modelo_id','=','turmas_modelos.id')
                 ]);
->>>>>>> Stashed changes
                 
 
                 
