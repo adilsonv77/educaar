@@ -265,7 +265,7 @@ class UserController extends Controller
     {
         $data = $request->all();
         $arquivo = $data['csv'];
-        // dd($arquivo);
+        //  dd($arquivo);
         $validation = Validator::make(
             $request->all(),
             $rules = [
@@ -282,6 +282,8 @@ class UserController extends Controller
         $user = array();
         $lines = file($arquivo->getRealPath());
         $csvFile = time() . '.' . $request->csv->getClientOriginalExtension();
+
+        // dd($csvFile);
         $request->csv->move(public_path('uploads'), $csvFile);
         foreach ($lines as $line) {
             if ($count != 0) {
@@ -317,6 +319,9 @@ class UserController extends Controller
             }
             $count++;
         }
+
+        unlink('uploads/'.$csvFile);
+        // dd(unlink('uploads/'.$csvFile));
 
         return redirect()->route('turmas.turmasAlunosIndex', $data);
     }
