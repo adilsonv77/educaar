@@ -301,16 +301,23 @@ class UserController extends Controller
                     ]);
                 } catch (\Illuminate\Database\QueryException $e) {
                     $aluno2 = User::where('username', $campos[1])->first();
-                    $aluno_turma = AlunoTurma::where('aluno_id', $aluno2->id)
+                    if(!AlunoTurma::where('aluno_id',$aluno2->id)->exists()){
+                        $aluno_turma = AlunoTurma::create([
+                            'turma_id' => $turma,
+                            'aluno_id'  => $aluno2->id
+                        ]);
+                    }else{
+                        $aluno_turma = AlunoTurma::where('aluno_id', $aluno2->id)
                         ->update([
                             'turma_id' => $turma
                         ]);
+                    }
                     continue;
                 }
             }
             $count++;
         }
 
-        return redirect('/user');
+        return redirect()->route('turmas.turmasAlunosIndex', $data);
     }
 }
