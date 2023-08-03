@@ -23,109 +23,122 @@
     justify-content: center;
 
 } */
+
+.logo{
+  display: flex;
+  max-width: 50%; 
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  margin-left: 25%;
+  margin-bottom: 2%;
+
+
+}
+
 .background-image {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  }
-  
-  .background-image img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.background-image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
 
 
 /* Telas de celular */
 @media screen and (max-width: 600px) {
-    .img-wrapper{
-        width: 200px;
-        display: flex;
-        flex-direction: row;
-        position: fixed;
-        bottom: 0;
-        right:220px;
-        /* transform: translateX(-50%); */
-    
-    }
+  .img-wrapper{
+      width: 200px;
+      display: flex;
+      flex-direction: row;
+      position: fixed;
+      bottom: 0;
+      right:220px;
+      /* transform: translateX(-50%); */
+  
+  }
+ 
+
+  .item-row.login{
+      display:flex;
+      margin:auto;
+      width: 70%;
+     
+   }
+
+  .item-row.password{
+      display:flex;
+      margin:auto;
+      width: 70%;
    
+      /* margin-left: 20%; */
+   
+   }
 
-    .item-row.login{
-        display:flex;
-        margin:auto;
-        width: 70%;
-       
-     }
+  .btn.btn-primary{
+      
+      display: flex;
+      width: 50%;
+      margin:auto;
+      justify-content: center;
+  }
 
-    .item-row.password{
-        display:flex;
-        margin:auto;
-        width: 70%;
-     
-        /* margin-left: 20%; */
-     
-     }
-
-    .btn.btn-primary{
-        
-        display: flex;
-        width: 50%;
-        margin:auto;
-        justify-content: center;
-    }
-
-    .img-wrapper{
-        width: 40%;
-        display: flex;
-        flex-direction: row;
-        position: fixed;
-        bottom: 0;
-        right: 50%;
-    
-        /* transform: translateX(-50%); */
-    
-    }
+  .img-wrapper{
+      width: 40%;
+      display: flex;
+      flex-direction: row;
+      position: fixed;
+      bottom: 0;
+      right: 50%;
+  
+      /* transform: translateX(-50%); */
+  
+  }
 }
 
 
 
 
 @media screen and (min-width: 768px) {
-    .content-body {
-      display: flex;
-      width: 50%;
-      margin: 0 auto;
-      max-width: 750px;
-    }
-    
-    .item-row.login,
-    .item-row.password {
-      display: flex;
-      margin: auto;
-      width: 70%;
-    }
-    
-    .btn.btn-primary {
-      display: flex;
-      margin: auto;
-      width: 50%;
-      justify-content: center;
-    }
-    
-    .img-wrapper {
-      width: 15%;
-      display: flex;
-      flex-direction: row;
-      position: fixed;
-      bottom: 0;
-      right: 17%;
-    }
-
-   
+  .content-body {
+    display: flex;
+    width: 50%;
+    margin: 0 auto;
+    max-width: 750px;
   }
+  
+  .item-row.login,
+  .item-row.password {
+    display: flex;
+    margin: auto;
+    width: 70%;
+  }
+  
+  .btn.btn-primary {
+    display: flex;
+    margin: auto;
+    width: 50%;
+    justify-content: center;
+  }
+  
+  .img-wrapper {
+    width: 15%;
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    right: 17%;
+  }
+
+ 
+}
 
 
 
@@ -152,58 +165,58 @@
 /* @media screen and (min-width: 768px) {
 
 
+  
+
+
+  .content-body{
+      display: flex;
+      width: 750px;
+      margin-left: 30%;
+      
+  
+  }
+  
+  
+  .item-row.login{
+      display:flex;
+      margin:auto;
+      width: 70%;
+   
+      margin-left: 10%;
+      
+      
+      
+   }
+   
+   .item-row.password{
+       display:flex;
+       margin:auto;
+       width: 70%;
     
-
-
-    .content-body{
-        display: flex;
-        width: 750px;
-        margin-left: 30%;
-        
+       margin-left: 20%;
     
     }
-    
-    
-    .item-row.login{
-        display:flex;
-        margin:auto;
-        width: 70%;
-     
-        margin-left: 10%;
-        
-        
-        
-     }
-     
-     .item-row.password{
-         display:flex;
-         margin:auto;
-         width: 70%;
-      
-         margin-left: 20%;
-      
-      }
-    
-      .btn.btn-primary{
-        display: flex;
-        margin:auto;
-        width: 50%;
-        justify-content: center;
-    
-    } 
+  
+    .btn.btn-primary{
+      display: flex;
+      margin:auto;
+      width: 50%;
+      justify-content: center;
+  
+  } 
 
 
-    .img-wrapper{
-        width: 15%;
-        display: flex;
-        flex-direction: row;
-        position: fixed;
-        bottom: 0;
-        right:16%;
-        transform: translateX(-50%);
-    
-    }
-    } */
+  .img-wrapper{
+      width: 15%;
+      display: flex;
+      flex-direction: row;
+      position: fixed;
+      bottom: 0;
+      right:16%;
+      transform: translateX(-50%);
+  
+  }
+  } */
 
 
 
