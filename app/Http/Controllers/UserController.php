@@ -286,21 +286,25 @@ class UserController extends Controller
         foreach ($lines as $line) {
             if ($count != 0) {
                 $campos = explode(";", $line);
-                try{
-                $user['username'] = $campos[1];
-                $user['name'] = utf8_encode($campos[2]);
-                $user['type'] = 'student';
-                $user['password'] = Hash::make($campos[1]);
-                $user['email'] = '@';
-                $user['school_id'] = Auth::user()->school_id;
-                $aluno = User::create($user);
+                try {
+                    $user['username'] = $campos[1];
+                    $user['name'] = utf8_encode($campos[2]);
+                    $user['type'] = 'student';
+                    $user['password'] = Hash::make($campos[1]);
+                    $user['email'] = '@';
+                    $user['school_id'] = Auth::user()->school_id;
+                    $aluno = User::create($user);
 
-                $aluno_turma = AlunoTurma::create([
-                    'turma_id' => $turma,
-                    'aluno_id'  => $aluno->id
-                ]);
-
-                }catch (\Illuminate\Database\QueryException $e) {
+                    $aluno_turma = AlunoTurma::create([
+                        'turma_id' => $turma,
+                        'aluno_id'  => $aluno->id
+                    ]);
+                } catch (\Illuminate\Database\QueryException $e) {
+                    $aluno2 = User::where('username', $campos[1])->first();
+                    $aluno_turma = AlunoTurma::where('aluno_id', $aluno2->id)
+                        ->update([
+                            'turma_id' => $turma
+                        ]);
                     continue;
                 }
             }

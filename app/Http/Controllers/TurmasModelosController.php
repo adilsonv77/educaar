@@ -17,32 +17,35 @@ class TurmasModelosController extends Controller
     //
     public function index()
     {
-        DB::connection()->enableQueryLog();
+        // DB::connection()->enableQueryLog();
         $where = DB::table('turmas_modelos')
             ->where('school_id', Auth::user()->school_id)
             ->addSelect([
                 'qntTurmas' => Turma::selectRaw('count(*)')
-                    ->whereColumn([['turmas_modelos.id', '=', 'turma_modelo_id'],
-                                    ['turmas_modelos.school_id','=','school_id']])])
+                    ->whereColumn([
+                        ['turmas_modelos.id', '=', 'turma_modelo_id'],
+                        ['turmas_modelos.school_id', '=', 'school_id']
+                    ])
+            ])
             ->addSelect([
-                    'conteudos'=> DB::table('contents as c')
+                'conteudos' => DB::table('contents as c')
                     ->selectRaw('count(c.id)')
-                    ->join('disciplinas_turmas_modelos as dtm', function($join) {
+                    ->join('disciplinas_turmas_modelos as dtm', function ($join) {
                         $join->on('dtm.disciplina_id', '=', 'c.disciplina_id');
                         $join->on('dtm.turma_modelo_id', '=', 'c.turma_id');
-                    })->whereColumn('dtm.turma_modelo_id','=','turmas_modelos.id')
-                ]);
-                
-
-                
-                // ->join('disciplinas_turmas_modelos as dtm','c.disciplina_id','=','dtm.disciplina_id')
-                // ->whereColumn('dtm.turma_modelo_id','=','turmas_modelos.id')])
+                    })->whereColumn('dtm.turma_modelo_id', '=', 'turmas_modelos.id')
+            ]);
 
 
-                // dd($where->get());
-            
-                // select * from turmas_modelo_disciplina tmd  join contents c 
-                // on c.disciplina_id = tmd.disciplina_id where tmd.turma_id = ?
+
+        // ->join('disciplinas_turmas_modelos as dtm','c.disciplina_id','=','dtm.disciplina_id')
+        // ->whereColumn('dtm.turma_modelo_id','=','turmas_modelos.id')])
+
+
+        // dd($where->get());
+
+        // select * from turmas_modelo_disciplina tmd  join contents c 
+        // on c.disciplina_id = tmd.disciplina_id where tmd.turma_id = ?
 
 
         $turmas = $where->paginate(20);
@@ -97,7 +100,7 @@ class TurmasModelosController extends Controller
             $turma = TurmaModelo::create($data);
         } else {
 
-            $turma = TurmaModelo::find($data['id']); 
+            $turma = TurmaModelo::find($data['id']);
             $turma->update($data);
             $deleted = DB::table('disciplinas_turmas_modelos')->where('turma_modelo_id', $turma->id)->delete();
         }
@@ -105,10 +108,10 @@ class TurmasModelosController extends Controller
         // Adicionar as disciplinas em disciplinas_turmasmodelo
         foreach ($discs as $disc) {
 
-                $disc_turmamodelo = DisciplinaTurmaModelo::create([
-                    'disciplina_id' => $disc,
-                    'turma_modelo_id'  => $turma->id
-                ]);
+            $disc_turmamodelo = DisciplinaTurmaModelo::create([
+                'disciplina_id' => $disc,
+                'turma_modelo_id'  => $turma->id
+            ]);
 
 
             //$disc_turmamodelo->save();
