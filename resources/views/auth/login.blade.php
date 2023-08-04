@@ -1,14 +1,38 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="pt-br" class="h-100">
 
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
+    <title>EducaAR</title>
+    @yield('style')
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
 
+    <link rel="stylesheet" href="/css/questions.css">
 
-@section('content')
-    <div class="">
-        {{-- <div class="h-100"> --}}
-        {{-- <div class="h-100 align-items-center"> --}}
-        {{-- <div class="row justify-content-center"> --}}
-        {{-- <div class="col-md-4"> --}}
-        <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
+    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="/css/telainicial.css"> --}}
+
+    @include('sweetalert::alert')
+    @livewireStyles
+
+    <link rel="stylesheet" href="{{ asset('css/login.css?v=' . filemtime(public_path('css/login.css'))) }}" />
+
+</head>
+
+<body class="h-100">
+
+    {{-- <img class="wave" src="images/wave.png"> --}}
+    <div class=''>
+
         <div class="background-image">
             <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fluid">
         </div>
@@ -21,18 +45,13 @@
 
 
         </div>
-        {{-- <div class="img-wrapper">
-            <div class="image-container">
-                <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
-                <span class="image-text">Texto 1</span>
+
+
+        <div class="container">
+            <div class="logo">
+                <img src="{{ asset('images/EDUCAAR.png') }}" alt="Imagem" class="img-fluid">
             </div>
-            <div class="image-container">
-                <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">
-                <span class="image-text">Texto 2</span>
-            </div>
-        </div> --}}
-        <div class="card">
-            <div class="card-header">{{ __('Login') }}</div>
+            {{-- <div class="card-header">{{ __('Login') }}</div> --}}
             <div class="card-body">
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -78,121 +97,16 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                            {{-- </div> --}}
+
                         </div>
                     </div>
-
-                    {{-- <div class="form-group row mb-0 btn"> --}}
-                    <!--   <div class="col-md-8 offset-md-4 lulu">-->
                     <button type="submit" class="btn btn-primary">
                         {{ __('Login') }}
                     </button>
-                    <!--</div>-->
-                    {{-- </div> --}}
-                </form>
             </div>
+
         </div>
-        {{-- </div> --}}
-        {{-- </div> --}}
-        {{-- </div> --}}
-        {{-- </div> --}}
     </div>
+</body>
 
-
-@section('script')
-    <link rel="stylesheet" href="{{ asset('css/login.css?v=' . filemtime(public_path('css/login.css'))) }}" />
-@endsection
-
-
-
-
-{{-- @section('style')
-    <style>
-        h-100 {
-
-            background-color: #fff;
-        }
-
-
-        .card {
-            display: flex;
-            box-shadow: 5px 5px 5px darkgrey;
-
-        }
-
-
-        .card-body {
-            padding-left: 30%;
-            box-shadow: 5px 5px 5px darkgrey;
-
-
-        }
-
-
-
-        .item-row.login {
-            display: flex;
-
-            width: 90%;
-
-            margin-left: 20%;
-
-
-
-        }
-
-        .item-row.password {
-            display: flex;
-
-            width: 90%;
-
-            margin-left: 20%;
-
-        }
-
-        .btn.btn-primary {
-
-            width: 150px;
-
-
-        }
-
-
-
-        @media screen and (max-width: 600px) {
-
-
-            .btn.btn-primary {
-
-                width: 100px;
-                margin-left: 125px;
-            }
-        }
-
-
-        @media screen and (min-width: 768px) and (max-width: 992px) {
-            .content-body {
-
-
-                padding-right: 20%;
-            }
-
-
-        }
-
-
-        @media screen and (min-width: 992px) {
-            .content-body {
-                text-align: center;
-
-                padding-right: 30%;
-                padding-left: 12%;
-            }
-
-
-
-
-        }
-    </style>
-@endsection --}}
-@endsection
+</html>
