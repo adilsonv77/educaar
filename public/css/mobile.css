@@ -1,9 +1,19 @@
 
+        h-100{
+            background-image:linear-gradient(circle at center, #8743df, #bd8aff);
+
+
+
+        }
+        
+        
+        
         body {
             
             padding: 0;
             font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif;
             color: #244376;
+            background-color: black;
         }
 
         #card {
