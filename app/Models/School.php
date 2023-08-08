@@ -9,16 +9,17 @@ class School extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'qr_letra', 'qr_numero'];
+    protected $fillable = ['name', 'qr_letra', 'qr_numero', 'prof_atual_id'];
     protected $table = 'schools';
 
 
-    public function users() {
+    public function users()
+    {
         return $this->hasMany(User::class);
     }
 
-    public function disciplinas() {
+    public function disciplinas()
+    {
         return $this->hasMany(Disciplina::class);
     }
-    
 }

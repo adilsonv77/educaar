@@ -6,6 +6,7 @@ use App\Models\AlunoTurma;
 use App\Models\User;
 use App\Models\TurmaDisciplina;
 use App\Models\AnoLetivo;
+use App\Models\School;
 use App\Models\TurmaModelo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -93,13 +94,14 @@ class TurmaController extends Controller
                 ->where('turmas_modelos.id', $turmamodelo->id)
                 ->get();
 
+            $prof = School::find(Auth::user()->school_id);
             // Adicionar as disciplinas em turmasdisciplinas
             foreach ($disciplinasturmas as $disc) {
 
                 $disc_turma = TurmaDisciplina::create([
                     'disciplina_id' => $disc->id,
                     'turma_id'  => $turma->id,
-                    'professor_id' => 1
+                    'professor_id' => $prof->prof_atual_id
                 ]);
 
                 //$disc_turmamodelo->save();
@@ -223,37 +225,40 @@ class TurmaController extends Controller
 
         return redirect('/turmas');
     }
-    public function turmasAlunosIndex(Request $request){
-        $data= $request->all(); 
-        
-//         SELECT u.name from users as u 
-// 	inner join alunos_turmas as at 
-//     on at.aluno_id= u.id
-//   where at.turma_id= 4 and u.type= 'student';
-        $turma= Turma::find($data['turma_id']);
+    public function turmasAlunosIndex(Request $request)
+    {
+        $data = $request->all();
 
-        $alunos= DB::table('users')
-        ->select('users.name','users.id')
-        ->join('alunos_turmas as at','at.aluno_id','=','users.id')
-        ->where([
-            ['at.turma_id','=',$turma->id],
-            ['users.type','=','student'],
-            ['users.school_id','=',$turma->school_id]])
-        ->orderBy('users.name')
-        ->get();
+        //         SELECT u.name from users as u 
+        // 	inner join alunos_turmas as at 
+        //     on at.aluno_id= u.id
+        //   where at.turma_id= 4 and u.type= 'student';
+        $turma = Turma::find($data['turma_id']);
 
-        $turma= Turma::find($data['turma_id'])->nome;
-        
+        $alunos = DB::table('users')
+            ->select('users.name', 'users.id')
+            ->join('alunos_turmas as at', 'at.aluno_id', '=', 'users.id')
+            ->where([
+                ['at.turma_id', '=', $turma->id],
+                ['users.type', '=', 'student'],
+                ['users.school_id', '=', $turma->school_id]
+            ])
+            ->orderBy('users.name')
+            ->get();
 
-        return view('pages.turma.alunosTurma', compact('alunos','turma'));
+        $turma = Turma::find($data['turma_id'])->nome;
+
+
+        return view('pages.turma.alunosTurma', compact('alunos', 'turma'));
     }
-    public function desmatricular(Request $request){
-        $data= $request->all();
+    public function desmatricular(Request $request)
+    {
+        $data = $request->all();
 
-        $query= DB::table('alunos_turmas')
-                ->where('alunos_turmas.aluno_id','=',$data['aluno_id'])
-                ->delete();
-        
+        $query = DB::table('alunos_turmas')
+            ->where('alunos_turmas.aluno_id', '=', $data['aluno_id'])
+            ->delete();
+
         return redirect('/turmas');
     }
 }
