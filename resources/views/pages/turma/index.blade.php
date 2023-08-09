@@ -53,7 +53,7 @@
                                         <form action="{{ route('turmas.turmasAlunosIndex', $item->id) }}">
                                             @csrf
                                             <input type="hidden" name="turma_id" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-primary">Alunos</button>
+                                            <button type="submit" class="btn btn-primary">Alunos ({{$item->qtosAlunos}})</button>
                                         </form>
                                     </td>
                                     <td>

@@ -35,8 +35,11 @@ class TurmaController extends Controller
 
         $where = $where->addSelect([
             'qtosAlunos' => AlunoTurma::selectRaw('count(*)')
+                ->join('users as u','alunos_turmas.aluno_id','=','u.id')
+                ->where('u.type','=','student')
                 ->whereColumn('turmas.id', '=', 'turma_id')
         ]);
+        
 
         $turmas = $where->paginate(20);
         $anosletivos = AnoLetivo::where('school_id', Auth::user()->school_id)->get();
