@@ -40,8 +40,9 @@
                                 <th>Nome</th>
                                 <th>Disciplina</th>
                                 <th>Série</th>
-
-                                <th colspan="3" style="text-align:center">Ações</th>
+                                <th>Editar</th>
+                                <th>Ações</th>
+                                <th>Excluir</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,7 +59,7 @@
                                             <button type="submit" class="btn btn-warning">Editar</button>
                                         </form>
                                     </td>
-                                    <td>
+
                                     <td>
                                         <form action="{{ route('fechar.index') }}">
                                             @csrf

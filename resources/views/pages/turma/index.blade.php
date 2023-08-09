@@ -34,6 +34,9 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>Ação</th>
+                                <th>Alunos</th>
+                                <th>Disciplinas</th>
+                                <th>Excluir</th>
                             </tr>
                         </thead>
                         <tbody>

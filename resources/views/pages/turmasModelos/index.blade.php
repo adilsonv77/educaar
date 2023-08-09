@@ -32,6 +32,7 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>Ação</th>
+                                <th>Excluir</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,7 +47,7 @@
                                         <form action="{{ route('turmasmodelos.edit', $item->id) }}">
                                             @csrf
                                             <button type="submit"
-                                                class="btn btn-warning"@if ($item->qntTurmas > 0|| $item->conteudos > 0) disabled @endif>Editar</button>
+                                                class="btn btn-warning"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif>Editar</button>
                                         </form>
                                     </td>
                                     <td>

@@ -31,6 +31,7 @@
   text-rendering: auto;
 }
 
+
 .fa-1x {
   font-size: 1em;
 }
@@ -10402,8 +10403,35 @@ readers do not read off random characters that represent icons */
 } */
 .nav-header {
   background-color: #8743DF;
+  margin-left: auto;
+  margin-right: auto;
 }
+.logo{
+  margin-left: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.img-fluid{
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .card {
   overflow: auto;
+}
+
+.form-inline .form-control {
+  width: 80%;
+}
+
+.form-inline {
+  justify-content: space-between;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
 }

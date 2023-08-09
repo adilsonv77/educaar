@@ -6,21 +6,20 @@
 @section('content')
     @can('student')
         <h1 class="text-center">Responda as questões abaixo</h1>
-
     @endcan
     <div class="card">
-            <div class="card">
-                <div class="card-body">
+        <div class="card">
+            <div class="card-body">
 
 
-                    <model-viewer src="/uploads/{{ $content->glb }}" ios-src="/uploads/{{ $content->usdz }}" poster=""
-                        alt="{{ $content->name }}" shadow-intensity="1" camera-controls auto-rotate ar>
-                    </model-viewer>
+                <model-viewer src="/uploads/{{ $content->glb }}" ios-src="/uploads/{{ $content->usdz }}" poster=""
+                    alt="{{ $content->name }}" shadow-intensity="1" camera-controls auto-rotate ar>
+                </model-viewer>
 
 
-                    
-                </div>
+
             </div>
+        </div>
 
         @can('teacher')
             <div class="container">
@@ -128,7 +127,6 @@
                                                 <label for="fly" class="radio-tile-label">{{ $item->c }}</label>
                                             </div>
                                         </div>
-
                                     @endif
                                     @if ($item->d !== null)
                                         <div class="input-container">
@@ -140,11 +138,9 @@
                                                 <label for="fly" class="radio-tile-label">{{ $item->d }}</label>
                                             </div>
                                         </div>
-
                                     @endif
                                 </div>
                             </div>
-
                         @endforeach
                         <div class="form-group mt-4">
                             <input type="submit" value="Responder" class="btn btn-lg btn-success">
@@ -157,13 +153,10 @@
 
 
                 @if (!isset($timeEnterActivity))
-
                     @foreach ($activityGradeUser as $item)
                         <p>Acertos: {{ $item->correctQuestions }}</p>
                         <p>Erros: {{ $item->wrongQuestions }}</p>
-
                     @endforeach
-
                 @endif
 
             </div>
@@ -223,6 +216,5 @@
             flex-shrink: 0;
             text-decoration: none;
         }
-
     </style>
 @endsection

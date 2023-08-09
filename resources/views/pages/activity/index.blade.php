@@ -20,7 +20,7 @@
                 <button class="btn btn-primary "type="submit">Pesquisar</button>
             </section>
         </div> --}}
-        <div class="form-inline d-flex justify-content-center align-items-center">
+        <div class="form-inline ">
             <input class="form-control mx-5" type="text" name="titulo" id="titulo" value="{{ $activity }}"
                 list="historico" />
             <section class="itens-group">

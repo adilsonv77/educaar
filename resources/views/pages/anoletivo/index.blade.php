@@ -33,6 +33,7 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>Ação</th>
+                                <th>Excluir</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,7 +65,8 @@
                                         <div class="modal-content">
                                             <div class="modal-body">
                                                 <h3>Você tem certeza que deseja excluir o ano letivo
-                                                    <b>{{ $item->name }}?</b></h3>
+                                                    <b>{{ $item->name }}?</b>
+                                                </h3>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"

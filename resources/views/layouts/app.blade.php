@@ -39,7 +39,10 @@
                 {{-- <a href="/" class="brand-logo">
                     <i class="fa-brands fa-unity"></i>
                 </a> --}}
-                <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">{{-- So pra teste --}}
+
+                <img src="{{ asset('images/EDUCAAR.png') }}" width="170" alt="Imagem"
+                    class="img-fluid">{{-- So pra teste --}}
+
                 <div class="nav-control">
                     <div class="hamburger">
                         <span class="line"></span><span class="line"></span><span class="line"></span>
@@ -240,15 +243,15 @@
 
     @endauth
 
-    {{-- @section('style')
+    @section('style')
         <style>
-            .brand-logo {
+            .nav-header {
                 display: flex;
                 justify-content: center;
                 align-items: center;
             }
         </style>
-    @endsection --}}
+    @endsection
 
 
 
