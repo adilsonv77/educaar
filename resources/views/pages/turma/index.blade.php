@@ -81,7 +81,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-dismiss="modal">Cancelar</button>
-                                                    <form action="{{ route('content.destroy', $item->id) }}"
+                                                    <form action="{{ route('turmas.destroy', $item->id) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')

@@ -264,4 +264,19 @@ class TurmaController extends Controller
 
         return redirect('/turmas');
     }
+    public function destroy($id)
+    {
+        if (Auth::user()->type == 'student') {
+            return redirect('/');
+        }
+
+        $turma = Turma::find($id);
+
+        $disciplinas= DB::table('turmas_disciplinas')->where('turma_id',$turma->id)->delete();
+
+        if ($turma != null) {
+            $turma->delete();
+        }
+        return redirect('/turmas');
+    }
 }
