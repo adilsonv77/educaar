@@ -73,7 +73,17 @@
                     </div>
                 </div>
 
-
+                <div class="form-group row">
+                        <label for="" class="col-md-4 col-form-label text-md-right">Escolha a Turma:* (Ano Letivo: {{$anoletivo->name}} )</label>
+                        <div class= "col-md-6">
+                            <select class="form-control" name="turma">
+                            @foreach ($turmas as $item)
+                                <option value="{{$item->id}}">
+                                    {{ $item->nome }} </option>
+                            @endforeach
+                        </select>
+                        </div>
+                </div>
 
                 <div class="form-group row mb-0">
                     <div class="col-md-6 offset-md-4">

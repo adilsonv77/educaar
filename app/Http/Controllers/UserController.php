@@ -67,6 +67,12 @@ class UserController extends Controller
     {
         $titulo = 'Adicionar Aluno';
         $acao = 'insert';
+        $anoletivo=AnoLetivo::where('bool_atual', 1)->first();
+        $turmas= DB::table('turmas')
+        ->where([['ano_id','=',$anoletivo->id],
+                ['school_id','=', Auth::user()->school_id]])
+                ->get();
+        
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,
@@ -74,7 +80,10 @@ class UserController extends Controller
             'type' => 'student',
             'name' => '',
             'email' => '',
-            'username' => ''
+            'username' => '',
+            'turmas'=>$turmas,
+            'turma'=>0,
+            'anoletivo'=>$anoletivo
         ];
 
         return view('pages.user.registerUser', $params);
@@ -241,7 +250,7 @@ class UserController extends Controller
 
         if ($data['acao'] == 'insert') {
 
-            User::create($data);
+            $user= User::create($data);
         } else {
 
             $user = User::find($data['id']);
@@ -249,6 +258,7 @@ class UserController extends Controller
         }
 
         if ($data['type'] == 'student') {
+            AlunoTurma::create(['turma_id' => $data['turma'], 'aluno_id' => $user->id]);
             return redirect('/indexAluno');
         } else {
             return redirect('/indexProf');
