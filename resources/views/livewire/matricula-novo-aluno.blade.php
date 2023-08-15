@@ -61,3 +61,11 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal-backdrop fade show"
+         id="backdrop"
+         style="display: @if($alterar === true)
+                 block
+         @else
+                 none
+         @endif;"></div>
