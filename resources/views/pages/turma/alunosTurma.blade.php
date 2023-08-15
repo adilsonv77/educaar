@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = $turma;
+    $pageName = 'Alunos da turma '.$turma;
 @endphp
 
 @section('page-name', $pageName)
