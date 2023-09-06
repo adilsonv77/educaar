@@ -67,12 +67,14 @@ class UserController extends Controller
     {
         $titulo = 'Adicionar Aluno';
         $acao = 'insert';
-        $anoletivo=AnoLetivo::where('bool_atual', 1)->first();
-        $turmas= DB::table('turmas')
-        ->where([['ano_id','=',$anoletivo->id],
-                ['school_id','=', Auth::user()->school_id]])
-                ->get();
-        
+        $anoletivo = AnoLetivo::where('bool_atual', 1)->first();
+        $turmas = DB::table('turmas')
+            ->where([
+                ['ano_id', '=', $anoletivo->id],
+                ['school_id', '=', Auth::user()->school_id]
+            ])
+            ->get();
+
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,
@@ -81,9 +83,9 @@ class UserController extends Controller
             'name' => '',
             'email' => '',
             'username' => '',
-            'turmas'=>$turmas,
-            'turma'=>0,
-            'anoletivo'=>$anoletivo
+            'turmas' => $turmas,
+            'turma' => $turmas->first(),
+            'anoletivo' => $anoletivo
         ];
 
         return view('pages.user.registerUser', $params);
@@ -123,6 +125,28 @@ class UserController extends Controller
             'username' => $user->username
 
         ];
+
+        if ($user->type == 'student') {
+            $anoletivo = AnoLetivo::where('bool_atual', 1)->first();
+            $turmas = DB::table('turmas')
+                ->where([
+                    ['ano_id', '=', $anoletivo->id],
+                    ['school_id', '=', Auth::user()->school_id]
+                ])
+                ->get();
+            $turma = DB::table('turmas')
+                ->join('alunos_turmas', 'alunos_turmas.turma_id', '=', 'turmas.id')
+                ->where([['turmas.ano_id', '=', $anoletivo->id], ['alunos_turmas.aluno_id', '=', $user->id]])
+                ->first();
+
+            $params += ['anoletivo' => $anoletivo, 'turmas' => $turmas];
+            if (isset($turma)) {
+                $params += ['turma' => $turma];
+            } else {
+                $params += ['turma' =>  $turmas->first()];
+            }
+        }
+
 
         return view('pages.user.registerUser', $params);
     }
@@ -250,15 +274,19 @@ class UserController extends Controller
 
         if ($data['acao'] == 'insert') {
 
-            $user= User::create($data);
+            $user = User::create($data);
+            if ($data['type'] == 'student') {
+                AlunoTurma::create(['turma_id' => $data['turma'], 'aluno_id' => $user->id]);
+            }
         } else {
-
             $user = User::find($data['id']);
             $user->update($data);
+            if ($data['type'] == 'student') {
+                AlunoTurma::updated(['turma_id' => $data['turma'], 'aluno_id' => $user->id]);
+            }
         }
 
         if ($data['type'] == 'student') {
-            AlunoTurma::create(['turma_id' => $data['turma'], 'aluno_id' => $user->id]);
             return redirect('/indexAluno');
         } else {
             return redirect('/indexProf');
@@ -313,16 +341,16 @@ class UserController extends Controller
                     ]);
                 } catch (\Illuminate\Database\QueryException $e) {
                     $aluno2 = User::where('username', $campos[1])->first();
-                    if(!AlunoTurma::where('aluno_id',$aluno2->id)->exists()){
+                    if (!AlunoTurma::where('aluno_id', $aluno2->id)->exists()) {
                         $aluno_turma = AlunoTurma::create([
                             'turma_id' => $turma,
                             'aluno_id'  => $aluno2->id
                         ]);
-                    }else{
+                    } else {
                         $aluno_turma = AlunoTurma::where('aluno_id', $aluno2->id)
-                        ->update([
-                            'turma_id' => $turma
-                        ]);
+                            ->update([
+                                'turma_id' => $turma
+                            ]);
                     }
                     continue;
                 }
@@ -330,7 +358,7 @@ class UserController extends Controller
             $count++;
         }
 
-        unlink('uploads/'.$csvFile);
+        unlink('uploads/' . $csvFile);
         // dd(unlink('uploads/'.$csvFile));
 
         return redirect()->route('turmas.turmasAlunosIndex', $data);

@@ -80,7 +80,8 @@
                         <div class="col-md-6">
                             <select class="form-control" name="turma">
                                 @foreach ($turmas as $item)
-                                    <option value="{{ $item->id }}">
+                                    <option value="{{ $item->id }}"
+                                        @if ($turma->id === $item->id) selected="selected" @endif>
                                         {{ $item->nome }} </option>
                                 @endforeach
                             </select>
