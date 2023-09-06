@@ -10,8 +10,9 @@
 
     <form action="{{ route('turmas.index') }}" method="GET ">
         @csrf
+        <label for="">Informe o ano Letivo</label>
         <div class="form-inline">
-            <label for="">Informe o ano Letivo</label>
+
             <select class="form-control" name="ano_id">
                 @foreach ($anosletivos as $item)
                     <option value="{{ $item->id }}" @if ($item->id === $anoletivo->id) selected="selected" @endif>
@@ -56,7 +57,8 @@
                                         <form action="{{ route('turmas.turmasAlunosIndex', $item->id) }}">
                                             @csrf
                                             <input type="hidden" name="turma_id" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-primary">Alunos ({{$item->qtosAlunos}})</button>
+                                            <button type="submit" class="btn btn-primary">Alunos
+                                                ({{ $item->qtosAlunos }})</button>
                                         </form>
                                     </td>
                                     <td>
@@ -84,8 +86,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-dismiss="modal">Cancelar</button>
-                                                    <form action="{{ route('turmas.destroy', $item->id) }}"
-                                                        method="POST">
+                                                    <form action="{{ route('turmas.destroy', $item->id) }}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger">Excluir</button>

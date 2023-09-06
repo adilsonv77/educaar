@@ -38,8 +38,11 @@
         @auth
             <div class="nav-header">
                 <a href="/" class="brand-logo">
-                    <i class="fa-brands fa-unity"></i>
+                    <img src="{{ asset('images/EDUCAAR_M.png') }}" width="170" alt="Imagem"
+                        class="img-fluid">{{-- So pra teste --}}
                 </a>
+
+
             </div>
             <div class="header">
                 <div class="header-content">

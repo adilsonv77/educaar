@@ -1,6 +1,13 @@
 
 .form-inline .form-control {
-    width: 20vw;
+    width: 66vw;
+    
+}
+.btn.btn-primary{
+    
+    width: 10vw;
+    
+
 }
 
 .form-inline {
