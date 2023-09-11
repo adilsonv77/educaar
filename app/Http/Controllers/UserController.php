@@ -281,8 +281,16 @@ class UserController extends Controller
         } else {
             $user = User::find($data['id']);
             $user->update($data);
+
+
             if ($data['type'] == 'student') {
-                AlunoTurma::updated(['turma_id' => $data['turma'], 'aluno_id' => $user->id]);
+                $query = DB::table('alunos_turmas')->where('aluno_id', $user->id);
+
+                if ($query->exists()) {
+                    $query->update(['turma_id' => $data['turma']]);
+                } else {
+                    AlunoTurma::create(['turma_id' => $data['turma'], 'aluno_id' => $user->id]);
+                }
             }
         }
 
