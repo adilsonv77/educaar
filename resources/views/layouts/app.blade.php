@@ -221,6 +221,7 @@
                             <ul aria-expanded="false">
                                 <li><a href="{{ route('user.matricula') }}">Importar arquivo</a></li>
                                 <li><a href="{{ route('turmas.novoAlunoTurma') }}">Aluno novo</a></li>
+                                <li><a href="{{ route('turmas.indexmatricula') }}">Listar</a></li>
                             </ul>
                         </li>
                         <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

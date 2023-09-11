@@ -35,11 +35,11 @@ class TurmaController extends Controller
 
         $where = $where->addSelect([
             'qtosAlunos' => AlunoTurma::selectRaw('count(*)')
-                ->join('users as u','alunos_turmas.aluno_id','=','u.id')
-                ->where('u.type','=','student')
+                ->join('users as u', 'alunos_turmas.aluno_id', '=', 'u.id')
+                ->where('u.type', '=', 'student')
                 ->whereColumn('turmas.id', '=', 'turma_id')
         ]);
-        
+
 
         $turmas = $where->paginate(20);
         $anosletivos = AnoLetivo::where('school_id', Auth::user()->school_id)->get();
@@ -216,6 +216,8 @@ class TurmaController extends Controller
     }
     public function novoAlunoTurmaStore(Request $request)
     {
+        $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
+            ->where('bool_atual', 1)->first();
         $data = $request->all();
 
         // dd($data);
@@ -228,6 +230,40 @@ class TurmaController extends Controller
 
         return redirect('/turmas');
     }
+
+    public function indexmatricula(Request $request)
+    {
+        $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
+            ->where('bool_atual', 1)->first();
+
+        $data = $request->all();
+
+        $where = DB::table('turmas')
+            ->where('school_id', Auth::user()->school_id)
+            ->where('ano_id', $anoletivo->id);
+
+        if (empty($data)) {
+            $turma = $where->first();
+        } else {
+            $turma = Turma::find($data['turma_id']);
+        }
+
+        $alunos = DB::table('users')
+            ->select('users.name', 'users.id')
+            ->join('alunos_turmas as at', 'at.aluno_id', '=', 'users.id')
+            ->where([
+                ['at.turma_id', '=', $turma->id],
+                ['users.type', '=', 'student'],
+                ['users.school_id', '=', $turma->school_id]
+            ])
+            ->orderBy('users.name')
+            ->get();
+
+        $turmas = $where->get();
+
+        return view('pages.turma.indexmatricula', compact('alunos', 'turma', 'turmas', 'anoletivo'));
+    }
+
     public function turmasAlunosIndex(Request $request)
     {
         $data = $request->all();
@@ -272,7 +308,7 @@ class TurmaController extends Controller
 
         $turma = Turma::find($id);
 
-        $disciplinas= DB::table('turmas_disciplinas')->where('turma_id',$turma->id)->delete();
+        $disciplinas = DB::table('turmas_disciplinas')->where('turma_id', $turma->id)->delete();
 
         if ($turma != null) {
             $turma->delete();
