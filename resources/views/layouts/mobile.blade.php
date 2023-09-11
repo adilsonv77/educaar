@@ -38,7 +38,7 @@
         @auth
             <div class="nav-header">
                 <a href="/" class="brand-logo">
-                    <img src="{{ asset('images/EDUCAAR_M.png') }}" width="170" alt="Imagem"
+                    <img src="{{ asset('images/EDUCAAR_M.png') }}" width="70" alt="Imagem"
                         class="img-fluid">{{-- So pra teste --}}
                 </a>
 

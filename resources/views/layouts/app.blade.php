@@ -36,12 +36,8 @@
     <div id="main-wrapper">
         @auth
             <div class="nav-header">
-                {{-- <a href="/" class="brand-logo">
-                    <i class="fa-brands fa-unity"></i>
-                </a> --}}
-
-                <img src="{{ asset('images/EDUCAAR.png') }}" width="170" alt="Imagem"
-                    class="img-fluid">{{-- So pra teste --}}
+                <img src="{{ asset('images/EDUCAAR.png') }}" width="180" style="margin-left:23%;margin-top:0.5%"
+                    alt="Imagem" class="img-fluid">
 
                 <div class="nav-control">
                     <div class="hamburger">

@@ -10410,13 +10410,17 @@ readers do not read off random characters that represent icons */
   margin-left: 10px;
   margin-left: auto;
   margin-right: auto;
+
 }
 
 .img-fluid{
 
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center;
+  justify-content: center; */
+  /* margin-left: 35px; */
+
+
 }
 
 
