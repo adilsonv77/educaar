@@ -236,12 +236,13 @@ class TurmaController extends Controller
         $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
 
-        $data = $request->all();
-
         $where = DB::table('turmas')
             ->where('school_id', Auth::user()->school_id)
             ->where('ano_id', $anoletivo->id);
 
+        $data = $request->all();
+
+        $turmas = $where->get();
         if (empty($data)) {
             $turma = $where->first();
         } else {
@@ -259,7 +260,8 @@ class TurmaController extends Controller
             ->orderBy('users.name')
             ->get();
 
-        $turmas = $where->get();
+
+
 
         return view('pages.turma.indexmatricula', compact('alunos', 'turma', 'turmas', 'anoletivo'));
     }
@@ -298,7 +300,8 @@ class TurmaController extends Controller
             ->where('alunos_turmas.aluno_id', '=', $data['aluno_id'])
             ->delete();
 
-        return redirect('/turmas');
+        $turma = $data['turma_id'];
+        return redirect(route('turmas.indexmatricula', 'turma_id=' . $turma));
     }
     public function destroy($id)
     {

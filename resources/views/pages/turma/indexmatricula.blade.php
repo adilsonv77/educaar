@@ -10,7 +10,7 @@
 
     <form action="{{ route('turmas.indexmatricula') }}" method="GET ">
         @csrf
-        <label for="">Informe a turma</label>
+        <label for="">Informe a turma: (Ano letivo atual {{ $anoletivo->name }})</label>
         <div class="form-inline">
             <select class="form-control" name="turma_id">
                 @foreach ($turmas as $item)
@@ -63,6 +63,7 @@
                                                     <form action="{{ route('turmas.desmatricular') }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="aluno_id" value="{{ $aluno->id }}">
+                                                        <input type="hidden" name="turma_id" value="{{ $turma->id }}">
                                                         <button type="submit" class="btn btn-danger">Desmatricular</button>
                                                     </form>
                                                 </div>
