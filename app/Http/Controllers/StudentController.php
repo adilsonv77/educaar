@@ -57,21 +57,24 @@ class StudentController extends Controller
             ->distinct()
             ->get();
 
-
-
         return view('student.indexContentStudent', compact('conteudos'));
     }
     public function showActivity(Request $request)
     {
+        //$request->session()->reflash();
         $content_id = $request->id;
+        if ($content_id == null) {
+            $content_id = session()->get("content_id");
+        }
         $activities = DB::table('activities')
             ->where("content_id", $content_id)
             ->orderBy("id")
             ->get();
 
-        //return view('student.questionAnswer', compact('activities'));
+        
+        session(["content_id" => $content_id]);
 
-        return view('student.ar', compact('activities', 'content_id'));
+        return view('student.ar', compact('activities'));
     }
 
     public function store(Request $request)
@@ -110,18 +113,15 @@ class StudentController extends Controller
         //dd($opcao == $datasess[0]->a);
 
         // session()->get("");
-        // session()->remove("");
-        // session()->remove()->all();
+        // session()->forget("");
+        // session()->flush(); // remover tudo !!! - perigoso. nunca usar
         // $ = $request->all();
         // $id = session()->get('activity_id');
         // # dd($activity);
         // #return view('pages.questions.index', $id);
+        
         return redirect('/students/activity');
     }
-
-
-
-
 
     public function questoes(Request $request)
     {
