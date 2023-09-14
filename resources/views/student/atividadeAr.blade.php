@@ -31,11 +31,24 @@
                     </div>
                 </div>
         @endforeach
-        <div class="form-group mt-4 d-flex justify-content-center mb-4">
-            <input type="submit" value="Salvar"@if ($respondida) disabled @endif class="btn btn-success"
-                id="btn_save">
-        </div>
-    </form>
+        <table class="table table-hover table-responsive-sm">
+        <tbody>
+            <tr>
+                <td>
+                    <button type="submit" @if ($respondida) hidden="hidden" @endif class="btn btn-success">Salvar</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{{ route('student.store') }}">
+                    @csrf
+                        <input type="hidden" name="return" value="1">
+                        <button type="submit" class="btn btn-warning">Retornar</button>  
+                    </form>
+                </td>  
+            </tr>
+        </tbody>
+        </table>
+
 @section('style')
     <style>
         input[type="radio"] {

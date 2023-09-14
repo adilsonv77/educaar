@@ -28,7 +28,6 @@
 
 @section('content')
 
-    <h2> Com sessão > {{session()->get('content_id')}} </h2>
     <span id="mind" style="display: none;">/mind/{{session()->get('content_id')}}.mind</span>
 
     <span id="glbs" style="display: none;"> 

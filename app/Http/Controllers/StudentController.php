@@ -79,36 +79,41 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
+
         //dd($request->all());
-        $questions = session()->get('questoes');
+        if ($request->get("return") == null)
+        {
+            $questions = session()->get('questoes');
 
-        $datareq = $request->all();
-        // dd($datareq);
-        // $s  = "";
-        foreach ($questions as $questao) {
-            $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
-            $respop = $datareq["questao" . $questao->id];
-            $data['question_id'] = $questao->id;
-            $data['user_id'] =  Auth::user()->id;
-            $data['activity_id'] =  $questao->activity_id;
-            $opcao = $questao->options[$respop];
-
-            $data['alternative_answered'] =  $opcao;
-            // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
-
-            if ($opcao == $questao->a) {
-                $data['correct'] = true;
-            } else {
-                $data['correct'] = false;
+            $datareq = $request->all();
+            // dd($datareq);
+            // $s  = "";
+            foreach ($questions as $questao) {
+                $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
+                $respop = $datareq["questao" . $questao->id];
+                $data['question_id'] = $questao->id;
+                $data['user_id'] =  Auth::user()->id;
+                $data['activity_id'] =  $questao->activity_id;
+                $opcao = $questao->options[$respop];
+    
+                $data['alternative_answered'] =  $opcao;
+                // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
+    
+                if ($opcao == $questao->a) {
+                    $data['correct'] = true;
+                } else {
+                    $data['correct'] = false;
+                }
+                // dd($data);
+                // gravar no banco uma linha da resposta
+                StudentAnswer::create($data);
+    
+    
+                // $opcao == $questao->a
             }
-            // dd($data);
-            // gravar no banco uma linha da resposta
-            StudentAnswer::create($data);
-
-
-            // $opcao == $questao->a
+    
         }
-
+ 
 
         //dd($opcao == $datasess[0]->a);
 
