@@ -43,9 +43,10 @@
             position: absolute;
             bottom: 10px;
             left: 10px;
-            background: white;
+            background: orange;
             z-index: 100;
             display: block;
+            border-radius: 90px;
         }
     </style>
 @endsection
@@ -68,10 +69,6 @@
             <input name="id" type="hidden" value="{{ $disciplina }}" />
             <button type="submit" class="btn" id="button-return"><i class="flaticon-381-back"></i></button>
         </form>
-        {{-- <a id="button-return" class="flaticon-381-back" data-href="{{ route('student.conteudos') }}">
-            <input name="acao" type="hidden" value="{{ true }}" />
-            <input name="id" type="hidden" value="{{ Auth::user()->id }}" />
-        </a> --}}
     </div>
 @endsection
 
