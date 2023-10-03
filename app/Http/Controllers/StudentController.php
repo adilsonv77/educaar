@@ -37,11 +37,9 @@ class StudentController extends Controller
     public function indexContentStudent(Request $request)
     {
 
-        $acao = $request->acao;
-        $id = $request->id;
-        if ($acao) {
-            dd($id);
-        }
+        session()->put('disciplina', $request->id);
+        $id = session()->get("disciplina");
+
         $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
 
@@ -67,7 +65,6 @@ class StudentController extends Controller
     {
         //$request->session()->reflash();
         $data = $request->all();
-        dd($data);
         $content_id = $request->id;
         if ($content_id == null) {
             $content_id = session()->get("content_id");
@@ -79,8 +76,9 @@ class StudentController extends Controller
 
 
         session(["content_id" => $content_id]);
+        $disciplina = session()->get("disciplina");
 
-        return view('student.ar', compact('activities'));
+        return view('student.ar', compact('activities', 'disciplina'));
     }
 
     public function store(Request $request)

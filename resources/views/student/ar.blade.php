@@ -29,8 +29,23 @@
             background: white;
             z-index: 100;
             display: none;
+        }
 
+        #return-container {
+            height: 80vh;
+            width: 120vh;
+            position: relative;
+            overflow: hidden;
+        }
 
+        #button-return {
+            font-size: 32px;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: white;
+            z-index: 100;
+            display: block;
         }
     </style>
 @endsection
@@ -47,13 +62,16 @@
 
     <div id="my-ar-container">
         <a id="button-ar" class="flaticon-381-list-1" data-href="{{ route('student.questoes') }}"></a>
-    </div>
 
-    <div id="return-container">
-        <a id="button-return" class="flaticon-381-back" data-href="{{ route('student.conteudos') }}">
+        <form action="{{ route('student.conteudos') }}">
+            @csrf
+            <input name="id" type="hidden" value="{{ $disciplina }}" />
+            <button type="submit" class="btn" id="button-return"><i class="flaticon-381-back"></i></button>
+        </form>
+        {{-- <a id="button-return" class="flaticon-381-back" data-href="{{ route('student.conteudos') }}">
             <input name="acao" type="hidden" value="{{ true }}" />
             <input name="id" type="hidden" value="{{ Auth::user()->id }}" />
-        </a>
+        </a> --}}
     </div>
 @endsection
 
