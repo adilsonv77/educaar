@@ -37,7 +37,11 @@ class StudentController extends Controller
     public function indexContentStudent(Request $request)
     {
 
+        $acao = $request->acao;
         $id = $request->id;
+        if ($acao) {
+            dd($id);
+        }
         $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
 
@@ -62,6 +66,8 @@ class StudentController extends Controller
     public function showActivity(Request $request)
     {
         //$request->session()->reflash();
+        $data = $request->all();
+        dd($data);
         $content_id = $request->id;
         if ($content_id == null) {
             $content_id = session()->get("content_id");
@@ -71,7 +77,7 @@ class StudentController extends Controller
             ->orderBy("id")
             ->get();
 
-        
+
         session(["content_id" => $content_id]);
 
         return view('student.ar', compact('activities'));
@@ -81,8 +87,7 @@ class StudentController extends Controller
     {
 
         //dd($request->all());
-        if ($request->get("return") == null)
-        {
+        if ($request->get("return") == null) {
             $questions = session()->get('questoes');
 
             $datareq = $request->all();
@@ -95,10 +100,10 @@ class StudentController extends Controller
                 $data['user_id'] =  Auth::user()->id;
                 $data['activity_id'] =  $questao->activity_id;
                 $opcao = $questao->options[$respop];
-    
+
                 $data['alternative_answered'] =  $opcao;
                 // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
-    
+
                 if ($opcao == $questao->a) {
                     $data['correct'] = true;
                 } else {
@@ -107,13 +112,12 @@ class StudentController extends Controller
                 // dd($data);
                 // gravar no banco uma linha da resposta
                 StudentAnswer::create($data);
-    
-    
+
+
                 // $opcao == $questao->a
             }
-    
         }
- 
+
 
         //dd($opcao == $datasess[0]->a);
 
@@ -124,7 +128,7 @@ class StudentController extends Controller
         // $id = session()->get('activity_id');
         // # dd($activity);
         // #return view('pages.questions.index', $id);
-        
+
         return redirect('/students/activity');
     }
 

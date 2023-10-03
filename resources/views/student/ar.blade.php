@@ -3,49 +3,61 @@
 
 
 @section('style')
-
-<style>
-
+    <style>
         #my-ar-container {
-            height: 80vh; width: 120vh; position: relative; overflow: hidden;   
-         }
+            height: 80vh;
+            width: 120vh;
+            position: relative;
+            overflow: hidden;
+        }
 
-         .glyph {
-               background: white;  font-size: 32px;  position: fixed; bottom: 3%; right: 5%; border-radius: 50%
-         }
+        .glyph {
+            background: white;
+            font-size: 32px;
+            position: fixed;
+            bottom: 3%;
+            right: 5%;
+            border-radius: 50%
+        }
 
 
-         #button-ar {
-            font-size: 32px; position: absolute; bottom: 10px; left: 10px; background: white; z-index: 100; display: none;
+        #button-ar {
+            font-size: 32px;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: white;
+            z-index: 100;
+            display: none;
 
-    
-         }
 
-         
-</style>
+        }
+    </style>
 @endsection
 
 
 @section('content')
+    <span id="mind" style="display: none;">/mind/{{ session()->get('content_id') }}.mind</span>
 
-    <span id="mind" style="display: none;">/mind/{{session()->get('content_id')}}.mind</span>
-
-    <span id="glbs" style="display: none;"> 
+    <span id="glbs" style="display: none;">
         @foreach ($activities as $item)
-         <li id="act_{{$item->id}}">/modelos3d/{{$item->glb}}</li>
+            <li id="act_{{ $item->id }}">/modelos3d/{{ $item->glb }}</li>
         @endforeach
     </span>
-    
+
     <div id="my-ar-container">
         <a id="button-ar" class="flaticon-381-list-1" data-href="{{ route('student.questoes') }}"></a>
     </div>
 
-    
+    <div id="return-container">
+        <a id="button-return" class="flaticon-381-back" data-href="{{ route('student.conteudos') }}">
+            <input name="acao" type="hidden" value="{{ true }}" />
+            <input name="id" type="hidden" value="{{ Auth::user()->id }}" />
+        </a>
+    </div>
 @endsection
 
-@section('script')	
-
-
+@section('script')
     <script type="importmap">
         
     {
@@ -59,7 +71,6 @@
 
 
 
-  
+
     <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
-    
-@endsection 
+@endsection
