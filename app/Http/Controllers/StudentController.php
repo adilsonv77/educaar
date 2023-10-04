@@ -84,7 +84,7 @@ class StudentController extends Controller
     public function store(Request $request)
     {
 
-        //dd($request->all());
+        dd($request->all());
         if ($request->get("return") == null) {
             $questions = session()->get('questoes');
 
@@ -148,15 +148,33 @@ class StudentController extends Controller
         }
         session()->put('questoes', $questions);
 
-        $respondida = DB::table('student_answers')
-            ->where([
-                ['activity_id', '=', $activity_id],
-                ['question_id', '=', $questions->first()->id],
-                ['user_id', '=', Auth::user()->id]
-            ])->exists();
+        dd($questions);
 
-        // dd($respondida);
-
+        $respondida = DB::table('student_answers as st')
+                    ->join('questions as q','st.question_id','=','q.id')
+                    ->where([
+                            ['st.activity_id', '=', $activity_id],
+                            ['st.user_id', '=', Auth::user()->id]
+                        ])->exists();
+        
+        $where = DB::table('questions')
+            ->where("activity_id", $activity_id);
+            
+        
+        if($respondida){
+            $questions=$where->addSelect([
+                'alternative_answered'=>DB::table('student_answers')
+                                ->select('student_answers.alternative_answered')
+                                ->whereColumn('student_answers.question_id', '=','questions.id')
+                                ->whereColumn('student_answers.activity_id', '=','questions.activity_id')
+                                ->where('student_answers.user_id','=',Auth::user()->id)
+                            ])->get();
+            
+        }else{
+            $questions=$where->addSelect([
+                'alternative_answered'=>0])
+                ->get();
+        }
         return view('student.atividadeAr', compact('questions', 'respondida'));
     }
 

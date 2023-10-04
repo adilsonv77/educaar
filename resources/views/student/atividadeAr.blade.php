@@ -21,7 +21,8 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="questao{{ $item->id }}"
                                     id="flexRadioDefault{{ $loop->index }} {{ $item->id }}"
-                                    value="{{ $loop->index }}">
+                                    value="{{ $loop->index }}" @if($respondida) disabled  @endif 
+                                    @if($option==$item->alternative_answered) checkdate @endif>
                                 <label for="flexRadioDefault{{ $loop->index }} {{ $item->id }}"
                                     class="form-check-label" style="font-size: 17px">
                                     {{ $option }}
