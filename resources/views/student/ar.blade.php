@@ -25,7 +25,7 @@
             font-size: 32px;
             position: absolute;
             bottom: 10px;
-            left: 10px;
+            left: 350px;
             background: white;
             z-index: 100;
             display: none;
