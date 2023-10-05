@@ -48,6 +48,11 @@
 
     <span id="mind" style="display: none;">/mind/{{session()->get('content_id')}}.mind</span>
 
+    <script>
+        var mind = document.getElementById("mind");
+        mind.textContent = mind.textContent + "?" + Math.floor(Math.random() * 100000);
+    </script>
+
     <span id="glbs" style="display: none;"> 
         @foreach ($activities as $item)
         
