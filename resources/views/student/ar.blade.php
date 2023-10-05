@@ -3,43 +3,20 @@
 
 
 @section('style')
-    <style>
+
+<style>
+
         #my-ar-container {
-            height: 80vh;
-            width: 120vh;
-            position: relative;
-            overflow: hidden;
-        }
+            height: 80vh; width: 120vh; position: relative; overflow: hidden;   
+         }
 
-        .glyph {
-            background: white;
-            font-size: 32px;
-            position: fixed;
-            bottom: 3%;
-            right: 5%;
-            border-radius: 50%
-        }
+         #button-ar {
+            position: absolute; bottom: 10px; left: 44px; z-index: 100; background: orange; border-radius: 90px;
+            padding-top: 5px; display: none
+         }
 
-
-        #button-ar {
-            font-size: 32px;
-            position: absolute;
-            bottom: 10px;
-            left: 350px;
-            background: white;
-            z-index: 100;
-            display: none;
-        }
-
-        #return-container {
-            height: 80vh;
-            width: 120vh;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #button-return {
-            font-size: 32px;
+         
+         #button-return {
             position: absolute;
             bottom: 10px;
             left: 10px;
@@ -47,32 +24,48 @@
             z-index: 100;
             display: block;
             border-radius: 90px;
+            padding-top: 5px
         }
-    </style>
+
+         .flaticon-questoes-ok:before {
+            content: url("/images/questoes-ok.png");
+        }
+    
+        .flaticon-questoes-nao:before {
+            content: url("/images/questoes-nao.png");
+        }
+
+        .flaticon-voltar:before {
+            content: url("/images/voltar.png");
+        }
+
+         
+</style>
 @endsection
 
 
 @section('content')
-    <span id="mind" style="display: none;">/mind/{{ session()->get('content_id') }}.mind</span>
 
-    <span id="glbs" style="display: none;">
+    <span id="mind" style="display: none;">/mind/{{session()->get('content_id')}}.mind</span>
+
+    <span id="glbs" style="display: none;"> 
         @foreach ($activities as $item)
-            <li id="act_{{ $item->id }}">/modelos3d/{{ $item->glb }}</li>
+         <li id="act_{{$item->id}}" >/modelos3d/{{$item->glb}}</li>
         @endforeach
     </span>
-
+    
     <div id="my-ar-container">
-        <a id="button-ar" class="flaticon-381-list-1" data-href="{{ route('student.questoes') }}"></a>
-
-        <form action="{{ route('student.conteudos') }}">
-            @csrf
-            <input name="id" type="hidden" value="{{ $disciplina }}" />
-            <button type="submit" class="btn" id="button-return"><i class="flaticon-381-back"></i></button>
-        </form>
+        <a id="button-return" class="flaticon-voltar" href="{{ route('student.conteudos') }}?id={{ $disciplina }}"></a> 
+        <a id="button-ar" class="flaticon-questoes-nao" data-href="{{ route('student.questoes') }}"></a> 
+       <!-- <a id="button-ar" class="flaticon-questoes-nao" data-href="{{ route('student.questoes') }}"></a> -->
     </div>
+
+    
 @endsection
 
-@section('script')
+@section('script')	
+
+
     <script type="importmap">
         
     {
@@ -86,6 +79,7 @@
 
 
 
-
+  
     <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
-@endsection
+    
+@endsection 
