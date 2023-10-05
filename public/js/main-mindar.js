@@ -67,10 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const anchor = mindarThree.addAnchor(i);
         anchor.glb = glb;
         anchor.activityid = li.id.split("_")[1];
+        anchor.clazz = li.getAttribute("usar_class");
         anchor.group.add(glbScene);
     
         anchor.onTargetFound = () => {
             buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
+            buttonAR.className = anchor.clazz;
            
             if (anchor.glb.animations.length > 0) {
 

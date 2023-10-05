@@ -50,14 +50,15 @@
 
     <span id="glbs" style="display: none;"> 
         @foreach ($activities as $item)
-         <li id="act_{{$item->id}}" >/modelos3d/{{$item->glb}}</li>
+        
+         <li id="act_{{$item->id}}" usar_class=@if($item->respondido==1)"flaticon-questoes-ok"@else"flaticon-questoes-nao"@endif>/modelos3d/{{$item->glb}}</li>
         @endforeach
     </span>
     
     <div id="my-ar-container">
         <a id="button-return" class="flaticon-voltar" href="{{ route('student.conteudos') }}?id={{ $disciplina }}"></a> 
-        <a id="button-ar" class="flaticon-questoes-nao" data-href="{{ route('student.questoes') }}"></a> 
-       <!-- <a id="button-ar" class="flaticon-questoes-nao" data-href="{{ route('student.questoes') }}"></a> -->
+        <a id="button-ar" data-href="{{ route('student.questoes') }}"></a> 
+
     </div>
 
     

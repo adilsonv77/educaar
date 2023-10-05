@@ -73,8 +73,22 @@ class StudentController extends Controller
             ->where("content_id", $content_id)
             ->orderBy("id")
             ->get();
-
-
+        
+        // verificar quais atividades já foram respondidas        
+        foreach ($activities as $activity) {
+            $questions = DB::table('questions')
+                ->where("activity_id", $activity->id)->get();
+            // uma questao respondida ou nao jah diz tudo da atividade
+            $respondida = DB::table('student_answers as st')
+                ->join('questions as q','st.question_id','=','q.id')
+                ->where([
+                        ['st.activity_id', '=', $activity->id],
+                        ['st.user_id', '=', Auth::user()->id],
+                     ])->exists();
+            $activity->respondido = ($respondida?1:0);
+                       
+        }
+ 
         session(["content_id" => $content_id]);
         $disciplina = session()->get("disciplina");
 
