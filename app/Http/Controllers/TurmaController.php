@@ -311,7 +311,11 @@ class TurmaController extends Controller
 
         $turma = Turma::find($id);
 
-        $disciplinas = DB::table('turmas_disciplinas')->where('turma_id', $turma->id)->delete();
+        $disciplinas = DB::table('turmas_disciplinas')->where('turma_id', $turma->id);
+
+        if($disciplinas->exists()){
+            $disciplinas->delete();
+        }
 
         if ($turma != null) {
             $turma->delete();
