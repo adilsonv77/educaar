@@ -14,7 +14,7 @@ use App\Models\School;
 use App\Models\DisciplinaProfessor;
 use App\Models\AnoLetivo;
 use App\DAO\ContentDAO;
-
+use App\DAO\UserDAO;
 
 class HomeController extends Controller
 {
@@ -105,12 +105,14 @@ class HomeController extends Controller
                 ->selectRaw("count(distinct(activities.id)) as quantos")->get();
 
             $activitiesCount = $activities[0]->quantos;
-            $usersCount = 0;
+            // $usersCount = UserDAO::buscarAlunosProf(Auth::user()->id);
+            $usersCount = 83;
             $contentCount = $contents[0]->quantos;
 
             return view('home', compact('activitiesCount', 'usersCount', 'contentCount', 'activitiesCount', 'schools'));
         }
 
-        return view('home')->withErrors('Login ou senha inválidos. Por favor, tente novamente.');
+        // return view('home')->withErrors('Login ou senha inválidos. Por favor, tente novamente.');
+        return redirect()->back()->withErrors('Login ou senha inválidos. Por favor, tente novamente.');
     }
 }
