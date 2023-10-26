@@ -73,22 +73,21 @@ class StudentController extends Controller
             ->where("content_id", $content_id)
             ->orderBy("id")
             ->get();
-        
+
         // verificar quais atividades já foram respondidas        
         foreach ($activities as $activity) {
             $questions = DB::table('questions')
                 ->where("activity_id", $activity->id)->get();
             // uma questao respondida ou nao jah diz tudo da atividade
             $respondida = DB::table('student_answers as st')
-                ->join('questions as q','st.question_id','=','q.id')
+                ->join('questions as q', 'st.question_id', '=', 'q.id')
                 ->where([
-                        ['st.activity_id', '=', $activity->id],
-                        ['st.user_id', '=', Auth::user()->id],
-                     ])->exists();
-            $activity->respondido = ($respondida?1:0);
-                       
+                    ['st.activity_id', '=', $activity->id],
+                    ['st.user_id', '=', Auth::user()->id],
+                ])->exists();
+            $activity->respondido = ($respondida ? 1 : 0);
         }
- 
+
         session(["content_id" => $content_id]);
         $disciplina = session()->get("disciplina");
 
@@ -98,7 +97,7 @@ class StudentController extends Controller
     public function store(Request $request)
     {
 
-        dd($request->all());
+        // dd($request->all());
         if ($request->get("return") == null) {
             $questions = session()->get('questoes');
 
@@ -150,11 +149,26 @@ class StudentController extends Controller
         // buscar da tabela student_answers uma questao respondida da activity_id, question_id, user_id
 
         $activity_id = $request->id;
-        $questions = DB::table('questions')
-            ->where("activity_id", $activity_id)
-            ->get();
 
-        $count = 0;
+        $respondida = DB::table('student_answers as st')
+            ->join('questions as q', 'st.question_id', '=', 'q.id')
+            ->where([
+                ['st.activity_id', '=', $activity_id],
+                ['st.user_id', '=', Auth::user()->id]
+            ])->exists();
+
+        $where = DB::table('questions')
+            ->where("activity_id", $activity_id)->addSelect([
+                'alternative_answered' => DB::table('student_answers')
+                    ->select('student_answers.alternative_answered')
+                    ->whereColumn('student_answers.question_id', '=', 'questions.id')
+                    ->whereColumn('student_answers.activity_id', '=', 'questions.activity_id')
+                    ->where('student_answers.user_id', '=', Auth::user()->id)
+            ]);
+        $questions = $where->get();
+
+        // dd($questions);
+
         foreach ($questions as $item) {
             $options = [$item->a, $item->b, $item->c, $item->d];
             shuffle($options);
@@ -162,33 +176,8 @@ class StudentController extends Controller
         }
         session()->put('questoes', $questions);
 
-        dd($questions);
+        // dd($questions);
 
-        $respondida = DB::table('student_answers as st')
-                    ->join('questions as q','st.question_id','=','q.id')
-                    ->where([
-                            ['st.activity_id', '=', $activity_id],
-                            ['st.user_id', '=', Auth::user()->id]
-                        ])->exists();
-        
-        $where = DB::table('questions')
-            ->where("activity_id", $activity_id);
-            
-        
-        if($respondida){
-            $questions=$where->addSelect([
-                'alternative_answered'=>DB::table('student_answers')
-                                ->select('student_answers.alternative_answered')
-                                ->whereColumn('student_answers.question_id', '=','questions.id')
-                                ->whereColumn('student_answers.activity_id', '=','questions.activity_id')
-                                ->where('student_answers.user_id','=',Auth::user()->id)
-                            ])->get();
-            
-        }else{
-            $questions=$where->addSelect([
-                'alternative_answered'=>0])
-                ->get();
-        }
         return view('student.atividadeAr', compact('questions', 'respondida'));
     }
 

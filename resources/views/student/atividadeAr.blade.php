@@ -20,9 +20,9 @@
                         @foreach ($item->options as $option)
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="questao{{ $item->id }}"
-                                    id="flexRadioDefault{{ $loop->index }} {{ $item->id }}"
-                                    value="{{ $loop->index }}" @if($respondida) disabled  @endif 
-                                    @if($option==$item->alternative_answered) checkdate @endif>
+                                    id="flexRadioDefault{{ $loop->index }} {{ $item->id }}" value="{{ $loop->index }}"
+                                    @if ($respondida) disabled @endif
+                                    @if ($option == $item->alternative_answered) checked @endif>
                                 <label for="flexRadioDefault{{ $loop->index }} {{ $item->id }}"
                                     class="form-check-label" style="font-size: 17px">
                                     {{ $option }}
@@ -33,22 +33,23 @@
                 </div>
         @endforeach
         <table class="table table-hover table-responsive-sm">
-        <tbody>
-            <tr>
-                <td>
-                    <button type="submit" @if ($respondida) hidden="hidden" @endif class="btn btn-success">Salvar</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="{{ route('student.store') }}">
-                    @csrf
-                        <input type="hidden" name="return" value="1">
-                        <button type="submit" class="btn btn-warning">Retornar</button>  
-                    </form>
-                </td>  
-            </tr>
-        </tbody>
-        </table>
+            <tbody>
+                <tr>
+                    <td>
+                        <button type="submit" @if ($respondida) hidden="hidden" @endif
+                            class="btn btn-success">Salvar</button>
+    </form>
+    </td>
+    <td>
+        <form action="{{ route('student.store') }}">
+            @csrf
+            <input type="hidden" name="return" value="1">
+            <button type="submit" class="btn btn-warning">Retornar</button>
+        </form>
+    </td>
+    </tr>
+    </tbody>
+    </table>
 
 @section('style')
     <style>
