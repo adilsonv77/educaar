@@ -13,14 +13,17 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
         rel="stylesheet">
+    <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
+    {{-- <link href="/css/mobile.css" rel="stylesheet"> --}}
     <link href="/css/style.css" rel="stylesheet">
+
     {{-- <link rel="stylesheet" href="/css/app.css"> --}}
     {{-- <link rel="stylesheet" href="{{ asset('/css/login.css') }}"rel="stylesheet"> --}}
     {{-- <link rel="stylesheet" href="/css/questions.css"> --}}
-    <link rel="stylesheet" href="/css/mobile.css">
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="/css/telainicial.css">
+
+
+    {{-- <link rel="stylesheet" href="/css/telainicial.css"> --}}
 
     @include('sweetalert::alert')
     @livewireStyles
@@ -114,6 +117,10 @@
 
 
     <div class="content-body">
+
+
+
+
         @yield('content')
 
 
@@ -139,6 +146,28 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     @yield('script')
+
+
+
 </body>
+
+<footer>
+
+    <div id='footerL'>
+        <button type="button" class="btn btn-warning">Voltar</button>
+    </div>
+
+    <div id='footerR'>
+        <button type="button" class="btn btn-warning">Outros</button>
+    </div>
+
+
+
+
+
+</footer>
+
+
+
 
 </html>
