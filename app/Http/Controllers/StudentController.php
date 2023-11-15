@@ -7,8 +7,10 @@ use App\Models\Activity;
 use App\Models\StudentAnswer;
 use Illuminate\Support\Facades\DB;
 use App\Models\AnoLetivo;
+use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\DocBlock\Tags\See;
 
 class StudentController extends Controller
 {
@@ -100,12 +102,14 @@ class StudentController extends Controller
         // dd($request->all());
         if ($request->get("return") == null) {
             $questions = session()->get('questoes');
-
+            //  dd($questions);
             $datareq = $request->all();
             // dd($datareq);
             // $s  = "";
             foreach ($questions as $questao) {
                 $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
+                
+                try{
                 $respop = $datareq["questao" . $questao->id];
                 $data['question_id'] = $questao->id;
                 $data['user_id'] =  Auth::user()->id;
@@ -124,6 +128,10 @@ class StudentController extends Controller
                 // gravar no banco uma linha da resposta
                 StudentAnswer::create($data);
 
+                }catch(Exception $e){
+                    continue;
+                }
+                
 
                 // $opcao == $questao->a
             }
@@ -150,12 +158,13 @@ class StudentController extends Controller
 
         $activity_id = $request->id;
 
-        $respondida = DB::table('student_answers as st')
-            ->join('questions as q', 'st.question_id', '=', 'q.id')
-            ->where([
-                ['st.activity_id', '=', $activity_id],
-                ['st.user_id', '=', Auth::user()->id]
-            ])->exists();
+        $respondida =$this->respondida();
+        // $respondida = DB::table('student_answers as st')
+        //     ->join('questions as q', 'st.question_id', '=', 'q.id')
+        //     ->where([
+        //         ['st.activity_id', '=', $activity_id],
+        //         ['st.user_id', '=', Auth::user()->id]
+        //     ])->exists();
 
         $where = DB::table('questions')
             ->where("activity_id", $activity_id)->addSelect([
@@ -179,6 +188,36 @@ class StudentController extends Controller
         // dd($questions);
 
         return view('student.atividadeAr', compact('questions', 'respondida'));
+    }
+
+    protected function respondida(){
+        $questions= session()->get('questoes');
+
+        $reposta=0;
+        // vou fazer o sistema de resposta assim: 
+        // 1- retorna que o questionário foi respondido completo
+        // -1 -retorna que o questionário não foi respondido completo
+        // 0 - retorna que o questionário não foi respondido 
+        $qntQuestoes = count($questions);
+        $qntRespondidas = 0;
+        foreach($questions as $question){
+            if($question->alternative_answered != null){
+                $qntRespondidas +=1 ;
+            }
+        }
+
+        if($qntRespondidas == $qntQuestoes){
+            $reposta = 1;
+        }else{
+            if($qntRespondidas == 0){
+                $reposta = 0;
+            }else{
+                $reposta = -1;
+            }
+        }
+
+        return $reposta;
+
     }
 
     public function alternatives(Request $request)
