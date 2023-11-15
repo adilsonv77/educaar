@@ -158,7 +158,7 @@ class StudentController extends Controller
 
         $activity_id = $request->id;
 
-        $respondida =$this->respondida();
+        
         // $respondida = DB::table('student_answers as st')
         //     ->join('questions as q', 'st.question_id', '=', 'q.id')
         //     ->where([
@@ -184,8 +184,8 @@ class StudentController extends Controller
             $item->options = $options;
         }
         session()->put('questoes', $questions);
-
-        // dd($questions);
+        $respondida =$this->respondida();
+        //  dd($questions);
 
         return view('student.atividadeAr', compact('questions', 'respondida'));
     }
@@ -198,6 +198,7 @@ class StudentController extends Controller
         // 1- retorna que o questionário foi respondido completo
         // -1 -retorna que o questionário não foi respondido completo
         // 0 - retorna que o questionário não foi respondido 
+        // dd($questions);
         $qntQuestoes = count($questions);
         $qntRespondidas = 0;
         foreach($questions as $question){
