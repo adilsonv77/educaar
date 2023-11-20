@@ -1,33 +1,77 @@
 /* Telas de celular */
-@media screen and (max-width: 425px) {
-  .h-100{
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-  }
+
+
+.h-100{
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+
+.card-body{
+  width: 100%;
+  /* display: flex; */
+  /* align-items: center;
+  justify-content: center; */
+  
+}
+
+.background-image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.btn.btn-primary{
+  display: flex;
+  margin:auto;
+  width:50vw;
+  justify-content: center;
+  background-color:#81348b;
+  
+}
+
+.item-row.login{
+  display:flex;
+  width: 100%;
+  border-radius: 25px;
+  
+  
+  
+}
+.item-row.password{
+  display:flex;
+  width: 100%;
+  border-radius: 25px;
+}
+
+
+@media screen and (max-width: 425px) {
+ 
   .container{
-    
-    
     width: 80vw;
     height:60vh;
     display: flex;
     flex-direction: column;
     align-items:center;
     justify-content: center;
-    background-color: #8743df;
-    border-radius: 50px;
-    border: 5px solid #7e2ce9;
-  }
-  
-  .card-body{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: #e3edeb;
+    border-radius: 30px;
     
   }
+  
+
 
   .logo{
     margin-top: 60px;
@@ -38,33 +82,7 @@
     height: 20vh;
   }
   
-  .item-row.login{
-    display:flex;
-    
-    width: 100%;
-    border-radius: 25px;
-    
-    border: 5px solid #7e2ce9;
-    
-    
-  }
-  .item-row.password{
-    display:flex;
-    
-    width: 100%;
- 
-    border: 5px solid #7e2ce9;
-    border-radius: 25px;
- }
 
- .btn.btn-primary{
-  display: flex;
-  margin:auto;
-  width:20vw;
-  justify-content: center;
-  background-color:#7e2ce9 ;
-  border: 5px solid #7e2ce9;
-} 
 
 .img-wrapper{
   width: 50vw;
@@ -80,34 +98,20 @@
 
 
 @media screen and (min-width: 426px) and (max-width:1439px) {
-   .h-100{
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-  }
+  
   .container{
-    
-    
     width: 50vw;
     height:70vh;
     display: flex;
     flex-direction: column;
     align-items:center;
     justify-content: center;
-    background-color: #8743df;
-    border-radius: 100px;
-    border: 5px solid #7e2ce9;
-  }
-  
-  .card-body{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: #e3edeb;
+    border-radius: 30px;
     
   }
+  
+
 
   .logo{
     margin-top: 60px;
@@ -118,33 +122,8 @@
     height: 15vh;
   }
   
-  .item-row.login{
-    display:flex;
-    
-    width: 40vw;
-    border-radius: 25px;
-    
-    border: 5px solid #7e2ce9;
-    
-    
-  }
-  .item-row.password{
-    display:flex;
-    
-    width: 40vw;
- 
-    border: 5px solid #7e2ce9;
-    border-radius: 25px;
- }
 
- .btn.btn-primary{
-  display: flex;
-  margin:auto;
-  width:20vw;
-  justify-content: center;
-  background-color:#7e2ce9 ;
-  border: 5px solid #7e2ce9;
-} 
+
 
 
 .img-wrapper{
@@ -164,34 +143,20 @@
 /* Tela grande minimo de 768px e maximo de 992px */
 @media screen and (min-width: 1440px) and (max-width:2560px) {
 
-  .h-100{
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-  }
+  
   .container{
-    
-    
     width: 30vw;
     height:70vh;
     display: flex;
     flex-direction: column;
     align-items:center;
     justify-content: center;
-    background-color: #8743df;
-    border-radius: 100px;
-    border: 5px solid #7e2ce9;
-  }
-  
-  .card-body{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: #e3edeb;
+    border-radius: 30px;
     
   }
+  
+
 
   .logo{
     margin-top: 60px;
@@ -202,34 +167,7 @@
     height: 15vh;
   }
   
-  .item-row.login{
-    display:flex;
-    
-    width: 100%;
-    border-radius: 25px;
-    
-    border: 5px solid #7e2ce9;
-    
-    
-  }
-  .item-row.password{
-    display:flex;
-    
-    width: 100%;
  
-    border: 5px solid #7e2ce9;
-    border-radius: 25px;
- }
-
- .btn.btn-primary{
-  display: flex;
-  margin:auto;
-  width:20vw;
-  justify-content: center;
-  background-color:#7e2ce9 ;
-  border: 5px solid #7e2ce9;
-} 
-
 
 .img-wrapper{
   width: 15%;
@@ -260,19 +198,7 @@
   filter: hue-rotate(270deg) saturate(150%) brightness(90%);
 } */
 
-.background-image img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-}
-.background-image {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
+
 
 
 

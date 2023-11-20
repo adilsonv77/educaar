@@ -1,9 +1,15 @@
 
-        h-100{
+        /* h-100{
             background-image:linear-gradient(circle at center, #8743df, #bd8aff);
 
 
 
+        } */
+
+        .brand-logo{
+
+
+            background-color: #e3edeb;
         }
         
         
@@ -75,6 +81,24 @@
             font-style: italic;
             line-height: 1.5em;
         }
+
+        .footer{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            bottom: 0;
+        }
+
+        #footerL{
+            width: 100vw;
+        }
+        #footerR{
+
+            width: 100vw;
+
+        }
+
 
        
 

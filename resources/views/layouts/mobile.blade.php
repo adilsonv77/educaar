@@ -41,7 +41,7 @@
         @auth
             <div class="nav-header">
                 <a href="/" class="brand-logo">
-                    <img src="{{ asset('images/EDUCAAR_M.png') }}" width="70" alt="Imagem"
+                    <img src="{{ asset('images/logo011.png') }}" width="70" alt="Imagem"
                         class="img-fluid">{{-- So pra teste --}}
                 </a>
 
@@ -153,14 +153,24 @@
 
 <footer>
 
-    <div id='footerL'>
-        <button type="button" class="btn btn-warning">Voltar</button>
-    </div>
+    <div class='footer'>
 
-    <div id='footerR'>
-        <button type="button" class="btn btn-warning">Outros</button>
-    </div>
+        <div id='footerBL'>
+            <button type="button" class="btn btn-warning">Voltar</button>
+        </div>
 
+        <div id='footerBR'>
+            <button type="button" class="btn btn-warning">Outros</button>
+        </div>
+
+        <div id='footerTR'>
+            <button type="button" class="btn btn-warning">T</button>
+        </div>
+
+        <div id='footerTL'>
+            <button type="button" class="btn btn-warning">B</button>
+        </div>
+    </div>
 
 
 
