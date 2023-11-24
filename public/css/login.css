@@ -33,14 +33,7 @@
   z-index: -1;
 }
 
-.btn.btn-primary{
-  display: flex;
-  margin:auto;
-  width:50vw;
-  justify-content: center;
-  background-color:#81348b;
-  
-}
+
 
 .item-row.login{
   display:flex;
@@ -94,6 +87,17 @@
   transform: translateX(-50%);
 
 }
+
+.btn.btn-primary{
+  display: flex;
+  margin:auto;
+  width:50vw;
+  justify-content: center;
+  background-color:#81348b;
+  
+}
+
+
 }
 
 
@@ -137,6 +141,15 @@
 
 }
 
+.btn.btn-primary{
+  display: flex;
+  margin:auto;
+  width:30vw;
+  justify-content: center;
+  background-color:#81348b;
+  
+}
+
  
 }
 
@@ -178,6 +191,17 @@
   right:16%;
   transform: translateX(-50%);
 
+}
+
+
+
+.btn.btn-primary{
+  display: flex;
+  margin:auto;
+  width:20vw;
+  justify-content: center;
+  background-color:#81348b;
+  
 }
   }
 

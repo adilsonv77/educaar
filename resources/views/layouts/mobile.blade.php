@@ -155,29 +155,28 @@
 
     <div class='footer'>
 
-        <div id='footerBL'>
+        <div id='footerBF'>
             <button type="button" class="btn btn-warning">Voltar</button>
         </div>
 
-        <div id='footerBR'>
-            <button type="button" class="btn btn-warning">Outros</button>
+        <div id='footerBF'>
+            <button type="button" class="btn btn-warning">Questoes</button>
         </div>
 
-        <div id='footerTR'>
-            <button type="button" class="btn btn-warning">T</button>
+        <div id='footerBF'>
+            <button type="button" class="btn btn-warning">Movimentar</button>
         </div>
 
-        <div id='footerTL'>
-            <button type="button" class="btn btn-warning">B</button>
+        <div id='footerBA'>
+            <button type="button" class="btn btn-warning" id="mais">+</button>
+        </div>
+
+        <div id='footerBL'>
+            <button type="button" class="btn btn-warning" id="menos">-</button>
         </div>
     </div>
 
-
-
-
 </footer>
-
-
 
 
 </html>
