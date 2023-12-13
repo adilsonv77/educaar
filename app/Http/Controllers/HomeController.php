@@ -68,8 +68,8 @@ class HomeController extends Controller
 
 
 
-
-            return view('mobHome', compact('disciplinas'));
+            $rota = route("student.conteudos") . "?id=1";
+            return view('mobHome', compact('disciplinas', 'rota'));
             /*
             $isActivityFinish = StudentAnswer::where('user_id', Auth::user()->id)->get();
             return view('home', compact('activities', 'isActivityFinish', 'schools'));
@@ -114,5 +114,10 @@ class HomeController extends Controller
 
         // return view('home')->withErrors('Login ou senha inválidos. Por favor, tente novamente.');
         return redirect()->back()->withErrors('Login ou senha inválidos. Por favor, tente novamente.');
+    }
+
+    function goBack()
+    {
+        return redirect()->back();
     }
 }

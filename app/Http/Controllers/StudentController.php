@@ -60,8 +60,8 @@ class StudentController extends Controller
             ])
             ->distinct()
             ->get();
-
-        return view('student.indexContentStudent', compact('conteudos'));
+            $rota = route("home") ;
+        return view('student.indexContentStudent', compact('conteudos','rota'));
     }
     public function showActivity(Request $request)
     {
@@ -92,8 +92,8 @@ class StudentController extends Controller
 
         session(["content_id" => $content_id]);
         $disciplina = session()->get("disciplina");
-
-        return view('student.ar', compact('activities', 'disciplina'));
+        $rota = route("student.conteudos") . "?id=" . $disciplina;
+        return view('student.ar', compact('activities', 'rota'));
     }
 
     public function store(Request $request)

@@ -155,12 +155,13 @@
 <footer>
 
     <div class='footer'>
-
+    @if($showBack)
         <div id='footerBF'>
-            <button type="button" class="btn btn-warning"> <span><i style = "color:#83368A;"
-                        class="bi bi-arrow-return-left h2"></i></span></button>
+        <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i style = "color:#83368A;"
+                        class="bi bi-arrow-return-left h2"></i></span></button></a>
         </div>
-
+    @endif
+    @if($showOthers)
         <div id='footerBF'>
             <button type="button" class="btn btn-warning">
                 <spam><i style = "color:#83368A;" class="bi bi-book h2"></i></spam>
@@ -181,6 +182,7 @@
             <button type="button" class="btn btn-warning" id="menos"><span><i style = "color:#83368A;"
                         class="bi bi-zoom-out h5"></i></span></button>
         </div>
+        @endif
     </div>
 
 </footer>

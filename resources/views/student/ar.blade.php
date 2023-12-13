@@ -1,4 +1,4 @@
-@extends('layouts.mobile')
+@extends('layouts.mobile',['back' => $rota, 'showBack' => true, 'showOthers' => true])
 
 
 
@@ -61,7 +61,7 @@
     </span>
     
     <div id="my-ar-container">
-        <a id="button-return" class="flaticon-voltar" href="{{ route('student.conteudos') }}?id={{ $disciplina }}"></a> 
+        {{-- <a id="button-return" class="flaticon-voltar" href="{{ route('student.conteudos') }}?id={{ $disciplina }}"></a>  --}}
         <a id="button-ar" data-href="{{ route('student.questoes') }}"></a> 
 
     </div>
