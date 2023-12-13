@@ -48,6 +48,10 @@
         }
 
         .btn.btn-warning{
+
+            background-color: white;
+            border-color: #83368A;
+            height: 100%;
             width: 100%;
 
         }
@@ -72,7 +76,7 @@
             text-decoration: none;
         }
 
-        footer {
+        /* footer {
             display: flex;
             flex-direction: column;
             max-width: 600px;
@@ -80,15 +84,19 @@
             text-align: center;
             font-style: italic;
             line-height: 1.5em;
-        }
+        } */
 
         .footer{
+            
             display: grid;
             grid-template-rows: repeat(2, 1fr);
             grid-template-columns: repeat(4, 1fr);
             gap: 5px;
             position: absolute;
             bottom: 0;
+            width: 100%;
+            
+            
         }
 
         #footerBF{
@@ -102,6 +110,7 @@
             grid-row-end: 3;
             
             
+            
         }
 
         #footerBL{
@@ -109,6 +118,7 @@
             grid-row-end: 3;
             grid-column-start:4;
             grid-column-end:5;
+            
 
 
         }

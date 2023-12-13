@@ -16,6 +16,7 @@
     <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
     {{-- <link href="/css/mobile.css" rel="stylesheet"> --}}
     <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 
     {{-- <link rel="stylesheet" href="/css/app.css"> --}}
     {{-- <link rel="stylesheet" href="{{ asset('/css/login.css') }}"rel="stylesheet"> --}}
@@ -156,23 +157,29 @@
     <div class='footer'>
 
         <div id='footerBF'>
-            <button type="button" class="btn btn-warning">Voltar</button>
+            <button type="button" class="btn btn-warning"> <span><i style = "color:#83368A;"
+                        class="bi bi-arrow-return-left h2"></i></span></button>
         </div>
 
         <div id='footerBF'>
-            <button type="button" class="btn btn-warning">Questoes</button>
+            <button type="button" class="btn btn-warning">
+                <spam><i style = "color:#83368A;" class="bi bi-book h2"></i></spam>
+            </button>
         </div>
 
         <div id='footerBF'>
-            <button type="button" class="btn btn-warning">Movimentar</button>
+            <button type="button" class="btn btn-warning"><span><i style = "color:#83368A;"
+                        class="bi bi-arrows-move h2"></i></span></button>
         </div>
 
         <div id='footerBA'>
-            <button type="button" class="btn btn-warning" id="mais">+</button>
+            <button type="button" class="btn btn-warning" id="mais"><span><i style = "color:#83368A;"
+                        class="bi bi-zoom-in h5"></i></span></button>
         </div>
 
         <div id='footerBL'>
-            <button type="button" class="btn btn-warning" id="menos">-</button>
+            <button type="button" class="btn btn-warning" id="menos"><span><i style = "color:#83368A;"
+                        class="bi bi-zoom-out h5"></i></span></button>
         </div>
     </div>
 
