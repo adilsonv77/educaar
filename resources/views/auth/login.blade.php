@@ -49,7 +49,7 @@
 
         <div class="container">
             <div class="logo">
-                <img src="{{ asset('images/logo011.png') }}" alt="Imagem" class="img-fluid">
+                <img src="{{ asset('images/LOGO HORIZONTAL.png') }}" alt="Imagem" class="img-fluid">
             </div>
             {{-- <div class="card-header">{{ __('Login') }}</div> --}}
             <div class="card-body">

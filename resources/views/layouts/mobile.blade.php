@@ -42,7 +42,7 @@
         @auth
             <div class="nav-header">
                 <a href="/" class="brand-logo">
-                    <img src="{{ asset('images/logo011.png') }}" width="70" alt="Imagem"
+                    <img src="{{ asset('images/LOGO VERTICAL.png') }}" width="70" alt="Imagem"
                         class="img-fluid">{{-- So pra teste --}}
                 </a>
 
@@ -155,33 +155,33 @@
 <footer>
 
     <div class='footer'>
-    @if($showBack)
-        <div id='footerBF'>
-        <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i style = "color:#83368A;"
-                        class="bi bi-arrow-return-left h2"></i></span></button></a>
-        </div>
-    @endif
-    @if($showOthers)
-        <div id='footerBF'>
-            <button type="button" class="btn btn-warning">
-                <spam><i style = "color:#83368A;" class="bi bi-book h2"></i></spam>
-            </button>
-        </div>
+        @if ($showBack)
+            <div id='footerBF'>
+                <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i
+                                style = "color:#83368A;" class="bi bi-arrow-return-left h2"></i></span></button></a>
+            </div>
+        @endif
+        @if ($showOthers)
+            <div id='footerBF'>
+                <button type="button" class="btn btn-warning">
+                    <spam><i style = "color:#83368A;" class="bi bi-book h2"></i></spam>
+                </button>
+            </div>
 
-        <div id='footerBF'>
-            <button type="button" class="btn btn-warning"><span><i style = "color:#83368A;"
-                        class="bi bi-arrows-move h2"></i></span></button>
-        </div>
+            <div id='footerBF'>
+                <button type="button" class="btn btn-warning"><span><i style = "color:#83368A;"
+                            class="bi bi-arrows-move h2"></i></span></button>
+            </div>
 
-        <div id='footerBA'>
-            <button type="button" class="btn btn-warning" id="mais"><span><i style = "color:#83368A;"
-                        class="bi bi-zoom-in h5"></i></span></button>
-        </div>
+            <div id='footerBA'>
+                <button type="button" class="btn btn-warning" id="mais"><span><i style = "color:#83368A;"
+                            class="bi bi-zoom-in h5"></i></span></button>
+            </div>
 
-        <div id='footerBL'>
-            <button type="button" class="btn btn-warning" id="menos"><span><i style = "color:#83368A;"
-                        class="bi bi-zoom-out h5"></i></span></button>
-        </div>
+            <div id='footerBL'>
+                <button type="button" class="btn btn-warning" id="menos"><span><i style = "color:#83368A;"
+                            class="bi bi-zoom-out h5"></i></span></button>
+            </div>
         @endif
     </div>
 
