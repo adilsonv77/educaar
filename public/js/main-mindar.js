@@ -7,8 +7,10 @@ import { MindARThree } from 'mindar-image-three';
 
 //const THREE = window.MINDAR.IMAGE.THREE;
 var buttonAR = null;
+var activeScene = null;
+var lastActiveScene = null;
 
-const loadGLTF = (path) => {
+function loadGLTF(path) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
     loader.load(path, (gltf) => {
@@ -79,13 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
               mixer = new THREE.AnimationMixer(anchor.glb.scene);
               action = mixer.clipAction(anchor.glb.animations[0]);
               action.play();
+              
             }
 
+            activeScene = glbScene;
             buttonAR.style.display = 'block';
         }
         
         //anchor.addEventListener
         anchor.onTargetLost = () => {
+          lastActiveScene = activeScene;
+          activeScene = null;
           buttonAR.style.display = 'none';
           if (action != null) {
             action.stop();
@@ -97,16 +103,56 @@ document.addEventListener('DOMContentLoaded', () => {
   
       }
 
+
       const clock = new THREE.Clock();
       await mindarThree.start();
 
+      var deltaTotal = 0;
       renderer.setAnimationLoop(() => {
         if (mixer != null) {
           const delta = clock.getDelta();
           mixer.update(delta);
         }
+        if (activeScene == null) {
+          deltaTotal = 0;
+          if (lastActiveScene != null) {
+            lastActiveScene.rotateY(-lastActiveScene.rotation._y); 
+            lastActiveScene.rotateX(-lastActiveScene.rotation._x); 
+            lastActiveScene.rotateZ(-lastActiveScene.rotation._z); 
+          }
+            
+        }
         renderer.render(scene, camera);
+
       });
+
+      const bRotateY = document.getElementById("b_rotate_y");
+      bRotateY.onclick = () => {
+        if (activeScene != null) {
+          const delta = clock.getDelta();
+          deltaTotal += delta;
+
+          if (deltaTotal >= 0.05) {
+            activeScene.rotateY(0.1);
+            deltaTotal = 0;
+          }
+        }
+      };
+      
+
+      const bRotateX = document.getElementById("b_rotate_x");
+      bRotateX.onclick = () => {
+        if (activeScene != null) {
+          const delta = clock.getDelta();
+          deltaTotal += delta;
+
+          if (deltaTotal >= 0.05) {
+            activeScene.rotateX(0.1);
+            deltaTotal = 0;
+          }
+        }
+      };
+
     }
     start();
   });

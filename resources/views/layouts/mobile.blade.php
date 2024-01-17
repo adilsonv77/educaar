@@ -161,16 +161,21 @@
                                 style = "color:#83368A;" class="bi bi-arrow-return-left h2"></i></span></button></a>
             </div>
         @endif
+        <!-- id eh uma coisa unica... o melhor eh que esses divs tivessem classes diferentes -->
         @if ($showOthers)
             <div id='footerBF'>
                 <button type="button" class="btn btn-warning">
-                    <spam><i style = "color:#83368A;" class="bi bi-book h2"></i></spam>
+                    <span><i style = "color:#83368A;" class="bi bi-book h2"></i></span>
                 </button>
             </div>
 
             <div id='footerBF'>
-                <button type="button" class="btn btn-warning"><span><i style = "color:#83368A;"
-                            class="bi bi-arrows-move h2"></i></span></button>
+                <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i style = "color:#83368A;"
+                            class="bi bi-arrows-move h5"></i></span></button>
+            </div>
+            <div id='footerBF'>
+                <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i style = "color:#83368A;"
+                            class="bi bi-arrows-move h5"></i></span></button>
             </div>
 
             <div id='footerBA'>
