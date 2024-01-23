@@ -10,6 +10,10 @@ var buttonAR = null;
 var activeScene = null;
 var lastActiveScene = null;
 
+// inspirado no OrbitControl
+var state = 0;  // 1 - rotacionar
+var rotateStart = new THREE.Vector2();
+
 function loadGLTF(path) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
@@ -20,7 +24,20 @@ function loadGLTF(path) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const start = async() => {
+  
+  
+  function onMouseDownScene(event) { 
+    event.preventDefault();
+  
+    if (event.button == 0) { // botao esquerda
+      rotateStart.set( event.clientX, event.clientY );
+      state = 1;
+    }
+    console.log("onmousedown"); 
+  };
+
+  
+  const start = async() => {
 
       buttonAR = document.getElementById("button-ar");
 
@@ -106,7 +123,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const clock = new THREE.Clock();
       await mindarThree.start();
+/*  ainda nao venci essa parte
+      var elems = document.getElementById("my-ar-container").getElementsByTagName("div");
+      elems[1].style.removeProperty("pointer-events");
+      elems[2].onmousedown = function (event) {
+        console.log("onmousedown"); 
+      };
 
+      //elems[0].addEventListener( 'mousedown', onMouseDownScene, false );
+
+      elems[2].onmousemove = (event) => { 
+        console.log("onmousemove"); 
+      };
+/*
+      elems[0].onmouseup = (event) => { 
+        state = 0;
+        console.log("onmouseup"); 
+      };
+*/
       var deltaTotal = 0;
       renderer.setAnimationLoop(() => {
         if (mixer != null) {
@@ -133,7 +167,8 @@ document.addEventListener('DOMContentLoaded', () => {
           deltaTotal += delta;
 
           if (deltaTotal >= 0.05) {
-            activeScene.rotateY(0.1);
+            //activeScene.rotateY(0.1); //rotateOnAxis rotateOnWorldAxis
+            activeScene.rotateOnWorldAxis(new THREE.Vector3(0,1,0), 0.1);
             deltaTotal = 0;
           }
         }
