@@ -1,4 +1,4 @@
-@extends('layouts.mobile')
+@extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => false])
 
 @section('page-name')
 @section('content')

@@ -187,7 +187,9 @@ class StudentController extends Controller
         $respondida =$this->respondida();
         //  dd($questions);
 
-        return view('student.atividadeAr', compact('questions', 'respondida'));
+        $rota = route("home") ;
+
+        return view('student.atividadeAr', compact('questions', 'respondida', 'rota'));
     }
 
     protected function respondida(){

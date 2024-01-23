@@ -3,6 +3,8 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
 
 import * as THREE from 'three';
+import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+
 import { MindARThree } from 'mindar-image-three';
 
 //const THREE = window.MINDAR.IMAGE.THREE;
@@ -126,16 +128,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const clock = new THREE.Clock();
       await mindarThree.start();
-/*  ainda nao venci essa parte
+
+     // var TBC = new TrackballControls(camera, renderer.domElement);
+     //var TBC = new TrackballControls(camera, document.getElementById("my-ar-container"));
+/*
+     var myarc = document.getElementById("my-ar-container");
+     myarc.onmousedown = function (event) {
+      console.log("onmousedown 0"); 
+    };
+
+/*
       var elems = document.getElementById("my-ar-container").getElementsByTagName("div");
       elems[1].style.removeProperty("pointer-events");
+
+      elems[0].onmousedown = function (event) {
+        console.log("onmousedown 0"); 
+      };
+
+      elems[1].onmousedown = function (event) {
+        console.log("onmousedown 1"); 
+      };
+
       elems[2].onmousedown = function (event) {
-        console.log("onmousedown"); 
+        console.log("onmousedown 2"); 
       };
 
       //elems[0].addEventListener( 'mousedown', onMouseDownScene, false );
 
-      elems[2].onmousemove = (event) => { 
+/*      elems[2].onmousemove = (event) => { 
         console.log("onmousemove"); 
       };
 /*

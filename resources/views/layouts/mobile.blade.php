@@ -161,12 +161,14 @@
                                 style = "color:#83368A;" class="bi bi-arrow-return-left h2"></i></span></button></a>
             </div>
         @endif
-        <!-- id eh uma coisa unica... o melhor eh que esses divs tivessem classes diferentes -->
+        <!-- id eh uma coisa unica... o melhor eh que esses divs tivessem classes diferentes e não com ids iguais (footerBF) -->
         @if ($showOthers)
             <div id='footerBF'>
+                <a id="button-ar" data-href="{{ route('student.questoes') }}" style="display: none">
                 <button type="button" class="btn btn-warning">
                     <span><i style = "color:#83368A;" class="bi bi-book h2"></i></span>
                 </button>
+                </a>
             </div>
 
             <div id='footerBF'>

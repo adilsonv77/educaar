@@ -10,12 +10,7 @@
             height: 80vh; width: 120vh; position: relative; overflow: hidden;   
          }
 
-         #button-ar {
-            position: absolute; bottom: 10px; left: 44px; z-index: 100; background: orange; border-radius: 90px;
-            padding-top: 5px; display: none
-         }
-
-         
+        
          #button-return {
             position: absolute;
             bottom: 10px;
@@ -25,14 +20,6 @@
             display: block;
             border-radius: 90px;
             padding-top: 5px
-        }
-
-         .flaticon-questoes-ok:before {
-            content: url("/images/questoes-ok.png");
-        }
-    
-        .flaticon-questoes-nao:before {
-            content: url("/images/questoes-nao.png");
         }
 
         .flaticon-voltar:before {
@@ -62,7 +49,7 @@
     
     <div id="my-ar-container">
         {{-- <a id="button-return" class="flaticon-voltar" href="{{ route('student.conteudos') }}?id={{ $disciplina }}"></a>  --}}
-        <a id="button-ar" data-href="{{ route('student.questoes') }}"></a> 
+        <a id="button-ar_x" data-href="{{ route('student.questoes') }}"></a> 
 
     </div>
 
