@@ -9,6 +9,7 @@ import { MindARThree } from 'mindar-image-three';
 
 //const THREE = window.MINDAR.IMAGE.THREE;
 var buttonAR = null;
+var buttonsAR = null;
 var activeScene = null;
 var lastActiveScene = null;
 var cameraVar = null;
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const start = async() => {
 
+      buttonsAR = document.getElementById("buttons_ar");
       buttonAR = document.getElementById("button-ar");
 
       const mind = document.getElementById("mind");
@@ -107,14 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             activeScene = glbScene;
-            buttonAR.style.display = 'block';
+            buttonsAR.style.display = 'block';
         }
         
         //anchor.addEventListener
         anchor.onTargetLost = () => {
           lastActiveScene = activeScene;
           activeScene = null;
-          buttonAR.style.display = 'none';
+          buttonsAR.style.display = 'none';
           if (action != null) {
             action.stop();
             action = null;

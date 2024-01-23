@@ -9,24 +9,7 @@
         #my-ar-container {
             height: 80vh; width: 120vh; position: relative; overflow: hidden;   
          }
-
         
-         #button-return {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: orange;
-            z-index: 100;
-            display: block;
-            border-radius: 90px;
-            padding-top: 5px
-        }
-
-        .flaticon-voltar:before {
-            content: url("/images/voltar.png");
-        }
-
-         
 </style>
 @endsection
 
@@ -48,9 +31,6 @@
     </span>
     
     <div id="my-ar-container">
-        {{-- <a id="button-return" class="flaticon-voltar" href="{{ route('student.conteudos') }}?id={{ $disciplina }}"></a>  --}}
-        <a id="button-ar_x" data-href="{{ route('student.questoes') }}"></a> 
-
     </div>
 
     
