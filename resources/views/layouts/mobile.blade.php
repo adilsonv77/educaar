@@ -179,12 +179,12 @@
             </div>
 
             <div id='footerBA'>
-                <button type="button" class="btn btn-warning" id="mais"><span><i style = "color:#83368A;"
+                <button type="button" class="btn btn-warning" id="zoom_mais"><span><i style = "color:#83368A;"
                             class="bi bi-zoom-in h5"></i></span></button>
             </div>
 
             <div id='footerBL'>
-                <button type="button" class="btn btn-warning" id="menos"><span><i style = "color:#83368A;"
+                <button type="button" class="btn btn-warning" id="zoom_menos"><span><i style = "color:#83368A;"
                             class="bi bi-zoom-out h5"></i></span></button>
             </div>
         @endif

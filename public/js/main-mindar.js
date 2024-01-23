@@ -9,6 +9,7 @@ import { MindARThree } from 'mindar-image-three';
 var buttonAR = null;
 var activeScene = null;
 var lastActiveScene = null;
+var cameraVar = null;
 
 // inspirado no OrbitControl
 var state = 0;  // 1 - rotacionar
@@ -53,6 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
  
       const {renderer, scene, camera} = mindarThree;
+
+      cameraVar = camera;
 
       const light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
       scene.add(light);
@@ -141,14 +144,29 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("onmouseup"); 
       };
 */
+
+      const getFov = () => {
+        return Math.floor(
+          (2 *
+            Math.atan(cameraVar.getFilmHeight() / 2 / cameraVar.getFocalLength()) *
+            180) /
+            Math.PI
+        );
+      };
+
       var deltaTotal = 0;
+      var origFov = getFov();
       renderer.setAnimationLoop(() => {
         if (mixer != null) {
           const delta = clock.getDelta();
           mixer.update(delta);
         }
         if (activeScene == null) {
+          cameraVar.fov = origFov;
+          cameraVar.updateProjectionMatrix();
+
           deltaTotal = 0;
+
           if (lastActiveScene != null) {
             lastActiveScene.rotateY(-lastActiveScene.rotation._y); 
             lastActiveScene.rotateX(-lastActiveScene.rotation._x); 
@@ -188,6 +206,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       };
 
+
+      const clickZoom = (value, zoomType) => {
+        if (value >= 20 && zoomType === "zoomIn") {
+          return value - 5;
+        } else if (value <= 75 && zoomType === "zoomOut") {
+          return value + 5;
+        } else {
+          return value;
+        }
+      };
+
+      const bZoomMais = document.getElementById("zoom_mais");
+      bZoomMais.onclick = () => {
+        const fov = getFov();
+        cameraVar.fov = clickZoom(fov, "zoomIn");
+        cameraVar.updateProjectionMatrix();
+      };
+
+      const bZoomMenos = document.getElementById("zoom_menos");
+      bZoomMenos.onclick = () => {
+        const fov = getFov();
+        cameraVar.fov = clickZoom(fov, "zoomOut");
+        cameraVar.updateProjectionMatrix();
+      
+      };
     }
     start();
   });
