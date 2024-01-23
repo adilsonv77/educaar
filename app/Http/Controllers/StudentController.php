@@ -15,27 +15,10 @@ use phpDocumentor\Reflection\DocBlock\Tags\See;
 class StudentController extends Controller
 {
 
-
-    public function novasAtividades()
-    {
-        $user_id = auth()->user()->id;
-        $activities = Activity::all();
-        $student_answers = StudentAnswer::all()->where('user_id', $user_id);
-
-        return view('student.novas', compact('activities', 'student_answers', 'user_id'));
-    }
-
-    public function atividadesRealizadas()
-    {
-        $user_id = auth()->user()->id;
-        $activities = Activity::all();
-        $student_answers = StudentAnswer::all()->where('user_id', $user_id);
-
-        return view('student.realizadas', compact('activities', 'student_answers', 'user_id'));
-    }
-
-
-
+    /**
+     * Página de home da aplicação... mostra todos os conteúdos do aluno.
+     * 
+     */
     public function indexContentStudent(Request $request)
     {
 
@@ -60,12 +43,16 @@ class StudentController extends Controller
             ])
             ->distinct()
             ->get();
-            $rota = route("home") ;
+        $rota = route("home") ;
         return view('student.indexContentStudent', compact('conteudos','rota'));
     }
+
+    /**
+     * Após clicar no conteúdo, entra na página de RA da aplicação
+     */
     public function showActivity(Request $request)
     {
-        //$request->session()->reflash();
+
         $data = $request->all();
         $content_id = $request->id;
         if ($content_id == null) {
@@ -96,61 +83,9 @@ class StudentController extends Controller
         return view('student.ar', compact('activities', 'rota'));
     }
 
-    public function store(Request $request)
-    {
-
-        // dd($request->all());
-        if ($request->get("return") == null) {
-            $questions = session()->get('questoes');
-            //  dd($questions);
-            $datareq = $request->all();
-            // dd($datareq);
-            // $s  = "";
-            foreach ($questions as $questao) {
-                $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
-                
-                try{
-                $respop = $datareq["questao" . $questao->id];
-                $data['question_id'] = $questao->id;
-                $data['user_id'] =  Auth::user()->id;
-                $data['activity_id'] =  $questao->activity_id;
-                $opcao = $questao->options[$respop];
-
-                $data['alternative_answered'] =  $opcao;
-                // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
-
-                if ($opcao == $questao->a) {
-                    $data['correct'] = true;
-                } else {
-                    $data['correct'] = false;
-                }
-                // dd($data);
-                // gravar no banco uma linha da resposta
-                StudentAnswer::create($data);
-
-                }catch(Exception $e){
-                    continue;
-                }
-                
-
-                // $opcao == $questao->a
-            }
-        }
-
-
-        //dd($opcao == $datasess[0]->a);
-
-        // session()->get("");
-        // session()->forget("");
-        // session()->flush(); // remover tudo !!! - perigoso. nunca usar
-        // $ = $request->all();
-        // $id = session()->get('activity_id');
-        // # dd($activity);
-        // #return view('pages.questions.index', $id);
-
-        return redirect('/students/activity');
-    }
-
+    /**
+     * Entra na página de questionario de uma atividade
+     */
     public function questoes(Request $request)
     {
 
@@ -176,8 +111,6 @@ class StudentController extends Controller
             ]);
         $questions = $where->get();
 
-        // dd($questions);
-
         foreach ($questions as $item) {
             $options = [$item->a, $item->b, $item->c, $item->d];
             shuffle($options);
@@ -185,14 +118,54 @@ class StudentController extends Controller
         }
         session()->put('questoes', $questions);
         $respondida =$this->respondida();
-        //  dd($questions);
 
-        $rota = route("home") ;
+        $rota = route("student.showActivity") ;
 
         return view('student.atividadeAr', compact('questions', 'respondida', 'rota'));
     }
 
-    protected function respondida(){
+    /**
+     * Botão salvar as respostas do questionario
+     */
+    public function store(Request $request)
+    {
+
+        $questions = session()->get('questoes');
+        $datareq = $request->all();
+        foreach ($questions as $questao) {
+            $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
+            
+            try{
+            $respop = $datareq["questao" . $questao->id];
+            $data['question_id'] = $questao->id;
+            $data['user_id'] =  Auth::user()->id;
+            $data['activity_id'] =  $questao->activity_id;
+            $opcao = $questao->options[$respop];
+
+            $data['alternative_answered'] =  $opcao;
+            // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
+
+            if ($opcao == $questao->a) {
+                $data['correct'] = true;
+            } else {
+                $data['correct'] = false;
+            }
+            // dd($data);
+            // gravar no banco uma linha da resposta
+            StudentAnswer::create($data);
+
+            }catch(Exception $e){
+                continue;
+            }
+            
+
+            
+        }
+
+        return redirect('/students/activity');
+    }
+
+    private function respondida() {
         $questions= session()->get('questoes');
 
         $reposta=0;
@@ -223,6 +196,7 @@ class StudentController extends Controller
 
     }
 
+    // Também acredito nao estar mais sendo utilizada
     public function alternatives(Request $request)
     {
 
@@ -234,4 +208,27 @@ class StudentController extends Controller
         //     ->get();
         return view('student.atividadeAr', compact('alternatives'));
     }
+
+    // Excluir.... provavelmente nao mais utilizadas
+
+    public function novasAtividades()
+    {
+        $user_id = auth()->user()->id;
+        $activities = Activity::all();
+        $student_answers = StudentAnswer::all()->where('user_id', $user_id);
+
+        return view('student.novas', compact('activities', 'student_answers', 'user_id'));
+    }
+
+    public function atividadesRealizadas()
+    {
+        $user_id = auth()->user()->id;
+        $activities = Activity::all();
+        $student_answers = StudentAnswer::all()->where('user_id', $user_id);
+
+        return view('student.realizadas', compact('activities', 'student_answers', 'user_id'));
+    }
+
+
 }
+

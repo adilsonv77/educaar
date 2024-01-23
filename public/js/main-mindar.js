@@ -98,7 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
         anchor.onTargetFound = () => {
             buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
-            buttonAR.className = anchor.clazz;
+            
+            var button = buttonAR.getElementsByTagName("button")[0];
+            //button.classList.replace("x0", anchor.clazz);
            
             if (anchor.glb.animations.length > 0) {
 
@@ -109,11 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             activeScene = glbScene;
-            buttonsAR.style.display = 'block';
+            buttonsAR.style.display = 'flex';
         }
         
         //anchor.addEventListener
         anchor.onTargetLost = () => {
+
+          var button = buttonAR.getElementsByTagName("button")[0];
+          //button.classList.replace(anchor.clazz, "x0");
+
           lastActiveScene = activeScene;
           activeScene = null;
           buttonsAR.style.display = 'none';

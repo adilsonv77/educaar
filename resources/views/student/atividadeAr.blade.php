@@ -39,13 +39,6 @@
                             class="btn btn-success">Salvar</button>
     </form>
     </td>
-    <td>
-        <form action="{{ route('student.store') }}">
-            @csrf
-            <input type="hidden" name="return" value="1">
-            <button type="submit" class="btn btn-warning">Retornar</button>
-        </form>
-    </td>
     </tr>
     </tbody>
     </table>

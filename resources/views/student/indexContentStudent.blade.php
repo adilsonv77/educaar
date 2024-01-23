@@ -29,6 +29,7 @@
             @endsection
 
             @section('style')
+            <!-- isso tem que sair pois está duplicado em mobile.css -->
                 <style>
                     body {
                         margin: 1em;
@@ -45,13 +46,6 @@
                         border-radius: 6px;
                         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
                         overflow: hidden;
-                    }
-
-                    model-viewer {
-                        width: 100%;
-                        height: 550px;
-                        background-color: rgb(65, 64, 64);
-                        --poster-color: #ffffff00;
                     }
 
                     .btn.btn-warning {

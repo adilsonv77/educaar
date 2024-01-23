@@ -79,13 +79,15 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/receivemind', 'App\Http\Controllers\ReceiveMindController@receive');
 
 //students
-
-Route::get('/students/novas', [App\Http\Controllers\StudentController::class, 'novasAtividades']);
-Route::get('/students/realizadas', [App\Http\Controllers\StudentController::class, 'atividadesRealizadas']);
 Route::get('/conteudos', [App\Http\Controllers\StudentController::class, 'indexContentStudent'])->name('student.conteudos');
 Route::get('/students/activity', [App\Http\Controllers\StudentController::class, 'showActivity'])->name('student.showActivity');
-Route::get('/students/questoes', [App\Http\Controllers\StudentController::class, 'questoes'])->name('student.questoes');
 Route::get('/students/store', [App\Http\Controllers\StudentController::class, 'store'])->name('student.store');
+Route::get('/students/questoes', [App\Http\Controllers\StudentController::class, 'questoes'])->name('student.questoes');
+
+// nao sao mais usadas.... provavelmente excluir !!!
+Route::get('/students/novas', [App\Http\Controllers\StudentController::class, 'novasAtividades']);
+Route::get('/students/realizadas', [App\Http\Controllers\StudentController::class, 'atividadesRealizadas']);
+
 
 Route::get('/alunoteste', function () {
     if (DB::table('schools')->count() == 0) {

@@ -166,7 +166,7 @@
             <div id="buttons_ar"  style="display: none">
                 <div id='footerBF'>
                     <a id="button-ar" data-href="{{ route('student.questoes') }}">
-                    <button type="button" class="btn btn-warning">
+                    <button type="button" class="questoes-nao"> <!-- x0 é só para usar na substituicao -->
                         <span><i style = "color:#83368A;" class="bi bi-book h2"></i></span>
                     </button>
                     </a>

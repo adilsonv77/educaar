@@ -10,7 +10,14 @@
             height: 80vh; width: 120vh; position: relative; overflow: hidden;   
          }
         
-</style>
+         .questoes-ok {
+            background-color: yellow;
+         }
+
+         .questoes-nao {
+            background-color: black;
+         }
+ </style>
 @endsection
 
 
@@ -26,7 +33,7 @@
     <span id="glbs" style="display: none;"> 
         @foreach ($activities as $item)
         
-         <li id="act_{{$item->id}}" usar_class=@if($item->respondido==1)"flaticon-questoes-ok"@else"flaticon-questoes-nao"@endif>/modelos3d/{{$item->glb}}</li>
+         <li id="act_{{$item->id}}" usar_class=@if($item->respondido==1)"questoes-ok"@else"questoes-nao"@endif>/modelos3d/{{$item->glb}}</li>
         @endforeach
     </span>
     
