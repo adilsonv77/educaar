@@ -16,12 +16,23 @@
                             {{ $loop->iteration }}.{{ $item->question }}
                         </h2>
                     </div>
+                    
+                    
+                    
+
                     <div class="card-body">
                         @foreach ($item->options as $option)
+                        
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="questao{{ $item->id }}"
                                     id="flexRadioDefault{{ $loop->index }} {{ $item->id }}" value="{{ $loop->index }}"
-                                    @if ($option == $item->alternative_answered) disabled checked @endif>
+                                    
+                                    @if ($item->alternative_answered != NULL) 
+                                        disabled 
+                                        @if ($option == $item->alternative_answered) checked @endif
+                                    @elseif ($item->alternative_answered == NULL and $loop->first) 
+                                        checked 
+                                    @endif>
                                 <label for="flexRadioDefault{{ $loop->index }} {{ $item->id }}"
                                     class="form-check-label" style="font-size: 17px">
                                     {{ $option }}
