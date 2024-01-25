@@ -142,22 +142,8 @@ class StudentController extends Controller
                 $data['activity_id'] =  $questao->activity_id;
                 $opcao = $questao->options[$respop];
                 //dd($respop . " - " . $opcao . " - " . $questao->a . " - " . implode(" ; ", $questao->options));
-                if ($opcao == $questao->a) {
-                    $data['correct'] = true;
-                    $data['alternative_answered'] =  "A";
-                } else {
-                    $data['correct'] = false;
-                    if ($opcao == $questao->b)
-                        $data['alternative_answered'] =  "B";
-                    else
-                        if ($opcao == $questao->c)
-                            $data['alternative_answered'] =  "C";
-                        else
-                            $data['alternative_answered'] =  "D";
-                }
                 
-                /*
-                $data['alternative_answered'] =  $opcao;
+                $data['alternative_answered'] =  $opcao; // havia um erro na estrutura do banco que esse campo era de somente 1!!!
                 // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
 
                 if ($opcao == $questao->a) {
@@ -165,7 +151,7 @@ class StudentController extends Controller
                 } else {
                     $data['correct'] = false;
                 }
-                */
+                
                 //dd($data);
                 // gravar no banco uma linha da resposta
                 StudentAnswer::create($data);
