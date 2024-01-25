@@ -136,27 +136,43 @@ class StudentController extends Controller
             $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
             
             try{
-            $respop = $datareq["questao" . $questao->id];
-            $data['question_id'] = $questao->id;
-            $data['user_id'] =  Auth::user()->id;
-            $data['activity_id'] =  $questao->activity_id;
-            $opcao = $questao->options[$respop];
+                $respop = $datareq["questao" . $questao->id];
+                $data['question_id'] = $questao->id;
+                $data['user_id'] =  Auth::user()->id;
+                $data['activity_id'] =  $questao->activity_id;
+                $opcao = $questao->options[$respop];
+                //dd($respop . " - " . $opcao . " - " . $questao->a . " - " . implode(" ; ", $questao->options));
+                if ($opcao == $questao->a) {
+                    $data['correct'] = true;
+                    $data['alternative_answered'] =  "A";
+                } else {
+                    $data['correct'] = false;
+                    if ($opcao == $questao->b)
+                        $data['alternative_answered'] =  "B";
+                    else
+                        if ($opcao == $questao->c)
+                            $data['alternative_answered'] =  "C";
+                        else
+                            $data['alternative_answered'] =  "D";
+                }
+                
+                /*
+                $data['alternative_answered'] =  $opcao;
+                // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
 
-            $data['alternative_answered'] =  $opcao;
-            // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
+                if ($opcao == $questao->a) {
+                    $data['correct'] = true;
+                } else {
+                    $data['correct'] = false;
+                }
+                */
+                //dd($data);
+                // gravar no banco uma linha da resposta
+                StudentAnswer::create($data);
 
-            if ($opcao == $questao->a) {
-                $data['correct'] = true;
-            } else {
-                $data['correct'] = false;
-            }
-            // dd($data);
-            // gravar no banco uma linha da resposta
-            StudentAnswer::create($data);
-
-            }catch(Exception $e){
-                continue;
-            }
+                }catch(Exception $e){
+                    continue;
+                 }
             
 
             
