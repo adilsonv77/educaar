@@ -155,16 +155,18 @@
 <footer>
 
     <div class='footer'>
+
+        <div class='gridContainer'>
         @if ($showBack)
-            <div id='footerBF'>
+            <div id="buttonReturn">       
                 <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i
                                 style = "color:#83368A;" class="bi bi-arrow-return-left h2"></i></span></button></a>
             </div>
         @endif
         <!-- id eh uma coisa unica... o melhor eh que esses divs tivessem classes diferentes e não com ids iguais (footerBF) -->
         @if ($showOthers)
-            <div id="buttons_ar"  style="display: none">
-                <div id='footerBF'>
+        <div id="buttons_ar"  style="display: none">
+                <div id="buttonQuestion" >
                     <a id="button-ar" data-href="{{ route('student.questoes') }}">
                     <button type="button" class="x0 btn btn-warning"> <!-- x0 é só para usar na substituicao -->
                         <span><i style = "color:#83368A;" class="bi bi-book h2"></i></span>
@@ -172,26 +174,29 @@
                     </a>
                 </div>
 
-                <div id='footerBF'>
+                <div id="buttonRotateX">
                     <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i style = "color:#83368A;"
-                                class="bi bi-arrows-move h5"></i></span></button>
+                                class="bi bi-arrows-move h2"></i></span></button>
                 </div>
-                <div id='footerBF'>
+                <div id="buttonRotateY">
                     <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i style = "color:#83368A;"
-                                class="bi bi-arrows-move h5"></i></span></button>
+                                class="bi bi-arrows-move h2"></i></span></button>
                 </div>
 
-                <div id='footerBA'>
+                <div id="buttonZoomIn">
                     <button type="button" class="btn btn-warning" id="zoom_mais"><span><i style = "color:#83368A;"
-                                class="bi bi-zoom-in h5"></i></span></button>
+                                class="bi bi-zoom-in h2"></i></span></button>
                 </div>
 
-                <div id='footerBL'>
+                <div id="buttonZoomOut">
                     <button type="button" class="btn btn-warning" id="zoom_menos"><span><i style = "color:#83368A;"
-                                class="bi bi-zoom-out h5"></i></span></button>
+                                class="bi bi-zoom-out h2"></i></span></button>
                 </div>
-            </div>
+
+               
+        </div>
         @endif
+    </div>
     </div>
 
 </footer>
