@@ -165,7 +165,7 @@
         @endif
         <!-- id eh uma coisa unica... o melhor eh que esses divs tivessem classes diferentes e não com ids iguais (footerBF) -->
         @if ($showOthers)
-        <div id="buttons_ar"  style="display: none">
+        <div id="buttons_ar">
                 <div id="buttonQuestion" >
                     <a id="button-ar" data-href="{{ route('student.questoes') }}">
                     <button type="button" class="x0 btn btn-warning"> <!-- x0 é só para usar na substituicao -->

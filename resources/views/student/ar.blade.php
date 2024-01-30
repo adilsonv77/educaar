@@ -9,7 +9,7 @@
         #my-ar-container {
             height: 80vh; width: 120vh; position: relative; overflow: hidden;   
          }
-        
+      
          .questoes-ok {
             background-color: yellow;
          }

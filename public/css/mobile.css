@@ -111,6 +111,10 @@
            
         }
 
+         #buttons_ar.hide{
+            display: none;
+        }
+
 
         #buttonReturn{
 

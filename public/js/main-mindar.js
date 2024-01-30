@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const start = async() => {
 
       buttonsAR = document.getElementById("buttons_ar");
+      buttonsAR.classList.add("hide");
       buttonAR = document.getElementById("button-ar");
 
       const mind = document.getElementById("mind");
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             activeScene = glbScene;
-            buttonsAR.style.display = 'flex';
+            buttonsAR.classList.remove("hide");
         }
         
         //anchor.addEventListener
@@ -122,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           lastActiveScene = activeScene;
           activeScene = null;
-          buttonsAR.style.display = 'none';
+          buttonsAR.classList.add("hide");
           if (action != null) {
             action.stop();
             action = null;
@@ -136,6 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const clock = new THREE.Clock();
       await mindarThree.start();
+
+      // essas duas linhas servem para o painel nao sobrepor os botões
+      var mindarscanning = document.getElementsByClassName("mindar-ui-scanning");
+      mindarscanning[0].style.bottom = "120px";
 
      // var TBC = new TrackballControls(camera, renderer.domElement);
      //var TBC = new TrackballControls(camera, document.getElementById("my-ar-container"));
