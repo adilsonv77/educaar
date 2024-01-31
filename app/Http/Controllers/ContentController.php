@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Content;
+
 use App\Models\Matricula;
 use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\DB;
@@ -203,20 +204,16 @@ class ContentController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show($id)
-    {
-        if (Auth::user()->type == 'student') {
-            return redirect('/');
-        }
+    // public function show($id)
+    // {
+    //     if (Auth::user()->type == 'student') {
+    //         return redirect('/');
+    //     }
 
-        $content = Content::where('id', $id)->first();
+    //     $content = Content::where('id', $id)->first();
 
-        return view('pages.content.show', compact('content'));
-    }
-
-
-
-
+    //     return view('pages.content.show', compact('content'));
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -260,14 +257,8 @@ class ContentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Content  $content
      * @return \Illuminate\Http\Response
+     * 
      */
-    // public function update(Request $request, Content $content)
-    // {
-    //     if(Auth::user()->type == 'student'){
-    //         return redirect('/');
-    //     }
-    // }
-
     /**
      * Remove the specified resource from storage.
      *

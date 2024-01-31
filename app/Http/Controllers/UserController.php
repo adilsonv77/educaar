@@ -62,6 +62,10 @@ class UserController extends Controller
     {
         return $this->doIndex($request, 'user.indexProf', 'teacher', 'admin');
     }
+    public function indexDev(Request $request)
+    {
+        return $this->doIndex($request, 'user.indexDev', 'developer', '');
+    }
 
     public function createStudent()
     {
@@ -108,12 +112,37 @@ class UserController extends Controller
 
         return view('pages.user.registerUser', $params);
     }
+    public function createDeveloper()
+    {
+
+        $titulo = 'Adicionar Desenvolvedor';
+        $acao = 'insert';
+        $params = [
+            'titulo' => $titulo,
+            'acao' => $acao,
+            'id' => 0,
+            'type' => 'developer',
+            'name' => '',
+            'email' => '',
+            'username' => ''
+        ];
+
+        return view('pages.user.registerUser', $params);
+    }
 
     public function edit(Request $request, $id)
     {
         $user = User::find($id);
 
-        $titulo = 'Editar ' . ($user->type == "teacher" ? "Professor" : "Aluno");
+        if($user->type == "teacher"){
+            $titulo = 'Editar Professor';
+        }else if($user->type == "student"){
+            $titulo = 'Editar Aluno';
+        }else{
+            $titulo = 'Editar Desenvolvedor';
+        }
+
+        // $titulo = 'Editar ' . ($user->type == "teacher" ? "Professor" : "Aluno");
         $acao = 'edit';
         $params = [
             'titulo' => $titulo,
@@ -296,8 +325,10 @@ class UserController extends Controller
 
         if ($data['type'] == 'student') {
             return redirect('/indexAluno');
-        } else {
+        } else if($data['type'] == 'teacher'){
             return redirect('/indexProf');
+        }else{
+            return redirect('/indexDev');
         }
     }
 

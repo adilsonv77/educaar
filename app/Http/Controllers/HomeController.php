@@ -53,6 +53,14 @@ class HomeController extends Controller
         if (Auth::user()->type == 'admin') {
             return view('home', compact('schools'));
         }
+        if(Auth::user()->type == 'developer'){
+            $activities= DB::table('activities')
+                        ->join('contents', 'activities.content_id', '=', 'contents.id')
+                        ->join('content_developer','content_developer.content_id','=','contents.id')
+                        ->where('content_developer.developer_id',Auth::user()->id);
+            $activities = $activities->distinct()->paginate(20);
+            return view('developer.index', compact('activities'));
+        }
 
         if (Auth::user()->type == 'student') {
             $ano_letivo = AnoLetivo::where('bool_atual', 1)->first();

@@ -24,8 +24,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('user', App\Http\Controllers\UserController::class);
     Route::get('/indexAluno', [App\Http\Controllers\UserController::class, 'indexAluno'])->name('user.indexAluno');
     Route::get('/indexProf', [App\Http\Controllers\UserController::class, 'indexProf'])->name('user.indexProf');
+    Route::get('/indexDev', [App\Http\Controllers\UserController::class, 'indexDev'])->name('user.indexDev');
     Route::get('/createStudent', [App\Http\Controllers\UserController::class, 'createStudent'])->name('user.createStudent');
     Route::get('/createTeacher', [App\Http\Controllers\UserController::class, 'createTeacher'])->name('user.createTeacher');
+    Route::get('/createDeveloper', [App\Http\Controllers\UserController::class, 'createDeveloper'])->name('user.createDeveloper');
     Route::get('/matricula', [App\Http\Controllers\UserController::class, 'matricula'])->name('user.matricula');
     Route::post('/storeMatricula', [App\Http\Controllers\UserController::class, 'storeMatricula'])->name('user.storeMatricula');    //class
     Route::resource('class', App\Http\Controllers\DisciplinaController::class);
@@ -50,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     //content
     Route::resource('content', App\Http\Controllers\ContentController::class);
     Route::get('/content/list', [App\Http\Controllers\ContentController::class, 'listOfContents'])->name('content.list');
+    
 
     //school
     Route::get('/registerStudentDiscipline', [App\Http\Controllers\DisciplinaController::class, 'viewCadastrarAlunoDisciplina'])->name('registerStudentDiscipline');
@@ -87,6 +90,13 @@ Route::get('/students/questoes', [App\Http\Controllers\StudentController::class,
 // nao sao mais usadas.... provavelmente excluir !!!
 Route::get('/students/novas', [App\Http\Controllers\StudentController::class, 'novasAtividades']);
 Route::get('/students/realizadas', [App\Http\Controllers\StudentController::class, 'atividadesRealizadas']);
+
+
+//developer
+
+Route::get('/developer', [App\Http\Controllers\DeveloperController::class, 'index'])->name('developer.index');
+Route::get('/developer/listDevs', [App\Http\Controllers\DeveloperController::class, 'listDevs'])->name('dev.listDevs');
+Route::post('/developer/store', [App\Http\Controllers\DeveloperController::class, 'store'])->name('dev.store');
 
 
 Route::get('/alunoteste', function () {

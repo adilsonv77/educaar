@@ -70,8 +70,13 @@
 
                                             </button>
                                         </form>
-
-
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('dev.listDevs') }}">
+                                            @csrf
+                                            <input type="hidden" name="content" value="{{ $item->id }}">
+                                            <button type="submit" class="btn btn-warning">Selecionar Devs</button>
+                                        </form>
                                     </td>
                                     <td>
                                         <button type="button"

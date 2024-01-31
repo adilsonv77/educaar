@@ -41,8 +41,10 @@
                                         <td>Aluno</td>
                                     @elseif ($item->type == 'teacher')
                                         <td>Professor</td>
-                                    @else
+                                    @elseif ($item->type == 'admin')
                                         <td>Administrador</td>
+                                    @else
+                                        <td>Desenvolvedor</td>
                                     @endif
 
                                     <td>

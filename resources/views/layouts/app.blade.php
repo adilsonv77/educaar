@@ -72,6 +72,9 @@
                                                 @if (Auth::user()->type == 'admin')
                                                     Administrator
                                                 @endif
+                                                @if (Auth::user()->type == 'developer')
+                                                    Desenvolvedor
+                                                @endif
                                             </p>
 
                                         </div>
@@ -132,6 +135,15 @@
                         </li>
                     @endcan
 
+                    
+                    @can('developer')
+                        <li><a class="ai-icon" href="{{ route('developer.index') }}">
+                                <i class="fa fa-external-link-square" aria-hidden="true"></i>
+                                <span class="nav-text">Atividades</span>
+                            </a>
+                        </li>
+                    @endcan
+
                     @can('teacher')
                         <li><a class=" ai-icon" href="/" aria-expanded="false">
                                 <i class="flaticon-381-home-2"></i>
@@ -170,6 +182,8 @@
                                 <li><a href="{{ route('user.createStudent') }}">Adicionar Aluno</a></li>
                                 <li><a href="{{ route('user.indexProf') }}">Listar Profs/Admins</a></li>
                                 <li><a href="{{ route('user.createTeacher') }}">Adicionar Professor</a></li>
+                                <li><a href="{{ route('user.indexDev') }}">Listar Desenvolvedores</a></li>
+                                <li><a href="{{ route('user.createDeveloper') }}">Adicionar Desenvolvedor</a></li>
 
                             </ul>
                         </li>
