@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class DeveloperController extends Controller
 {
@@ -57,6 +58,7 @@ class DeveloperController extends Controller
     {
         $data = $request->all();
 
+    // dd($data);
         $content_id = session()->get('content_id');
 
         $devs= DB::table('users')
@@ -64,12 +66,17 @@ class DeveloperController extends Controller
                     ->get();
         
         foreach($devs as $dev){
+
+            try{
             if($data['dev'.$dev->id]==$dev->id){
                 DB::table('content_developer')->insert([
                     'content_id' => $content_id,
                     'developer_id' => $dev->id
                 ]);
             }
+        }catch(Exception $e){
+            continue;
+        }
         }
         return redirect()->route('content.index');
     }
