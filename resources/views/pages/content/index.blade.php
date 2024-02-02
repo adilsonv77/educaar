@@ -42,6 +42,7 @@
                                 <th>Série</th>
                                 <th>Editar</th>
                                 <th>Ações</th>
+                                <th>Selecionar Devs</th>
                                 <th>Excluir</th>
                             </tr>
                         </thead>

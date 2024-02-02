@@ -25,7 +25,8 @@
                                 <tr>
                                     <td>
                                         <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" name="dev{{ $item->id}}" value="{{$item->id}}">
+                                        <input type="checkbox" class="form-check-input" name="dev{{ $item->id}}" value="{{$item->id}}"
+                                        @if($item->selected_dev==1) checked @endif>
                                         <label class="form-check-label" for="dev{{ $item->id}}">{{ $item->name }}</label>
                                         </div>
                                     </td>
