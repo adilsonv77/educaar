@@ -68,6 +68,7 @@
                 @csrf
                     <input name="id" type="hidden" value="{{$id}}"/>
                     <input name="acao" type="hidden" value="{{$acao}}"/>
+                    <input name="Type" type="hidden" value="{{$Type}}"/>
 
                 <div class="form-group">
                     <label for="">Nome da Atividade*</label>
@@ -79,7 +80,6 @@
                 <div class="form-group">
                     <label for="">Conteúdo*</label>
                     <select class="form-control" name="content_id" aria-label="">
-                       
                         @foreach ($contents as $item)
                             <option value="{{ $item->id }}" @if ($item->id === $content) selected="selected" @endif>{{ $item->total_name }}</option>
                         @endforeach
@@ -118,10 +118,10 @@
         </div>
     </div>
     <script>
-         @if($acao === 'edit') 
+         if($acao === 'edit'){ 
             document.getElementById("glb").disabled = true;
             document.getElementById("marcador").disabled = true;
-        @endif
+        }
     </script>
 @endsection
  

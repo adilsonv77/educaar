@@ -20,9 +20,12 @@ class DeveloperController extends Controller
         $activities= DB::table('activities')
                     ->join('contents', 'activities.content_id', '=', 'contents.id')
                     ->join('content_developer','content_developer.content_id','=','contents.id')
-                    ->where('content_developer.user_id',Auth::user()->id)
-                    ->select('activities.*')
-                    ->get();
+                    ->where('content_developer.developer_id',Auth::user()->id)
+                    ->select('activities.*');
+
+
+        $activities = $activities->distinct()->paginate(20);
+
         return view('developer.index', compact('activities'));
     }
 
@@ -33,7 +36,34 @@ class DeveloperController extends Controller
      */
     public function create()
     {
-        //
+        if (Auth::user()->type !== 'developer') {
+            return redirect('/');
+        }
+        $titulo = 'Atividade Nova';
+        $acao = 'insert';
+        $Type = Auth::user()->type;
+        $contents = DB::table('contents')
+            ->join('disciplinas', 'contents.disciplina_id', '=', 'disciplinas.id')
+            ->join('turmas_modelos', 'contents.turma_id', '=', 'turmas_modelos.id')
+            ->join('content_developer', 'content_developer.content_id', '=', 'contents.id')
+            ->where('content_developer.developer_id', Auth::user()->id);
+        
+            $contents = $contents
+            ->select('contents.id as id', 
+                    DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name'))
+            ->get();
+        $content = 0;
+        $params = [
+            'titulo' => $titulo,
+            'acao' => $acao,
+            'name' => '',
+            'id' => 0,
+            'contents' => $contents,
+            'content' => $content,
+            'Type' => $Type
+        ];
+
+        return view('pages.activity.register', $params);
     }
 
     /**
@@ -50,29 +80,11 @@ class DeveloperController extends Controller
 
         session()->put('content_id', $data);
 
-        /** 
-         * $devs= DB::table('users')
-                ->whereExists(function ($query) {
-                    $query->select(DB::raw(1))
-                        ->from('content_developer')
-                        ->whereRaw('content_developer.developer_id = users.id');
-                })->get();
-        */
-
-
-       /* $devs = DB::table('users')
-        ->addSelect(['selected_dev' => DB::table('content_developer')
-        ->whereColumn('content_developer.developer_id','=', 'users.id')
-        ->where('content_developer.content_id', $data)
-        ->exists()])
-        ->where('type', 'developer')
-        ->get();*/
-
         $devs= DB::table('users')->where('type', 'developer')
                     ->select('users.*')
                     ->addSelect(['selected_dev'=> DB::Raw('exists (select * from content_developer 
                     where content_developer.developer_id = users.id
-                     and content_developer.content_id = '.$data.') as selected_dev')])
+                    and content_developer.content_id = '.$data.') as selected_dev')])
                     ->get();
 
         

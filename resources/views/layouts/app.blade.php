@@ -135,12 +135,15 @@
                         </li>
                     @endcan
 
-                    
                     @can('developer')
-                        <li><a class="ai-icon" href="{{ route('developer.index') }}">
-                                <i class="fa fa-external-link-square" aria-hidden="true"></i>
+                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                                <i class="flaticon-381-notepad"></i>
                                 <span class="nav-text">Atividades</span>
                             </a>
+                            <ul aria-expanded="false">
+                                <li><a href="{{ route('developer.index') }}">Listar</a></li>
+                                <li><a href="{{ route('dev.createActivity') }}">Adicionar</a></li>
+                            </ul>
                         </li>
                     @endcan
 

@@ -59,7 +59,7 @@ class HomeController extends Controller
                         ->join('content_developer','content_developer.content_id','=','contents.id')
                         ->where('content_developer.developer_id',Auth::user()->id);
             $activities = $activities->distinct()->paginate(20);
-            return view('developer.index', compact('activities'));
+            return view('home', compact('activities'));
         }
 
         if (Auth::user()->type == 'student') {

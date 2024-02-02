@@ -95,6 +95,7 @@ Route::get('/students/realizadas', [App\Http\Controllers\StudentController::clas
 //developer
 
 Route::get('/developer', [App\Http\Controllers\DeveloperController::class, 'index'])->name('developer.index');
+Route::get('/developer/createActivity', [App\Http\Controllers\DeveloperController::class, 'create'])->name('dev.createActivity');
 Route::get('/developer/listDevs', [App\Http\Controllers\DeveloperController::class, 'listDevs'])->name('dev.listDevs');
 Route::post('/developer/store', [App\Http\Controllers\DeveloperController::class, 'store'])->name('dev.store');
 

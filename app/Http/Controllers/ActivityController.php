@@ -79,10 +79,11 @@ class ActivityController extends Controller
         }
         $titulo = 'Atividade Nova';
         $acao = 'insert';
+        $Type= Auth::user()->type;
         $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, true);
         $contents = $contents
             ->select('contents.id as id', 
-                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name'))
+                    DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name'))
             ->get();
         $content = 0;
         $params = [
@@ -91,7 +92,8 @@ class ActivityController extends Controller
             'name' => '',
             'id' => 0,
             'contents' => $contents,
-            'content' => $content
+            'content' => $content,
+            'Type' => $Type
         ];
 
         return view('pages.activity.register', $params);
@@ -250,8 +252,12 @@ class ActivityController extends Controller
 
         $content = Content::find($data["content_id"]);
         $content ->update(['fechado' => 0]);
-       
-        return redirect(route('activity.index'));
+       dd($data);
+       if($data['Type'] == 'teacher'){
+            return redirect(route('activity.index'));
+       }else{
+            return redirect(route('developer.index'));
+       }
 
  
     }
