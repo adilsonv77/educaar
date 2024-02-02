@@ -35,7 +35,7 @@
                                             class="btn btn-primary">Visualizar</a></td>
 
                                     <td style="width: 70px;">
-                                        <form action="{{ route('activity.edit', $item->id) }}">
+                                        <form action="{{ route('developer.edit', $item->id) }}">
                                             @csrf
                                             <button type="submit" class="btn btn-warning" text-align:
                                                 center>Editar</button>

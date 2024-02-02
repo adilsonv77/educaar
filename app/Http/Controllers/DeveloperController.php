@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use App\Models\Activity;
 
 class DeveloperController extends Controller
 {
@@ -41,7 +42,6 @@ class DeveloperController extends Controller
         }
         $titulo = 'Atividade Nova';
         $acao = 'insert';
-        $Type = Auth::user()->type;
         $contents = DB::table('contents')
             ->join('disciplinas', 'contents.disciplina_id', '=', 'disciplinas.id')
             ->join('turmas_modelos', 'contents.turma_id', '=', 'turmas_modelos.id')
@@ -60,7 +60,6 @@ class DeveloperController extends Controller
             'id' => 0,
             'contents' => $contents,
             'content' => $content,
-            'Type' => $Type
         ];
 
         return view('pages.activity.register', $params);
@@ -118,9 +117,31 @@ class DeveloperController extends Controller
         return redirect()->route('content.index');
     }
 
-    public function edit()
+    public function edit($id)
     {
-        //
+        $activity = Activity::find($id);
+        $titulo = 'Editar Atividades';
+        $acao = 'edit';
+        $contents = DB::table('contents')
+        ->join('disciplinas', 'contents.disciplina_id', '=', 'disciplinas.id')
+        ->join('turmas_modelos', 'contents.turma_id', '=', 'turmas_modelos.id')
+        ->join('content_developer', 'content_developer.content_id', '=', 'contents.id')
+        ->where('content_developer.developer_id', Auth::user()->id);
+    
+        $contents = $contents
+            ->select ('contents.id as id', 
+                    DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
+                    )
+            ->get();
+        $params = [
+            'titulo' => $titulo,
+            'acao' => $acao,
+            'id' => $activity->id,
+            'name' => $activity->name,
+            'contents' => $contents,
+            'content' => $activity->content_id
+        ];
+        return view('pages.activity.register', $params);
     }
 
     public function destroy()

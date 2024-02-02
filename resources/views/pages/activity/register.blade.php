@@ -68,7 +68,6 @@
                 @csrf
                     <input name="id" type="hidden" value="{{$id}}"/>
                     <input name="acao" type="hidden" value="{{$acao}}"/>
-                    <input name="Type" type="hidden" value="{{$Type}}"/>
 
                 <div class="form-group">
                     <label for="">Nome da Atividade*</label>
