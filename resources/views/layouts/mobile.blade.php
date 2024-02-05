@@ -14,17 +14,17 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
         rel="stylesheet">
     <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
-    {{-- <link href="/css/mobile.css" rel="stylesheet"> --}}
+    <!-- {{-- <link href="/css/mobile.css" rel="stylesheet"> --}} -->
     <link href="/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 
-    {{-- <link rel="stylesheet" href="/css/app.css"> --}}
+    <!-- {{-- <link rel="stylesheet" href="/css/app.css"> --}}
     {{-- <link rel="stylesheet" href="{{ asset('/css/login.css') }}"rel="stylesheet"> --}}
-    {{-- <link rel="stylesheet" href="/css/questions.css"> --}}
+    {{-- <link rel="stylesheet" href="/css/questions.css"> --}} -->
 
 
 
-    {{-- <link rel="stylesheet" href="/css/telainicial.css"> --}}
+    <!-- {{-- <link rel="stylesheet" href="/css/telainicial.css"> --}} -->
 
     @include('sweetalert::alert')
     @livewireStyles
@@ -38,6 +38,7 @@
             <div class="sk-child sk-bounce3"></div>
         </div>
     </div>
+
     <div id="main-wrapper">
         @auth
             <div class="nav-header">
@@ -45,9 +46,8 @@
                     <img src="{{ asset('images/LOGO VERTICAL.png') }}" width="70" alt="Imagem"
                         class="img-fluid">{{-- So pra teste --}}
                 </a>
-
-
             </div>
+            
             <div class="header">
                 <div class="header-content">
                     <nav class="navbar navbar-expand">
@@ -116,23 +116,17 @@
     @endauth
 
 
-
-    <div class="content-body">
-
-
-
-
-        @yield('content')
-
-
-    </div>
+    
+        <div class="content-body">
 
 
 
 
-    {{-- <div class="footer">
+            @yield('content')
 
-    </div> --}}
+
+        </div>
+   
 
     </div>
     @livewireScripts
@@ -149,26 +143,24 @@
     @yield('script')
 
 
-
 </body>
+
 
 <footer>
 
-    <div class='footer'>
-
-        <div class='gridContainer'>
+    <div class='gridContainer'>
         @if ($showBack)
             <div id="buttonReturn">       
                 <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i
                                 style = "color:#83368A;" class="bi bi-arrow-return-left h2"></i></span></button></a>
             </div>
         @endif
-        <!-- id eh uma coisa unica... o melhor eh que esses divs tivessem classes diferentes e não com ids iguais (footerBF) -->
+       
         @if ($showOthers)
         <div id="buttons_ar">
                 <div id="buttonQuestion" >
                     <a id="button-ar" data-href="{{ route('student.questoes') }}">
-                    <button type="button" class="x0 btn btn-warning"> <!-- x0 é só para usar na substituicao -->
+                    <button type="button" class="x0 btn btn-warning"> 
                         <span><i style = "color:#83368A;" class="bi bi-book h2"></i></span>
                     </button>
                     </a>
@@ -176,11 +168,11 @@
 
                 <div id="buttonRotateX">
                     <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i style = "color:#83368A;"
-                                class="bi bi-arrows-move h2"></i></span></button>
+                                class="bi bi-arrow-left-right h2"></i></span></button>
                 </div>
                 <div id="buttonRotateY">
                     <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i style = "color:#83368A;"
-                                class="bi bi-arrows-move h2"></i></span></button>
+                                class="bi bi-arrow-down-up h2"></i></span></button>
                 </div>
 
                 <div id="buttonZoomIn">
@@ -192,14 +184,12 @@
                     <button type="button" class="btn btn-warning" id="zoom_menos"><span><i style = "color:#83368A;"
                                 class="bi bi-zoom-out h2"></i></span></button>
                 </div>
-
-               
+             
         </div>
         @endif
     </div>
-    </div>
-
 </footer>
 
+<!-- lembrar de voltar ate os comentarios aparecerem -->
 
 </html>

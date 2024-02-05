@@ -1,16 +1,21 @@
 
-        /* h-100{
-            background-image:linear-gradient(circle at center, #8743df, #bd8aff);
+        .h-100{
+            
+           
 
 
-
-        } */
+        }
 
         .brand-logo{
 
 
             background-color: #e3edeb;
         }
+
+        /* .content-body{
+            max-height: 90vh;
+
+        } */
         
         
         
@@ -20,7 +25,8 @@
             margin: 0;
             font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif;
             color: #244376;
-            /* background-color: black; */
+            background-color: black;
+            
         }
 
         #card {
@@ -33,10 +39,7 @@
             overflow: hidden;
         }
 
-        /* #btn_save.btn.btn-success{
-            width: 50%;
-            padding:5% 20%;     
-        } */
+        
 
         .btn.btn-warning{
 
@@ -72,25 +75,43 @@
 
        
 
-        .footer{
-            border-top: 1px solid #333;
+        footer{
+            /* border-top: 1px solid #333; */
             bottom: 0;
             left: 0;
             position: absolute;
             width: 100%;
+            margin-top: auto;
+            
+
+            /* na moral tenho q ver se isso ta sendo uzado, ta parecendo meio inutil */
+           
      
         } 
+
+        .telinha-teste{
+            
+
+
+
+
+        }
 
 
         .gridContainer{
 
             display: grid;
-            grid-template-rows: repeat(2, 1fr);
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(1, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap:5px;
             padding: 5px;
             align-items: center;
             justify-content: center;
+            position: absolute;
+            
+            
+            
+            
 
         }
 
@@ -99,15 +120,13 @@
             
             position: absolute;
             display: grid;
-            grid-template-rows: repeat(2, 1fr);
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(1, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap:5px;
             padding: 5px;
             align-items: center;
             justify-content: center;
-            bottom: 0;
-            right: 0;
-            width: 100%;
+             
            
         }
 
@@ -119,15 +138,15 @@
         #buttonReturn{
 
             grid-column: 1 / span 1; 
-            grid-row: 2 / span 1;
-            z-index: 2;
+            grid-row: 1 / span 1;
+            /* z-index: 2; */
 
 
         }
 
         #buttonQuestion{
 
-            grid-column: 1 / span 1; 
+            grid-column: 2 / span 1; 
             grid-row: 1 / span 1;
             
 
@@ -135,36 +154,36 @@
         }
         #buttonRotateX{
 
-            grid-column: 2 / span 1; 
+            grid-column: 3 / span 1; 
             grid-row: 1 / span 1;
 
 
         }
         #buttonRotateY{
 
-            grid-column: 2 / span 1; 
-            grid-row: 2 / span 1;
+            grid-column: 4 / span 1; 
+            grid-row: 1 / span 1;
 
 
         }
         #buttonZoomIn{
 
-            grid-column: 3 / span 1; 
+            grid-column: 5 / span 1; 
             grid-row: 1 / span 1;
 
 
         }
         #buttonZoomOut{
 
-            grid-column: 3 / span 1; 
-            grid-row: 2 / span 1;
+            grid-column: 6 / span 1; 
+            grid-row: 1 / span 1;
 
 
         }
 
 
 
-
+        
         
 
         
