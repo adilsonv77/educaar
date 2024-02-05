@@ -41,7 +41,7 @@
         </div>
     @else
         <div>
-            <h2>Nenhum aluno matriculado nesta turma </h2>
+            <h2>Nenhum desenvolvedor </h2>
         </div>
         @endif
     </div>

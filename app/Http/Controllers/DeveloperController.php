@@ -72,6 +72,9 @@ class DeveloperController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    //  public function show(){
+
+    //  }
     
     public function listDevs(Request $request){
 
@@ -94,13 +97,25 @@ class DeveloperController extends Controller
     {
         $data = $request->all();
 
-    // dd($data);
+        // dd($data);
+        
         $content_id = session()->get('content_id');
 
         $devs= DB::table('users')
                     ->where('type', 'developer')
                     ->get();
         
+        
+        $content_exists= DB::table('content_developer')
+                    ->where('content_id', $content_id)
+                    ->exists();
+
+        if($content_exists){
+            DB::table('content_developer')
+            ->where('content_id', $content_id)
+            ->delete();
+        }
+
         foreach($devs as $dev){
 
             try{
@@ -144,8 +159,15 @@ class DeveloperController extends Controller
         return view('pages.activity.register', $params);
     }
 
-    public function destroy()
+    public function destroy($id)
     {
-        //
+        $content_id= session()->get('content_id');
+        $content_developer = DB::table('content_developer')
+        ->where([
+            ['content_id', '=', $content_id],
+            ['developer_id', '=', $id]
+        ])->delete();  
+        
+        return redirect(route('developer.selectDevelopers'));
     }
 }
