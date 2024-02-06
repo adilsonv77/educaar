@@ -26,17 +26,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($activities as $item)
+                            @foreach ($activities as $activity)
                                 <tr>
-                                    <td style="width: 60%;">{{ $item->name }}</td>
-                                    <td style="width: 25%;"><img src="/marcadores/{{ $item->marcador }}"
+                                    <td style="width: 60%;">{{ $activity->name }}</td>
+                                    <td style="width: 25%;"><img src="/marcadores/{{ $activity->marcador }}"
                                             alt=""width="200" height="200"></td>
-                                    <td style="width: 10%;"><a href="/activity/{{ $item->id }}"
+                                    <td style="width: 10%;"><a href="/activity/{{ $activity->id }}"
                                             class="btn btn-primary">Visualizar</a></td>
 
                                     <td style="width: 70px;">
-                                        <form action="{{ route('dev.editActivity', $item->id) }}">
+                                        <form action="{{ route('dev.editActivity', $activity->id) }}">
                                             @csrf
+                                            <input type="hidden" name="id" value="{{ $activity->id }}">
                                             <button type="submit" class="btn btn-warning" text-align:
                                                 center>Editar</button>
                                         </form>

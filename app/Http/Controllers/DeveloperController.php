@@ -72,9 +72,9 @@ class DeveloperController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //  public function show(){
+    // public function show(){
 
-    //  }
+    // }
     
     public function listDevs(Request $request){
 
@@ -128,12 +128,14 @@ class DeveloperController extends Controller
         }catch(Exception $e){
             continue;
         }
+
         }
         return redirect()->route('content.index');
     }
 
-    public function edit($id)
+    public function edit(Request $request)
     {
+        $id = $request->id;
         $activity = Activity::find($id);
         $titulo = 'Editar Atividades';
         $acao = 'edit';
