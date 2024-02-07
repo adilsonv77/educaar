@@ -142,53 +142,57 @@
 
     @yield('script')
 
+    </body>
 
-</body>
 
 
 <footer>
-
-    <div class='gridContainer'>
-        @if ($showBack)
-            <div id="buttonReturn">       
-                <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i
-                                style = "color:#83368A;" class="bi bi-arrow-return-left h2"></i></span></button></a>
-            </div>
-        @endif
-       
-        @if ($showOthers)
-        <div id="buttons_ar">
-                <div id="buttonQuestion" >
-                    <a id="button-ar" data-href="{{ route('student.questoes') }}">
-                    <button type="button" class="x0 btn btn-warning"> 
-                        <span><i style = "color:#83368A;" class="bi bi-book h2"></i></span>
-                    </button>
-                    </a>
+    <div class='nav_bar'>
+        <div class='gridContainer'>
+            @if ($showBack)
+                <div id="buttonReturn">       
+                    <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i
+                                    style = "color:#83368A;" class="bi bi-arrow-return-left h2"></i></span></button></a>
                 </div>
-
-                <div id="buttonRotateX">
-                    <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i style = "color:#83368A;"
-                                class="bi bi-arrow-left-right h2"></i></span></button>
-                </div>
-                <div id="buttonRotateY">
-                    <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i style = "color:#83368A;"
-                                class="bi bi-arrow-down-up h2"></i></span></button>
-                </div>
-
-                <div id="buttonZoomIn">
-                    <button type="button" class="btn btn-warning" id="zoom_mais"><span><i style = "color:#83368A;"
-                                class="bi bi-zoom-in h2"></i></span></button>
-                </div>
-
-                <div id="buttonZoomOut">
-                    <button type="button" class="btn btn-warning" id="zoom_menos"><span><i style = "color:#83368A;"
-                                class="bi bi-zoom-out h2"></i></span></button>
-                </div>
-             
+            @endif
         </div>
-        @endif
+        
+            @if ($showOthers)
+            <div class='buttons_ar'>
+                    <div id="buttonQuestion" >
+                        <a id="button-ar" data-href="{{ route('student.questoes') }}">
+                        <button type="button" class="x0 btn btn-warning"> 
+                            <span><i style = "color:#83368A;" class="bi bi-book h2"></i></span>
+                        </button>
+                        </a>
+                    </div>
+
+                    <div id="buttonRotateX">
+                        <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i style = "color:#83368A;"
+                                    class="bi bi-arrow-left-right h2"></i></span></button>
+                    </div>
+                    <div id="buttonRotateY">
+                        <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i style = "color:#83368A;"
+                                    class="bi bi-arrow-down-up h2"></i></span></button>
+                    </div>
+
+                    <div id="buttonZoomIn">
+                        <button type="button" class="btn btn-warning" id="zoom_mais"><span><i style = "color:#83368A;"
+                                    class="bi bi-zoom-in h2"></i></span></button>
+                    </div>
+
+                    <div id="buttonZoomOut">
+                        <button type="button" class="btn btn-warning" id="zoom_menos"><span><i style = "color:#83368A;"
+                                    class="bi bi-zoom-out h2"></i></span></button>
+                    </div>
+                
+            </div>
+            @endif
+        
     </div>
 </footer>
+
+
 
 <!-- lembrar de voltar ate os comentarios aparecerem -->
 
