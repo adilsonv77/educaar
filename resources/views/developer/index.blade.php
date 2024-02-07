@@ -22,18 +22,27 @@
                                 <th>Nome</th>
                                 <th>Marcador</th>
                                 <th>Visualizar</th>
+                                <th>Questionários</th>
                                 <th>Editar</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($activities as $activity)
                                 <tr>
-                                    <td style="width: 60%;">{{ $activity->name }}</td>
-                                    <td style="width: 25%;"><img src="/marcadores/{{ $activity->marcador }}"
+                                <td style="width: 60%;">{{ $activity->name }}</td>
+                                <td style="width: 25%;"><img src="/marcadores/{{ $activity->marcador }}"
                                             alt=""width="200" height="200"></td>
                                     <td style="width: 10%;"><a href="/activity/{{ $activity->id }}"
-                                            class="btn btn-primary">Visualizar</a></td>
-
+                                            class="btn btn-primary">Visualizar</a>
+                                </td>
+                                <td style="width: 10%;">
+                                        <form action="{{ route('questions.index', $activity->id) }}">
+                                            @csrf
+                                            <input type="hidden" name="activity" value="{{ $activity->id }}">
+                                            <button type="submit" class="btn btn-info" text-align:
+                                                center>Questionários</button>
+                                        </form>
+                                </td>
                                     <td style="width: 70px;">
                                         <form action="{{ route('dev.editActivity', $activity->id) }}">
                                             @csrf
