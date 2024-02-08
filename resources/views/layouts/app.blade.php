@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="/css/questions.css">
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v=' . filemtime(public_path('css/app.css'))) }}" rel="stylesheet">
     <link rel="stylesheet" href="/css/telainicial.css">
 
     @include('sweetalert::alert')
@@ -36,7 +36,7 @@
     <div id="main-wrapper">
         @auth
             <div class="nav-header">
-                <img src="{{ asset('images/EDUCAAR.png') }}" width="180" style="margin-left:23%;margin-top:0.5%"
+                <img src="{{ asset('images/LOGO VERTICAL.png') }}" width="120" style="margin-left:23%;margin-top:0.5%"
                     alt="Imagem" class="img-fluid">
 
                 <div class="nav-control">

@@ -10402,7 +10402,7 @@ readers do not read off random characters that represent icons */
   }
 } */
 .nav-header {
-  background-color: #8743DF;
+  background-color: #E3EDEB; /* #8743DF; */
   margin-left: auto;
   margin-right: auto;
 }
