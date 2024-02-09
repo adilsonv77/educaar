@@ -14,7 +14,7 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
         rel="stylesheet">
     <link href="{{ asset('css/mobile.css') }}" rel="stylesheet">
-    <!-- {{-- <link href="/css/mobile.css" rel="stylesheet"> --}} -->
+    {{--<link href="/css/mobile.css" rel="stylesheet">--}}
     <link href="/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 
@@ -142,7 +142,7 @@
 
     @yield('script')
 
-    </body>
+</body>
 
 
 
@@ -152,7 +152,7 @@
             @if ($showBack)
                 <div id="buttonReturn">       
                     <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i
-                                    style = "color:#83368A;" class="bi bi-arrow-return-left h2"></i></span></button></a>
+                                    style = "color:#83368A;" class="bi bi-arrow-left h3"></i></span></button></a>
                 </div>
             @endif
         </div>
@@ -162,28 +162,28 @@
                     <div id="buttonQuestion" >
                         <a id="button-ar" data-href="{{ route('student.questoes') }}">
                         <button type="button" class="x0 btn btn-warning"> 
-                            <span><i style = "color:#83368A;" class="bi bi-book h2"></i></span>
+                            <span><i style = "color:#83368A;" class="bi bi-book h3"></i></span>
                         </button>
                         </a>
                     </div>
 
                     <div id="buttonRotateX">
                         <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i style = "color:#83368A;"
-                                    class="bi bi-arrow-left-right h2"></i></span></button>
+                                    class="bi bi-arrow-return-right h3"></i></span></button>
                     </div>
                     <div id="buttonRotateY">
                         <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i style = "color:#83368A;"
-                                    class="bi bi-arrow-down-up h2"></i></span></button>
+                                    class="bi bi-arrow-90deg-up h3"></i></span></button>
                     </div>
 
                     <div id="buttonZoomIn">
                         <button type="button" class="btn btn-warning" id="zoom_mais"><span><i style = "color:#83368A;"
-                                    class="bi bi-zoom-in h2"></i></span></button>
+                                    class="bi bi-zoom-in h3"></i></span></button>
                     </div>
 
                     <div id="buttonZoomOut">
                         <button type="button" class="btn btn-warning" id="zoom_menos"><span><i style = "color:#83368A;"
-                                    class="bi bi-zoom-out h2"></i></span></button>
+                                    class="bi bi-zoom-out h3"></i></span></button>
                     </div>
                 
             </div>

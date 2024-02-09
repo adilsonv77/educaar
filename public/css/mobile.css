@@ -11,6 +11,13 @@
 
         /*corpo da pagina*/
         
+        .h-100{
+
+
+            overflow: auto !important;
+            height: 90vh !important;
+        }
+
 
         
 
@@ -74,10 +81,10 @@
 
 
         .nav_bar{
-            position: fixed;
+            position:absolute;
             bottom: 0;
             left:0;
-            background-color: gray;
+            background-color:#f9f9f9;
             width: 100vw;
             height: 4rem;
             padding:0 1rem;
@@ -94,10 +101,10 @@
 
         .gridContainer{
 
-            display: grid;
+            display: absolute;
             grid-template-rows: repeat(1, 1fr);
             grid-template-columns: repeat(6, 1fr);
-            gap:5px;
+            gap:10px;
             padding: 5px;
             align-items: center;
             justify-content: center;
@@ -112,14 +119,15 @@
 
         .buttons_ar{
             
-            position: fixed;
+            position: absolute;
             display: grid;
             grid-template-rows: repeat(1, 1fr);
             grid-template-columns: repeat(6, 1fr);
-            gap:5px;
+            gap: 10px;
             padding: 5px;
             align-items: center;
             justify-content: center;
+            
              
            
         }
@@ -127,25 +135,11 @@
 
 
         .content-body{
-            max-height: 30vh;
+            overflow: auto !important;
+            height: 95vh !important;
 
     
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
          #buttons_ar.hide{
             display: none;
@@ -156,7 +150,7 @@
 
             grid-column: 1 / span 1; 
             grid-row: 1 / span 1;
-            /* z-index: 2; */
+            z-index: 2;
 
 
         }
