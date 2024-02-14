@@ -100,7 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
         anchor.onTargetFound = () => {
             buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
-            
+
+            var bq = document.getElementById("button_question");
+            bq.style.backgroundColor = anchor.clazz;
+
             if (anchor.glb.animations.length > 0) {
 
               mixer = new THREE.AnimationMixer(anchor.glb.scene);

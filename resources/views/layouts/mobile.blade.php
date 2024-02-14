@@ -161,7 +161,7 @@
             <div class='buttons_ar'>
                     <div id="buttonQuestion" >
                         <a id="button-ar" data-href="{{ route('student.questoes') }}">
-                        <button type="button" class="x0 btn btn-warning"> 
+                        <button id="button_question" type="button" class="x0 btn btn-warning"> 
                             <span><i style = "color:#83368A;" class="bi bi-book h3"></i></span>
                         </button>
                         </a>
