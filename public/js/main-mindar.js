@@ -43,8 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const start = async() => {
 
-      buttonsAR = document.getElementById("buttons_ar");
-      buttonsAR.classList.add("hide");
+      buttonsAR = document.getElementsByClassName("buttons_ar")[0];
+      buttonsAR.style.display = "none";
+
       buttonAR = document.getElementById("button-ar");
 
       const mind = document.getElementById("mind");
@@ -100,9 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.onTargetFound = () => {
             buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
             
-            var button = buttonAR.getElementsByTagName("button")[0];
-            //button.classList.replace("x0", anchor.clazz);
-           
             if (anchor.glb.animations.length > 0) {
 
               mixer = new THREE.AnimationMixer(anchor.glb.scene);
@@ -112,18 +110,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             activeScene = glbScene;
-            buttonsAR.classList.remove("hide");
+            buttonsAR.style.display = "";
         }
         
         //anchor.addEventListener
         anchor.onTargetLost = () => {
 
-          var button = buttonAR.getElementsByTagName("button")[0];
-          //button.classList.replace(anchor.clazz, "x0");
-
           lastActiveScene = activeScene;
           activeScene = null;
-          buttonsAR.classList.add("hide");
+          buttonsAR.style.display = "none";
           if (action != null) {
             action.stop();
             action = null;

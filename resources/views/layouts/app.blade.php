@@ -16,7 +16,7 @@
     <link href="/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
 
-    <link rel="stylesheet" href="/css/questions.css">
+    <link rel="stylesheet" href="{{ asset('css/questions.css?v=' . filemtime(public_path('css/questions.css'))) }}">
 
     <link href="{{ asset('css/app.css?v=' . filemtime(public_path('css/app.css'))) }}" rel="stylesheet">
     <link rel="stylesheet" href="/css/telainicial.css">
