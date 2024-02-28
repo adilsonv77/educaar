@@ -9,10 +9,11 @@ import { MindARThree } from 'mindar-image-three';
 
 //const THREE = window.MINDAR.IMAGE.THREE;
 var buttonAR = null;
-var buttonsAR = null;
+var buttonsAR = [];
 var activeScene = null;
 var lastActiveScene = null;
 var cameraVar = null;
+var qtosBotoes = 0;
 
 // inspirado no OrbitControl
 var state = 0;  // 1 - rotacionar
@@ -40,11 +41,30 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("onmousedown"); 
   };
 
+  function hideButtons() {
+    for (var i = 0; i < qtosBotoes; i++) {
+      buttonsAR[i].style.display = "none";
+    }
+  }
+  
+  function showButtons() {
+    for (var i = 0; i < qtosBotoes; i++) {
+      buttonsAR[i].style.display = "";
+    }
+  }
   
   const start = async() => {
 
-      buttonsAR = document.getElementsByClassName("buttons_ar")[0];
-      buttonsAR.style.display = "none";
+      // inicializa o array
+      buttonsAR[0] = document.getElementById("buttonQuestion");
+      buttonsAR[1] = document.getElementById("buttonRotateX");
+      buttonsAR[2] = document.getElementById("buttonRotateY");
+      buttonsAR[3] = document.getElementById("buttonZoomIn");
+      buttonsAR[4] = document.getElementById("buttonZoomOut");
+
+      qtosBotoes = buttonsAR.length;
+
+      hideButtons();
 
       buttonAR = document.getElementById("button-ar");
 
@@ -113,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             activeScene = glbScene;
-            buttonsAR.style.display = "";
+            showButtons();
+
         }
         
         //anchor.addEventListener
@@ -121,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           lastActiveScene = activeScene;
           activeScene = null;
-          buttonsAR.style.display = "none";
+          hideButtons();
           if (action != null) {
             action.stop();
             action = null;
