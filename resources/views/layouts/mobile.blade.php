@@ -148,17 +148,17 @@
 
 <footer>
     <div class='nav_bar'>
-        <div class='gridContainer'>
+        <div class='buttons_ar'>
             @if ($showBack)
                 <div id="buttonReturn">       
                     <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i
                                     style = "color:#83368A;" class="bi bi-arrow-left h3"></i></span></button></a>
                 </div>
             @endif
-        </div>
+       
         
             @if ($showOthers)
-            <div class='buttons_ar'>
+            
                     <div id="buttonQuestion" >
                         <a id="button-ar" data-href="{{ route('student.questoes') }}">
                         <button id="button_question" type="button" class="x0 btn btn-warning"> 
