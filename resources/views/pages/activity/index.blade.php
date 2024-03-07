@@ -48,6 +48,7 @@
                                 <th>Nome</th>
                                 <th>Marcador</th>
                                 <th>Visualizar</th>
+                                <th>Resultados</th>
                                 <th>Questoes</th>
                                 <th>Editar</th>
                                 <th>Excluir</th>
@@ -61,6 +62,15 @@
                                             alt=""width="200" height="200"></td>
                                     <td style="width: 10%;"><a href="/activity/{{ $item->id }}"
                                             class="btn btn-primary">Visualizar</a></td>
+
+                                <td style="width: 10%;">
+                                        <form action="{{ route('activity.results', $item->id) }}">
+                                            @csrf
+                                            <input type="hidden" name="activity" value="{{ $item->id }}">
+                                            <button type="submit" class="btn btn-success" text-align:
+                                                center>Resultados</button>
+                                        </form>
+                                    </td>
 
 
                                     <td style="width: 10%;">

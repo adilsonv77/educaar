@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
 
     //question
     Route::resource('/questions', App\Http\Controllers\QuestionController::class);
+    Route::get('results', [App\Http\Controllers\QuestionController::class, 'results'])->name('activity.results');
     // Route::get('/question/index', [App\Http\Controllers\QuestionController::class, 'index'])->name('question.index');
     // Route::get('/question/create', [App\Http\Controllers\QuestionController::class, 'create'])->name('question.create');
     // Route::post('/question/store', [App\Http\Controllers\QuestionController::class, 'store'])->name('question.store');

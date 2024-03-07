@@ -225,6 +225,15 @@ class QuestionController extends Controller
         $activity_id = session()->get('activity_id');
         return redirect(route('questions.index', $activity_id));
     }
+
+
+    public function results(Request $request){
+        $data= $request->all();
+
+        $activity = Activity::find($data['activity']);
+
+        return view('pages.activity.results');
+    }
 }
 // $wrongQuestions = [];
 // $correctQuestions = [];
