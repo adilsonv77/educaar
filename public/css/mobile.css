@@ -146,6 +146,7 @@
             grid-column: 2 / span 1; 
             grid-row: 1 / span 1;
             
+            
 
 
         }
@@ -153,28 +154,28 @@
 
             grid-column: 3 / span 1; 
             grid-row: 1 / span 1;
-
+            
 
         }
         #buttonRotateY{
 
             grid-column: 4 / span 1; 
             grid-row: 1 / span 1;
-
+            
 
         }
         #buttonZoomIn{
 
             grid-column: 5 / span 1; 
             grid-row: 1 / span 1;
-
+            
 
         }
         #buttonZoomOut{
 
             grid-column: 6 / span 1; 
             grid-row: 1 / span 1;
-
+            
 
         }
 

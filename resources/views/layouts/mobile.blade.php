@@ -169,11 +169,11 @@
 
                     <div id="buttonRotateX">
                         <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i style = "color:#83368A;"
-                                    class="bi bi-arrow-return-right h3"></i></span></button>
+                                    class="bi bi-arrow-90deg-up" h3></i></span></button>
                     </div>
                     <div id="buttonRotateY">
                         <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i style = "color:#83368A;"
-                                    class="bi bi-arrow-90deg-up h3"></i></span></button>
+                                    class="bi bi-arrow-return-right" h3></i></span></button>
                     </div>
 
                     <div id="buttonZoomIn">
