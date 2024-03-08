@@ -52,15 +52,39 @@
 
 @media screen and (max-width: 425px) {
  
+ 
+
+
+}
+
+
+@media screen and (min-width: 426px) and (max-width:1439px) {
+  
+  
+
+ 
+}
+
+/* Tela grande minimo de 768px e maximo de 992px */
+@media screen and (min-width: 1440px) and (max-width:2560px) {
+
+  
+  
+  }
+
+
+  /* Estilos para dispositivos com largura de tela até 767px (celulares em modo retrato) */
+@media only screen and (max-width: 767px) {
   .container{
     width: 80vw;
-    height:60vh;
+    height:70vh;
     display: flex;
     flex-direction: column;
     align-items:center;
     justify-content: center;
     background-color: #e3edeb;
     border-radius: 30px;
+    z-index: 1;
     
   }
   
@@ -78,7 +102,7 @@
 
 
 .img-wrapper{
-  width: 50vw;
+  width: 50%;
   display: flex;
   flex-direction: row;
   position: fixed;
@@ -96,13 +120,10 @@
   background-color:#81348b;
   
 }
-
-
 }
 
-
-@media screen and (min-width: 426px) and (max-width:1439px) {
-  
+/* Estilos para dispositivos com largura de tela de 768px até 991px (tablets e dispositivos com telas menores) */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
   .container{
     width: 50vw;
     height:70vh;
@@ -112,6 +133,8 @@
     justify-content: center;
     background-color: #e3edeb;
     border-radius: 30px;
+    z-index: 1;
+
     
   }
   
@@ -131,7 +154,7 @@
 
 
 .img-wrapper{
-  width: 25vw;
+  width: 25%;
   display: flex;
   flex-direction: row;
   position: fixed;
@@ -149,14 +172,10 @@
   background-color:#81348b;
   
 }
-
- 
 }
 
-/* Tela grande minimo de 768px e maximo de 992px */
-@media screen and (min-width: 1440px) and (max-width:2560px) {
-
-  
+/* Estilos para dispositivos com largura de tela de 992px até 1199px (tablets e dispositivos com telas maiores, e também alguns notebooks e monitores menores) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
   .container{
     width: 30vw;
     height:70vh;
@@ -166,6 +185,7 @@
     justify-content: center;
     background-color: #e3edeb;
     border-radius: 30px;
+    z-index: 1;
     
   }
   
@@ -203,7 +223,59 @@
   background-color:#81348b;
   
 }
+}
+
+/* Estilos para dispositivos com largura de tela de 1200px ou mais (notebooks, monitores maiores e dispositivos de tela grande) */
+@media only screen and (min-width: 1200px) {
+  .container{
+    width: 30vw;
+    height:70vh;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    background-color: #e3edeb;
+    border-radius: 30px;
+    z-index: 1;
+    
   }
+  
+
+
+  .logo{
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    width: 15vw;
+    height: 15vh;
+  }
+  
+ 
+
+.img-wrapper{
+  width: 15%;
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  bottom: 0;
+  right:16%;
+  transform: translateX(-50%);
+
+}
+
+
+
+.btn.btn-primary{
+  display: flex;
+  margin:auto;
+  width:20vw;
+  justify-content: center;
+  background-color:#81348b;
+  
+}
+}
+
 
 
 
