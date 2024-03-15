@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DAO\ResultDAO;
 use App\Models\Activity;
 use App\Models\Content;
 use App\Models\Question;
@@ -231,6 +232,10 @@ class QuestionController extends Controller
         $data= $request->all();
 
         $activity = Activity::find($data['activity']);
+
+       $result= ResultDAO::burcarResultadosTarefas(15, 5);
+
+       dd($result);
 
         return view('pages.activity.results');
     }
