@@ -16,7 +16,7 @@ class ResultDAO
     protected $question_base;
 
 
-    public static function burcarResultadosTarefas($activityID, $turma_id)
+    public static function buscarQntFizeramATarefas($activityID, $turma_id)
     {
         $where = DB::table('questions as q')->where('q.activity_id', $activityID);
 
@@ -34,13 +34,6 @@ class ResultDAO
             ])
             ->groupBy('u.name');
         
-            /**
-             * 
-        $results = DB::table(DB::raw("({$subQuery->toSql()}) as sub"))
-        ->select('sub.nome', 'sub.qntRespondida')
-        ->whereBetween('sub.qntRespondida', [1, 4])
-        ->get();
-             */
             // $alunos_fizeram= $subQuery->selectRaw('COUNT(u.name) as completo')->get();
             $alunos_fizeram= $sql->get();
 
@@ -82,13 +75,75 @@ class ResultDAO
                 'alunos_fizeram_incompleto' => count($alunos_fizeram_incompleto),
                 'alunos_nao_fizeram' => $alunos_nao_fizeram->qntsNaofizeram
             ];
-            /**
+
+        return $result;
+    }
+    public static function questoesQntAcertos($activityID, $turma_id)
+    {
+
+        $sql = DB::table('questions as q')
+        ->select('q.question as questao', 'q.id', DB::raw('COUNT(sta.id) as qntRespondida'))
+        ->join('student_answers as sta', 'sta.question_id', '=', 'q.id')
+            ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'sta.user_id')
+            ->where([
+                ['alunt.turma_id', '=', $turma_id],
+                ['q.activity_id', '=', $activityID]
+            ])
+            ->groupBy('q.id');
+
+            $where= $sql  ->addSelect([
+                'quntRespondCerto' => DB::table('student_answers as sta')->selectRaw('COUNT(sta.id)')
+                    ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'sta.user_id')
+                    ->whereColumn('sta.question_id', '=', 'q.id')
+                    ->where('sta.correct', '=', 1)
+            ]);
+            
+
+            $result_questions= $where->get();
+
+            return $result_questions;
+    }
+}
+
+        /*
+        $where = DB::table('contents')
+            ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
+            ->addSelect([
+                'qtasatividades' => Activity::selectRaw('count(*)')
+                    ->whereColumn('contents.id', '=', 'content_id')
+            ]);
+*/
+        /**
+         * SELECT q.question as questao,q.id, COUNT(sta.id) as qntRespondida, 
+        (SELECT COUNT(sta.id) FROM student_answers as sta
+                    INNER JOIN alunos_turmas as alunt 
+                    on alunt.aluno_id= sta.user_id
+        WHERE sta.question_id= q.id and sta.correct=1
+        ) as quntRespondCerto from questions as q
+            inner join student_answers as sta 
+            on sta.question_id= q.id
+            INNER JOIN alunos_turmas as alunt 
+            on alunt.aluno_id = sta.user_id
+    WHERE q.activity_id=15 AND alunt.turma_id=5 
+GROUP BY q.id
+         */
+
+
+/**
+             * 
+        $results = DB::table(DB::raw("({$subQuery->toSql()}) as sub"))
+        ->select('sub.nome', 'sub.qntRespondida')
+        ->whereBetween('sub.qntRespondida', [1, 4])
+        ->get();
+             */
+
+         /**
              * SELECT COUNT(u.name) as qntsNaofizeram from users as u 
 	    INNER join alunos_turmas as alunt
         on alunt.aluno_id= u.id
         WHERE alunt.turma_id= 5 AND NOT EXISTS (SELECT * from student_answers as sta 
-                                       		  WHERE sta.question_id= 20
-                                       AND sta.user_id= u.id)
+                           	WHERE sta.question_id= 20
+                                    AND sta.user_id= u.id)
 
              * 
              * $repairJobs = RepairJob::with('repairJobPhoto', 'city', 'vehicle')
@@ -101,10 +156,8 @@ class ResultDAO
                 })->get();
              */
 
-      
-        return $result;
-    }
-}
+
+
     /**
      * 
      * 

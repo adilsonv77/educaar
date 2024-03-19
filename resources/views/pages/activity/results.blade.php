@@ -2,13 +2,15 @@
 
 @php
     $pageName = 'Resultados';
+    $qntCompletas= $result['alunos_fizeram_completo'];
+    $qntIncompletas= $result['alunos_fizeram_incompleto'];
+    $qntNaoFizeram= $result['alunos_nao_fizeram'];
+    $questions_results= $questions; 
 @endphp
 
 @section('page-name', $pageName)
 
 @section('content')
-
-<h1>Chegou!!!!!!!</h1>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +26,14 @@
 <div id="rosca" style="width: 900px; height: 500px;"></div>
 
 <script type="text/javascript">
+
+    var qntCompletas= <?php echo $qntCompletas; ?>;
+    var qntIncompletas= <?php echo $qntIncompletas; ?>;
+    var qntNaoFizeram= <?php echo $qntNaoFizeram; ?>;
+    var questoes_resultados= <?php echo $questions_results; ?>;
+
+    console.log(questoes_resultados);
+
     google.charts.load('current', {'packages':['bar', 'corechart']});
     google.charts.setOnLoadCallback(drawStuff);
 
@@ -33,6 +43,15 @@
     }
 
     function drawBarChart() {
+ // add each element via forEach loop
+//  info.forEach(function(value, index, array){
+//       data.addRow([
+//         value.name,
+//         value.qn
+//       ]);
+    // })
+
+
         var data = google.visualization.arrayToDataTable([
           ['Questoes', 'Respostas Corretas', 'Questoes Respondidas'],
           ['Q1', 12, 12],
@@ -40,6 +59,7 @@
           ['Q3', 6, 13],
           ['Q4', 14, 14]
         ]);
+        
 
         var options = {
           chart: {
@@ -55,8 +75,9 @@
     function drawPieChart() {
         var data = google.visualization.arrayToDataTable([
           ['Questionário', 'Alunos'],
-          ['Completo',     11],
-          ['Incompleto',      2],
+          ['Completo',   qntCompletas],
+          ['Incompleto',  qntIncompletas],
+          ['Não fizeram', qntNaoFizeram]
         ]);
 
         var options = {

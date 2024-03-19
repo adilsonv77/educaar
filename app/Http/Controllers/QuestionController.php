@@ -233,11 +233,11 @@ class QuestionController extends Controller
 
         $activity = Activity::find($data['activity']);
 
-       $result= ResultDAO::burcarResultadosTarefas(15, 5);
+        $result= ResultDAO::buscarQntFizeramATarefas(15, 5);
+        $questions=ResultDAO::questoesQntAcertos(15,5);
+            //    dd($result);
 
-       dd($result);
-
-        return view('pages.activity.results');
+        return view('pages.activity.results', compact('result','questions'));
     }
 }
 // $wrongQuestions = [];
