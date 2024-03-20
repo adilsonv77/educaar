@@ -22,7 +22,27 @@
 </head>
 <body>
 
-<div id="barras" style="width: 800px; height: 600px;"></div>
+  <div id="formTurma">
+  <form action="{{ route('turmas.index') }}" method="GET ">
+          @csrf
+          <label for="">Informe a turma:</label>
+          <div class="form-inline">
+
+              <select class="form-control" name="ano_id">
+                  @foreach ($turmas as $item)
+                      <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
+                          {{ $item->nome }}</option>
+                  @endforeach
+              </select>
+              <section class="itens-group">
+                  <button class="btn btn-primary "type="submit">Pesquisar</button>
+              </section>
+          </div>
+      </form>
+      <br>
+  </div>
+  
+<div id="barras" style="width: 1000px; height: 800px;"></div>
 <div id="rosca" style="width: 900px; height: 500px;"></div>
 
 <script type="text/javascript">
@@ -31,8 +51,6 @@
     var qntIncompletas= <?php echo $qntIncompletas; ?>;
     var qntNaoFizeram= <?php echo $qntNaoFizeram; ?>;
     var questoes_resultados= <?php echo $questions_results; ?>;
-
-    console.log(questoes_resultados);
 
     google.charts.load('current', {'packages':['bar', 'corechart']});
     google.charts.setOnLoadCallback(drawStuff);
@@ -43,22 +61,6 @@
     }
 
     function drawBarChart() {
- // add each element via forEach loop
-//  info.forEach(function(value, index, array){
-//       data.addRow([
-//         value.name,
-//         value.qn
-//       ]);
-    // })
-
-
-        // var data = google.visualization.arrayToDataTable([
-        //   ['Questoes', 'Respostas Corretas', 'Questoes Respondidas'],
-        //   ['Q1', 12, 12],
-        //   ['Q2', 10, 14],
-        //   ['Q3', 6, 13],
-        //   ['Q4', 14, 14]
-        // ]);
 
           var data = new google.visualization.DataTable();
           data.addColumn('string','Questões');

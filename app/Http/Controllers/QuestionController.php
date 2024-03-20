@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\DAO\ResultDAO;
 use App\Models\Activity;
-use App\Models\Content;
+use App\Models\Turma;
 use App\Models\Question;
 use App\Models\StudentAnswer;
 use App\Models\StudentTimeActivity;
-use App\Models\StudentGrade;
+use App\Models\AnoLetivo;
 use Illuminate\Http\Request;
 use App\Models\School;
 use Illuminate\Support\Facades\Validator;
@@ -229,17 +229,55 @@ class QuestionController extends Controller
 
 
     public function results(Request $request){
-        $data= $request->all();
+        $activity_id= $request->input('activity');
+        $turma_id = $request->input('turma_id');
 
-        $activity = Activity::find($data['activity']);
+        $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
+        ->where('bool_atual', 1)->first();
 
-        $result= ResultDAO::buscarQntFizeramATarefas(15, 5);
-        $questions=ResultDAO::questoesQntAcertos(15,5);
-            //    dd($result);
 
-        return view('pages.activity.results', compact('result','questions'));
+        $where = DB::table('turmas as t')
+            ->select('t.id as id','t.nome as nome')
+            ->join('turmas_disciplinas as td','td.turma_id', '=', 't.id')
+            ->join('turmas_modelos as tm', 't.turma_modelo_id','=','tm.id')
+            ->join('contents as c', 'c.turma_id', '=', 'tm.id')
+            ->join('activities as a', 'a.content_id', '=', 'c.id')
+            ->where([
+                ['td.professor_id','=', Auth::user()->id],
+                ['t.ano_id','=', $anoletivo->id],
+                ['a.id', '=', $activity_id]
+            ])
+            ->distinct();
+
+        if ($turma_id) {
+            $turma = Turma::find($turma_id);
+            
+        } else {
+            $turma = $where->first();
+        }
+
+        $turmas= $where->get();
+
+        $activity = Activity::find($activity_id);
+
+        $result= ResultDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
+        $questions=ResultDAO::questoesQntAcertos($activity->id, $turma->id);
+
+        return view('pages.activity.results', compact('result','questions', 'turmas', 'turma'));
     }
 }
+//         SELECT DISTINCT t.id, t.nome FROM `turmas` as t 
+// 			INNER JOIN turmas_disciplinas as td 
+//             on td.turma_id= t.id
+//             INNER JOIN turmas_modelos as tm
+//             on t.turma_modelo_id= tm.id
+//             inner join contents as c 
+//             ON c.turma_id= tm.id
+//             INNER join activities as a 
+//             on a.content_id= c.id
+// WHERE td.professor_id= 4 and t.ano_id= 4 and a.id= 15
+
+
 // $wrongQuestions = [];
 // $correctQuestions = [];
 // $numberQuestions = count($request->question);

@@ -67,8 +67,9 @@
                                         <form action="{{ route('activity.results', $item->id) }}">
                                             @csrf
                                             <input type="hidden" name="activity" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-success" text-align:
-                                                center>Resultados</button>
+                                            <button type="submit" class="btn btn-success" 
+                                            @if ($item->qtnQuest == 0) disabled @endif
+                                            text-align:center>Resultados</button>
                                         </form>
                                     </td>
 
