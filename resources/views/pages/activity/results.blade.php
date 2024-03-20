@@ -52,13 +52,20 @@
     // })
 
 
-        var data = google.visualization.arrayToDataTable([
-          ['Questoes', 'Respostas Corretas', 'Questoes Respondidas'],
-          ['Q1', 12, 12],
-          ['Q2', 10, 14],
-          ['Q3', 6, 13],
-          ['Q4', 14, 14]
-        ]);
+        // var data = google.visualization.arrayToDataTable([
+        //   ['Questoes', 'Respostas Corretas', 'Questoes Respondidas'],
+        //   ['Q1', 12, 12],
+        //   ['Q2', 10, 14],
+        //   ['Q3', 6, 13],
+        //   ['Q4', 14, 14]
+        // ]);
+
+          var data = new google.visualization.DataTable();
+          data.addColumn('string','Questões');
+          data.addColumn('number', 'Respostas Corretas');
+          data.addColumn('number', 'Questões Respondidas');
+          questoes_resultados.forEach((question)=>data.addRow([question.questao, question.quntRespondCerto, question.qntRespondida ]));
+
         
 
         var options = {
