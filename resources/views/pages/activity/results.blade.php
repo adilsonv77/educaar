@@ -68,7 +68,6 @@
           data.addColumn('number', 'Questões Respondidas');
           questoes_resultados.forEach((question)=>data.addRow([question.questao, question.quntRespondCerto, question.qntRespondida ]));
 
-        
 
         var options = {
           chart: {

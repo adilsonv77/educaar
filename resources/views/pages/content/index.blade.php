@@ -72,6 +72,17 @@
                                             </button>
                                         </form>
                                     </td>
+                                    
+                                    <td>
+                                        <form action="{{ route('content.resultsContents') }}">
+                                            @csrf
+                                            <input type="hidden" name="content" value="{{ $item->id }}">
+                                            <button type="submit"  class="btn btn-success">
+                                                Resultados
+                                            </button>
+                                        </form>
+                                    </td>
+
                                     <td>
                                         <form action="{{ route('dev.listDevs') }}">
                                             @csrf

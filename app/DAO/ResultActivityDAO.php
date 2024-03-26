@@ -6,7 +6,7 @@ use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class ResultDAO
+class ResultActivityDAO
 {
     protected $totalQuestions;
     protected $alunos_fizeram;
@@ -33,6 +33,7 @@ class ResultDAO
                 ['q.activity_id', '=', $activityID]
             ])
             ->groupBy('u.name');
+            // trocar para u.id
         
             // $alunos_fizeram= $subQuery->selectRaw('COUNT(u.name) as completo')->get();
             $alunos_fizeram= $sql->get();

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DAO\ResultDAO;
+use App\DAO\ResultActivityDAO;
 use App\Models\Activity;
 use App\Models\Turma;
 use App\Models\Question;
@@ -260,8 +260,8 @@ class QuestionController extends Controller
 
         $activity = Activity::find($activity_id);
 
-        $result= ResultDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
-        $questions=ResultDAO::questoesQntAcertos($activity->id, $turma->id);
+        $result= ResultActivityDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
+        $questions=ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);
 
         return view('pages.activity.results', compact('result','questions', 'turmas', 'turma'));
     }

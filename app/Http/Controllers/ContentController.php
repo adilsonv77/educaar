@@ -212,7 +212,7 @@ class ContentController extends Controller
 
     //     $content = Content::where('id', $id)->first();
 
-    //     return view('pages.content.show', compact('content'));
+    //     return view('pages.content.results');
     // }
 
     /**
@@ -275,4 +275,12 @@ class ContentController extends Controller
         $content->delete();
         return redirect(route('content.index'));
     }
+
+    public function resultsContents(Request $request){
+
+        $data= $request->all();
+
+        return view('pages.content.results');
+    }
+    
 }
