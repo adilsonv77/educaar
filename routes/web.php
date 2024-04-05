@@ -34,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
 
     //ano letivo
     Route::resource('anoletivo', App\Http\Controllers\AnoLetivoController::class);
+    Route::get('/anoletivonovo', function () { return view('pages.anoletivo.list');})->name('anoletivonovo');
+
 
     //turmas modelos
     Route::resource('turmasmodelos', App\Http\Controllers\TurmasModelosController::class);

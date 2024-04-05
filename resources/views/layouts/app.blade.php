@@ -14,8 +14,6 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
         rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/app.css">
-
     <link rel="stylesheet" href="{{ asset('css/questions.css?v=' . filemtime(public_path('css/questions.css'))) }}">
 
     <link href="{{ asset('css/app.css?v=' . filemtime(public_path('css/app.css'))) }}" rel="stylesheet">
@@ -208,7 +206,7 @@
                             <ul aria-expanded="false">
                                 <li><a href="{{ route('anoletivo.index') }}">Listar</a></li>
                                 <li><a href="{{ route('anoletivo.create') }}">Adicionar</a></li>
-
+                                <li><a href="{{ route('anoletivonovo') }}">Novo</a></li>
                             </ul>
                         </li>
 
