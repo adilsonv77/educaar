@@ -8,8 +8,10 @@
 
 @section('content')
 
+  
     <head>
         <link rel="stylesheet" href="/css/list_content.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
 
     <form action="{{ route('activity.index') }}" method="GET">
@@ -87,14 +89,14 @@
                                         <form action="{{ route('activity.edit', $item->id) }}">
                                             @csrf
                                             <button type="submit" class="btn btn-warning" text-align:
-                                                center>Editar</button>
+                                                center><i class="bi bi-pencil-square"></i></button>
                                         </form>
                                     </td>
 
                                     <td style="width: 70px;">
                                         <button type="button" class="btn btn-danger"
                                             @if ($item->qtnQuest > 0) disabled @endif data-toggle="modal"
-                                            data-target="#modal{{ $item->id }}">Excluir</button>
+                                            data-target="#modal{{ $item->id }}"> <i class="bi bi-trash3"></i></button>
                                     </td>
 
                                 </tr>

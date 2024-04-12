@@ -10,15 +10,13 @@
 
     <head>
         <link rel="stylesheet" href="/css/list_content.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
 
     <form action="{{ route('content.index') }}" method="GET">
         <div class="form-inline">
-            <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}"
-                list="historico" />
-            <section class="itens-group">
-                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
-            </section>
+            <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}" list="historico" />
+            <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
         </div>
 
 
@@ -40,9 +38,10 @@
                                 <th>Nome</th>
                                 <th>Disciplina</th>
                                 <th>Série</th>
-                                <th>Editar</th>
-                                <th>Ações</th>
+                                <th>Ações</th> 
                                 <th>Selecionar Devs</th>
+                                <th>Resultados</th>
+                                <th>Editar</th>
                                 <th>Excluir</th>
                             </tr>
                         </thead>
@@ -54,13 +53,9 @@
                                     <td>{{ $item->content_name }}</td>
                                     <td>{{ $item->disc_name }}</td>
                                     <td>{{ $item->turma_name }}</td>
-                                    <td>
-                                        <form action="{{ route('content.edit', $item->id) }}">
-                                            @csrf
-                                            <button type="submit" class="btn btn-warning">Editar</button>
-                                        </form>
-                                    </td>
 
+                                    
+                                         <!-- Açoes -->
                                     <td>
                                         <form action="{{ route('fechar.index') }}">
                                             @csrf
@@ -72,7 +67,17 @@
                                             </button>
                                         </form>
                                     </td>
-                                    
+                                     
+
+                                    <td>
+                                        <form action="{{ route('dev.listDevs') }}">
+                                            @csrf
+                                            <input type="hidden" name="content" value="{{ $item->id }}">
+                                            <button type="submit" class="btn btn-warning">Selecionar Devs</button>
+                                        </form>
+                                    </td>
+
+                                    <!-- Resultados -->
                                     <td>
                                         <form action="{{ route('content.resultsContents') }}">
                                             @csrf
@@ -84,17 +89,18 @@
                                     </td>
 
                                     <td>
-                                        <form action="{{ route('dev.listDevs') }}">
+                                     <!-- Editar -->
+                                    <form action="{{ route('content.edit', $item->id) }}">
                                             @csrf
-                                            <input type="hidden" name="content" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-warning">Selecionar Devs</button>
+                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
                                         </form>
                                     </td>
                                     <td>
+                                         <!-- Excluir -->
                                         <button type="button"
-                                            class="btn btn-danger"@if ($item->qtasatividades > 0) disabled @endif
-                                            data-toggle="modal" data-target="#modal{{ $item->id }}">
-                                            Excluir
+                                                class="btn btn-danger  @if ($item->qtasatividades > 0) disabled @endif"
+                                                data-toggle="modal" data-target="#modal{{ $item->id }}">
+                                                <i class="bi bi-trash3"></i>
                                         </button>
                                     </td>
                                 </tr>

@@ -74,6 +74,11 @@
             title: 'Questoes Corretas',
             subtitle: 'Questoes Respondidas',
           }
+          vAxis: {
+            gridlines:{
+              count:1
+            }
+          }
         };
 
         var chart = new google.charts.Bar(document.getElementById('barras'));
