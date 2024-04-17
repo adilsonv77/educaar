@@ -8,6 +8,12 @@
 
 @section('content')
 
+
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+
+
     <form action="{{ route('turmas.index') }}" method="GET ">
         @csrf
         <label for="">Informe o ano Letivo</label>
@@ -34,9 +40,9 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
-                                <th>Ação</th>
                                 <th>Alunos</th>
                                 <th>Disciplinas</th>
+                                <th>Editar</th>
                                 <th>Excluir</th>
                             </tr>
                         </thead>
@@ -46,13 +52,7 @@
                                 <tr>
 
                                     <td>{{ $item->nome }}</td>
-                                    <td>
-                                        <form action="{{ route('turmas.edit', $item->id) }}">
-                                            @csrf
-                                            <button type="submit" class="btn btn-warning"
-                                                @if ($item->qtosAlunos > 0) disabled @endif>Editar</button>
-                                        </form>
-                                    </td>
+                                    
                                     <td>
                                         <form action="{{ route('turmas.turmasAlunosIndex', $item->id) }}">
                                             @csrf
@@ -69,10 +69,18 @@
                                         </form>
                                     </td>
                                     <td>
+                                        <form action="{{ route('turmas.edit', $item->id) }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-warning"
+                                                @if ($item->qtosAlunos > 0) disabled @endif>
+                                                <i class="bi bi-pencil-square"></i></button>
+                                        </form>
+                                    </td>
+                                    <td>
                                         <button type="button"
                                             class="btn btn-danger"@if ($item->qtosAlunos > 0) disabled @endif
                                             data-toggle="modal" data-target="#modal{{ $item->id }}">
-                                            Excluir
+                                            <i class="bi bi-trash3"></i>
                                         </button>
                                     </td>
                                     <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"

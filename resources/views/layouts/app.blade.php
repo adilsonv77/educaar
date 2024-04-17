@@ -15,6 +15,7 @@
         rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/questions.css?v=' . filemtime(public_path('css/questions.css'))) }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <link href="{{ asset('css/app.css?v=' . filemtime(public_path('css/app.css'))) }}" rel="stylesheet">
     <link rel="stylesheet" href="/css/telainicial.css">
@@ -34,8 +35,8 @@
     <div id="main-wrapper">
         @auth
             <div class="nav-header">
-                <img src="{{ asset('images/LOGO VERTICAL.png') }}" width="120" style="margin-left:23%;margin-top:0.5%"
-                    alt="Imagem" class="img-fluid">
+                <!-- <img src="{{ asset('images/Logo Mini.png') }}" width="120" style="margin-left:23%;margin-top:0.5%"
+                    alt="Imagem" class="img-fluid"> -->
 
                 <div class="nav-control">
                     <div class="hamburger">
@@ -57,6 +58,7 @@
                                 <li class="nav-item dropdown header-profile">
                                     <a class="nav-link" href="javascript:void(0)" role="button" data-toggle="dropdown">
                                         <div class="header-info">
+                                            <i class="bi bi-person icon-purple"></i>
                                             <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
                                             <p class="fs-12 mb-0">
                                                 @if (Auth::user()->type == 'student')
@@ -257,11 +259,11 @@
 
     @section('style')
         <style>
-            .nav-header {
+            /* .nav-header {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-            }
+            } */
         </style>
     @endsection
 

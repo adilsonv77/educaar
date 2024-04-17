@@ -34,6 +34,7 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
+                                <th>Desmatricular</th>
                             </tr>
                         </thead>
                         <tbody>

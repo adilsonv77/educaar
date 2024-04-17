@@ -8,6 +8,10 @@
 
 @section('content')
 
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+
     <form action="{{ route('anoletivo.index') }}" method="GET">
         <div class="form-inline">
             <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $anoLetivo }}"
@@ -32,7 +36,7 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
-                                <th>Ação</th>
+                                <th>Editar</th>
                                 <th>Excluir</th>
                             </tr>
                         </thead>
@@ -47,7 +51,8 @@
                                     <td>
                                         <form action="{{ route('anoletivo.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning">Editar</button>
+                                            <button type="submit" class="btn btn-warning">
+                                            <i class="bi bi-pencil-square"></i></button>
                                         </form>
                                     </td>
 
@@ -55,7 +60,7 @@
                                     <td>
                                         <button type="button" class="btn btn-danger" data-toggle="modal"
                                             data-target="#modal{{ $item->id }}">
-                                            Excluir
+                                            <i class="bi bi-trash3"></i>
                                         </button>
                                     </td>
                                 </tr>

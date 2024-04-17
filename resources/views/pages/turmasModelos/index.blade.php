@@ -8,6 +8,10 @@
 
 @section('content')
 
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+
     {{-- <form action= "{{ route('turmasmodelos.index') }}" method="GET">
         <div class="form-inline">
                     <input class="form-control" type="text" name="titulo" id="titulo" value= "{{$anoLetivo}}" list= "historico"/>
@@ -31,7 +35,7 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
-                                <th>Ação</th>
+                                <th>Editar</th>
                                 <th>Excluir</th>
                             </tr>
                         </thead>
@@ -47,14 +51,16 @@
                                         <form action="{{ route('turmasmodelos.edit', $item->id) }}">
                                             @csrf
                                             <button type="submit"
-                                                class="btn btn-warning"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif>Editar</button>
+                                                class="btn btn-warning"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif>
+                                                <i class="bi bi-pencil-square"></i>
+                                                </button>
                                         </form>
                                     </td>
                                     <td>
                                         <button type="button"
                                             class="btn btn-danger"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif
                                             data-toggle="modal" data-target="#modal{{ $item->id }}">
-                                            Excluir
+                                            <i class="bi bi-trash3"></i>
                                         </button>
                                     </td>
                                     <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"

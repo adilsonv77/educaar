@@ -8,6 +8,10 @@
 
 @section('content')
 
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+
     <form action="{{ route('class.index') }}" method="GET">
         <div class="form-inline">
             <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $disciplina }}"
@@ -32,7 +36,7 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
-                                <th>Ação</th>
+                                <th>Editar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,7 +50,7 @@
                                     <td>
                                         <form action="{{ route('class.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning">Editar</button>
+                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
                                         </form>
                                     </td>
 
