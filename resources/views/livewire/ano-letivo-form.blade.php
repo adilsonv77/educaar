@@ -101,7 +101,7 @@
                     <h5 class="modal-title">
                        {{$modalTitulo}} 
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -134,6 +134,10 @@
                             <div class="col-md-6 offset-md-4">
                                 <button class="btn btn-primary">
                                     Salvar
+                                </button>
+
+                                <button type="button"  data-dismiss="modal" class="btn btn-primary">
+                                    Cancelar
                                 </button>
                             </div>
                         </div>
