@@ -229,12 +229,16 @@ class QuestionController extends Controller
 
 
     public function results(Request $request){
-        $activity_id= $request->input('activity');
+        $activity= $request->input('activity_id');
+
+        if($activity){
+            session()->put('activity', $activity); 
+        }
         $turma_id = $request->input('turma_id');
 
         $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
         ->where('bool_atual', 1)->first();
-
+        $activity_id = session()->get('activity');
 
         $where = DB::table('turmas as t')
             ->select('t.id as id','t.nome as nome')
@@ -249,6 +253,7 @@ class QuestionController extends Controller
             ])
             ->distinct();
 
+            
         if ($turma_id) {
             $turma = Turma::find($turma_id);
             
@@ -259,6 +264,7 @@ class QuestionController extends Controller
         $turmas= $where->get();
 
         $activity = Activity::find($activity_id);
+
 
         $result= ResultActivityDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
         $questions=ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);

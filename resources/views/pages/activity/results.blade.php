@@ -23,12 +23,11 @@
 <body>
 
   <div id="formTurma">
-  <form action="{{ route('turmas.index') }}" method="GET ">
+  <form action="{{ route('activity.results') }}" method="GET ">
           @csrf
           <label for="">Informe a turma:</label>
           <div class="form-inline">
-
-              <select class="form-control" name="ano_id">
+              <select class="form-control" name="turma_id">
                   @foreach ($turmas as $item)
                       <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
                           {{ $item->nome }}</option>
@@ -73,7 +72,7 @@
           chart: {
             title: 'Questoes Corretas',
             subtitle: 'Questoes Respondidas',
-          }
+          },
           vAxis: {
             gridlines:{
               count:1
