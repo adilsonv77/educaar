@@ -52,7 +52,7 @@
                                             @csrf
                                             <button type="submit"
                                                 class="btn btn-warning"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif>
-                                                <i class="bi bi-pencil-square"></i>
+                                                <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i>
                                                 </button>
                                         </form>
                                     </td>
@@ -60,7 +60,7 @@
                                         <button type="button"
                                             class="btn btn-danger"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif
                                             data-toggle="modal" data-target="#modal{{ $item->id }}">
-                                            <i class="bi bi-trash3"></i>
+                                            <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
                                         </button>
                                     </td>
                                     <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"

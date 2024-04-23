@@ -38,7 +38,7 @@
                                 <th>Nome</th>
                                 <th>Disciplina</th>
                                 <th>Série</th>
-                                <th>Ações</th> 
+                                <th>Fechar</th> 
                                 <th>Selecionar Devs</th>
                                 <th>Resultados</th>
                                 <th>Editar</th>
@@ -62,7 +62,7 @@
                                             <input type="hidden" name="content" value="{{ $item->id }}">
                                             <button type="submit" id="FecharConteudo" class="btn btn-info"
                                                 @if ($item->qtasatividades == 0 or $item->fechado) disabled @endif>
-                                                Fechar ({{ $item->qtasatividades }})
+                                                <i class="bi bi-lock-fill h2 "  style = "color : #ffffff;"></i> ({{ $item->qtasatividades }})
 
                                             </button>
                                         </form>
@@ -73,7 +73,9 @@
                                         <form action="{{ route('dev.listDevs') }}">
                                             @csrf
                                             <input type="hidden" name="content" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-warning">Selecionar Devs</button>
+                                            <button type="submit" class="btn btn-warning">
+                                                <i class="bi bi-person-fill-gear h2"  style = "color : #ffffff;"></i>
+                                            </button>
                                         </form>
                                     </td>
 
@@ -83,7 +85,7 @@
                                             @csrf
                                             <input type="hidden" name="content_id" value="{{ $item->id }}">
                                             <button type="submit"  class="btn btn-success">
-                                                Resultados
+                                            <i class="bi bi-journal-bookmark h2"  style = "color : #ffffff;"></i>
                                             </button>
                                         </form>
                                     </td>
@@ -92,7 +94,9 @@
                                      <!-- Editar -->
                                     <form action="{{ route('content.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
+                                            <button type="submit" class="btn btn-warning ">
+                                                <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i>
+                                            </button>
                                         </form>
                                     </td>
                                     <td>
@@ -100,7 +104,7 @@
                                         <button type="button"
                                                 class="btn btn-danger  @if ($item->qtasatividades > 0) disabled @endif"
                                                 data-toggle="modal" data-target="#modal{{ $item->id }}">
-                                                <i class="bi bi-trash3"></i>
+                                                <i class="bi bi-trash3 h2"  style = "color : #ffffff;"></i>
                                         </button>
                                     </td>
                                 </tr>

@@ -50,7 +50,7 @@
                                     <td>
                                         <form action="{{ route('class.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
+                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square h2 " style = "color : #ffffff;"></i></button>
                                         </form>
                                     </td>
 

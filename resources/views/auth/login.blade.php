@@ -26,11 +26,19 @@
 
     <link rel="stylesheet" href="{{ asset('css/login.css?v=' . filemtime(public_path('css/login.css'))) }}" />
 
+
+    
+
+
 </head>
+
+
 
 <body class="h-100">
 
     {{-- <img class="wave" src="images/wave.png"> --}}
+
+    
     <div class=''>
 
         <div class="background-image">
@@ -46,22 +54,25 @@
 
         </div>
 
-
-        <div class="container">
-            <div class="logo">
-                <img src="{{ asset('images/LOGO HORIZONTAL.png') }}" alt="Imagem" class="img-fluid">
-            </div>
-            {{-- <div class="card-header">{{ __('Login') }}</div> --}}
-            <div class="card-body">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
+        @if ($errors->any())
+                    <div class="alert alert-danger" id="alerta">
                         <ul>
+                            <h3>Problema ao logar</h3>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>
                 @endif
+
+        <div class="container">
+            <div class="logo">
+                <img src="{{ asset('images/LOGO HORIZONTAL.png') }}" alt="Imagem" class="img-fluid">
+            </div>
+            
+            {{-- <div class="card-header">{{ __('Login') }}</div> --}}
+            <div class="card-body">
+            
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
 

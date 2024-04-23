@@ -57,7 +57,8 @@
                                         <form action="{{ route('turmas.turmasAlunosIndex', $item->id) }}">
                                             @csrf
                                             <input type="hidden" name="turma_id" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-primary">Alunos
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="bi bi-people-fill h2" style = "color : #ffffff;"></i>
                                                 ({{ $item->qtosAlunos }})</button>
                                         </form>
                                     </td>
@@ -65,7 +66,10 @@
                                         <form action="{{ route('turmas.disciplinasIndex', $item->id) }}">
                                             @csrf
                                             <input type="hidden" name="turma_id" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-primary">Disciplinas</button>
+                                            <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-stack h2" style = "color : #ffffff;"></i>
+
+                                            </button>
                                         </form>
                                     </td>
                                     <td>
@@ -73,14 +77,14 @@
                                             @csrf
                                             <button type="submit" class="btn btn-warning"
                                                 @if ($item->qtosAlunos > 0) disabled @endif>
-                                                <i class="bi bi-pencil-square"></i></button>
+                                                <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i></button>
                                         </form>
                                     </td>
                                     <td>
                                         <button type="button"
                                             class="btn btn-danger"@if ($item->qtosAlunos > 0) disabled @endif
                                             data-toggle="modal" data-target="#modal{{ $item->id }}">
-                                            <i class="bi bi-trash3"></i>
+                                            <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
                                         </button>
                                     </td>
                                     <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"

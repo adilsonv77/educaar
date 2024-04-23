@@ -46,7 +46,7 @@
                                     <td>
                                         <button type="button" class="btn btn-danger"data-toggle="modal"
                                             data-target="#modal{{ $aluno->id }}">
-                                            Desmatricular
+                                            <i class="bi bi-person-fill-dash h2" style = "color : #ffffff;"></i>
                                         </button>
                                     </td>
                                     <div class="modal fade" id="modal{{ $aluno->id }}" tabindex="-1" role="dialog"

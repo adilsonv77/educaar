@@ -152,7 +152,7 @@
             @if ($showBack)
                 <div id="buttonReturn">       
                     <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i
-                                    style = "color:#83368A;" class="bi bi-arrow-left h3"></i></span></button></a>
+                                    style = "color:#ffffff;" class="bi bi-arrow-left h3"></i></span></button></a>
                 </div>
             @endif
        
@@ -162,27 +162,27 @@
                     <div id="buttonQuestion" >
                         <a id="button-ar" data-href="{{ route('student.questoes') }}">
                         <button id="button_question" type="button" class="x0 btn btn-warning"> 
-                            <span><i style = "color:#83368A;" class="bi bi-book h3"></i></span>
+                            <span><i  style = "color:#ffffff;" class="bi bi-book h3"></i></span>
                         </button>
                         </a>
                     </div>
 
                     <div id="buttonRotateX">
-                        <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i style = "color:#83368A;"
+                        <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i  style = "color:#ffffff;"
                                     class="bi bi-arrow-90deg-up" h3></i></span></button>
                     </div>
                     <div id="buttonRotateY">
-                        <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i style = "color:#83368A;"
+                        <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i  style = "color:#ffffff;"
                                     class="bi bi-arrow-return-right" h3></i></span></button>
                     </div>
 
                     <div id="buttonZoomIn">
-                        <button type="button" class="btn btn-warning" id="zoom_mais"><span><i style = "color:#83368A;"
+                        <button type="button" class="btn btn-warning" id="zoom_mais"><span><i  style = "color:#ffffff;"
                                     class="bi bi-zoom-in h3"></i></span></button>
                     </div>
 
                     <div id="buttonZoomOut">
-                        <button type="button" class="btn btn-warning" id="zoom_menos"><span><i style = "color:#83368A;"
+                        <button type="button" class="btn btn-warning" id="zoom_menos"><span><i  style = "color:#ffffff;"
                                     class="bi bi-zoom-out h3"></i></span></button>
                     </div>
                 

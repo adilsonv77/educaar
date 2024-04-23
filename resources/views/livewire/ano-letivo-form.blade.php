@@ -17,6 +17,11 @@
         $("#confirmarExcluirModal").modal('hide');
     });
 
+
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+
     </script>
     <div class="py-4 space-y-4">
         <div class="flex justify-between">
@@ -63,13 +68,16 @@
 
 
                                     <td>
-                                        <button class="btn btn-warning" wire:click="editar({{$item->id}})">Editar</button>    
+                                        <button class="btn btn-warning" wire:click="editar({{$item->id}})">
+                                        <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i>
+                                        </button>    
                                    </td>
 
 
                                     <td>
                                         <button type="button" class="btn btn-danger" wire:click="confirmarExcluir({{$item->id}})">
-                                            Excluir
+                                        <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
+
                                         </button>
 
                                     </td>
