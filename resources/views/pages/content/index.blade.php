@@ -81,7 +81,7 @@
                                     <td>
                                         <form action="{{ route('content.resultsContents') }}">
                                             @csrf
-                                            <input type="hidden" name="content" value="{{ $item->id }}">
+                                            <input type="hidden" name="content_id" value="{{ $item->id }}">
                                             <button type="submit"  class="btn btn-success">
                                                 Resultados
                                             </button>

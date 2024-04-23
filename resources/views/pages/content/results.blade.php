@@ -1,13 +1,106 @@
 @extends('layouts.app')
 
 @php
-
-$pageName= 'Resultados';
+    $pageName= 'Resultados';
+    $qntCompletas= $results['conteudo_completo'];
+    $qntIncompletas= $results['conteudo_incompleto'];
+    $qntNaoFizeram= $results['conteudo_nao_fizeram'];
+    $activities= $activities;
 @endphp
 
 @section('page-name', $pageName)
 
 @section('content')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
 
-<h1>Cheguei!!!!!</h1>
+  <div id="formTurma">
+  <form action="{{ route('content.resultsContents') }}" method="GET ">
+          @csrf
+          <label for="">Informe a turma:</label>
+          <div class="form-inline">
+              <select class="form-control" name="turma_id">
+                  @foreach ($turmas as $item)
+                      <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
+                          {{ $item->nome }}</option>
+                  @endforeach
+              </select>
+              <section class="itens-group">
+                  <button class="btn btn-primary "type="submit">Pesquisar</button>
+              </section>
+          </div>
+      </form>
+      <br>
+  </div>
+  
+<div id="barras" style="width: 1000px; height: 800px;"></div>
+<div id="rosca" style="width: 900px; height: 500px;"></div>
+
+<script type="text/javascript">
+
+    var qntCompletas= <?php echo $qntCompletas; ?>;
+    var qntIncompletas= <?php echo $qntIncompletas; ?>;
+    var qntNaoFizeram= <?php echo $qntNaoFizeram; ?>;
+    var activities= <?php echo $activities; ?>;
+
+    google.charts.load('current', {'packages':['bar', 'corechart']});
+    google.charts.setOnLoadCallback(drawStuff);
+
+    function drawStuff() {
+        drawBarChart();
+        drawPieChart();
+    }
+
+    function drawBarChart() {
+
+          var data = new google.visualization.DataTable();
+          data.addColumn('string','Atividades');
+          data.addColumn('number', 'Quantos Responderam');
+          activities.forEach((activity)=>data.addRow([activity.name, activity.qntFizeram]));
+
+
+        var options = {
+          chart: {
+            title: 'Atividades respondidas',
+          },
+          vAxis: {
+            gridlines:{
+              count:1
+            }
+          }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('barras'));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+
+    function drawPieChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Questionário', 'Alunos'],
+          ['Completo',   qntCompletas],
+          ['Incompleto',  qntIncompletas],
+          ['Não fizeram', qntNaoFizeram]
+        ]);
+
+        var options = {
+          title: 'Questionário completo/incompleto',
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('rosca'));
+        chart.draw(data, options);
+    }
+</script>
+</body>
+</html>
+
+
+
 @endsection

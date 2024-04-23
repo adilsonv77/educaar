@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Activity;
+use App\Models\Turma;
 use App\Models\Content;
-
+use App\Models\Activity;
 use App\Models\Matricula;
 use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +14,7 @@ use DataTables;
 use chillerlan\QRCode\QRCode;
 use Illuminate\Support\Facades\Validator;
 use App\DAO\ContentDAO;
+use App\DAO\ResultContentDAO;
 
 class ContentController extends Controller
 {
@@ -39,7 +39,7 @@ class ContentController extends Controller
             ]);
 
 */
-       DB::enableQueryLog();
+    DB::enableQueryLog();
         $where = null;
         if (Auth::user()->type == 'admin') {
             $where = DB::table('contents')
@@ -277,10 +277,48 @@ class ContentController extends Controller
     }
 
     public function resultsContents(Request $request){
+        $content= $request->input('content_id');
 
-        $data= $request->all();
+        if($content){
+            session()->put('content', $content); 
+        }
+        $turma_id = $request->input('turma_id');
 
-        return view('pages.content.results');
+        $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
+        ->where('bool_atual', 1)->first();
+
+        $content_id = session()->get('content');
+
+        $where = DB::table('turmas as t')
+            ->select('t.id as id','t.nome as nome')
+            ->join('turmas_disciplinas as td','td.turma_id', '=', 't.id')
+            ->join('turmas_modelos as tm', 't.turma_modelo_id','=','tm.id')
+            ->join('contents as c', 'c.turma_id', '=', 'tm.id')
+            ->join('activities as a', 'a.content_id', '=', 'c.id')
+            ->where([
+                ['td.professor_id','=', Auth::user()->id],
+                ['t.ano_id','=', $anoletivo->id],
+                ['c.id', '=', $content_id]
+            ])
+            ->distinct();
+
+            
+        if ($turma_id) {
+            $turma = Turma::find($turma_id);
+            
+        } else {
+            $turma = $where->first();
+        }
+
+        $turmas= $where->get();
+
+        $content = Content::find($content_id);
+
+        $results= ResultContentDAO::buscarQntFizeramAsTarefas($content->id, $turma->id);
+
+        $activities= ResultContentDAO::atividadesFeitas($content->id, $turma->id);
+
+        return view('pages.content.results', compact('results', 'activities', 'turmas', 'turma'));
     }
     
 }

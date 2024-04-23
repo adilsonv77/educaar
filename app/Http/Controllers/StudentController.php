@@ -43,6 +43,7 @@ class StudentController extends Controller
             ])
             ->distinct()
             ->get();
+
         $rota = route("home") ;
         return view('student.indexContentStudent', compact('conteudos','rota'));
     }
