@@ -80,7 +80,6 @@
         var chart = new google.charts.Bar(document.getElementById('barras'));
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
-
     function drawPieChart() {
         var data = google.visualization.arrayToDataTable([
           ['Questionário', 'Alunos'],
@@ -96,7 +95,24 @@
 
         var chart = new google.visualization.PieChart(document.getElementById('rosca'));
         chart.draw(data, options);
+
+        google.visualization.events.addListener(chart, 'select', selectHandler);
+
+        function selectHandler() {
+          var selectedItem = chart.getSelection()[0];
+          var type= " ";
+          if (selectedItem) {
+            type = data.getValue(selectedItem.row, 0);
+            alert('O usuário selecionou ' + type);
+            
+          }
+        }
     }
+
+   
+
+
+
 </script>
 </body>
 </html>
