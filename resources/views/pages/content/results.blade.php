@@ -82,14 +82,14 @@
     }
     function drawPieChart() {
         var data = google.visualization.arrayToDataTable([
-          ['Questionário', 'Alunos'],
+          ['Atividades', 'Alunos'],
           ['Completo',   qntCompletas],
           ['Incompleto',  qntIncompletas],
           ['Não fizeram', qntNaoFizeram]
         ]);
 
         var options = {
-          title: 'Questionário completo/incompleto',
+          title: 'Atividades completas/incompletas/não fizeram',
           pieHole: 0.4,
         };
 
@@ -103,16 +103,11 @@
           var type= " ";
           if (selectedItem) {
             type = data.getValue(selectedItem.row, 0);
-            alert('O usuário selecionou ' + type);
-            
+            var url = "{{ route('content.listStudents', ['type' => 'type_selection']) }}".replace('type_selection', type);
+            window.location.href = url;
           }
         }
     }
-
-   
-
-
-
 </script>
 </body>
 </html>

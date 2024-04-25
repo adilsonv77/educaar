@@ -99,6 +99,19 @@
 
         var chart = new google.visualization.PieChart(document.getElementById('rosca'));
         chart.draw(data, options);
+
+
+        google.visualization.events.addListener(chart, 'select', selectHandler);
+
+        function selectHandler() {
+        var selectedItem = chart.getSelection()[0];
+        var type= " ";
+        if (selectedItem) {
+        type = data.getValue(selectedItem.row, 0);
+        var url = "{{ route('activity.listStudents', ['type' => 'type_selection']) }}".replace('type_selection', type);
+        window.location.href = url;
+      }
+}
     }
 </script>
 </body>

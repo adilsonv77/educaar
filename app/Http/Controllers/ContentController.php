@@ -321,9 +321,9 @@ class ContentController extends Controller
         return view('pages.content.results', compact('results', 'activities', 'turmas', 'turma'));
     }
 
-    function resultsListStudents(Request $request){
+    function resultsListStudents($type){
     
-        dd($request->type);
+        
         return view('pages.content.listStudents');
     
     }

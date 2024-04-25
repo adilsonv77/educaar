@@ -271,6 +271,11 @@ class QuestionController extends Controller
 
         return view('pages.activity.results', compact('result','questions', 'turmas', 'turma'));
     }
+
+    function resultsListStudents($type){
+
+        return view('pages.content.listStudents');
+    }
 }
 //         SELECT DISTINCT t.id, t.nome FROM `turmas` as t 
 // 			INNER JOIN turmas_disciplinas as td 

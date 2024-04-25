@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
     //content
     Route::resource('content', App\Http\Controllers\ContentController::class);
     Route::get('resultsContents', [App\Http\Controllers\ContentController::class, 'resultsContents'])->name('content.resultsContents');
-    Route::get('listStudents', [App\Http\Controllers\ContentController::class, 'resultsListStudents'])->name('content.listStudents');
+    Route::get('/listStudents/{type}', [App\Http\Controllers\ContentController::class, 'resultsListStudents'])->name('content.listStudents');
     Route::get('/content/list', [App\Http\Controllers\ContentController::class, 'listOfContents'])->name('content.list');
     
 
@@ -65,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
     //question
     Route::resource('/questions', App\Http\Controllers\QuestionController::class);
     Route::get('results', [App\Http\Controllers\QuestionController::class, 'results'])->name('activity.results');
+    Route::get('/listStudents/{type}', [App\Http\Controllers\QuestionController::class, 'resultsListStudents'])->name('activity.listStudents');
     // Route::get('/question/index', [App\Http\Controllers\QuestionController::class, 'index'])->name('question.index');
     // Route::get('/question/create', [App\Http\Controllers\QuestionController::class, 'create'])->name('question.create');
     // Route::post('/question/store', [App\Http\Controllers\QuestionController::class, 'store'])->name('question.store');
