@@ -63,7 +63,7 @@
                                     <td style="width: 25%;"><img src="/marcadores/{{ $item->marcador }}"
                                             alt=""width="200" height="200"></td>
                                     <td style="width: 10%;"><a href="/activity/{{ $item->id }}"
-                                            class="btn btn-primary">Visualizar</a></td>
+                                            class="btn btn-primary"><i class="bi bi-eye-fill h2" style = "color : #ffffff;"></i></a></td>
 
                                 <td style="width: 10%;">
                                         <form action="{{ route('activity.results', $item->id) }}">
@@ -71,7 +71,9 @@
                                             <input type="hidden" name="activity_id" value="{{ $item->id }}">
                                             <button type="submit" class="btn btn-success" 
                                             @if ($item->qtnQuest == 0) disabled @endif
-                                            text-align:center>Resultados</button>
+                                            text-align:center><i class="bi bi-journal-bookmark h2"  
+                                            style = "color : #ffffff;"></i>
+                                            </button>
                                         </form>
                                     </td>
 
@@ -81,7 +83,7 @@
                                             @csrf
                                             <input type="hidden" name="activity" value="{{ $item->id }}">
                                             <button type="submit" class="btn btn-info" text-align:
-                                                center>Questionários</button>
+                                                center><i class="bi bi-file-earmark-medical-fill h2" style = "color : #ffffff;"></i></button>
                                         </form>
                                     </td>
 
@@ -89,14 +91,14 @@
                                         <form action="{{ route('activity.edit', $item->id) }}">
                                             @csrf
                                             <button type="submit" class="btn btn-warning" text-align:
-                                                center><i class="bi bi-pencil-square"></i></button>
+                                                center><i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i></button>
                                         </form>
                                     </td>
 
                                     <td style="width: 70px;">
                                         <button type="button" class="btn btn-danger"
                                             @if ($item->qtnQuest > 0) disabled @endif data-toggle="modal"
-                                            data-target="#modal{{ $item->id }}"> <i class="bi bi-trash3"></i></button>
+                                            data-target="#modal{{ $item->id }}"> <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i></button>
                                     </td>
 
                                 </tr>

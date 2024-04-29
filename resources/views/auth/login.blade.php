@@ -9,6 +9,9 @@
     <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
     <title>EducaAR</title>
     @yield('style')
+
+    <link rel="stylesheet" href="{{ asset('css/login.css?v=' . filemtime(public_path('css/login.css'))) }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
@@ -24,8 +27,7 @@
     @include('sweetalert::alert')
     @livewireStyles
 
-    <link rel="stylesheet" href="{{ asset('css/login.css?v=' . filemtime(public_path('css/login.css'))) }}" />
-
+   
 
     
 
@@ -56,7 +58,9 @@
 
         @if ($errors->any())
                     <div class="alert alert-danger" id="alerta">
+                    
                         <ul>
+                        
                             <h3>Problema ao logar</h3>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>

@@ -51,14 +51,15 @@
                                     <td>
                                         <form action="{{ route('questions.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning">Editar</button>
+                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square h2" style = "color : #ffffff;">
+                                        </button>
                                         </form>
                                     </td>
 
                                     <td>
                                         <button type="button" class="btn btn-danger" data-toggle="modal"
                                             data-target="#modal{{ $item->id }}">
-                                            Excluir
+                                            <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
                                         </button>
                                     </td>
                                 </tr>

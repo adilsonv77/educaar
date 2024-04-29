@@ -10,6 +10,24 @@
   
 }
 
+#alerta{
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff9999;
+  color: white;
+  border: 1px solid #cc0000;
+}
+
+#alerta h3{
+
+  color: white;
+
+
+}
+
+
 
 
 
@@ -229,6 +247,14 @@
 
 /* Estilos para dispositivos com largura de tela de 1200px ou mais (notebooks, monitores maiores e dispositivos de tela grande) */
 @media only screen and (min-width: 1200px) {
+
+  .h-100{
+
+    width: 100vw;
+    height: 100vh;
+  }
+
+
   .container{
     width: 30vw;
     height:70vh;
@@ -243,13 +269,15 @@
   }
   #alerta{
     width: 20vw;
-    height: 10vh;
+    height: 15vh;
+    display: flex;
     position: absolute;
-    top: 20%;
-    right: -55%;
-    
-  
+    top: 1%;
+    right: 1%;
+
   }
+
+  
   
 
 
