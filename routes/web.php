@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
     //content
     Route::resource('content', App\Http\Controllers\ContentController::class);
     Route::get('resultsContents', [App\Http\Controllers\ContentController::class, 'resultsContents'])->name('content.resultsContents');
-    Route::get('/listStudents/{type}', [App\Http\Controllers\ContentController::class, 'resultsListStudents'])->name('content.listStudents');
+    Route::get('/listStudents/content/{type}', [App\Http\Controllers\ContentController::class, 'resultsListStudents'])->name('content.listStudents');
     Route::get('/content/list', [App\Http\Controllers\ContentController::class, 'listOfContents'])->name('content.list');
     
 

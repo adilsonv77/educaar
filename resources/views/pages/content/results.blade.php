@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName= 'Resultados';
+    $pageName= 'Resultados de '. $content->name;
     $qntCompletas= $results['conteudo_completo'];
     $qntIncompletas= $results['conteudo_incompleto'];
     $qntNaoFizeram= $results['conteudo_nao_fizeram'];

@@ -318,13 +318,21 @@ class ContentController extends Controller
 
         $activities= ResultContentDAO::atividadesFeitas($content->id, $turma->id);
 
-        return view('pages.content.results', compact('results', 'activities', 'turmas', 'turma'));
+        return view('pages.content.results', compact('results', 'activities', 'turmas', 'turma', 'content'));
     }
 
     function resultsListStudents($type){
-    
+        $id= session()->get('content');
+        $content= Content::find($id);
         
-        return view('pages.content.listStudents');
+        if($type == 'Completo'){
+            $results= ResultContentDAO::getStudentDidActivities();    
+        }elseif($type == 'Incompleto'){
+            $results= ResultContentDAO::getStudentsUnfinishActivities();
+        }elseif($type == 'Não fizeram'){
+            $results= ResultContentDAO::getStudentDidNotActivities();
+        }
+        return view('pages.content.listStudents', compact('results', 'content'));
     
     }
 }
