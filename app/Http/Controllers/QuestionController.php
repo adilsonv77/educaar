@@ -269,12 +269,24 @@ class QuestionController extends Controller
         $result= ResultActivityDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
         $questions=ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);
 
-        return view('pages.activity.results', compact('result','questions', 'turmas', 'turma'));
+        return view('pages.activity.results', compact('result','questions', 'turmas', 'turma', 'activity'));
     }
 
     function resultsListStudents($type){
 
-        return view('pages.content.listStudents');
+        $activity_id= session()->get('activity');
+
+        $activity= Activity::find($activity_id);
+
+        if($type == 'Completo'){
+            $results= ResultActivityDAO::getStudentDidQuestions();    
+        }elseif($type == 'Incompleto'){
+            $results= ResultActivityDAO::getStudentsUnfinishQuestions();
+        }elseif($type == 'Não fizeram'){
+            $results= ResultActivityDAO::getStudentDidNotQuestions();
+        }
+
+        return view('pages.content.listStudents', compact('results','activity'));
     }
 }
 //         SELECT DISTINCT t.id, t.nome FROM `turmas` as t 

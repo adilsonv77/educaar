@@ -8,23 +8,17 @@ use Illuminate\Support\Facades\DB;
 
 class ResultActivityDAO
 {
-    protected $totalQuestions;
-    protected $alunos_fizeram;
-    protected $alunos_fizeram_completo= array();
-    protected $alunos_fizeram_incompleto= array();
-    protected $alunos_nao_fizeram;
-    protected $question_base;
-
-
     public static function buscarQntFizeramATarefas($activityID, $turma_id)
     {
         $where = DB::table('questions as q')->where('q.activity_id', $activityID);
 
+        session()->put('turma_id', $turma_id);
+        session()->put('activity_id', $activityID);
         //total de questões
         $totalQuestions= $where->count();
 
         $sql = DB::table('questions as q')
-        ->select('u.name as nome', DB::raw('COUNT(sta.id) as qntRespondida'))
+        ->select('u.id as id','u.name as nome', DB::raw('COUNT(sta.id) as qntRespondida'))
             ->join('student_answers as sta', 'sta.question_id', '=', 'q.id')
             ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'sta.user_id')
             ->join('users as u', 'u.id', '=', 'alunt.aluno_id')
@@ -32,9 +26,8 @@ class ResultActivityDAO
                 ['alunt.turma_id', '=', $turma_id],
                 ['q.activity_id', '=', $activityID]
             ])
-            ->groupBy('u.name');
+            ->groupBy('id','nome');
             // trocar para u.id
-        
             // $alunos_fizeram= $subQuery->selectRaw('COUNT(u.name) as completo')->get();
             $alunos_fizeram= $sql->get();
 
@@ -43,19 +36,17 @@ class ResultActivityDAO
             //separando os alunos que não fizeram todas as questões
             $alunos_fizeram_incompleto= array();
             foreach($alunos_fizeram as $aluno){
-                $newaluno = [
-                    'nome' => $aluno->nome,
-                    'qntRespondida' => $aluno->qntRespondida
-                ];
-
                 if( $aluno->qntRespondida == $totalQuestions){
-                    array_push($alunos_fizeram_completo,  $newaluno);
+                    array_push($alunos_fizeram_completo,  $aluno);
                 }else{
-                    array_push($alunos_fizeram_incompleto,  $newaluno);
+                    array_push($alunos_fizeram_incompleto,  $aluno);
                 }
             }
+            session()->put('alunos_fizeram_completo', $alunos_fizeram_completo);
+            session()->put('alunos_fizeram_incompleto', $alunos_fizeram_incompleto);
 
             $question_base= $where->first()->id;
+            session()->put('question_base', $question_base);
             //alunos que não fizeram
             $sql2= DB::table('users as u')
                     ->selectRaw('COUNT(u.name) as qntsNaofizeram')
@@ -103,6 +94,39 @@ class ResultActivityDAO
             $result_questions= $where->get();
 
             return $result_questions;
+    }
+    public static function getStudentDidQuestions(){
+
+        $alunos= session()->get('alunos_fizeram_completo');
+
+        return $alunos;
+
+    }
+    public static function getStudentsUnfinishQuestions(){
+
+        $alunos= session()->get('alunos_fizeram_incompleto');
+
+        return $alunos;
+
+    }
+    public static function getStudentDidNotQuestions(){
+                    //alunos que não fizeram
+                    $turma_id= session()->get('turma_id');
+                    $questao=  session()->get('question_base');
+
+                    $sql2= DB::table('users as u')
+                    ->select('u.id as id','u.name as nome')
+                    ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'u.id')
+                    ->where('alunt.turma_id', '=', $turma_id)
+                    ->whereNotExists(function($query) use ($questao)
+                    {
+                        $query->select(DB::raw(1))
+                                ->from('student_answers as sta')
+                                ->whereRaw('sta.user_id = u.id')
+                                ->whereRaw('sta.question_id = '. $questao);
+                    });
+            $alunos_nao_fizeram= $sql2->get();
+            return $alunos_nao_fizeram;
     }
 }
 

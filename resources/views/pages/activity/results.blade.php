@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Resultados';
+    $pageName =  $activity->name;
     $qntCompletas= $result['alunos_fizeram_completo'];
     $qntIncompletas= $result['alunos_fizeram_incompleto'];
     $qntNaoFizeram= $result['alunos_nao_fizeram'];
