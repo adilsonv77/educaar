@@ -42,7 +42,7 @@
             </div>
 
             <div>
-               <button class="btn btn-sm btn-primary" wire:click="novo()">Novo</button>
+               <button class="btn btn-sm btn-primary " id="novo" wire:click="novo()"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
             </div>
         </div>
      </div>
