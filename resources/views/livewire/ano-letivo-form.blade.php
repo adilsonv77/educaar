@@ -30,7 +30,7 @@
                     <input class="form-control" type="text" wire:model="filtro"
                         list="historico" />
                     <section class="itens-group">
-                        <button class="btn btn-primary" type="button" wire:click="$refresh">Filtrar</button>
+                        <button class="btn btn-primary btn-lg" type="button" wire:click="$refresh">Filtrar</button>
                         
                     </section>
                 </div>

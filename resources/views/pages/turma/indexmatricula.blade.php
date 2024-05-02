@@ -19,7 +19,7 @@
                 @endforeach
             </select>
             <section class="itens-group">
-                <button class="btn btn-primary "type="submit">Pesquisar</button>
+                <button class="btn btn-primary btn-lg "type="submit">Pesquisar</button>
             </section>
         </div>
     </form>

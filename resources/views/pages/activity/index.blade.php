@@ -10,8 +10,9 @@
 
   
     <head>
-        <link rel="stylesheet" href="/css/list_content.css">
+        
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        
     </head>
 
     <form action="{{ route('activity.index') }}" method="GET">
@@ -23,10 +24,10 @@
             </section>
         </div> --}}
         <div class="form-inline ">
-            <input class="form-control mx-5" type="text" name="titulo" id="titulo" value="{{ $activity }}"
+            <input class="form-control " type="text" name="titulo" id="titulo" value="{{ $activity }}"
                 list="historico" />
             <section class="itens-group">
-                <button class="btn btn-primary" type="submit">Pesquisar</button>
+                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
             </section>
         </div>
         <datalist id="historico">
