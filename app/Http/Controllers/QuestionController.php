@@ -286,7 +286,7 @@ class QuestionController extends Controller
             $results= ResultActivityDAO::getStudentDidNotQuestions();
         }
 
-        return view('pages.content.listStudents', compact('results','activity'));
+        return view('pages.activity.listStudents', compact('results','activity'));
     }
 }
 //         SELECT DISTINCT t.id, t.nome FROM `turmas` as t 

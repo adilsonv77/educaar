@@ -128,14 +128,26 @@ class ResultContentDAO
 
     public static function getStudentDidNotActivities(){
         
-        $turma_id= session()->get('turma_id');
+        
         $content_id= session()->get('content_id');
 
-        $questao= Question::join('activities as a', 'questions.activity_id', '=', 'a.id')
-        ->join('contents as c', 'a.content_id', '=', 'c.id')
-        ->where('c.id', '=', $content_id)->first();
 
-        $result= DB::table('users as u')
+        // SELECT q.id, q.question FROM questions as q 
+		// join activities as a
+        // on q.activity_id= a.id
+        // JOIN contents as c
+        // on a.content_id= c.id
+        // WHERE c.id=9
+        $questao= DB::table('questions as q')
+        ->select('q.id as id','q.question as questao')
+        ->join('activities as a', 'q.activity_id', '=', 'a.id')
+        ->join('contents as c', 'a.content_id', '=', 'c.id')
+        ->where('c.id', '=', $content_id)
+        ->first();
+        
+        $turma_id= session()->get('turma_id');
+        
+        $result = DB::table('users as u')
         ->select('u.id as id','u.name as nome')
         ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'u.id')
         ->where('alunt.turma_id', '=', $turma_id)
@@ -145,7 +157,9 @@ class ResultContentDAO
                     ->from('student_answers as sta')
                     ->whereRaw('sta.user_id = u.id')
                     ->whereRaw('sta.question_id = '. $questao->id);
-        })->get();
+        })
+            ->get();
+    
     
     return $result;
     }
