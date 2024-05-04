@@ -97,10 +97,11 @@
 
        // Adicionando eventos de mouse às legendas após o gráfico ser desenhado
       google.visualization.events.addListener(chart, 'ready', function() {
-        console.log(map1);
             $('#barras text').each(function(index) {
-                $(this).on('mouseover', function() {
+
+              $(this).on('mouseover', function() {
                   var question= map1.get($(this).text());
+                  if(question !== undefined){
                     var tooltip = $('#tooltip');
                     tooltip.text(question[2]);
                     tooltip.css({
@@ -108,6 +109,7 @@
                         left: event.pageX + 'px',
                         top: (event.pageY - tooltip.outerHeight() - 10) + 'px' // Posiciona a tooltip acima do cursor do mouse
                     });
+                  }
                 });
 
                 $(this).on('mouseout', function() {
