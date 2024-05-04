@@ -42,6 +42,7 @@
   </div>
   
 <div id="barras" style="width: 1000px; height: 800px;"></div>
+<div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 <div id="rosca" style="width: 900px; height: 500px;"></div>
 
 <script type="text/javascript">
@@ -61,29 +62,60 @@
 
     function drawBarChart() {
 
+      const map1 = new Map();
+
           var data = new google.visualization.DataTable();
           data.addColumn('string','Questões');
           data.addColumn('number', 'Respostas Corretas');
           data.addColumn('number', 'Questões Respondidas');
-          questoes_resultados.forEach((question)=>data.addRow([question.questao, question.quntRespondCerto, question.qntRespondida ]));
+          data.addColumn({type: 'string', role: 'annotation'}); // Coluna de descrição sem ser exibida no gráfico
 
+          var count = 1;
+          questoes_resultados.forEach((question)=>{
+            var value = "Q"+count++; 
+            map1.set(value, [question.quntRespondCerto, question.qntRespondida, question.questao]);
+            data.addRow([value, question.quntRespondCerto, question.qntRespondida, question.questao ]);
+          });
 
-        var options = {
-          chart: {
-            title: 'Questoes Corretas',
-            subtitle: 'Questoes Respondidas',
-          },
-          vAxis: {
-            gridlines:{
-              count:1
-            }
-          }
-        };
+          var options = {
+              chart: {
+                title: 'Questoes Corretas',
+                subtitle: 'Questoes Respondidas',
+              },
+              vAxis: {
+                gridlines:{
+                  count:1
+                }
+              },
+              series: {
+            3: {visibleInLegend: false} // Define a coluna da descrição para não ser exibida no gráfico
+              }
+            };
 
         var chart = new google.charts.Bar(document.getElementById('barras'));
         chart.draw(data, google.charts.Bar.convertOptions(options));
-    }
 
+       // Adicionando eventos de mouse às legendas após o gráfico ser desenhado
+      google.visualization.events.addListener(chart, 'ready', function() {
+        console.log(map1);
+            $('#barras text').each(function(index) {
+                $(this).on('mouseover', function() {
+                  var question= map1.get($(this).text());
+                    var tooltip = $('#tooltip');
+                    tooltip.text(question[2]);
+                    tooltip.css({
+                        display: 'block',
+                        left: event.pageX + 'px',
+                        top: (event.pageY - tooltip.outerHeight() - 10) + 'px' // Posiciona a tooltip acima do cursor do mouse
+                    });
+                });
+
+                $(this).on('mouseout', function() {
+                    $('#tooltip').css('display', 'none');
+                });
+            });
+        });
+    }
     function drawPieChart() {
         var data = google.visualization.arrayToDataTable([
           ['Questionário', 'Alunos'],
