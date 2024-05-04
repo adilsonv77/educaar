@@ -41,6 +41,7 @@
   </div>
   
 <div id="barras" style="width: 1000px; height: 800px;"></div>
+<div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 <div id="rosca" style="width: 900px; height: 500px;"></div>
 
 <script type="text/javascript">
@@ -60,10 +61,18 @@
 
     function drawBarChart() {
 
+      const map1 = new Map();
+
           var data = new google.visualization.DataTable();
           data.addColumn('string','Atividades');
           data.addColumn('number', 'Quantos Responderam');
-          activities.forEach((activity)=>data.addRow([activity.name, activity.qntFizeram]));
+          data.addColumn({type: 'string', role: 'annotation'});
+          var count = 1;
+          activities.forEach((activity)=>{
+            var value = "A"+count++;
+            data.addRow([value, activity.qntFizeram, activity.name]);
+            map1.set(value, [value, activity.qntFizeram, activity.name]);
+          });
 
 
         var options = {
@@ -74,11 +83,38 @@
             gridlines:{
               count:1
             }
-          }
+          },
+          series: {
+            2: {visibleInLegend: false} // Define a coluna da descrição para não ser exibida no gráfico
+              }
         };
 
         var chart = new google.charts.Bar(document.getElementById('barras'));
         chart.draw(data, google.charts.Bar.convertOptions(options));
+
+        
+       // Adicionando eventos de mouse às legendas após o gráfico ser desenhado
+      google.visualization.events.addListener(chart, 'ready', function() {
+            $('#barras text').each(function(index) {
+
+              $(this).on('mouseover', function() {
+                  var activity= map1.get($(this).text());
+                  if(activity !== undefined){
+                    var tooltip = $('#tooltip');
+                    tooltip.text(activity[2]);
+                    tooltip.css({
+                        display: 'block',
+                        left: event.pageX + 'px',
+                        top: (event.pageY - tooltip.outerHeight() - 10) + 'px' // Posiciona a tooltip acima do cursor do mouse
+                    });
+                  }
+                });
+
+                $(this).on('mouseout', function() {
+                    $('#tooltip').css('display', 'none');
+                });
+            });
+        });
     }
     function drawPieChart() {
         var data = google.visualization.arrayToDataTable([
