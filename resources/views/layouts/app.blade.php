@@ -19,10 +19,18 @@
 
     <link href="{{ asset('css/app.css?v=' . filemtime(public_path('css/app.css'))) }}" rel="stylesheet">
     <link rel="stylesheet" href="/css/telainicial.css">
-
+    
+    <script src="{{ asset('js/teste.js?v=' . filemtime(public_path('js/teste.js'))) }}" type="module"></script>
+    
     @include('sweetalert::alert')
     @livewireStyles
 </head>
+
+<script>
+    const caminhoHorizontal = "{{ asset('images/LOGO_HORIZONTAL.png')}}" ;
+    console.log(caminhoHorizontal);
+    const caminhoVertical = "{{ asset('images/LOGO_VERTICAL.png')}}";
+</script>
 
 <body class="h-100">
     <div id="preloader">
@@ -34,11 +42,11 @@
     </div>
     <div id="main-wrapper">
         @auth
-            <div class="nav-header">
-                <!-- <img src="{{ asset('images/Logo Mini.png') }}" width="120" style="margin-left:23%;margin-top:0.5%"
-                    alt="Imagem" class="img-fluid"> -->
+            <div class="nav-header" id="logo">
+                <img src="{{ asset('images/LOGO VERTICAL.png') }}" width="120" style="margin-left:23%;margin-top:0.5%"
+                    alt="Imagem" class="img-fluid"  id="imagem"> 
 
-                <div class="nav-control">
+                <div class="nav-control" id = "marcio">
                     <div class="hamburger">
                         <span class="line"></span><span class="line"></span><span class="line"></span>
                     </div>
@@ -56,7 +64,7 @@
 
                             <ul class="navbar-nav header-right">
                                 <li class="nav-item dropdown header-profile">
-                                    <a class="nav-link" href="javascript:void(0)" role="button" data-toggle="dropdown">
+                                    <a class="nav-link" href="javascript:void()" role="button" data-toggle="dropdown">
                                         <div class="header-info">
                                             <i class="bi bi-person icon-purple"></i>
                                             <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
@@ -289,6 +297,11 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     @yield('script')
+
+
+
+
+
 </body>
 
 </html>
