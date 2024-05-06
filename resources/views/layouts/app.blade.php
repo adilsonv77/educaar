@@ -20,7 +20,7 @@
     <link href="{{ asset('css/app.css?v=' . filemtime(public_path('css/app.css'))) }}" rel="stylesheet">
     <link rel="stylesheet" href="/css/telainicial.css">
     
-    <script src="{{ asset('js/teste.js?v=' . filemtime(public_path('js/teste.js'))) }}" type="module"></script>
+    <script src="{{ asset('js/mudancaLogo.js?v=' . filemtime(public_path('js/mudancaLogo.js'))) }}" type="module"></script>
     
     @include('sweetalert::alert')
     @livewireStyles
@@ -28,7 +28,6 @@
 
 <script>
     const caminhoHorizontal = "{{ asset('images/LOGO_HORIZONTAL.png')}}" ;
-    console.log(caminhoHorizontal);
     const caminhoVertical = "{{ asset('images/LOGO_VERTICAL.png')}}";
 </script>
 
@@ -43,10 +42,10 @@
     <div id="main-wrapper">
         @auth
             <div class="nav-header" id="logo">
-                <img src="{{ asset('images/LOGO VERTICAL.png') }}" width="120" style="margin-left:23%;margin-top:0.5%"
-                    alt="Imagem" class="img-fluid"  id="imagem"> 
+                <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}" width="120" style="margin-left:23%;margin-top:0.5%"
+                    alt="Imagem" class="img-fluid" id="imagem"> 
 
-                <div class="nav-control" id = "marcio">
+                <div class="nav-control" id = "menu">
                     <div class="hamburger">
                         <span class="line"></span><span class="line"></span><span class="line"></span>
                     </div>
