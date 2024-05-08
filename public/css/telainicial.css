@@ -55,8 +55,20 @@
 }
 
 .img-fluid{
-    width: 10%;
-    height: 20%;
+
+    margin-left: 0% !important; 
+    margin-top: 0% !important;
+    /* width: 10%;
+    height: 20%; */
+    
+
+
+
+}
+
+.menu-togle img-fluid{
+
+    background-color: black;
 
 
 

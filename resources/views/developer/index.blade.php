@@ -10,6 +10,7 @@
 
     <head>
         <link rel="stylesheet" href="/css/list_content.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
 
     <div class="card">
@@ -33,14 +34,14 @@
                                 <td style="width: 25%;"><img src="/marcadores/{{ $activity->marcador }}"
                                             alt=""width="200" height="200"></td>
                                     <td style="width: 10%;"><a href="/activity/{{ $activity->id }}"
-                                            class="btn btn-primary">Visualizar</a>
+                                            class="btn btn-primary"><i class="bi bi-eye-fill h2" style = "color : #ffffff;"></i></a>
                                 </td>
                                 <td style="width: 10%;">
                                         <form action="{{ route('questions.index', $activity->id) }}">
                                             @csrf
                                             <input type="hidden" name="activity" value="{{ $activity->id }}">
                                             <button type="submit" class="btn btn-info" text-align:
-                                                center>Questionários</button>
+                                                center><i class="bi bi-file-earmark-medical-fill h2" style = "color : #ffffff;"></i></button>
                                         </form>
                                 </td>
                                     <td style="width: 70px;">
@@ -48,7 +49,7 @@
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $activity->id }}">
                                             <button type="submit" class="btn btn-warning" text-align:
-                                                center>Editar</button>
+                                                center><i class="bi bi-pencil-square h2"  style = "color : #ffffff;"></i></button>
                                         </form>
                                     </td>
                             @endforeach
