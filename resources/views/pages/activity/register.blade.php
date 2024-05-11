@@ -1,7 +1,5 @@
 @extends('layouts.app')
 @section('script')
-<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.0/dist/mindar-image-aframe.prod.js"></script>
 @endsection
 @section('page-name', $titulo)
 
@@ -39,15 +37,31 @@
             } 
         };
 
-        function HabilitarDesabilitar() {
-            var alt = document.getElementById("alterar");
+        function HabilitarDesabilitar3D() {
+            var alt = document.getElementById("alterar3D");
+
+            document.getElementById("glb").disabled = !alt.checked;
+            document.getElementById("glb").required = alt.checked;
+
+            if (!alt.checked) {
+                var upl = document.getElementById("glb");
+                upl.value = "";
+            }
+
+            
+         }
+
+         function HabilitarDesabilitarImagemMarcador() {
+            var alt = document.getElementById("alterarMarcador");
 
             document.getElementById("marcador").disabled = !alt.checked;
-            document.getElementById("glb").disabled = !alt.checked;
-
             document.getElementById("marcador").required = alt.checked;
-            document.getElementById("glb").required = alt.checked;
-            
+
+            if (!alt.checked) {
+                var upl = document.getElementById("marcador");
+                upl.value = "";
+            }
+             
          }
 
     </script>
@@ -86,26 +100,23 @@
 
                 </div>
 
-                @if ($acao == 'edit') 
-                    <div class="form-group" >
-                        <input type="checkbox" id="alterar" name="alterar" value="S" onclick="HabilitarDesabilitar()"/>
-                        <label for="alterar">Alterar modelo 3d e marcador</label>
-                    </div>
-
-                @endif
-
- 
                 <div class="form-group">
-                        <label for="">Modelo 3D (GLB ou GLTF->ZIP)*</label>
+                        @if ($acao == 'edit') 
+                            <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
+                        @endif
+                        <label for="alterar3D">Modelo 3D (GLB ou GLTF->ZIP)*</label>
                         <span class="alert-danger">Tamanho máximo: 40MB</span>
                         <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="glb"
-                            id="glb" accept=".glb, .zip" onchange="upload_check()"/>
+                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit') disabled @endif/>
                 </div>
 
                 <div class="form-group">
-                        <label for="">Marcador (PNG ou JPEG ou JPG)*</label>
+                        @if ($acao == 'edit') 
+                            <input type="checkbox" id="alterarMarcador" name="alterarMarcador" value="S" onclick="HabilitarDesabilitarImagemMarcador()"/>
+                        @endif
+                        <label for="alterarMarcador">Marcador (PNG ou JPEG ou JPG)*</label>
                         <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="marcador"
-                            id="marcador" accept=".png, .jpeg, .jpg">
+                            id="marcador" accept=".png, .jpeg, .jpg"  @if($acao === 'edit') disabled @endif/>
                 </div>
 
                 <div class="form-group mt-4">
@@ -117,10 +128,6 @@
         </div>
     </div>
     <script>
-         if($acao === 'edit'){ 
-            document.getElementById("glb").disabled = true;
-            document.getElementById("marcador").disabled = true;
-        }
-    </script>
+     </script>
 @endsection
  

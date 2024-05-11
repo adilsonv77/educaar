@@ -52,7 +52,7 @@
                                 <th>Marcador</th>
                                 <th>Visualizar</th>
                                 <th>Resultados</th>
-                                <th>Questoes</th>
+                                <th>Questões</th>
                                 <th>Editar</th>
                                 <th>Excluir</th>
                             </tr>

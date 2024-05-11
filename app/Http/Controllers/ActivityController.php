@@ -127,7 +127,7 @@ class ActivityController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
+            'name' => 'required|max:100',
             'glb' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:glb,zip', 'max:40960000'],
             'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg']
         ]);
