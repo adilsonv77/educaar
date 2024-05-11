@@ -32,50 +32,39 @@
             <div class="col-md-9 col-sm-12">
                 <div class="form-group">
                     <label for="">Enunciado</label>
-                    <input type="text" name="question" class="form-control @error('question') is-invalid @enderror"
+                    <input type="text" name="question" maxlength="100" class="form-control @error('question') is-invalid @enderror"
                         id="question" value="{{ old('question', $question) }}" required autocomplete="question"
                         autofocus />
                 </div>
             </div>
-            {{-- <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label for="">Resposta</label>
-                        <select class="form-control name= question[{{$id}}][answer]" aria-label="">
-                            <option selected>Selecione a Resposta</option>
-                            <option value="a">Alternativa A</option>
-                            <option value="b">Alternativa B</option>
-                            <option value="c">Alternativa C</option>
-                            <option value="d">Alternativa D</option>
-                        </select>
-                    </div>
-                </div>  --}}
+           
     </div>
     <div class="row mt-3">
         <div class="col-md-3 col-sm-12">
             <div class="form-group">
                 <label for="">Resposta Correta</label>
-                <input type="text" name="A" class="form-control @error('A') is-invalid @enderror" id="A"
+                <input type="text" name="A"  maxlength="50" class="form-control @error('A') is-invalid @enderror" id="A"
                     value="{{ old('A', $A) }}" required autocomplete="A" autofocus />
             </div>
         </div>
         <div class="col-md-3 col-sm-12">
             <div class="form-group">
                 <label for="">Resposta Errada</label>
-                <input type="text" name="B" class="form-control @error('B') is-invalid @enderror" id="B"
+                <input type="text" name="B" maxlength="50" class="form-control @error('B') is-invalid @enderror" id="B"
                     value="{{ old('B', $B) }}" required autocomplete="B" autofocus />
             </div>
         </div>
         <div class="col-md-3 col-sm-12">
             <div class="form-group">
                 <label for="">Resposta Errada</label>
-                <input type="text" name="C" class="form-control @error('C') is-invalid @enderror" id="C"
+                <input type="text" name="C" maxlength="50" class="form-control @error('C') is-invalid @enderror" id="C"
                     value="{{ old('C', $C) }}" required autocomplete="C" autofocus />
             </div>
         </div>
         <div class="col-md-3 col-sm-12">
             <div class="form-group">
                 <label for="">Resposta Errada</label>
-                <input type="text" name="D" class="form-control @error('D') is-invalid @enderror" id="D"
+                <input type="text" name="D" maxlength="50" class="form-control @error('D') is-invalid @enderror" id="D"
                     value="{{ old('D', $D) }}" required autocomplete="D" autofocus />
             </div>
         </div>
