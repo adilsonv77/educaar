@@ -10,8 +10,15 @@
 
     <head>
         <link rel="stylesheet" href="/css/list_content.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
+
+ 
+    <div>
+        <form action="{{ route('dev.createActivity') }}">
+            @csrf
+            <button class="btn btn-sm btn-primary " id="novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+        </form>
+    </div>
 
     <div class="card">
         <div class="card-body">

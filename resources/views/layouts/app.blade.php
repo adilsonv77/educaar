@@ -143,69 +143,51 @@
                     @endcan
 
                     @can('developer')
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        <li><a class="ai-icon" href="{{ route('developer.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-notepad"></i>
                                 <span class="nav-text">Atividades</span>
                             </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('developer.index') }}">Listar</a></li>
-                                <li><a href="{{ route('dev.createActivity') }}">Adicionar</a></li>
-                            </ul>
                         </li>
                     @endcan
 
                     @can('teacher')
-                        <li><a class=" ai-icon" href="/" aria-expanded="false">
-                                <i class="flaticon-381-home-2"></i>
-                                <span class="nav-text">Página Inicial</span>
-                            </a>
-                        </li>
-
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                       
+                        <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-smartphone-5"></i>
                                 <span class="nav-text">Conteúdos</span>
                             </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('content.index') }}">Listar</a></li>
-                                <li><a href="{{ route('content.create') }}">Adicionar</a></li>
-                            </ul>
                         </li>
 
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        <li><a class="ai-icon" href="{{ route('activity.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-notepad"></i>
                                 <span class="nav-text">Atividades</span>
                             </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('activity.index') }}">Listar</a></li>
-                                <li><a href="{{ route('activity.create') }}">Adicionar</a></li>
-                            </ul>
                         </li>
                     @endcan
                     @can('admin')
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        
+                        <li><a class="ai-icon" href="{{ route('user.indexAluno') }}" aria-expanded="false">
                                 <i class="flaticon-381-user-9"></i>
-                                <span class="nav-text">Usuários</span>
+                                <span class="nav-text">Alunos</span>
                             </a>
-                            <ul aria-expanded="false">
-
-                                <li><a href="{{ route('user.indexAluno') }}">Listar Alunos</a></li>
-                                <li><a href="{{ route('user.createStudent') }}">Adicionar Aluno</a></li>
-                                <li><a href="{{ route('user.indexProf') }}">Listar Profs/Admins</a></li>
-                                <li><a href="{{ route('user.createTeacher') }}">Adicionar Professor</a></li>
-                                <li><a href="{{ route('user.indexDev') }}">Listar Desenvolvedores</a></li>
-                                <li><a href="{{ route('user.createDeveloper') }}">Adicionar Desenvolvedor</a></li>
-
-                            </ul>
                         </li>
 
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        <li><a class="ai-icon" href="{{ route('user.indexProf') }}" aria-expanded="false">
+                                <i class="flaticon-381-user-5"></i>
+                                <span class="nav-text">Professores</span>
+                            </a>
+                        </li>
+
+                        <li><a class="ai-icon" href="{{ route('user.indexDev') }}" aria-expanded="false">
+                                <i class="flaticon-381-user-6"></i>
+                                <span class="nav-text">Desenvolvedores</span>
+                            </a>
+                        </li>
+
+                        <li><a class="ai-icon" href="{{ route('class.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-book"></i>
                                 <span class="nav-text">Disciplinas</span>
                             </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('class.index') }}">Listar</a></li>
-                                <li><a href="{{ route('class.create') }}">Adicionar</a></li>
-                            </ul>
                         </li>
 
                         <li><a class="ai-icon" href="{{ route('anoletivo') }}" aria-expanded="false">
@@ -214,23 +196,15 @@
                             </a>
                         </li>
 
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        <li><a class="ai-icon" href="{{ route('turmasmodelos.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-notebook-4"></i>
                                 <span class="nav-text">Turmas Modelos</span>
                             </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('turmasmodelos.index') }}">Listar</a></li>
-                                <li><a href="{{ route('turmasmodelos.create') }}">Adicionar</a></li>
-                            </ul>
                         </li>
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        <li><a class="ai-icon" href="{{ route('turmas.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-notebook-3"></i>
                                 <span class="nav-text">Turmas</span>
                             </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('turmas.index') }}">Listar</a></li>
-                                <li><a href="{{ route('turmas.create') }}">Adicionar</a></li>
-                            </ul>
                         </li>
 
                         <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -239,18 +213,13 @@
                             </a>
                             <ul aria-expanded="false">
                                 <li><a href="{{ route('user.matricula') }}">Importar arquivo</a></li>
-                                <li><a href="{{ route('turmas.novoAlunoTurma') }}">Aluno novo</a></li>
-                                <li><a href="{{ route('turmas.indexmatricula') }}">Listar</a></li>
+                                 <li><a href="{{ route('turmas.indexmatricula') }}">Listar</a></li>
                             </ul>
                         </li>
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                        <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-smartphone-5"></i>
                                 <span class="nav-text">Conteúdos</span>
                             </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('content.index') }}">Listar</a></li>
-                                <li><a href="{{ route('content.create') }}">Adicionar</a></li>
-                            </ul>
                         </li>
                     @endcan
                 </ul>
@@ -261,12 +230,7 @@
 
     @section('style')
         <style>
-            /* .nav-header {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            } */
-        </style>
+         </style>
     @endsection
 
 

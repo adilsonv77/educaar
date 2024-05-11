@@ -228,7 +228,7 @@ class TurmaController extends Controller
             AlunoTurma::create(['turma_id' => $data['turma'], 'aluno_id' => $data['aluno_id']]);
         }
 
-        return redirect('/turmas');
+        return redirect(route('turmas.indexmatricula'));
     }
 
     public function indexmatricula(Request $request)

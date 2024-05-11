@@ -20,9 +20,8 @@
                     {{-- <livewire:matricula-novo-aluno :nome="$nome" :anoletivo="$anoletivo" /> --}}
                     @livewire('matricula-novo-aluno', ['nome' => $nome, 'anoletivo' => $anoletivo])
 
-
+                </form>
             </div>
-            </form>
         </div>
     </div>
 @endsection

@@ -24,7 +24,7 @@ use UConverter;
 class UserController extends Controller
 {
 
-    private function doIndex(Request $request, $userindex, $tipo, $tipo2)
+    private function doIndex(Request $request, $userindex, $tipo, $tipo2, $userCreate)
     {
         if (Auth::user()->type != 'admin') {
             return redirect('/');
@@ -45,7 +45,7 @@ class UserController extends Controller
 
         $users = $wusers->paginate(20);
 
-        return view('pages.user.index', compact('users', 'usuarios', 'userindex'));
+        return view('pages.user.index', compact('users', 'usuarios', 'userindex', 'userCreate'));
     }
 
     public function index(Request $request)
@@ -55,16 +55,16 @@ class UserController extends Controller
 
     public function indexAluno(Request $request)
     {
-        return $this->doIndex($request, 'user.indexAluno', 'student', '');
+        return $this->doIndex($request, 'user.indexAluno', 'student', '', 'user.createStudent');
     }
 
     public function indexProf(Request $request)
     {
-        return $this->doIndex($request, 'user.indexProf', 'teacher', 'admin');
+        return $this->doIndex($request, 'user.indexProf', 'teacher', 'admin', 'user.createTeacher');
     }
     public function indexDev(Request $request)
     {
-        return $this->doIndex($request, 'user.indexDev', 'developer', '');
+        return $this->doIndex($request, 'user.indexDev', 'developer', '', 'user.createDeveloper');
     }
 
     public function createStudent()
@@ -191,84 +191,6 @@ class UserController extends Controller
             ->where('ano_id', $anoletivo->id)
             ->get();
         $turma_id = 0;
-
-
-
-
-        //     $data = $request->all();
-
-
-
-
-        //     if (array_key_exists('csv', $data)){
-        //         $csvFile = time().'.'.$request->csv->getClientOriginalExtension();
-        //         $request->csv->move(public_path('uploads'), $csvFile);
-
-        //         $data['csv'] = $csvFile;
-        //     } 
-
-
-        //     // $file=fopen('C:\Users\07949338903\Documents\GitHub\educaar\docs\x.csv','r');
-        //     // while($line = fgetcsv($file) !== FALSE){
-        //     //     print_r($line);
-
-
-        //     // }
-
-        //     // fclose($file);
-
-
-
-
-
-
-
-        //     // $row = 1;
-        //     // if (($handle = fopen("C:\Users\07949338903\Documents\GitHub\educaar\docs\x.csv", "r")) !== FALSE) {
-        //     //     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        //     //         $num = count($data);
-        //     //         return "<p> $num campos na linha $row: <br /></p>\n";
-        //     //         $row++;
-        //     //         for ($c=0; $c < $num; $c++) {
-        //     //             return $data[$c] . "<br />\n";
-        //     //         }
-        //     //     }
-        //     //     fclose($handle);
-        //     // }
-
-
-
-        //     // abre o arquivo CSV
-        //     $file = fopen('C:\Users\07949338903\Documents\GitHub\educaar\docs\x.csv', 'r');
-
-        //     // percorre o arquivo linha por linha
-        //     while (($line = fgetcsv($file)) !== FALSE) {
-        //         // imprime cada linha como um array
-        //         print_r($line);
-        //     }
-        //     var_dump($file);
-        //     // fecha o arquivo
-        //     fclose($file);
-
-
-
-
-
-
-
-        //     $titulo = 'Adicionar Aluno Excel';
-        //     $acao = 'insert';
-        //     $params = [
-        //         'titulo' => $titulo, 
-        //         'acao' => $acao,
-        //         'id' => 0,
-        //         'type' => 'student',
-        //    ];
-
-
-        //     return view('pages.user.registerUserExcel',$params);
-
-
 
         return view('pages.turma.matricula', compact('titulo', 'turmas', 'turma_id'));
     }

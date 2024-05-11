@@ -10,8 +10,7 @@
 
     <head>
         <link rel="stylesheet" href="/css/list_content.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    </head>
+     </head>
 
     <form action="{{ route('content.index') }}" method="GET">
         <div class="form-inline">
@@ -27,6 +26,13 @@
         </datalist>
     </form>
     <br>
+
+    <div>
+        <form action="{{ route('content.create') }}">
+            @csrf
+            <button class="btn btn-sm btn-primary " id="novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+        </form>
+    </div>
 
     <div class="card">
         <div class="card-body">

@@ -9,10 +9,12 @@
 @section('content')
 
   
-    <head>  
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    </head>
-
+    <div>
+        <form action="{{ route('activity.create') }}">
+            @csrf
+            <button class="btn btn-sm btn-primary " id="novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+        </form>
+    </div>
     <form action="{{ route('activity.index') }}" method="GET">
         {{-- <div class="form-inline">
             <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $activity }}"

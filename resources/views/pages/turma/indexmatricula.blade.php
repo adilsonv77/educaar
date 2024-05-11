@@ -8,7 +8,14 @@
 
 @section('content')
 
-    <form action="{{ route('turmas.indexmatricula') }}" method="GET ">
+  
+    <div>
+        <form action="{{ route('turmas.novoAlunoTurma') }}">
+            @csrf
+            <button class="btn btn-sm btn-primary " id="novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+        </form>
+    </div>
+   <form action="{{ route('turmas.indexmatricula') }}" method="GET ">
         @csrf
         <label for="">Informe a turma: (Ano letivo atual {{ $anoletivo->name }})</label>
         <div class="form-inline">

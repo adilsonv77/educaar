@@ -27,7 +27,7 @@ class DeveloperController extends Controller
 
         $activities = $activities->distinct()->paginate(20);
 
-        return view('developer.index', compact('activities'));
+        return view('pages.developer.index', compact('activities'));
     }
 
     /**
@@ -90,7 +90,7 @@ class DeveloperController extends Controller
                     ->get();
 
         
-        return view('developer.selectDevelopers', compact('devs'));
+        return view('pages.developer.selectDevelopers', compact('devs'));
     }
 
     public function store(Request $request)
