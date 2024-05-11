@@ -1,0 +1,44 @@
+Querys das VWS
+
+(-------vw_Activities_qntQuestions---------)
+
+CREATE VIEW vw_Activities_qntQuestions AS 
+SELECT a.id AS activity_id, a.content_id AS content_id, count(q.id) AS QntQuestions
+from acticities AS a
+JOIN questions AS q 
+ON q.activity_id= a.id
+
+GROUP BY activity_id 
+
+
+(--------vw_aluno_QntResposta----------)
+
+CREATE VIEW vw_aluno_QntResposta AS 
+SELECT u.id AS user_id, u.name AS name, count(sta.id) AS QntRespondida, a.id AS activity_id,
+a.content_id as content_id, alunt.turma_id AS turma_id 
+from users AS u
+JOIN alunos_turmas AS alunt 
+ON alunt.aluno_id= u.id
+JOIN student_answers AS sta 
+ON sta.user_id= alunt.aluno_id
+JOIN questions AS q 
+ON sta.question_id= q.id
+JOIN activities AS a 
+ON q.activity_id= a.id
+
+GROUP BY user_id, name, activity_id, content_id, turma_id 
+
+
+(!!!!!!!!!!!!!!!!!!!!!!! ATENÇÃO NÃO PEGAR ESSA ULTIMA QUERY, SOMENTE AS DUAS PRIMEIRAS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
+
+(----------------Query com os resultados -------------------------)
+
+SELECT sub1.Conteudo as Conteudo, COUNT(sub2.user_id) AS QntCompletaram from (SELECT aq.content_id as Conteudo, SUM(QntQuestions) as QntQuestions FROM 
+vw_Activities_qntQuestions as aq
+group by Conteudo) sub1
+JOIN (SELECT user_id, name, sum(QntRespondida) AS QntRespondida, content_id FROM `vw_aluno_QntResposta` WHERE content_id= 9 and turma_id=5
+GROUP BY user_id, name
+) AS sub2
+ON sub1.Conteudo= sub2.content_id
+WHERE sub2.QntRespondida = sub1.QntQuestions 
+GROUP BY Conteudo
