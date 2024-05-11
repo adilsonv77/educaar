@@ -4,7 +4,7 @@ Querys das VWS
 
 CREATE VIEW vw_Activities_qntQuestions AS 
 SELECT a.id AS activity_id, a.content_id AS content_id, count(q.id) AS QntQuestions
-from acticities AS a
+from activities AS a
 JOIN questions AS q 
 ON q.activity_id= a.id
 
