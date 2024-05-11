@@ -46,7 +46,7 @@
                                 <th>Série</th>
                                 <th>Fechar</th> 
                                 <th>Selecionar Devs</th>
-                                <th>Resultados</th>
+                                @can('teacher')<th>Resultados</th>@endcan
                                 <th>Editar</th>
                                 <th>Excluir</th>
                             </tr>
@@ -84,7 +84,7 @@
                                             </button>
                                         </form>
                                     </td>
-
+                                    @can('teacher')
                                     <!-- Resultados -->
                                     <td>
                                         <form action="{{ route('content.resultsContents') }}">
@@ -95,7 +95,7 @@
                                             </button>
                                         </form>
                                     </td>
-
+                                    @endcan
                                     <td>
                                      <!-- Editar -->
                                     <form action="{{ route('content.edit', $item->id) }}">

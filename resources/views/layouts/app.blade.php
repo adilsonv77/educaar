@@ -173,13 +173,13 @@
                         </li>
 
                         <li><a class="ai-icon" href="{{ route('user.indexProf') }}" aria-expanded="false">
-                                <i class="flaticon-381-user-5"></i>
+                                <i class="bi-person-hearts"></i>
                                 <span class="nav-text">Professores</span>
                             </a>
                         </li>
 
                         <li><a class="ai-icon" href="{{ route('user.indexDev') }}" aria-expanded="false">
-                                <i class="flaticon-381-user-6"></i>
+                                <i class="bi-person-fill-gear"></i>
                                 <span class="nav-text">Desenvolvedores</span>
                             </a>
                         </li>
