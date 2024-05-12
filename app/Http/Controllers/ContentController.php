@@ -332,7 +332,7 @@ class ContentController extends Controller
         }elseif($type == 'Não fizeram'){
             $results= ResultContentDAO::getStudentDidNotActivities();
         }
-        return view('pages.content.listStudents', compact('results', 'content'));
+        return view('pages.content.listStudents', compact('results', 'content', 'type'));
     
     }
 }

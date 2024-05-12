@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName =  $activity->name;
+    $pageName =  $activity->name . " (".$type.")";
 @endphp
 
 @section('page-name', $pageName)

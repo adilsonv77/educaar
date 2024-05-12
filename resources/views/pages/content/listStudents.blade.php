@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName =  $content->name;
+    $pageName =  $content->name . " (".$type.")";
 @endphp
 
 @section('page-name', $pageName)

@@ -46,9 +46,6 @@ class QuestionController extends Controller
             $activity->name = $aname;
         }
 
-
-
-
         $questions = DB::table("questions")->where('questions.activity_id', $data)->get();
 
         return view('pages.questions.index', compact('questions', 'activity'));
@@ -286,7 +283,7 @@ class QuestionController extends Controller
             $results= ResultActivityDAO::getStudentDidNotQuestions();
         }
 
-        return view('pages.activity.listStudents', compact('results','activity'));
+        return view('pages.activity.listStudents', compact('results','activity','type'));
     }
 }
 //         SELECT DISTINCT t.id, t.nome FROM `turmas` as t 
@@ -301,60 +298,4 @@ class QuestionController extends Controller
 // WHERE td.professor_id= 4 and t.ano_id= 4 and a.id= 15
 
 
-// $wrongQuestions = [];
-// $correctQuestions = [];
-// $numberQuestions = count($request->question);
 
-// $timeLeaveActivity = date('H:i:s');
-
-// $questionTime = date_diff(date_create($timeLeaveActivity), date_create($timeEnterActivity));
-
-// $questionTimeFormated = "{$questionTime->h}:{$questionTime->i}:{$questionTime->s}";
-
-// $studentTimeActivity = new StudentTimeActivity();
-// $studentTimeActivity->activity_id = $activityId;
-// $studentTimeActivity->user_id = Auth::user()->id;
-// $studentTimeActivity->timeEnterActivity = $timeEnterActivity;
-// $studentTimeActivity->timeLeaveActivity = $timeLeaveActivity;
-// $studentTimeActivity->timeGeneral = $questionTimeFormated;
-// $studentTimeActivity->save();
-
-// foreach ($request->question as $key => $question){
-
-//     $studentUser = new StudentAnswer;
-//     $studentUser->activity_id = $activityId;
-//     $studentUser->user_id = Auth::user()->id;
-
-//     foreach ($question as $j=> $answer){
-//         $studentUser->alternative_answered = $answer;
-//         $studentUser->question_id = $j;
-
-//         $currentQuestion = Question::find($j);
-//         $correctQuestion = $currentQuestion->answer;
-
-//         if($answer == $correctQuestion){
-//             $studentUser->correct = true;
-//             $studentUser->wrong = false;
-//             array_push($correctQuestions, $j);
-
-//         }
-
-//         if($answer !== $correctQuestion){
-//             $studentUser->correct = false;
-//             $studentUser->wrong = true;
-//             array_push($wrongQuestions, $j);
-//         }
-
-//     }
-
-
-//     $studentUser->save();
-// }
-
-// $studentGrade = new StudentGrade();
-// $studentGrade->correctQuestions = count($correctQuestions);
-// $studentGrade->wrongQuestions = count($wrongQuestions);
-// $studentGrade->numberQuestions = $numberQuestions;
-// $studentGrade->user_id = Auth::user()->id;
-// $studentGrade->activity_id = $activityId;
-// $studentGrade->save();
