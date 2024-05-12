@@ -38,7 +38,7 @@
             </div>
 
             <div>
-               <button class="btn btn-sm btn-primary " id="novo" wire:click="novo()"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+               <button class="btn btn-sm btn-primary " id="novo" wire:click="novo()" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
             </div>
         </div>
      </div>
@@ -51,7 +51,7 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
-                                <th>Ação</th>
+                                <th>Editar</th>
                                 <th>Excluir</th>
                             </tr>
                         </thead>
@@ -64,14 +64,14 @@
 
 
                                     <td>
-                                        <button class="btn btn-warning" wire:click="editar({{$item->id}})">
+                                        <button class="btn btn-warning" wire:click="editar({{$item->id}})" title="Editar">
                                         <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i>
                                         </button>    
                                    </td>
 
 
                                     <td>
-                                        <button type="button" class="btn btn-danger" wire:click="confirmarExcluir({{$item->id}})">
+                                        <button type="button" class="btn btn-danger" wire:click="confirmarExcluir({{$item->id}})" title="Excluir">
                                         <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
 
                                         </button>
@@ -122,8 +122,7 @@
                     @endif
 
                     <form wire:submit.prevent="salvar">
-                       
-                         <div class="form-group row">
+                        <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }} : </label>
 
                             <div class="col-md-6">
@@ -132,20 +131,19 @@
 
                             </div>
                         </div>               
+                        
+                        <div class="modal-footer">
+                                <button type="button"  data-dismiss="modal" class="btn btn-primary">
+                                    Cancelar
+                                </button>
 
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
                                 <button class="btn btn-primary">
                                     Salvar
                                 </button>
 
-                                <button type="button"  data-dismiss="modal" class="btn btn-primary">
-                                    Cancelar
-                                </button>
-                            </div>
                         </div>
 
+                                               
                     </form>
 
 

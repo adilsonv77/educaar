@@ -11,7 +11,7 @@
      <div>
         <form action="{{ route('class.create') }}">
             @csrf
-            <button class="btn btn-sm btn-primary " id="novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+            <button class="btn btn-sm btn-primary " id="novo" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
         </form>
     </div>
 
@@ -53,40 +53,12 @@
                                     <td>
                                         <form action="{{ route('class.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square h2 " style = "color : #ffffff;"></i></button>
+                                            <button type="submit" class="btn btn-warning" title="Editar"><i class="bi bi-pencil-square h2 " style = "color : #ffffff;"></i></button>
                                         </form>
                                     </td>
 
-                                    {{-- @if ($item->is_checked)
-                                <td>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal"
-                                        data-target="#modal{{ $item->id }}">
-                                        Excluir
-                                    </button>
-                                </td>
-                                @endif --}}
+                                   
                                 </tr>
-                                <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <h3>Você tem certeza que deseja excluir a disciplina
-                                                    <b>{{ $item->name }}?</b>
-                                                </h3>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Cancelar</button>
-                                                <form action="{{ route('class.destroy', $item->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Sim</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             @endforeach
 
                         </tbody>

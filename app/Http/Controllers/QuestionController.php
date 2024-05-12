@@ -39,7 +39,7 @@ class QuestionController extends Controller
 
         $activity = Activity::find($data);
 
-        $aname = mb_substr($activity->name, 0, 10);
+        $aname = mb_substr($activity->name, 0, 30);
         if (strlen($aname) != strlen($activity->name)) {
             $activity->name = $aname . "...";
         } else {

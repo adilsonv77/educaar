@@ -11,7 +11,7 @@
     <div>
         <form action="{{ route('turmasmodelos.create') }}">
             @csrf
-            <button class="btn btn-sm btn-primary " id="novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+            <button class="btn btn-sm btn-primary " id="novo" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
         </form>
     </div>
 
@@ -54,7 +54,7 @@
                                         <form action="{{ route('turmasmodelos.edit', $item->id) }}">
                                             @csrf
                                             <button type="submit"
-                                                class="btn btn-warning"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif>
+                                                class="btn btn-warning"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif title="Editar">
                                                 <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i>
                                                 </button>
                                         </form>
@@ -62,7 +62,7 @@
                                     <td>
                                         <button type="button"
                                             class="btn btn-danger"@if ($item->qntTurmas > 0 || $item->conteudos > 0) disabled @endif
-                                            data-toggle="modal" data-target="#modal{{ $item->id }}">
+                                            data-toggle="modal" data-target="#modal{{ $item->id }}" title="Excluir"">
                                             <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
                                         </button>
                                     </td>

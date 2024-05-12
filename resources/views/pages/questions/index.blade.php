@@ -44,45 +44,45 @@
                                         <button type="button" class="btn btn-danger" data-toggle="modal"
                                             data-target="#modal{{ $item->id }}">
                                             Deletar
-                                        </button>
+                                        </button> 
                                     </td> --}}
 
                                     <td>{{ $item->question }}</td>
                                     <td>
                                         <form action="{{ route('questions.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square h2" style = "color : #ffffff;">
+                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square h2" style = "color : #ffffff;"  title="Editar">
                                         </button>
                                         </form>
                                     </td>
 
                                     <td>
                                         <button type="button" class="btn btn-danger" data-toggle="modal"
-                                            data-target="#modal{{ $item->id }}">
+                                            data-target="#modal{{ $item->id }}" title="Excluir">
                                             <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
                                         </button>
-                                    </td>
-                                </tr>
-                                <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <h3>Você tem certeza que deseja excluir o questions {{ $item->question }}?
-                                                </h3>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Cancelar</button>
-                                                <form action="{{ route('questions.destroy', $item->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Excluir</button>
-                                                </form>
+                                        <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-body">
+                                                        <h3>Você tem certeza que deseja excluir o questions {{ $item->question }}?
+                                                        </h3>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Cancelar</button>
+                                                        <form action="{{ route('questions.destroy', $item->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Excluir</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </td>
+                                </tr>
                             @endforeach
 
                         </tbody>

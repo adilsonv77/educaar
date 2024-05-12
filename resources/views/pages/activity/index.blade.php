@@ -12,7 +12,7 @@
     <div>
         <form action="{{ route('activity.create') }}">
             @csrf
-            <button class="btn btn-sm btn-primary " id="novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+            <button class="btn btn-sm btn-primary " id="novo" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
         </form>
     </div>
     <form action="{{ route('activity.index') }}" method="GET">
@@ -63,17 +63,18 @@
                                     <td style="width: 60%;">{{ $item->name }}</td>
                                     <td style="width: 25%;"><img src="/marcadores/{{ $item->marcador }}"
                                             alt=""width="200" height="200"></td>
-                                    <td style="width: 10%;"><a href="/activity/{{ $item->id }}"
-                                            class="btn btn-primary"><i class="bi bi-eye-fill h2" style = "color : #ffffff;"></i></a></td>
+                                    <td style="width: 10%;"><a href="/activity/{{ $item->id }}" class="btn btn-primary" title="Visualizar">
+                                        <i class="bi bi-eye-fill h2" style = "color : #ffffff;"></i>
+                                    </a></td>
 
-                                <td style="width: 10%;">
+                                    <td style="width: 10%;">
                                         <form action="{{ route('activity.results', $item->id) }}">
                                             @csrf
                                             <input type="hidden" name="activity_id" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-success" 
-                                            @if ($item->qtnQuest == 0) disabled @endif
-                                            text-align:center><i class="bi bi-journal-bookmark h2"  
-                                            style = "color : #ffffff;"></i>
+                                            <button type="submit" class="btn btn-success" title="Resultados" 
+                                                @if ($item->qtnQuest == 0) disabled @endif
+                                                text-align:center>
+                                                <i class="bi bi-journal-bookmark h2"  style = "color : #ffffff;"></i>
                                             </button>
                                         </form>
                                     </td>
@@ -83,23 +84,27 @@
                                         <form action="{{ route('questions.index', $item->id) }}">
                                             @csrf
                                             <input type="hidden" name="activity" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-info" text-align:
-                                                center><i class="bi bi-file-earmark-medical-fill h2" style = "color : #ffffff;"></i></button>
+                                            <button type="submit" class="btn btn-info" text-align:center title="Questões">
+                                                <i class="bi bi-file-earmark-medical-fill h2" style = "color : #ffffff;"></i>
+                                            </button>
                                         </form>
                                     </td>
 
                                     <td style="width: 70px;">
                                         <form action="{{ route('activity.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning" text-align:
-                                                center><i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i></button>
+                                            <button type="submit" class="btn btn-warning" text-align:center title="Editar">
+                                                <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i>
+                                            </button>
                                         </form>
                                     </td>
                                     @can('teacher')
                                     <td style="width: 70px;">
                                         <button type="button" class="btn btn-danger"
                                             @if ($item->qtnQuest > 0) disabled @endif data-toggle="modal"
-                                            data-target="#modal{{ $item->id }}"> <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i></button>
+                                            data-target="#modal{{ $item->id }}" title="Excluir"> 
+                                            <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
+                                        </button>
                                     </td>
                                     @endcan
                                 </tr>

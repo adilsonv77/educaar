@@ -11,7 +11,7 @@
     <div>
         <form action="{{ route($userCreate) }}">
             @csrf
-            <button class="btn btn-sm btn-primary " id="novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+            <button class="btn btn-sm btn-primary " id="novo" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
         </form>
     </div>
 
@@ -57,7 +57,7 @@
                                     <td>
                                         <form action="{{ route('user.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i></button>
+                                            <button type="submit" class="btn btn-warning" title="Editar"><i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i></button>
                                         </form>
                                     </td>
 
