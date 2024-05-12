@@ -221,7 +221,7 @@ class QuestionController extends Controller
         $question = Question::find($id);
         $question->delete();
         $activity_id = session()->get('activity_id');
-        return redirect(route('questions.index', $activity_id));
+        return redirect(route('questions.index', ["activity" => $activity_id]));
     }
 
 

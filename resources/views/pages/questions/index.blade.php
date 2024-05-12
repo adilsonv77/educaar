@@ -66,7 +66,7 @@
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-body">
-                                                        <h3>Você tem certeza que deseja excluir o questions {{ $item->question }}?
+                                                        <h3>Você tem certeza que deseja excluir a questão {{ $item->question }}?
                                                         </h3>
                                                     </div>
                                                     <div class="modal-footer">
