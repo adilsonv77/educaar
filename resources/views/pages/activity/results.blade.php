@@ -8,19 +8,13 @@
     $questions_results= $questions; 
 @endphp
 
+@section('style')
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+@endsection
+
 @section('page-name', $pageName)
 
 @section('content')
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-</head>
-<body>
 
   <div id="formTurma">
   <form action="{{ route('activity.results') }}" method="GET ">
@@ -34,7 +28,7 @@
                   @endforeach
               </select>
               <section class="itens-group">
-                  <button class="btn btn-primary "type="submit">Pesquisar</button>
+                  <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
               </section>
           </div>
       </form>
@@ -137,22 +131,27 @@
 
         google.visualization.events.addListener(chart, 'select', selectHandler);
 
+        google.visualization.events.addListener(chart, 'onmouseover', mouseOverHandler);
+        google.visualization.events.addListener(chart, 'onmouseout', mouseOutHandler);
+
+        function mouseOverHandler() {
+          document.getElementById('rosca').style.cursor = 'pointer';
+        }
+        
+        function mouseOutHandler() {
+          document.getElementById('rosca').style.cursor = 'default';
+        }
+
         function selectHandler() {
-        var selectedItem = chart.getSelection()[0];
-        var type= " ";
-        if (selectedItem) {
-        type = data.getValue(selectedItem.row, 0);
-        var url = "{{ route('activity.listStudents', ['type' => 'type_selection']) }}".replace('type_selection', type);
-        window.location.href = url;
-      }
+          var selectedItem = chart.getSelection()[0];
+          var type= " ";
+          if (selectedItem) {
+          type = data.getValue(selectedItem.row, 0);
+          var url = "{{ route('activity.listStudents', ['type' => 'type_selection']) }}".replace('type_selection', type);
+          window.location.href = url;
+        }
 }
     }
 </script>
-</body>
-</html>
-
-
-
-
 
 @endsection

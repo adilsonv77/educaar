@@ -10,19 +10,14 @@
 
 @section('page-name', $pageName)
 
+@section('style')
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+@endsection
+
 @section('content')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-</head>
-<body>
 
   <div id="formTurma">
-  <form action="{{ route('content.resultsContents') }}" method="GET ">
+    <form action="{{ route('content.resultsContents') }}" method="GET ">
           @csrf
           <label for="">Informe a turma:</label>
           <div class="form-inline">
@@ -32,17 +27,16 @@
                           {{ $item->nome }}</option>
                   @endforeach
               </select>
-              <section class="itens-group">
-                  <button class="btn btn-primary "type="submit">Pesquisar</button>
-              </section>
+              <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
           </div>
-      </form>
-      <br>
+    </form>
+
+    <br>
   </div>
   
-<div id="barras" style="width: 1000px; height: 800px;"></div>
-<div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
-<div id="rosca" style="width: 900px; height: 500px;"></div>
+  <div id="barras" style="width: 1000px; height: 800px;"></div>
+  <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
+  <div id="rosca" style="width: 900px; height: 500px;"></div>
 
 <script type="text/javascript">
 
@@ -134,6 +128,17 @@
 
         google.visualization.events.addListener(chart, 'select', selectHandler);
 
+        google.visualization.events.addListener(chart, 'onmouseover', mouseOverHandler);
+        google.visualization.events.addListener(chart, 'onmouseout', mouseOutHandler);
+
+        function mouseOverHandler() {
+          document.getElementById('rosca').style.cursor = 'pointer';
+        }
+        
+        function mouseOutHandler() {
+          document.getElementById('rosca').style.cursor = 'default';
+        }
+
         function selectHandler() {
           var selectedItem = chart.getSelection()[0];
           var type= " ";
@@ -145,8 +150,7 @@
         }
     }
 </script>
-</body>
-</html>
+
 
 
 
