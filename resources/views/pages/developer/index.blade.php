@@ -4,15 +4,13 @@
     $pageName = 'Atividades';
 @endphp
 
+@section('style')
+    <link rel="stylesheet" href="/css/list_content.css">
+@endsection
 @section('page-name', $pageName)
 
 @section('content')
 
-    <head>
-        <link rel="stylesheet" href="/css/list_content.css">
-    </head>
-
- 
     <div>
         <form action="{{ route('dev.createActivity') }}">
             @csrf

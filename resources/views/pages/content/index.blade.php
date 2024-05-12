@@ -4,13 +4,13 @@
     $pageName = 'Conteúdos';
 @endphp
 
+@section('style')
+    <link rel="stylesheet" href="/css/list_content.css">
+@endsection
+
 @section('page-name', $pageName)
 
 @section('content')
-
-    <head>
-        <link rel="stylesheet" href="/css/list_content.css">
-     </head>
 
     <form action="{{ route('content.index') }}" method="GET">
         <div class="form-inline">

@@ -4,15 +4,15 @@
     $pageName = 'Questões';
 @endphp
 
+@section('style')
+    <link rel="stylesheet" href="/css/list_content.css">
+    <link rel="stylesheet" href="/css/list_questions.css">
+@endsection
+
 @section('page-name', $pageName)
 
 @section('content')
 
-    <head>
-        <link rel="stylesheet" href="/css/list_content.css">
-        <link rel="stylesheet" href="/css/list_questions.css">
-    </head>
-    {{-- <a style="display:block;width:100px" style= "padding-right: -100px" href="{{ route('questions.create') }}" class="btn btn-success">Criar</a> --}}
 
     <div class="card">
         <div class="card-header">
