@@ -22,7 +22,7 @@ class ResultContentDAO
         session()->put('turma_id', $turma_id);
         session()->put('content_id', $content_id);
         $totalAlunos = DB::table('alunos_turmas')->where('turma_id', $turma_id)->count();
-
+ 
             // SELECT sub1.Conteudo as Conteudo, COUNT(sub2.user_id) AS QntCompletaram from (SELECT aq.content_id as Conteudo, SUM(QntQuestions) as QntQuestions FROM 
             // vw_Activities_qntQuestions as aq
             // group by Conteudo) sub1
@@ -41,7 +41,8 @@ class ResultContentDAO
         ->whereRaw('sub2.QntRespondida = sub1.QntQuestions')
         ->groupBy('Conteudo')
         ->first();
-    
+        
+
         $resultadoIncompleto=DB::table(DB::raw('(SELECT aq.content_id as Conteudo, SUM(QntQuestions) as QntQuestions FROM vw_Activities_qntQuestions as aq group by Conteudo) sub1'))
         ->select('sub1.Conteudo as Conteudo', DB::raw('COUNT(sub2.user_id) AS QntNCompletaram'))
         ->join(DB::raw("(SELECT user_id, name, sum(QntRespondida) AS QntRespondida, content_id FROM vw_aluno_QntResposta WHERE content_id= $content_id and turma_id=$turma_id GROUP BY user_id, name) AS sub2"), function ($join) {
@@ -51,8 +52,9 @@ class ResultContentDAO
         ->groupBy('Conteudo')
         ->first(); 
 
-        $completo= $resultadoCompleto->QntCompletaram;
-        $incompleto= $resultadoIncompleto->QntNCompletaram;
+        // se todos os alunos completaram entao resultadoIncompleto == null. O mesmo acontece quando nenhum aluno completou com resultadoCompleto
+        $completo= ($resultadoCompleto == null?0:$resultadoCompleto->QntCompletaram);
+        $incompleto= ($resultadoIncompleto == null?0:$resultadoIncompleto->QntNCompletaram);
         $naoFizeram= $totalAlunos - ($completo + $incompleto);
 
         $result= [
