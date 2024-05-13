@@ -42,7 +42,7 @@
     <div id="main-wrapper">
         @auth
             <div class="nav-header" id="logo">
-                <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}" width="120" style="margin-left:23%;margin-top:0.5%"
+                <img src="{{ asset('images/LOGO_VERTICAL.png') }}" width="120" 
                     alt="Imagem" class="img-fluid" id="imagem"> 
 
                 <div class="nav-control" id = "menu">
