@@ -17,7 +17,7 @@
                         <label for="name">Nome* </label>
 
                         <div class="col-md-6">
-                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
+                            <input id="name" type="text" maxlength="100" class="form-control @error('name') is-invalid @enderror"
                                 name="name" value="{{ old('name', $name) }}" required autocomplete="name"
                                 placeholder="Digite aqui o nome do conteúdo" autofocus />
 

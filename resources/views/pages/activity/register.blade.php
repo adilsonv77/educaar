@@ -85,7 +85,7 @@
 
                 <div class="form-group">
                     <label for="">Nome da Atividade*</label>
-                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
+                    <input id="name" type="text" maxlength="100"class="form-control @error('name') is-invalid @enderror" name="name"
                             value="{{ old('name', $name) }}" required autocomplete="name" autofocus/>
                     
                 </div>

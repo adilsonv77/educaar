@@ -14,7 +14,7 @@
 
     <form action="{{ route('content.index') }}" method="GET">
         <div class="form-inline">
-            <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}" list="historico" />
+            <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}" list="historico" />
             <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
         </div>
 

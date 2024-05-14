@@ -24,7 +24,7 @@
             </section>
         </div> --}}
         <div class="form-inline ">
-            <input class="form-control " type="text" name="titulo" id="titulo" value="{{ $activity }}"
+            <input maxlength="100" class="form-control " type="text" name="titulo" id="titulo" value="{{ $activity }}"
                 list="historico" />
             <section class="itens-group">
                 <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
