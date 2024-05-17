@@ -128,6 +128,36 @@ class ResultActivityDAO
             $alunos_nao_fizeram= $sql2->get();
             return $alunos_nao_fizeram;
     }
+    public static function respostasDosAlunos(){
+        /*SELECT u.id as aluno_id, u.name as name, q.id as question_id, sta.alternative_answered as alternativa, sta.correct as Correto from student_answers as sta 
+		Join users as u
+        on sta.user_id= u.id
+        JOIN alunos_turmas as alunt 
+        on alunt.aluno_id= u.id
+        JOIN questions as q 
+        on sta.question_id= q.id
+WHERE alunt.turma_id= 5 AND q.activity_id=15
+ORDER BY name
+*/
+        $turma_id= session()->get('turma_id');
+        $activity_id= session()->get('activity_id');
+
+        $sql= DB::table('student_answers as sta')
+        ->select('u.id as aluno_id', 'u.name as name', 'q.id as question_id', 'sta.alternative_answered as alternativa', 'sta.correct as Correto')
+        ->join('users as u', 'sta.user_id', '=', 'u.id')
+        ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'u.id')
+        ->join('questions as q', 'sta.question_id', '=', 'q.id')
+        ->where([
+            ['alunt.turma_id', '=', $turma_id],
+            ['q.activity_id', '=', $activity_id]
+        ])
+        ->orderBy('name');
+
+        $respostas= $sql->get();
+
+
+        return $respostas;
+    }
 }
 
         /*

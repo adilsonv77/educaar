@@ -39,6 +39,35 @@
 <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 <div id="rosca" style="width: 900px; height: 500px;"></div>
 
+<table class="table">
+  <thead class="thead-info">
+    <tr>
+    <th scope="col">Nome</th>
+      @php
+          $count=1;
+      @endphp
+      @foreach ($questions as $question)
+        <th scope="col">{{ "Q".$count++ }}</th>
+      @endforeach
+    </tr>
+  </thead>
+  <tbody>
+      @php
+          
+      @endphp
+
+        @foreach($respostasSelecionadas as $item)
+              <tr @if($item->Correto==1)class="table-success"@endif class="table-light">
+                <td>{{$item->name}}</td>
+                <td>{{ $item->question_id}}</td>
+                <td>{{ $item->alternativa}}</td>
+              </tr>
+        @endforeach
+  </tbody>
+</table>
+
+
+
 <script type="text/javascript">
 
     var qntCompletas= <?php echo $qntCompletas; ?>;

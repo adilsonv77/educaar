@@ -265,8 +265,10 @@ class QuestionController extends Controller
 
         $result= ResultActivityDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
         $questions=ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);
+        $respostasSelecionadas= ResultActivityDAO::respostasDosAlunos();
 
-        return view('pages.activity.results', compact('result','questions', 'turmas', 'turma', 'activity'));
+
+        return view('pages.activity.results', compact('result','questions', 'turmas', 'turma', 'activity', 'respostasSelecionadas'));
     }
 
     function resultsListStudents($type){
