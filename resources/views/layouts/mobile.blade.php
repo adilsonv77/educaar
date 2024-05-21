@@ -173,6 +173,14 @@
                         <button type="button" class="btn btn-warning" id="b_rotate_x"><span><i  style = "color:#ffffff;"
                                     class="bi bi-arrow-90deg-up" h3></i></span></button>
                     </div>
+                    <div id="buttonRotateX_">
+                        <button type="button" class="btn btn-warning" id="b_rotate_x_"><span><i  style = "color:#ffffff;"
+                                    class="bi bi-arrow-90deg-down" h3></i></span></button>
+                    </div>
+                    <div id="buttonRotateY_">
+                        <button type="button" class="btn btn-warning" id="b_rotate_y_"><span><i  style = "color:#ffffff;"
+                                    class="bi bi-arrow-return-left" h3></i></span></button>
+                    </div>
                     <div id="buttonRotateY">
                         <button type="button" class="btn btn-warning" id="b_rotate_y"><span><i  style = "color:#ffffff;"
                                     class="bi bi-arrow-return-right" h3></i></span></button>

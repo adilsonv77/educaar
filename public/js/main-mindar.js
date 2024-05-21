@@ -58,9 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // inicializa o array
       buttonsAR[0] = document.getElementById("buttonQuestion");
       buttonsAR[1] = document.getElementById("buttonRotateX");
-      buttonsAR[2] = document.getElementById("buttonRotateY");
-      buttonsAR[3] = document.getElementById("buttonZoomIn");
-      buttonsAR[4] = document.getElementById("buttonZoomOut");
+      buttonsAR[2] = document.getElementById("buttonRotateX_");
+      buttonsAR[3] = document.getElementById("buttonRotateY");
+      buttonsAR[4] = document.getElementById("buttonRotateY_");
+      buttonsAR[5] = document.getElementById("buttonZoomIn");
+      buttonsAR[6] = document.getElementById("buttonZoomOut");
 
       qtosBotoes = buttonsAR.length;
 
@@ -161,41 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
       var mindarscanning = document.getElementsByClassName("mindar-ui-scanning");
       mindarscanning[0].style.bottom = "120px";
 
-     // var TBC = new TrackballControls(camera, renderer.domElement);
-     //var TBC = new TrackballControls(camera, document.getElementById("my-ar-container"));
-/*
-     var myarc = document.getElementById("my-ar-container");
-     myarc.onmousedown = function (event) {
-      console.log("onmousedown 0"); 
-    };
-
-/*
-      var elems = document.getElementById("my-ar-container").getElementsByTagName("div");
-      elems[1].style.removeProperty("pointer-events");
-
-      elems[0].onmousedown = function (event) {
-        console.log("onmousedown 0"); 
-      };
-
-      elems[1].onmousedown = function (event) {
-        console.log("onmousedown 1"); 
-      };
-
-      elems[2].onmousedown = function (event) {
-        console.log("onmousedown 2"); 
-      };
-
-      //elems[0].addEventListener( 'mousedown', onMouseDownScene, false );
-
-/*      elems[2].onmousemove = (event) => { 
-        console.log("onmousemove"); 
-      };
-/*
-      elems[0].onmouseup = (event) => { 
-        state = 0;
-        console.log("onmouseup"); 
-      };
-*/
 
       const getFov = () => {
         return Math.floor(
@@ -230,34 +197,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
       });
 
-      const bRotateY = document.getElementById("b_rotate_y");
-      bRotateY.onclick = () => {
+      const fRotateY = (dir) => {
         if (activeScene != null) {
           const delta = clock.getDelta();
           deltaTotal += delta;
 
           if (deltaTotal >= 0.05) {
             //activeScene.rotateY(0.1); //rotateOnAxis rotateOnWorldAxis
-            activeScene.rotateOnWorldAxis(new THREE.Vector3(0,1,0), 0.1);
+            activeScene.rotateOnWorldAxis(new THREE.Vector3(0,1,0), dir);
             deltaTotal = 0;
           }
         }
       };
       
+      const bRotateY = document.getElementById("b_rotate_y");
+      bRotateY.onclick = () => {
+        fRotateY(0.1);
+      }
 
-      const bRotateX = document.getElementById("b_rotate_x");
-      bRotateX.onclick = () => {
+      const bRotateY_ = document.getElementById("b_rotate_y_");
+      bRotateY_.onclick = () => {
+        fRotateY(-0.1);
+      }
+
+      const fRotateX = (dir) => {
         if (activeScene != null) {
           const delta = clock.getDelta();
           deltaTotal += delta;
 
           if (deltaTotal >= 0.05) {
-            activeScene.rotateX(0.1);
+            activeScene.rotateX(dir);
             deltaTotal = 0;
           }
         }
       };
 
+      const bRotateX = document.getElementById("b_rotate_x");
+      const bRotateX_ = document.getElementById("b_rotate_x_");
+      
+      bRotateX.onclick = () => {
+          fRotateX(0.1);
+      };
+
+      bRotateX_.onclick = () => {
+        fRotateX(-0.1);
+    };
 
       const clickZoom = (value, zoomType) => {
         if (value >= 20 && zoomType === "zoomIn") {
