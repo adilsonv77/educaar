@@ -38,30 +38,31 @@
                     </div>
                 </div>
 
-                @csrf
-                <select multiple="multiple" size="10" name="duallistbox_disc[]">
-                    @foreach ($disciplinas as $item)
-                        <option value="{{ $item['id'] }}" @if ($item['selected']) selected="selected" @endif>
-                            {{ $item['name'] }}</option>
-                    @endforeach
-                </select>
+                <div class="form-group">
+                    @csrf
+                    <select multiple="multiple" size="10" name="duallistbox_disc[]">
+                        @foreach ($disciplinas as $item)
+                            <option value="{{ $item['id'] }}" @if ($item['selected']) selected="selected" @endif>
+                                {{ $item['name'] }}</option>
+                        @endforeach
+                    </select>
 
-                <script>
-                    var demo1 = $('select[name="duallistbox_disc[]"]').bootstrapDualListbox({
-                        nonSelectedListLabel: 'Todas as disciplinas',
-                        selectedListLabel: 'Todas as disciplinas para a turma',
-                        bootstrap2Compatible: false,
-                        filterTextClear: "Mostrar tudo",
-                        filterPlaceHolder: "Filtro",
-                        moveAllLabel: "Mover todos",
-                        removeAllLabel: "Remover todos",
-                        infoText: "Mostrando todos os {0}",
-                        infoTextFiltered: "<span class='label label-warning'>Filtrado</span> {0} de {1}",
-                        infoTextEmpty: "Lista vazia"
+                    <script>
+                        var demo1 = $('select[name="duallistbox_disc[]"]').bootstrapDualListbox({
+                            nonSelectedListLabel: 'Todas as disciplinas',
+                            selectedListLabel: 'Todas as disciplinas para a turma',
+                            bootstrap2Compatible: false,
+                            filterTextClear: "Mostrar tudo",
+                            filterPlaceHolder: "Filtro",
+                            moveAllLabel: "Mover todos",
+                            removeAllLabel: "Remover todos",
+                            infoText: "Mostrando todos os {0}",
+                            infoTextFiltered: "<span class='label label-warning'>Filtrado</span> {0} de {1}",
+                            infoTextEmpty: "Lista vazia"
 
-                    });
-                </script>
-
+                        });
+                    </script>
+                </div>
 
                 <div class="form-group row mb-0">
                     <div class="col-md-6 offset-md-4">
