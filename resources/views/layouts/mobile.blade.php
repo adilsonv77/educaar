@@ -28,6 +28,8 @@
 
     @include('sweetalert::alert')
     @livewireStyles
+    @yield('script-head')
+
 </head>
 
 <body class="h-100">
@@ -148,7 +150,7 @@
 
 <footer>
     <div class='nav_bar'>
-        <div class='buttons_ar'>
+        <div class='buttons_ar' id="buttons_footer">
             @if ($showBack)
                 <div id="buttonReturn">       
                     <a href="{{ $back }}"><button type="button" class="btn btn-warning"> <span><i

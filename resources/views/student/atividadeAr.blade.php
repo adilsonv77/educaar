@@ -1,6 +1,25 @@
 @extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => false])
 
 @section('page-name')
+
+@section('script-head')
+    <script>
+        // history.forward();
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var buttonsfooter = document.getElementById("buttons_footer");
+            buttonsfooter.appendChild(document.createElement("div"));
+            
+            var buttonsalvarquestao = document.getElementById("salvarquestao");
+            buttonsfooter.appendChild(buttonsalvarquestao);
+            
+        });
+
+
+    </script>
+
+@endsection
+
 @section('content')
 
 
@@ -42,17 +61,11 @@
                     </div>
                 </div>
         @endforeach
-        <table class="table table-hover table-responsive-sm">
-            <tbody>
-                <tr>
-                    <td>
+                    <div id="salvarquestao">
                         <button type="submit" @if ($respondida == 1) hidden="hidden" @endif
                             class="btn btn-success">Salvar</button>
+                    </div>
     </form>
-    </td>
-    </tr>
-    </tbody>
-    </table>
 
 @section('style')
     <style>
@@ -70,11 +83,5 @@
     </style>
 @endsection
 
-@section('script')
-    <script>
-        history.forward();
-    </script>
-
-@endsection
 
 @endsection
