@@ -33,7 +33,8 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
-                                <th>Tipo</th>
+                                <th>Login</th>
+                                @if ($type == 'developer')<th>Tipo</th>@endif
                                 <th>Editar</th>
                             </tr>
                         </thead>
@@ -43,15 +44,15 @@
                                 <tr>
 
                                     <td>{{ $item->name }}</td>
+                                    <td>{{ $item->username }}</td>
 
-                                    @if ($item->type == 'student')
-                                        <td>Aluno</td>
-                                    @elseif ($item->type == 'teacher')
-                                        <td>Professor</td>
-                                    @elseif ($item->type == 'admin')
-                                        <td>Administrador</td>
-                                    @else
-                                        <td>Desenvolvedor</td>
+
+                                    @if ($type == 'developer')
+                                        @if ($item->type == 'admin')
+                                            <td>Administrador</td>
+                                        @else
+                                            <td>Desenvolvedor</td>
+                                        @endif
                                     @endif
 
                                     <td>

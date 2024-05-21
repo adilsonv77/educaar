@@ -40,12 +40,13 @@ class UserController extends Controller
         $usuarios = $request->titulo;
         if ($usuarios) {
             $r = '%' . $usuarios . '%';
-            $wusers = $wusers->where('name', 'like', $r);
+            $wusers = $wusers->where(DB::raw('concat(name, " - ", username) '), 'like', $r);
         }
 
         $users = $wusers->paginate(20);
+        $type = $tipo;
 
-        return view('pages.user.index', compact('users', 'usuarios', 'userindex', 'userCreate'));
+        return view('pages.user.index', compact('users', 'usuarios', 'userindex', 'userCreate', 'type'));
     }
 
     public function index(Request $request)
@@ -60,11 +61,11 @@ class UserController extends Controller
 
     public function indexProf(Request $request)
     {
-        return $this->doIndex($request, 'user.indexProf', 'teacher', 'admin', 'user.createTeacher');
+        return $this->doIndex($request, 'user.indexProf', 'teacher', '', 'user.createTeacher');
     }
     public function indexDev(Request $request)
     {
-        return $this->doIndex($request, 'user.indexDev', 'developer', '', 'user.createDeveloper');
+        return $this->doIndex($request, 'user.indexDev', 'developer', 'admin', 'user.createDeveloper');
     }
 
     public function createStudent()
@@ -181,7 +182,7 @@ class UserController extends Controller
     }
     public function matricula()
     {
-        $titulo = 'Adicionar alunos';
+        $titulo = 'Importar alunos de arquivo';
 
         $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
@@ -301,6 +302,8 @@ class UserController extends Controller
                         'aluno_id'  => $aluno->id
                     ]);
                 } catch (\Illuminate\Database\QueryException $e) {
+                    //dd($e);
+
                     $aluno2 = User::where('username', $campos[1])->first();
                     if (!AlunoTurma::where('aluno_id', $aluno2->id)->exists()) {
                         $aluno_turma = AlunoTurma::create([
