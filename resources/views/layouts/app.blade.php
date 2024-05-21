@@ -163,6 +163,8 @@
                                 <span class="nav-text">Atividades</span>
                             </a>
                         </li>
+
+                        
                     @endcan
                     @can('admin')
                         

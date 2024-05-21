@@ -43,7 +43,7 @@
         @auth
             <div class="nav-header">
                 <a href="/" class="brand-logo">
-                    <img src="{{ asset('images/LOGO VERTICAL.png') }}" width="70" alt="Imagem"
+                    <img src="{{ asset('images/LOGO_VERTICAL.png') }}" width="70" alt="Imagem"
                         class="img-fluid">{{-- So pra teste --}}
                 </a>
             </div>

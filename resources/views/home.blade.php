@@ -44,6 +44,27 @@
                             <span class="line bg-success"></span>
                         </div>
                     </div>
+
+                    <div class="col-xl-4 col-xxl-6 col-lg-12 col-sm-6">
+                        <div class="card border-card">
+                            <div class="card-body">
+                                <a href="{{ route('content.index') }}">
+                                    <div class="media">
+                                        <div class="media-body mr-3">
+                                            <h2 class="text-success">{{ $fechadoCount }}</h2>
+                                            <span class="position">Fechados</span>
+                                        </div>
+                                        <span class="cd-icon bgl-success">
+                                            <i class="flaticon-381-notepad"></i>
+                                        </span>
+
+                                    </div>
+                                </a>
+                            </div>
+                            <span class="line bg-success"></span>
+                        </div>
+                    </div>
+                   
                    
 
                 </div>
