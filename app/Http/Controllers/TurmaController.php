@@ -20,7 +20,9 @@ class TurmaController extends Controller
     {
 
         $where = DB::table('turmas')
-            ->where('school_id', Auth::user()->school_id);
+            ->select('turmas.id', 'turmas.nome', 'turmas.school_id', 'turmas.ano_id', 'tm.serie')
+            ->where('turmas.school_id', Auth::user()->school_id)
+            ->join('turmas_modelos as tm', 'turmas.turma_modelo_id', '=', 'tm.id');
 
         $data = $request->input('ano_id');
         if ($data) {
@@ -44,6 +46,7 @@ class TurmaController extends Controller
         $turmas = $where->paginate(20);
         $anosletivos = AnoLetivo::where('school_id', Auth::user()->school_id)->get();
 
+        //dd($turmas);
 
         session()->remove('turma_id');
 

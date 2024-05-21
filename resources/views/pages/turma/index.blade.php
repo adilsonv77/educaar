@@ -41,6 +41,7 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
+                                <th>Modelo</th>
                                 <th>Alunos</th>
                                 <th>Disciplinas</th>
                                 <th>Editar</th>
@@ -53,6 +54,7 @@
                                 <tr>
 
                                     <td>{{ $item->nome }}</td>
+                                    <td>{{ $item->serie }}</td>
                                     
                                     <td>
                                         <form action="{{ route('turmas.turmasAlunosIndex', $item->id) }}">
