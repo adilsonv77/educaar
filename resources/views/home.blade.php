@@ -51,7 +51,7 @@
                                 <a href="{{ route('content.index') }}">
                                     <div class="media">
                                         <div class="media-body mr-3">
-                                            <h2 class="text-success">{{ $fechadoCount }}</h2>
+                                            <h2 class="text-success">{{ $activitiesCount }}</h2>
                                             <span class="position">Fechados</span>
                                         </div>
                                         <span class="cd-icon bgl-success">

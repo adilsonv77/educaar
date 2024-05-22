@@ -52,15 +52,17 @@
     </tr>
   </thead>
   <tbody>
-      @php
-          
-      @endphp
 
         @foreach($respostasSelecionadas as $item)
-              <tr @if($item->Correto==1)class="table-success"@endif class="table-light">
-                <td>{{$item->name}}</td>
-                <td>{{ $item->question_id}}</td>
-                <td>{{ $item->alternativa}}</td>
+              <tr class="table-light">
+                <td>{{$item['name']}}</td>
+                @foreach($questions as $question)
+                  @if(isset($item['q'.$question->id]))
+                  <td>{{ $item['q'.$question->id]}}</td>
+                  @else
+                  <td>0</td>
+                  @endif
+                  @endforeach
               </tr>
         @endforeach
   </tbody>

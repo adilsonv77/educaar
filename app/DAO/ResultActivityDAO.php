@@ -16,6 +16,7 @@ class ResultActivityDAO
         session()->put('activity_id', $activityID);
         //total de questões
         $totalQuestions= $where->count();
+        
 
         $sql = DB::table('questions as q')
         ->select('u.id as id','u.name as nome', DB::raw('COUNT(sta.id) as qntRespondida'))
@@ -67,6 +68,7 @@ class ResultActivityDAO
                 'alunos_fizeram_incompleto' => count($alunos_fizeram_incompleto),
                 'alunos_nao_fizeram' => $alunos_nao_fizeram->qntsNaofizeram
             ];
+            
 
         return $result;
     }
@@ -141,6 +143,7 @@ ORDER BY name
 */
         $turma_id= session()->get('turma_id');
         $activity_id= session()->get('activity_id');
+        $totalquestoes= session()->get('totalQuestions');
 
         $sql= DB::table('student_answers as sta')
         ->select('u.id as aluno_id', 'u.name as name', 'q.id as question_id', 'sta.alternative_answered as alternativa', 'sta.correct as Correto')
@@ -151,12 +154,42 @@ ORDER BY name
             ['alunt.turma_id', '=', $turma_id],
             ['q.activity_id', '=', $activity_id]
         ])
-        ->orderBy('name');
+        ->orderBy('name')
+        ->orderBy('question_id', 'asc');
 
         $respostas= $sql->get();
+        $questoes_atividade = DB::table('questions as q')->where('q.activity_id', $activity_id)->first()->id;
+        $tabelaresultado = array();
+        $nomealuno = "";
+        $newd = null;
+        foreach ($respostas as $linha) {
+                    
+              // se questao ==1 eu sei que é a primeira linha do aluno então vou pegar o nome do aluno dessa linha e montar uma linha na tabela
+            if ($linha->name <> $nomealuno) {
+                    if ($newd != null){
+                        array_push($tabelaresultado, $newd);
+                    }
+                    $newd = [
+                        'name' => $linha->name,
+                    ];
+                    $nomealuno = $linha->name;
+            } 
+              // extrai o valor da coluna questao
+            
+            //   $idq = descobre o indice de $linha->questaoid em $questoes_atividade
+            $idq = $linha->question_id;
+            $newd['q'.$idq] = $linha->alternativa;
+            $newd['q'.$idq.'correta'] = $linha->Correto;
 
-
-        return $respostas;
+            //   $newd = $newd[
+            //            'q'.$idq => $linha->resposta,
+            //             'q'.$idq.'correta' => $linha->correta
+            //         ]; 
+            
+        }
+        array_push($tabelaresultado, $newd);
+        // dd($tabelaresultado);
+        return $tabelaresultado;
     }
 }
 
