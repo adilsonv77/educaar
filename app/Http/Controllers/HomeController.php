@@ -85,39 +85,23 @@ class HomeController extends Controller
         }
 
         if (Auth::user()->type == 'teacher') {
-            /*
-            $contadorAlunos = 0;
-            $ano_letivo_id = AnoLetivo::where('bool_atual',1)->first()->id;
-            $disciplinas_do_professor = DisciplinaProfessor::where('professor_id', Auth::user()->id)
-                        ->where('anoletivo_id', $ano_letivo_id)
-                        ->pluck('disciplina_id');
-            $alunos_disciplinas = Matricula::whereIn('disciplina_id', $disciplinas_do_professor)->get();
-        
-            $alunos = array();
-
-            foreach($alunos_disciplinas as $aluno) {
-
-                array_push($alunos, User::where('id', $aluno->id)->get());
-                $contadorAlunos++;
-            }
-            
-            $activitiesCount = $contadorAtividades;
-            $usersCount = $contadorAlunos;
-            $contentCount = $content->count();
-*/
+         
             DB::enableQueryLog();
             $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, false)
                 ->selectRaw("count(distinct(contents.id)) as quantos")->get();
             //dd(DB::getQueryLog());
             $activities = ActivityDAO::buscarActivitiesDoProf(Auth::user()->id, false)
                 ->selectRaw("count(distinct(activities.id)) as quantos")->get();
+                
+            $fechados = ContentDAO::buscarContentsDoProf(Auth::user()->id, false)
+                ->selectRaw("count(distinct(contents.fechado)) as quantos")->get();
 
+            $fechadoCount = $fechados[0] -> quantos;
             $activitiesCount = $activities[0]->quantos;
-            // $usersCount = UserDAO::buscarAlunosProf(Auth::user()->id);
             $usersCount = 83;
             $contentCount = $contents[0]->quantos;
 
-            return view('home', compact('activitiesCount', 'usersCount', 'contentCount', 'activitiesCount', 'schools'));
+            return view('home', compact('activitiesCount', 'usersCount', 'contentCount', 'activitiesCount', 'schools', 'fechadoCount'));
         }
 
         // return view('home')->withErrors('Login ou senha inválidos. Por favor, tente novamente.');
