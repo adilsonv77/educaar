@@ -73,11 +73,7 @@
           chart: {
             title: 'Atividades respondidas',
           },
-          vAxis: {
-            gridlines:{
-              count:1
-            }
-          },
+          height: 500,
           series: {
             2: {visibleInLegend: false} // Define a coluna da descrição para não ser exibida no gráfico
               }
