@@ -26,16 +26,21 @@
 
 
 }
+div.container{
+  height: 40vh;
+}
 
-
-
+div.logo{
+  height: 100px;
+}
 
 
 .card-body{
   width: 100%;
-  /* display: flex; */
-  /* align-items: center;
-  justify-content: center; */
+  height: 25vh;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */ 
   
 }
 
@@ -68,7 +73,82 @@
   width: 100%;
   border-radius: 25px;
 }
+@media screen and (max-width: 411px) and (min-width: 325px) {
+ 
+  .h-100{
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  
+  #alerta{
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ff9999;
+    color: white;
+    border: 1px solid #cc0000;
+  }
+  
+  #alerta h3{
+  
+    color: white;
+  
+  
+  }
+  div.container{
+    height: 50vh;
+  }
+  
+  div.logo{
+    height: 100px;
+  }
+  
+  
+  .card-body{
+    width: 100%;
+    height: 25vh;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */ 
+    
+  }
+  
+  .background-image img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+  .background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  
+  
+  
+  .item-row.login{
+    display:flex;
+    width: 100%;
+    border-radius: 25px;
+    
+    
+    
+  }
+  .item-row.password{
+    display:flex;
+    width: 100%;
+    border-radius: 25px;
+  }
+
+
+}
 
 @media screen and (max-width: 425px) {
  
@@ -196,9 +276,9 @@
 
 /* Estilos para dispositivos com largura de tela de 992px até 1199px (tablets e dispositivos com telas maiores, e também alguns notebooks e monitores menores) */
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
-  .container{
+  div.container{
     width: 30vw;
-    height:70vh;
+    height: 35vh;
     display: flex;
     flex-direction: column;
     align-items:center;
@@ -209,7 +289,9 @@
     
   }
   
-
+ div.card-body{
+  height: 30vh;
+ }
 
   .logo{
     margin-top: 60px;
@@ -255,9 +337,9 @@
   }
 
 
-  .container{
+  div.container{
     width: 30vw;
-    height:70vh;
+    height:60vh;
     display: flex;
     flex-direction: column;
     align-items:center;
@@ -281,13 +363,13 @@
   
 
 
-  .logo{
-    margin-top: 60px;
+  div.logo{
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     align-items:center;
     width: 15vw;
-    height: 15vh;
+    height: 10vh;
   }
   
  
