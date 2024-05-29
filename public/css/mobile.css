@@ -68,10 +68,6 @@
         /*ate aqui*/
 
         .btn.btn-warning{
-
-            /* background-color: white;
-            border-color: #83368A;
-            color: #0000; */
             height: 100%;
             width: 100%;
 
@@ -96,97 +92,37 @@
 
         }
 
-        
-
-    
-
-        
-
-
-        .buttons_ar{
-            
+        .buttons_ar {
             position: absolute;
             display: grid;
-            grid-template-rows: repeat(1, 1fr);
-            grid-template-columns: repeat(6, 1fr);
-            gap: 2px;
-            padding: 2px;
-            align-items: center;
-            justify-content: center;
-            width: 100vw;
-            
-             
+            grid-template-columns: repeat(8, 1fr); 
+            align-items: center; 
+            justify-content: center; 
+            width: 100%;
+            height: 100%; 
             
         }
-
-
-
+        
+        
         .content-body{
             overflow: auto !important;
             height: 95vh !important;
-
-    
         }
 
          #buttons_ar.hide{
             display: none;
         }
+ 
 
-
-        #buttonReturn{
-
-            grid-column: 1 / span 1; 
-            grid-row: 1 / span 1;
-            z-index: 2;
-
-
-        }
-
-        #buttonQuestion{
-
-            grid-column: 2 / span 1; 
-            grid-row: 1 / span 1;
-            
-            
-
-
-        }
-        #buttonRotateX{
-
-            grid-column: 3 / span 1; 
-            grid-row: 1 / span 1;
-            
-
-        }
-        #buttonRotateY{
-
-            grid-column: 4 / span 1; 
-            grid-row: 1 / span 1;
-            
-
-        }
-        #buttonZoomIn{
-
-            grid-column: 5 / span 1; 
-            grid-row: 1 / span 1;
-            
-
-        }
-        #buttonZoomOut{
-
-            grid-column: 6 / span 1; 
-            grid-row: 1 / span 1;
-            
-
-        }
-
-
-
-        
         
 
         
 
+        #button-back,#button-ar, #b_rotate_x, #b_rotate_x_, #b_rotate_y,#b_rotate_y_, #zoom_mais, #zoom_menos{
+
+            height: 80%;
+            text-align: center;
+        }
         
         
 
