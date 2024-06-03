@@ -151,12 +151,19 @@
 <footer>
     <div class='nav_bar'>
         <div class='buttons_ar' id="buttons_footer">
+
+        @if ($showBack)
+
             
                         <button id="button-back" class="btn btn-warning" onclick="location.href='{{ $back }}'">
                             <span><i style="color:#ffffff;" class="bi bi-arrow-left"></i></span>
                         </button>
+                
+        @endif
 
+                @if ($showOthers)
 
+                
                         <button id="button-ar" class="btn btn-warning" data-href="{{ route('student.questoes') }}">
                             <span><i style="color:#ffffff;" class="bi bi-book"></i></span>
                         </button>
@@ -191,9 +198,9 @@
                             <span><i  style = "color:#ffffff;"class="bi bi-zoom-out "></i></span>
                         </button>
                   
-                
+                        
             </div>
-            
+            @endif
         
     </div>
 </footer>

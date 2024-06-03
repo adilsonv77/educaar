@@ -19,18 +19,7 @@
         }
 
 
-        
-
-
-        /* body {  atualmente nao vi diferenca em ter isso ta parecendo meio inutil
-            
-            padding: 0;
-            margin: 0;
-            font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif;
-            color: #244376;
-            background-color: black;
-            
-        } */
+      
 
 
         /*faco aminima idea do qq isso ta fazenddo*/
@@ -113,10 +102,6 @@
             display: none;
         }
  
-
-        
-
-        
 
         #button-back,#button-ar, #b_rotate_x, #b_rotate_x_, #b_rotate_y,#b_rotate_y_, #zoom_mais, #zoom_menos{
 
