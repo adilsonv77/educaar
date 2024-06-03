@@ -56,13 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const start = async() => {
 
       // inicializa o array
-      buttonsAR[0] = document.getElementById("buttonQuestion");
-      buttonsAR[1] = document.getElementById("buttonRotateX");
-      buttonsAR[2] = document.getElementById("buttonRotateX_");
-      buttonsAR[3] = document.getElementById("buttonRotateY");
-      buttonsAR[4] = document.getElementById("buttonRotateY_");
-      buttonsAR[5] = document.getElementById("buttonZoomIn");
-      buttonsAR[6] = document.getElementById("buttonZoomOut");
+      buttonsAR[0] = document.getElementById("button-ar");
+      buttonsAR[1] = document.getElementById("b_rotate_x");
+      buttonsAR[2] = document.getElementById("b_rotate_x_");
+      buttonsAR[3] = document.getElementById("b_rotate_y_");
+      buttonsAR[4] = document.getElementById("b_rotate_y");
+      buttonsAR[5] = document.getElementById("zoom_mais");
+      buttonsAR[6] = document.getElementById("zoom_menos");
 
       qtosBotoes = buttonsAR.length;
 
