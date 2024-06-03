@@ -173,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
         );
       };
 
-      var deltaTotal = 0;
       var origFov = getFov();
       renderer.setAnimationLoop(() => {
         if (mixer != null) {
@@ -184,9 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
           cameraVar.fov = origFov;
           cameraVar.updateProjectionMatrix();
 
-          deltaTotal = 0;
-
-          if (lastActiveScene != null) {
+         if (lastActiveScene != null) {
             lastActiveScene.rotateY(-lastActiveScene.rotation._y); 
             lastActiveScene.rotateX(-lastActiveScene.rotation._x); 
             lastActiveScene.rotateZ(-lastActiveScene.rotation._z); 
@@ -197,19 +194,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       });
 
+      buttonAR.onclick = () => {
+        location.href = buttonAR.href;
+      }
+
       const fRotateY = (dir) => {
         if (activeScene != null) {
-          /*const delta = clock.getDelta();
-          deltaTotal += delta;
-
-          */
-          //if (deltaTotal >= 0.05) {
-            //activeScene.rotateY(0.1); //rotateOnAxis rotateOnWorldAxis
-            activeScene.rotateOnWorldAxis(new THREE.Vector3(0,1,0), dir);
-            deltaTotal = 0;
-          //}
+           activeScene.rotateOnWorldAxis(new THREE.Vector3(0,1,0), dir);
         }
       };
+      
       
       const bRotateY = document.getElementById("b_rotate_y");
       bRotateY.onclick = () => {
@@ -223,16 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const fRotateX = (dir) => {
         if (activeScene != null) {
-          /*
-          const delta = clock.getDelta();
-          deltaTotal += delta;
-
-          if (deltaTotal >= 0.05) {
-            */
-            activeScene.rotateX(dir);
-            /*
-            deltaTotal = 0;
-          }*/
+           activeScene.rotateX(dir);
         }
       };
 
