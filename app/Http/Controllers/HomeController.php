@@ -94,7 +94,7 @@ class HomeController extends Controller
                 ->selectRaw("count(distinct(activities.id)) as quantos")->get();
                 
             $fechados = ContentDAO::buscarContentsDoProf(Auth::user()->id, false)
-                ->selectRaw("count(distinct(contents.fechado)) as quantos")->get();
+                ->selectRaw("sum(contents.fechado) as quantos")->get();
 
             $fechadoCount = $fechados[0] -> quantos;
             $activitiesCount = $activities[0]->quantos;
