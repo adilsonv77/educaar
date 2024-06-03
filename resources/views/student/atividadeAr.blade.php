@@ -7,6 +7,7 @@
         // history.forward();
 
         document.addEventListener("DOMContentLoaded", function() {
+           
             var buttonsfooter = document.getElementById("buttons_footer");
             buttonsfooter.appendChild(document.createElement("div"));
             
@@ -14,6 +15,10 @@
             buttonsfooter.appendChild(buttonsalvarquestao);
             
         });
+
+        function submitForm() {
+            document.questoesform.submit();
+        }
 
 
     </script>
@@ -40,7 +45,7 @@
 @section('content')
 
 
-    <form action="{{ route('student.store') }}">
+    <form name="questoesform" action="{{ route('student.store') }}">
         @foreach ($questions as $item)
             @csrf
             <div class="">
@@ -79,8 +84,8 @@
                 </div>
         @endforeach
                     <div id="salvarquestao">
-                        <button type="submit" @if ($respondida == 1) hidden="hidden" @endif
-                            class="btn btn-success">Salvar</button>
+                        <button @if ($respondida == 1) hidden="hidden" @endif
+                            class="btn btn-success" onclick="submitForm()">Salvar</button>
                     </div>
     </form>
 
