@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.onTargetFound = () => {
             buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
 
-            var bq = document.getElementById("button_question");
+            var bq = document.getElementById("button-ar");
             bq.style.backgroundColor = anchor.clazz;
 
             if (anchor.glb.animations.length > 0) {
