@@ -199,14 +199,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const fRotateY = (dir) => {
         if (activeScene != null) {
-          const delta = clock.getDelta();
+          /*const delta = clock.getDelta();
           deltaTotal += delta;
 
-          if (deltaTotal >= 0.05) {
+          */
+          //if (deltaTotal >= 0.05) {
             //activeScene.rotateY(0.1); //rotateOnAxis rotateOnWorldAxis
             activeScene.rotateOnWorldAxis(new THREE.Vector3(0,1,0), dir);
             deltaTotal = 0;
-          }
+          //}
         }
       };
       
@@ -222,13 +223,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const fRotateX = (dir) => {
         if (activeScene != null) {
+          /*
           const delta = clock.getDelta();
           deltaTotal += delta;
 
           if (deltaTotal >= 0.05) {
+            */
             activeScene.rotateX(dir);
+            /*
             deltaTotal = 0;
-          }
+          }*/
         }
       };
 
