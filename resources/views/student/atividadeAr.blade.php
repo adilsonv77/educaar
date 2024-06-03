@@ -18,6 +18,23 @@
 
     </script>
 
+    <style>
+        input[type="radio"] {
+            border: 0px;
+            width: 7%;
+            height: 2em;
+        }
+
+        .form-check-label {
+
+            font-family: arial;
+            margin-left: 15px;
+            margin-top: 5px;
+
+        }
+    </style>
+
+
 @endsection
 
 @section('content')
@@ -68,20 +85,7 @@
     </form>
 
 @section('style')
-    <style>
-        input[type="radio"] {
-            border: 0px;
-            width: 7%;
-            height: 2em;
-        }
-
-        .form-check-label {
-
-            font-family: arial;
-
-        }
-    </style>
-@endsection
+ @endsection
 
 
 @endsection
