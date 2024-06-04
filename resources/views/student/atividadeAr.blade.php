@@ -1,6 +1,19 @@
 @extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => false])
 
 @section('page-name')
+@section('style')
+<style>
+.scroll {
+            margin: 4px, 4px;
+            padding: 4px;
+
+            height: 90%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            text-align: justify;
+        }
+</style>
+ @endsection
 
 @section('script-head')
     <script>
@@ -37,6 +50,7 @@
             margin-top: 5px;
 
         }
+
     </style>
 
 
@@ -44,7 +58,7 @@
 
 @section('content')
 
-
+<div class="scroll">
     <form name="questoesform" action="{{ route('student.store') }}">
         @foreach ($questions as $item)
             @csrf
@@ -88,9 +102,7 @@
                             class="btn btn-success" onclick="submitForm()">Salvar</button>
                     </div>
     </form>
-
-@section('style')
- @endsection
+</div>
 
 
 @endsection
