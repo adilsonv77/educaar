@@ -30,6 +30,13 @@
         @endforeach
     </span>
     
+    <div id="barradeprogresso">
+        <div class="progress" style="height: 20px">
+            <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            Carregando</div>
+        </div>
+    </div>
+
     <div id="my-ar-container">
     </div>
 

@@ -18,18 +18,26 @@ var qtosBotoes = 0;
 // inspirado no OrbitControl
 var state = 0;  // 1 - rotacionar
 var rotateStart = new THREE.Vector2();
+function mostrarAvanco(percent) {
+  var pb = document.getElementById("progressbar");
+  pb.style = "width: " + percent + "%";
+
+};
 
 function loadGLTF(path) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
     loader.load(path, (gltf) => {
       resolve(gltf);
+    }, (xhr) => {
+     mostrarAvanco( ( xhr.loaded / xhr.total * 100 ) );
     });
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   
+ 
   
   function onMouseDownScene(event) { 
     event.preventDefault();
@@ -55,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const start = async() => {
 
-      // inicializa o array
+       // inicializa o array
       buttonsAR[0] = document.getElementById("button-ar");
       buttonsAR[1] = document.getElementById("b_rotate_x");
       buttonsAR[2] = document.getElementById("b_rotate_x_");
@@ -68,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       hideButtons();
 
+   
       buttonAR = document.getElementById("button-ar");
 
       const mind = document.getElementById("mind");
@@ -155,6 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
       }
 
+      let barradeprogresso = document.getElementById("barradeprogresso");
+      barradeprogresso.style.display = "none";
+
+      let myarcontainer = document.getElementById("my-ar-container");
+      myarcontainer.style.display = "";
 
       const clock = new THREE.Clock();
       await mindarThree.start();
