@@ -108,6 +108,11 @@
             height: 80%;
             text-align: center;
         }
+
+        #b_rotate_x_{
+
+            transform: rotate(180deg);
+        }
         
         
 
