@@ -11,12 +11,12 @@
                                 <a href="{{ route('content.index') }}">
                                     <div class="media">
                                    
-                                        <div class="media-body mr-3">
+                                        <div class="media-body p-0 ">
                                             <h2 class="text-secondary">{{ $contentCount }}</h2>
                                             <span class="position">Conteúdos</span>
                                         </div>
-                                        <div class="media-body mr-3">
-                                            <h2 class="text-success">{{ $fechadoCount }}</h2>
+                                        <div class="align-self-center pl-2">
+                                            <h3 class="text-warning">{{ $fechadoCount }}</h3>
                                             <span class="position">Fechados</span>
                                         </div>
                                         <span class="cd-icon bgl-secondary">
