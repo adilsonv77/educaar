@@ -15,10 +15,12 @@
                                             <h2 class="text-secondary">{{ $contentCount }}</h2>
                                             <span class="position">Conteúdos</span>
                                         </div>
-                                        <div class="align-self-center pl-2">
-                                            <h3 class="text-warning">{{ $fechadoCount }}</h3>
-                                            <span class="position">Fechados</span>
-                                        </div>
+                                        @if($fechadoCount>0)
+                                            <div class="align-self-center pl-2">
+                                                <h3 class="text-warning">{{ $fechadoCount }}</h3>
+                                                <span class="position">Fechados</span>
+                                            </div>
+                                        @endif
                                         <span class="cd-icon bgl-secondary">
                                             <i class="flaticon-381-smartphone-5"></i>
                                         </span>

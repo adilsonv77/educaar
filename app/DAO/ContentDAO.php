@@ -17,7 +17,7 @@ class ContentDAO {
             join turmas on turmas_disciplinas.turma_id = turmas.id
             join contents on turmas.turma_modelo_id = contents.turma_id and
                             turmas_disciplinas.disciplina_id = contents.disciplina_id
-            where professor_id = 4 and ano_id = 1
+            where professor_id = 4 and ano_id = 5
         */
         $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();        

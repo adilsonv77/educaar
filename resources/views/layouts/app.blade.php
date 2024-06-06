@@ -42,8 +42,10 @@
     <div id="main-wrapper">
         @auth
             <div class="nav-header" id="logo">
-                <img src="{{ asset('images/LOGO_VERTICAL.png') }}" width="120" 
-                    alt="Imagem" class="img-fluid" id="imagem"> 
+                <a href="home">
+                    <img src="{{ asset('images/LOGO_VERTICAL.png') }}" width="120" 
+                        alt="Imagem" class="img-fluid" id="imagem"> 
+                </a>
 
                 <div class="nav-control" id = "menu">
                     <div class="hamburger">
