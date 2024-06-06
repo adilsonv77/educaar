@@ -15,7 +15,7 @@
                                             <h2 class="text-secondary">{{ $contentCount }}</h2>
                                             <span class="position">Conteúdos</span>
                                         </div>
-                                        @if($fechadoCount>0)
+                                        @if($contentCount>0)
                                             <div class="align-self-center pl-2">
                                                 <h3 class="text-warning">{{ $fechadoCount }}</h3>
                                                 <span class="position">Fechados</span>
