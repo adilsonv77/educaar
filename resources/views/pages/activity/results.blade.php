@@ -10,6 +10,8 @@
 
 @section('style')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 @endsection
 
 @section('page-name', $pageName)
@@ -39,7 +41,7 @@
 <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 <div id="rosca" style="width: 900px; height: 500px;"></div>
 
-<table class="table">
+<table id="table" class="table table-bordered">
   <thead class="thead-info">
     <tr>
     <th scope="col">Nome</th>
@@ -47,7 +49,7 @@
           $count=1;
       @endphp
       @foreach ($questions as $question)
-        <th scope="col">{{ "Q".$count++ }}</th>
+        <th id="Q{{ $count }}" data-bs-toggle="tooltip" title="Q{{ $count }}" scope="col">{{ "Q".$count++ }}</th>
       @endforeach
     </tr>
   </thead>
@@ -58,16 +60,17 @@
                 <td>{{$item['name']}}</td>
                 @foreach($questions as $question)
                   @if(isset($item['q'.$question->id]))
-                  <td>{{ $item['q'.$question->id]}}</td>
+                  <td data-bs-toggle="tooltip" title="Tooltip para Q{{ $question->id }}"
+                  @if($item['q'.$question->id.'correta']==1)class="table-success"
+                    @elseif($item['q'.$question->id.'correta']==0) class="table-danger"@endif >{{ $item['q'.$question->id]}}</td>
                   @else
-                  <td>0</td>
+                  <td class="table-warning">0</td>
                   @endif
                   @endforeach
               </tr>
         @endforeach
   </tbody>
 </table>
-
 
 
 <script type="text/javascript">
@@ -84,10 +87,9 @@
         drawBarChart();
         drawPieChart();
     }
+    const map1 = new Map();
 
     function drawBarChart() {
-
-      const map1 = new Map();
 
           var data = new google.visualization.DataTable();
           data.addColumn('string','Questões');
@@ -96,9 +98,12 @@
           data.addColumn({type: 'string', role: 'annotation'}); // Coluna de descrição sem ser exibida no gráfico
 
           var count = 1;
+          var titleTable=null;
           questoes_resultados.forEach((question)=>{
             var value = "Q"+count++; 
             map1.set(value, [question.quntRespondCerto, question.qntRespondida, question.questao]);
+            titleTable= document.getElementById(value);
+            titleTable.setAttribute('title', question.questao);
             data.addRow([value, question.quntRespondCerto, question.qntRespondida, question.questao ]);
           });
 
@@ -181,8 +186,21 @@
           var url = "{{ route('activity.listStudents', ['type' => 'type_selection']) }}".replace('type_selection', type);
           window.location.href = url;
         }
-}
     }
+}
+
+// Inicialização dos tooltips após o carregamento da página
+document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
 </script>
+
+<!-- jQuery, Popper.js, and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
 @endsection
