@@ -96,9 +96,12 @@ class HomeController extends Controller
             $fechados = ContentDAO::buscarContentsDoProf(Auth::user()->id, false)
                 ->selectRaw("sum(contents.fechado) as quantos")->get();
 
+            $alunosProf = UserDAO::buscarAlunosProf(Auth::user()->id)
+                ->selectRaw("count(distinct(u.id)) as quantos")->get();
+
             $fechadoCount = $fechados[0] -> quantos;
             $activitiesCount = $activities[0]->quantos;
-            $usersCount = 83;
+            $usersCount = $alunosProf[0]->quantos;
             $contentCount = $contents[0]->quantos;
 
             return view('home', compact('activitiesCount', 'usersCount', 'contentCount', 'activitiesCount', 'schools', 'fechadoCount'));

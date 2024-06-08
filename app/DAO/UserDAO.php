@@ -23,12 +23,8 @@ class UserDAO
             ->where([
                 ['turmas_disciplinas.professor_id', '=', $profid],
                 ['turmas.ano_id', '=', $anoletivoAtual->id]
-            ])
-            ->count();
-        /*
-        if ($usarprojecao)
-            $sql = $sql->select('contents.*');
-        */
+            ]);
+
         return $sql;
     }
 }
