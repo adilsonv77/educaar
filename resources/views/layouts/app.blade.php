@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <link href="{{ asset('css/app.css?v=' . filemtime(public_path('css/app.css'))) }}" rel="stylesheet">
-    <link rel="stylesheet" href="/css/telainicial.css">
+    <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
     
     <script src="{{ asset('js/mudancaLogo.js?v=' . filemtime(public_path('js/mudancaLogo.js'))) }}" type="module"></script>
     

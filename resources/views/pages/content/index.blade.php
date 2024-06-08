@@ -30,7 +30,7 @@
     <div>
         <form action="{{ route('content.create') }}">
             @csrf
-            <button class="btn btn-sm btn-primary " id="novo" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+            <button class="btn btn-smaller, btn-primary " id="novo" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
         </form>
     </div>
 
@@ -90,7 +90,8 @@
                                         <form action="{{ route('content.resultsContents') }}">
                                             @csrf
                                             <input type="hidden" name="content_id" value="{{ $item->id }}">
-                                            <button type="submit"  class="btn btn-success" title="Resultados">
+                                            <button type="submit"  class="btn btn-success" title="Resultados"
+                                            @if ($item->qtasatividades == 0) disabled @endif>
                                             <i class="bi bi-journal-bookmark h2"  style = "color : #ffffff;"></i>
                                             </button>
                                         </form>
