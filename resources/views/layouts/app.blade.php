@@ -24,6 +24,7 @@
     
     @include('sweetalert::alert')
     @livewireStyles
+    @yield('script-head')
 </head>
 
 <script>

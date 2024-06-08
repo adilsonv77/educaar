@@ -19,6 +19,7 @@ use App\DAO\ResultContentDAO;
 class ContentController extends Controller
 {
 
+
     /**
      * Display a listing of the resource.
      *
@@ -29,17 +30,7 @@ class ContentController extends Controller
         if (Auth::user()->type == 'student') {
             return redirect('/');
         }
-/*
-
-        $where = DB::table('contents')
-            ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
-            ->addSelect([
-                'qtasatividades' => Activity::selectRaw('count(*)')
-                    ->whereColumn('contents.id', '=', 'content_id')
-            ]);
-
-*/
-    DB::enableQueryLog();
+    
         $where = null;
         if (Auth::user()->type == 'admin') {
             $where = DB::table('contents')
@@ -67,12 +58,18 @@ class ContentController extends Controller
             $where = $where->where(DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")")'), 'like', $r);
         }
 
+        $showmodal = session()->get('showmodal');
+        if (!$showmodal) {
+            $showmodal = 0;
+        } else {
+            session()->forget('showmodal');
+        }
         
 
         $contents = $where->paginate(20);
        // dd(DB::getQueryLog());
 
-        return view('pages.content.index', compact('contents', 'content'));
+        return view('pages.content.index', compact('contents', 'content', 'showmodal'));
     }
 
     public function listOfContents()
@@ -204,16 +201,6 @@ class ContentController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    // public function show($id)
-    // {
-    //     if (Auth::user()->type == 'student') {
-    //         return redirect('/');
-    //     }
-
-    //     $content = Content::where('id', $id)->first();
-
-    //     return view('pages.content.results');
-    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -251,14 +238,6 @@ class ContentController extends Controller
         return view('pages.content.create', $params);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Content  $content
-     * @return \Illuminate\Http\Response
-     * 
-     */
     /**
      * Remove the specified resource from storage.
      *
@@ -316,9 +295,19 @@ class ContentController extends Controller
 
         $results= ResultContentDAO::buscarQntFizeramAsTarefas($content->id, $turma->id);
 
-        $activities= ResultContentDAO::atividadesFeitas($content->id, $turma->id);
+        // Se nao existirem resultados entao retorna à página renderizando uma janela modal
+        if ($results['conteudo_completo'] + $results['conteudo_incompleto'] + $results['conteudo_nao_fizeram'] == 0) {
 
-        return view('pages.content.results', compact('results', 'activities', 'turmas', 'turma', 'content'));
+            session()->flash('showmodal', 1);
+            return redirect(route('content.index'));
+
+        } else {
+
+            $activities= ResultContentDAO::atividadesFeitas($content->id, $turma->id);
+
+            return view('pages.content.results', compact('results', 'activities', 'turmas', 'turma', 'content'));
+        }
+        
     }
 
     function resultsListStudents($type){

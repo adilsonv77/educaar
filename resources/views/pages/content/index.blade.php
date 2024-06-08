@@ -10,6 +10,17 @@
 
 @section('page-name', $pageName)
 
+
+@section('script-head')
+    @if($showmodal == 1)
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                $('#modalSemRespostas').modal('show');
+            });
+        </script>
+    @endif
+@endsection
+
 @section('content')
 
     <form action="{{ route('content.index') }}" method="GET">
@@ -135,11 +146,29 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                
                             @endforeach
 
                         </tbody>
                     </table>
-                    <div class="d-flex justify-content-center">
+                    <div class="modal fade" id="modalSemRespostas" tabindex="-1" role="dialog"
+                        aria-labelledby="SemRespostasModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <h3>Nenhum aluno respondeu alguma atividade desse conteúdo.</h3>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">OK</button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="d-flex justify-content-center">
                         {{ $contents->links('vendor.pagination.bootstrap-4') }}
                     </div>
 
