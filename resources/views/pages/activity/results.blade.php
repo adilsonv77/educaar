@@ -41,6 +41,15 @@
 <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 <div id="rosca" style="width: 900px; height: 500px;"></div>
 
+<div class="alert alert-primary">
+  <b>Veja mais detalhes ao passar o mouse sobre o título da questão ou a resposta do aluno.</b>
+  <ul>
+      <li style="list-style:square"> &#9989; : O aluno acertou a questão</li>
+      <li style="list-style:square"> &#10060; : O aluno errou a questão</li>
+      <li style="list-style:square">&#128993; : O aluno não fez a questão</li>
+  </ul>
+</div>
+
 <table id="table" class="table table-bordered">
   <thead class="thead-info">
     <tr>
