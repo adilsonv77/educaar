@@ -60,9 +60,11 @@
                 <td>{{$item['name']}}</td>
                 @foreach($questions as $question)
                   @if(isset($item['q'.$question->id]))
-                  <td data-bs-toggle="tooltip" title="Tooltip para Q{{ $question->id }}"
-                  @if($item['q'.$question->id.'correta']==1)class="table-success"
-                    @elseif($item['q'.$question->id.'correta']==0) class="table-danger"@endif >{{ $item['q'.$question->id]}}</td>
+                    <td data-bs-toggle="tooltip" title="{{ $item['q'.$question->id] }}"
+                    @if($item['q'.$question->id.'correta']==1)class="table-success"
+                    @elseif($item['q'.$question->id.'correta']==0) class="table-danger"@endif >
+                    {{ $item['q'.$question->id.'alternativa']}} 
+                    @if($item['q'.$question->id.'correta']==1) &#9989; @elseif($item['q'.$question->id.'correta']==0) &#10060; @endif</td>
                   @else
                   <td class="table-warning">0</td>
                   @endif

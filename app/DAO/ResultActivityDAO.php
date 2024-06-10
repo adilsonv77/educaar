@@ -158,7 +158,6 @@ ORDER BY name
         ->orderBy('question_id', 'asc');
 
         $respostas= $sql->get();
-        $questoes_atividade = DB::table('questions as q')->where('q.activity_id', $activity_id)->first()->id;
         $tabelaresultado = array();
         $nomealuno = "";
         $newd = null;
@@ -178,6 +177,24 @@ ORDER BY name
             
             //   $idq = descobre o indice de $linha->questaoid em $questoes_atividade
             $idq = $linha->question_id;
+            $questao = DB::table('questions as q')->where('q.id', $idq)->first();
+            switch ($linha->alternativa) {
+                case $questao->a:
+                    $newd['q'.$idq.'alternativa'] = "A";
+                    break;
+                case $questao->b:
+                    $newd['q'.$idq.'alternativa'] = "B";
+                    break;
+                case $questao->c:
+                    $newd['q'.$idq.'alternativa'] = "C";
+                    break;
+                case $questao->d:
+                    $newd['q'.$idq.'alternativa'] = "D";
+                    break;
+                default:
+                $newd['q'.$idq.'alternativa'] = "0";
+                    break;
+            }
             $newd['q'.$idq] = $linha->alternativa;
             $newd['q'.$idq.'correta'] = $linha->Correto;
 
