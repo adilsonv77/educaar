@@ -87,16 +87,23 @@ class HomeController extends Controller
         if (Auth::user()->type == 'teacher') {
          
             DB::enableQueryLog();
-            $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, false)
+
+            $prof_id = Auth::user()->id;
+            
+            $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
+                ->where('bool_atual', 1)->first();
+            $anoletivo_id = $anoletivoAtual->id;
+
+            $contents = ContentDAO::buscarContentsDoProf($prof_id, $anoletivo_id)
                 ->selectRaw("count(distinct(contents.id)) as quantos")->get();
             //dd(DB::getQueryLog());
-            $activities = ActivityDAO::buscarActivitiesDoProf(Auth::user()->id, false)
+            $activities = ActivityDAO::buscarActivitiesDoProf($prof_id, $anoletivo_id)
                 ->selectRaw("count(distinct(activities.id)) as quantos")->get();
                 
-            $fechados = ContentDAO::buscarContentsDoProf(Auth::user()->id, false)
+            $fechados = ContentDAO::buscarContentsDoProf($prof_id, $anoletivo_id)
                 ->selectRaw("sum(contents.fechado) as quantos")->get();
 
-            $alunosProf = UserDAO::buscarAlunosProf(Auth::user()->id)
+            $alunosProf = UserDAO::buscarAlunosProf($prof_id, $anoletivo_id)
                 ->selectRaw("count(distinct(u.id)) as quantos")->get();
 
             $fechadoCount = $fechados[0] -> quantos;

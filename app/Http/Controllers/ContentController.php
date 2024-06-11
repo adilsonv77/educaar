@@ -39,7 +39,10 @@ class ContentController extends Controller
                 ->where('turmas_modelos.school_id', '=', Auth::user()->school_id);
         } else {
 
-            $where = ContentDAO::buscarContentsDoProf(Auth::user()->id, true);
+            $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
+                ->where('bool_atual', 1)->first();
+            $anoletivo_id = $anoletivoAtual->id;
+            $where = ContentDAO::buscarContentsDoProf(Auth::user()->id, $anoletivo_id, true);
         }
 
         $where = $where->select('contents.id as id', 'contents.name as content_name', 'disciplinas.name as disc_name',

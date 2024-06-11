@@ -9,12 +9,10 @@ use Illuminate\Support\Facades\DB;
 class UserDAO
 {
 
-    public static function buscarAlunosProf($profid)
+    public static function buscarAlunosProf($profid, $anoletivoid)
     {
         // ver como fazer, pois se um professor tiver mais de uma disciplina na mesma turma é contado mais de uma vez
 
-        $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
-            ->where('bool_atual', 1)->first();
 
         $sql = DB::table('turmas_disciplinas')
         ->join("alunos_turmas as ta", "ta.turma_id", "=", "turmas_disciplinas.turma_id")
@@ -22,7 +20,7 @@ class UserDAO
         ->join("users as u", "u.id", "=", "ta.aluno_id")
             ->where([
                 ['turmas_disciplinas.professor_id', '=', $profid],
-                ['turmas.ano_id', '=', $anoletivoAtual->id]
+                ['turmas.ano_id', '=', $anoletivoid]
             ]);
 
         return $sql;

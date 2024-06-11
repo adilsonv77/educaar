@@ -37,8 +37,11 @@ class ActivityController extends Controller
         }
         
         //DB::connection()->enableQueryLog();
+        $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
+            ->where('bool_atual', 1)->first();
+        $anoletivo_id = $anoletivoAtual->id;
 
-        $activities = ActivityDAO::buscarActivitiesDoProf(Auth::user()->id, true)
+        $activities = ActivityDAO::buscarActivitiesDoProf(Auth::user()->id, $anoletivo_id)
            ->select('activities.*', 
                 DB::raw('concat(activities.name, " - ", disciplinas.name, " (", contents.name, ")") AS pesq_name'));
 
@@ -79,7 +82,12 @@ class ActivityController extends Controller
         }
         $titulo = 'Atividade Nova';
         $acao = 'insert';
-        $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, true);
+
+        $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
+                ->where('bool_atual', 1)->first();
+        $anoletivo_id = $anoletivoAtual->id;
+
+        $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, $anoletivo_id, true);
         $contents = $contents
             ->select('contents.id as id', 
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name'))
@@ -289,7 +297,12 @@ class ActivityController extends Controller
         $activity = Activity::find($id);
         $titulo = 'Editar Atividades';
         $acao = 'edit';
-        $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, true);
+
+        $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
+            ->where('bool_atual', 1)->first();
+        $anoletivo_id = $anoletivoAtual->id;
+
+        $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, $anoletivo_id, true);
         $contents = $contents
             ->select ('contents.id as id', 
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
