@@ -167,7 +167,12 @@
                             </a>
                         </li>
 
-                        
+                        <li><a class="ai-icon" href="{{ route('teacher.frequencia') }}" aria-expanded="false">
+                                <i class="bi-graph-up"></i>
+                                <span class="nav-text">Acessos</span>
+                            </a>
+                        </li>
+                     
                     @endcan
                     @can('admin')
                         

@@ -98,6 +98,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/students/activity', [App\Http\Controllers\StudentController::class, 'showActivity'])->name('student.showActivity');
     Route::get('/students/store', [App\Http\Controllers\StudentController::class, 'store'])->name('student.store');
     Route::get('/students/questoes', [App\Http\Controllers\StudentController::class, 'questoes'])->name('student.questoes');
+
+    //teacher
+    Route::get('/frequencia', [App\Http\Controllers\FrequenciaController::class, 'index'])->name('teacher.frequencia');
 });
 
 //webservice para receber o arquivo mind
