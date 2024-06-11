@@ -23,11 +23,19 @@ class LoginDAO
         return $login;
     }
 
-    public static function qtosLogins($profid, $turmaid) {
-        // SELECT DATE(entrada_momento) AS MOMENTO, COUNT(*) AS QUANTOS FROM `logins` GROUP BY MOMENTO
-       
+    public static function qtosLogins($profid, $turmaid, $op) {
+        // op = pordia : SELECT DATE(entrada_momento) AS MOMENTO, COUNT(*) AS QUANTOS FROM `logins` GROUP BY MOMENTO
+
+        // op = poralunos : SELECT DATE(entrada_momento) AS MOMENTO, COUNT(distinct user_id) AS QUANTOS FROM logins GROUP BY MOMENTO
+
+        if ($op == "pordia") {
+            $count = "*";
+        } else {
+            $count = "distinct user_id";
+        }
+
         $freq = Login::query()
-                ->select(DB::raw('DATE(entrada_momento) as momento'), DB::raw('count(*) as quantos'))
+                ->select(DB::raw('DATE(entrada_momento) as momento'), DB::raw('count('.$count.') as quantos'))
                 ->groupBy("momento")
                  ->get();
         return $freq;

@@ -36,7 +36,12 @@ class FrequenciaController extends Controller
         }
         $turmas= $where->get();
 
-        $freq = LoginDAO::qtosLogins($prof_id, $turma_id);
+        $acesso = $request->input('acessos');
+        if (!$acesso) {
+            $acesso = "pordia";
+        }
+
+        $freq = LoginDAO::qtosLogins($prof_id, $turma_id, $acesso);
         $maxquantos = 0;
         foreach ($freq as $item) {
             if ($item->quantos > $maxquantos)
@@ -48,29 +53,14 @@ class FrequenciaController extends Controller
             array_push( $ticksquantos, $i );
         }
 
-
-        return view('pages.user.frequencia', compact('turmas', 'turma', 'freq', 'ticksquantos'));
-    }
-
-    public function results(Request $request){
-        $turma_id = $request->input('turma_id');
-
-        $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
-                        ->where('bool_atual', 1)->first();
-
-        $prof_id = Auth::user()->id;
-
-
-        $where = TurmaDAO::buscarTurmasProf($prof_id, $anoletivo->id);
-
-        if ($turma_id) {
-            $turma = Turma::find($turma_id);
+        if ($acesso == "pordia") {
+            $titgrafico = "Acessos por dia";
         } else {
-            $turma = $where->first();
+            $titgrafico = "Alunos que acessaram por dia";
         }
-        $turmas= $where->get();
 
-        return view('pages.user.frequencia', compact('turmas', 'turma'));
+        return view('pages.user.frequencia', compact('turmas', 'turma', 'freq', 'ticksquantos', 'titgrafico', 'acesso'));
     }
-}
+
+ }
 ?>

@@ -31,7 +31,7 @@
         ]);
         
         var options = {
-            title: 'Acessos por dia',
+            title: '{{ $titgrafico }}',
             hAxis: {
               title: 'Data',
               format: 'dd/MM',
@@ -67,23 +67,38 @@
   <div id="formTurma">
     <form action="{{ route('teacher.frequencia') }}" method="GET ">
           @csrf
-          <label for="">Informe a turma:</label>
-          <div class="form-inline">
-              <select class="form-control" name="turma_id">
-                  @foreach ($turmas as $item)
-                      <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
-                          {{ $item->nome }}</option>
-                  @endforeach
-              </select>
-              <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+          
+          <div class="mb-3">
+              <label  class="form-label" for="">Informe a turma : </label>
+              <div class="form-inline">
+                <select class="form-control" name="turma_id">
+                    @foreach ($turmas as $item)
+                        <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
+                            {{ $item->nome }}</option>
+                    @endforeach
+                </select>
+                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+              </div>
           </div>
-    </form>
 
-    <br>
+          <div class="mb-3">
+              <label  class="form-label" >Filtro : </label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="pordia" name="acessos" value="pordia" onchange="this.form.submit();" @if($acesso === 'pordia') checked @endif>
+                <label class="form-check-label" for="pordia">Acessos por dia</label><br>
+              </div>
+              <div class="form-check form-check-inline">  
+                <input class="form-check-input" type="radio" id="poralunos" name="acessos" value="poralunos" onchange="this.form.submit();" @if($acesso !== 'pordia') checked @endif>
+                <label class="form-check-label" for="poralunos">Alunos que acessaram por dia</label><br>
+              </div>
+          </div>
+          <div class="mb-3">
+            <div id="curve_chart" style="width: 1000px; height: 800px;"></div>
+         </div>
+   </form>
+
   </div>
   
-  <div id="curve_chart" style="width: 1000px; height: 800px;"></div>
-  <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 
 
 
