@@ -7,6 +7,9 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Login;
+
 class LoginController extends Controller
 {
     /*
@@ -61,29 +64,35 @@ class LoginController extends Controller
 
 
     public function login(Request $request)
-{
-    $this->validate($request, [
-        'login'    => 'required',
-        'password' => 'required',
-    ]);
-
-    $login_type = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL )
-        ? 'email'
-        : 'username';
-
-    $request->merge([
-        $login_type => $request->input('login')
-    ]);
-
-    if (Auth::attempt($request->only($login_type, 'password'))) {
-        return redirect()->intended($this->redirectPath());
-    }
-
-    return redirect()->back()
-        ->withInput()
-        ->withErrors([
-            'login' => 'Usuário ou senha inválidos',
+    {
+        $this->validate($request, [
+            'login'    => 'required',
+            'password' => 'required',
         ]);
+
+        $login_type = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL )
+            ? 'email'
+            : 'username';
+
+        $request->merge([
+            $login_type => $request->input('login')
+        ]);
+
+        if (Auth::attempt($request->only($login_type, 'password'))) {
+            $data = [];
+            $data['user_id'] = Auth::user()->id;
+            $data['entrada_momento'] = now();
+            
+            Login::create($data);
+
+            return redirect()->intended($this->redirectPath());
+        }
+
+        return redirect()->back()
+            ->withInput()
+            ->withErrors([
+                'login' => 'Usuário ou senha inválidos',
+            ]);
     }
 
 }
