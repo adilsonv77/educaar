@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Login;
+use App\DAO\LoginDao;
 
 class LoginController extends Controller
 {
@@ -93,6 +94,16 @@ class LoginController extends Controller
             ->withErrors([
                 'login' => 'Usuário ou senha inválidos',
             ]);
+    }
+
+    public function logout(Request $request) {
+
+        $login = LoginDAO::ultimoLogin(Auth::user()->id);
+        $login->saida_momento = now();
+        $login->update();
+
+        Auth::logout();
+        return redirect('/login');
     }
 
 }
