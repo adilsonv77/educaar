@@ -264,11 +264,12 @@ class ContentController extends Controller
         $turma_id = $request->input('turma_id');
 
         $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
-        ->where('bool_atual', 1)->first();
+                ->where('bool_atual', 1)->first();
 
         $content_id = session()->get('content');
+        $prof_id = Auth::user()->id;
 
-        $where = ContentDAO::buscarTurmasDoContentsDoProf(Auth::user()->id,$anoletivo->id,$content_id);
+        $where = ContentDAO::buscarTurmasDoContentsDoProf($prof_id, $anoletivo->id, $content_id);
             
         if ($turma_id) {
             $turma = Turma::find($turma_id);
