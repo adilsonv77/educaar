@@ -339,7 +339,7 @@ div.logo{
 
   div.container{
     width: 30vw;
-    height:60vh;
+    height:45vh;
     display: flex;
     flex-direction: column;
     align-items:center;
