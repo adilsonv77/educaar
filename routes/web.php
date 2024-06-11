@@ -82,29 +82,30 @@ Route::middleware(['auth'])->group(function () {
     //fechar
     Route::resource('fechar', App\Http\Controllers\FecharController::class);
     Route::get('/fecharstore', [App\Http\Controllers\FecharController::class, 'store'])->name('fecharconteudo.store');
+
+    //developer
+    Route::get('/developer', [App\Http\Controllers\DeveloperController::class, 'index'])->name('developer.index');
+    Route::get('/developer/createActivity', [App\Http\Controllers\DeveloperController::class, 'create'])->name('dev.createActivity');
+    Route::get('/developer/editActivity', [App\Http\Controllers\DeveloperController::class, 'edit'])->name('dev.editActivity');
+    Route::get('/developer/listDevs', [App\Http\Controllers\DeveloperController::class, 'listDevs'])->name('dev.listDevs');
+    Route::post('/developer/store', [App\Http\Controllers\DeveloperController::class, 'store'])->name('dev.store');
+
+    //students
+    Route::get('/conteudos', [App\Http\Controllers\StudentController::class, 'indexContentStudent'])->name('student.conteudos');
+    Route::get('/students/activity', [App\Http\Controllers\StudentController::class, 'showActivity'])->name('student.showActivity');
+    Route::get('/students/store', [App\Http\Controllers\StudentController::class, 'store'])->name('student.store');
+    Route::get('/students/questoes', [App\Http\Controllers\StudentController::class, 'questoes'])->name('student.questoes');
 });
 
 //webservice para receber o arquivo mind
 Route::post('/receivemind', 'App\Http\Controllers\ReceiveMindController@receive');
 
-//students
-Route::get('/conteudos', [App\Http\Controllers\StudentController::class, 'indexContentStudent'])->name('student.conteudos');
-Route::get('/students/activity', [App\Http\Controllers\StudentController::class, 'showActivity'])->name('student.showActivity');
-Route::get('/students/store', [App\Http\Controllers\StudentController::class, 'store'])->name('student.store');
-Route::get('/students/questoes', [App\Http\Controllers\StudentController::class, 'questoes'])->name('student.questoes');
 
 // nao sao mais usadas.... provavelmente excluir !!!
 Route::get('/students/novas', [App\Http\Controllers\StudentController::class, 'novasAtividades']);
 Route::get('/students/realizadas', [App\Http\Controllers\StudentController::class, 'atividadesRealizadas']);
 
 
-//developer
-
-Route::get('/developer', [App\Http\Controllers\DeveloperController::class, 'index'])->name('developer.index');
-Route::get('/developer/createActivity', [App\Http\Controllers\DeveloperController::class, 'create'])->name('dev.createActivity');
-Route::get('/developer/editActivity', [App\Http\Controllers\DeveloperController::class, 'edit'])->name('dev.editActivity');
-Route::get('/developer/listDevs', [App\Http\Controllers\DeveloperController::class, 'listDevs'])->name('dev.listDevs');
-Route::post('/developer/store', [App\Http\Controllers\DeveloperController::class, 'store'])->name('dev.store');
 
 
 Route::get('/alunoteste', function () {
