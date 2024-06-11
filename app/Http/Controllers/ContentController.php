@@ -197,15 +197,7 @@ class ContentController extends Controller
         return redirect('/content');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-
-
-    /**
+   /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Content  $content

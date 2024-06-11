@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class ActivityDAO
 {
 
-    public static function buscarActivitiesDoProf($profid, $usarprojecao)
+    public static function buscarActivitiesDoProf($profid, $anoletivoid)
     {
         /*
         SELECT distinct activities.* FROM activities
@@ -28,10 +28,7 @@ class ActivityDAO
                     where turmas_disciplinas.professor_id = 5/209 and ano_id = 4
     */
 
-    $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
-        ->where('bool_atual', 1)->first();        
-
-    $sql = DB::table('turmas_disciplinas')
+     $sql = DB::table('turmas_disciplinas')
             
             ->join('turmas','turmas_disciplinas.turma_id','=','turmas.id')
             ->join('contents', function($join) {
@@ -42,7 +39,7 @@ class ActivityDAO
             ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
             //->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_id')
             ->where('turmas_disciplinas.professor_id', '=', $profid)
-            ->where("ano_id", "=", $anoletivoAtual->id)
+            ->where("ano_id", "=", $anoletivoid)
             ->distinct();
 
     /*    
@@ -57,21 +54,8 @@ class ActivityDAO
             ->where("anos_letivos.bool_atual", 1);
 */
 
-            /*
-        if ($usarprojecao)
-            $sql = $sql->select('activities.*');
-*/
-        //dd($sql);
+         //dd($sql);
         return $sql;
     }
 }
 
-/*
-
-
-
-->join("turmas_disciplinas",  function ($join) {
-    $join->on('turmas.id', '=', 'turmas_disciplinas.turma_id')
-        ->on('contents.disciplina_id', '=', 'turmas_disciplinas.disciplina_id');
-})
-*/

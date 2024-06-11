@@ -87,7 +87,7 @@ class ActivityController extends Controller
                 ->where('bool_atual', 1)->first();
         $anoletivo_id = $anoletivoAtual->id;
 
-        $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, $anoletivo_id, true);
+        $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, $anoletivo_id);
         $contents = $contents
             ->select('contents.id as id', 
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name'))
@@ -302,7 +302,7 @@ class ActivityController extends Controller
             ->where('bool_atual', 1)->first();
         $anoletivo_id = $anoletivoAtual->id;
 
-        $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, $anoletivo_id, true);
+        $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, $anoletivo_id);
         $contents = $contents
             ->select ('contents.id as id', 
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')

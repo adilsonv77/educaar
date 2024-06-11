@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class ContentDAO {
 
-    public static function buscarContentsDoProf($profid, $usarprojecao) {
+    public static function buscarContentsDoProf($profid, $anoletivoid) {
 
         // select que pegue quais são as disciplinas e turmas do usuário atual
         // usar essas duas informações para buscar os conteúdos
@@ -19,8 +19,7 @@ class ContentDAO {
                             turmas_disciplinas.disciplina_id = contents.disciplina_id
             where professor_id = 4 and ano_id = 5
         */
-        $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
-            ->where('bool_atual', 1)->first();        
+
 
         $sql = DB::table('turmas_disciplinas')
             
@@ -32,7 +31,7 @@ class ContentDAO {
             ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
             ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_id')
             ->where('professor_id', '=', $profid)
-            ->where("ano_id", "=", $anoletivoAtual->id)
+            ->where("ano_id", "=", $anoletivoid)
             ->distinct();
         /*
         if ($usarprojecao)
