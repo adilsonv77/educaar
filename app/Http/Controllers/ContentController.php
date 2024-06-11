@@ -268,19 +268,7 @@ class ContentController extends Controller
 
         $content_id = session()->get('content');
 
-        $where = DB::table('turmas as t')
-            ->select('t.id as id','t.nome as nome')
-            ->join('turmas_disciplinas as td','td.turma_id', '=', 't.id')
-            ->join('turmas_modelos as tm', 't.turma_modelo_id','=','tm.id')
-            ->join('contents as c', 'c.turma_id', '=', 'tm.id')
-            ->join('activities as a', 'a.content_id', '=', 'c.id')
-            ->where([
-                ['td.professor_id','=', Auth::user()->id],
-                ['t.ano_id','=', $anoletivo->id],
-                ['c.id', '=', $content_id]
-            ])
-            ->distinct();
-
+        $where = ContentDAO::buscarTurmasDoContentsDoProf(Auth::user()->id,$anoletivo->id,$content_id);
             
         if ($turma_id) {
             $turma = Turma::find($turma_id);
