@@ -8,7 +8,7 @@
     $questions_results= $questions; 
 @endphp
 
-@section('style')
+@section('script-head')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
