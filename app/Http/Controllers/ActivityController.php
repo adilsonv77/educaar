@@ -9,6 +9,7 @@ use App\Models\Question;
 use App\Models\StudentAccessActivity;
 use App\Models\StudentTimeActivity;
 use App\Models\StudentAnswer;
+use App\Models\AnoLetivo;
 
 use App\Models\User;
 use App\Models\StudentGrade;
