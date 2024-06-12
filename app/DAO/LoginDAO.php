@@ -36,6 +36,8 @@ class LoginDAO
 
         $freq = Login::query()
                 ->select(DB::raw('DATE(entrada_momento) as momento'), DB::raw('count('.$count.') as quantos'))
+                ->join("alunos_turmas as atu", "atu.aluno_id", "=", "logins.user_id")
+                ->where("atu.turma_id", "=", $turmaid)
                 ->groupBy("momento")
                 ->orderBy("momento")
                  ->get();
