@@ -325,4 +325,47 @@ class TurmaController extends Controller
         }
         return redirect('/turmas');
     }
+
+    public function listarTurmasAlunosProf(Request $request){
+        $turma_id = $request->input('turma_id');
+
+        $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
+        ->where('bool_atual', 1)->first();
+        
+        $where = DB::table('turmas as t')
+            ->select('t.id as id','t.nome as nome', 't.school_id')
+            ->join('turmas_disciplinas as td','td.turma_id', '=', 't.id')
+            ->join('turmas_modelos as tm', 't.turma_modelo_id','=','tm.id')
+            ->join('contents as c', 'c.turma_id', '=', 'tm.id')
+            ->join('activities as a', 'a.content_id', '=', 'c.id')
+            ->where([
+                ['td.professor_id','=', Auth::user()->id],
+                ['t.ano_id','=', $anoletivo->id],
+                ['t.school_id','=', Auth::user()->school_id]
+            ])
+            ->distinct();
+
+        if ($turma_id) {
+            $turma = Turma::find($turma_id);
+            
+        } else {
+            $turma = $where->first();
+        }
+        $turmas= $where->get();
+
+        // dd($turma);
+        $where2 = DB::table('users as u')
+            ->select('u.id as id', 'u.name as nome')
+            ->join('alunos_turmas as at', 'at.aluno_id', '=', 'u.id')
+            ->where([
+                ['at.turma_id', '=', $turma->id],
+                ['u.type', '=', 'student'],
+                ['u.school_id', '=', $turma->school_id]
+            ])
+            ->orderBy('u.name');
+
+            $alunos = $where2->paginate(20);
+
+        return view('pages.turma.listarTurmasAlunosProf', compact('turmas', 'alunos', 'turma'));
+    }
 }

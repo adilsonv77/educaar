@@ -166,6 +166,11 @@
                                 <span class="nav-text">Atividades</span>
                             </a>
                         </li>
+                        <li><a class="ai-icon" href="{{ route('turmas.listarTurmasAlunosProf') }}" aria-expanded="false">
+                                <i class="flaticon-381-user-9"></i>
+                                <span class="nav-text">Alunos</span>
+                            </a>
+                        </li>
 
                         <li><a class="ai-icon" href="{{ route('teacher.frequencia') }}" aria-expanded="false">
                                 <i class="bi-graph-up"></i>
