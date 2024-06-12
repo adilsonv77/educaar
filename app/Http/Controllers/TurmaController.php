@@ -149,14 +149,12 @@ class TurmaController extends Controller
         //return var_dump($data);
         //$turma= Turma::find($data);
 
-
         $disciplinas = DB::table('turmas_disciplinas')
             ->select('disciplinas.name as dname', 'disciplinas.id as did', 'users.id as pid')
             ->join('disciplinas', 'disciplinas.id', '=', 'turmas_disciplinas.disciplina_id')
             ->join('users', 'users.id', '=', 'turmas_disciplinas.professor_id')
             ->where('turma_id', $data)
             ->get();
-
 
         $professores = DB::table('users')
             ->select('users.name', 'users.id')

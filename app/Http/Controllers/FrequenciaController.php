@@ -28,15 +28,16 @@ class FrequenciaController extends Controller
 
         $where = TurmaDAO::buscarTurmasProf($prof_id, $anoletivo->id);
 
+        $turmas= $where->get();
+
         if ($turma_id) {
             $turma = Turma::find($turma_id);
         } else {
             $turma = $where->first();
             $turma_id = $turma->id;
         }
-        $turmas= $where->get();
 
-        $acesso = $request->input('acessos');
+       $acesso = $request->input('acessos');
         if (!$acesso) {
             $acesso = "pordia";
         }
