@@ -3,6 +3,8 @@
 namespace App\DAO;
 
 use App\Models\Login;
+use App\Models\AlunoTurma;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -43,5 +45,24 @@ class LoginDAO
                  ->get();
         return $freq;
     }
-}
+
+    public static function listaUltAcessoAlunos($profid, $turmaid) {
+        /*SELECT u.id, u.name, max(date(entrada_momento)) FROM alunos_turmas as atu 
+              join users u on u.id = atu.aluno_id 
+              left outer join logins on atu.aluno_id = logins.user_id 
+              where atu.turma_id = 5 GROUP by u.id, u.name order by u.name;
+              */
+
+        $lista = AlunoTurma::query()
+                    -> select ("u.id" , "u.name", DB::raw("max(date(entrada_momento))"))
+                    -> join("users u", "u.id", "=", "aluno_id")
+                    -> leftJoin("logins", "aluno_id", "=", "logins.user_id")
+                    -> where("turma_id", "=", $turmaid)
+                    -> groupBy("u.id", "u.name")
+                    -> orderBy("u.name");
+
+        return $lista;
+
+    }
+ }
 ?>

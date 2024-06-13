@@ -11,10 +11,14 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
+  
+    @if($acesso !== 'ultacesso') 
 
     google.charts.load('current', {'packages':['bar', 'corechart']});
     google.charts.setOnLoadCallback(drawStuff);
 
+    @endif
+    
     function drawStuff() {
         drawLineChart();
      }
@@ -88,9 +92,14 @@
                 <label class="form-check-label" for="pordia">Acessos por dia</label><br>
               </div>
               <div class="form-check form-check-inline">  
-                <input class="form-check-input" type="radio" id="poralunos" name="acessos" value="poralunos" onchange="this.form.submit();" @if($acesso !== 'pordia') checked @endif>
+                <input class="form-check-input" type="radio" id="poralunos" name="acessos" value="poralunos" onchange="this.form.submit();" @if($acesso === 'poralunos') checked @endif>
                 <label class="form-check-label" for="poralunos">Alunos que acessaram por dia</label><br>
               </div>
+              <div class="form-check form-check-inline">  
+                <input class="form-check-input" type="radio" id="ultacesso" name="acessos" value="ultacesso" onchange="this.form.submit();" @if($acesso === 'ultacesso') checked @endif>
+                <label class="form-check-label" for="ultacesso">Último acesso de cada aluno</label><br>
+              </div>
+
           </div>
           <div class="mb-3">
             <div id="curve_chart" style="width: 1000px; height: 800px;"></div>
