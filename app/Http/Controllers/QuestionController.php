@@ -152,15 +152,6 @@ class QuestionController extends Controller
         return redirect(route('questions.index', 'activity=' . $id));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Question  $question
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Question $question)
-    {
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -197,18 +188,6 @@ class QuestionController extends Controller
 
         return view('pages.questions.registerQuestions', $params);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Question  $question
-     * @return \Illuminate\Http\Response
-     */
-    // public function update(Request $request, Question $question)
-    // {
-    //     //
-    // }
 
     /**
      * Remove the specified resource from storage.
@@ -251,14 +230,15 @@ class QuestionController extends Controller
             ->distinct();
 
             
+        $turmas= $where->get();
+
         if ($turma_id) {
             $turma = Turma::find($turma_id);
             
         } else {
             $turma = $where->first();
+            $turma_id = $turma->id;
         }
-
-        $turmas= $where->get();
 
         $activity = Activity::find($activity_id);
 
