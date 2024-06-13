@@ -11,27 +11,25 @@
         <div class="card-body">
             @if (!empty($disciplinas))
                 <div class="table-responsive">
-                    <table class="table table-hover table-responsive-sm">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Ação</th>
+                    <form method="POST" action="{{ route('turmas.storeDisciplinaProf') }}">
+                        <table class="table table-hover table-responsive-sm">
+                            <thead>
+                                <tr>
+                                    <th>Disciplina</th>
+                                    <th>Escolha o professor
+                                    </th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                            <form method="POST" action="{{ route('turmas.storeDisciplinaProf') }}">
                                 @csrf
                                 @foreach ($disciplinas as $disc)
                                     <tr>
 
                                         <td>{{ $disc->dname }}</td>
-
-
                                         <td>
                                             <div class="form-group">
-                                                <label for="">Escolha o professor</label>
                                                 <select class="form-control" name="cbx_{{ $disc->did }}">
                                                     @foreach ($professores as $item)
                                                         <option value="{{ $item->id }}"
@@ -41,18 +39,17 @@
                                                 </select>
                                             </div>
                                         </td>
+                                    </tr>
                                 @endforeach
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-6 offset-md-4">
-                                        <button type="submit" class="btn btn-primary">
-                                            Salvar
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </tbody>
-                    </table>
-
+                                    
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">
+                                Salvar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             @else
                 <div>
