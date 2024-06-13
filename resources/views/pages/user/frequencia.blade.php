@@ -16,9 +16,6 @@
 
     google.charts.load('current', {'packages':['bar', 'corechart']});
     google.charts.setOnLoadCallback(drawStuff);
-
-    @endif
-    
     function drawStuff() {
         drawLineChart();
      }
@@ -62,6 +59,9 @@
 
         chart.draw(data, options);
       }
+
+    @endif
+    
 </script>
 
 @endsection
@@ -73,9 +73,9 @@
           @csrf
           
           <div class="mb-3">
-              <label  class="form-label" for="">Informe a turma : </label>
+              <label  class="form-label" for="turma_id">Informe a turma : </label>
               <div class="form-inline">
-                <select class="form-control" name="turma_id">
+                <select class="form-control" name="turma_id" id="turma_id">
                     @foreach ($turmas as $item)
                         <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
                             {{ $item->nome }}</option>
@@ -86,7 +86,7 @@
           </div>
 
           <div class="mb-3">
-              <label  class="form-label" >Filtro : </label>
+              <label  class="form-label" for="pordia">Filtro : </label>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="pordia" name="acessos" value="pordia" onchange="this.form.submit();" @if($acesso === 'pordia') checked @endif>
                 <label class="form-check-label" for="pordia">Acessos por dia</label><br>
@@ -101,9 +101,37 @@
               </div>
 
           </div>
+         
+         @if($acesso === 'ultacesso')
+         <div class="card">
+            <div class="card-body">
+               <div class="table-responsive">
+                  <table class="table table-hover table-responsive-sm">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Acesso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach ($alunos as $item)
+                            <tr>
+                                <td>{{ $item->name }}</td>
+                                <td>@if(!$item->acesso) Nunca @else {{ $item->acesso }} @endif  </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+         @else
           <div class="mb-3">
             <div id="curve_chart" style="width: 1000px; height: 800px;"></div>
-         </div>
+          </div>
+ 
+         @endif
    </form>
 
   </div>

@@ -44,7 +44,7 @@ class FrequenciaController extends Controller
 
         if ($acesso !== "ultacesso") {
 
-            $freq = LoginDAO::qtosLogins($prof_id, $turma_id, $acesso);
+            $freq = LoginDAO::qtosLogins($prof_id, $turma_id, $acesso)->get();
             $maxquantos = 0;
             foreach ($freq as $item) {
                 if ($item->quantos > $maxquantos)
@@ -56,20 +56,21 @@ class FrequenciaController extends Controller
                 array_push( $ticksquantos, $i );
             }
 
-            $compact = compact('turmas', 'turma', 'freq', 'ticksquantos', 'titgrafico', 'acesso');
-        }
-
-        if ($acesso == "pordia") {
-            $titgrafico = "Acessos por dia";
-        } else {
-            if ($acesso == "poraluno") {
-                $titgrafico = "Alunos que acessaram por dia";
+            if ($acesso == "pordia") {
+                $titgrafico = "Acessos por dia";
             } else {
-                $titgrafico = "Último acesso de cada aluno";
+                $titgrafico = "Alunos que acessaram por dia";
             }
+            $compact = compact('turmas', 'turma', 'freq', 'ticksquantos', 'titgrafico', 'acesso');
+        } else {
+            $alunos = LoginDAO::listaUltAcessoAlunos($prof_id, $turma_id);
+            $alunos = $alunos->get();
+            
+            $titgrafico = "Último acesso de cada aluno";
+            $compact = compact('turmas', 'turma', 'alunos', 'titgrafico', 'acesso');
         }
 
-        return view('pages.user.frequencia', $compact);
+         return view('pages.user.frequencia', $compact);
     }
 
  }

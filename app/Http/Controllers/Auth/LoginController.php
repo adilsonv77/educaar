@@ -98,7 +98,7 @@ class LoginController extends Controller
 
     public function logout(Request $request) {
 
-        $login = LoginDAO::ultimoLogin(Auth::user()->id);
+        $login = LoginDAO::ultimoLogin(Auth::user()->id)->first();
         $login->saida_momento = now();
         $login->update();
 

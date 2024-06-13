@@ -20,8 +20,7 @@ class LoginDAO
         $login = Login::query()
                         ->where('user_id', $profid)
                         ->latest() // ordenado por created_at que tem o mesmo valor do entrada_momento
-                        ->take(1)
-                        ->first();
+                        ->take(1);
         return $login;
     }
 
@@ -41,8 +40,7 @@ class LoginDAO
                 ->join("alunos_turmas as atu", "atu.aluno_id", "=", "logins.user_id")
                 ->where("atu.turma_id", "=", $turmaid)
                 ->groupBy("momento")
-                ->orderBy("momento")
-                 ->get();
+                ->orderBy("momento");
         return $freq;
     }
 
@@ -54,8 +52,8 @@ class LoginDAO
               */
 
         $lista = AlunoTurma::query()
-                    -> select ("u.id" , "u.name", DB::raw("max(date(entrada_momento))"))
-                    -> join("users u", "u.id", "=", "aluno_id")
+                    -> select ("u.id" , "u.name", DB::raw("max(date(entrada_momento)) as acesso"))
+                    -> join("users as u", "u.id", "=", "aluno_id")
                     -> leftJoin("logins", "aluno_id", "=", "logins.user_id")
                     -> where("turma_id", "=", $turmaid)
                     -> groupBy("u.id", "u.name")
