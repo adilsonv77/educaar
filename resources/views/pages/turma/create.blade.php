@@ -15,9 +15,10 @@
 
                     <div class="form-group">
                         <label for="name">Nome Da Turma* </label>
-                        <div class="col-md-6">
+                        <div class="col-md-10">
                             <input id="nome" type="text" class="form-control @error('nome') is-invalid @enderror"
-                                name="nome" value="{{ old('nome', $nome) }}" required autocomplete="nome" autofocus />
+                                name="nome" value="{{ old('nome', $nome) }}" required autocomplete="nome" autofocus 
+                                maxlength="100"/>
                         </div>
 
                         <br>

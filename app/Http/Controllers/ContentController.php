@@ -62,7 +62,7 @@ class ContentController extends Controller
         }
 
         $contents = $where->paginate(20);
-       // dd(DB::getQueryLog());
+        //$turmasAlunos = UserDAO::quantosAlunosPorTurma(Auth::user()->id)->get();
 
         return view('pages.content.index', compact('contents', 'content'));
     }

@@ -2,48 +2,16 @@
 
 @php
     $pageName= 'Resultados de '. $content->name;
-    $qntCompletas= $results['conteudo_completo'];
-    $qntIncompletas= $results['conteudo_incompleto'];
-    $qntNaoFizeram= $results['conteudo_nao_fizeram'];
-    $activities= $activities;
 @endphp
 
 @section('page-name', $pageName)
 
 @section('script-head')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-@endsection
-
-@section('content')
-
-  <div id="formTurma">
-    <form action="{{ route('content.resultsContents') }}" method="GET ">
-          @csrf
-          <label for="">Informe a turma:</label>
-          <div class="form-inline">
-              <select class="form-control" name="turma_id">
-                  @foreach ($turmas as $item)
-                      <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
-                          {{ $item->nome }}</option>
-                  @endforeach
-              </select>
-              <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
-          </div>
-    </form>
-
-    <br>
-  </div>
-  
-  <div id="barras" style="width: 1000px; height: 800px;"></div>
-  <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
-  <div id="rosca" style="width: 900px; height: 500px;"></div>
-
-<script type="text/javascript">
-
-    var qntCompletas= <?php echo $qntCompletas; ?>;
-    var qntIncompletas= <?php echo $qntIncompletas; ?>;
-    var qntNaoFizeram= <?php echo $qntNaoFizeram; ?>;
-    var activities= <?php echo $activities; ?>;
+<script>
+    var qntCompletas= {{$results['conteudo_completo']}}; 
+    var qntIncompletas= {{$results['conteudo_incompleto']}};
+    var qntNaoFizeram= {{$results['conteudo_nao_fizeram']}};
 
     google.charts.load('current', {'packages':['bar', 'corechart']});
     google.charts.setOnLoadCallback(drawStuff);
@@ -59,28 +27,41 @@
 
           var data = new google.visualization.DataTable();
           data.addColumn('string','Atividades');
-          data.addColumn('number', 'Quantos Responderam');
+          data.addColumn('number', 'Qtos Responderam');
+          data.addColumn('number', 'Total');
           data.addColumn({type: 'string', role: 'annotation'});
-          var count = 1;
-          activities.forEach((activity)=>{
-            var value = "A"+count++;
-            data.addRow([value, activity.qntFizeram, activity.name]);
-            map1.set(value, [value, activity.qntFizeram, activity.name]);
-          });
+          var value;
 
+          @foreach ($activities as $item) 
+            value = "A"+{{ $loop->index+1 }};
+            data.addRow([value, {{ $item->qntFizeram }}, {{ ($results['conteudo_incompleto'] + $results['conteudo_nao_fizeram']) }}, "{{ $item->name }}"]); 
+            map1.set(value, [value, {{ $item->qntFizeram }}, "{{ $item->name }}"]);
+          @endforeach
 
-        var options = {
+         var options = {
           chart: {
             title: 'Atividades respondidas',
           },
-          height: 500,
+          isStacked: true,
+          legend: 'none',
+
+          
           series: {
             2: {visibleInLegend: false} // Define a coluna da descrição para não ser exibida no gráfico
-              }
+              },
+              
+          vAxis: {
+            minValue: 0,
+            ticks: [0, .3, .6, .9, 1]
+          },
+          bar: { groupWidth: '45%' }
         };
-
+        var chart = new google.visualization.ColumnChart(document.getElementById('barras'));
+        chart.draw(data, options);
+/*
         var chart = new google.charts.Bar(document.getElementById('barras'));
         chart.draw(data, google.charts.Bar.convertOptions(options));
+  */     
 
         
        // Adicionando eventos de mouse às legendas após o gráfico ser desenhado
@@ -145,6 +126,36 @@
           }
         }
     }
+</script>
+@endsection
+
+@section('content')
+
+  <div id="formTurma">
+    <form action="{{ route('content.resultsContents') }}" method="POST ">
+          @csrf
+          <label for="turmasel">Informe a turma:</label>
+          <div class="form-inline">
+              <select class="form-control" name="turma_id" id="turmasel">
+                  @foreach ($turmas as $item)
+                      <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
+                          {{ $item->nome }}</option>
+                  @endforeach
+              </select>
+              <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+          </div>
+    </form>
+
+    <br>
+  </div>
+  
+  <div id="barras" style="width: 1000px; height: 500px;"></div>
+  <div id="rosca" style="width: 900px; height: 500px;"></div>
+  <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
+
+<script type="text/javascript">
+
+
 </script>
 
 
