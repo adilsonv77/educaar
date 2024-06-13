@@ -327,8 +327,81 @@ div.logo{
 }
 }
 
-/* Estilos para dispositivos com largura de tela de 1200px ou mais (notebooks, monitores maiores e dispositivos de tela grande) */
-@media only screen and (min-width: 1200px) {
+/* Estilos para dispositivos com largura de tela de 1200px ou mais (notebooks, dispositivos de tela grande) */
+
+
+@media only screen and (min-width: 1200px)  and (max-width: 1600px) {
+
+  .h-100{
+
+    width: 100vw;
+    height: 100vh;
+  }
+
+
+  div.container{
+    width: 30vw;
+    height:60vh;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    background-color: #e3edeb;
+    border-radius: 30px;
+    z-index: 1;
+    
+  }
+  #alerta{
+    width: 20vw;
+    height: 15vh;
+    display: flex;
+    position: absolute;
+    top: 1%;
+    right: 1%;
+
+  }
+
+  
+  
+
+
+  div.logo{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    width: 15vw;
+    height: 10vh;
+  }
+  
+ 
+
+.img-wrapper{
+  width: 15%;
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  bottom: 0;
+  right:16%;
+  transform: translateX(-50%);
+
+}
+
+
+
+.btn.btn-primary{
+  display: flex;
+  margin:auto;
+  width:20vw;
+  justify-content: center;
+  background-color:#81348b;
+  
+}
+
+}
+
+/*telas de desktop (talvez funcione :P )*/
+@media only screen and (min-width: 1600px) {
 
   .h-100{
 
@@ -396,12 +469,6 @@ div.logo{
   
 }
 }
-
-
-
-
-
-
 
 
 
