@@ -44,17 +44,13 @@
                             @foreach ($alunos as $item)
                                 <tr>
 
-                                    <td>{{ $item->nome }}</td>
+                                    <td>{{ $item->name }}</td>
                                 
                             @endforeach
                         </tbody>
                     </table>
 
-                    <div class="d-flex justify-content-center">
-                        {{ $alunos->links('vendor.pagination.bootstrap-4') }}
-                    </div>
-
-                </div>
+                 </div>
             @else
                 <div>
                     <h2>Nenhum aluno</h2>

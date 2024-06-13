@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\DAO\UserDAO;
 use App\Models\AlunoTurma;
 use App\Models\User;
 use App\Models\TurmaDisciplina;
 use App\Models\AnoLetivo;
 use App\Models\School;
 use App\Models\TurmaModelo;
+use App\Models\Turma;
+use App\DAO\TurmaDAO;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Turma;
+
 use Illuminate\Support\Facades\Validator;
 
 class TurmaController extends Controller
@@ -327,9 +331,11 @@ class TurmaController extends Controller
     public function listarTurmasAlunosProf(Request $request){
         $turma_id = $request->input('turma_id');
 
+        $prof_id = Auth::user()->id;
+
         $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
-        ->where('bool_atual', 1)->first();
-        
+                    ->where('bool_atual', 1)->first();
+        /*
         $where = DB::table('turmas as t')
             ->select('t.id as id','t.nome as nome', 't.school_id')
             ->join('turmas_disciplinas as td','td.turma_id', '=', 't.id')
@@ -342,16 +348,22 @@ class TurmaController extends Controller
                 ['t.school_id','=', Auth::user()->school_id]
             ])
             ->distinct();
+            Ana... podes excluir esse comentário.. troquei o where acima pela chamada da DAO
+        */
+
+        $where = TurmaDAO::buscarTurmasProf($prof_id, $anoletivo->id);
+        $turmas= $where->get();
 
         if ($turma_id) {
             $turma = Turma::find($turma_id);
             
         } else {
             $turma = $where->first();
+            $turma_id = $turma->id;
         }
-        $turmas= $where->get();
 
         // dd($turma);
+        /*
         $where2 = DB::table('users as u')
             ->select('u.id as id', 'u.name as nome')
             ->join('alunos_turmas as at', 'at.aluno_id', '=', 'u.id')
@@ -361,8 +373,10 @@ class TurmaController extends Controller
                 ['u.school_id', '=', $turma->school_id]
             ])
             ->orderBy('u.name');
-
-            $alunos = $where2->paginate(20);
+*/
+            $alunos = TurmaDAO::buscarAlunosTurma($turma_id);
+            
+            $alunos = $alunos->get();  // paginate(20) as turmas não são tão grandes, e a paginação vai exigir uma alteração fudida nos filtros
 
         return view('pages.turma.listarTurmasAlunosProf', compact('turmas', 'alunos', 'turma'));
     }
