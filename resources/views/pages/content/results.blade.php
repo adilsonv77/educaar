@@ -38,12 +38,17 @@
             map1.set(value, [value, {{ $item->qntFizeram }}, "{{ $item->name }}"]);
           @endforeach
 
+          var _ticks = [];
+          for (var i = 0; i <= ({{$results['conteudo_completo'] + $results['conteudo_incompleto'] + $results['conteudo_nao_fizeram']}}); i++) {
+            _ticks.push(i);
+          }
+
          var options = {
           chart: {
             title: 'Atividades respondidas',
           },
           isStacked: true,
-          legend: 'none',
+          legend: 'bottom',
 
           
           series: {
@@ -52,7 +57,7 @@
               
           vAxis: {
             minValue: 0,
-            ticks: [0, .3, .6, .9, 1]
+            ticks: _ticks
           },
           bar: { groupWidth: '45%' }
         };
