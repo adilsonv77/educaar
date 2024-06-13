@@ -61,18 +61,10 @@ class ContentController extends Controller
             $where = $where->where(DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")")'), 'like', $r);
         }
 
-        $showmodal = session()->get('showmodal');
-        if (!$showmodal) {
-            $showmodal = 0;
-        } else {
-            session()->forget('showmodal');
-        }
-        
-
         $contents = $where->paginate(20);
        // dd(DB::getQueryLog());
 
-        return view('pages.content.index', compact('contents', 'content', 'showmodal'));
+        return view('pages.content.index', compact('contents', 'content'));
     }
 
     public function listOfContents()
@@ -264,33 +256,26 @@ class ContentController extends Controller
         $content_id = session()->get('content');
         $prof_id = Auth::user()->id;
 
+        // é mais simples a DAO
         $where = ContentDAO::buscarTurmasDoContentsDoProf($prof_id, $anoletivo->id, $content_id);
             
+        $turmas= $where->get();
+
         if ($turma_id) {
             $turma = Turma::find($turma_id);
             
         } else {
             $turma = $where->first();
+            $turma_id = $turma->id;
         }
 
-        $turmas= $where->get();
-
-        $content = Content::find($content_id);
+       $content = Content::find($content_id);
 
         $results= ResultContentDAO::buscarQntFizeramAsTarefas($content->id, $turma->id);
 
-        // Se nao existirem resultados entao retorna à página renderizando uma janela modal
-        if ($results['conteudo_completo'] + $results['conteudo_incompleto'] + $results['conteudo_nao_fizeram'] == 0) {
+        $activities= ResultContentDAO::atividadesFeitas($content->id, $turma->id);
 
-            session()->flash('showmodal', 1);
-            return redirect(route('content.index'));
-
-        } else {
-
-            $activities= ResultContentDAO::atividadesFeitas($content->id, $turma->id);
-
-            return view('pages.content.results', compact('results', 'activities', 'turmas', 'turma', 'content'));
-        }
+        return view('pages.content.results', compact('results', 'activities', 'turmas', 'turma', 'content'));
         
     }
 

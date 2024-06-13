@@ -12,13 +12,6 @@
 
 
 @section('script-head')
-    @if($showmodal == 1)
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                $('#modalSemRespostas').modal('show');
-            });
-        </script>
-    @endif
 @endsection
 
 @section('content')
