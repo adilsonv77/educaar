@@ -101,6 +101,13 @@ Route::middleware(['auth'])->group(function () {
 
     //teacher
     Route::get('/frequencia', [App\Http\Controllers\FrequenciaController::class, 'index'])->name('teacher.frequencia');
+
+
+    //Lista De alunos em preofessor
+
+    Route::get('/turma/questoesDosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class , 'index'])->name('student.results');
+
+
 });
 
 //webservice para receber o arquivo mind

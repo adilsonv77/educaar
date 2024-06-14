@@ -45,7 +45,16 @@
                                 <tr>
 
                                     <td>{{ $item->name }}</td>
-                                
+
+
+                                    <td style="width: 10%;">
+                                        <form action="{{ route('student.results') }}">
+                                            <button type="submit" class="btn btn-success" title="Resultados" >
+                                                <i class="bi bi-journal-bookmark h2"  style = "color : #ffffff;"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
