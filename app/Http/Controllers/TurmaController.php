@@ -376,8 +376,27 @@ class TurmaController extends Controller
 */
             $alunos = TurmaDAO::buscarAlunosTurma($turma_id);
             
+            $alunos = $alunos->addSelect([
+                'qtnQuest' => DB::table('questions as q')->selectRaw('count(q.id)')
+                ->join("contents as c", function($join) {
+                    $join->on("td.disciplina_id", "=", "c.disciplina_id");
+                })
+                ->join("activities as a", "a.content_id", "=", "c.id")
+                ->join("questions as q", "q.activity_id", "=", "a.id")
+                ->join("student_answers as sta", function($join) {
+                    $join->on("sta.question_id", "=", "q.id")
+                        ->on("sta.activity_id", "=", "a.id");
+                })
+                ->whereColumn('u.id', '=', 'sta.aluno_id')
+                ->whereColumn('"t.turma_modelo_id", "=", "c.turma_id"')
+                ->where([
+                    ['td.professor_id', '=', $prof_id],
+                    ['sta.correct', '=', 1],
+                ])
+            ]);
+            dd($alunos);
             $alunos = $alunos->get();  // paginate(20) as turmas não são tão grandes, e a paginação vai exigir uma alteração fudida nos filtros
-
+        
         return view('pages.turma.listarTurmasAlunosProf', compact('turmas', 'alunos', 'turma'));
     }
 }
