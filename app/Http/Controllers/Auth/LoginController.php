@@ -97,12 +97,17 @@ class LoginController extends Controller
     }
 
     public function logout(Request $request) {
-
-        /*
-        $login = LoginDAO::ultimoLogin(Auth::user()->id)->first();
+        // nao sei o problema... mas ele nao encontra a classe DAO quando executa do celular
+        $login = Login::query()
+            ->where('user_id', Auth::user()->id)
+            ->latest() // ordenado por created_at que tem o mesmo valor do entrada_momento
+            ->take(1)
+            ->first();
         $login->saida_momento = now();
         $login->update();
-*/
+
+        //  $login = LoginDAO::ultimoLogin(Auth::user()->id)->first();
+
         Auth::logout();
         return redirect('/login');
     }
