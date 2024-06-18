@@ -105,7 +105,7 @@ Route::middleware(['auth'])->group(function () {
 
     //Lista De alunos em preofessor
 
-    Route::get('/turma/questoesDosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class , 'index'])->name('student.results');
+    Route::get('/turma/questoesDosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class, 'index'])->name('student.results');
 
 
 });

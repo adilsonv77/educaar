@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Http\Controllers;
 
 class QuestoesAcertadasController extends Controller
 
@@ -14,7 +15,7 @@ class QuestoesAcertadasController extends Controller
 
         
 
-        return view('pages.student.results');
+        return view('pages.turma.questoesDosAlunos');
     }
 
 
