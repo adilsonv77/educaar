@@ -1,6 +1,7 @@
 
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader';
 
 import * as THREE from 'three';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
@@ -14,6 +15,7 @@ var activeScene = null;
 var lastActiveScene = null;
 var cameraVar = null;
 var qtosBotoes = 0;
+var bdGLB = null;
 
 // inspirado no OrbitControl
 var state = 0;  // 1 - rotacionar
@@ -27,7 +29,16 @@ function mostrarAvanco(percent) {
 function loadGLTF(path) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader()
+    dracoLoader.setDecoderPath( 'https://www.gstatic.com/draco/versioned/decoders/1.5.4/' );
+    loader.setDRACOLoader( dracoLoader );
     loader.load(path, (gltf) => {
+ /*
+      console.log("GLTFLoader");
+
+      var transaction = bdGLB.transaction("glbs", IDBTransaction.READ_WRITE);
+      transaction.objectStore("glbs").put(gltf, path);
+ */     
       resolve(gltf);
     }, (xhr) => {
      mostrarAvanco( ( xhr.loaded / xhr.total * 100 ) );
@@ -76,7 +87,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
       hideButtons();
 
-   
+      /*
+      var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB || window.msIndexedDB,
+          IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction;    
+          
+      bdGLB = indexedDB.open("GLBAtividades", 1);
+      bdGLB.createObjectStore("glbs");
+
+      let db;
+      const request = indexedDB.open("MyTestDatabase");
+      request.onerror = (event) => {
+        console.error("Why didn't you allow my web app to use IndexedDB?!");
+      };
+      request.onsuccess = (event) => {
+        db = event.target.result;
+      };
+
+     /* bdGLB.onupgradeneeded = function(event) {
+        var db = event.target.result;
+        db.createObjectStore("glbs");
+      };*/
+
       buttonAR = document.getElementById("button-ar");
 
       const mind = document.getElementById("mind");
@@ -104,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       for (var i = 0; i<glbs.childElementCount; i++) {
         var li = glbs.children[i];
-        
+        console.log(li.textContent);
         const glb = await loadGLTF(li.textContent);
 
         const glbScene = glb.scene;
