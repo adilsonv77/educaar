@@ -362,22 +362,30 @@ class TurmaController extends Controller
             $turma_id = $turma->id;
         }
 
-        // dd($turma);
-        /*
-        $where2 = DB::table('users as u')
-            ->select('u.id as id', 'u.name as nome')
-            ->join('alunos_turmas as at', 'at.aluno_id', '=', 'u.id')
-            ->where([
-                ['at.turma_id', '=', $turma->id],
-                ['u.type', '=', 'student'],
-                ['u.school_id', '=', $turma->school_id]
-            ])
-            ->orderBy('u.name');
-*/
-            $alunos = TurmaDAO::buscarAlunosTurma($turma_id);
+            $where2 = TurmaDAO::buscarAlunosTurma($turma_id);
             
-            $alunos = $alunos->get();  // paginate(20) as turmas não são tão grandes, e a paginação vai exigir uma alteração fudida nos filtros
+            $where2 = $where2->get();  // paginate(20) as turmas não são tão grandes, e a paginação vai exigir uma alteração fudida nos filtros
         
+        $alunos = array();
+        $newd = null;
+
+        foreach($where2 as $aluno){
+            $newd = [
+                'name' => $aluno->name,
+                'id' => $aluno->id,
+            ];
+            $alunot = TurmaDAO::resultadosCorretosAlunos($turma_id, $aluno->id, $prof_id)->get()->first();
+
+            dd($alunot->qntCorretas);
+
+            if($alunot->qntCorretas != 0){
+                $newd['qntCorretas'] = $alunot->qntCorretas;
+            }else{
+                $newd['qntCorretas'] = 0;
+            }
+            array_push($alunos, $newd);
+        }
+
         return view('pages.turma.listarTurmasAlunosProf', compact('turmas', 'alunos', 'turma'));
     }
 }

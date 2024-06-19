@@ -55,6 +55,7 @@ class TurmaDAO
 where td.professor_id = 4 and t.ano_id = 4 AND sta.correct= 0 
 AND u.id = 8
  */
+
         $sql = DB::table('turmas_disciplinas as td')
             ->select("u.name", DB::raw("COUNT(q.id) as qntCorretas"))
             ->join("turmas as t", "td.turma_id", "=", "t.id")
@@ -75,7 +76,7 @@ AND u.id = 8
             })
             ->where([
                 ['td.professor_id', '=', $profid],
-                ['t.ano_id', '=', $turmaid],
+                ['t.id', '=', $turmaid],
                 ['sta.correct', '=', 1],
                 ['u.id', '=', $alunoid]
             ])
