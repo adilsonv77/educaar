@@ -374,19 +374,17 @@ class TurmaController extends Controller
                 'name' => $aluno->name,
                 'id' => $aluno->aluno_id,
             ];
-            $alunot = TurmaDAO::resultadosCorretosAlunos($turma_id, $aluno->aluno_id, $prof_id)->get()->first();
-
-            if($alunot!=null){
-                if($alunot->qntCorretas != 0){
-                    $newd['qntCorretas'] = $alunot->qntCorretas;
-                }else{
-                    $newd['qntCorretas'] = 0;
-                }
+            $alunoRespondeuCorreto = TurmaDAO::resultadosCorretosAlunos($turma_id, $aluno->aluno_id, $prof_id)->get()->first();
+            $alunoNaoRespondeuCorreto = TurmaDAO::resultadosIncorretosAlunos($turma_id, $aluno->aluno_id, $prof_id)->get()->first();
+           
+            if($alunoRespondeuCorreto!=null && $alunoNaoRespondeuCorreto!=null){
+                $newd['qntCorretas'] = $alunoRespondeuCorreto->qntCorretas;
+                $newd['qntIncorretas'] = $alunoNaoRespondeuCorreto->qntIncorretas;
             }else{
                 $newd['qntCorretas'] = 0;
+                $newd['qntIncorretas'] = 0;
             }
 
-            
             array_push($alunos, $newd);
         }
 

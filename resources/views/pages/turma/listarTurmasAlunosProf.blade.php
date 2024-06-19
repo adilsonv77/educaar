@@ -54,6 +54,13 @@
                                             </button>
                                         </form>
                                     </td>
+                                    <td style="width: 10%;">
+                                        <form action="{{ route('student.results') }}">
+                                            <button type="submit" class="btn btn-success" title="Resultados" >
+                                                {{ $item['qntIncorretas'] }}
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
