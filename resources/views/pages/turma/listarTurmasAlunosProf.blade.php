@@ -44,13 +44,13 @@
                             @foreach ($alunos as $item)
                                 <tr>
 
-                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item['name'] }}</td>
 
 
                                     <td style="width: 10%;">
                                         <form action="{{ route('student.results') }}">
                                             <button type="submit" class="btn btn-success" title="Resultados" >
-                                                <i class="bi bi-journal-bookmark h2"  style = "color : #ffffff;"></i>
+                                                {{ $item['qntCorretas'] }}
                                             </button>
                                         </form>
                                     </td>

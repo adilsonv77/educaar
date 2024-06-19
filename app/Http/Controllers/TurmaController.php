@@ -368,21 +368,25 @@ class TurmaController extends Controller
         
         $alunos = array();
         $newd = null;
-
+        // dd($where2);
         foreach($where2 as $aluno){
             $newd = [
                 'name' => $aluno->name,
-                'id' => $aluno->id,
+                'id' => $aluno->aluno_id,
             ];
-            $alunot = TurmaDAO::resultadosCorretosAlunos($turma_id, $aluno->id, $prof_id)->get()->first();
+            $alunot = TurmaDAO::resultadosCorretosAlunos($turma_id, $aluno->aluno_id, $prof_id)->get()->first();
 
-            dd($alunot->qntCorretas);
-
-            if($alunot->qntCorretas != 0){
-                $newd['qntCorretas'] = $alunot->qntCorretas;
+            if($alunot!=null){
+                if($alunot->qntCorretas != 0){
+                    $newd['qntCorretas'] = $alunot->qntCorretas;
+                }else{
+                    $newd['qntCorretas'] = 0;
+                }
             }else{
                 $newd['qntCorretas'] = 0;
             }
+
+            
             array_push($alunos, $newd);
         }
 
