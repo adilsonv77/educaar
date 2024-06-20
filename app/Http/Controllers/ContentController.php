@@ -242,7 +242,42 @@ class ContentController extends Controller
         return redirect(route('content.index'));
     }
 
+    private $atividade_completa = 0;
+    private $atividade_incompleta = 0;
+    private $atividade_nao_fizeram = 0;
+    public $listaalunos = [];
+
+    private function finalizarAtividade($temrespondida, $temnaorespondida, $idaluno) {
+         if (array_key_exists($idaluno, $this->listaalunos)) {
+            $aluno = $this->listaalunos[$idaluno];
+            
+        } else {
+            $aluno = [
+                'incompleto' => 0,
+                'nao_fez' => 0
+            ];
+
+            $this->listaalunos[$idaluno] = $aluno;
+       }
+        
+        if ($temrespondida > 0) {
+            if ($temnaorespondida > 0) {
+                $this->atividade_incompleta = $this->atividade_incompleta + 1;
+                $aluno['incompleto'] = 1;
+            } else {
+                $this->atividade_completa = $this->atividade_completa + 1;
+            }
+        } else {
+            $this->atividade_nao_fizeram = $this->atividade_nao_fizeram + 1;
+            $aluno['nao_fez'] = 1;
+        }
+
+        $this->listaalunos[$idaluno] = $aluno;
+
+    }
+
     public function resultsContents(Request $request){
+       
         $content= $request->input('content_id');
 
         if($content){
@@ -256,7 +291,6 @@ class ContentController extends Controller
         $content_id = session()->get('content');
         $prof_id = Auth::user()->id;
 
-        // é mais simples a DAO
         $where = ContentDAO::buscarTurmasDoContentsDoProf($prof_id, $anoletivo->id, $content_id);
             
         $turmas= $where->get();
@@ -271,11 +305,108 @@ class ContentController extends Controller
 
        $content = Content::find($content_id);
 
-        $results= ResultContentDAO::buscarQntFizeramAsTarefas($content->id, $turma->id);
+       $resultsSQL = ResultContentDAO::getStatusQuestionPorConteudo($turma_id, $content_id)->get() ;
+      //  dd($resultsSQL);
 
-        $activities= ResultContentDAO::atividadesFeitas($content->id, $turma->id);
+       $this->listaalunos = [];
+ 
+       $this->atividade_completa = 0;
+       $this->atividade_incompleta = 0;
+       $this->atividade_nao_fizeram = 0;
+    
+       $results = [];
 
-        return view('pages.content.results', compact('results', 'activities', 'turmas', 'turma', 'content'));
+       $idaluno = 0;
+       $idatividade = 0;
+       $newd = null; 
+       $temrespondida = 0;
+       $temnaorespondida = 0;
+
+       $conteudo_completo = 0;
+       $conteudo_incompleto = 0;
+       $conteudo_nao_fizeram = 0;
+
+       foreach($resultsSQL as $r) {
+
+            if ($r->activity_id <> $idatividade) {
+
+                if ($newd != null) {
+
+                    $this->finalizarAtividade($temrespondida, $temnaorespondida, $idaluno);
+ 
+                    $newd['atividade_completa'] = $this->atividade_completa;
+                    $newd['atividade_incompleta'] = $this->atividade_incompleta;
+                    $newd['atividade_nao_fizeram'] = $this->atividade_nao_fizeram;
+                    
+                    array_push($results, $newd); 
+            
+                 }
+
+                $newd = [
+                    'nome' => $r->activity_name
+                ];
+
+                $this->atividade_completa = 0;
+                $this->atividade_incompleta = 0;
+                $this->atividade_nao_fizeram = 0;
+
+                $idaluno = 0;
+                $idatividade = $r->activity_id;
+            }
+
+            if ($r->aluno <> $idaluno) {
+
+                if ($idaluno <> 0) {
+                    $this->finalizarAtividade($temrespondida, $temnaorespondida, $idaluno);
+                 } 
+               
+                $temrespondida = 0;
+                $temnaorespondida = 0;
+                $idaluno = $r->aluno;
+
+            }
+
+            if ($r->correct === 1 || $r->correct === 0) {
+                $temrespondida = 1;
+            } else {
+                $temnaorespondida = 1;
+            }
+
+
+       }
+ 
+       if ($idaluno <> 0) {
+            
+            $this->finalizarAtividade($temrespondida, $temnaorespondida, $idaluno);
+
+            $newd['atividade_completa'] = $this->atividade_completa;
+            $newd['atividade_incompleta'] = $this->atividade_incompleta;
+            $newd['atividade_nao_fizeram'] = $this->atividade_nao_fizeram;
+            
+            array_push($results, $newd); 
+
+
+       } 
+       //dd($this->listaalunos);
+       $totais = [
+        'qtos_fizeram' => 0,
+        'qtos_nao_fizeram' => 0,
+        'qtos_incompletos' => 0
+       ];
+       foreach ($this->listaalunos as $a) {
+        if ($a['nao_fez'] === 1) {
+            $totais['qtos_nao_fizeram'] = $totais['qtos_nao_fizeram'] + 1;
+        } else {
+            if ($a['incompleto'] === 1) {
+                $totais['qtos_incompletos'] = $totais['qtos_incompletos'] + 1; 
+            } else {
+                $totais['qtos_fizeram'] = $totais['qtos_fizeram'] + 1; 
+            }
+        }
+       }
+      //dd($results);
+
+        return view('pages.content.results', compact('results', 'totais', 'turmas', 'turma', 'content'));
         
     }
 

@@ -9,11 +9,11 @@
 @section('script-head')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-    var qntCompletas= {{$results['conteudo_completo']}}; 
-    var qntIncompletas= {{$results['conteudo_incompleto']}};
-    var qntNaoFizeram= {{$results['conteudo_nao_fizeram']}};
+    var qntCompletas= {{$totais['qtos_fizeram']}}; 
+    var qntIncompletas= {{$totais['qtos_incompletos']}};
+    var qntNaoFizeram= {{$totais['qtos_nao_fizeram']}};
 
-    google.charts.load('current', {'packages':['bar', 'corechart']});
+    google.charts.load('current', {'packages':['corechart', 'bar']});
     google.charts.setOnLoadCallback(drawStuff);
 
     function drawStuff() {
@@ -27,19 +27,19 @@
 
           var data = new google.visualization.DataTable();
           data.addColumn('string','Atividades');
-          data.addColumn('number', 'Qtos Responderam');
-          data.addColumn('number', 'Total');
+          data.addColumn('number', 'Responderam');
+          data.addColumn('number', 'Não respond.');
           data.addColumn({type: 'string', role: 'annotation'});
           var value;
 
-          @foreach ($activities as $item) 
+          @foreach ($results as $item) 
             value = "A"+{{ $loop->index+1 }};
-            data.addRow([value, {{ $item->qntFizeram }}, {{ ($results['conteudo_incompleto'] + $results['conteudo_nao_fizeram']) }}, "{{ $item->name }}"]); 
-            map1.set(value, [value, {{ $item->qntFizeram }}, "{{ $item->name }}"]);
+            data.addRow([value, {{ $item['atividade_completa'] }}, {{ ($item['atividade_incompleta'] + $item['atividade_nao_fizeram']) }}, "{{ $item['nome'] }}"]); 
+            map1.set(value, [value, {{ $item['atividade_completa'] }}, "{{ $item['nome'] }}"]);
           @endforeach
 
           var _ticks = [];
-          for (var i = 0; i <= ({{$results['conteudo_completo'] + $results['conteudo_incompleto'] + $results['conteudo_nao_fizeram']}}); i++) {
+          for (var i = 0; i <= (qntCompletas+qntIncompletas+qntNaoFizeram); i++) {
             _ticks.push(i);
           }
 
@@ -50,11 +50,6 @@
           isStacked: true,
           legend: 'bottom',
 
-          
-          series: {
-            2: {visibleInLegend: false} // Define a coluna da descrição para não ser exibida no gráfico
-              },
-              
           vAxis: {
             minValue: 0,
             ticks: _ticks
@@ -156,14 +151,6 @@
   
   <div id="barras" style="width: 1000px; height: 500px;"></div>
   <div id="rosca" style="width: 900px; height: 500px;"></div>
-  <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
-
-<script type="text/javascript">
-
-
-</script>
-
-
-
+  <div id="tooltipX" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 
 @endsection
