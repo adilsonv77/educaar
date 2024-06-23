@@ -1,20 +1,17 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use App\Models\Turma;
 use App\Models\Content;
 use App\Models\Activity;
-use App\Models\Matricula;
 use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
-use DataTables;
-use chillerlan\QRCode\QRCode;
-use Illuminate\Support\Facades\Validator;
 use App\DAO\ContentDAO;
 use App\DAO\ResultContentDAO;
+use App\DAO\UserDAO;
 
 class ContentController extends Controller
 {
@@ -52,6 +49,12 @@ class ContentController extends Controller
 
         $where = $where->addSelect([
             'qtasatividades' => Activity::selectRaw('count(*)')
+                ->whereColumn('contents.id', '=', 'content_id')
+        ]);
+        $where = $where->addSelect([
+            'qtasQuestoes' => Question::selectRaw('count(*)')
+                ->join("activities as a", "a.id", "=", "activity_id")
+                ->join("contents as c", "c.id", "=", "content_id")
                 ->whereColumn('contents.id', '=', 'content_id')
         ]);
         $content = $request->titulo;
@@ -272,6 +275,7 @@ class ContentController extends Controller
             $aluno['nao_fez'] = 1;
         }
 
+        $aluno['id'] = $idaluno;
         $this->listaalunos[$idaluno] = $aluno;
 
     }
@@ -303,11 +307,12 @@ class ContentController extends Controller
             $turma_id = $turma->id;
         }
 
+        session()->put('turma_id',$turma_id); 
+
        $content = Content::find($content_id);
 
        $resultsSQL = ResultContentDAO::getStatusQuestionPorConteudo($turma_id, $content_id)->get() ;
-      //  dd($resultsSQL);
-
+  
        $this->listaalunos = [];
  
        $this->atividade_completa = 0;
@@ -404,6 +409,7 @@ class ContentController extends Controller
             }
         }
        }
+       session()->put("listaalunos", $this->listaalunos);
       //dd($results);
 
         return view('pages.content.results', compact('results', 'totais', 'turmas', 'turma', 'content'));
@@ -411,17 +417,30 @@ class ContentController extends Controller
     }
 
     function resultsListStudents($type){
+
+        $listaalunos = session()->get("listaalunos");
+
+        $tipoalunos = [];
+
+        foreach ($listaalunos as $a) {
+            if($type == 'Completo'){
+                if ($a['incompleto'] === 0 && $a['nao_fez'] === 0 )
+                    array_push($tipoalunos, $a['id']);
+            }elseif($type == 'Incompleto'){
+                if ($a['incompleto'] === 1)
+                    array_push($tipoalunos, $a['id']);
+            }elseif($type == 'Não fizeram'){
+                if ($a['nao_fez'] === 1)
+                    array_push($tipoalunos, $a['id']);
+           }
+        }
+        
+        $results = UserDAO::buscarAlunos($tipoalunos);
+      
         $id= session()->get('content');
         $content= Content::find($id);
-        
-        if($type == 'Completo'){
-            $results= ResultContentDAO::getStudentDidActivities();    
-        }elseif($type == 'Incompleto'){
-            $results= ResultContentDAO::getStudentsUnfinishActivities();
-        }elseif($type == 'Não fizeram'){
-            $results= ResultContentDAO::getStudentDidNotActivities();
-        }
-        return view('pages.content.listStudents', compact('results', 'content', 'type'));
+
+         return view('pages.content.listStudents', compact('results', 'content', 'type'));
     
     }
 }

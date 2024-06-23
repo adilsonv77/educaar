@@ -71,7 +71,8 @@
                                             @csrf
                                             <input type="hidden" name="content" value="{{ $item->id }}">
                                             <button type="submit" id="FecharConteudo" class="btn btn-info"
-                                                @if ($item->qtasatividades == 0 or $item->fechado) disabled @endif title="Fechar">
+                                                @if ($item->qtasatividades == 0 or $item->fechado or $item->qtasQuestoes == 0) disabled @endif 
+                                                @if($item->qtasQuestoes == 0) title="Sem questões" @elseif ($item->fechado) title="Já fechado" @else title="Fechar" @endif >
                                                 <i class="bi bi-lock-fill h2 "  style = "color : #ffffff;"></i> ({{ $item->qtasatividades }})
 
                                             </button>
@@ -94,8 +95,8 @@
                                         <form action="{{ route('content.resultsContents') }}">
                                             @csrf
                                             <input type="hidden" name="content_id" value="{{ $item->id }}">
-                                            <button type="submit"  class="btn btn-success" title="Resultados"
-                                            @if ($item->qtasatividades == 0) disabled @endif>
+                                            <button type="submit"  class="btn btn-success" @if($item->qtasQuestoes == 0) title="Sem questões" @else title="Resultados" @endif
+                                            @if ($item->qtasatividades == 0 or $item->qtasQuestoes == 0) disabled @endif>
                                             <i class="bi bi-journal-bookmark h2"  style = "color : #ffffff;"></i>
                                             </button>
                                         </form>

@@ -25,6 +25,15 @@ class UserDAO
 
         return $sql;
     }
+
+    public static function buscarAlunos($listaalunos) {
+        $sql = DB::table('users')
+            ->whereIn('id', $listaalunos)
+            ->select('name')
+            ->get();
+
+        return $sql;
+    }
 }
 
 // SELECT COUNT(u.id), t.nome FROM `turmas_disciplinas` as td 
