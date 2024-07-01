@@ -101,6 +101,7 @@ Route::middleware(['auth'])->group(function () {
 
     //teacher
     Route::get('/frequencia', [App\Http\Controllers\FrequenciaController::class, 'index'])->name('teacher.frequencia');
+    Route::post('/frequencia', [App\Http\Controllers\FrequenciaController::class, 'index'])->name('teacher.frequencia.filter');
 
 
     //Lista De alunos em preofessor

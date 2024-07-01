@@ -25,6 +25,13 @@ class FrequenciaController extends Controller
 
         $prof_id = Auth::user()->id;
         
+        $data_ini = $request->start_date;
+        $data_fim = $request->end_date;
+
+        if (!$data_ini)
+            $data_ini = '';
+        if (!$data_fim)
+            $data_fim = '';
 
         $where = TurmaDAO::buscarTurmasProf($prof_id, $anoletivo->id);
 
@@ -44,7 +51,7 @@ class FrequenciaController extends Controller
 
         if ($acesso !== "ultacesso") {
 
-            $freq = LoginDAO::qtosLogins($prof_id, $turma_id, $acesso)->get();
+            $freq = LoginDAO::qtosLogins($prof_id, $turma_id, $acesso, $data_ini, $data_fim)->get();
             $maxquantos = 0;
             foreach ($freq as $item) {
                 if ($item->quantos > $maxquantos)

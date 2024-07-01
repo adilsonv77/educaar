@@ -24,10 +24,12 @@ class LoginDAO
         return $login;
     }
 
-    public static function qtosLogins($profid, $turmaid, $op) {
+    public static function qtosLogins($profid, $turmaid, $op, $data_ini, $data_fim) {
         // op = pordia : SELECT DATE(entrada_momento) AS MOMENTO, COUNT(*) AS QUANTOS FROM `logins` GROUP BY MOMENTO
 
         // op = poralunos : SELECT DATE(entrada_momento) AS MOMENTO, COUNT(distinct user_id) AS QUANTOS FROM logins GROUP BY MOMENTO
+
+//        dd($data_ini, $data_fim);
 
         if ($op == "pordia") {
             $count = "*";
@@ -41,6 +43,15 @@ class LoginDAO
                 ->where("atu.turma_id", "=", $turmaid)
                 ->groupBy("momento")
                 ->orderBy("momento");
+
+        if ($data_ini) {
+            $freq = $freq->whereDate('entrada_momento', '>=', $data_ini); 
+        }
+        
+        if ($data_fim) {
+            $freq = $freq->whereDate('entrada_momento', '<=', $data_fim); 
+        }
+
         return $freq;
     }
 

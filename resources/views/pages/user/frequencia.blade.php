@@ -69,21 +69,37 @@
 @section('content')
 
   <div id="formTurma">
-    <form action="{{ route('teacher.frequencia') }}" method="GET ">
+    <form action="{{ route('teacher.frequencia.filter') }}" method="POST">
           @csrf
           
-          <div class="mb-3">
-              <label  class="form-label" for="turma_id">Informe a turma : </label>
-              <div class="form-inline">
+          <div class="col-md-6">
+              <label>Informe a turma : </label>
+
                 <select class="form-control" name="turma_id" id="turma_id">
                     @foreach ($turmas as $item)
                         <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
                             {{ $item->nome }}</option>
                     @endforeach
                 </select>
-                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
-              </div>
+                
+         </div>
+
+          @if($acesso !== 'ultacesso')
+          <div class="row pb-3">
+            <div class="col-md-3">
+              <label>Data inicial:</label>
+              <input type="date" name="start_date" class="form-control"/>
+            </div>
+            <div class="col-md-3">
+              <label>Data final:</label>
+              <input type="date" name="end_date" class="form-control"/>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-primary" type="submit">Pesquisar</button>
+            </div>
+            
           </div>
+          @endif
 
           <div class="mb-3">
               <label  class="form-label" for="pordia">Filtro : </label>
@@ -127,7 +143,7 @@
               </div>
             </div>
          @else
-          <div class="mb-3">
+           <div class="mb-3">
             <div id="curve_chart" style="width: 1000px; height: 800px;"></div>
           </div>
  
