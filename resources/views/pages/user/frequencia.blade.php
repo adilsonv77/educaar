@@ -27,7 +27,7 @@
 
         data.addRows([
             @foreach ($freq as $item) 
-              [new Date('{{$item->momento}}'), {{$item->quantos}}], 
+              [new Date('{{$item->momento}} 00:00:00'), {{$item->quantos}}], 
             @endforeach
         ]);
         
@@ -38,7 +38,7 @@
               format: 'dd/MM',
               ticks: [
                 @foreach ($freq as $item) 
-                  new Date('{{$item->momento}}'), 
+                  new Date('{{$item->momento}} 00:00:00'), 
                 @endforeach
               ]
 
