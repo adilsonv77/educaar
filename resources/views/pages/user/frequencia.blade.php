@@ -94,13 +94,14 @@
               <label>Data final:</label>
               <input type="date" name="end_date" class="form-control"/>
             </div>
-            <div class="col-md-3">
-              <button class="btn btn-primary" type="submit">Pesquisar</button>
-            </div>
             
           </div>
           @endif
-
+          
+          <div class="col-md-3">
+              <button class="btn btn-primary" type="submit">Pesquisar</button>
+          </div>
+ 
           <div class="mb-3">
               <label  class="form-label" for="pordia">Filtro : </label>
               <div class="form-check form-check-inline">
