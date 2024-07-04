@@ -96,7 +96,7 @@
         ]);
 
         var options = {
-          title: 'Atividades completas/incompletas/não fizeram',
+          title: 'Como está o conteúdo por aluno ?',
           pieHole: 0.4,
         };
 

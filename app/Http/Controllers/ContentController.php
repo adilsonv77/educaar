@@ -257,7 +257,8 @@ class ContentController extends Controller
         } else {
             $aluno = [
                 'incompleto' => 0,
-                'nao_fez' => 0
+                'nao_fez' => 0,
+                'fez' => 0
             ];
 
             $this->listaalunos[$idaluno] = $aluno;
@@ -269,6 +270,7 @@ class ContentController extends Controller
                 $aluno['incompleto'] = 1;
             } else {
                 $this->atividade_completa = $this->atividade_completa + 1;
+                $aluno['fez'] = 1;
             }
         } else {
             $this->atividade_nao_fizeram = $this->atividade_nao_fizeram + 1;
@@ -326,10 +328,6 @@ class ContentController extends Controller
        $newd = null; 
        $temrespondida = 0;
        $temnaorespondida = 0;
-
-       $conteudo_completo = 0;
-       $conteudo_incompleto = 0;
-       $conteudo_nao_fizeram = 0;
 
        foreach($resultsSQL as $r) {
 
@@ -392,25 +390,27 @@ class ContentController extends Controller
 
 
        } 
-       //dd($this->listaalunos);
+       //dd($results);
+      // dd($this->listaalunos);
+       // esse total são em relação ao conteúdo... se o aluno fez uma atividade e nao fez outra, ...
+       // ... então está no incompleto
        $totais = [
         'qtos_fizeram' => 0,
         'qtos_nao_fizeram' => 0,
         'qtos_incompletos' => 0
        ];
        foreach ($this->listaalunos as $a) {
-        if ($a['nao_fez'] === 1) {
+        if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0) {
             $totais['qtos_nao_fizeram'] = $totais['qtos_nao_fizeram'] + 1;
         } else {
-            if ($a['incompleto'] === 1) {
-                $totais['qtos_incompletos'] = $totais['qtos_incompletos'] + 1; 
-            } else {
+            if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0) {
                 $totais['qtos_fizeram'] = $totais['qtos_fizeram'] + 1; 
+            } else {
+                $totais['qtos_incompletos'] = $totais['qtos_incompletos'] + 1; 
             }
-        }
+         }
        }
        session()->put("listaalunos", $this->listaalunos);
-      //dd($results);
 
         return view('pages.content.results', compact('results', 'totais', 'turmas', 'turma', 'content'));
         
@@ -424,13 +424,13 @@ class ContentController extends Controller
 
         foreach ($listaalunos as $a) {
             if($type == 'Completo'){
-                if ($a['incompleto'] === 0 && $a['nao_fez'] === 0 )
+                if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
             }elseif($type == 'Incompleto'){
-                if ($a['incompleto'] === 1)
+                if ($a['incompleto'] === 1 || ($a['nao_fez'] === 1 && $a['fez'] === 1))
                     array_push($tipoalunos, $a['id']);
             }elseif($type == 'Não fizeram'){
-                if ($a['nao_fez'] === 1)
+                if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
            }
         }
