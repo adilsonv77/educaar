@@ -115,8 +115,33 @@ AND u.id = 8
         return $sql;
     }
 
-    public static function resultadosQuestoesNaoFeitas(){
-        
+    public static function resultadosQuestoesNaoFeitas($profid) {
+        /**
+         * select COUNT(q.id) as qntQuestoes from turmas_disciplinas as td
+        join turmas as t on td.turma_id = t.id
+        join contents as c on t.turma_modelo_id = c.turma_id and
+                            td.disciplina_id = c.disciplina_id
+        join activities as a on a.content_id= c.id
+        JOIN questions as q on q.activity_id= a.id
+        where td.professor_id = 4 and t.ano_id = 4 
+         */
+
+        $anoletivoid = AnoLetivo::where("bool_atual", 1)->first()->id;
+        $sql = DB::table('turmas_disciplinas as td')
+            ->select(DB::raw("COUNT(q.id) as qntQuestoes"))
+            ->join("turmas as t", "td.turma_id", "=", "t.id")
+            ->join("contents as c", function($join) {
+                $join->on("t.turma_modelo_id", "=", "c.turma_id")
+                    ->on("td.disciplina_id", "=", "c.disciplina_id");
+            })
+            ->join("activities as a", "a.content_id", "=", "c.id")
+            ->join("questions as q", "q.activity_id", "=", "a.id")
+            ->where([
+                ['td.professor_id', '=', $profid],
+                ['t.ano_id', '=', $anoletivoid]
+            ]);
+
+            return $sql;
     }
 }
 ?>
