@@ -143,5 +143,60 @@ AND u.id = 8
 
             return $sql;
     }
+
+    public static function buscarQuestoesCorretas($turmaid, $alunoid, $profid) {
+        $sql = DB::table('turmas_disciplinas as td')
+            ->join("turmas as t", "td.turma_id", "=", "t.id")
+            ->join("contents as c", function($join) {
+                $join->on("t.turma_modelo_id", "=", "c.turma_id")
+                    ->on("td.disciplina_id", "=", "c.disciplina_id");
+            })
+            ->join("activities as a", "a.content_id", "=", "c.id")
+            ->join("questions as q", "q.activity_id", "=", "a.id")
+            ->join("student_answers as sta", function($join) {
+                $join->on("sta.question_id", "=", "q.id")
+                    ->on("sta.activity_id", "=", "a.id");
+            })
+            ->join("users as u", "sta.user_id", "=", "u.id")
+            ->join("alunos_turmas as alunt", function($join) {
+                $join->on("alunt.turma_id", "=", "t.id")
+                    ->on("alunt.aluno_id", "=", "u.id");
+            })
+            ->where([
+                ['td.professor_id', '=', $profid],
+                ['t.id', '=', $turmaid],
+                ['sta.correct', '=', 1],
+                ['u.id', '=', $alunoid]
+            ]);
+
+        return $sql;
+    }
+    public static function buscarQuestoesIncorretas($turmaid, $alunoid, $profid) {
+        $sql = DB::table('turmas_disciplinas as td')
+            ->join("turmas as t", "td.turma_id", "=", "t.id")
+            ->join("contents as c", function($join) {
+                $join->on("t.turma_modelo_id", "=", "c.turma_id")
+                    ->on("td.disciplina_id", "=", "c.disciplina_id");
+            })
+            ->join("activities as a", "a.content_id", "=", "c.id")
+            ->join("questions as q", "q.activity_id", "=", "a.id")
+            ->join("student_answers as sta", function($join) {
+                $join->on("sta.question_id", "=", "q.id")
+                    ->on("sta.activity_id", "=", "a.id");
+            })
+            ->join("users as u", "sta.user_id", "=", "u.id")
+            ->join("alunos_turmas as alunt", function($join) {
+                $join->on("alunt.turma_id", "=", "t.id")
+                    ->on("alunt.aluno_id", "=", "u.id");
+            })
+            ->where([
+                ['td.professor_id', '=', $profid],
+                ['t.id', '=', $turmaid],
+                ['sta.correct', '=', 0],
+                ['u.id', '=', $alunoid]
+            ]);
+        return $sql;
+    }
+
 }
 ?>

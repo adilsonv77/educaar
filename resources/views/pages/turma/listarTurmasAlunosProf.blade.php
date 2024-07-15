@@ -49,6 +49,9 @@
 
                                     <td style="width: 10%;">
                                         <form action="{{ route('student.results') }}">
+                                        <input type="hidden" name="aluno_id" value="{{ $item['id'] }}">
+                                        <input type="hidden" name="type_question" value="corretas">
+                                        <input type="hidden" name="turma_id" value="{{ $turma->id }}">
                                             <button type="submit" class="btn btn-success" title="Resultados" >
                                                 {{ $item['qntCorretas'] }}
                                             </button>
@@ -56,6 +59,9 @@
                                     </td>
                                     <td style="width: 10%;">
                                         <form action="{{ route('student.results') }}">
+                                        <input type="hidden" name="aluno_id" value="{{ $item['id'] }}">
+                                        <input type="hidden" name="type_question" value="incorretas">
+                                        <input type="hidden" name="turma_id" value="{{ $turma->id }}">
                                             <button type="submit" class="btn btn-success" title="Resultados" >
                                                 {{ $item['qntIncorretas'] }}
                                             </button>
@@ -63,6 +69,9 @@
                                     </td>
                                     <td style="width: 10%;">
                                         <form action="{{ route('student.results') }}">
+                                        <input type="hidden" name="aluno_id" value="{{ $item['id'] }}">
+                                        <input type="hidden" name="type_question" value="naofeitas">
+                                        <input type="hidden" name="turma_id" value="{{ $turma->id }}">
                                             <button type="submit" class="btn btn-success" title="Resultados" >
                                                 {{ $item['qntNaoRespondidas'] }}
                                             </button>

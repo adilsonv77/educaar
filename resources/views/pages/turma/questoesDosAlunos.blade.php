@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Alunos';
+    $pageName = $aluno->name;
 @endphp
 
 @section('page-name', $pageName)
@@ -9,13 +9,6 @@
 @section('content')
 
 <div id="jorje">
-    <form action="{{ route('student.results') }}>
-         
-    </form>
-
-    <br>
-  </div>
-
     <div class="card">
         <div class="card-body">
            
@@ -23,22 +16,28 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Mial</th>
-                                <th>Alal</th>
-                                <th>Pir</th>
-                                <th>Berro</th>
+                                <th>Questão</th>
+                                <th>Atividade</th>
+                                <th>Conteúdo</th>
+                                <th>Resposta</th>
                             </tr>
                         </thead>
                         <tbody>
-
-                           
+                        @foreach ($questoes as $questao)
+                        <tr>
+                            <td>{{ $questao['question'] }}</td>
+                            <td>{{ $questao['activity_name'] }}</td>
+                            <td>{{ $questao['content_name'] }}</td>
+                            <td>{{ $questao['alternative_answered']}}</td>
+                        </tr>
+                        @endforeach
                         </tbody>
                     </table>
 
                  </div>
          
                 <div>
-                    <h2>Nenhum aluno</h2>
+                    <h2>Nenhuma resposta</h2>
                 </div>
             
         </div>
