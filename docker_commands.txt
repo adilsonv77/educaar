@@ -9,8 +9,12 @@ composer remove consoletvs/charts
 
 docker run --rm --entrypoint htpasswd httpd:2 -Bbn testuser testpassword > docker-compose/nginx/nginx.htpasswd
 
-docker-compose build app
-docker-compose up -d
+Executar somentes esses dois comandos no terminal: 
+        docker-compose build app
+        docker-compose up -d
+
+ps.: utilizem o terminal do vscode ou abra a pasta educaar no terminal para executar esses dois comandos. 
+
 #docker-compose exec app rm -rf vendor composer.lock
 #docker-compose exec app composer install
 #docker-compose exec app composer remove consoletvs/charts
