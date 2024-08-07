@@ -65,26 +65,27 @@
                                         <div class="header-info">
                                             <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
                                             <p class="fs-12 mb-0">
-                                                @if (Auth::user()->type == 'student')
+                                                @if (session('type') == 'student')
                                                     Estudante
                                                 @endif
 
-                                                @if (Auth::user()->type == 'teacher')
+                                                @if (session('type') == 'teacher')
                                                     Professor
                                                 @endif
 
-                                                @if (Auth::user()->type == 'admin')
+                                                @if (session('type') == 'admin')
                                                     Administrator
                                                 @endif
                                             </p>
 
                                         </div>
-                                        @can('admin')
+                                        @if (session('type') == 'admin')
+
                                             <a href="{{ route('config.index') }}" title="Configurar";
                                                 class="dropdown-item ai-icon">
                                                 <img src="/gear.png" width="10" alt="" />
                                             </a>
-                                        @endcan
+                                        @endif
                             </div>
                             <div class="saida">
                                 <a href="{{ route('logout') }}" title="Sair";

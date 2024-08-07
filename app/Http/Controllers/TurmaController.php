@@ -166,17 +166,7 @@ class TurmaController extends Controller
             ->where('users.school_id', Auth::user()->school_id)
             ->get();
 
-        // return var_dump($professores);
-
-        // Auth::user()->type == 'student'
-
-        // SELECT d.name, d.id from turmas_disciplinas as td
-        // 				join disciplinas as d
-        //                 on d.id= td.disciplina_id
-        //                 join turmas as tm 
-        //                 on td.turma_id= tm.id
-        // 	where tm.id= 1;
-
+     
         return view('pages.turma.turmaDisciplinas', compact('disciplinas', 'professores'));
     }
     public function storeDisciplinaProf(Request $request)
@@ -310,7 +300,7 @@ class TurmaController extends Controller
     }
     public function destroy($id)
     {
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             return redirect('/');
         }
 

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="">
-        @can('student')
+        @if (session('type') == 'student')
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -87,6 +87,6 @@
                     }
                 </style>
             @endsection
-        @endcan
+        @endif
     </div>
 @endsection

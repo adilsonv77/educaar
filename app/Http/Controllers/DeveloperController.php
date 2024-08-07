@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Models\Activity;
+use App\Models\AnoLetivo;
+use App\DAO\ContentDAO;
 
 class DeveloperController extends Controller
 {
@@ -37,18 +39,15 @@ class DeveloperController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->type !== 'developer') {
+        if (session('type') !== 'developer') {
             return redirect('/');
         }
+
         $titulo = 'Atividade Nova';
         $acao = 'insert';
-        $contents = DB::table('contents')
-            ->join('disciplinas', 'contents.disciplina_id', '=', 'disciplinas.id')
-            ->join('turmas_modelos', 'contents.turma_id', '=', 'turmas_modelos.id')
-            ->join('content_developer', 'content_developer.content_id', '=', 'contents.id')
-            ->where('content_developer.developer_id', Auth::user()->id);
+        $contents = ContentDAO::buscarConteudosDeveloper(Auth::user()->id);
         
-            $contents = $contents
+        $contents = $contents
             ->select('contents.id as id', 
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name'))
             ->get();

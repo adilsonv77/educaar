@@ -33,7 +33,7 @@ class ActivityController extends Controller
     public function index(Request $request)
     {
 
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             return redirect('/');
         }
         
@@ -78,7 +78,7 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->type !== 'teacher') {
+        if (session('type') !== 'teacher') {
             return redirect('/');
         }
         $titulo = 'Atividade Nova';
@@ -259,7 +259,7 @@ class ActivityController extends Controller
 
         $content = Content::find($data["content_id"]);
         $content ->update(['fechado' => 0]);
-       if(Auth::user()->type == 'teacher'){
+       if(session('type') == 'teacher'){
             return redirect(route('activity.index'));
        }else{
             return redirect(route('developer.index'));
@@ -309,6 +309,8 @@ class ActivityController extends Controller
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
                     )
             ->get();
+        
+        //dd($contents);
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,

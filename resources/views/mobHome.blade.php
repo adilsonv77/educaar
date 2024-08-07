@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="">
-        @can('student')
+        @if (session('type') == 'student')
             <div class="card">
                 {{-- <div class="card-body"> --}}
                 {{-- <div class="table-responsive"> --}}
@@ -27,7 +27,7 @@
             @section('style')
                 <link href="/css/mobile.css" rel="stylesheet">
             @endsection
-        @endcan
+        @endif
     </div>
 @endsection
 

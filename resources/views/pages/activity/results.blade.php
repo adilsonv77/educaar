@@ -63,7 +63,6 @@
     </tr>
   </thead>
   <tbody>
-
         @foreach($respostasSelecionadas as $item)
               <tr class="table-light">
                 <td>{{$item['name']}}</td>

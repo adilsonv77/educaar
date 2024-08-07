@@ -170,7 +170,7 @@ class TurmasModelosController extends Controller
     }
     public function destroy($id)
     {
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             return redirect('/');
         }
 

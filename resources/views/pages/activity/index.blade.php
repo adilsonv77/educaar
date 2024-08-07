@@ -51,7 +51,7 @@
                                 <th>Nome</th>
                                 <th>Marcador</th>
                                 <th>Visualizar</th>
-                                @can('teacher')<th>Resultados</th>@endcan
+                                @if (session('type') == 'teacher')<th>Resultados</th>@endif
                                 <th>Questões</th>
                                 <th>Editar</th>
                                 <th>Excluir</th>
@@ -98,7 +98,7 @@
                                             </button>
                                         </form>
                                     </td>
-                                    @can('teacher')
+                                    @if (session('type') == 'teacher')
                                     <td style="width: 70px;">
                                         <button type="button" class="btn btn-danger"
                                             @if ($item->qtnQuest > 0) disabled @endif data-toggle="modal"
@@ -106,7 +106,7 @@
                                             <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
                                         </button>
                                     </td>
-                                    @endcan
+                                    @endif
                                 </tr>
                                 <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">

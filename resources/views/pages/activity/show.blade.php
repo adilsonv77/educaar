@@ -4,9 +4,9 @@
 
 
 @section('content')
-    @can('student')
+    @if (session('type') == 'student')
         <h1 class="text-center">Responda as questões abaixo</h1>
-    @endcan
+    @endif
     <div class="card">
         <div class="card">
             <div class="card-body">
@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        @can('teacher')
+        @if (session('type') == 'teacher')
             <div class="container">
 
                 <div class="d-flex align-items-center">
@@ -80,9 +80,9 @@
                     </table>
                 </div>
             </div>
-        @endcan
+        @endif
 
-        @can('student')
+        @if (session('type') == 'student')
             <div class="container questoes mb-3">
                 @if (isset($timeEnterActivity))
                     <h2 class="mb-3">Questões</h2>
@@ -161,7 +161,7 @@
 
             </div>
 
-        @endcan
+        @endif
 
     </div>
     </div>

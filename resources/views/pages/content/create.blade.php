@@ -23,7 +23,7 @@
 
                         </div>
                     </div>
-                    @can('teacher')
+                    @if (session('type') == 'teacher')
                     <div class="form-group row">
                         <label for="">Escolha a Disciplina*</label>
                         <select class="form-control" name="disciplina_id">
@@ -35,11 +35,11 @@
                         </select>
 
                     </div>
-                    @endcan
+                    @endif
 
-                    @can('admin')
+                    @if (session('type') == 'admin')
                     <livewire:discporturma :turma="$turma" :disciplinaKey="$disciplina"/>
-                    @endcan
+                    @endif
 
                     <div class="form-group row mt-4">
                         <input type="submit" value="Salvar" class="btn btn-success">

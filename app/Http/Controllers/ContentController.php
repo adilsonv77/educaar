@@ -24,12 +24,12 @@ class ContentController extends Controller
      */
     public function index(Request $request)
     {
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             return redirect('/');
         }
     
         $where = null;
-        if (Auth::user()->type == 'admin') {
+        if (session('type') == 'admin') {
             $where = DB::table('contents')
                 ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
                 ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_id')
@@ -72,7 +72,7 @@ class ContentController extends Controller
 
     public function listOfContents()
     {
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             return redirect('/');
         }
         $data = Content::select('*');
@@ -95,7 +95,7 @@ class ContentController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             return redirect('/');
         }
         $idprof = Auth::user()->id;
@@ -112,7 +112,7 @@ class ContentController extends Controller
             'id' => 0
         ];
 
-        if (Auth::user()->type == 'teacher') {
+        if (session('type') == 'teacher') {
             $disciplinas = $this->buscarDisciplinas($anoLetivo->id, $idprof);
             $params['disciplinas'] = $disciplinas;
             $params['disciplina'] = "";
@@ -165,7 +165,7 @@ class ContentController extends Controller
     {
         $data = $request->all();
 
-        if (Auth::user()->type == 'teacher') {
+        if (session('type') == 'teacher') {
             $turma_disc = explode("_", $data['disciplina_id']);
 
             $data['turma_id'] = $turma_disc[0];
@@ -215,7 +215,7 @@ class ContentController extends Controller
             'user_id' => $content->user_id
         ];
 
-        if (Auth::user()->type == 'teacher') {
+        if (session('type') == 'teacher') {
             $disciplinas = $this->buscarDisciplinas($anoLetivo->id, $idprof);
             $params['disciplinas'] = $disciplinas;
             $params['disciplina'] = $content->turma_id . "_" . $content->disciplina_id;
@@ -236,7 +236,7 @@ class ContentController extends Controller
      */
     public function destroy($id)
     {
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             return redirect('/');
         }
 

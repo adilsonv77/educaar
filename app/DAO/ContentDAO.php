@@ -59,6 +59,17 @@ class ContentDAO {
 
     }
 
+    public static function buscarConteudosDeveloper($devid) {
+        $contents = DB::table('contents')
+            ->join('disciplinas', 'contents.disciplina_id', '=', 'disciplinas.id')
+            ->join('turmas_modelos', 'contents.turma_id', '=', 'turmas_modelos.id')
+            ->join('content_developer', 'content_developer.content_id', '=', 'contents.id')
+            ->where('content_developer.developer_id', $devid);
+
+        return $contents;
+
+    }
+
 }
 
 ?>

@@ -27,7 +27,7 @@ class QuestionController extends Controller
 
     public function index(Request $request)
     {
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             return redirect('/');
         }
         #dd($request->query());
@@ -53,7 +53,7 @@ class QuestionController extends Controller
 
     public function listOfQuestions()
     {
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             return redirect('/');
         }
         $data = Question::select('*');

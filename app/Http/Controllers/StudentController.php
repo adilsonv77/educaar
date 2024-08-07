@@ -10,7 +10,7 @@ use App\Models\AnoLetivo;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
-use phpDocumentor\Reflection\DocBlock\Tags\See;
+use App\DAO\ContentDAO;
 
 class StudentController extends Controller
 {
@@ -25,24 +25,35 @@ class StudentController extends Controller
         session()->put('disciplina', $request->id);
         $id = session()->get("disciplina");
 
-        $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
+        if (Auth::user()->type != session('type')) {
+
+            $conteudos = ContentDAO::buscarConteudosDeveloper(Auth::user()->id)
+                ->select('contents.name', 'contents.id')
+                ->where('disciplinas.id', '=', $id)
+                ->get();
+
+        } else {
+            $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
 
-        $conteudos = DB::table('alunos_turmas as at')
-            ->select('c.name', 'c.id')
-            ->join('turmas as t', 't.id', '=', 'at.turma_id')
-            ->join('disciplinas_turmas_modelos as dtm', 'dtm.turma_modelo_id', '=', 't.turma_modelo_id')
-            ->join('contents as c', function (JoinClause $join) {
-                $join->on('dtm.turma_modelo_id', '=', 'c.turma_id')->on('c.disciplina_id', '=', 'dtm.disciplina_id');
-            })
-            ->where([
-                ['at.aluno_id', '=', Auth::user()->id],
-                ['t.ano_id', '=', $anoAtual->id],
-                ['c.disciplina_id', '=', $id],
-                ['c.fechado', '=', 1]
-            ])
-            ->distinct()
-            ->get();
+            $conteudos = DB::table('alunos_turmas as at')
+                ->select('c.name', 'c.id')
+                ->join('turmas as t', 't.id', '=', 'at.turma_id')
+                ->join('disciplinas_turmas_modelos as dtm', 'dtm.turma_modelo_id', '=', 't.turma_modelo_id')
+                ->join('contents as c', function (JoinClause $join) {
+                    $join->on('dtm.turma_modelo_id', '=', 'c.turma_id')->on('c.disciplina_id', '=', 'dtm.disciplina_id');
+                })
+                ->where([
+                    ['at.aluno_id', '=', Auth::user()->id],
+                    ['t.ano_id', '=', $anoAtual->id],
+                    ['c.disciplina_id', '=', $id],
+                    ['c.fechado', '=', 1]
+                ])
+                ->distinct()
+                ->get();
+
+        }
+
 
         $rota = route("home") ;
         return view('student.indexContentStudent', compact('conteudos','rota'));

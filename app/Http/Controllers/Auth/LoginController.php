@@ -71,6 +71,8 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
+        /*
+        no nosso sistema o login é sempre pelo nome do usuario
         $login_type = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL )
             ? 'email'
             : 'username';
@@ -78,21 +80,50 @@ class LoginController extends Controller
         $request->merge([
             $login_type => $request->input('login')
         ]);
+        */
+        $user_password = [
+            'username'    => $request->input('login'),
+            'password' => $request->input('password')
+        ];
 
-        if (Auth::attempt($request->only($login_type, 'password'))) {
+        if (Auth::attempt($user_password)) {
             $data = [];
             $data['user_id'] = Auth::user()->id;
             $data['entrada_momento'] = now();
-            
+            $request->session()->put('type', Auth::user()->type);
             Login::create($data);
 
             return redirect()->intended($this->redirectPath());
+        }
+        $logindev = "";
+        if (str_ends_with($request->input('login'), '_u')) {
+            $logindev = substr($request->input('login'), 0, -2);
+            $user_password = [
+                'username'    => $logindev,
+                'password' => $request->input('password')
+            ];
+            if (Auth::attempt($user_password)) {
+                if (Auth::user()->type == 'developer') {
+                    $data = [];
+                    $data['user_id'] = Auth::user()->id;
+
+                    $request->session()->put('type', 'student');
+
+                    $data['entrada_momento'] = now();
+                    
+                    Login::create($data);
+        
+                    return redirect()->intended($this->redirectPath());
+                }
+
+            }
+
         }
 
         return redirect()->back()
             ->withInput()
             ->withErrors([
-                'login' => 'Usuário ou senha inválidos',
+                'login' => 'Usuário ou senha inválidos'
             ]);
     }
 

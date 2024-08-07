@@ -20,7 +20,7 @@ class DisciplinaController extends Controller
      */
     public function index(Request $request)
     {
-        if (Auth::user()->type != 'admin') {
+        if (session('type') != 'admin') {
             return redirect('/');
         }
 

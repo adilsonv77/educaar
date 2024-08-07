@@ -50,7 +50,7 @@
                                 <th>Série</th>
                                 <th>Fechar</th> 
                                 <th>Selecionar Devs</th>
-                                @can('teacher')<th>Resultados</th>@endcan
+                                @if (session('type') == 'teacher')<th>Resultados</th>@endif
                                 <th>Editar</th>
                                 <th>Excluir</th>
                             </tr>
@@ -89,7 +89,7 @@
                                             </button>
                                         </form>
                                     </td>
-                                    @can('teacher')
+                                    @if (session('type') == 'teacher')
                                     <!-- Resultados -->
                                     <td>
                                         <form action="{{ route('content.resultsContents') }}">
@@ -101,7 +101,7 @@
                                             </button>
                                         </form>
                                     </td>
-                                    @endcan
+                                    @endif
                                     <td>
                                      <!-- Editar -->
                                     <form action="{{ route('content.edit', $item->id) }}">

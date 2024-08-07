@@ -71,29 +71,30 @@
                                             <i class="bi bi-person icon-purple"></i>
                                             <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
                                             <p class="fs-12 mb-0">
-                                                @if (Auth::user()->type == 'student')
+                                                
+                                                @if (session('type') == 'student')
                                                     Estudante
                                                 @endif
 
-                                                @if (Auth::user()->type == 'teacher')
+                                                @if (session('type') == 'teacher')
                                                     Professor
                                                 @endif
 
-                                                @if (Auth::user()->type == 'admin')
+                                                @if (session('type') == 'admin')
                                                     Administrator
                                                 @endif
-                                                @if (Auth::user()->type == 'developer')
+                                                @if (session('type') == 'developer')
                                                     Desenvolvedor
                                                 @endif
                                             </p>
 
                                         </div>
-                                        @can('admin')
+                                        @if (session('type') == 'admin')
                                             <a href="{{ route('config.index') }}" title="Configurar";
                                                 class="dropdown-item ai-icon">
                                                 <img src="/gear.png" width="10" alt="" />
                                             </a>
-                                        @endcan
+                                        @endif
 
                                         <div class="saida">
                                             <a href="{{ route('logout') }}" title="Sair";
@@ -132,7 +133,7 @@
             <div class="deznav-scroll">
                 <ul class="metismenu" id="menu">
 
-                    @can('student')
+                    @if (session('type') == 'student')
                         <li><a class="ai-icon" href="/students/novas">
                                 <i class="fa fa-external-link-square" aria-hidden="true"></i>
                                 <span class="nav-text">Novas</span>
@@ -143,17 +144,17 @@
                                 <span class="nav-text">Realizadas</span>
                             </a>
                         </li>
-                    @endcan
+                    @endif
 
-                    @can('developer')
+                    @if (session('type') == 'developer')
                         <li><a class="ai-icon" href="{{ route('developer.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-notepad"></i>
                                 <span class="nav-text">Atividades</span>
                             </a>
                         </li>
-                    @endcan
+                    @endif
 
-                    @can('teacher')
+                    @if (session('type') == 'teacher')
                        
                         <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-smartphone-5"></i>
@@ -178,8 +179,9 @@
                             </a>
                         </li>
                      
-                    @endcan
-                    @can('admin')
+                    @endif
+
+                    @if (session('type') == 'admin')
                         
                         <li><a class="ai-icon" href="{{ route('user.indexAluno') }}" aria-expanded="false">
                                 <i class="flaticon-381-user-9"></i>
@@ -236,7 +238,7 @@
                                 <span class="nav-text">Conteúdos</span>
                             </a>
                         </li>
-                    @endcan
+                    @endif
                 </ul>
             </div>
         </div>

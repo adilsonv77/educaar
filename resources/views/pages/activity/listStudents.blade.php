@@ -10,7 +10,6 @@
 
     <div class="card">
         <div class="card-body">
-            @if (!empty($results))
                 <div class="table-responsive">
                     <table class="table table-hover table-responsive-sm">
                         <thead>
@@ -23,18 +22,11 @@
                                 <tr>
                                     <td>{{ $item->nome }}</td>
                                 </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
                 </div>
-            @endforeach
-
-            </tbody>
-            </table>
-
         </div>
-    @else
-        <div>
-            <h2>Nenhum aluno matriculado nesta turma </h2>
-        </div>
-        @endif
-    </div>
     </div>
 @endsection

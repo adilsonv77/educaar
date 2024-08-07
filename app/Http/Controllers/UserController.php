@@ -26,7 +26,7 @@ class UserController extends Controller
 
     private function doIndex(Request $request, $userindex, $tipo, $tipo2, $userCreate)
     {
-        if (Auth::user()->type != 'admin') {
+        if (session('type') != 'admin') {
             return redirect('/');
         }
 

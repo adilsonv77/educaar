@@ -50,10 +50,10 @@ class HomeController extends Controller
         //$activities = $contents;
         $schools = School::all()->where('id', Auth::user()->school_id)->first();
 
-        if (Auth::user()->type == 'admin') {
+        if (session('type') == 'admin') {
             return view('home', compact('schools'));
         }
-        if(Auth::user()->type == 'developer'){
+        if(session('type') == 'developer'){
             $activities= DB::table('activities')
                         ->join('contents', 'activities.content_id', '=', 'contents.id')
                         ->join('content_developer','content_developer.content_id','=','contents.id')
@@ -62,19 +62,28 @@ class HomeController extends Controller
             return view('home', compact('activities'));
         }
 
-        if (Auth::user()->type == 'student') {
+        if (session('type') == 'student') {
             $ano_letivo = AnoLetivo::where('bool_atual', 1)->first();
-            $disciplinas = DB::table('disciplinas as d')
-                ->select('d.id', 'd.name')
-                ->join('turmas_disciplinas as td', 'd.id', '=', 'td.disciplina_id')
-                ->join('turmas as t', 'td.turma_id', '=', 't.id')
-                ->join('alunos_turmas as at', 't.id', '=', 'at.turma_id')
-                ->where('at.aluno_id', Auth::user()->id)
-                ->where('t.ano_id', $ano_letivo->id)
-                ->distinct()
-                ->get();
 
-
+            // quando o usuário é developer mas o sistema trata como aluno
+            
+            if (Auth::user()->type != session('type')) {
+                $disciplinas = ContentDAO::buscarConteudosDeveloper(Auth::user()->id);
+                $disciplinas = $disciplinas
+                    ->select('disciplinas.id', 'disciplinas.name')
+                    ->distinct()
+                    ->get();
+            } else {
+                $disciplinas = DB::table('disciplinas as d')
+                    ->select('d.id', 'd.name')
+                    ->join('turmas_disciplinas as td', 'd.id', '=', 'td.disciplina_id')
+                    ->join('turmas as t', 'td.turma_id', '=', 't.id')
+                    ->join('alunos_turmas as at', 't.id', '=', 'at.turma_id')
+                    ->where('at.aluno_id', Auth::user()->id)
+                    ->where('t.ano_id', $ano_letivo->id)
+                    ->distinct()
+                    ->get();
+           }
 
             $rota = route("student.conteudos") . "?id=1";
             return view('mobHome', compact('disciplinas', 'rota'));
@@ -84,7 +93,7 @@ class HomeController extends Controller
             */
         }
 
-        if (Auth::user()->type == 'teacher') {
+        if (session('type') == 'teacher') {
          
             DB::enableQueryLog();
 
