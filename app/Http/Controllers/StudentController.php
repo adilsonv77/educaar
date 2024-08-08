@@ -34,7 +34,7 @@ class StudentController extends Controller
 
         } else {
             $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
-            ->where('bool_atual', 1)->first();
+                ->where('bool_atual', 1)->first();
 
             $conteudos = DB::table('alunos_turmas as at')
                 ->select('c.name', 'c.id')
@@ -51,7 +51,6 @@ class StudentController extends Controller
                 ])
                 ->distinct()
                 ->get();
-
         }
 
 

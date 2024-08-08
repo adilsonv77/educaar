@@ -147,7 +147,12 @@
                     @endif
 
                     @if (session('type') == 'developer')
-                        <li><a class="ai-icon" href="{{ route('developer.index') }}" aria-expanded="false">
+                        <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
+                                <i class="flaticon-381-smartphone-5"></i>
+                                <span class="nav-text">Conteúdos</span>
+                            </a>
+                        </li>
+                       <li><a class="ai-icon" href="{{ route('developer.index') }}" aria-expanded="false">
                                 <i class="flaticon-381-notepad"></i>
                                 <span class="nav-text">Atividades</span>
                             </a>

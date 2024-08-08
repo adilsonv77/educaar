@@ -49,10 +49,12 @@
                                 <th>Disciplina</th>
                                 <th>Série</th>
                                 <th>Fechar</th> 
-                                <th>Selecionar Devs</th>
-                                @if (session('type') == 'teacher')<th>Resultados</th>@endif
-                                <th>Editar</th>
-                                <th>Excluir</th>
+                                @if (session('type') == 'teacher')<th>Resultados</th>@endif                                
+                                @if (session('type') !== 'developer')
+                                    <th>Selecionar Devs</th>
+                                    <th>Editar</th>
+                                    <th>Excluir</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -80,15 +82,6 @@
                                     </td>
                                      
 
-                                    <td>
-                                        <form action="{{ route('dev.listDevs') }}">
-                                            @csrf
-                                            <input type="hidden" name="content" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-warning" title="Selecionar Devs">
-                                                <i class="bi bi-person-fill-gear h2"  style = "color : #ffffff;"></i>
-                                            </button>
-                                        </form>
-                                    </td>
                                     @if (session('type') == 'teacher')
                                     <!-- Resultados -->
                                     <td>
@@ -102,6 +95,16 @@
                                         </form>
                                     </td>
                                     @endif
+                                    @if (session('type') !== 'developer')
+                                    <td>
+                                        <form action="{{ route('dev.listDevs') }}">
+                                            @csrf
+                                            <input type="hidden" name="content" value="{{ $item->id }}">
+                                            <button type="submit" class="btn btn-warning" title="Selecionar Devs">
+                                                <i class="bi bi-person-fill-gear h2"  style = "color : #ffffff;"></i>
+                                            </button>
+                                        </form>
+                                    </td>
                                     <td>
                                      <!-- Editar -->
                                     <form action="{{ route('content.edit', $item->id) }}">
@@ -119,6 +122,7 @@
                                                 <i class="bi bi-trash3 h2"  style = "color : #ffffff;"></i>
                                         </button>
                                     </td>
+                                    @endif
                                 </tr>
                                 <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">

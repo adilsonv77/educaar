@@ -209,6 +209,7 @@ class ActivityController extends Controller
         if (array_key_exists('marcador', $data)) {
 
             $imgFile = $baseFileName . '.' . $request->marcador->getClientOriginalExtension();
+
             $request->marcador->move(public_path('marcadores'), $imgFile);
 
             $data['marcador'] = $imgFile;
