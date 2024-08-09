@@ -91,6 +91,7 @@ class LoginController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['entrada_momento'] = now();
             $request->session()->put('type', Auth::user()->type);
+            $request->session()->put('tipotrocado', false);
             Login::create($data);
 
             return redirect()->intended($this->redirectPath());
@@ -108,6 +109,7 @@ class LoginController extends Controller
                     $data['user_id'] = Auth::user()->id;
 
                     $request->session()->put('type', 'student');
+                    $request->session()->put('tipotrocado', true);
 
                     $data['entrada_momento'] = now();
                     

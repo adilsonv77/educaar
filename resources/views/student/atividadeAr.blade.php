@@ -98,8 +98,10 @@
                 </div>
         @endforeach
                     <div id="salvarquestao">
+                    @if (!session('tipotrocado'))
                         <button @if ($respondida == 1) hidden="hidden" @endif
                             class="btn btn-success" onclick="submitForm()">Salvar</button>
+                    @endif
                     </div>
     </form>
 </div>
