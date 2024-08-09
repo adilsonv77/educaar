@@ -31,12 +31,14 @@
     </form>
     <br>
 
+    @if (session('type') !== 'developer')
     <div>
         <form action="{{ route('content.create') }}">
             @csrf
             <button class="btn btn-smaller, btn-primary " id="novo" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
         </form>
-    </div>
+     </div>
+    @endif
 
     <div class="card">
         <div class="card-body">
