@@ -38,9 +38,9 @@
             <div class="col-md-9 col-sm-12">
                 <div class="form-group">
                     <label for="">Enunciado</label>
-                    <textarea rows="2" cols="150" type="text" name="question" maxlength="100" class="form-control @error('question') is-invalid @enderror"
-                        id="question" value="{{ old('question', $question) }}" required autocomplete="question"
-                        autofocus ></textarea>
+                    <textarea rows="2" cols="150" type="text" name="question" maxlength="98" class="form-control @error('question') is-invalid @enderror"
+                        id="question"  required autocomplete="question"
+                        autofocus >{{ old('question', $question) }}</textarea>
                 </div>
             </div>
            

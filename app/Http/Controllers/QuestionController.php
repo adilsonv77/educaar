@@ -128,7 +128,7 @@ class QuestionController extends Controller
         $id = session()->get('activity_id');
         # dd($activity);
         $validator = Validator::make($request->all(), [
-            'question' => 'required|max:100',
+            'question' => 'required',
             'A' => 'required',
             'B' => 'required',
             'C' => 'required',
