@@ -141,38 +141,71 @@ class StudentController extends Controller
     public function store(Request $request)
     {
 
+        /* 
+            precisa verificar se a questão já foi respondida...
+           isso pode acontecer quando o mesmo usuário se loga simultaneamente em mais equipamentos,
+           e entra na atividade. 
+        */ 
+
+        DB::beginTransaction();
+
         $questions = session()->get('questoes');
-        $datareq = $request->all();
-        foreach ($questions as $questao) {
-            $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
-            
-            try{
-                $respop = $datareq["questao" . $questao->id];
-                $data['question_id'] = $questao->id;
-                $data['user_id'] =  Auth::user()->id;
-                $data['activity_id'] =  $questao->activity_id;
-                $opcao = $questao->options[$respop];
-                //dd($respop . " - " . $opcao . " - " . $questao->a . " - " . implode(" ; ", $questao->options));
+        $questoes = [];
+
+        foreach ($questions as $q)
+        {
+            array_push($questoes, $q->id);
+        }
+
+        $respondida = DB::table('student_answers')
+            ->whereIn('question_id', $questoes)
+            ->exists();
+
+        if (!$respondida) {
+
+            $datareq = $request->all();
+            foreach ($questions as $questao) {
+                $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
                 
-                $data['alternative_answered'] =  $opcao; // havia um erro na estrutura do banco que esse campo era de somente 1!!!
-                // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
+                try{
+                    $respop = $datareq["questao" . $questao->id];
+                    $data['question_id'] = $questao->id;
+                    $data['user_id'] =  Auth::user()->id;
+                    $data['activity_id'] =  $questao->activity_id;
+                    $opcao = $questao->options[$respop];
+                    //dd($respop . " - " . $opcao . " - " . $questao->a . " - " . implode(" ; ", $questao->options));
+                    
+                    $data['alternative_answered'] =  $opcao; // havia um erro na estrutura do banco que esse campo era de somente 1!!!
+                    // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
 
-                if ($opcao == $questao->a) {
-                    $data['correct'] = true;
-                } else {
-                    $data['correct'] = false;
-                }
+                    if ($opcao == $questao->a) {
+                        $data['correct'] = true;
+                    } else {
+                        $data['correct'] = false;
+                    }
+                    
+                    //dd($data);
+                    // gravar no banco uma linha da resposta
+                    StudentAnswer::create($data);
+
+                    }catch(Exception $e){
+                        continue;
+                    }
                 
-                //dd($data);
-                // gravar no banco uma linha da resposta
-                StudentAnswer::create($data);
+                    
+                
+            }
 
-                }catch(Exception $e){
-                    continue;
-                 }
-            
+            DB::commit();
+        } else {
+            DB::commit();
 
-            
+            return redirect()->back()
+            ->withInput()
+            ->withErrors([
+                'respondida' => 'Questionário já respondido por outro login. Você somente consegue retornar.'
+            ]);
+
         }
 
         return redirect('/students/activity');
