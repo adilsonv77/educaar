@@ -149,8 +149,6 @@ class StudentController extends Controller
 
         DB::beginTransaction();
 
-        dd("BeginTransaction");
-        
         $questions = session()->get('questoes');
         $questoes = [];
 
@@ -162,6 +160,8 @@ class StudentController extends Controller
         $respondida = DB::table('student_answers')
             ->whereIn('question_id', $questoes)
             ->exists();
+        
+        dd($respondida);
 
         if (!$respondida) {
 
