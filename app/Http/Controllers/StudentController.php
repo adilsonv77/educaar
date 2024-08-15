@@ -159,6 +159,7 @@ class StudentController extends Controller
 
         $respondida = DB::table('student_answers')
             ->whereIn('question_id', $questoes)
+            ->where('user_id', Auth::user()->id)
             ->exists();
         
         dd($respondida);
