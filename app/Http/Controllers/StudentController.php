@@ -162,8 +162,6 @@ class StudentController extends Controller
             ->where('user_id', Auth::user()->id)
             ->exists();
         
-        dd($respondida);
-
         if (!$respondida) {
 
             $datareq = $request->all();
