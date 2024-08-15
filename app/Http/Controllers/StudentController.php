@@ -149,6 +149,8 @@ class StudentController extends Controller
 
         DB::beginTransaction();
 
+        dd("BeginTransaction");
+        
         $questions = session()->get('questoes');
         $questoes = [];
 
