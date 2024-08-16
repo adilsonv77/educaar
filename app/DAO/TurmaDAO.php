@@ -39,7 +39,7 @@ class TurmaDAO
         return $sql;        
     }
 
-    public static function resultadosCorretosAlunos($turmaid, $alunoid, $profid) {
+    public static function resultadosCorretosAlunos($turmaid, $alunoid) {
         
         /*select u.name, COUNT(q.id) as qntCorretas from turmas_disciplinas as td
         join turmas as t on td.turma_id = t.id
@@ -74,7 +74,6 @@ AND u.id = 8
                     ->on("alunt.aluno_id", "=", "u.id");
             })
             ->where([
-                //['td.professor_id', '=', $profid],
                 ['t.id', '=', $turmaid],
                 ['sta.correct', '=', 1],
                 ['u.id', '=', $alunoid]
@@ -85,7 +84,7 @@ AND u.id = 8
         return $sql;
     }
 
-    public static function resultadosIncorretosAlunos($turmaid, $alunoid, $profid) {
+    public static function resultadosIncorretosAlunos($turmaid, $alunoid) {
         $sql = DB::table('turmas_disciplinas as td')
             ->select("u.name", DB::raw("COUNT(q.id) as qntIncorretas"))
             ->join("turmas as t", "td.turma_id", "=", "t.id")
@@ -105,7 +104,6 @@ AND u.id = 8
                     ->on("alunt.aluno_id", "=", "u.id");
             })
             ->where([
-               // ['td.professor_id', '=', $profid],
                 ['t.id', '=', $turmaid],
                 ['sta.correct', '=', 0],
                 ['u.id', '=', $alunoid]
@@ -115,18 +113,17 @@ AND u.id = 8
         return $sql;
     }
 
-    public static function resultadosQuestoesNaoFeitas($profid) {
-        /**
-         * select COUNT(q.id) as qntQuestoes from turmas_disciplinas as td
-        join turmas as t on td.turma_id = t.id
-        join contents as c on t.turma_modelo_id = c.turma_id and
-                            td.disciplina_id = c.disciplina_id
-        join activities as a on a.content_id= c.id
-        JOIN questions as q on q.activity_id= a.id
-        where td.professor_id = 4 and t.ano_id = 4 
+    public static function resultadosQuestoesNaoFeitas($turmaid) {
+        /*
+          select COUNT(q.id) as qntQuestoes from turmas_disciplinas as td
+            join turmas as t on td.turma_id = t.id
+            join contents as c on t.turma_modelo_id = c.turma_id and
+                                td.disciplina_id = c.disciplina_id
+            join activities as a on a.content_id= c.id
+            JOIN questions as q on q.activity_id= a.id
+            where td.professor_id = 4 and t.ano_id = 4 
          */
 
-        $anoletivoid = AnoLetivo::where("bool_atual", 1)->first()->id;
         $sql = DB::table('turmas_disciplinas as td')
             ->select(DB::raw("COUNT(q.id) as qntQuestoes"))
             ->join("turmas as t", "td.turma_id", "=", "t.id")
@@ -137,8 +134,7 @@ AND u.id = 8
             ->join("activities as a", "a.content_id", "=", "c.id")
             ->join("questions as q", "q.activity_id", "=", "a.id")
             ->where([
-             //   ['td.professor_id', '=', $profid],
-                ['t.ano_id', '=', $anoletivoid]
+                ['t.id', '=', $turmaid]
             ]);
 
             return $sql;
