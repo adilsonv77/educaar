@@ -140,7 +140,7 @@ AND u.id = 8
             return $sql;
     }
 
-    public static function buscarQuestoesCorretas($turmaid, $alunoid, $profid) {
+    public static function buscarQuestoesCorretas($turmaid, $alunoid) {
         $sql = DB::table('turmas_disciplinas as td')
             ->join("turmas as t", "td.turma_id", "=", "t.id")
             ->join("contents as c", function($join) {
@@ -167,7 +167,7 @@ AND u.id = 8
 
         return $sql;
     }
-    public static function buscarQuestoesIncorretas($turmaid, $alunoid, $profid) {
+    public static function buscarQuestoesIncorretas($turmaid, $alunoid) {
         $sql = DB::table('turmas_disciplinas as td')
             ->join("turmas as t", "td.turma_id", "=", "t.id")
             ->join("contents as c", function($join) {

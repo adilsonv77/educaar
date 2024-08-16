@@ -11,7 +11,7 @@
 <div id="jorje">
     <div class="card">
         <div class="card-body">
-           
+           @if (!empty($questoes))
                 <div class="table-responsive">
                     <table class="table table-hover table-responsive-sm">
                         <thead>
@@ -35,11 +35,11 @@
                     </table>
 
                  </div>
-         
+            @else
                 <div>
                     <h2>Nenhuma resposta</h2>
                 </div>
-            
+            @endif
         </div>
     </div>
 

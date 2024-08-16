@@ -16,15 +16,14 @@ class QuestoesAcertadasController extends Controller
     {
         $data= $request->all(); 
         
-        $profid= Auth::user()->id;
 
         $aluno = DB::table('users')->where('id', $data['aluno_id'])->first();
 
 
         if($data['type_question']== "corretas"){
-            $where = TurmaDAO::buscarQuestoesCorretas($data['turma_id'], $aluno->id, $profid)->get();
+            $where = TurmaDAO::buscarQuestoesCorretas($data['turma_id'], $aluno->id)->get();
         }else if($data['type_question']== "incorretas"){
-            $where = TurmaDAO::buscarQuestoesIncorretas($data['turma_id'], $aluno->id, $profid)->get();
+            $where = TurmaDAO::buscarQuestoesIncorretas($data['turma_id'], $aluno->id)->get();
         }else{
 
         }
