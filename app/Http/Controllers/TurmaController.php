@@ -370,15 +370,11 @@ class TurmaController extends Controller
             $alunoRespondeuCorreto = TurmaDAO::resultadosCorretosAlunos($turma_id, $aluno->aluno_id, $prof_id)->get()->first();
             $alunoNaoRespondeuCorreto = TurmaDAO::resultadosIncorretosAlunos($turma_id, $aluno->aluno_id, $prof_id)->get()->first();
             $alunoNaoRespondeu= TurmaDAO::resultadosQuestoesNaoFeitas($prof_id)->get()->first();
-            if($alunoRespondeuCorreto!=null && $alunoNaoRespondeuCorreto!=null){
-                $newd['qntCorretas'] = $alunoRespondeuCorreto->qntCorretas;
-                $newd['qntIncorretas'] = $alunoNaoRespondeuCorreto->qntIncorretas;
-                $newd['qntNaoRespondidas'] = $alunoNaoRespondeu->qntQuestoes - ($alunoRespondeuCorreto->qntCorretas + $alunoNaoRespondeuCorreto->qntIncorretas);
-            }else{
-                $newd['qntCorretas'] = 0;
-                $newd['qntIncorretas'] = 0;
-                $newd['qntNaoRespondidas'] = $alunoNaoRespondeu->qntQuestoes;
-            }
+
+            $newd['qntCorretas'] = ($alunoRespondeuCorreto == null?0:$alunoRespondeuCorreto->qntCorretas);
+            $newd['qntIncorretas'] = ($alunoNaoRespondeuCorreto == null?0:$alunoNaoRespondeuCorreto->qntIncorretas);
+            $newd['qntNaoRespondidas'] = $alunoNaoRespondeu->qntQuestoes - ($newd['qntCorretas'] + $newd['qntIncorretas']);
+       
 
             array_push($alunos, $newd);
         }

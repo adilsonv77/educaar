@@ -55,7 +55,6 @@ class TurmaDAO
 where td.professor_id = 4 and t.ano_id = 4 AND sta.correct= 0 
 AND u.id = 8
  */
-
         $sql = DB::table('turmas_disciplinas as td')
             ->select("u.name", DB::raw("COUNT(q.id) as qntCorretas"))
             ->join("turmas as t", "td.turma_id", "=", "t.id")
@@ -75,12 +74,13 @@ AND u.id = 8
                     ->on("alunt.aluno_id", "=", "u.id");
             })
             ->where([
-                ['td.professor_id', '=', $profid],
+                //['td.professor_id', '=', $profid],
                 ['t.id', '=', $turmaid],
                 ['sta.correct', '=', 1],
                 ['u.id', '=', $alunoid]
             ])
             ->groupBy("u.name");
+       // dd($sql->toSql());
 
         return $sql;
     }
@@ -105,7 +105,7 @@ AND u.id = 8
                     ->on("alunt.aluno_id", "=", "u.id");
             })
             ->where([
-                ['td.professor_id', '=', $profid],
+               // ['td.professor_id', '=', $profid],
                 ['t.id', '=', $turmaid],
                 ['sta.correct', '=', 0],
                 ['u.id', '=', $alunoid]
@@ -137,7 +137,7 @@ AND u.id = 8
             ->join("activities as a", "a.content_id", "=", "c.id")
             ->join("questions as q", "q.activity_id", "=", "a.id")
             ->where([
-                ['td.professor_id', '=', $profid],
+             //   ['td.professor_id', '=', $profid],
                 ['t.ano_id', '=', $anoletivoid]
             ]);
 
@@ -163,7 +163,7 @@ AND u.id = 8
                     ->on("alunt.aluno_id", "=", "u.id");
             })
             ->where([
-                ['td.professor_id', '=', $profid],
+               // ['td.professor_id', '=', $profid],
                 ['t.id', '=', $turmaid],
                 ['sta.correct', '=', 1],
                 ['u.id', '=', $alunoid]
@@ -190,7 +190,7 @@ AND u.id = 8
                     ->on("alunt.aluno_id", "=", "u.id");
             })
             ->where([
-                ['td.professor_id', '=', $profid],
+              //  ['td.professor_id', '=', $profid],
                 ['t.id', '=', $turmaid],
                 ['sta.correct', '=', 0],
                 ['u.id', '=', $alunoid]
