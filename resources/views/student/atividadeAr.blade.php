@@ -7,7 +7,7 @@
             margin: 4px, 4px;
             padding: 4px;
 
-            height: 70%;
+            height: 80%;
             overflow-x: hidden;
             overflow-y: auto;
             text-align: justify;
