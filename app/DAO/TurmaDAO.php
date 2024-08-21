@@ -142,6 +142,7 @@ AND u.id = 8
 
     public static function buscarQuestoesCorretas($turmaid, $alunoid) {
         $sql = DB::table('turmas_disciplinas as td')
+            ->select("a.name as activity_name", "c.name as content_name", "alternative_answered", "question")
             ->join("turmas as t", "td.turma_id", "=", "t.id")
             ->join("contents as c", function($join) {
                 $join->on("t.turma_modelo_id", "=", "c.turma_id")
@@ -169,6 +170,7 @@ AND u.id = 8
     }
     public static function buscarQuestoesIncorretas($turmaid, $alunoid) {
         $sql = DB::table('turmas_disciplinas as td')
+            ->select("a.name as activity_name", "c.name as content_name", "alternative_answered", "question")
             ->join("turmas as t", "td.turma_id", "=", "t.id")
             ->join("contents as c", function($join) {
                 $join->on("t.turma_modelo_id", "=", "c.turma_id")
@@ -194,5 +196,44 @@ AND u.id = 8
         return $sql;
     }
 
+
+    public static function buscarQuestoesNaoRespondidas($turmaid, $alunoid) {
+        /*
+        SELECT * FROM turmas_disciplinas td 
+            join turmas t on t.id = td.turma_id
+            join contents c on c.turma_id = t.turma_modelo_id and c.disciplina_id = td.disciplina_id
+            join activities a on a.content_id = c.id
+            join questions q on q.activity_id = a.id
+            
+            left outer join (SELECT * FROM student_answers sa WHERE user_id = 255) saq on q.id = saq.question_id and q.activity_id = saq.activity_id
+
+            where td.turma_id = 16 and  saq.alternative_answered is null;
+            */
+
+        $sql_s_a = DB::table('student_answers as sa')
+            ->where('user_id', '=', $alunoid);
+        
+        $sql = DB::table('turmas_disciplinas as td')
+        ->select("a.name as activity_name", "c.name as content_name", "alternative_answered", "question")
+        ->join("turmas as t", "td.turma_id", "=", "t.id")
+        ->join("contents as c", function($join) {
+            $join->on("t.turma_modelo_id", "=", "c.turma_id")
+                ->on("td.disciplina_id", "=", "c.disciplina_id");
+        })
+        ->join("activities as a", "a.content_id", "=", "c.id")
+        ->join("questions as q", "q.activity_id", "=", "a.id")
+        ->leftJoinSub($sql_s_a, 'saq', function ($join) {
+            $join->on('q.id', '=', 'saq.question_id')
+                 ->on('q.activity_id', '=', 'saq.activity_id');
+        })
+        ->where([
+              ['t.id', '=', $turmaid],
+              ['saq.alternative_answered' =>  NULL]
+          ]);
+
+       // dd($sql->toSql());
+
+        return $sql;        
+    }
 }
 ?>

@@ -19,7 +19,7 @@
                                 <th>Questão</th>
                                 <th>Atividade</th>
                                 <th>Conteúdo</th>
-                                <th>Resposta</th>
+                                @if ($mostra_resposta == 1)<th>Resposta</th>@endif
                             </tr>
                         </thead>
                         <tbody>
@@ -28,7 +28,7 @@
                             <td>{{ $questao['question'] }}</td>
                             <td>{{ $questao['activity_name'] }}</td>
                             <td>{{ $questao['content_name'] }}</td>
-                            <td>{{ $questao['alternative_answered']}}</td>
+                            @if ($mostra_resposta == 1) <td>{{ $questao['alternative_answered']}}</td>@endif
                         </tr>
                         @endforeach
                         </tbody>
