@@ -19,6 +19,7 @@
                                 </td>
                             </tr>
                         @endforeach
+                        <tr><td><br/></td></tr> <!-- para deixar um espaço após o último elemento -->
                     </tbody>
                 </table>
                 {{-- </div> --}}
