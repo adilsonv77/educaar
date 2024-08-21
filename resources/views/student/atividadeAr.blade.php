@@ -71,10 +71,7 @@
                             {{ $loop->iteration }}.{{ $item->question }}
                         </h2>
                     </div>
-                    
-                    
-                    
-
+ 
                     <div class="card-body">
                         @foreach ($item->options as $option)
                         
@@ -97,12 +94,13 @@
                     </div>
                 </div>
         @endforeach
-                    <div id="salvarquestao">
+                <div><br/></div>
+                <div id="salvarquestao">
                     @if (!session('tipotrocado'))
                         <button @if ($respondida == 1) hidden="hidden" @endif
                             class="btn btn-success" onclick="submitForm()">Salvar</button>
                     @endif
-                    </div>
+                </div>
     </form>
 </div>
 
