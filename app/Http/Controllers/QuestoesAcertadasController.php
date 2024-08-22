@@ -25,6 +25,8 @@ class QuestoesAcertadasController extends Controller
         }else if($data['type_question']== "incorretas"){
             $where = TurmaDAO::buscarQuestoesIncorretas($data['turma_id'], $aluno->id)->get();
         }else{
+            
+            
             $where = TurmaDAO::buscarQuestoesNaoRespondidas($data['turma_id'], $aluno->id)->get();
             $mostra_resposta = 0;
         }
@@ -39,20 +41,65 @@ class QuestoesAcertadasController extends Controller
                 'question'=> $w->question,
                 'alternative_answered'=> $w->alternative_answered
             ];
-/*
-            $activity_name = DB::table('activities')->where('id', $w->activity_id)->first();
-            dd($activity_name);
-            //->name;
-            $content_name = DB::table('contents')->where('id', $w->content_id)->first()->name;
 
-            $questao['activity_name'] = $activity_name;
-            $questao['content_name'] = $content_name;
-*/
             array_push($questoes, $questao);
         }
-
-        
         return view('pages.turma.questoesDosAlunos', compact('questoes', 'aluno', 'mostra_resposta'));
+    }
+
+    public function todos(Request $request)
+    {
+        $data= $request->all(); 
+        $where = TurmaDAO::buscarQuestoesNaoRespondidasTodosAlunos($data['turma_id'])->get();
+        //dd($where);
+        $questoes = array();
+        $last_content = "";
+        $last_activity = "";
+
+        foreach($where as $w){
+           
+            if ($w->content_name != $last_content) {
+                
+                if ($last_activity != "") 
+                    array_push($questao['activities'], $activity);
+
+                if ($last_content != "") {
+
+                    array_push($questoes, $questao);
+                }
+
+                $questao = [
+                    'content_name' => $w->content_name,
+                    'activities' => []
+                ];
+                $last_content = $w->content_name;
+                $last_activity = "";
+
+
+
+            } 
+
+            if ($w->activity_name != $last_activity) {
+                
+                if ($last_activity != "") {
+                    
+                    array_push($questao['activities'], $activity);
+
+                }
+                $activity = [
+                    'activity_name' => $w->activity_name,
+                    'alunos' => []
+                ];
+                $last_activity = $w->activity_name;
+                
+            } 
+            
+            array_push($activity['alunos'], $w->user_name);
+
+        }
+
+        return view('pages.turma.listarNaoRespondidas', compact('questoes'));
+
     }
 
 }

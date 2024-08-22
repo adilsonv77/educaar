@@ -199,7 +199,7 @@ AND u.id = 8
 
     public static function buscarQuestoesNaoRespondidas($turmaid, $alunoid) {
         /*
-        SELECT * FROM turmas_disciplinas td 
+        SELECT a.name as activity_name, c.name as content_name, alternative_answered, question FROM turmas_disciplinas td 
             join turmas t on t.id = td.turma_id
             join contents c on c.turma_id = t.turma_modelo_id and c.disciplina_id = td.disciplina_id
             join activities a on a.content_id = c.id
@@ -226,14 +226,48 @@ AND u.id = 8
             $join->on('q.id', '=', 'saq.question_id')
                  ->on('q.activity_id', '=', 'saq.activity_id');
         })
-        ->where([
-              ['t.id', '=', $turmaid],
-              ['saq.alternative_answered' =>  NULL]
-          ]);
+        ->where('t.id', '=', $turmaid)
+        ->whereNull('saq.alternative_answered')
+        ->orderBy("c.id")
+        ->orderBy("a.id");
 
-       // dd($sql->toSql());
+        // dd($sql->toSql());
 
         return $sql;        
+    }
+
+    public static function buscarQuestoesNaoRespondidasTodosAlunos($turmaid) {
+        /*
+        select user_name, a.name as activity_name, c.name as content_name FROM 
+        (select u.name as user_name, aluno_id, turma_id from alunos_turmas join users u on u.id = aluno_id where turma_id = 16) at
+        join contents c on c.turma_id = at.turma_id
+        join activities a on a.content_id = c.id
+        left outer join student_answers sa on sa.activity_id = a.id and sa.user_id = aluno_id
+        where sa.id is null
+        order by c.id
+        */
+
+        $sql_at = DB::table('alunos_turmas as at')
+            ->select("u.name as user_name", "aluno_id", "turma_id")
+            ->join("users as u", "u.id", "=", "aluno_id")
+            ->where("turma_id", "=",  $turmaid);
+
+        $sql = DB::table("contents as c")
+            ->select("user_name", "a.name as activity_name", "c.name as content_name")
+            ->joinSub($sql_at, "at", "c.turma_id", "=", "at.turma_id")
+            ->join("activities as a", "a.content_id", "=", "c.id")
+            ->leftJoin("student_answers as sa", function ($join) {
+                $join->on('sa.activity_id', '=', 'a.id')
+                     ->on('sa.user_id', '=', 'aluno_id');
+            })
+            ->whereNull("sa.id")
+            ->orderBy("c.id")
+            ->orderBy("a.id")
+            ->orderBy("user_name");
+
+      // dd($sql->toSql());
+ 
+       return $sql;   
     }
 }
 ?>

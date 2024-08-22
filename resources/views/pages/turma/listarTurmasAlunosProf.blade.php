@@ -24,8 +24,13 @@
     </form>
 
     <br>
-  </div>
-
+    </div>
+    <form action="{{ route('student.naorespondidas') }}">
+        <input type="hidden" name="turma_id" value="{{ $turma->id }}">
+        <button type="submit" class="btn btn-success" >
+             Geral de questões não respondidas
+        </button>
+    </form>
     <div class="card">
         <div class="card-body">
             @if (!empty($alunos))
