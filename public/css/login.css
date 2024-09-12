@@ -29,13 +29,11 @@ body .img-fundo {
   justify-content: center;
   background-color: #e3edeb;
   border-radius: 60px;
-  width: 40vw;
-  height: 60vh;
+  width: 30vw;
+  height: 50vh;
 }
 
 .elements .img-fluid{
-
-
 height: 90%;
 }
 
@@ -51,12 +49,26 @@ height: 90%;
 }
 
 
+.elements .btn{
 
-.item-row{
+
+  
+}
+
+
+
+/* .item-row{
 width: 60%;
 margin-bottom:10% ;
 
 }
+
+.item-row .btn{
+  width: 30%;
+  height: 20%;
+  
+  
+  } */
 
 
 

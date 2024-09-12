@@ -28,7 +28,7 @@
     @livewireStyles
 </head>
 
-
+<form method="POST" action="{{ route('login') }}">
 
 <body>       
     <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo">
@@ -45,7 +45,7 @@
 
         <div class="main-container">
                         
-                            <!-- <form method="POST" action="{{ route('login') }}"> -->
+                            
                                 @csrf
                         <div class="elements">
                         <div class="logo">
