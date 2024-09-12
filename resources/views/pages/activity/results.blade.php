@@ -12,6 +12,7 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
 @endsection
 
 @section('page-name', $pageName)
@@ -22,14 +23,14 @@
   <form action="{{ route('activity.results') }}" method="GET ">
           @csrf
           <label for="">Informe a turma:</label>
-          <div class="form-inline">
+          <div class="form-inline" style="width: 40vw">
               <select class="form-control" name="turma_id">
                   @foreach ($turmas as $item)
                       <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
                           {{ $item->nome }}</option>
                   @endforeach
               </select>
-              <section class="itens-group">
+              <section class="itens-group" >
                   <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
               </section>
           </div>

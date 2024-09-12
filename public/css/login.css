@@ -2,473 +2,139 @@
 
 
 
-.h-100{
-
+body {
   display: flex;
   align-items: center;
   justify-content: center;
-  
+  position: relative; 
+  width: 100vw;
+  height: 100vh; 
+  overflow: hidden; 
 }
-
-#alerta{
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #ff9999;
-  color: white;
-  border: 1px solid #cc0000;
-}
-
-#alerta h3{
-
-  color: white;
-
-
-}
-div.container{
-  height: 40vh;
-}
-
-div.logo{
-  height: 100px;
-}
-
-
-.card-body{
-  width: 100%;
-  height: 25vh;
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */ 
-  
-}
-
-.background-image img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-}
-.background-image {
-  position: fixed;
+body .img-fundo {
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover; 
+  z-index: -1; 
+}
+
+.main-container{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #e3edeb;
+  border-radius: 60px;
+  width: 40vw;
+  height: 60vh;
+}
+
+.elements .img-fluid{
+
+
+height: 90%;
+}
+
+.elements{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  height: 70%;
+  gap: 7%;
 }
 
 
 
-.item-row.login{
-  display:flex;
-  width: 100%;
-  border-radius: 25px;
-  
-  
-  
+.item-row{
+width: 60%;
+margin-bottom:10% ;
+
 }
-.item-row.password{
-  display:flex;
-  width: 100%;
-  border-radius: 25px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 @media screen and (max-width: 411px) and (min-width: 325px) {
- 
-  .h-100{
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-  }
-  
-  #alerta{
-  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ff9999;
-    color: white;
-    border: 1px solid #cc0000;
-  }
-  
-  #alerta h3{
-  
-    color: white;
-  
-  
-  }
-  div.container{
-    height: 55vh;
-  }
-  
-  div.logo{
-    height: 100px;
-  }
-  
-  
-  .card-body{
-    width: 100%;
-    height: 45vh;
-    /* display: flex;
-    align-items: center;
-    justify-content: center; */ 
-    
-  }
-  
-  .background-image img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
-  .background-image {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  }
-  
-  
-  
-  .item-row.login{
-    display:flex;
-    width: 100%;
-    border-radius: 25px;
-    
-    
-    
-  }
-  .item-row.password{
-    display:flex;
-    width: 100%;
-    border-radius: 25px;
-  }
 
 
 }
-
-@media screen and (max-width: 425px) {
  
- 
-
-
-}
-
-
-@media screen and (min-width: 426px) and (max-width:1439px) {
-  
   
 
- 
-}
-
-/* Tela grande minimo de 768px e maximo de 992px */
-@media screen and (min-width: 1440px) and (max-width:2560px) {
-
-  
-  
-  }
 
 
   /* Estilos para dispositivos com largura de tela até 767px (celulares em modo retrato) */
 @media only screen and (max-width: 767px) {
-  .container{
-    width: 80vw;
-    height:70vh;
+
+  .main-container{
+    position: absolute;
     display: flex;
     flex-direction: column;
-    align-items:center;
+    align-items: center;
     justify-content: center;
     background-color: #e3edeb;
-    border-radius: 30px;
-    z-index: 1;
-    
+    border-radius: 60px;
+    width: 80vw;
+    height: 60vh;
   }
   
-
-
-  .logo{
-    margin-top: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    width: 70vw;
-    height: 15vh;
-  }
-  
-
-
-.img-wrapper{
-  width: 50%;
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  bottom: 0;
-  right:27%;
-  transform: translateX(-50%);
-
-}
-
-.btn.btn-primary{
-  display: flex;
-  margin:auto;
-  width:50vw;
-  justify-content: center;
-  background-color:#81348b;
-  
-}
-}
+} 
 
 /* Estilos para dispositivos com largura de tela de 768px até 991px (tablets e dispositivos com telas menores) */
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-  .container{
-    width: 50vw;
-    height:70vh;
+
+  .main-container{
+    position: absolute;
     display: flex;
     flex-direction: column;
-    align-items:center;
+    align-items: center;
     justify-content: center;
     background-color: #e3edeb;
-    border-radius: 30px;
-    z-index: 1;
-
-    
+    border-radius: 60px;
+    width: 80vw;
+    height: 80vh;
   }
-  
 
-
-  .logo{
-    margin-top: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    width: 28vw;
-    height: 15vh;
-  }
-  
-
-
-
-
-.img-wrapper{
-  width: 25%;
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  bottom: 0;
-  right:20%;
-  transform: translateX(-50%);
-
-}
-
-.btn.btn-primary{
-  display: flex;
-  margin:auto;
-  width:30vw;
-  justify-content: center;
-  background-color:#81348b;
-  
-}
-}
+} 
 
 /* Estilos para dispositivos com largura de tela de 992px até 1199px (tablets e dispositivos com telas maiores, e também alguns notebooks e monitores menores) */
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
-  div.container{
-    width: 30vw;
-    height: 35vh;
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    justify-content: center;
-    background-color: #e3edeb;
-    border-radius: 30px;
-    z-index: 1;
-    
-  }
+
   
- div.card-body{
-  height: 30vh;
- }
-
-  .logo{
-    margin-top: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    width: 15vw;
-    height: 15vh;
-  }
   
- 
-
-.img-wrapper{
-  width: 15%;
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  bottom: 0;
-  right:16%;
-  transform: translateX(-50%);
-
-}
-
-
-
-.btn.btn-primary{
-  display: flex;
-  margin:auto;
-  width:20vw;
-  justify-content: center;
-  background-color:#81348b;
-  
-}
-}
+} 
 
 /* Estilos para dispositivos com largura de tela de 1200px ou mais (notebooks, dispositivos de tela grande) */
-
-
 @media only screen and (min-width: 1200px)  and (max-width: 1600px) {
 
-  .h-100{
-
-    width: 100vw;
-    height: 100vh;
-  }
-
-
-  div.container{
-    width: 30vw;
-    height:60vh;
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    justify-content: center;
-    background-color: #e3edeb;
-    border-radius: 30px;
-    z-index: 1;
-    
-  }
-  #alerta{
-    width: 25vw;
-    height: 20vh;
-    display: flex;
-    position: absolute;
-    top: 1%;
-    right: 1%;
-
-  }
-
-  
   
 
-
-  div.logo{
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    width: 15vw;
-    height: 10vh;
-  }
-  
- 
-
-.img-wrapper{
-  width: 15%;
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  bottom: 0;
-  right:16%;
-  transform: translateX(-50%);
-
-}
-
-
-
-.btn.btn-primary{
-  display: flex;
-  margin:auto;
-  width:20vw;
-  justify-content: center;
-  background-color:#81348b;
-  
-}
-
-}
+} 
 
 /*telas de desktop (talvez funcione :P )*/
 @media only screen and (min-width: 1600px) {
 
-  .h-100{
-
-    width: 100vw;
-    height: 100vh;
-  }
-
-
-  div.container{
-    width: 30vw;
-    height:45vh;
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    justify-content: center;
-    background-color: #e3edeb;
-    border-radius: 30px;
-    z-index: 1;
-    
-  }
-  #alerta{
-    width: 20vw;
-    height: 15vh;
-    display: flex;
-    position: absolute;
-    top: 1%;
-    right: 1%;
-
-  }
-
   
-  
-
-
-  div.logo{
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    width: 15vw;
-    height: 10vh;
-  }
-  
- 
-
-.img-wrapper{
-  width: 15%;
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  bottom: 0;
-  right:16%;
-  transform: translateX(-50%);
-
-}
-
-
-
-.btn.btn-primary{
-  display: flex;
-  margin:auto;
-  width:20vw;
-  justify-content: center;
-  background-color:#81348b;
-  
-}
-}
+} 
 
 
 
@@ -478,9 +144,7 @@ div.logo{
 
 
 
-/* .wave{
-  filter: hue-rotate(270deg) saturate(150%) brightness(90%);
-} */
+
 
 
 

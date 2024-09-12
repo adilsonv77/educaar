@@ -26,102 +26,64 @@
 
     @include('sweetalert::alert')
     @livewireStyles
-
-   
-
-    
-
-
 </head>
 
 
 
-<body class="h-100">
-
-    {{-- <img class="wave" src="images/wave.png"> --}}
-
-    
-    <div class=''>
-
-        <div class="background-image">
-            <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fluid">
-        </div>
-
-        <div class="img-wrapper">
-
-            <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
-
-            <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">
-
-
-        </div>
-
+<body>       
+    <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo">
         @if ($errors->any())
-                    <div class="alert alert-danger" id="alerta">
-                    
-                        <ul>
+            <div class="alert alert-danger" id="alerta">
+                <ul>
+                    <h3>Problema ao logar</h3>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div class="main-container">
                         
-                            <h3>Problema ao logar</h3>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-        <div class="container">
-            <div class="logo">
-                <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}" alt="Imagem" class="img-fluid">
-            </div>
-            
-            {{-- <div class="card-header">{{ __('Login') }}</div> --}}
-            <div class="card-body">
-            
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-
-                    <div class="form-group row">
-                        <div class="item-row login">
-                            {{-- <div class="col-9"> --}}
-
-
-                            <input id="login" type="text"
-                                class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
-                                name="login" value="{{ old('username') ?: old('email') }}" required autofocus
-                                placeholder="Login">
-                            </label>
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            {{-- </div> --}}
+                            <!-- <form method="POST" action="{{ route('login') }}"> -->
+                                @csrf
+                        <div class="elements">
+                        <div class="logo">
+                            <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}"  alt="Imagem" class="img-fluid">
                         </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="item-row password">
-
-                            {{-- <div class="col-9"> --}}
-
-                            <input id="password" type="password"
-                                class="form-control @error('password') is-invalid @enderror" name="password" required
-                                autocomplete="current-password" placeholder="Senha">
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-
+                            
+                                <input id="login" type="text"
+                                    class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
+                                    name="login" value="{{ old('username') ?: old('email') }}" required autofocus
+                                    placeholder="Login">
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror                
+                            
+                                <input id="password" type="password"
+                                    class="form-control @error('password') is-invalid @enderror" name="password" required
+                                    autocomplete="current-password" placeholder="Senha">
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                             
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Login') }}
+                                </button>
+                            
                         </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                        {{ __('Login') }}
-                    </button>
-            </div>
-
-        </div>
+        
     </div>
+                        <!-- <footer>   
+                                <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
+                                <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">   
+                        </footer> -->
 </body>
+
+
 
 </html>
