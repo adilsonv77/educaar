@@ -2,7 +2,7 @@
 
 
 
-body {
+.prision {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,7 +11,7 @@ body {
   height: 100vh; 
   overflow: hidden; 
 }
-body .img-fundo {
+.prision .img-fundo {
   position: absolute;
   top: 0;
   left: 0;
@@ -20,6 +20,19 @@ body .img-fundo {
   object-fit: cover; 
   z-index: -1; 
 }
+
+.prision footer{
+
+  position: fixed;
+  bottom: 0;
+  width: 20%;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 
 .main-container{
   position: absolute;
@@ -32,6 +45,7 @@ body .img-fundo {
   width: 30vw;
   height: 50vh;
 }
+ 
 
 .elements .img-fluid{
 height: 90%;
@@ -48,16 +62,22 @@ height: 90%;
   gap: 7%;
 }
 
+.mial{
+  width: 100%;
+  display: flex;
+  justify-content: center;
 
-.elements .btn{
+
+}
 
 
-  
+.mial .btn{
+width: 50%;
 }
 
 
 
-/* .item-row{
+.item-row{
 width: 60%;
 margin-bottom:10% ;
 
@@ -66,9 +86,12 @@ margin-bottom:10% ;
 .item-row .btn{
   width: 30%;
   height: 20%;
-  
-  
-  } */
+  }
+
+ 
+
+
+
 
 
 
@@ -108,6 +131,17 @@ margin-bottom:10% ;
     width: 80vw;
     height: 60vh;
   }
+
+  .prision footer{
+
+    position: fixed;
+    bottom: 0;
+    width: 40%;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
 } 
 
@@ -124,6 +158,17 @@ margin-bottom:10% ;
     border-radius: 60px;
     width: 80vw;
     height: 80vh;
+  }
+
+  .prision footer{
+
+    position: fixed;
+    bottom: 0;
+    width: 40%;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
 } 

@@ -11,26 +11,29 @@
     @yield('style')
 
     <link rel="stylesheet" href="{{ asset('css/login.css?v=' . filemtime(public_path('css/login.css'))) }}" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> -->
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
         rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/app.css">
+    <!-- <link rel="stylesheet" href="/css/app.css">
 
     <link rel="stylesheet" href="/css/questions.css">
 
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="/css/telainicial.css"> --}}
+    <link rel="stylesheet" href="/css/telainicial.css"> --}} -->
 
     @include('sweetalert::alert')
     @livewireStyles
+    <form method="POST" action="{{ route('login') }}">
 </head>
 
-<form method="POST" action="{{ route('login') }}">
+
 
 <body>       
+    <div class="prision">
+
     <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo">
         @if ($errors->any())
             <div class="alert alert-danger" id="alerta">
@@ -47,7 +50,7 @@
                         
                             
                                 @csrf
-                        <div class="elements">
+                    <div class="elements">
                         <div class="logo">
                             <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}"  alt="Imagem" class="img-fluid">
                         </div>
@@ -71,17 +74,26 @@
                                     </span>
                                 @enderror
                              
+                                <div class="mial">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
+                                </div>
                             
-                        </div>
+                    </div>
+                    </div>   
         
-    </div>
-                        <!-- <footer>   
+                    
+                        <footer>   
                                 <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
                                 <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">   
-                        </footer> -->
+                        </footer>
+
+         
+
+                                   
+
+    </div>                    
 </body>
 
 
