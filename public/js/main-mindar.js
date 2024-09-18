@@ -104,6 +104,28 @@ document.addEventListener('DOMContentLoaded', () => {
       
         // Alternativa: Zera a rotação e depois aplica uma correção se necessário
         activeScene.rotation.set(0, 0, 0);  // Zera a rotação em todos os eixos
+
+        // anchor.onTargetFound = () => {
+        //   // Quando o alvo é detectado, o botão e o modelo são exibidos
+        //   buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
+        //   var bq = document.getElementById("button-ar");
+        //   bq.style.backgroundColor = anchor.clazz;
+        //   buttonAR.style.display = "block";
+          
+        //   if (anchor.glb.animations.length > 0) {
+        //     mixer = new THREE.AnimationMixer(anchor.glb.scene);
+        //     action = mixer.clipAction(anchor.glb.animations[0]);
+        //     action.play();
+        //   }
+        
+        //   // Mantém o objeto visível ao centralizá-lo e ajustar a rotação
+        //   activeScene = glbScene;
+        //   const box = new THREE.Box3().setFromObject(activeScene);
+        //   const center = box.getCenter(new THREE.Vector3());
+        //   activeScene.position.sub(center); 
+        //   activeScene.rotation.set(0, Math.PI / 2, 0);
+        //   activeScene.rotation.set(0, 0, 0);
+
       };
       
       
@@ -111,6 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
       anchor.onTargetLost = () => {
         lastActiveScene = activeScene;
         activeScene = null;
+
+        console.log("Marcador perdido, mas o objeto permanece na cena.");
       
         // para esconder o botãoAR quando o target sair
         buttonAR.style.display = "none";

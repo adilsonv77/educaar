@@ -35,6 +35,9 @@
     <div class="prision">
 
     <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo">
+
+
+    
         @if ($errors->any())
             <div class="alert alert-danger" id="alerta">
                 <ul>
@@ -47,13 +50,16 @@
         @endif
 
         <div class="main-container">
+                    
                         
                             
                                 @csrf
                     <div class="elements">
-                        <div class="logo">
+
+                    
+                    <div class="logo">
                             <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}"  alt="Imagem" class="img-fluid">
-                        </div>
+                    </div>
                             
                                 <input id="login" type="text"
                                     class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
