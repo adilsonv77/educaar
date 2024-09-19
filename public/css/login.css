@@ -20,6 +20,22 @@
   object-fit: cover; 
   z-index: -1; 
 }
+.h3{
+  color: black;
+}
+
+#password{
+
+color: black;
+
+}
+
+#login{
+
+color: black;
+
+
+}
 
 .prision footer{
 
@@ -32,11 +48,10 @@
   align-items: center;
 }
 
+
+
 footer .img-fluid{
   width: 20%;
-
-
-
 }
 
 
@@ -90,6 +105,7 @@ width: 80%;
 .item-row{
 width: 60%;
 margin-bottom:10% ;
+color: black;
 
 }
 
@@ -102,11 +118,12 @@ margin-bottom:10% ;
     position: absolute; /* ou fixed, se quiser que ele fique fixo na tela */
     top: 20px; /* Distância do topo */
     right: 20px; /* Distância da direita */
+   
     display: flex;
     align-items: flex-start;
-    justify-content: flex-end;
+    justify-content: center;
     background-color: #ff9999;
-    color: white;
+    color: black;
     border: 1px solid #cc0000;
     padding: 10px; /* Espaçamento interno */
 }
@@ -161,12 +178,21 @@ margin-bottom:10% ;
 
     position: fixed;
     bottom: 0;
-    width: 40%;
+    width: 100%;
     padding: 10px 0;
     display: flex;
     justify-content: center;
     align-items: center;
   }
+
+ 
+
+  footer .img-fluid{
+    width: 50%;
+  }
+
+
+
   
 } 
 
@@ -189,11 +215,15 @@ margin-bottom:10% ;
 
     position: fixed;
     bottom: 0;
-    width: 40%;
+    width: 100%;
     padding: 10px 0;
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  footer .img-fluid{
+    width: 50%;
   }
 
 } 
