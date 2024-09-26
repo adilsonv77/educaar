@@ -3,6 +3,7 @@
 @section('page-name', 'Cadastrar aluno na disciplina')
 
 @section('content')
+
     <div class="card">
         <div class="card-body">
             @if ($errors->any())

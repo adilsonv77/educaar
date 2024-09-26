@@ -72,20 +72,6 @@ class AppServiceProvider extends ServiceProvider
             return true;
         }, 'E-mail já existe. Por favor, digite novamente.');
 
-        Validator::extend('disciplina_ja_existe', function ($attribute, $value, $parameters, $validator) {
-            $inputs = $validator->getData();
-            $name = $inputs['name'];
-            $id = $inputs['id'];
-
-            $disciplinas = Disciplina::where('school_id', Auth::user()->school_id)->get();
-            foreach ($disciplinas as $disciplina) {
-                if ($name == $disciplina->name && $disciplina->id != $id) {
-                    return false;
-                }
-            }
-
-            return true;
-        }, 'Disciplina já existe. Por favor, digite novamente.');
 
         Validator::extend('ano_letivo_ja_existe', function ($attribute, $value, $parameters, $validator) {
             $inputs = $validator->getData();
@@ -102,6 +88,21 @@ class AppServiceProvider extends ServiceProvider
             return true;
         }, 'Ano Letivo já existe. Por favor, digite novamente.');
 
+        Validator::extend('disciplina_ja_existe', function($attribute, $value, $parameters, $validator) {
+            $inputs = $validator->getData();
+            $name = $inputs['name'];
+            $disciplinaId = isset($inputs['disciplinaId']) ? $inputs['disciplinaId'] : null;
+        
+            $existingDisciplina = Disciplina::where('school_id', Auth::user()->school_id)
+                ->where('name', $name)
+                ->first();
+        
+            if ($existingDisciplina && $existingDisciplina->id != $disciplinaId) {
+                return false;
+            }
+        
+            return true;
+        }, 'A disciplina já existe. Por favor, escolha outro nome.');
 
         Validator::extend('extensao_invalida', function ($attribute, $value, $parameters, $validator) {
             // dd($attribute, $value, $parameters);

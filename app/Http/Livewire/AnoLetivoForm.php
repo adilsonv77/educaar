@@ -21,6 +21,12 @@ class AnoLetivoForm extends Component
 
     public $anoLetivoExcluir;
 
+    public $filtroTemp = ''; 
+    public function aplicarFiltro()
+    {
+        $this->filtro = $this->filtroTemp; 
+    }
+
     public function render()
     {
         $where = AnoLetivo::where('school_id', Auth::user()->school_id);

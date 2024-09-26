@@ -33,12 +33,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/createDeveloper', [App\Http\Controllers\UserController::class, 'createDeveloper'])->name('user.createDeveloper');
     Route::get('/matricula', [App\Http\Controllers\UserController::class, 'matricula'])->name('user.matricula');
     Route::post('/storeMatricula', [App\Http\Controllers\UserController::class, 'storeMatricula'])->name('user.storeMatricula');    //class
-    Route::resource('class', App\Http\Controllers\DisciplinaController::class);
+
+    //Route::get('/disciplinas', DisciplinaForm::class)->name('disciplinas');
+    //Route::resource('class', App\Http\Controllers\DisciplinaController::class);
+    Route::get('/class', function () { return view('pages.disciplina.list'); })->name('class.index');
 
     //ano letivo
     //Route::resource('anoletivo', App\Http\Controllers\AnoLetivoController::class);
     Route::get('/anoletivo', function () { return view('pages.anoletivo.list');})->name('anoletivo');
-
 
     //turmas modelos
     Route::resource('turmasmodelos', App\Http\Controllers\TurmasModelosController::class);

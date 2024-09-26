@@ -23,10 +23,10 @@
         <div class="flex justify-between">
             <div class="w-1/4">
                 <div class="form-inline">
-                    <input class="form-control" type="text" wire:model="filtro"
+                    <input class="form-control" type="text" wire:model.defer="filtroTemp"
                         list="historico" />
                     <section class="itens-group">
-                        <button class="btn btn-primary btn-lg" type="button" wire:click="$refresh">Filtrar</button>
+                        <button class="btn btn-primary btn-lg" type="button" wire:click="aplicarFiltro">Filtrar</button>
                         
                     </section>
                 </div>
