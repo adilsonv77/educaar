@@ -1,0 +1,104 @@
+.coluna {
+    border: 1px solid black;
+}
+
+.container-fluid {
+    padding: 0 !important;
+}
+
+.linha {
+    display: flex;
+    justify-content: center;
+}
+
+#painel {
+    position: relative;
+    background-color: #f8f8f8;
+    width: 550px;
+    height: 735px;
+    margin: 25px;
+    padding: 25px;
+    padding-bottom: 0 !important;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.185);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#painel textarea {
+    width: 100%;
+    height: 95px;
+    font-size: 18px;
+    border-radius: 15px;
+    padding: 5px 10px;
+    border: none;
+    resize: none;
+}
+
+#painel button{
+    width: 90px;
+    height: 40px;
+    background-color: #f8f8f8;
+    border: none;
+}
+
+#media{
+    background-color: white;
+    width: 300px;
+    height: 300px;
+    border-radius: 100%;
+    margin: 25px 0;
+    padding-top: 40px;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#selectType{
+    font-size: 16px;
+    margin-top: 35px;
+}
+
+#selectType span{
+    margin: 0 20px;
+    color: gray;
+}
+
+#areaBtns{
+    height: 149px;
+    width: 100%;
+    background-color: #E8ECEC;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 25px;
+}
+
+#add{
+    position: absolute;
+    width: fit-content !important;
+    height: fit-content !important;
+    padding: 0 12px;
+    background-color: white;
+    border-radius: 100%;
+    font-size: 30px;
+    right: 10px;
+    bottom: 90px;
+}
+
+.btnPainel{
+    background-color: #823688 !important;
+    width: 100px !important;
+    height: 100px !important;
+    border-radius: 100%;
+}
+
+button:focus{
+    border-style: none;
+}

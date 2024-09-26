@@ -6,8 +6,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\School;
 
-// use Hash;
+//Testes Renan
+use App\Http\Controllers\teste;
+Route::get('/paineis', [teste::class, 'index'])->name('paineis');
 
+// use Hash;
 Route::get('/', function () {
     return redirect('/home');
 });

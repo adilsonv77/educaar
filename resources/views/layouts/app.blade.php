@@ -183,6 +183,12 @@
                                 <span class="nav-text">Acessos</span>
                             </a>
                         </li>
+
+                        <li><a class="ai-icon" href="{{ route('paineis') }}" aria-expanded="false">
+                                <i class="bi-graph-up"></i>
+                                <span class="nav-text">Painéis</span>
+                            </a>
+                        </li>
                      
                     @endif
 
