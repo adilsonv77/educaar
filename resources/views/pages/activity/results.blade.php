@@ -103,37 +103,46 @@
 
           var data = new google.visualization.DataTable();
           data.addColumn('string','Questões');
-          data.addColumn('number', 'Respostas Corretas');
-          data.addColumn('number', 'Questões Respondidas');
+          data.addColumn('number', 'Respostas Corretas ');
+          data.addColumn('number', 'Respostas Incorretas ');
           data.addColumn({type: 'string', role: 'annotation'}); // Coluna de descrição sem ser exibida no gráfico
 
           var count = 1;
           var titleTable=null;
           questoes_resultados.forEach((question)=>{
             var value = "Q"+count++; 
+            var respostasIncorretas = question.qntRespondida - question.quntRespondCerto; 
+            console.log("Questão: " + question.questao + " | Respostas Incorretas: " + respostasIncorretas); 
             map1.set(value, [question.quntRespondCerto, question.qntRespondida, question.questao]);
             titleTable= document.getElementById(value);
             titleTable.setAttribute('title', question.questao);
-            data.addRow([value, question.quntRespondCerto, question.qntRespondida, question.questao ]);
+            data.addRow([value, question.quntRespondCerto, respostasIncorretas, question.questao ]);
           });
 
-          var options = {
-              chart: {
-                title: 'Questoes Corretas',
-                subtitle: 'Questoes Respondidas',
-              },
-              vAxis: {
-                gridlines:{
-                  count:1
-                }
-              },
-              series: {
-            3: {visibleInLegend: false} // Define a coluna da descrição para não ser exibida no gráfico
-              }
-            };
+          var _ticks = [];
+          for (var i = 0; i <= (qntCompletas+qntIncompletas); i++) {
+            _ticks.push(i);
+          }
 
-        var chart = new google.charts.Bar(document.getElementById('barras'));
-        chart.draw(data, google.charts.Bar.convertOptions(options));
+         var options = {
+          chart: {
+            title: 'Respostas Corretas e Incorretas',
+          },
+          isStacked: true,
+          legend: 'bottom',
+
+          vAxis: {
+            minValue: 0,
+            ticks: _ticks
+          },
+          bar: { groupWidth: '45%' }
+        };
+            
+            var chart = new google.visualization.ColumnChart(document.getElementById('barras'));
+            chart.draw(data, options);
+
+        // var chart = new google.charts.Bar(document.getElementById('barras'));
+        // chart.draw(data, google.charts.Bar.convertOptions(options));
 
        // Adicionando eventos de mouse às legendas após o gráfico ser desenhado
       google.visualization.events.addListener(chart, 'ready', function() {

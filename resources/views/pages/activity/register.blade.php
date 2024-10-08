@@ -3,7 +3,7 @@
 @endsection
 @section('page-name', $titulo)
 
-@section('content')
+@section('content') 
     <script>
        function upload_check()
         {
