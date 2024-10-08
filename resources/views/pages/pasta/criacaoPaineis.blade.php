@@ -33,7 +33,7 @@
         </div>
         <div class="col-md-4 coluna">
             <div id="configPainel">
-                <form action="{{route("paineis.store")}}" method="POST">
+                <form action="{{route("paineis.store")}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <!--Selecione uma mídia-->
                     <p id="tituloSelecionado">Bloco de Mídia</p>
