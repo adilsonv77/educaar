@@ -17,8 +17,6 @@
 
             if(upl.files[0].size > max)
             {
-               
-                    
                 const div = document.createElement("div");
                 
                 upl.parentNode.insertBefore(div, upl.nextSibling);
@@ -47,8 +45,6 @@
                 var upl = document.getElementById("glb");
                 upl.value = "";
             }
-
-            
          }
 
          function HabilitarDesabilitarImagemMarcador() {

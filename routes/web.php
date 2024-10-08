@@ -8,7 +8,10 @@ use App\Models\School;
 
 //Testes Renan
 use App\Http\Controllers\teste;
-Route::get('/paineis', [teste::class, 'index'])->name('paineis');
+Route::prefix('paineis')->group(function(){
+    Route::get('/', [teste::class, 'index'])->name('paineis.create');
+    Route::post('/', [teste::class, 'store'])->name('paineis.store');
+});
 
 // use Hash;
 Route::get('/', function () {
@@ -79,7 +82,6 @@ Route::middleware(['auth'])->group(function () {
     // Route::post('/question/store', [App\Http\Controllers\QuestionController::class, 'store'])->name('question.store');
 
     //activity
-
     Route::resource('activity', App\Http\Controllers\ActivityController::class);
 
     //report

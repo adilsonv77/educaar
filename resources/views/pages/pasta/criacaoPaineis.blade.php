@@ -7,7 +7,7 @@
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
-<link rel="stylesheet" href="{{asset('css/paineis.css')}}">
+<link rel="stylesheet" href="{{asset('css/painel.css')}}">
 @endsection
 
 @section('content')
@@ -16,8 +16,8 @@
     <div class="row">
         <div class="col-md-8 coluna linha">
             <div id="painel">
-                <textarea type="text" maxlength="117" placeholder="Digite seu texto aqui"></textarea>
-                <div id="media">
+                <textarea id="textoSuperior" type="text" maxlength="117" placeholder="Digite seu texto aqui"></textarea>
+                <div id="media" tabindex=0>
                     <p>Selecione um:</p>
                     <div id="selectType">
                         <button id="img">Imagem</button>
@@ -25,17 +25,51 @@
                         <button id="vid">Vídeo</button>
                     </div>
                 </div>
-                <textarea type="text" maxlength="117" placeholder="Digite seu texto aqui"></textarea>
+                <textarea id="textoInferior" type="text" maxlength="117" placeholder="Digite seu texto aqui"></textarea>
                 <div id="areaBtns">
                     <button id="add">+</button>
-                </div>    
+                </div>
             </div>
         </div>
         <div class="col-md-4 coluna">
+            <div id="configPainel">
+                <form action="{{route("paineis.store")}}" method="POST">
+                    @csrf
+                    <!--Selecione uma mídia-->
+                    <p id="tituloSelecionado">Bloco de Mídia</p>
+                    <hr>
+                    <div id="blocoMidia">
+                        <p>Tipo de mídia</p>
+                        <input type="radio" name="midia" id="midia1">
+                        <label for="midia1">Video</label>
+                        <input type="radio" name="midia" id="midia2">
+                        <label for="midia2">Imagem</label>
+                        <hr>
+                        <label for="youtubeLink">Youtube</label><br>
+                        <input id="youtubeLink" placeholder="Ex: https://www.youtube.com/watch?v=4YEy" name="link"><br>
+                        <label for="myfile">Local (somente .png, .jpg, .jpeg)</label><br>
+                        <input type="file" style="border:none" name="img" id="img" accept=".png, .jpeg, .jpg"/><br><br>
+                    </div>
+                    <div id="blocoTxt">
 
+                    </div>
+                    <div id="blocoBtn">
+
+                    </div>
+                    <input type="text" value="Document" name="src" id="test" style="display: none">
+                    <input type="submit" value="Salvar" id="salvarPainel">
+                </form>
+
+            </div>
         </div>
     </div>
 </div>
-
-<script src="{{asset('js/paineis.js')}}" type="module"></script>
+<script>
+    const submit =document.getElementById("salvarPainel")
+    const test = document.getElementById("test")
+    submit.onclick= ()=>{
+        test.value =document.getElementById("painel").outerHTML
+    }
+</script>
+<script src="{{asset('js/painel.js')}}" type="module"></script>
 @endsection
