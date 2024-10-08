@@ -198,7 +198,13 @@
                             <span><i  style = "color:#ffffff;"class="bi bi-zoom-out "></i></span>
                         </button> 
                    -->
-                        
+                        <button type="button" class="btn btn-warning" id="showObject">
+                            <span><i  style = "color:#ffffff;"class="bi bi-lock-fill"></i></span>
+                        </button> 
+
+                        <button type="button" class="btn btn-warning" id="removeObject">
+                            <span><i  style = "color:#ffffff;"class="bi bi-unlock-fill"></i></span>
+                        </button> 
             </div>
             @endif
         
