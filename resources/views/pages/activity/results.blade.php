@@ -103,8 +103,8 @@
 
           var data = new google.visualization.DataTable();
           data.addColumn('string','Questões');
-          data.addColumn('number', 'Respostas Corretas ');
           data.addColumn('number', 'Respostas Incorretas ');
+          data.addColumn('number', 'Respostas Corretas ');
           data.addColumn({type: 'string', role: 'annotation'}); // Coluna de descrição sem ser exibida no gráfico
 
           var count = 1;
@@ -113,10 +113,10 @@
             var value = "Q"+count++; 
             var respostasIncorretas = question.qntRespondida - question.quntRespondCerto; 
             console.log("Questão: " + question.questao + " | Respostas Incorretas: " + respostasIncorretas); 
-            map1.set(value, [question.quntRespondCerto, question.qntRespondida, question.questao]);
+            map1.set(value, [question.qntRespondida ,question.quntRespondCerto , question.questao]);
             titleTable= document.getElementById(value);
             titleTable.setAttribute('title', question.questao);
-            data.addRow([value, question.quntRespondCerto, respostasIncorretas, question.questao ]);
+            data.addRow([value,respostasIncorretas ,question.quntRespondCerto , question.questao ]);
           });
 
           var _ticks = [];
@@ -130,6 +130,7 @@
           },
           isStacked: true,
           legend: 'bottom',
+          colors: ['#5A2D66', '#9C6FA8'],
 
           vAxis: {
             minValue: 0,

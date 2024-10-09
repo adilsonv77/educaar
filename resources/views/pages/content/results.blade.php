@@ -58,10 +58,10 @@
         };
         var chart = new google.visualization.ColumnChart(document.getElementById('barras'));
         chart.draw(data, options);
-/*
-        var chart = new google.charts.Bar(document.getElementById('barras'));
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-  */     
+        
+        //var chart = new google.charts.Bar(document.getElementById('barras'));
+        // chart.draw(data, google.charts.Bar.convertOptions(options));
+       
 
         
        // Adicionando eventos de mouse às legendas após o gráfico ser desenhado
