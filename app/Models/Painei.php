@@ -9,6 +9,6 @@ class Painei extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'src',
+        'panel',
     ];
 }

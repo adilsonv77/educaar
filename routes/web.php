@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\School;
 
 //Testes Renan
-use App\Http\Controllers\teste;
+use App\Http\Controllers\PainelController;
 Route::prefix('paineis')->group(function(){
-    Route::get('/', [teste::class, 'index'])->name('paineis.create');
-    Route::post('/', [teste::class, 'store'])->name('paineis.store');
+    Route::get('/', [PainelController::class, 'index'])->name('paineis.create');
+    Route::post('/', [PainelController::class, 'store'])->name('paineis.store');
 });
 
 // use Hash;
@@ -23,7 +23,6 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
-    
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
     //config

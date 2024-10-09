@@ -7,7 +7,7 @@
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
-<link rel="stylesheet" href="{{asset('css/painel.css')}}">
+<link rel="stylesheet" href="{{asset('css/painel1.css')}}">
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
         <div class="col-md-8 coluna linha">
             <div id="painel">
                 <textarea id="textoSuperior" type="text" maxlength="117" placeholder="Digite seu texto aqui"></textarea>
-                <div id="media" tabindex=0>
+                <div id="midia" tabindex=0>
                     <p>Selecione um:</p>
                     <div id="selectType">
                         <button id="img">Imagem</button>
@@ -47,8 +47,8 @@
                         <hr>
                         <label for="youtubeLink">Youtube</label><br>
                         <input id="youtubeLink" placeholder="Ex: https://www.youtube.com/watch?v=4YEy" name="link"><br>
-                        <label for="myfile">Local (somente .png, .jpg, .jpeg)</label><br>
-                        <input type="file" style="border:none" name="img" id="img" accept=".png, .jpeg, .jpg"/><br><br>
+                        <label id="labelMyFile" for="myfile">Local (somente .png, .jpg, .jpeg)</label><br>
+                        <input type="file" style="border:none" name="midia" id="midiaInput" accept=".png, .jpeg, .jpg, .mp4"/><br><br>
                     </div>
                     <div id="blocoTxt">
 
@@ -56,7 +56,6 @@
                     <div id="blocoBtn">
 
                     </div>
-                    <input type="text" value="Document" name="src" id="test" style="display: none">
                     <input type="submit" value="Salvar" id="salvarPainel">
                 </form>
 
@@ -64,12 +63,5 @@
         </div>
     </div>
 </div>
-<script>
-    const submit =document.getElementById("salvarPainel")
-    const test = document.getElementById("test")
-    submit.onclick= ()=>{
-        test.value =document.getElementById("painel").outerHTML
-    }
-</script>
-<script src="{{asset('js/painel.js')}}" type="module"></script>
+<script src="{{asset('js/painel1.js')}}" type="module"></script>
 @endsection
