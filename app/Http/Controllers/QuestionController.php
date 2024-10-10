@@ -245,7 +245,7 @@ class QuestionController extends Controller
 
         $result= ResultActivityDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
         $questions=ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);
-        $respostasSelecionadas= ResultActivityDAO::respostasDosAlunos();
+        $respostasSelecionadas= ResultActivityDAO::respostasDosAlunos($activity->id, $turma->id);
 
 
         return view('pages.activity.results', compact('result','questions', 'turmas', 'turma', 'activity', 'respostasSelecionadas'));
@@ -258,11 +258,15 @@ class QuestionController extends Controller
         $activity= Activity::find($activity_id);
 
         if($type == 'Completo'){
-            $results= ResultActivityDAO::getStudentDidQuestions();    
+            $results= session()->get('alunos_fizeram_completo');    
         }elseif($type == 'Incompleto'){
-            $results= ResultActivityDAO::getStudentsUnfinishQuestions();
+            $results= session()->get('alunos_fizeram_incompleto');
         }elseif($type == 'Não fizeram'){
-            $results= ResultActivityDAO::getStudentDidNotQuestions();
+
+            $turma_id= session()->get('turma_id');
+            $questao=  session()->get('question_base');
+
+            $results= ResultActivityDAO::getStudentDidNotQuestions($turma_id, $questao);
         }
 
         return view('pages.activity.listStudents', compact('results','activity','type'));

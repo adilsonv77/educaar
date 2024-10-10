@@ -97,24 +97,10 @@ class ResultActivityDAO
 
             return $result_questions;
     }
-    public static function getStudentDidQuestions(){
 
-        $alunos= session()->get('alunos_fizeram_completo');
-
-        return $alunos;
-
-    }
-    public static function getStudentsUnfinishQuestions(){
-
-        $alunos= session()->get('alunos_fizeram_incompleto');
-
-        return $alunos;
-
-    }
-    public static function getStudentDidNotQuestions(){
+    public static function getStudentDidNotQuestions($turma_id, $question_base){
                     //alunos que não fizeram
-                    $turma_id= session()->get('turma_id');
-                    $questao=  session()->get('question_base');
+
 
                     $sql2= DB::table('users as u')
                     ->select('u.id as id','u.name as nome')
@@ -130,7 +116,7 @@ class ResultActivityDAO
             $alunos_nao_fizeram= $sql2->get();
             return $alunos_nao_fizeram;
     }
-    public static function respostasDosAlunos(){
+    public static function respostasDosAlunos($activity_id, $turma_id){
         /*SELECT u.id as aluno_id, u.name as name, q.id as question_id, sta.alternative_answered as alternativa, sta.correct as Correto from student_answers as sta 
 		Join users as u
         on sta.user_id= u.id
@@ -141,9 +127,6 @@ class ResultActivityDAO
 WHERE alunt.turma_id= 5 AND q.activity_id=15
 ORDER BY name
 */
-        $turma_id= session()->get('turma_id');
-        $activity_id= session()->get('activity_id');
-        $totalquestoes= session()->get('totalQuestions');
 
         $sql= DB::table('student_answers as sta')
         ->select('u.id as aluno_id', 'u.name as name', 'q.id as question_id', 'sta.alternative_answered as alternativa', 'sta.correct as Correto')
@@ -193,78 +176,5 @@ ORDER BY name
     }
 }
 
-        /*
-        $where = DB::table('contents')
-            ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
-            ->addSelect([
-                'qtasatividades' => Activity::selectRaw('count(*)')
-                    ->whereColumn('contents.id', '=', 'content_id')
-            ]);
-*/
-        /**
-         * SELECT q.question as questao,q.id, COUNT(sta.id) as qntRespondida, 
-        (SELECT COUNT(sta.id) FROM student_answers as sta
-                    INNER JOIN alunos_turmas as alunt 
-                    on alunt.aluno_id= sta.user_id
-        WHERE sta.question_id= q.id and sta.correct=1
-        ) as quntRespondCerto from questions as q
-            inner join student_answers as sta 
-            on sta.question_id= q.id
-            INNER JOIN alunos_turmas as alunt 
-            on alunt.aluno_id = sta.user_id
-    WHERE q.activity_id=15 AND alunt.turma_id=5 
-GROUP BY q.id
-         */
-
-
-/**
-             * 
-        $results = DB::table(DB::raw("({$subQuery->toSql()}) as sub"))
-        ->select('sub.nome', 'sub.qntRespondida')
-        ->whereBetween('sub.qntRespondida', [1, 4])
-        ->get();
-             */
-
-         /**
-             * SELECT COUNT(u.name) as qntsNaofizeram from users as u 
-	    INNER join alunos_turmas as alunt
-        on alunt.aluno_id= u.id
-        WHERE alunt.turma_id= 5 AND NOT EXISTS (SELECT * from student_answers as sta 
-                           	WHERE sta.question_id= 20
-                                    AND sta.user_id= u.id)
-
-             * 
-             * $repairJobs = RepairJob::with('repairJobPhoto', 'city', 'vehicle')
-              ->where('active', '=', 'Y')
-              ->whereNotExists(function($query)
-                {
-                    $query->select(DB::raw(1))
-                          ->from('DismissedRequest')
-                          ->whereRaw('RepairJob.id = DismissedRequest.id');
-                })->get();
-             */
-
-
-
-    /**
-     * 
-     * 
-     * 
-     * 
-         * SELECT COUNT(nome) as completo, (SELECT COUNT(q.id) as qntQuestions from questions as q 
-			inner join activities as a 
-            on q.activity_id= a.id
-        where a.id= 15)as TotalQuestoes 
-        from (SELECT u.name as nome, COUNT(sta.id) as qntRespondida FROM `users` AS u 
-		inner join `alunos_turmas` as alunt
-		on alunt.aluno_id= u.id
-        inner join student_answers as sta 
-        on sta.user_id= alunt.aluno_id
-        inner join questions as q 
-        on sta.question_id= q.id
-        WHERE alunt.turma_id= 5 and q.activity_id= 15  
-GROUP BY u.name) AS sub 
-
-         */
 
 
