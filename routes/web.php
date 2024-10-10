@@ -61,6 +61,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/indexmatricula', [App\Http\Controllers\TurmaController::class, 'indexmatricula'])->name('turmas.indexmatricula');
     Route::get('/listarTurmasAlunosProf', [App\Http\Controllers\TurmaController::class, 'listarTurmasAlunosProf'])->name('turmas.listarTurmasAlunosProf');
 
+    Route::get('/resultadosTurma', [App\Http\Controllers\ResultadosController::class, 'index'])->name('turma.resultados');
+
+
     //content
     Route::resource('content', App\Http\Controllers\ContentController::class);
     Route::get('resultsContents', [App\Http\Controllers\ContentController::class, 'resultsContents'])->name('content.resultsContents');
@@ -85,7 +88,6 @@ Route::middleware(['auth'])->group(function () {
 
     //report
     Route::get('/activity/report/{activityId}/{userId}', [App\Http\Controllers\ActivityController::class, 'report'])->name('report.student');
-
     Route::resource('ar', App\Http\Controllers\ARController::class);
 
     //fechar
@@ -108,13 +110,10 @@ Route::middleware(['auth'])->group(function () {
     //teacher
     Route::get('/frequencia', [App\Http\Controllers\FrequenciaController::class, 'index'])->name('teacher.frequencia');
     Route::post('/frequencia', [App\Http\Controllers\FrequenciaController::class, 'index'])->name('teacher.frequencia.filter');
-
-
+    
     //Lista De alunos em preofessor
-
     Route::get('/turma/questoesDosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class, 'index'])->name('student.results');
     Route::get('/turma/questoesNaoRespondidasTodosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class, 'todos'])->name('student.naorespondidas');
-
 
 });
 

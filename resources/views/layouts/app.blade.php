@@ -184,8 +184,15 @@
                             </a>
                         </li>
 
+
+                        <li><a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
+                                <i class="bi-table"></i>
+                                <span class="nav-text">Resultados</span>
+                            </a>
+                        </li>
+                        
                         <li><a class="ai-icon" href="{{ route('paineis.create') }}" aria-expanded="false">
-                                <i class="bi-graph-up"></i>
+                                <i class="bi-bricks"></i>
                                 <span class="nav-text">Painéis</span>
                             </a>
                         </li>
