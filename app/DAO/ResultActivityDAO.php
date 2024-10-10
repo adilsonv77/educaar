@@ -98,7 +98,7 @@ class ResultActivityDAO
             return $result_questions;
     }
 
-    public static function getStudentDidNotQuestions($turma_id, $question_base){
+    public static function getStudentDidNotQuestions($turma_id, $questao){
                     //alunos que não fizeram
 
 
