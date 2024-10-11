@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Função para iniciar o AR
   const start = async () => {
     buttonAR = document.getElementById("button-ar");
+    var bloquear = document.getElementById("showObject");
+    var desbloquear = document.getElementById("removeObject");
     const mind = document.getElementById("mind");
 
     const mindarThree = new MindARThree({
@@ -81,9 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
         var bq = document.getElementById("button-ar");
         bq.style.backgroundColor = anchor.clazz;
-        
+        bloquear.style.backgroundColor = anchor.clazz;
         // Para aparecer o buttonAR (das perguntas) quando o target aparecer
         buttonAR.style.display = "block";
+        bloquear.style.display = "block";
         
         if (anchor.glb.animations.length > 0) {
           mixer = new THREE.AnimationMixer(anchor.glb.scene);
@@ -104,6 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
       
         // Alternativa: Zera a rotação e depois aplica uma correção se necessário
         activeScene.rotation.set(0, 0, 0);  // Zera a rotação em todos os eixos
+        
+        activeScene.visible = true;
       };
       
       
@@ -114,6 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
       
         // para esconder o botãoAR quando o target sair
         buttonAR.style.display = "none";
+        bloquear.style.display = "none";
+        desbloquear.style.display = "none";
       
         if (action != null) {
           action.stop();
@@ -125,17 +132,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.getElementById("showObject").addEventListener('click', () => {
-
+      bloquear.style.display = "none";
+      desbloquear.style.display = "block";
       mindarThree.stop();
-
+      scene.background = new THREE.Color(0x00ced1);
     });
 
     document.getElementById("removeObject").addEventListener('click', () => {
-
+      desbloquear.style.display = "none";
       mindarThree.start();
       mindarThree.scene = null;
+      // activeScene.remove();
+      scene.remove(activeScene);
+      activeScene.visible = false;
       activeScene = null;
-
+      scene.background = null;
     });
 
     // Funções de toque
