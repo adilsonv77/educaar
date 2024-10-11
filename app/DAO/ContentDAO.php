@@ -47,9 +47,9 @@ select a.content_id, q.id, q.question from activities a
   where a.content_id in (1, 10, 20)
   */
         $sql = DB::table('activities as a')
-            ->select('a.content_id, q.id, q.question')
+            ->select('a.content_id', 'q.id', 'q.question')
             ->join('questions as q','a.id', '=', 'q.activity_id')
-            ->where('a.content_id', 'in', $contents);
+            ->whereIn('a.content_id', $contents);
 
         return $sql;
     }

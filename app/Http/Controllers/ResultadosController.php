@@ -35,15 +35,32 @@ class ResultadosController extends Controller
                             ->get();
         
         $contents  = array();
+        $contents_id = array();
         foreach ($contentsprof as $linha) {
             if ($linha->turma_id == $turma_id) {
                 $newd = [
                     'name' => $linha->name,
+                    'questoes' => []
                 ];
+   
+                array_push($contents_id, $linha->id);
+                $contents[$linha->id] = $newd;
             }
 
-            array_push($contents, $newd);
         }
+
+        $questoes = ContentDAO::buscarQuestoesDosConteudos($contents_id)->get();
+        foreach($questoes as $questao) {
+            $content = $contents[$questao->content_id];
+            $newd = [
+                'qid' => $questao->id,
+                'qdesc' => $questao->question
+            ];
+            array_push($content['questoes'], $newd);
+            $contents[$questao->content_id] = $content;
+        }
+
+        dd($contents);
 
         $compact = compact('turmas', 'turma', 'contents');
         return view('pages.turma.resultados', $compact);
