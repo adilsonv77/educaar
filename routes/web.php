@@ -9,8 +9,10 @@ use App\Models\School;
 //Testes Renan
 use App\Http\Controllers\PainelController;
 Route::prefix('paineis')->group(function(){
-    Route::get('/', [PainelController::class, 'index'])->name('paineis.create');
+    Route::get('/', [PainelController::class, 'create'])->name('paineis.create');
     Route::post('/', [PainelController::class, 'store'])->name('paineis.store');
+    Route::get('/{id}/edit', [PainelController::class, 'edit'])->name('paineis.edit');
+    Route::put('/{id}', [PainelController::class, 'update'])->name('paineis.update');
 });
 
 // use Hash;

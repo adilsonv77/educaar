@@ -16,8 +16,8 @@ btnAdd.onclick = () => {
 const midiaArea = document.getElementById("midia")
 const btnImg = document.getElementById("img")
 const btnVid = document.getElementById("vid")
-const txtSuperior = document.getElementById("textoSuperior")
-const txtInferior = document.getElementById("textoInferior")
+const txtSuperior = document.getElementById("txtSuperior")
+const txtInferior = document.getElementById("txtInferior")
 let tituloConfig = document.getElementById("tituloSelecionado")
 let ultimaConfig;
 const blocoMedia = document.getElementById("blocoMidia")

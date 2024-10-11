@@ -26,14 +26,26 @@ class PainelController extends Controller
         "btn4Icon": 5,
         "btn4Function": 17,
         "btn2Param": "15,25",
+        "midiaExtension": ".png"
     }
     */
 
-    public function index()
+    public function create()
     {
-        // $paineis = Painei::all();
-        // dd($paineis);
-        return view('pages.pasta.criacaoPaineis');
+        return view('pages.painel.criacaoPaineis', ['titulo'=>'Criação de painéis','action'=>'create', 'route'=>route('paineis.store')]);
+    }
+
+    public function edit($id)
+    {
+        $painel = Painei::where('id', $id)->first();
+        if(!empty($painel)) {
+            $data = json_decode($painel->panel, true);
+            $data['titulo']= 'Edição de painel';
+            $data['action']= 'edit';
+            $data['route']= route('paineis.update', ['id', $id]);
+
+            return view('pages.painel.criacaoPaineis', $data);
+        }
     }
 
     public function store(Request $request)
@@ -41,23 +53,21 @@ class PainelController extends Controller
         $data = $request->all();
         $baseFileName = time();
 
-        $imgFile = $baseFileName . '.' . $request->img->getClientOriginalExtension();
-        $request->img->move(public_path('midiasPainel'), $imgFile);
+        $imgFile = $baseFileName . '.' . $request->midia->getClientOriginalExtension();
+        $request->midia->move(public_path('midiasPainel'), $imgFile);
         $data['midiasPainel'] = $imgFile;
 
-        //Transforma dados puros do form em json
-        $json = "{";
-        foreach ($data as $key => $value) {
-            //Coisas que não devem ser salvas no JSON
-            if($key != "_token" && $key != "midiasPainel" && $key != "midia")
-            $json= $json."\"".$key."\": \"".$value."\",";
-        }
-        $json = ["panel"=>$json." \"midiaExtension\": \"".$request->img->getClientOriginalExtension()."\"}"];
-
+        //Remove os dados desnecessários para serem guardados
+        $data['midiaExtension'] = $request->midia->getClientOriginalExtension();
+        unset( $data['_token']);
+        unset( $data['midia']);
+        unset( $data['midiasPainel']);
+        $json = ["panel"=>json_encode($data)];
+      
         //Criar o painel e salvo o dado
         $painel = Painei::create($json);
 
-        $data['midiasPainel'] = $painel->id . '.' . $request->img->getClientOriginalExtension();
+        $data['midiasPainel'] = $painel->id . '.' . $request->midia->getClientOriginalExtension();
         $public_path = public_path('midiasPainel');
 
         rename($public_path . '/' . $imgFile, $public_path . '/' . $data['midiasPainel']);
