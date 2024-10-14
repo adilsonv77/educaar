@@ -80,6 +80,8 @@ const imagemRadio = document.getElementById("midia2")
 const midia = document.getElementById("midia")
 const labelFile = document.getElementById("labelMyFile")
 
+midia.accept = ".png, .jpeg, .jpg, .mp4"
+
 videoRadio.onchange = selectVideo;
 imagemRadio.onchange = selectImage;
 
@@ -89,7 +91,7 @@ function selectVideo() {
 }
 
 function selectImage() {
-  midia.accept = "..png, .jpeg, .jpg"
+  midia.accept = ".png, .jpeg, .jpg"
   labelFile.innerText = "Local (somente .png, .jpg, .jpeg)"
 }
 

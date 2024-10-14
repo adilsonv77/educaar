@@ -32,7 +32,7 @@ class PainelController extends Controller
 
     public function create()
     {
-        return view('pages.painel.criacaoPaineis', ['titulo'=>'Criação de painéis','action'=>'create', 'route'=>route('paineis.store')]);
+        return view('pages.painel.criacaoPaineis', ['titulo'=>'Criação de painéis','action'=>'create']);
     }
 
     public function edit($id)
@@ -42,7 +42,7 @@ class PainelController extends Controller
             $data = json_decode($painel->panel, true);
             $data['titulo']= 'Edição de painel';
             $data['action']= 'edit';
-            $data['route']= route('paineis.update', ['id', $id]);
+            $data['id'] = $id;
 
             return view('pages.painel.criacaoPaineis', $data);
         }
@@ -53,12 +53,12 @@ class PainelController extends Controller
         $data = $request->all();
         $baseFileName = time();
 
-        $imgFile = $baseFileName . '.' . $request->midia->getClientOriginalExtension();
-        $request->midia->move(public_path('midiasPainel'), $imgFile);
+        $imgFile = $baseFileName . '.' . $request->arquivoMidia->getClientOriginalExtension();
+        $request->arquivoMidia->move(public_path('midiasPainel'), $imgFile);
         $data['midiasPainel'] = $imgFile;
 
         //Remove os dados desnecessários para serem guardados
-        $data['midiaExtension'] = $request->midia->getClientOriginalExtension();
+        $data['midiaExtension'] = $request->arquivoMidia->getClientOriginalExtension();
         unset( $data['_token']);
         unset( $data['midia']);
         unset( $data['midiasPainel']);
@@ -67,12 +67,23 @@ class PainelController extends Controller
         //Criar o painel e salvo o dado
         $painel = Painei::create($json);
 
-        $data['midiasPainel'] = $painel->id . '.' . $request->midia->getClientOriginalExtension();
+        $data['midiasPainel'] = $painel->id . '.' . $request->arquivoMidia->getClientOriginalExtension();
         $public_path = public_path('midiasPainel');
 
         rename($public_path . '/' . $imgFile, $public_path . '/' . $data['midiasPainel']);
         
         $painel->update($data);
         return redirect()->route('paineis.create');
+    }
+
+    public function update(Request $request, $id){
+        $data = $request->all();
+        //Remove os dados desnecessários para serem guardados
+        unset( $data['_token']);
+        unset( $data['midia']);
+        unset( $data['midiasPainel']);
+        $json = ["panel"=>json_encode($data)];
+        Painei::where('id',$id)->update($json);
+        return redirect()->route('paineis.create'); 
     }
 }
