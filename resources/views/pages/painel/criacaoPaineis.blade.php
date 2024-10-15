@@ -8,7 +8,7 @@
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
-<link rel="stylesheet" href="{{asset('css/painel.css')}}">
+<link rel="stylesheet" href="{{asset('css/painel2.css')}}">
 @endsection
 
 @section('content')
@@ -19,7 +19,7 @@
         @if ($action == 'edit')
             <input name="id" type="hidden" value={{$id}}>
         @endif
-        <input name="action" type="hidden" value={{$action}}>
+        <input name="action" type="hidden" value={{$action}} id="actionInput">
         @csrf
         <div class="row">
             <div class="col-md-8 coluna linha">
@@ -76,5 +76,16 @@
         </div>
     </form>
 </div>
+<script>
+    //Alterar rota para destruir
+    const excluirPainel = document.getElementById("excluirPainel");
+    const form = document.getElementsByTagName("form");
+    const actionInput = document.getElementById("actionInput");
+
+    excluirPainel.onclick = () => {
+        form.action = "{{route('paineis.destroy', ['id'=>$id])}}";
+        actionInput.value = "destroy";
+    }
+</script>
 <script src="{{asset('js/painel1.js')}}" type="module"></script>
 @endsection

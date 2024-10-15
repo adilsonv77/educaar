@@ -94,4 +94,3 @@ function selectImage() {
   midia.accept = ".png, .jpeg, .jpg"
   labelFile.innerText = "Local (somente .png, .jpg, .jpeg)"
 }
-

@@ -86,4 +86,8 @@ class PainelController extends Controller
         return redirect()->route('paineis.create');
     }
 
+    public function destroy($id){
+        dd($id);
+    }
+
 }
