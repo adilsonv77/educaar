@@ -50,7 +50,7 @@
     font-size: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: csater;
 }
 
 #selectType {
@@ -141,14 +141,20 @@ textarea:focus{
     margin-right: 15px;
 }
 
-#salvarPainel{
+.submitPanel{
     position: absolute;
     bottom: 25px;
     right: 25px;
     background-color: white;
     border: none;
     border-radius: 15px;
-    padding: 8px 45px;
+    width: 120px;
+    text-align: center;
+    padding: 6px 0;
+}
+
+.submitPanel:nth-child(2n){
+    right: 160px;
 }
 
 #youtubeLink{
