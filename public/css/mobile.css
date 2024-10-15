@@ -103,7 +103,7 @@
         }
  
 
-        #button-back,#button-ar, #b_rotate_x, #b_rotate_x_, #b_rotate_y,#b_rotate_y_, #zoom_mais, #zoom_menos{
+        #button-back,#button-ar, #b_rotate_x, #b_rotate_x_, #b_rotate_y,#b_rotate_y_, #zoom_mais, #zoom_menos, #showObject, #removeObject{
 
             height: 80%;
             text-align: center;
