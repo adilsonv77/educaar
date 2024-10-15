@@ -95,21 +95,29 @@ document.addEventListener('DOMContentLoaded', () => {
           action.play();
         }
         
-        // Ajusta a rotação do objeto para garantir que fique reto
-        activeScene = glbScene;
-        
-        // Centralizar o objeto no centro da cena (evitar desalinhamentos)
-        const box = new THREE.Box3().setFromObject(activeScene);
+        // Calcula a caixa delimitadora do objeto para encontrar o centro
+        const box = new THREE.Box3().setFromObject(glbScene);
         const center = box.getCenter(new THREE.Vector3());
-        activeScene.position.sub(center);  // Centraliza o objeto
-      
-        // Ajustar a rotação para garantir que o objeto fique reto
-        activeScene.rotation.set(0, Math.PI / 2, 0);  // Rotação fixa, ajuste conforme necessário
-      
-        // Alternativa: Zera a rotação e depois aplica uma correção se necessário
-        activeScene.rotation.set(0, 0, 0);  // Zera a rotação em todos os eixos
+
+        // Centraliza o objeto na cena
+        glbScene.position.sub(center);
+
+        // Cria uma caixa para conter o objeto
+        const container = new THREE.Object3D();
+        container.add(glbScene);  // Adiciona o objeto centralizado na caixa
+
+        // Ajusta a rotação da caixa (com o objeto dentro)
+        container.rotation.set(0, Math.PI / 2, 0);  // Exemplo de rotação, ajuste conforme necessário
+
+        // Define a cena ativa como a caixa contendo o objeto
+        activeScene = container;
+
+        // Adiciona o container (com o objeto centralizado) ao grupo do anchor
+        anchor.group.add(container);
+
+        // Torna o objeto visível
+        activeScene.visible = true;;
         
-        activeScene.visible = true;
       };
       
       
@@ -248,6 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   start();
+  
+  
 
   document.addEventListener('touchmove', (event) => {
     if (event.scale !== 1) {
