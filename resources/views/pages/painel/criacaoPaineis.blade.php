@@ -67,25 +67,11 @@
                     <div id="blocoBtn">
 
                     </div>
-                    @if ($action == 'edit')
-                        <input type="submit" value="Excluir" id="excluirPainel" class="submitPanel">
-                    @endif
                     <input type="submit" value="Salvar" id="salvarPainel" class="submitPanel">
                 </div>
             </div>
         </div>
     </form>
 </div>
-<script>
-    //Alterar rota para destruir
-    const excluirPainel = document.getElementById("excluirPainel");
-    const form = document.getElementsByTagName("form");
-    const actionInput = document.getElementById("actionInput");
-
-    excluirPainel.onclick = () => {
-        form.action = "{{route('paineis.destroy', ['id'=>$id])}}";
-        actionInput.value = "destroy";
-    }
-</script>
 <script src="{{asset('js/painel1.js')}}" type="module"></script>
 @endsection

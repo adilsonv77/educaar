@@ -76,12 +76,10 @@ class PainelController extends Controller
             unset($data['id']);
             $painel = Painei::where('id', $id)->update($json);
         }
-
         $data['midiasPainel'] = $id . '.' . $request->arquivoMidia->getClientOriginalExtension();
         $public_path = public_path('midiasPainel');
         if($action == 'edit') unlink($public_path . '/' . $data['midiasPainel']);
         rename($public_path . '/' . $imgFile, $public_path . '/' . $data['midiasPainel']);
-
         // $painel->update($data);
         return redirect()->route('paineis.create');
     }
