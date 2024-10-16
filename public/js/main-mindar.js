@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.group.add(container);
 
         // Torna o objeto visível
-        activeScene.visible = true;;
+        activeScene.visible = true;
         
       };
       
@@ -150,13 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("removeObject").addEventListener('click', () => {
       desbloquear.style.display = "none";
       mindarThree.start();
-      // mindarThree.scene = null;
+      mindarThree.scene = null;
       // activeScene.remove();
       scene.remove(activeScene);
       activeScene.visible = false;
       activeScene = null;
       scene.background = null;
-      anchor.onTargetFound();
     });
 
     // Funções de toque
