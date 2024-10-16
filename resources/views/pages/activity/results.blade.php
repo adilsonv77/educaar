@@ -11,8 +11,8 @@
 @section('script-head')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <!-- Bootstrap CSS -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
-<link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
+<!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet"> -->
 @endsection 
 
 @section('page-name', $pageName)
@@ -22,8 +22,8 @@
   <div id="formTurma">
   <form action="{{ route('activity.results') }}" method="GET ">
           @csrf
-          <label for="">Informe a turma:</label>
-          <div class="form-inline" style="width: 40vw">
+          <label for="">Informe a turma: minheeeuuuuu</label>
+          <div class="form-inline" >
               <select class="form-control" name="turma_id">
                   @foreach ($turmas as $item)
                       <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
@@ -109,9 +109,10 @@
 
               var data = new google.visualization.DataTable();
               data.addColumn('string','Questões');
-              data.addColumn('number', 'Respostas Incorretas ');
               data.addColumn('number', 'Respostas Corretas ');
+              data.addColumn('number', 'Respostas Incorretas');
               data.addColumn({type: 'string', role: 'annotation'}); // Coluna de descrição sem ser exibida no gráfico
+             
 
               var count = 1;
               var titleTable=null;
@@ -122,41 +123,64 @@
                 map1.set(value, [question.qntRespondida ,question.quntRespondCerto , question.questao]);
                 titleTable= document.getElementById(value);
                 titleTable.setAttribute('title', question.questao);
-                data.addRow([value,respostasIncorretas ,question.quntRespondCerto , question.questao ]);
+                data.addRow([value, question.quntRespondCerto, respostasIncorretas, question.questao ]);
               });
 
               var _ticks = [];
-              for (var i = 0; i <= (qntCompletas+qntIncompletas); i++) {
+              for (var i = 0; i <= (qntCompletas + qntIncompletas); i++) {
                 _ticks.push(i);
               }
 
-            var options = {
-              chart: {
-                title: 'Respostas Corretas e Incorretas',
-              },
-              isStacked: true,
-              legend: 'bottom',
-              colors: ['#5A2D66', '#9C6FA8'],
+              var options = {
+                chart: {
+                  title: 'Respostas Corretas e Incorretas'
+                },
+                isStacked: true,
+                legend: 'bottom',
+                colors: ['#9C6FA8','#5A2D66'],
+                vAxis: {
+                  minValue: 0,
+                  ticks: _ticks
+                },
+                bar: { groupWidth: '45%' },
+                series: {
+                  3: { visibleInLegend: false } // Define a coluna da descrição para não ser exibida no gráfico
+                }
+              };
 
-              vAxis: {
-                minValue: 0,
-                ticks: _ticks
-              },
-              bar: { groupWidth: '45%' }
-            };
+              var chart = new google.charts.Bar(document.getElementById('barras'));
+              chart.draw(data, google.charts.Bar.convertOptions(options));
+
+
+            //   var _ticks = [];
+            //   for (var i = 0; i <= (qntCompletas+qntIncompletas); i++) {
+            //     _ticks.push(i);
+            //   }
+
+            // var options = {
+            //   chart: {
+            //     title: 'Respostas Corretas e Incorretas',
+            //   },
+            //   isStacked: true,
+            //   legend: 'bottom',
+            //   colors: ['#5A2D66', '#9C6FA8'],
+
+            //   vAxis: {
+            //     minValue: 0,
+            //     ticks: _ticks
+            //   },
+            //   bar: { groupWidth: '45%' }
+            // };
                 
-                var chart = new google.visualization.ColumnChart(document.getElementById('barras'));
-                chart.draw(data, options);
-
-            // var chart = new google.charts.Bar(document.getElementById('barras'));
-            // chart.draw(data, google.charts.Bar.convertOptions(options));
+            //     var chart = new google.visualization.ColumnChart(document.getElementById('barras'));
+            //     chart.draw(data, google.charts.Bar.convertOptions(options));
 
           // Adicionando eventos de mouse às legendas após o gráfico ser desenhado
           google.visualization.events.addListener(chart, 'ready', function() {
                 $('#barras text').each(function(index) {
 
                   $(this).on('mouseover', function() {
-                      var question= map1.get($(this).text());
+                      
                       if(question !== undefined){
                         var tooltip = $('#tooltip');
                         tooltip.text(question[2]);
