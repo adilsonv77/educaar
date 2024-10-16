@@ -116,10 +116,25 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.group.add(container);
 
         // Torna o objeto visível
-        activeScene.visible = true;
+
+        activeScene.visible = true;;
+
+        // Adiciona um listener para o evento de rolagem do mouse
+        window.addEventListener('wheel', (event) => {
+          event.preventDefault();
+          const zoomFactor = 0.1;
+
+          // Verifica a direção da rolagem e ajusta a escala do container
+          if (event.deltaY < 0) {
+              container.scale.multiplyScalar(1 + zoomFactor);
+          } else {
+              container.scale.multiplyScalar(1 - zoomFactor);
+          }
+          
+          container.scale.clampScalar(0.4, 10);
+        });
         
       };
-      
       
 
       anchor.onTargetLost = () => {
