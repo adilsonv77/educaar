@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
         var bq = document.getElementById("button-ar");
         bq.style.backgroundColor = anchor.clazz;
-        bloquear.style.backgroundColor = anchor.clazz;
+
         // Para aparecer o buttonAR (das perguntas) quando o target aparecer
         buttonAR.style.display = "block";
         bloquear.style.display = "block";
@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
       desbloquear.style.display = "none";
       mindarThree.start();
       mindarThree.scene = null;
-      // activeScene.remove();
       scene.remove(activeScene);
       activeScene.visible = false;
       activeScene = null;
