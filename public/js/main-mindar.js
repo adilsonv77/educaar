@@ -8,6 +8,10 @@ var buttonAR = null;
 var activeScene = null;
 var lastActiveScene = null;
 var cameraVar = null;
+var mindarThree = null;
+var isSetup = false;
+var bloquear = null;
+var desbloquear = null;
 
 // Função para mostrar progresso
 function mostrarAvanco(percent) {
@@ -32,21 +36,29 @@ function loadGLTF(path) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+
+  function setup() {
+    
+
+
+
+  }
+
   // Função para iniciar o AR
   const start = async () => {
-    buttonAR = document.getElementById("button-ar");
-    var bloquear = document.getElementById("showObject");
-    var desbloquear = document.getElementById("removeObject");
+
+    isSetup = mindarThree == null;
+
     const mind = document.getElementById("mind");
 
-    const mindarThree = new MindARThree({
+    mindarThree = new MindARThree({
       container: document.getElementById("my-ar-container"),
       imageTargetSrc: mind.textContent,
       filterMinCF: 0.0001,
       filterBeta: 0.001
     });
 
-    const { renderer, scene, camera } = mindarThree;
+    var { renderer, scene, camera } = mindarThree;
     cameraVar = camera;
 
     const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
@@ -118,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Torna o objeto visível
 
         activeScene.visible = true;;
-
+        /*
         // Adiciona um listener para o evento de rolagem do mouse
         window.addEventListener('wheel', (event) => {
           event.preventDefault();
@@ -133,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
           
           container.scale.clampScalar(0.4, 10);
         });
+        */
         
       };
       
@@ -141,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lastActiveScene = activeScene;
         activeScene = null;
       
-        // para esconder o botãoAR quando o target sair
+        // para esconder o botaoAR quando o target sair
         buttonAR.style.display = "none";
         bloquear.style.display = "none";
         desbloquear.style.display = "none";
@@ -155,77 +168,95 @@ document.addEventListener('DOMContentLoaded', () => {
       
     }
 
-    document.getElementById("showObject").addEventListener('click', () => {
-      bloquear.style.display = "none";
-      desbloquear.style.display = "block";
-      mindarThree.stop();
-      scene.background = new THREE.Color(0x00ced1);
-    });
+    buttonAR = document.getElementById("button-ar");
+    bloquear = document.getElementById("showObject");
+    desbloquear = document.getElementById("removeObject");
 
-    document.getElementById("removeObject").addEventListener('click', () => {
-      desbloquear.style.display = "none";
-      mindarThree.start();
-      mindarThree.scene = null;
-      scene.remove(activeScene);
-      activeScene.visible = false;
-      activeScene = null;
-      scene.background = null;
-    });
-
-    // Funções de toque
-    let touchStart = null;
-    let touchStartRotation = { x: 0, y: 0 };
-    let touchStartPosition = { x: 0, y: 0 };
-    let initialScale = 1;
-
-    const handleTouchStart = (event) => {
-      if (activeScene == null)
-        return;
-
-      if (event.touches.length === 1) {
-        touchStart = event.touches[0];
-        touchStartRotation = { x: activeScene.rotation.x, y: activeScene.rotation.y };
-        touchStartPosition = { x: touchStart.clientX, y: touchStart.clientY };
-      } else if (event.touches.length === 2) {
-        touchStart = event.touches;
-        initialScale = activeScene ? activeScene.scale.x : 1;
-      }
-    };
-
-    const handleTouchMove = (event) => {
-      if (activeScene == null)
-        return;
+    if (isSetup) {
       
-      if (touchStart) {
-        if (event.touches.length === 1) {
-          const touchMove = event.touches[0];
-          const deltaX = touchMove.clientX - touchStartPosition.x;
-          const deltaY = touchMove.clientY - touchStartPosition.y;
-          activeScene.rotation.y = touchStartRotation.y + deltaX * 0.01;
-          activeScene.rotation.x = touchStartRotation.x + deltaY * 0.01;
-        } else if (event.touches.length === 2) {
-          const touch1 = event.touches[0];
-          const touch2 = event.touches[1];
-          const dx = touch2.clientX - touch1.clientX;
-          const dy = touch2.clientY - touch1.clientY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const prevDx = touchStart[1].clientX - touchStart[0].clientX;
-          const prevDy = touchStart[1].clientY - touchStart[0].clientY;
-          const prevDistance = Math.sqrt(prevDx * prevDx + prevDy * prevDy);
-          const scaleFactor = distance / prevDistance;
-          activeScene.scale.set(initialScale * scaleFactor, initialScale * scaleFactor, initialScale * scaleFactor);
+      document.getElementById("showObject").addEventListener('click', () => {
+        bloquear.style.display = "none";
+        desbloquear.style.display = "block";
+        mindarThree.stop();
+        scene.background = new THREE.Color(0x00ced1);
+      });
+  
+      document.getElementById("removeObject").addEventListener('click', () => {
+        desbloquear.style.display = "none";
+        buttonAR.style.display = "none";
+        //mindarThree.start();
+  
+        const startX = async () => {
+          start();
         }
-      }
-    };
+  
+        startX();
+  
+        //mindarThree.scene = null;
+        scene.remove(activeScene);
+        activeScene.visible = false;
+        activeScene = null;
+        scene.background = null;
+      });
 
-    const handleTouchEnd = () => {
-      touchStart = null;
-    };
+      // Funções de toque
+      let touchStart = null;
+      let touchStartRotation = { x: 0, y: 0 };
+      let touchStartPosition = { x: 0, y: 0 };
+      let initialScale = 1;
 
-    document.addEventListener('touchstart', handleTouchStart);
-    document.addEventListener('touchmove', handleTouchMove);
-    document.addEventListener('touchend', handleTouchEnd);
+      const handleTouchStart = (event) => {
+        if (activeScene == null)
+          return;
 
+        if (event.touches.length === 1) {
+          touchStart = event.touches[0];
+          touchStartRotation = { x: activeScene.rotation.x, y: activeScene.rotation.y };
+          touchStartPosition = { x: touchStart.clientX, y: touchStart.clientY };
+        } else if (event.touches.length === 2) {
+          touchStart = event.touches;
+          initialScale = activeScene ? activeScene.scale.x : 1;
+        }
+      };
+
+      const handleTouchMove = (event) => {
+        if (activeScene == null)
+          return;
+        
+        if (touchStart) {
+          if (event.touches.length === 1) {
+            const touchMove = event.touches[0];
+            const deltaX = touchMove.clientX - touchStartPosition.x;
+            const deltaY = touchMove.clientY - touchStartPosition.y;
+            activeScene.rotation.y = touchStartRotation.y + deltaX * 0.01;
+            activeScene.rotation.x = touchStartRotation.x + deltaY * 0.01;
+          } else if (event.touches.length === 2) {
+            const touch1 = event.touches[0];
+            const touch2 = event.touches[1];
+            const dx = touch2.clientX - touch1.clientX;
+            const dy = touch2.clientY - touch1.clientY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const prevDx = touchStart[1].clientX - touchStart[0].clientX;
+            const prevDy = touchStart[1].clientY - touchStart[0].clientY;
+            const prevDistance = Math.sqrt(prevDx * prevDx + prevDy * prevDy);
+            const scaleFactor = distance / prevDistance;
+            activeScene.scale.set(initialScale * scaleFactor, initialScale * scaleFactor, initialScale * scaleFactor);
+          }
+        }
+      };
+
+      const handleTouchEnd = () => {
+        touchStart = null;
+      };
+
+      document.addEventListener('touchstart', handleTouchStart);
+      document.addEventListener('touchmove', handleTouchMove);
+      document.addEventListener('touchend', handleTouchEnd);
+
+    }
+
+
+ 
     let barradeprogresso = document.getElementById("barradeprogresso");
     barradeprogresso.style.display = "none";
 
