@@ -179,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
         desbloquear.style.display = "block";
         mindarThree.stop();
         scene.background = new THREE.Color(0x00ced1);
+
       });
   
       document.getElementById("removeObject").addEventListener('click', () => {
@@ -186,6 +187,11 @@ document.addEventListener('DOMContentLoaded', () => {
         buttonAR.style.display = "none";
         //mindarThree.start();
   
+        document.querySelectorAll('.mindar-ui-overlay').forEach(function(a){
+          a.remove()
+        });
+
+
         const startX = async () => {
           start();
         }
