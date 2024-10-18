@@ -185,12 +185,12 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById("removeObject").addEventListener('click', () => {
         desbloquear.style.display = "none";
         buttonAR.style.display = "none";
+        document.getElementById("barradeprogresso").style.display = "block";
         //mindarThree.start();
   
         document.querySelectorAll('.mindar-ui-overlay').forEach(function(a){
           a.remove()
         });
-
 
         const startX = async () => {
           start();
