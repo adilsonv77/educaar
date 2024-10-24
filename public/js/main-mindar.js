@@ -61,8 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
     var { renderer, scene, camera } = mindarThree;
     cameraVar = camera;
 
-    const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+    //const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+    const light = new THREE.HemisphereLight(0xffffff, 0xffffff, Math.PI);
     scene.add(light);
+
+    const helper = new THREE.HemisphereLightHelper(light, 5)
+    scene.add(helper);
 
     const glbs = document.getElementById("glbs");
     var mixer = null;
@@ -73,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const glb = await loadGLTF(li.textContent);
 
       const glbScene = glb.scene;
+      
       const box = new THREE.Box3().setFromObject(glbScene);
       const sceneSize = box.getSize(new THREE.Vector3());
       const sceneCenter = box.getCenter(new THREE.Vector3());
@@ -130,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Torna o objeto visível
 
         activeScene.visible = true;;
+        
         /*
         // Adiciona um listener para o evento de rolagem do mouse
         window.addEventListener('wheel', (event) => {
