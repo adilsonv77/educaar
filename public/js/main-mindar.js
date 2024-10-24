@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const light = new THREE.HemisphereLight(0xffffff, 0xffffff, Math.PI);
     scene.add(light);
 
-    const helper = new THREE.HemisphereLightHelper(light, 5)
+    const helper = new THREE.HemisphereLightHelper(light, 5);
     scene.add(helper);
 
     const glbs = document.getElementById("glbs");
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (var i = 0; i < glbs.childElementCount; i++) {
       var li = glbs.children[i];
-      const glb = await loadGLTF(li.textContent);
+      const glb = await loadGLTF(li.textContent+"?v="+Math.floor());
 
       const glbScene = glb.scene;
       
