@@ -61,8 +61,12 @@
                             @foreach ($activities as $item)
                                 <tr>
                                     <td style="width: 60%;">{{ $item->name }}</td>
-                                    <td style="width: 25%;"><img src="/marcadores/{{ $item->marcador }}"
-                                            alt=""width="200" height="200"></td>
+                                    <td style="width: 25%;">
+                                        
+                                        <img src="{{ asset('/marcadores/'.$item->marcador.'?v=' . @filemtime(public_path('/marcadores/'.$item->marcador))) }}"
+                                        
+                                            width="200" height="200">
+                                    </td>
                                     <td style="width: 10%;"><a href="/activity/{{ $item->id }}" class="btn btn-primary" title="Visualizar">
                                         <i class="bi bi-eye-fill h2" style = "color : #ffffff;"></i>
                                     </a></td>

@@ -6,9 +6,17 @@
 
     <div class="card">
         <div class="card-body">
-            <model-viewer src="/modelos3d/{{ $activity }}" poster=""
-                alt="{{ $name }}" shadow-intensity="1" camera-controls auto-rotate autoplay>
-            </model-viewer>
+            <?php
+            $filetime = @filemtime(public_path('/modelos3d/'.$activity));
+            ?>
+            @if ($filetime != FALSE)
+                <model-viewer src={{ asset('/modelos3d/'.$activity.'?v=' . $filetime) }}
+                
+                poster="" alt="{{ $name }}" shadow-intensity="1" camera-controls auto-rotate autoplay>
+                </model-viewer>
+            @else
+                <div>Arquivo não encontrado</div>
+            @endif
         </div>
     </div>
 
