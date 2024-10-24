@@ -183,7 +183,7 @@
                                 <span class="nav-text">Acessos</span>
                             </a>
                         </li>
-<!--
+
                         <li><a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
                                 <i class="bi-table"></i>
                                 <span class="nav-text">Resultados</span>
@@ -195,7 +195,7 @@
                                 <span class="nav-text">Painéis</span>
                             </a>
                         </li>
--->
+
                     @endif
 
                     @if (session('type') == 'admin')
