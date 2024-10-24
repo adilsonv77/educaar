@@ -53,47 +53,51 @@
                     
                         
                             
-                                @csrf
-                    <div class="elements">
+            @csrf
+            <div class="elements">
 
+            
+                <div class="logo">
+                        <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}"  alt="Imagem" class="img-fluid">
+                </div>
                     
-                    <div class="logo">
-                            <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}"  alt="Imagem" class="img-fluid">
-                    </div>
-                            
-                                <input id="login" type="text"
-                                    class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
-                                    name="login" value="{{ old('username') ?: old('email') }}" required autofocus
-                                    placeholder="Login">
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror                
-                            
-                                <input id="password" type="password"
-                                    class="form-control @error('password') is-invalid @enderror" name="password" required
-                                    autocomplete="current-password" placeholder="Senha">
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                             
-                                <div class="mial">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-                                </div>
-                            
-                    </div>
-                    </div>   
+                <input id="login" type="text"
+                    class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
+                    name="login" value="{{ old('username') ?: old('email') }}" required autofocus
+                    placeholder="Login">
+                @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror                
+            
+                <input id="password" type="password"
+                    class="form-control @error('password') is-invalid @enderror" name="password" required
+                    autocomplete="current-password" placeholder="Senha">
+                @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                
+                <div class="mial">
+                        <button type="submit" class="btn btn-primary">
+                            {{ __('Login') }}
+                        </button>
+                </div>
+                    
+            </div>
+                    
+            <div class="data">
+                20241024
+            </div>
+        </div>   
         
                     
-                        <footer>   
-                                <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
-                                <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">   
-                        </footer>
+        <footer>   
+                <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
+                <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">   
+        </footer>
 
                      
 
