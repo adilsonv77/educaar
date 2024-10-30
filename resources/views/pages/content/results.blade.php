@@ -72,6 +72,7 @@
                   var activity= map1.get($(this).text());
                   if(activity !== undefined){
                     var tooltip = $('#tooltip');
+
                     tooltip.text(activity[2]);
                     tooltip.css({
                         display: 'block',

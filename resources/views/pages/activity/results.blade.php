@@ -102,6 +102,7 @@
         function drawStuff() {
             drawBarChart();
             drawPieChart();
+            
         }
         const map1 = new Map();
 
@@ -111,8 +112,8 @@
               data.addColumn('string','Questões');
               data.addColumn('number', 'Respostas Corretas ');
               data.addColumn('number', 'Respostas Incorretas');
-              data.addColumn({type: 'string', role: 'annotation'}); // Coluna de descrição sem ser exibida no gráfico
-             
+              data.addColumn({type: 'string', role: 'tooltip'}); // Coluna de descrição sem ser exibida no gráfico
+              
 
               var count = 1;
               var titleTable=null;
@@ -120,84 +121,27 @@
                 var value = "Q"+count++; 
                 var respostasIncorretas = question.qntRespondida - question.quntRespondCerto; 
                 console.log("Questão: " + question.questao + " | Respostas Incorretas: " + respostasIncorretas); 
-                map1.set(value, [question.qntRespondida ,question.quntRespondCerto , question.questao]);
+                map1.set(value [question.qntRespondida ,question.quntRespondCerto , question.questao ]);
                 titleTable= document.getElementById(value);
                 titleTable.setAttribute('title', question.questao);
-                data.addRow([value, question.quntRespondCerto, respostasIncorretas, question.questao ]);
+                console.log(question)
+                data.addRow([value +": " + question.questao , question.quntRespondCerto, respostasIncorretas, question.questao ]);
               });
-
-              var _ticks = [];
-              for (var i = 0; i <= (qntCompletas + qntIncompletas); i++) {
-                _ticks.push(i);
-              }
-
               var options = {
                 chart: {
                   title: 'Respostas Corretas e Incorretas'
                 },
                 isStacked: true,
-                legend: 'bottom',
-                colors: ['#9C6FA8','#5A2D66'],
-                vAxis: {
-                  minValue: 0,
-                  ticks: _ticks
-                },
-                bar: { groupWidth: '45%' },
-                series: {
-                  3: { visibleInLegend: false } // Define a coluna da descrição para não ser exibida no gráfico
-                }
+                tooltip: {isHtml: true},
+                bar: { groupWidth: '45%' },                
               };
 
               var chart = new google.charts.Bar(document.getElementById('barras'));
+              
               chart.draw(data, google.charts.Bar.convertOptions(options));
 
-
-            //   var _ticks = [];
-            //   for (var i = 0; i <= (qntCompletas+qntIncompletas); i++) {
-            //     _ticks.push(i);
-            //   }
-
-            // var options = {
-            //   chart: {
-            //     title: 'Respostas Corretas e Incorretas',
-            //   },
-            //   isStacked: true,
-            //   legend: 'bottom',
-            //   colors: ['#5A2D66', '#9C6FA8'],
-
-            //   vAxis: {
-            //     minValue: 0,
-            //     ticks: _ticks
-            //   },
-            //   bar: { groupWidth: '45%' }
-            // };
-                
-            //     var chart = new google.visualization.ColumnChart(document.getElementById('barras'));
-            //     chart.draw(data, google.charts.Bar.convertOptions(options));
-
-          // Adicionando eventos de mouse às legendas após o gráfico ser desenhado
-          google.visualization.events.addListener(chart, 'ready', function() {
-                $('#barras text').each(function(index) {
-
-                  $(this).on('mouseover', function() {
-                      
-                      if(question !== undefined){
-                        var tooltip = $('#tooltip');
-                        tooltip.text(question[2]);
-                        tooltip.css({
-                            display: 'block',
-                            left: event.pageX + 'px',
-                            top: (event.pageY - tooltip.outerHeight() - 10) + 'px' // Posiciona a tooltip acima do cursor do mouse
-                        });
-                      }
-                    });
-
-                    $(this).on('mouseout', function() {
-                        $('#tooltip').css('display', 'none');
-                    });
-                });
-            });
         }
+
         function drawPieChart() {
             var data = google.visualization.arrayToDataTable([
               ['Questionário', 'Alunos'],
