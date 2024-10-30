@@ -22,7 +22,7 @@
   <div id="formTurma">
   <form action="{{ route('activity.results') }}" method="GET ">
           @csrf
-          <label for="">Informe a turma: minheeeuuuuu</label>
+          <label for="">Informe a turma: </label>
           <div class="form-inline" >
               <select class="form-control" name="turma_id">
                   @foreach ($turmas as $item)
@@ -38,7 +38,7 @@
       <br>
   </div>
   
-  @if ($qntCompletas+$qntIncompletas+$qntNaoFizeram == 0)
+  @if ($qntCompletas + $qntIncompletas == 0)
        <b>Nenhum aluno ainda acessou.</b>
   @else
 
