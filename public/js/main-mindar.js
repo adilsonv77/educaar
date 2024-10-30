@@ -2,6 +2,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader';
 import * as THREE from 'three';
 import { MindARThree } from 'mindar-image-three';
+import { CSS3DObject } from "three/addons/renderers/CSS3DRenderer.js"
 
 // variáveis
 var buttonAR = null;
@@ -36,13 +37,11 @@ function loadGLTF(path) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-
   function setup() {
-    
-
-
 
   }
+
+  var paineis = [];
 
   // Função para iniciar o AR
   const start = async () => {
@@ -58,10 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
       filterBeta: 0.001
     });
 
-    var { renderer, scene, camera } = mindarThree;
+    var { renderer, scene, camera, cssRenderer, cssScene } = mindarThree;
     cameraVar = camera;
 
-    //const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
     const light = new THREE.HemisphereLight(0xffffff, 0xffffff, Math.PI);
     scene.add(light);
 
@@ -74,136 +72,179 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (var i = 0; i < glbs.childElementCount; i++) {
       var li = glbs.children[i];
-      const glb = await loadGLTF(li.textContent+"?v="+Math.floor());
 
-      const glbScene = glb.scene;
-      
-      const box = new THREE.Box3().setFromObject(glbScene);
-      const sceneSize = box.getSize(new THREE.Vector3());
-      const sceneCenter = box.getCenter(new THREE.Vector3());
+      //Verifica se é um painel ou um modelo3d
+      const painelInicial = li.getAttribute("painel")
+      const usarModelo = painelInicial == 0;
 
-      // Normaliza e posicionar o objeto
-      var maxAxis = Math.max(sceneSize.x, sceneSize.y, sceneSize.z);
-      glbScene.scale.multiplyScalar(1.0 / maxAxis);
-      box.setFromObject(glbScene);
-      box.getCenter(sceneCenter);
-      box.getSize(sceneSize);
-      glbScene.position.copy(sceneCenter).multiplyScalar(-1);
+      //Alterar para 
+      if (usarModelo) {
+        const glb = await loadGLTF(li.textContent);
 
-      const anchor = mindarThree.addAnchor(i);
-      anchor.glb = glb;
-      anchor.activityid = li.id.split("_")[1];
-      anchor.clazz = li.getAttribute("usar_class");
-      anchor.group.add(glbScene);
-
-      anchor.onTargetFound = () => {
-        console.log("chegou no targetfound")
-        buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
-        var bq = document.getElementById("button-ar");
-        bq.style.backgroundColor = anchor.clazz;
-
-        // Para aparecer o buttonAR (das perguntas) quando o target aparecer
-        buttonAR.style.display = "block";
-        bloquear.style.display = "block";
-        
-        if (anchor.glb.animations.length > 0) {
-          mixer = new THREE.AnimationMixer(anchor.glb.scene);
-          action = mixer.clipAction(anchor.glb.animations[0]);
-          action.play();
-        }
-        
-        // Calcula a caixa delimitadora do objeto para encontrar o centro
+        const glbScene = glb.scene;
         const box = new THREE.Box3().setFromObject(glbScene);
-        const center = box.getCenter(new THREE.Vector3());
+        const sceneSize = box.getSize(new THREE.Vector3());
+        const sceneCenter = box.getCenter(new THREE.Vector3());
 
-        // Centraliza o objeto na cena
-        glbScene.position.sub(center);
+        // Normaliza e posicionar o objeto
+        var maxAxis = Math.max(sceneSize.x, sceneSize.y, sceneSize.z);
+        glbScene.scale.multiplyScalar(1.0 / maxAxis);
+        box.setFromObject(glbScene);
+        box.getCenter(sceneCenter);
+        box.getSize(sceneSize);
+        glbScene.position.copy(sceneCenter).multiplyScalar(-1);
 
-        // Cria uma caixa para conter o objeto
-        const container = new THREE.Object3D();
-        container.add(glbScene);  // Adiciona o objeto centralizado na caixa
+        const anchor = mindarThree.addAnchor(i);
+        anchor.glb = glb;
+        anchor.activityid = li.id.split("_")[1];
+        anchor.clazz = li.getAttribute("usar_class");
+        anchor.group.add(glbScene);
 
-        // Ajusta a rotação da caixa (com o objeto dentro)
-        container.rotation.set(0, Math.PI / 2, 0);  // Exemplo de rotação, ajuste conforme necessário
+        anchor.onTargetFound = () => {
+          console.log("chegou no targetfound")
+          buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
+          var bq = document.getElementById("button-ar");
+          bq.style.backgroundColor = anchor.clazz;
 
-        // Define a cena ativa como a caixa contendo o objeto
-        activeScene = container;
+          // Para aparecer o buttonAR (das perguntas) quando o target aparecer
+          buttonAR.style.display = "block";
+          bloquear.style.display = "block";
 
-        // Adiciona o container (com o objeto centralizado) ao grupo do anchor
-        anchor.group.add(container);
-
-        // Torna o objeto visível
-
-        activeScene.visible = true;;
-        
-        /*
-        // Adiciona um listener para o evento de rolagem do mouse
-        window.addEventListener('wheel', (event) => {
-          event.preventDefault();
-          const zoomFactor = 0.1;
-
-          // Verifica a direção da rolagem e ajusta a escala do container
-          if (event.deltaY < 0) {
-              container.scale.multiplyScalar(1 + zoomFactor);
-          } else {
-              container.scale.multiplyScalar(1 - zoomFactor);
+          if (anchor.glb.animations.length > 0) {
+            mixer = new THREE.AnimationMixer(anchor.glb.scene);
+            action = mixer.clipAction(anchor.glb.animations[0]);
+            action.play();
           }
-          
-          container.scale.clampScalar(0.4, 10);
-        });
-        */
-        
-      };
-      
 
-      anchor.onTargetLost = () => {
-        lastActiveScene = activeScene;
-        activeScene = null;
-      
-        // para esconder o botaoAR quando o target sair
-        buttonAR.style.display = "none";
-        bloquear.style.display = "none";
-        desbloquear.style.display = "none";
-      
-        if (action != null) {
-          action.stop();
-          action = null;
-          mixer = null;
+          // Calcula a caixa delimitadora do objeto para encontrar o centro
+          const box = new THREE.Box3().setFromObject(glbScene);
+          const center = box.getCenter(new THREE.Vector3());
+
+          // Centraliza o objeto na cena
+          glbScene.position.sub(center);
+
+          // Cria uma caixa para conter o objeto
+          const container = new THREE.Object3D();
+          container.add(glbScene);  // Adiciona o objeto centralizado na caixa
+
+          // Ajusta a rotação da caixa (com o objeto dentro)
+          container.rotation.set(0, Math.PI / 2, 0);  // Exemplo de rotação, ajuste conforme necessário
+
+          // Define a cena ativa como a caixa contendo o objeto
+          activeScene = container;
+
+          // Adiciona o container (com o objeto centralizado) ao grupo do anchor
+          anchor.group.add(container);
+
+          // Torna o objeto visível
+
+          activeScene.visible = true;;
+
+          /*
+          // Adiciona um listener para o evento de rolagem do mouse
+          window.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            const zoomFactor = 0.1;
+  
+            // Verifica a direção da rolagem e ajusta a escala do container
+            if (event.deltaY < 0) {
+                container.scale.multiplyScalar(1 + zoomFactor);
+            } else {
+                container.scale.multiplyScalar(1 - zoomFactor);
+            }
+            
+            container.scale.clampScalar(0.4, 10);
+          });
+          */
+
+        };
+
+        anchor.onTargetLost = () => {
+          lastActiveScene = activeScene;
+          activeScene = null;
+
+          // para esconder o botaoAR quando o target sair
+          buttonAR.style.display = "none";
+          bloquear.style.display = "none";
+          desbloquear.style.display = "none";
+
+          if (action != null) {
+            action.stop();
+            action = null;
+            mixer = null;
+          }
+        };
+
+      } else {
+        //Usar painel
+        //Pega dados do banco (guardados dentro da var "json") e faz um objeto JSON.
+        const jsonAtribute = li.getAttribute("json")
+        const jsonObject = JSON.parse(jsonAtribute)
+
+        //Gera painel HTML
+        paineis.push(jsonObject.id)
+
+        createPainel(jsonObject.id, jsonObject.txtInferior, jsonObject.txtSuperior)
+
+        let painelHtml = document.getElementById(jsonObject.id);
+
+        //Pega aquele elemento HTML criado e liga com o mindAR
+
+        const obj = new CSS3DObject(painelHtml)
+        const cssAnchor = mindarThree.addCSSAnchor(i)
+        cssAnchor.group.add(obj)
+        anexarPainel(painelHtml);
+
+        cssAnchor.onTargetFound = () => {
+
+          painelHtml.style.visibility = 'visible';
+          painelHtml.style.display = "block";
+          // if (video) {
+          //   player.playVideo();
+          //   document.getElementById("player").style.visibility = "visible"
+          //   console.log("Vídeo encontrado");
+          // }
         }
-      };
-      
+
+        cssAnchor.onTargetLost = () => {
+          painelHtml.visibility = 'hidden';
+          painelHtml.style.display = "none";
+          // if (video) {
+          //   player.pauseVideo();
+          //   document.getElementById("player").style.visibility = "hidden"
+          // }
+        }
+      }
+
+      buttonAR = document.getElementById("button-ar");
+      bloquear = document.getElementById("showObject");
+      desbloquear = document.getElementById("removeObject");
     }
-
-    buttonAR = document.getElementById("button-ar");
-    bloquear = document.getElementById("showObject");
-    desbloquear = document.getElementById("removeObject");
-
     if (isSetup) {
-      
+
       document.getElementById("showObject").addEventListener('click', () => {
         bloquear.style.display = "none";
         desbloquear.style.display = "block";
         mindarThree.stop();
         scene.background = new THREE.Color(0x00ced1);
-
       });
-  
+
       document.getElementById("removeObject").addEventListener('click', () => {
         desbloquear.style.display = "none";
         buttonAR.style.display = "none";
         document.getElementById("barradeprogresso").style.display = "block";
         //mindarThree.start();
-  
-        document.querySelectorAll('.mindar-ui-overlay').forEach(function(a){
+
+        document.querySelectorAll('.mindar-ui-overlay').forEach(function (a) {
           a.remove()
         });
 
         const startX = async () => {
           start();
         }
-  
+
         startX();
-  
+
         //mindarThree.scene = null;
         scene.remove(activeScene);
         activeScene.visible = false;
@@ -220,7 +261,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const handleTouchStart = (event) => {
         if (activeScene == null)
           return;
-
         if (event.touches.length === 1) {
           touchStart = event.touches[0];
           touchStartRotation = { x: activeScene.rotation.x, y: activeScene.rotation.y };
@@ -234,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const handleTouchMove = (event) => {
         if (activeScene == null)
           return;
-        
+
         if (touchStart) {
           if (event.touches.length === 1) {
             const touchMove = event.touches[0];
@@ -264,11 +304,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.addEventListener('touchstart', handleTouchStart);
       document.addEventListener('touchmove', handleTouchMove);
       document.addEventListener('touchend', handleTouchEnd);
-
     }
 
-
- 
     let barradeprogresso = document.getElementById("barradeprogresso");
     barradeprogresso.style.display = "none";
 
@@ -303,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
           lastActiveScene.rotateZ(-lastActiveScene.rotation._z);
         }
       }
+      cssRenderer.render(cssScene, camera);
       renderer.render(scene, camera);
     });
 
@@ -312,8 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   start();
-  
-  
 
   document.addEventListener('touchmove', (event) => {
     if (event.scale !== 1) {
@@ -321,3 +357,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: false });
 });
+
+//Função para criar um painel
+function createPainel(id, txtInferior, txtSuperior) {
+  const container = document.createElement('div');
+  container.classList.add('painel');
+  container.id = id;
+  container.style.visibility = 'hidden';
+  container.style.display = "none";
+  container.innerHTML = `
+      <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117" placeholder="Digite seu texto aqui" disabled>
+          `+ txtSuperior + `
+      </textarea>
+      <div id="midia" tabindex="0">
+          <p>Selecione um:</p>
+          <div id="selectType">
+              <button id="img">Imagem</button>
+              <span>ou</span>
+              <button id="vid">Vídeo</button>
+          </div>
+      </div>
+      <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117" placeholder="Digite seu texto aqui" disabled>
+          `+ txtInferior + `
+      </textarea>
+      <div id="areaBtns">
+
+      </div>
+  `;
+  document.getElementById("painelContainer").appendChild(container);
+}
+
+function anexarPainel(painel) {
+  painel.classList = [];
+  painel.style = "";
+  painel.classList = ["painel"];
+  //painel.style.visibility = 'hidden';
+  //painel.style.display = "none";
+  // Adiciona o container criado a página
+  document.getElementById("painelContainer").appendChild(painel);
+}

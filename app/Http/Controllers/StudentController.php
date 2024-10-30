@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use App\DAO\ContentDAO;
+use App\Models\Painei;
 
 class StudentController extends Controller
 {
@@ -63,7 +64,6 @@ class StudentController extends Controller
      */
     public function showActivity(Request $request)
     {
-
         $data = $request->all();
         $content_id = $request->id;
         if ($content_id == null) {
@@ -71,11 +71,19 @@ class StudentController extends Controller
         }
         $activities = DB::table('activities')
             ->where("content_id", $content_id)
-            ->orderBy("id")
+            ->orderBy('painel_inicial_id', 'desc')
             ->get();
-
+            //dd($activities);
+            
         // verificar quais atividades já foram respondidas        
         foreach ($activities as $activity) {
+            //Pega o json do painel da atividade se for um painel.
+            $idPainelInicial = $activity->painel_inicial_id;
+            if($idPainelInicial != null){
+                //Possui um painel inicial
+                $activity->json = Painei::where('id',$idPainelInicial)->first()->panel;
+            }
+
             $questions = DB::table('questions')
                 ->where("activity_id", $activity->id)->get();
             // uma questao respondida ou nao jah diz tudo da atividade
@@ -91,7 +99,7 @@ class StudentController extends Controller
         session(["content_id" => $content_id]);
         $disciplina = session()->get("disciplina");
         $rota = route("student.conteudos") . "?id=" . $disciplina;
-        return view('student.ar', compact('activities', 'rota'));
+        return view('student.ar', compact('activities', 'rota',));
     }
 
     /**
@@ -101,10 +109,8 @@ class StudentController extends Controller
     {
 
         // buscar da tabela student_answers uma questao respondida da activity_id, question_id, user_id
-
         $activity_id = $request->id;
 
-        
         // $respondida = DB::table('student_answers as st')
         //     ->join('questions as q', 'st.question_id', '=', 'q.id')
         //     ->where([
@@ -140,7 +146,6 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-
         /* 
             precisa verificar se a questão já foi respondida...
            isso pode acontecer quando o mesmo usuário se loga simultaneamente em mais equipamentos,
@@ -192,9 +197,6 @@ class StudentController extends Controller
                     }catch(Exception $e){
                         continue;
                     }
-                
-                    
-                
             }
 
             DB::commit();

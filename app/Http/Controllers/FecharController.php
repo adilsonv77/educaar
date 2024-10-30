@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 
 class FecharController extends Controller
-{
+{ 
+
     public function index(Request $request)
     {
         $content  = DB::table('contents')
@@ -21,8 +22,10 @@ class FecharController extends Controller
             ->where('contents.id', $request['content'])
             ->first();
 
-        $activities = Activity::where('content_id', '=', $request['content'])->get();
-
+        $activities = Activity::where('content_id', '=', $request['content'])
+        ->orderBy('painel_inicial_id', 'desc')
+        ->get();
+   
         $titulo = "Fechar conteúdo";
 
         session()->put("content.id", $request['content']);
@@ -33,7 +36,6 @@ class FecharController extends Controller
 
     public function store()
     {
-
         $content = Content::find(session()->pull("content.id"));
         $content ->update(['fechado' => 1]);
         

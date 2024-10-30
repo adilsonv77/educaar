@@ -3,9 +3,13 @@
 
 
 @section('style')
-
+<link rel="stylesheet" href="{{asset('css/painel.css')}}">
 <style>
-
+        #painelContainer{
+            display: flex;
+            justify-content: center;
+        }
+        
         #my-ar-container {
             height: 80vh; width: 120vh; position: relative; overflow: hidden;   
          }
@@ -13,9 +17,10 @@
  </style>
 @endsection
 
-
 @section('content')
-
+    <div id="painelContainer">
+            
+    </div>
     <span id="mind" style="display: none;">/mind/{{session()->get('content_id')}}.mind</span>
 
     <script>
@@ -25,8 +30,7 @@
 
     <span id="glbs" style="display: none;"> 
         @foreach ($activities as $item)
-        
-         <li id="act_{{$item->id}}" usar_class=@if($item->respondido==1)"#efbecc"@else""@endif>/modelos3d/{{$item->glb}}</li>
+            <li id="act_{{$item->id}}" usar_class=@if($item->respondido==1)"#efbecc" @else "" @endif @if(!empty($item->painel_inicial_id)) json="{{$item->json}}" @endif painel=@if(!empty($item->painel_inicial_id)) {{$item->painel_inicial_id}} @else "0" @endif >/modelos3d/{{$item->glb}}</li>
         @endforeach
     </span>
     
@@ -37,17 +41,13 @@
         </div>
     </div>
 
-    <div id="my-ar-container">
-    </div>
-
+    <div id="my-ar-container"> </div>
     
 @endsection
 
 @section('script')	
 
-
-    <script type="importmap">
-        
+    <script type="importmap"> 
     {
       "imports": {
         "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
@@ -56,9 +56,6 @@
     }
     </script>
 
-
-
-  
     <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
     
 @endsection 

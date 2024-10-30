@@ -130,7 +130,6 @@ class ContentController extends Controller
     private function buscarDisciplinas($anoid, $profid)
     {
         /*
-
         Retorna as disciplinas com suas turmas desse professor, nesse ano letivo.
 
         select distinct d.name, tm.serie from turmas_disciplinas td

@@ -7,7 +7,7 @@
     justify-content: center;
 }
 
-#painel {
+.painel {
     position: relative;
     background-color: #f8f8f8;
     width: 550px;
@@ -22,7 +22,7 @@
     align-items: center;
 }
 
-#painel textarea {
+.painel textarea {
     width: 100%;
     height: 95px;
     font-size: 18px;
@@ -32,7 +32,7 @@
     resize: none;
 }
 
-#painel button {
+.painel button {
     width: 90px;
     height: 40px;
     background-color: #f8f8f8;

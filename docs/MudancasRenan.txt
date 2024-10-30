@@ -1,0 +1,26 @@
+Tabela paineis
+    Para guardar os paineis, uma tabela "paineis" foi colocada no banco de dados. Seu único atributo relevante é o seu JSON.
+O json retem todas as informações sobre aquele painel e de seus filhos (por exemplo, guardar a informação do nome painel, e
+dos botões que ele possuem). A ideia é que padronize-se as funções e os ícones, e possa-se obter um ícone função a partir de
+um número guardado no json do banco.
+
+Guardar informações nos painéis
+    Dentro do banco de dados apenas um json é guardado com todas as informações necessárias.
+    Isso torna o sistema mais flexível a expanções futuras.
+    Template JSON:
+    {
+        "id": (definido pelo SGBD),
+        "txtSuperior": "Texto em cima da midia",
+        "txtInferior": "Texto abaixo da mida",
+        "link": "https://www.youtube.com/watch?v=4YEypDiRyS4",
+        "midia": "img",
+        "btn1Icon": 24,
+        "btn1Function": 10,
+        "btn2Icon": 2,
+        "btn2Function": 1,
+        "btn2Param": 13,
+        "btn4Icon": 5,
+        "btn4Function": 17,
+        "btn2Param": "15,25",
+        "midiaExtension": ".png"
+    }

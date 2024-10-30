@@ -36,22 +36,24 @@ class ActivityController extends Controller
         if (session('type') == 'student') {
             return redirect('/');
         }
-        
+
         //DB::connection()->enableQueryLog();
         $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
         $anoletivo_id = $anoletivoAtual->id;
 
         $activities = ActivityDAO::buscarActivitiesDoProf(Auth::user()->id, $anoletivo_id)
-           ->select('activities.*', 
-                DB::raw('concat(activities.name, " - ", disciplinas.name, " (", contents.name, ")") AS pesq_name'));
+            ->select(
+                'activities.*',
+                DB::raw('concat(activities.name, " - ", disciplinas.name, " (", contents.name, ")") AS pesq_name')
+            );
 
-                
+
         $activities = $activities->addSelect([
-                    'qtnQuest' => Question::selectRaw('count(*)')
-                        ->whereColumn('activities.id', '=', 'activity_id')
-    
-                ]);
+            'qtnQuest' => Question::selectRaw('count(*)')
+                ->whereColumn('activities.id', '=', 'activity_id')
+
+        ]);
 
         $act = $request->titulo;
         if ($act) {
@@ -59,13 +61,13 @@ class ActivityController extends Controller
             $activities = $activities->where(DB::raw('concat(activities.name, " - ", disciplinas.name, " (", contents.name, ")") '), 'like', $r);
         }
         $activities = $activities->distinct()->paginate(20);
- /*
-        $pesq = array();
-        foreach ($activities as $act) {
-            array_push($pesq, $act->pesq_name);
-        }
-        $pesq = array_unique($pesq);
-*/
+        /*
+               $pesq = array();
+               foreach ($activities as $act) {
+                   array_push($pesq, $act->pesq_name);
+               }
+               $pesq = array_unique($pesq);
+       */
         $activity = $request->titulo;
         return view('pages.activity.index', compact('activities', 'activity'));
 
@@ -85,13 +87,15 @@ class ActivityController extends Controller
         $acao = 'insert';
 
         $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
-                ->where('bool_atual', 1)->first();
+            ->where('bool_atual', 1)->first();
         $anoletivo_id = $anoletivoAtual->id;
 
         $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, $anoletivo_id);
         $contents = $contents
-            ->select('contents.id as id', 
-                    DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name'))
+            ->select(
+                'contents.id as id',
+                DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
+            )
             ->get();
         $content = 0;
         $params = [
@@ -106,8 +110,9 @@ class ActivityController extends Controller
         return view('pages.activity.register', $params);
     }
 
-    public static function deleteDir($dirPath) {
-        if (! is_dir($dirPath)) {
+    public static function deleteDir($dirPath)
+    {
+        if (!is_dir($dirPath)) {
             return;
         }
         if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
@@ -135,12 +140,20 @@ class ActivityController extends Controller
 
         $data = $request->all();
 
+        //Verifica se é cadastro de glb ou de painel
+        $idPainel = $data['panelId'];
+        unset($data['panelId']);
+        $usarPainel = false;
+        if (!empty($idPainel)) {
+            $data['glb'] = '';
+            $usarPainel = true;
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:100',
-            'glb' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:glb,zip', 'max:40960000'],
+            'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:40960000'],
             'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg']
         ]);
-
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
@@ -162,21 +175,21 @@ class ActivityController extends Controller
 
         $zipdir = "";
         $achou = "";
-        if (array_key_exists('glb', $data)) {
-
+        //Se possuir um glb, e o cadastro de GLB for selecionado.
+        if (array_key_exists('glb', $data) && !$usarPainel) {
             $filename = time();
 
             if ($request->glb->getClientOriginalExtension() == "zip") {
                 $zipArchive = new \ZipArchive();
                 $result = $zipArchive->open($request->glb);
                 if ($result === TRUE) {
-                    $zipArchive ->extractTo(public_path('modelos3d/'.$filename));
-                    $zipArchive ->close();
+                    $zipArchive->extractTo(public_path('modelos3d/' . $filename));
+                    $zipArchive->close();
 
-                    $files = scandir(public_path('modelos3d/'.$filename));
+                    $files = scandir(public_path('modelos3d/' . $filename));
 
-                    
-                    foreach($files as $file) {
+
+                    foreach ($files as $file) {
                         if (str_ends_with($file, ".gltf")) {
                             $achou = $file;
                             break;
@@ -185,19 +198,19 @@ class ActivityController extends Controller
 
                     $zipdir = $filename;
                     if ($achou == "") {
-                        self::deleteDir(public_path('modelos3d/'.$filename));
+                        self::deleteDir(public_path('modelos3d/' . $filename));
                         return redirect()->back()->withErrors(['msg' => 'Arquivo GLTF incompatível.']);
                     }
 
                     // normalmente é scene.gltf mas estou me garantindo para exceções
-                    $data['glb'] = $filename."/".$achou;
-                    
+                    $data['glb'] = $filename . "/" . $achou;
+
                 } else {
                     return redirect()->back()->withErrors(['msg' => 'Problemas ao descompactar o ZIP.']);
                 }
-                
+
             } else {
-                
+
                 $glbFile = $baseFileName . '.' . $request->glb->getClientOriginalExtension();
                 $request->glb->move(public_path('modelos3d'), $glbFile);
 
@@ -213,60 +226,72 @@ class ActivityController extends Controller
             $request->marcador->move(public_path('marcadores'), $imgFile);
 
             $data['marcador'] = $imgFile;
- 
+
         }
 
         if ($data['acao'] == 'insert') {
-            $data['professor_id'] =  Auth::user()->id;
+            $data['professor_id'] = Auth::user()->id;
             $activity = Activity::create($data);
 
             $data['marcador'] = $activity->id . '.' . $request->marcador->getClientOriginalExtension();
             $public_path = public_path('marcadores');
-            rename($public_path .'/'. $imgFile, $public_path .'/'.  $data['marcador']);
+            rename($public_path . '/' . $imgFile, $public_path . '/' . $data['marcador']);
 
             $public_path = public_path('modelos3d');
-            if ($zipdir === "") {
+            
+            if ($zipdir === "" && !$usarPainel) {
+                //Se for um arquivo .zip e for para usar o glb
                 $data['glb'] = $activity->id . '.' . $request->glb->getClientOriginalExtension();
-                
-                rename($public_path .'/'. $glbFile, $public_path .'/'.  $data['glb']);
+                rename($public_path . '/' . $glbFile, $public_path . '/' . $data['glb']);
+            } else if (!$usarPainel) {
+                //Se for um arquivo glb e é para usar o glb
+                $data['glb'] = $activity->id . "/" . $achou;
+                rename($public_path . '/' . $zipdir, $public_path . '/' . $activity->id);
             } else {
-                $data['glb'] = $activity->id."/".$achou;
-                rename($public_path . '/' . $zipdir, $public_path .'/'.  $activity->id);
+                //Se não for para usar um glb, e usar um painel
+                $data['painel_inicial_id'] = $idPainel;
             }
-
             $activity->update($data);
-        } else {
+        } else if (!$usarPainel){
             $activity = Activity::find($data['id']);
 
             if ($zipdir !== "") {
-                self::deleteDir(public_path('modelos3d/'.$activity->id));
-                $data['glb'] = $activity->id."/".$achou;
+                self::deleteDir(public_path('modelos3d/' . $activity->id));
+                $data['glb'] = $activity->id . "/" . $achou;
                 $public_path = public_path('modelos3d');
-                rename($public_path . '/' . $zipdir, $public_path .'/'.  $activity->id);
+                rename($public_path . '/' . $zipdir, $public_path . '/' . $activity->id);
             }
-            
-  
-            @unlink(public_path('mind')."/".$activity->content_id.".mind");
+
+            @unlink(public_path('mind') . "/" . $activity->content_id . ".mind");
 
             $content = Content::find($activity->content_id);
-            $content ->update(['fechado' => 0]);
-            
-            $activity->update($data);
+            $content->update(['fechado' => 0]);
 
+            $activity->update($data);
+        } else{
+            $activity = Activity::find($data['id']);
+            $data['painel_inicial_id'] = $idPainel;
+            
+            @unlink(public_path('mind') . "/" . $activity->content_id . ".mind");
+
+            $content = Content::find($activity->content_id);
+            $content->update(['fechado' => 0]);
+
+            $activity->update($data);
         }
 
 
-        @unlink(public_path('mind')."/".$data["content_id"].".mind");
+        @unlink(public_path('mind') . "/" . $data["content_id"] . ".mind");
 
         $content = Content::find($data["content_id"]);
-        $content ->update(['fechado' => 0]);
-       if(session('type') == 'teacher'){
+        $content->update(['fechado' => 0]);
+        if (session('type') == 'teacher') {
             return redirect(route('activity.index'));
-       }else{
+        } else {
             return redirect(route('developer.index'));
-       }
+        }
 
- 
+
     }
 
     /**
@@ -306,11 +331,12 @@ class ActivityController extends Controller
 
         $contents = ContentDAO::buscarContentsDoProf(Auth::user()->id, $anoletivo_id);
         $contents = $contents
-            ->select ('contents.id as id', 
-                    DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
-                    )
+            ->select(
+                'contents.id as id',
+                DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
+            )
             ->get();
-        
+
         //dd($contents);
         $params = [
             'titulo' => $titulo,
@@ -336,25 +362,25 @@ class ActivityController extends Controller
 
         if ($activity != null) {
 
-            @unlink(public_path('marcadores'). "/" . $activity->marcador);
+            @unlink(public_path('marcadores') . "/" . $activity->marcador);
 
             if (str_contains($activity->glb, "/")) {
                 $posbarra = strpos($activity->glb, "/");
                 $dirname = substr($activity->glb, 0, $posbarra);
-                self::deleteDir(public_path('modelos3d')."/".$dirname);
-    
+                self::deleteDir(public_path('modelos3d') . "/" . $dirname);
+
             } else {
                 @unlink(public_path('modelos3d') . "/" . $activity->glb);
             }
-    
-            $activity->delete();
-        
 
-            @unlink(public_path('mind')."/".$activity->content_id.".mind");
- 
+            $activity->delete();
+
+
+            @unlink(public_path('mind') . "/" . $activity->content_id . ".mind");
+
             $content = Content::find($activity->content_id);
-            $content ->update(['fechado' => 0]);
-        
+            $content->update(['fechado' => 0]);
+
         }
 
         return redirect(route('activity.index'));

@@ -8,7 +8,7 @@
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
-<link rel="stylesheet" href="{{asset('css/painel2.css')}}">
+<link rel="stylesheet" href="{{asset('css/painel.css')}}">
 @endsection
 
 @section('content')
@@ -23,7 +23,7 @@
         @csrf
         <div class="row">
             <div class="col-md-8 coluna linha">
-                <div id="painel">
+                <div class="painel">
                     <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117"
                         placeholder="Digite seu texto aqui"> @if ($action == 'edit') {{$txtSuperior}}
                         @endif</textarea>
