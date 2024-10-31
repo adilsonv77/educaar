@@ -59,14 +59,6 @@
     }
     </script>
 
-    <script>
-        setTimeout(() => {
-           document.getElementsByClassName("painel")[0].addEventListener("click",()=>{
-            alert("eae")
-           })
-        }, 3000);
-    </script>
-
     <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
     
 @endsection 

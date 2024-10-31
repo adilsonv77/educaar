@@ -194,23 +194,30 @@ document.addEventListener('DOMContentLoaded', () => {
         cssAnchor.group.add(obj)
 
         cssAnchor.onTargetFound = () => {
-
           painelHtml.style.visibility = 'visible';
           painelHtml.style.display = "block";
-          // if (video) {
-          //   player.playVideo();
-          //   document.getElementById("player").style.visibility = "visible"
-          //   console.log("Vídeo encontrado");
-          // }
+          
+          // Para aparecer o buttonAR (das perguntas) quando o target aparecer
+          buttonAR.style.display = "block";
+          bloquear.style.display = "block";
+
+          if (jsonObject.midiaExtension == "mp4") {
+            painelHtml.getElementsByTagName("video")[0].play();
+          }
         }
 
         cssAnchor.onTargetLost = () => {
           painelHtml.visibility = 'hidden';
           painelHtml.style.display = "none";
-          // if (video) {
-          //   player.pauseVideo();
-          //   document.getElementById("player").style.visibility = "hidden"
-          // }
+
+           // para esconder o botaoAR quando o target sair
+           buttonAR.style.display = "none";
+           bloquear.style.display = "none";
+           desbloquear.style.display = "none";
+           
+          if (jsonObject.midiaExtension == "mp4") {
+            painelHtml.getElementsByTagName("video")[0].pause();
+          }
         }
       }
 
@@ -223,8 +230,17 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById("showObject").addEventListener('click', () => {
         bloquear.style.display = "none";
         desbloquear.style.display = "block";
+        
+        //Verifica se é um objeto 3D ou um painel
+        if (activeScene instanceof THREE.Object3D) {
+          //modelo 3D
+          alert("Modelo3d")
+          scene.background = new THREE.Color(0x00ced1);
+        }else{
+          //painel
+          alert("Painel")
+        }
         mindarThree.stop();
-        scene.background = new THREE.Color(0x00ced1);
       });
 
       document.getElementById("removeObject").addEventListener('click', () => {
@@ -368,13 +384,13 @@ function createPainel(painel) {
     //Vídeo
     midiaHTML = `
       <video controls class="midiaApresentada">
-        <source src="${window.location.origin+'/midiasPainel/'+painel.arquivoMidia}" type="video/mp4">
+        <source src="${window.location.origin + '/midiasPainel/' + painel.arquivoMidia}" type="video/mp4">
       </video>
     `
   } else {
     //Imagem
     midiaHTML = `
-      <img class="midiaApresentada" src="${window.location.origin+'/midiasPainel/'+painel.arquivoMidia}">
+      <img class="midiaApresentada" src="${window.location.origin + '/midiasPainel/' + painel.arquivoMidia}">
     `
   }
   container.innerHTML = `
@@ -386,12 +402,8 @@ function createPainel(painel) {
           `+ painel.txtInferior + `
       </textarea>
       <div id="areaBtns">
-        <input placeholder="eae">
+        
       </div>
   `;
-  container.onclick = ()=>{
-    console.log("Porra")
-    container.style.background = "red";
-  }
   document.getElementById("painelContainer").appendChild(container);
 }
