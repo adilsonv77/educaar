@@ -29,13 +29,13 @@
           data.addColumn('string','Atividades');
           data.addColumn('number', 'Responderam');
           data.addColumn('number', 'Não respond.');
-          data.addColumn({type: 'string', role: 'annotation'});
+          data.addColumn({type: 'string', role: 'tooltip'});
           var value;
 
           @foreach ($results as $item) 
             value = "A"+{{ $loop->index+1 }};
-            data.addRow([value, {{ $item['atividade_completa'] }}, {{ ($item['atividade_incompleta'] + $item['atividade_nao_fizeram']) }}, "{{ $item['nome'] }}"]); 
-            map1.set(value, [value, {{ $item['atividade_completa'] }}, "{{ $item['nome'] }}"]);
+            //map1.set(value,  [value, {{ $item['atividade_completa'] }}, "{{ $item['nome'] }}"]);
+            data.addRow([ value +": " + "{{ $item['nome'] }}", {{ $item['atividade_completa'] }}, {{ ($item['atividade_incompleta'] + $item['atividade_nao_fizeram']) }}, "{{ $item['nome'] }}"]); 
           @endforeach
 
           var _ticks = [];
@@ -49,44 +49,48 @@
           },
           isStacked: true,
           legend: 'bottom',
+          
 
           vAxis: {
             minValue: 0,
             ticks: _ticks
           },
           bar: { groupWidth: '45%' }
+           
         };
-        var chart = new google.visualization.ColumnChart(document.getElementById('barras'));
-        chart.draw(data, options);
+
+        var chart = new google.charts.Bar(document.getElementById('barras'));
+              
+              chart.draw(data, google.charts.Bar.convertOptions(options));
+        // var chart = new google.visualization.ColumnChart(document.getElementById('barras'));
+        // chart.draw(data, options);
         
-        //var chart = new google.charts.Bar(document.getElementById('barras'));
-        // chart.draw(data, google.charts.Bar.convertOptions(options));
-       
+        
 
         
        // Adicionando eventos de mouse às legendas após o gráfico ser desenhado
-      google.visualization.events.addListener(chart, 'ready', function() {
-            $('#barras text').each(function(index) {
+      // google.visualization.events.addListener(chart, 'ready', function() {
+      //       $('#barras text').each(function(index) {
 
-              $(this).on('mouseover', function() {
-                  var activity= map1.get($(this).text());
-                  if(activity !== undefined){
-                    var tooltip = $('#tooltip');
+      //         $(this).on('mouseover', function() {
+      //             var activity= map1.get($(this).text());
+      //             if(activity !== undefined){
+      //               var tooltip = $('#tooltip');
 
-                    tooltip.text(activity[2]);
-                    tooltip.css({
-                        display: 'block',
-                        left: event.pageX + 'px',
-                        top: (event.pageY - tooltip.outerHeight() - 10) + 'px' // Posiciona a tooltip acima do cursor do mouse
-                    });
-                  }
-                });
+      //               tooltip.text(activity[2]);
+      //               tooltip.css({
+      //                   display: 'block',
+      //                   left: event.pageX + 'px',
+      //                   top: (event.pageY - tooltip.outerHeight() - 10) + 'px' // Posiciona a tooltip acima do cursor do mouse
+      //               });
+      //             }
+      //           });
 
-                $(this).on('mouseout', function() {
-                    $('#tooltip').css('display', 'none');
-                });
-            });
-        });
+      //           $(this).on('mouseout', function() {
+      //               $('#tooltip').css('display', 'none');
+      //           });
+      //       });
+      //   });
     }
     function drawPieChart() {
         var data = google.visualization.arrayToDataTable([
