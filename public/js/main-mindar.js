@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.group.add(glbScene);
 
         anchor.onTargetFound = () => {
-          console.log("chegou no targetfound")
+          // console.log("chegou no targetfound")
           buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
           var bq = document.getElementById("button-ar");
           bq.style.backgroundColor = anchor.clazz;
@@ -241,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
           alert("Painel")
         }
         mindarThree.stop();
+        scene.background = new THREE.Color(0x00ced1);
       });
 
       document.getElementById("removeObject").addEventListener('click', () => {
