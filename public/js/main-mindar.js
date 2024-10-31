@@ -192,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const obj = new CSS3DObject(painelHtml)
         const cssAnchor = mindarThree.addCSSAnchor(i)
         cssAnchor.group.add(obj)
-        anexarPainel(painelHtml);
 
         cssAnchor.onTargetFound = () => {
 
@@ -395,14 +394,4 @@ function createPainel(painel) {
     container.style.background = "red";
   }
   document.getElementById("painelContainer").appendChild(container);
-}
-
-function anexarPainel(painel) {
-  painel.classList = [];
-  painel.style = "";
-  painel.classList = ["painel"];
-  //painel.style.visibility = 'hidden';
-  //painel.style.display = "none";
-  // Adiciona o container criado a página
-  document.getElementById("painelContainer").appendChild(painel);
 }
