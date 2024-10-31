@@ -112,7 +112,7 @@
               data.addColumn('string','Questões');
               data.addColumn('number', 'Respostas Incorretas');
               data.addColumn('number', 'Respostas Corretas '); 
-              data.addColumn({type: 'string', role: 'tooltip'}); 
+              //data.addColumn({type: 'string', role: 'tooltip'}); 
 
 
               var count = 1;
@@ -124,9 +124,9 @@
                 // map1.set(value [question.qntRespondida ,question.quntRespondCerto , question.questao ]);
                 titleTable= document.getElementById(value);
                 titleTable.setAttribute('title', question.questao);
-                console.log(question)
-                data.addRow([value ,respostasIncorretas , question.quntRespondCerto,"minehu"]);
-                // data.addRow([value + ": " + question.questao, respostasIncorretas,question.quntRespondCerto,value + " " + question.questao]);
+                //console.log(question)
+                //data.addRow([value ,respostasIncorretas , question.quntRespondCerto,"minehu"]);
+                 data.addRow([{f:value + ": " + question.questao, v:value}, respostasIncorretas,question.quntRespondCerto]);
               });
 
 
