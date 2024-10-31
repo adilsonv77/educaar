@@ -32,13 +32,15 @@ class PainelController extends Controller
         $data = $request->all();
         $baseFileName = time();
         $action = $data['action'];
+        $midiaExtension = $request->arquivoMidia->getClientOriginalExtension();
 
-        $imgFile = $baseFileName . '.' . $request->arquivoMidia->getClientOriginalExtension();
+        $imgFile = $baseFileName . '.' . $midiaExtension;
         $request->arquivoMidia->move(public_path('midiasPainel'), $imgFile);
         $data['midiasPainel'] = $imgFile;
 
-        //Remove os dados desnecessários para serem guardados
-        $data['midiaExtension'] = $request->arquivoMidia->getClientOriginalExtension();
+        //Remove os dados desnecessários para serem guardados e adiciona necessários
+        $data['midiaExtension'] = $midiaExtension;
+        $data['arquivoMidia'] = $data['id'].'.'.$midiaExtension;
         unset($data['_token']);
         unset($data['midia']);
         unset($data['midiasPainel']);
@@ -53,11 +55,14 @@ class PainelController extends Controller
         } else {
             $id = $data['id'];
             unset($data['id']);
-            $painel = Painei::where('id', $id)->update($json);
+            $painel = Painei::where('id', $id);
+            //Pega a extenção do arquivo já guardado no painel
+            $originalExtension = json_decode($painel->first()->panel)->midiaExtension;
+            $painel->update($json);
         }
-        $data['midiasPainel'] = $id . '.' . $request->arquivoMidia->getClientOriginalExtension();
+        $data['midiasPainel'] = $id . '.' . $midiaExtension;
         $public_path = public_path('midiasPainel');
-        if($action == 'edit') unlink($public_path . '/' . $data['midiasPainel']);
+        if($action == 'edit') unlink($public_path . '/' . $id.'.'.$originalExtension);
         rename($public_path . '/' . $imgFile, $public_path . '/' . $data['midiasPainel']);
         // $painel->update($data);
         return redirect()->route('paineis.create');

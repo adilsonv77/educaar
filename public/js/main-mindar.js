@@ -182,9 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const jsonObject = JSON.parse(jsonAtribute)
 
         //Gera painel HTML
-        paineis.push(jsonObject.id)
-
-        createPainel(jsonObject.id, jsonObject.txtInferior, jsonObject.txtSuperior)
+        paineis.push(jsonObject.id) //talvez seja código inútil
+        createPainel(jsonObject)
 
         let painelHtml = document.getElementById(jsonObject.id);
 
@@ -359,31 +358,42 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //Função para criar um painel
-function createPainel(id, txtInferior, txtSuperior) {
+function createPainel(painel) {
   const container = document.createElement('div');
   container.classList.add('painel');
-  container.id = id;
+  container.id = painel.id;
   container.style.visibility = 'hidden';
   container.style.display = "none";
+  var midiaHTML;
+  if (painel.midiaExtension == "mp4") {
+    //Vídeo
+    midiaHTML = `
+      <video controls class="midiaApresentada">
+        <source src="${window.location.origin+'/midiasPainel/'+painel.arquivoMidia}" type="video/mp4">
+      </video>
+    `
+  } else {
+    //Imagem
+    midiaHTML = `
+      <img class="midiaApresentada" src="${window.location.origin+'/midiasPainel/'+painel.arquivoMidia}">
+    `
+  }
   container.innerHTML = `
       <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117" placeholder="Digite seu texto aqui" disabled>
-          `+ txtSuperior + `
+          `+ painel.txtSuperior + `
       </textarea>
-      <div id="midia" tabindex="0">
-          <p>Selecione um:</p>
-          <div id="selectType">
-              <button id="img">Imagem</button>
-              <span>ou</span>
-              <button id="vid">Vídeo</button>
-          </div>
-      </div>
+      `+ midiaHTML + `
       <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117" placeholder="Digite seu texto aqui" disabled>
-          `+ txtInferior + `
+          `+ painel.txtInferior + `
       </textarea>
       <div id="areaBtns">
-
+        <input placeholder="eae">
       </div>
   `;
+  container.onclick = ()=>{
+    console.log("Porra")
+    container.style.background = "red";
+  }
   document.getElementById("painelContainer").appendChild(container);
 }
 

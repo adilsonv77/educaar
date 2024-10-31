@@ -3,7 +3,7 @@
 
 
 @section('style')
-<link rel="stylesheet" href="{{asset('css/painel.css')}}">
+<link rel="stylesheet" href="{{asset('css/painel2.css')}}">
 <style>
         #painelContainer{
             display: flex;
@@ -30,7 +30,10 @@
 
     <span id="glbs" style="display: none;"> 
         @foreach ($activities as $item)
-            <li id="act_{{$item->id}}" usar_class=@if($item->respondido==1)"#efbecc" @else "" @endif @if(!empty($item->painel_inicial_id)) json="{{$item->json}}" @endif painel=@if(!empty($item->painel_inicial_id)) {{$item->painel_inicial_id}} @else "0" @endif >/modelos3d/{{$item->glb}}</li>
+            <li id="act_{{$item->id}}" usar_class=@if($item->respondido==1)"#efbecc" @else "" @endif @if(!empty($item->painel_inicial_id)) json="{{$item->json}}" @endif
+                painel=@if(!empty($item->painel_inicial_id)) {{$item->painel_inicial_id}} @else "0" @endif>
+                /modelos3d/{{$item->glb}}
+            </li>
         @endforeach
     </span>
     
@@ -54,6 +57,14 @@
         "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
         "mindar-image-three":"https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"      }
     }
+    </script>
+
+    <script>
+        setTimeout(() => {
+           document.getElementsByClassName("painel")[0].addEventListener("click",()=>{
+            alert("eae")
+           })
+        }, 3000);
     </script>
 
     <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>

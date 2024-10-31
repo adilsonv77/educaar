@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\School;
 
-//Testes Renan
+//Painéis - Renan
+//Talvez alguns possam ser substituidos por o tal do resource
 use App\Http\Controllers\PainelController;
 Route::prefix('paineis')->group(function(){
     Route::get('/', [PainelController::class, 'create'])->name('paineis.create');
