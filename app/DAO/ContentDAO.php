@@ -6,9 +6,11 @@ use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class ContentDAO {
+class ContentDAO
+{
 
-    public static function buscarContentsDoProf($profid, $anoletivoid) {
+    public static function buscarContentsDoProf($profid, $anoletivoid)
+    {
 
         // select que pegue quais são as disciplinas e turmas do usuário atual
         // usar essas duas informações para buscar os conteúdos
@@ -22,12 +24,12 @@ class ContentDAO {
 
 
         $sql = DB::table('turmas_disciplinas')
-            
-            ->join('turmas','turmas_disciplinas.turma_id','=','turmas.id')
-            ->join('contents', function($join) {
-                        $join->on('turmas.turma_modelo_id', '=', 'contents.turma_id');
-                        $join->on('turmas_disciplinas.disciplina_id', '=', 'contents.disciplina_id');
-                    })
+
+            ->join('turmas', 'turmas_disciplinas.turma_id', '=', 'turmas.id')
+            ->join('contents', function ($join) {
+                $join->on('turmas.turma_modelo_id', '=', 'contents.turma_id');
+                $join->on('turmas_disciplinas.disciplina_id', '=', 'contents.disciplina_id');
+            })
             ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
             ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_id')
             ->where('professor_id', '=', $profid)
@@ -39,8 +41,14 @@ class ContentDAO {
         */
         return $sql;
     }
+    //Não testado e não utilizado
+    public static function buscarTodosConteudos($turma) {
+        $sql = DB::table('contents')->where('turma_id','=',$turma);
+        return $sql;
+    }
 
-    public static function buscarQuestoesDosConteudos($contents) {
+    public static function buscarQuestoesDosConteudos($contents)
+    {
         /*
 select a.content_id, q.id, q.question from activities a
   join questions q on a.id = q.activity_id
@@ -48,24 +56,25 @@ select a.content_id, q.id, q.question from activities a
   */
         $sql = DB::table('activities as a')
             ->select('a.content_id', 'q.id', 'q.question')
-            ->join('questions as q','a.id', '=', 'q.activity_id')
+            ->join('questions as q', 'a.id', '=', 'q.activity_id')
             ->whereIn('a.content_id', $contents);
 
         return $sql;
     }
 
-    public static function buscarTurmasDoContentsDoProf($profid, $anoletivoid, $contentid) {
+    public static function buscarTurmasDoContentsDoProf($profid, $anoletivoid, $contentid)
+    {
 
 
         $sql = DB::table('turmas as t')
-            ->select('t.id as id','t.nome as nome')
-            ->join('turmas_disciplinas as td','td.turma_id', '=', 't.id')
-            ->join('turmas_modelos as tm', 't.turma_modelo_id','=','tm.id')
+            ->select('t.id as id', 't.nome as nome')
+            ->join('turmas_disciplinas as td', 'td.turma_id', '=', 't.id')
+            ->join('turmas_modelos as tm', 't.turma_modelo_id', '=', 'tm.id')
             ->join('contents as c', 'c.turma_id', '=', 'tm.id')
             ->join('activities as a', 'a.content_id', '=', 'c.id')
             ->where([
-                ['td.professor_id','=', $profid],
-                ['t.ano_id','=', $anoletivoid],
+                ['td.professor_id', '=', $profid],
+                ['t.ano_id', '=', $anoletivoid],
                 ['c.id', '=', $contentid]
             ])
             ->distinct();
@@ -74,7 +83,8 @@ select a.content_id, q.id, q.question from activities a
 
     }
 
-    public static function buscarConteudosDeveloper($devid) {
+    public static function buscarConteudosDeveloper($devid)
+    {
         $contents = DB::table('contents')
             ->join('disciplinas', 'contents.disciplina_id', '=', 'disciplinas.id')
             ->join('turmas_modelos', 'contents.turma_id', '=', 'turmas_modelos.id')

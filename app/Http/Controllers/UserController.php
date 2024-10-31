@@ -92,7 +92,7 @@ class UserController extends Controller
             'turma' => $turmas->first(),
             'anoletivo' => $anoletivo
         ];
-
+        
         return view('pages.user.registerUser', $params);
     }
 

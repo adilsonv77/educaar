@@ -14,6 +14,22 @@ class StudentAnswer extends Model
         'user_id',
         'activity_id',
         'alternative_answered',
+        'answer',
         'correct'
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(User::class, 'user_id'); // Assumindo que 'user_id' é a chave estrangeira
+    }
+
+    public function question() // Alterado para belongsTo
+    {
+        return $this->belongsTo(Question::class, 'question_id'); // Uma resposta pertence a uma pergunta
+    }
+
+    public function activity()
+    {
+        return $this->belongsTo(Activity::class, 'activity_id');
+    }
 }
