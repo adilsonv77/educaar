@@ -110,37 +110,41 @@
 
               var data = new google.visualization.DataTable();
               data.addColumn('string','Questões');
-              data.addColumn('number', 'Respostas Corretas ');
               data.addColumn('number', 'Respostas Incorretas');
-              data.addColumn({type: 'string', role: 'tooltip'}); // Coluna de descrição sem ser exibida no gráfico
-              
+              data.addColumn('number', 'Respostas Corretas '); 
+              //data.addColumn({type: 'string', role: 'tooltip'}); 
+
 
               var count = 1;
               var titleTable=null;
               questoes_resultados.forEach((question)=>{
                 var value = "Q"+count++; 
                 var respostasIncorretas = question.qntRespondida - question.quntRespondCerto; 
-                console.log("Questão: " + question.questao + " | Respostas Incorretas: " + respostasIncorretas); 
-                map1.set(value [question.qntRespondida ,question.quntRespondCerto , question.questao ]);
+                // console.log("Questão: " + question.questao + " | Respostas Incorretas: " + respostasIncorretas); 
+                // map1.set(value [question.qntRespondida ,question.quntRespondCerto , question.questao ]);
                 titleTable= document.getElementById(value);
                 titleTable.setAttribute('title', question.questao);
-                console.log(question)
-                data.addRow([value +": " + question.questao , question.quntRespondCerto, respostasIncorretas, question.questao ]);
+                //console.log(question)
+                //data.addRow([value ,respostasIncorretas , question.quntRespondCerto,"minehu"]);
+                 data.addRow([{f:value + ": " + question.questao, v:value}, respostasIncorretas,question.quntRespondCerto]);
               });
+
+
               var options = {
                 chart: {
                   title: 'Respostas Corretas e Incorretas'
                 },
                 isStacked: true,
-                tooltip: {isHtml: true},
-                bar: { groupWidth: '45%' },                
+                colors: ['#5A2D66','#9C6FA8'] 
+                // tooltip: {isHtml: true},
+                // legend: 'none'            
               };
 
               var chart = new google.charts.Bar(document.getElementById('barras'));
-              
+
               chart.draw(data, google.charts.Bar.convertOptions(options));
 
-        }
+          }
 
         function drawPieChart() {
             var data = google.visualization.arrayToDataTable([
