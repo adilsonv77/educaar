@@ -56,8 +56,5 @@ table th {
 
 }
 
-.table-responsive th[title],
-.table-responsive td[title] {
-    position: relative;
-    cursor: pointer;
-}
+
+

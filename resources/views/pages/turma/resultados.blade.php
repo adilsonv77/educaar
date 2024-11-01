@@ -65,9 +65,8 @@
                         @foreach ($content['activities'] as $activity)
                             @foreach ($activity['questions'] as $question)
                                 <!-- Tooltip com o texto da pergunta -->
-                                 <div class="tooltip">
-                                    <th title="{{ $question['question_text'] ?? 'Pergunta não encontrada' }}">Q{{ $loop->iteration }}</th>
-                                 </div>
+                                <th data-bs-toggle="tooltip" title="{{ $question['question_text'] ?? 'Pergunta não encontrada' }}">
+                                    Q{{ $loop->iteration }}</th>
                             @endforeach
                         @endforeach
                     @endforeach
@@ -86,7 +85,7 @@
                                             $status = $response['status'];
                                             $answer = $response['answer'];
                                         @endphp
-                                        <td title="{{ $answer }}">
+                                        <td data-bs-toggle="tooltip" title="{{ $answer }}">
                                             {{ $status }} <!-- Exibe o ícone de status -->
                                         </td>
                                     @else
@@ -100,5 +99,6 @@
             </tbody>
         </table>
     </div>
+
 @endif
 @endsection

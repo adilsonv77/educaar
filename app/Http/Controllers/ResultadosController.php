@@ -60,18 +60,26 @@ class ResultadosController extends Controller
 
             $questions = Question::where('activity_id', $activity->id)->get();
 
-            foreach ($questions as $question) {
-                $activity_data['questions'][$question->id] = [
-                    'question_text' => $question->question,  //texto da pergunta
-                    'responses' => [] // coletar respostas
-                ];
-            }
+            // Somente adiciona a atividade se tiver pelo menos uma questão
+            if ($questions->isNotEmpty()) {
+                foreach ($questions as $question) {
+                    $activity_data['questions'][$question->id] = [
+                        'question_text' => $question->question,  // texto da pergunta
+                        'responses' => [] // coletar respostas
+                    ];
+                }
 
-            // Armazenar a atividade 
-            if (isset($contents[$activity->content_id])) {
-                $contents[$activity->content_id]['activities'][$activity->id] = $activity_data;
+                // Armazenar a atividade 
+                if (isset($contents[$activity->content_id])) {
+                    $contents[$activity->content_id]['activities'][$activity->id] = $activity_data;
+                }
             }
         }
+
+        // Remove conteúdos sem atividades
+        $contents = array_filter($contents, function ($content) {
+            return !empty($content['activities']);
+        });
 
         // Organizar as respostas dos alunos
         $studentsResponses = [];
@@ -105,8 +113,9 @@ class ResultadosController extends Controller
                 }
             }
         }
-        //dd($studentsResponses);
+
         return view('pages.turma.resultados', compact('turmas', 'turma', 'contents', 'studentsResponses'));
     }
+
 
 }
