@@ -35,7 +35,7 @@
           @foreach ($results as $item) 
             value = "A"+{{ $loop->index+1 }};
             //map1.set(value,  [value, {{ $item['atividade_completa'] }}, "{{ $item['nome'] }}"]);
-            data.addRow([ value +": " + "{{ $item['nome'] }}", {{ $item['atividade_completa'] }}, {{ ($item['atividade_incompleta'] + $item['atividade_nao_fizeram']) }}, "{{ $item['nome'] }}"]); 
+            data.addRow([{f:value +": " + "{{ $item['nome'] }}", v:value} , {{ $item['atividade_completa'] }}, {{ ($item['atividade_incompleta'] + $item['atividade_nao_fizeram']) }}, "{{ $item['nome'] }}"]); 
           @endforeach
 
           var _ticks = [];
@@ -48,6 +48,7 @@
             title: 'Atividades respondidas',
           },
           isStacked: true,
+          colors: ['#5A2D66','#9C6FA8'], 
           legend: 'bottom',
           
 
