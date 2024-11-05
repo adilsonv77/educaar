@@ -41,11 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
-  var paineis = [];
+  var paineis = {};
 
   // Função para iniciar o AR
   const start = async () => {
-
     isSetup = mindarThree == null;
 
     const mind = document.getElementById("mind");
@@ -156,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
             container.scale.clampScalar(0.4, 10);
           });
           */
-
         };
 
         anchor.onTargetLost = () => {
@@ -182,21 +180,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const jsonObject = JSON.parse(jsonAtribute)
 
         //Gera painel HTML
-        paineis.push(jsonObject.id) //talvez seja código inútil
-        createPainel(jsonObject)
+        paineis[jsonObject.id] = jsonObject;
+        createPainel(jsonObject, false)
 
         let painelHtml = document.getElementById(jsonObject.id);
 
         //Pega aquele elemento HTML criado e liga com o mindAR
 
         const obj = new CSS3DObject(painelHtml)
+
         const cssAnchor = mindarThree.addCSSAnchor(i)
         cssAnchor.group.add(obj)
 
         cssAnchor.onTargetFound = () => {
+          activeScene = obj;
           painelHtml.style.visibility = 'visible';
           painelHtml.style.display = "block";
-          
+
           // Para aparecer o buttonAR (das perguntas) quando o target aparecer
           buttonAR.style.display = "block";
           bloquear.style.display = "block";
@@ -207,14 +207,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         cssAnchor.onTargetLost = () => {
+          lastActiveScene = activeScene;
+          activeScene = null;
+
           painelHtml.visibility = 'hidden';
           painelHtml.style.display = "none";
 
-           // para esconder o botaoAR quando o target sair
-           buttonAR.style.display = "none";
-           bloquear.style.display = "none";
-           desbloquear.style.display = "none";
-           
+          // para esconder o botaoAR quando o target sair
+          buttonAR.style.display = "none";
+          bloquear.style.display = "none";
+          desbloquear.style.display = "none";
+
           if (jsonObject.midiaExtension == "mp4") {
             painelHtml.getElementsByTagName("video")[0].pause();
           }
@@ -230,18 +233,33 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById("showObject").addEventListener('click', () => {
         bloquear.style.display = "none";
         desbloquear.style.display = "block";
-        
-        //Verifica se é um objeto 3D ou um painel
-        if (activeScene instanceof THREE.Object3D) {
-          //modelo 3D
-          alert("Modelo3d")
-          scene.background = new THREE.Color(0x00ced1);
-        }else{
-          //painel
-          alert("Painel")
-        }
+
         mindarThree.stop();
         scene.background = new THREE.Color(0x00ced1);
+
+        //Verifica se é um objeto 3D ou um painel
+        if (activeScene.children.length != 0) {
+          //modelo 3D
+        } else {
+          //painel 
+          //Por algum motivo a tela só desaparece se esperar 1 milésimo de 1 segundo .
+          setTimeout(() => {
+            activeScene.element.style.visibility = "hidden";
+            activeScene.element.style.display = "none";
+            try {
+              //Caso houver um vídeo, ele precisa ser mutado
+              activeScene.element.getElementsByTagName("video")[0].pause()
+            } catch (e) {
+              //Caso não houver vídeo, não há erros
+            }
+          }, 1);
+
+
+
+          createPainel(paineis[activeScene.element.id], true)
+          let painelBloqueado = document.getElementById(activeScene.element.id + "lock") //Precisa? '-'
+        }
+
       });
 
       document.getElementById("removeObject").addEventListener('click', () => {
@@ -253,6 +271,22 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.mindar-ui-overlay').forEach(function (a) {
           a.remove()
         });
+
+        //Verifica se é um objeto 3D ou um painel
+        if (activeScene.children.length != 0) {
+          //modelo 3D
+        } else {
+          //painel
+          //Exclui todo os paineis carregados, afinal. O sistema chama a função start(), que cria novamente todos.
+          Array.from(document.getElementsByClassName("painel")).filter((painel) => {
+            return !painel.id.includes("lock")
+          }).forEach(painel => {
+            painel.remove()
+          });
+          //Exclui o painel bloqueado pra não ficar incomodando e pesando o site
+          let painelBloqueado = document.getElementById(activeScene.element.id + "lock")
+          painelBloqueado.remove()
+        }
 
         const startX = async () => {
           start();
@@ -321,6 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.addEventListener('touchend', handleTouchEnd);
     }
 
+
     let barradeprogresso = document.getElementById("barradeprogresso");
     barradeprogresso.style.display = "none";
 
@@ -374,12 +409,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //Função para criar um painel
-function createPainel(painel) {
+function createPainel(painel, bloquearPainel) {
   const container = document.createElement('div');
   container.classList.add('painel');
-  container.id = painel.id;
-  container.style.visibility = 'hidden';
-  container.style.display = "none";
+  if (!bloquearPainel) {
+    //Painel criado para ser mostrado em AR
+    container.id = painel.id;
+    container.style.visibility = 'hidden';
+    container.style.display = "none";
+  } else {
+    //Painel criado para ser mostrado quando o painel é bloqueado
+    container.style.zIndex = "1";
+    container.id = painel.id + 'lock';
+  }
   var midiaHTML;
   if (painel.midiaExtension == "mp4") {
     //Vídeo
