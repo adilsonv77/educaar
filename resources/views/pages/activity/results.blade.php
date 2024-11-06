@@ -11,8 +11,8 @@
 @section('script-head')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <!-- Bootstrap CSS -->
-<!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
-<link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet"> -->
+<!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"> -->
+<!-- <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">  -->
 @endsection 
 
 @section('page-name', $pageName)
@@ -22,8 +22,10 @@
   <div id="formTurma">
   <form action="{{ route('activity.results') }}" method="GET ">
           @csrf
-          <label for="">Informe a turma: </label>
+          
           <div class="form-inline" >
+          
+          <label for="" >Informe a turma: </label>
               <select class="form-control" name="turma_id">
                   @foreach ($turmas as $item)
                       <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
@@ -36,7 +38,19 @@
           </div>
       </form>
       <br>
+    
   </div>
+  <style>
+    .form-inline {
+        display: flex;
+        justify-content: flex-start; 
+    }
+
+    .form-inline label {
+      
+      margin-right: 10px;
+    }
+</style>
   
   @if ($qntCompletas + $qntIncompletas == 0)
        <b>Nenhum aluno ainda acessou.</b>
@@ -55,6 +69,7 @@
       </ul>
     </div>
 
+   <div style="overflow: hidden; border-radius: 10px;">  <!--isso aqui é pa arredondar as bordas superiores da tabela -->
     <table id="table" class="table table-bordered">
       <thead class="thead-info">
         <tr>
@@ -84,9 +99,17 @@
                       @endforeach
                   </tr>
             @endforeach
-
       </tbody>
+<!-- isso aqui é um estilo pra corzinha bunitinha, coloquei aqui msm -->
+      <style> 
+        .table thead th {
+            background-color: #7e3789 !important; 
+            color: #000; 
+        }
+      </style>
     </table>
+
+  </div>
 
 
     <script type="text/javascript">
