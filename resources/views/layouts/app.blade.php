@@ -172,9 +172,21 @@
                                 <span class="nav-text">Atividades</span>
                             </a>
                         </li>
+                        <li><a class="ai-icon" href="{{ route('paineis.create') }}" aria-expanded="false">
+                                <i class="bi-bricks"></i>
+                                <span class="nav-text">Painéis</span>
+                            </a>
+                        </li>
                         <li><a class="ai-icon" href="{{ route('turmas.listarTurmasAlunosProf') }}" aria-expanded="false">
                                 <i class="flaticon-381-user-9"></i>
                                 <span class="nav-text">Alunos</span>
+                            </a>
+                        </li>
+
+                        
+                        <li><a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
+                                <i class="bi-table"></i>
+                                <span class="nav-text">Resultados</span>
                             </a>
                         </li>
 
@@ -183,18 +195,7 @@
                                 <span class="nav-text">Acessos</span>
                             </a>
                         </li>
-
-                        <li><a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
-                                <i class="bi-table"></i>
-                                <span class="nav-text">Resultados</span>
-                            </a>
-                        </li>
                         
-                        <li><a class="ai-icon" href="{{ route('paineis.create') }}" aria-expanded="false">
-                                <i class="bi-bricks"></i>
-                                <span class="nav-text">Painéis</span>
-                            </a>
-                        </li>
 
                     @endif
 
