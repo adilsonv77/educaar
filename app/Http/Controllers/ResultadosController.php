@@ -85,6 +85,15 @@ class ResultadosController extends Controller
 
         // Organizar as respostas dos alunos
         $studentsResponses = [];
+        $students = TurmaDAO::buscarAlunosTurma($turma_id)->get();
+        
+        //  adiciona todos os alunos da turma
+        foreach($students as $student) {
+            $studentsResponses[$student->name] = array();
+        }
+
+        //dd($studentsResponses);
+
         $activity_questions = StudentAnswer::whereIn('activity_id', $activities->pluck('id'))
             ->with(['activity.contents', 'student'])
             ->get();
@@ -115,7 +124,7 @@ class ResultadosController extends Controller
                 }
             }
         }
-        
+       
         // ordenar lista
         ksort($studentsResponses);
         
