@@ -12,7 +12,7 @@
 @section('content')
 
 <div id="formTurma">
-    <form action="{{ route('activity.results') }}" method="GET">
+    <form action="{{ route('turma.resultados') }}" method="GET">
         @csrf
         <label for="">Informe a turma:</label>
         <div class="form-inline">
@@ -30,6 +30,18 @@
     </form>
     <br>
 </div>
+
+<style>
+    .form-inline {
+        display: flex;
+        justify-content: flex-start; 
+    }
+
+    .form-inline label {
+      
+      margin-right: 10px;
+    }
+</style>
 
 @if (!empty($contents))
     <div class="table-responsive">

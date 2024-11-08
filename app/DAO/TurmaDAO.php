@@ -21,7 +21,7 @@ class TurmaDAO
             ]);
 */
         $sql = DB::table('turmas_disciplinas')
-            ->select("turmas.id", "turmas.nome")
+            ->select("turmas.id", "turmas.nome", "turmas.turma_modelo_id")
             ->join("turmas", "turmas.id", "=", "turmas_disciplinas.turma_id")
             ->where([
                 ['turmas_disciplinas.professor_id', '=', $profid],

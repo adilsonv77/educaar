@@ -30,16 +30,18 @@ class ResultadosController extends Controller
             $turma = $turmas->first();
             $turma_id = $turma->id;
         }
+       
+        $turma_modelo_id = $turma->turma_modelo_id;
 
         // Buscar conteúdos do professor para a turma selecionada
         $contentsprof = ContentDAO::buscarContentsDoProf($prof_id, $anoletivo->id)
             ->select('contents.id', 'contents.name', 'contents.turma_id')
             ->get();
-
+        
         $contents = [];
         $contents_id = [];
         foreach ($contentsprof as $linha) {
-            if ($linha->turma_id == $turma_id) {
+            if ($linha->turma_id == $turma_modelo_id) {
                 $contents[$linha->id] = [
                     'id' => $linha->id,
                     'name' => $linha->name,
@@ -113,7 +115,10 @@ class ResultadosController extends Controller
                 }
             }
         }
-
+        
+        // ordenar lista
+        ksort($studentsResponses);
+        
         return view('pages.turma.resultados', compact('turmas', 'turma', 'contents', 'studentsResponses'));
     }
 

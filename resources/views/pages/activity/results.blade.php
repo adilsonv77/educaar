@@ -20,25 +20,23 @@
 @section('content')
 
   <div id="formTurma">
-  <form action="{{ route('activity.results') }}" method="GET ">
-          @csrf
-          
-          <div class="form-inline" >
-          
-          <label for="" >Informe a turma: </label>
-              <select class="form-control" name="turma_id">
-                  @foreach ($turmas as $item)
-                      <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
-                          {{ $item->nome }}</option>
-                  @endforeach
-              </select>
-              <section class="itens-group" >
-                  <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
-              </section>
-          </div>
-      </form>
-      <br>
-    
+    <form action="{{ route('activity.results') }}" method="GET ">
+            @csrf
+            <label for="" >Informe a turma: </label>
+            <div class="form-inline" >
+                <select class="form-control" name="turma_id">
+                    @foreach ($turmas as $item)
+                        <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
+                            {{ $item->nome }}</option>
+                    @endforeach
+                </select>
+                <section class="itens-group" >
+                    <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+                </section>
+            </div>
+    </form>
+    <br>
+      
   </div>
   <style>
     .form-inline {
