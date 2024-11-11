@@ -27,7 +27,7 @@ class ContentController extends Controller
         if (session('type') == 'student') {
             return redirect('/');
         }
-    
+
         $where = null;
         if (session('type') == 'admin') {
             $where = DB::table('contents')
@@ -45,9 +45,14 @@ class ContentController extends Controller
             }
         }
 
-        $where = $where->select('contents.id as id', 'contents.name as content_name', 'disciplinas.name as disc_name',
-                'turmas_modelos.serie as turma_name', 'contents.fechado',
-                DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS pesq_name'));
+        $where = $where->select(
+            'contents.id as id',
+            'contents.name as content_name',
+            'disciplinas.name as disc_name',
+            'turmas_modelos.serie as turma_name',
+            'contents.fechado',
+            DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS pesq_name')
+        );
 
 
         $where = $where->addSelect([
@@ -181,7 +186,7 @@ class ContentController extends Controller
 
         if ($data['acao'] == 'insert') {
             // usuário que cadastrou
-            $data['user_id'] =  Auth::user()->id;
+            $data['user_id'] = Auth::user()->id;
 
             Content::create($data);
         } else {
@@ -194,7 +199,7 @@ class ContentController extends Controller
         return redirect('/content');
     }
 
-   /**
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Content  $content
@@ -252,10 +257,11 @@ class ContentController extends Controller
     private $atividade_nao_fizeram = 0;
     public $listaalunos = [];
 
-    private function finalizarAtividade($temrespondida, $temnaorespondida, $idaluno) {
-         if (array_key_exists($idaluno, $this->listaalunos)) {
+    private function finalizarAtividade($temrespondida, $temnaorespondida, $idaluno)
+    {
+        if (array_key_exists($idaluno, $this->listaalunos)) {
             $aluno = $this->listaalunos[$idaluno];
-            
+
         } else {
             $aluno = [
                 'incompleto' => 0,
@@ -264,8 +270,8 @@ class ContentController extends Controller
             ];
 
             $this->listaalunos[$idaluno] = $aluno;
-       }
-        
+        }
+
         if ($temrespondida > 0) {
             if ($temnaorespondida > 0) {
                 $this->atividade_incompleta = $this->atividade_incompleta + 1;
@@ -284,72 +290,162 @@ class ContentController extends Controller
 
     }
 
-    public function resultsContents(Request $request){
-       
-        $content= $request->input('content_id');
+    public function resultsContents(Request $request)
+    {
 
-        if($content){
-            session()->put('content', $content); 
+        $content = $request->input('content_id');
+
+        if ($content) {
+            session()->put('content', $content);
         }
         $turma_id = $request->input('turma_id');
 
         $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
-                ->where('bool_atual', 1)->first();
+            ->where('bool_atual', 1)->first();
 
         $content_id = session()->get('content');
+        //dd($content_id);
+
         $prof_id = Auth::user()->id;
 
+        // Busca as turmas do conteúdo para o professor
         $where = ContentDAO::buscarTurmasDoContentsDoProf($prof_id, $anoletivo->id, $content_id);
-            
-        $turmas= $where->get();
+
+        $turmas = $where->get();
 
         if ($turma_id) {
             $turma = Turma::find($turma_id);
-            
+
         } else {
             $turma = $where->first();
             $turma_id = $turma->id;
         }
 
-        session()->put('turma_id',$turma_id); 
+        session()->put('turma_id', $turma_id);
 
-       $content = Content::find($content_id);
+        //Busca conteúdos especificos
+        $content = Content::find($content_id);
+        $activities = Activity::where('content_id', $content_id)->get();
 
-       $resultsSQL = ResultContentDAO::getStatusQuestionPorConteudo($turma_id, $content_id)->get() ;
-  
-       $this->listaalunos = [];
- 
-       $this->atividade_completa = 0;
-       $this->atividade_incompleta = 0;
-       $this->atividade_nao_fizeram = 0;
-    
-       $results = [];
+        //Busca as questões para o conteúdo
+        $questions = ContentDAO::buscarQuestoesPorConteudo($content_id);
 
-       $idaluno = 0;
-       $idatividade = 0;
-       $newd = null; 
-       $temrespondida = 0;
-       $temnaorespondida = 0;
+        $resultsSQL = ResultContentDAO::getStatusQuestionPorConteudo($turma_id, $content_id)->get();
 
-       foreach($resultsSQL as $r) {
+        $this->listaalunos = [];
+
+        $this->atividade_completa = 0;
+        $this->atividade_incompleta = 0;
+        $this->atividade_nao_fizeram = 0;
+
+        $results = [];
+
+        $idaluno = 0;
+        $idatividade = 0;
+        $newd = null;
+        $temrespondida = 0;
+        $temnaorespondida = 0;
+
+        foreach ($questions as $questao) {
+            // Obter as respostas para cada questão
+            $responses = ResultContentDAO::getResponsesByQuestion($turma_id, $questao->id);
+        
+            // Inspecionar a resposta para entender a estrutura
+            dd($responses);  // Isso vai parar o código e mostrar o que está sendo retornado
+        
+            // Inicializar o contador de alternativas
+            $alternatives_count = [
+                'A' => 0,
+                'B' => 0,
+                'C' => 0,
+                'D' => 0
+            ];
+        
+            // Iterar sobre as respostas retornadas
+            foreach ($responses as $response) {
+                // As respostas podem estar em alternative_answered, e a contagem está em 'count'
+                if (in_array($response->alternative_answered, ['A', 'B', 'C', 'D'])) {
+                    $alternatives_count[$response->alternative_answered] = $response->count;
+                }
+            }
+        
+            // Identificar a alternativa correta com base na coluna 'correct' da tabela 'questions'
+            $correct_alternative = null;
+            if ($questao->correct == 1) { // Considerando que '1' indica a alternativa correta
+                if ($questao->a == 1) $correct_alternative = 'A';
+                elseif ($questao->b == 1) $correct_alternative = 'B';
+                elseif ($questao->c == 1) $correct_alternative = 'C';
+                elseif ($questao->d == 1) $correct_alternative = 'D';
+            }
+        
+            // Adicionar as informações da questão para o resultado
+            $newd['questions'][] = [
+                'id' => $questao->id,
+                'question' => $questao->question,
+                'alternatives_count' => $alternatives_count,
+                'correct' => $correct_alternative
+            ];  
+        }
+        //dd($responses);
+
+        foreach ($resultsSQL as $r) {
 
             if ($r->activity_id <> $idatividade) {
 
                 if ($newd != null) {
 
                     $this->finalizarAtividade($temrespondida, $temnaorespondida, $idaluno);
- 
+
                     $newd['atividade_completa'] = $this->atividade_completa;
                     $newd['atividade_incompleta'] = $this->atividade_incompleta;
                     $newd['atividade_nao_fizeram'] = $this->atividade_nao_fizeram;
-                    
-                    array_push($results, $newd); 
-            
-                 }
+
+                    array_push($results, $newd);
+
+                }
 
                 $newd = [
-                    'nome' => $r->activity_name
+                    'nome' => $r->activity_name,
+                    'questions' => []
                 ];
+
+                $questions = DB::table('questions')->where('activity_id', $r->activity_id)->get();
+
+
+                foreach ($questions as $questao) {
+                    $responses = ResultContentDAO::getResponsesByQuestion($turma_id, $questao->id);
+
+                    // Iniciar contador de alternativas
+                    $alternatives_count = [
+                        'A' => 0,
+                        'B' => 0,
+                        'C' => 0,
+                        'D' => 0
+                    ];
+
+                    // Alternativa correta inicialmente indefinida
+                    $correct_alternative = null;
+
+                    foreach ($responses as $response) {
+                        if (in_array($response->alternative_answered, ['A', 'B', 'C', 'D'])) {
+
+                            $alternatives_count[$response->alternative_answered] = $response->count;
+
+                            if ($response->correct == 1) {
+                                $correct_alternative = $response->alternative_answered;
+                            }
+                        }
+                    }
+
+                    $newd['questions'][] = [
+                        'id' => $questao->id,
+                        'question' => $questao->question,
+                        'alternatives_count' => $alternatives_count,
+                        'correct' => $correct_alternative
+                    ];
+                }
+
+
 
                 $this->atividade_completa = 0;
                 $this->atividade_incompleta = 0;
@@ -363,8 +459,8 @@ class ContentController extends Controller
 
                 if ($idaluno <> 0) {
                     $this->finalizarAtividade($temrespondida, $temnaorespondida, $idaluno);
-                 } 
-               
+                }
+
                 $temrespondida = 0;
                 $temnaorespondida = 0;
                 $idaluno = $r->aluno;
@@ -378,71 +474,94 @@ class ContentController extends Controller
             }
 
 
-       }
- 
-       if ($idaluno <> 0) {
-            
+        }
+
+        if ($idaluno <> 0) {
+
             $this->finalizarAtividade($temrespondida, $temnaorespondida, $idaluno);
 
             $newd['atividade_completa'] = $this->atividade_completa;
             $newd['atividade_incompleta'] = $this->atividade_incompleta;
             $newd['atividade_nao_fizeram'] = $this->atividade_nao_fizeram;
-            
-            array_push($results, $newd); 
+
+            array_push($results, $newd);
 
 
-       } 
-       //dd($results);
-      // dd($this->listaalunos);
-       // esse total são em relação ao conteúdo... se o aluno fez uma atividade e nao fez outra, ...
-       // ... então está no incompleto
-       $totais = [
-        'qtos_fizeram' => 0,
-        'qtos_nao_fizeram' => 0,
-        'qtos_incompletos' => 0
-       ];
-       foreach ($this->listaalunos as $a) {
-        if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0) {
-            $totais['qtos_nao_fizeram'] = $totais['qtos_nao_fizeram'] + 1;
-        } else {
-            if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0) {
-                $totais['qtos_fizeram'] = $totais['qtos_fizeram'] + 1; 
+        }
+        //dd($results);
+        // dd($this->listaalunos);
+        // esse total são em relação ao conteúdo... se o aluno fez uma atividade e nao fez outra, ...
+        // ... então está no incompleto
+        $totais = [
+            'qtos_fizeram' => 0,
+            'qtos_nao_fizeram' => 0,
+            'qtos_incompletos' => 0
+        ];
+        foreach ($this->listaalunos as $a) {
+            if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0) {
+                $totais['qtos_nao_fizeram'] = $totais['qtos_nao_fizeram'] + 1;
             } else {
-                $totais['qtos_incompletos'] = $totais['qtos_incompletos'] + 1; 
+                if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0) {
+                    $totais['qtos_fizeram'] = $totais['qtos_fizeram'] + 1;
+                } else {
+                    $totais['qtos_incompletos'] = $totais['qtos_incompletos'] + 1;
+                }
             }
-         }
-       }
-       session()->put("listaalunos", $this->listaalunos);
+        }
+        session()->put("listaalunos", $this->listaalunos);
+        //dd($results);
+        // dd($this->listaalunos);
+        // esse total são em relação ao conteúdo... se o aluno fez uma atividade e nao fez outra, ...
+        // ... então está no incompleto
 
-        return view('pages.content.results', compact('results', 'totais', 'turmas', 'turma', 'content'));
-        
+         $totais = [
+            'qtos_fizeram' => 0,
+            'qtos_nao_fizeram' => 0,
+            'qtos_incompletos' => 0
+        ];
+        foreach ($this->listaalunos as $a) {
+            if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0) {
+                $totais['qtos_nao_fizeram'] = $totais['qtos_nao_fizeram'] + 1;
+            } else {
+                if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0) {
+                    $totais['qtos_fizeram'] = $totais['qtos_fizeram'] + 1;
+                } else {
+                    $totais['qtos_incompletos'] = $totais['qtos_incompletos'] + 1;
+                }
+            }
+        }
+        session()->put("listaalunos", $this->listaalunos);
+
+        return view('pages.content.results', compact('results', 'totais', 'turmas', 'turma', 'content', 'activities'));
+
     }
 
-    function resultsListStudents($type){
+    function resultsListStudents($type)
+    {
 
         $listaalunos = session()->get("listaalunos");
 
         $tipoalunos = [];
 
         foreach ($listaalunos as $a) {
-            if($type == 'Completo'){
+            if ($type == 'Completo') {
                 if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
-            }elseif($type == 'Incompleto'){
+            } elseif ($type == 'Incompleto') {
                 if ($a['incompleto'] === 1 || ($a['nao_fez'] === 1 && $a['fez'] === 1))
                     array_push($tipoalunos, $a['id']);
-            }elseif($type == 'Não fizeram'){
+            } elseif ($type == 'Não fizeram') {
                 if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
-           }
+            }
         }
-        
-        $results = UserDAO::buscarAlunos($tipoalunos);
-      
-        $id= session()->get('content');
-        $content= Content::find($id);
 
-         return view('pages.content.listStudents', compact('results', 'content', 'type'));
-    
+        $results = UserDAO::buscarAlunos($tipoalunos);
+
+        $id = session()->get('content');
+        $content = Content::find($id);
+
+        return view('pages.content.listStudents', compact('results', 'content', 'type'));
+
     }
 }

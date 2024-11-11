@@ -42,8 +42,9 @@ class ContentDAO
         return $sql;
     }
     //Não testado e não utilizado
-    public static function buscarTodosConteudos($turma) {
-        $sql = DB::table('contents')->where('turma_id','=',$turma);
+    public static function buscarTodosConteudos($turma)
+    {
+        $sql = DB::table('contents')->where('turma_id', '=', $turma);
         return $sql;
     }
 
@@ -93,6 +94,16 @@ select a.content_id, q.id, q.question from activities a
 
         return $contents;
 
+    }
+    public static function buscarQuestoesPorConteudo($content_id)
+    {
+
+        $sql = DB::table('questions as q')
+            ->select('q.id', 'q.question')
+            ->join('activities as a', 'a.id', '=', 'q.activity_id')
+            ->where('a.content_id', '=', $content_id);
+
+        return $sql;
     }
 
 }
