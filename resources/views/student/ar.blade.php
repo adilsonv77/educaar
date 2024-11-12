@@ -3,7 +3,9 @@
 
 
 @section('style')
-<link rel="stylesheet" href="{{asset('css/painel2.css')}}">
+    <!--Nao dar erro do ngrok:-->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<link rel="stylesheet" href="{{asset('css/painel.css')}}">
 <style>
     #painelContainer {
         display: flex;
@@ -46,10 +48,16 @@
     </div>
 </div>
 
-<div id="my-ar-container">
-    <div id="painelContainer">
+<div id="painelContainer">
 
-    </div>
+</div>
+<div id="my-ar-container">
+
+<div id="painelContainer">
+
+</div>
+<div id="my-ar-container">
+    
 </div>
 
 @endsection

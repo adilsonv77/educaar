@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
+    
     <title>EducaAR</title>
     @yield('style')
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
@@ -21,14 +22,13 @@
     <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
     
     <script src="{{ asset('js/mudancaLogo.js?v=' . filemtime(public_path('js/mudancaLogo.js'))) }}" type="module"></script>
-    
     @include('sweetalert::alert')
     @livewireStyles
     @yield('script-head')
 </head>
 
 <script>
-    const caminhoHorizontal = "{{ asset('images/LOGO_HORIZONTAL.png')}}" ;
+    const caminhoHorizontal = "{{ asset('images/LOGO_HORIZONTAL.png')}}";
     const caminhoVertical = "{{ asset('images/LOGO_VERTICAL.png')}}";
 </script>
 
@@ -42,88 +42,88 @@
     </div>
     <div id="main-wrapper">
         @auth
-            <div class="nav-header" id="logo">
-                <a href="home">
-                    <img src="{{ asset('images/LOGO_VERTICAL.png') }}" width="120" 
-                        alt="Imagem" class="img-fluid" id="imagem"> 
-                </a>
+                <div class="nav-header" id="logo">
+                    <a href="home">
+                        <img src="{{ asset('images/LOGO_VERTICAL.png') }}" width="120" alt="Imagem" class="img-fluid"
+                            id="imagem">
+                    </a>
 
-                <div class="nav-control" id = "menu">
-                    <div class="hamburger">
-                        <span class="line"></span><span class="line"></span><span class="line"></span>
+                    <div class="nav-control" id="menu">
+                        <div class="hamburger">
+                            <span class="line"></span><span class="line"></span><span class="line"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="header">
-                <div class="header-content">
-                    <nav class="navbar navbar-expand">
-                        <div class="collapse navbar-collapse justify-content-between">
-                            <div class="header-left">
-                                <div class="dashboard_bar">
-                                    @yield('page-name')
+                <div class="header">
+                    <div class="header-content">
+                        <nav class="navbar navbar-expand">
+                            <div class="collapse navbar-collapse justify-content-between">
+                                <div class="header-left">
+                                    <div class="dashboard_bar">
+                                        @yield('page-name')
+                                    </div>
                                 </div>
+
+                                <ul class="navbar-nav header-right">
+                                    <li class="nav-item dropdown header-profile">
+                                        <a class="nav-link" href="javascript:void()" role="button" data-toggle="dropdown">
+                                            <div class="header-info">
+                                                <i class="bi bi-person icon-purple"></i>
+                                                <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
+                                                <p class="fs-12 mb-0">
+
+                                                    @if (session('type') == 'student')
+                                                        Estudante
+                                                    @endif
+
+                                                    @if (session('type') == 'teacher')
+                                                        Professor
+                                                    @endif
+
+                                                    @if (session('type') == 'admin')
+                                                        Administrator
+                                                    @endif
+                                                    @if (session('type') == 'developer')
+                                                        Desenvolvedor
+                                                    @endif
+                                                </p>
+
+                                            </div>
+                                            @if (session('type') == 'admin')
+                                                <a href="{{ route('config.index') }}" title="Configurar" ;
+                                                    class="dropdown-item ai-icon">
+                                                    <img src="/gear.png" width="10" alt="" />
+                                                </a>
+                                            @endif
+
+                                            <div class="saida">
+                                                <a href="{{ route('logout') }}" title="Sair" ;
+                                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                                    class="dropdown-item ai-icon">
+
+                                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                        class="d-none">
+                                                        @csrf
+                                                    </form>
+
+                                                    <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger"
+                                                        width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="black"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                                        <line x1="21" y1="12" x2="9" y2="12">
+                                                        </line>
+                                                    </svg>
+                                                </a>
+                                        </a>
                             </div>
+                            {{--
+                    </div> --}}
 
-                            <ul class="navbar-nav header-right">
-                                <li class="nav-item dropdown header-profile">
-                                    <a class="nav-link" href="javascript:void()" role="button" data-toggle="dropdown">
-                                        <div class="header-info">
-                                            <i class="bi bi-person icon-purple"></i>
-                                            <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
-                                            <p class="fs-12 mb-0">
-                                                
-                                                @if (session('type') == 'student')
-                                                    Estudante
-                                                @endif
+                    </a>
 
-                                                @if (session('type') == 'teacher')
-                                                    Professor
-                                                @endif
-
-                                                @if (session('type') == 'admin')
-                                                    Administrator
-                                                @endif
-                                                @if (session('type') == 'developer')
-                                                    Desenvolvedor
-                                                @endif
-                                            </p>
-
-                                        </div>
-                                        @if (session('type') == 'admin')
-                                            <a href="{{ route('config.index') }}" title="Configurar";
-                                                class="dropdown-item ai-icon">
-                                                <img src="/gear.png" width="10" alt="" />
-                                            </a>
-                                        @endif
-
-                                        <div class="saida">
-                                            <a href="{{ route('logout') }}" title="Sair";
-                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                                class="dropdown-item ai-icon">
-
-                                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                    class="d-none">
-                                                    @csrf
-                                                </form>
-
-                                                <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger"
-                                                    width="30" height="30" viewBox="0 0 24 24" fill="none"
-                                                    stroke="black" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                                    <polyline points="16 17 21 12 16 7"></polyline>
-                                                    <line x1="21" y1="12" x2="9" y2="12">
-                                                    </line>
-                                                </svg>
-                                            </a>
-                                    </a>
-                        </div>
-                        {{-- </div> --}}
-
-                        </a>
-
-                        </li>
-                        </ul>
+                    </li>
+                    </ul>
                 </div>
                 </nav>
             </div>
@@ -183,6 +183,23 @@
                             </a>
                         </li>
 
+                            <li><a class="ai-icon" href="{{ route('teacher.frequencia') }}" aria-expanded="false">
+                                    <i class="bi-graph-up"></i>
+                                    <span class="nav-text">Acessos</span>
+                                </a>
+                            </li>
+
+                            <li><a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
+                                    <i class="bi-table"></i>
+                                    <span class="nav-text">Resultados</span>
+                                </a>
+                            </li>
+
+                            <li><a class="ai-icon" href="{{ route('paineis.create') }}" aria-expanded="false">
+                                    <i class="bi-bricks"></i>
+                                    <span class="nav-text">Painéis</span>
+                                </a>
+                            </li>
                         
                         <li><a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
                                 <i class="bi-table"></i>
@@ -197,75 +214,75 @@
                         </li>
                         
 
-                    @endif
+                        @endif
 
-                    @if (session('type') == 'admin')
-                        
-                        <li><a class="ai-icon" href="{{ route('user.indexAluno') }}" aria-expanded="false">
-                                <i class="flaticon-381-user-9"></i>
-                                <span class="nav-text">Alunos</span>
-                            </a>
-                        </li>
+                        @if (session('type') == 'admin')
 
-                        <li><a class="ai-icon" href="{{ route('user.indexProf') }}" aria-expanded="false">
-                                <i class="bi-person-hearts"></i>
-                                <span class="nav-text">Professores</span>
-                            </a>
-                        </li>
+                            <li><a class="ai-icon" href="{{ route('user.indexAluno') }}" aria-expanded="false">
+                                    <i class="flaticon-381-user-9"></i>
+                                    <span class="nav-text">Alunos</span>
+                                </a>
+                            </li>
 
-                        <li><a class="ai-icon" href="{{ route('user.indexDev') }}" aria-expanded="false">
-                                <i class="bi-person-fill-gear"></i>
-                                <span class="nav-text">Desenvolvedores</span>
-                            </a>
-                        </li>
+                            <li><a class="ai-icon" href="{{ route('user.indexProf') }}" aria-expanded="false">
+                                    <i class="bi-person-hearts"></i>
+                                    <span class="nav-text">Professores</span>
+                                </a>
+                            </li>
 
-                        <li><a class="ai-icon" href="{{ route('class.index') }}" aria-expanded="false">
-                                <i class="flaticon-381-book"></i>
-                                <span class="nav-text">Disciplinas</span>
-                            </a>
-                        </li>
+                            <li><a class="ai-icon" href="{{ route('user.indexDev') }}" aria-expanded="false">
+                                    <i class="bi-person-fill-gear"></i>
+                                    <span class="nav-text">Desenvolvedores</span>
+                                </a>
+                            </li>
 
-                        <li><a class="ai-icon" href="{{ route('anoletivo') }}" aria-expanded="false">
-                                <i class="flaticon-381-calendar-2"></i>
-                                <span class="nav-text">Anos Letivos</span>
-                            </a>
-                        </li>
+                            <li><a class="ai-icon" href="{{ route('class.index') }}" aria-expanded="false">
+                                    <i class="flaticon-381-book"></i>
+                                    <span class="nav-text">Disciplinas</span>
+                                </a>
+                            </li>
 
-                        <li><a class="ai-icon" href="{{ route('turmasmodelos.index') }}" aria-expanded="false">
-                                <i class="flaticon-381-notebook-4"></i>
-                                <span class="nav-text">Turmas Modelos</span>
-                            </a>
-                        </li>
-                        <li><a class="ai-icon" href="{{ route('turmas.index') }}" aria-expanded="false">
-                                <i class="flaticon-381-notebook-3"></i>
-                                <span class="nav-text">Turmas</span>
-                            </a>
-                        </li>
+                            <li><a class="ai-icon" href="{{ route('anoletivo') }}" aria-expanded="false">
+                                    <i class="flaticon-381-calendar-2"></i>
+                                    <span class="nav-text">Anos Letivos</span>
+                                </a>
+                            </li>
 
-                        <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                                <i class="flaticon-381-id-card-1"></i>
-                                <span class="nav-text">Matrículas</span>
-                            </a>
-                            <ul aria-expanded="false">
-                                <li><a href="{{ route('user.matricula') }}">Importar arquivo</a></li>
-                                 <li><a href="{{ route('turmas.indexmatricula') }}">Listar</a></li>
-                            </ul>
-                        </li>
-                        <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
-                                <i class="flaticon-381-smartphone-5"></i>
-                                <span class="nav-text">Conteúdos</span>
-                            </a>
-                        </li>
-                    @endif
-                </ul>
+                            <li><a class="ai-icon" href="{{ route('turmasmodelos.index') }}" aria-expanded="false">
+                                    <i class="flaticon-381-notebook-4"></i>
+                                    <span class="nav-text">Turmas Modelos</span>
+                                </a>
+                            </li>
+                            <li><a class="ai-icon" href="{{ route('turmas.index') }}" aria-expanded="false">
+                                    <i class="flaticon-381-notebook-3"></i>
+                                    <span class="nav-text">Turmas</span>
+                                </a>
+                            </li>
+
+                            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                                    <i class="flaticon-381-id-card-1"></i>
+                                    <span class="nav-text">Matrículas</span>
+                                </a>
+                                <ul aria-expanded="false">
+                                    <li><a href="{{ route('user.matricula') }}">Importar arquivo</a></li>
+                                    <li><a href="{{ route('turmas.indexmatricula') }}">Listar</a></li>
+                                </ul>
+                            </li>
+                            <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
+                                    <i class="flaticon-381-smartphone-5"></i>
+                                    <span class="nav-text">Conteúdos</span>
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
             </div>
-        </div>
 
-    @endauth
+        @endauth
 
     @section('style')
-        <style>
-         </style>
+    <style>
+    </style>
     @endsection
 
 
