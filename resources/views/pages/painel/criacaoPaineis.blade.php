@@ -13,7 +13,6 @@
 @section('content')
 
 <div class="container-fluid">
-
     <form action="{{route('paineis.store')}}" method="POST" enctype="multipart/form-data">
         @if ($action == 'edit')
             <input name="id" type="hidden" value={{$id}}>

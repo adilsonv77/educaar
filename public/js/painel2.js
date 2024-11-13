@@ -95,24 +95,36 @@ function selectImage() {
   labelFile.innerText = "Local (somente .png, .jpg, .jpeg)"
 }
 
-//Colocar imagem e/ou video no coisa
+//Colocar imagem e/ou video no painel
 const fileBtn = document.getElementById("midiaInput")
 const espacoMidias = document.getElementById("espacoMidias")
 let primeiraVez = true
 fileBtn.onchange = (event) => {
   if (primeiraVez) {
+    //Cria as tags de img e video.
     primeiraVez = false
     midiaArea.style.display = "none";
     espacoMidias.innerHTML += `
-    <img src="" id="imgMidia" class="midiaPreview">
-    <video id="vidMidia" controls class="midiaApresentada" style="display: none; height: 33.5vh; margin: 4% 0;">
-      <source id="srcVidMidia" src="" type="video/mp4">
-    </video>`;
+    <div id="midiaPreview">
+      <img src="" id="imgMidia" style="dislay: none">
+      <video id="vidMidia" controls style="dislay: none">
+        <source id="srcVidMidia" src="" type="video/mp4">
+      </video>
+    </div>`;
+    
+    //Coloca os event listener de configuração de painel quando selecionar
+    document.getElementById("midiaPreview").onclick = () => updateConfiguracoesPainel("midia", null)
+    Array.from(document.getElementById("midiaPreview").children).forEach(child => {
+      child.addEventListener('click', () => {
+        updateConfiguracoesPainel("midia", null)
+      });
+    });
   }
   let img = document.getElementById("imgMidia")
   let vid = document.getElementById("vidMidia")
   let srcVid = document.getElementById("srcVidMidia")
 
+  //Coloca a tag vídeo se for vídeo a tag img se for imagem
   let eVideo = event.target.files[0].name.endsWith(".mp4"); //É video (true) ou imagem (false)?
   if (eVideo) {
     //É vídeo
@@ -126,19 +138,4 @@ fileBtn.onchange = (event) => {
     img.src = URL.createObjectURL(event.target.files[0]);
   }
 
-  setTimeout(() => {
-    let widthPainel = document.getElementsByClassName("painel")[0].getBoundingClientRect().width;
-    console.log(widthPainel - widthPainel * 0.036);
-    if (eVideo) {
-      if (vid.getBoundingClientRect().width > widthPainel - widthPainel * 0.036) {
-        //Video maior que o permitido.
-        alert("video maior")
-      }
-    } else {
-      if (img.getBoundingClientRect().width > widthPainel - widthPainel * 0.036) {
-        //Imagem maior que o permitido.
-        
-      }
-    }
-  }, 1);
 }
