@@ -1,7 +1,5 @@
 @extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => true])
 
-
-
 @section('style')
     <!--Nao dar erro do ngrok:-->
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
@@ -47,11 +45,6 @@
             Carregando</div>
     </div>
 </div>
-
-<div id="painelContainer">
-
-</div>
-<div id="my-ar-container">
 
 <div id="painelContainer">
 

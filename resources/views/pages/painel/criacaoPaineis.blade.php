@@ -26,12 +26,14 @@
                     <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117"
                         placeholder="Digite seu texto aqui"> @if ($action == 'edit') {{$txtSuperior}}
                         @endif</textarea>
-                    <div id="midia" tabindex=0>
-                        <p>Selecione um:</p>
-                        <div id="selectType">
-                            <button id="img">Imagem</button>
-                            <span>ou</span>
-                            <button id="vid">Vídeo</button>
+                    <div id="espacoMidias">
+                        <div id="midia" tabindex=0>
+                            <p>Selecione um:</p>
+                            <div id="selectType">
+                                <button id="img">Imagem</button>
+                                <span>ou</span>
+                                <button id="vid">Vídeo</button>
+                            </div>
                         </div>
                     </div>
                     <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117"
@@ -72,5 +74,5 @@
         </div>
     </form>
 </div>
-<script src="{{asset('js/painel1.js')}}" type="module"></script>
+<script src="{{asset('js/painel2.js')}}" type="module"></script>
 @endsection
