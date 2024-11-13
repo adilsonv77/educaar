@@ -92,8 +92,7 @@ Route::middleware(['auth'])->group(function () {
 
     //report
     Route::get('/activity/report/{activityId}/{userId}', [App\Http\Controllers\ActivityController::class, 'report'])->name('report.student');
-    Route::resource('ar', App\Http\Controllers\ARController::class);
-
+    
     //fechar
     Route::resource('fechar', App\Http\Controllers\FecharController::class);
     Route::get('/fecharstore', [App\Http\Controllers\FecharController::class, 'store'])->name('fecharconteudo.store');
