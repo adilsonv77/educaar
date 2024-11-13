@@ -20,6 +20,6 @@ composer.lock
 package-lock.json
 public/info.php
 database/modelos/modelo01.mwb.bak
-.env
+*.env
 /public/midiasPainel/*
 !/public/midiasPainel/.gitkeep
