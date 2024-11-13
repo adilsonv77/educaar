@@ -156,7 +156,7 @@
         @if ($showBack)
 
             
-                        <button id="button-back" class="btn btn-warning" onclick="location.href='{{ $back }}'">
+                        <button id="button-back" type="button" class="btn btn-warning" onclick="location.href='{{ $back }}'">
                             <span><i style="color:#ffffff;" class="bi bi-arrow-left"></i></span>
                         </button>
                 
