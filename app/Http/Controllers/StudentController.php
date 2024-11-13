@@ -151,7 +151,7 @@ class StudentController extends Controller
            isso pode acontecer quando o mesmo usuário se loga simultaneamente em mais equipamentos,
            e entra na atividade. 
         */ 
-        dd("Salvando");
+        // dd("Salvando");
 
         DB::beginTransaction();
 

@@ -19,7 +19,6 @@
         @csrf
         <label for="">Informe o ano Letivo</label>
         <div class="form-inline">
-
             <select class="form-control" name="ano_id">
                 @foreach ($anosletivos as $item)
                     <option value="{{ $item->id }}" @if ($item->id === $anoletivo->id) selected="selected" @endif>

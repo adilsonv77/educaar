@@ -50,7 +50,7 @@ class TurmasModelosController extends Controller
 
         $turmas = $where->paginate(20);
         //dd(DB::getQueryLog());
-        return view('pages.turmasModelos.index', compact('turmas'));
+    return view('pages.turmasModelos.index', compact('turmas'));
     }
     public function create()
     {
