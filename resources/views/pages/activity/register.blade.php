@@ -105,7 +105,7 @@
                         <span class="alert-danger">Tamanho máximo: 40MB</span>
                         <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="glb"
                             id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit') disabled @endif/>
-                            <input type="text" placeholder="Insira o ID do painel" name="panelId" id="panelId">
+                       <!-- <input type="text" placeholder="Insira o ID do painel" name="panelId" id="panelId"> -->
                 </div>
 
                 <div class="form-group">
