@@ -94,3 +94,51 @@ function selectImage() {
   midia.accept = ".png, .jpeg, .jpg"
   labelFile.innerText = "Local (somente .png, .jpg, .jpeg)"
 }
+
+//Colocar imagem e/ou video no coisa
+const fileBtn = document.getElementById("midiaInput")
+const espacoMidias = document.getElementById("espacoMidias")
+let primeiraVez = true
+fileBtn.onchange = (event) => {
+  if (primeiraVez) {
+    primeiraVez = false
+    midiaArea.style.display = "none";
+    espacoMidias.innerHTML += `
+    <img src="" id="imgMidia" class="midiaPreview">
+    <video id="vidMidia" controls class="midiaApresentada" style="display: none; height: 33.5vh; margin: 4% 0;">
+      <source id="srcVidMidia" src="" type="video/mp4">
+    </video>`;
+  }
+  let img = document.getElementById("imgMidia")
+  let vid = document.getElementById("vidMidia")
+  let srcVid = document.getElementById("srcVidMidia")
+
+  let eVideo = event.target.files[0].name.endsWith(".mp4"); //É video (true) ou imagem (false)?
+  if (eVideo) {
+    //É vídeo
+    img.style.display = "none"
+    vid.style.display = "block"
+    srcVid.src = URL.createObjectURL(event.target.files[0]);
+  } else {
+    //É imagem
+    img.style.display = "block"
+    vid.style.display = "none"
+    img.src = URL.createObjectURL(event.target.files[0]);
+  }
+
+  setTimeout(() => {
+    let widthPainel = document.getElementsByClassName("painel")[0].getBoundingClientRect().width;
+    console.log(widthPainel - widthPainel * 0.036);
+    if (eVideo) {
+      if (vid.getBoundingClientRect().width > widthPainel - widthPainel * 0.036) {
+        //Video maior que o permitido.
+        alert("video maior")
+      }
+    } else {
+      if (img.getBoundingClientRect().width > widthPainel - widthPainel * 0.036) {
+        //Imagem maior que o permitido.
+        
+      }
+    }
+  }, 1);
+}
