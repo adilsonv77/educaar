@@ -26,7 +26,8 @@
                         placeholder="Digite seu texto aqui"> @if ($action == 'edit') {{$txtSuperior}}
                         @endif</textarea>
                     <div id="espacoMidias">
-                        <div id="midia" tabindex=0>
+                        <!-- selecione um tipo de midia -->
+                        <div id="midia" tabindex=0 @if ($action == 'edit') style="display: none;" @endif>
                             <p>Selecione um:</p>
                             <div id="selectType">
                                 <button id="img">Imagem</button>
@@ -34,6 +35,13 @@
                                 <button id="vid">Vídeo</button>
                             </div>
                         </div>
+                        <!-- preview da midia -->
+                        <div id="midiaPreview">
+                            <img src="" id="imgMidia" style="dislay: none">
+                            <video id="vidMidia" controls style="dislay: none">
+                                <source id="srcVidMidia" src="@if ($action == 'edit'){{public_path("midiasPainel").'/'.$arquivoMidia}}@endif" type="video/mp4">
+                            </video>
+                        </div>`
                     </div>
                     <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117"
                         placeholder="Digite seu texto aqui"> @if ($action == 'edit') {{$txtInferior}}

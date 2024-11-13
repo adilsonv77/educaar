@@ -101,16 +101,9 @@ const espacoMidias = document.getElementById("espacoMidias")
 let primeiraVez = true
 fileBtn.onchange = (event) => {
   if (primeiraVez) {
-    //Cria as tags de img e video.
+    //Esconde a seleção do tipo de midia.
     primeiraVez = false
     midiaArea.style.display = "none";
-    espacoMidias.innerHTML += `
-    <div id="midiaPreview">
-      <img src="" id="imgMidia" style="dislay: none">
-      <video id="vidMidia" controls style="dislay: none">
-        <source id="srcVidMidia" src="" type="video/mp4">
-      </video>
-    </div>`;
     
     //Coloca os event listener de configuração de painel quando selecionar
     document.getElementById("midiaPreview").onclick = () => updateConfiguracoesPainel("midia", null)

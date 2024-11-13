@@ -40,35 +40,35 @@ class PainelController extends Controller
 
         //Remove os dados desnecessários para serem guardados e adiciona necessários
         $data['midiaExtension'] = $midiaExtension;
-        $data['arquivoMidia'] = $data['id'].'.'.$midiaExtension;
         unset($data['_token']);
         unset($data['midia']);
         unset($data['midiasPainel']);
         unset($data['action']);
 
         $json = ["panel" => json_encode($data)];
-
+        $id = -1;
         //Criar o painel e salvo o dado
         if ($action == 'create') {
             $painel = Painei::create($json);
             $id = $painel->id;
+            $data['id'] = $id;
         } else {
             $id = $data['id'];
-            unset($data['id']);
             $painel = Painei::where('id', $id);
             //Pega a extenção do arquivo já guardado no painel
             $originalExtension = json_decode($painel->first()->panel)->midiaExtension;
-            $painel->update($json);
         }
-        $data['midiasPainel'] = $id . '.' . $midiaExtension;
+        $data['arquivoMidia'] = $id . '.' . $midiaExtension;
         $public_path = public_path('midiasPainel');
-        if($action == 'edit') unlink($public_path . '/' . $id.'.'.$originalExtension);
-        rename($public_path . '/' . $imgFile, $public_path . '/' . $data['midiasPainel']);
-        // $painel->update($data);
+        if ($action == 'edit')
+            unlink($public_path . '/' . $id . '.' . $originalExtension);
+        rename($public_path . '/' . $imgFile, $public_path . '/' . $data['arquivoMidia']);
+        $painel->update(["panel" => json_encode($data)]);
         return redirect()->route('paineis.create');
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         dd($id);
     }
 
