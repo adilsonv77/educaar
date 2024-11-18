@@ -39,20 +39,20 @@ class ResultContentDAO
                 ['c.id', '=', $contentid]
             ])
             ->orderBy("activity_id")
-            ->orderBy("aluno");
+            ->orderBy("aluno")
+            ->get(); // Aqui você já executa a consulta e obtém os resultados
 
         return $sql;
     }
-    public static function getResponsesByQuestion($turma_id, $question_id)
+
+    public static function getAlternativeCountsForActivity($activityId)
     {
-        return DB::table('student_answers')
-            ->select('alternative_answered', DB::raw('count(*) as count'))
-            ->where('question_id', $question_id)
-            ->where('activity_id', $turma_id)
-            ->groupBy('alternative_answered')
-            ->get(); // Retorna uma coleção
-
+        return DB::table('student_answers as sa')
+            ->join('questions as q', 'sa.question_id', '=', 'q.id')
+            ->select('sa.alternative_answered', DB::raw('count(*) as count'))
+            ->where('sa.activity_id', $activityId)
+            ->whereIn('sa.alternative_answered', ['A', 'B', 'C', 'D'])
+            ->groupBy('sa.alternative_answered')
+            ->get();
     }
-
-
 }

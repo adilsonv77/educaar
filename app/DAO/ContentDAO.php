@@ -95,17 +95,18 @@ select a.content_id, q.id, q.question from activities a
         return $contents;
 
     }
-    public static function buscarQuestoesPorConteudo($content_id)
+    public static function buscarQuestoesPorConteudo($content_id, $turma_id)
     {
-
-        $sql = DB::table('questions as q')
-            ->select('q.id', 'q.question')
-            ->join('activities as a', 'a.id', '=', 'q.activity_id')
-            ->where('a.content_id', '=', $content_id);
-
-        return $sql;
+        return DB::table('questions as q')
+            ->join('activities as a', 'q.activity_id', '=', 'a.id')
+            ->join('contents as c', 'a.content_id', '=', 'c.id')
+            ->leftJoin('student_answers as sa', 'q.id', '=', 'sa.question_id') 
+            ->where('a.content_id', $content_id)
+            ->where('c.turma_id', $turma_id) 
+            ->select('q.*', 'sa.correct')  
+            ->get();
     }
 
-}
 
-?>
+
+}

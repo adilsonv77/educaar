@@ -292,7 +292,6 @@ class ContentController extends Controller
 
     public function resultsContents(Request $request)
     {
-
         $content = $request->input('content_id');
 
         if ($content) {
@@ -304,18 +303,14 @@ class ContentController extends Controller
             ->where('bool_atual', 1)->first();
 
         $content_id = session()->get('content');
-        //dd($content_id);
-
         $prof_id = Auth::user()->id;
 
         // Busca as turmas do conteúdo para o professor
         $where = ContentDAO::buscarTurmasDoContentsDoProf($prof_id, $anoletivo->id, $content_id);
-
         $turmas = $where->get();
 
         if ($turma_id) {
             $turma = Turma::find($turma_id);
-
         } else {
             $turma = $where->first();
             $turma_id = $turma->id;
@@ -323,17 +318,19 @@ class ContentController extends Controller
 
         session()->put('turma_id', $turma_id);
 
-        //Busca conteúdos especificos
+        // Busca conteúdos específicos
         $content = Content::find($content_id);
         $activities = Activity::where('content_id', $content_id)->get();
 
-        //Busca as questões para o conteúdo
-        $questions = ContentDAO::buscarQuestoesPorConteudo($content_id);
+        // Busca as questões para o conteúdo
+        $questions = ContentDAO::buscarQuestoesPorConteudo($content_id, $turma_id);
 
-        $resultsSQL = ResultContentDAO::getStatusQuestionPorConteudo($turma_id, $content_id)->get();
+        // Consulta para obter status das respostas das questões
+        $resultsSQL = ResultContentDAO::getStatusQuestionPorConteudo($turma_id, $content_id);
 
         $this->listaalunos = [];
 
+        // Variáveis de controle para atividades
         $this->atividade_completa = 0;
         $this->atividade_incompleta = 0;
         $this->atividade_nao_fizeram = 0;
@@ -346,54 +343,77 @@ class ContentController extends Controller
         $temrespondida = 0;
         $temnaorespondida = 0;
 
-        foreach ($questions as $questao) {
-            // Obter as respostas para cada questão
-            $responses = ResultContentDAO::getResponsesByQuestion($turma_id, $questao->id);
-        
-            // Inspecionar a resposta para entender a estrutura
-            dd($responses);  // Isso vai parar o código e mostrar o que está sendo retornado
-        
-            // Inicializar o contador de alternativas
+        foreach ($questions as $question) {
+            // Inicializa o contador de alternativas
             $alternatives_count = [
                 'A' => 0,
                 'B' => 0,
                 'C' => 0,
                 'D' => 0
             ];
-        
-            // Iterar sobre as respostas retornadas
-            foreach ($responses as $response) {
-                // As respostas podem estar em alternative_answered, e a contagem está em 'count'
-                if (in_array($response->alternative_answered, ['A', 'B', 'C', 'D'])) {
-                    $alternatives_count[$response->alternative_answered] = $response->count;
-                }
-            }
-        
-            // Identificar a alternativa correta com base na coluna 'correct' da tabela 'questions'
+
+            // Realiza a consulta para contar as respostas
+            $respostas_count = DB::table('student_answers as sa')
+                ->join('questions as q', 'sa.question_id', '=', 'q.id')
+                ->select(
+                    'sa.alternative_answered',
+                    DB::raw('COUNT(sa.id) as respostas_count'),
+                    'q.answer'
+                )
+                ->where('q.id', $question->id) // Filtra pela questão atual
+                ->groupBy('sa.alternative_answered', 'q.answer')
+                ->get();
+
             $correct_alternative = null;
-            if ($questao->correct == 1) { // Considerando que '1' indica a alternativa correta
-                if ($questao->a == 1) $correct_alternative = 'A';
-                elseif ($questao->b == 1) $correct_alternative = 'B';
-                elseif ($questao->c == 1) $correct_alternative = 'C';
-                elseif ($questao->d == 1) $correct_alternative = 'D';
+
+            foreach ($respostas_count as $response) {
+                if (isset($response->alternative_answered)) {
+                    // Verifica qual alternativa corresponde ao texto retornado
+                    $alternative_answered = strtoupper($response->alternative_answered);
+
+                    // Mapeia as alternativas (A, B, C, D) para o texto das respostas
+                    switch ($alternative_answered) {
+                        case strtoupper($question->a):
+                            $alternative_key = 'A';
+                            break;
+                        case strtoupper($question->b):
+                            $alternative_key = 'B';
+                            break;
+                        case strtoupper($question->c):
+                            $alternative_key = 'C';
+                            break;
+                        case strtoupper($question->d):
+                            $alternative_key = 'D';
+                            break;
+                        default:
+                            $alternative_key = null; // Caso não haja correspondência
+                            break;
+                    }
+
+                    // Se encontrou a correspondência, atualiza o contador de alternativas
+                    if ($alternative_key !== null) {
+                        $alternatives_count[$alternative_key] += $response->respostas_count;
+                    }
+                }
+
+
+                // Atribui a alternativa correta
+                $correct_alternative = $response->answer;
             }
-        
-            // Adicionar as informações da questão para o resultado
+
+            // Adiciona os dados da questão na estrutura de resultados
             $newd['questions'][] = [
-                'id' => $questao->id,
-                'question' => $questao->question,
+                'id' => $question->id,
+                'question' => $question->question,
                 'alternatives_count' => $alternatives_count,
-                'correct' => $correct_alternative
-            ];  
+                'correct_alternative' => $correct_alternative ?? 'N/A' // Definindo o valor da alternativa correta
+            ];
         }
-        //dd($responses);
 
+        // Processa as atividades e alunos
         foreach ($resultsSQL as $r) {
-
-            if ($r->activity_id <> $idatividade) {
-
+            if ($r->activity_id !== $idatividade) {
                 if ($newd != null) {
-
                     $this->finalizarAtividade($temrespondida, $temnaorespondida, $idaluno);
 
                     $newd['atividade_completa'] = $this->atividade_completa;
@@ -401,7 +421,6 @@ class ContentController extends Controller
                     $newd['atividade_nao_fizeram'] = $this->atividade_nao_fizeram;
 
                     array_push($results, $newd);
-
                 }
 
                 $newd = [
@@ -409,13 +428,11 @@ class ContentController extends Controller
                     'questions' => []
                 ];
 
+                // Obtém as questões da atividade
                 $questions = DB::table('questions')->where('activity_id', $r->activity_id)->get();
+                foreach ($questions as $question) {
 
-
-                foreach ($questions as $questao) {
-                    $responses = ResultContentDAO::getResponsesByQuestion($turma_id, $questao->id);
-
-                    // Iniciar contador de alternativas
+                    // Conta as respostas para cada alternativa
                     $alternatives_count = [
                         'A' => 0,
                         'B' => 0,
@@ -423,48 +440,77 @@ class ContentController extends Controller
                         'D' => 0
                     ];
 
-                    // Alternativa correta inicialmente indefinida
+                    $respostas_count = DB::table('student_answers as sa')
+                        ->join('questions as q', 'sa.question_id', '=', 'q.id')
+                        ->select(
+                            'sa.alternative_answered',
+                            DB::raw('COUNT(sa.id) as respostas_count'),
+                            'q.answer'
+                        )
+                        ->where('q.id', $question->id) // Filtra pela questão atual
+                        ->groupBy('sa.alternative_answered', 'q.answer')
+                        ->get();
+
                     $correct_alternative = null;
 
-                    foreach ($responses as $response) {
-                        if (in_array($response->alternative_answered, ['A', 'B', 'C', 'D'])) {
+                    foreach ($respostas_count as $response) {
+                        if (isset($response->alternative_answered)) {
+                            // Converte a alternativa para maiúscula para garantir consistência na comparação
+                            $alternative_answered = strtoupper($response->alternative_answered);
 
-                            $alternatives_count[$response->alternative_answered] = $response->count;
+                            // Mapeia a alternativa para a chave correta
+                            $alternative_key = null;
+                            switch ($alternative_answered) {
+                                case strtoupper($question->a):
+                                    $alternative_key = 'A';
+                                    break;
+                                case strtoupper($question->b):
+                                    $alternative_key = 'B';
+                                    break;
+                                case strtoupper($question->c):
+                                    $alternative_key = 'C';
+                                    break;
+                                case strtoupper($question->d):
+                                    $alternative_key = 'D';
+                                    break;
+                            }
 
-                            if ($response->correct == 1) {
-                                $correct_alternative = $response->alternative_answered;
+                            // Se a chave da alternativa foi encontrada, incrementa o contador
+                            if ($alternative_key !== null) {
+                                $alternatives_count[$alternative_key] += $response->respostas_count;
                             }
                         }
+
+                        // Atribui a alternativa correta
+                        $correct_alternative = $response->answer;
                     }
 
+                    // Adiciona a questão ao array de resultados da atividade
                     $newd['questions'][] = [
-                        'id' => $questao->id,
-                        'question' => $questao->question,
+                        'id' => $question->id,
+                        'question' => $question->question,
                         'alternatives_count' => $alternatives_count,
-                        'correct' => $correct_alternative
+                        'correct_alternative' => $correct_alternative ?? 'N/A' // Se não houver alternativa correta, exibe 'N/A'
                     ];
+
                 }
 
-
-
+                // Zera os contadores para a próxima atividade
                 $this->atividade_completa = 0;
                 $this->atividade_incompleta = 0;
                 $this->atividade_nao_fizeram = 0;
-
-                $idaluno = 0;
-                $idatividade = $r->activity_id;
+                $idatividade = $r->activity_id; // Atualiza o ID da atividade
             }
 
-            if ($r->aluno <> $idaluno) {
-
-                if ($idaluno <> 0) {
+            // Gerenciamento de alunos
+            if ($r->aluno !== $idaluno) {
+                if ($idaluno !== 0) {
                     $this->finalizarAtividade($temrespondida, $temnaorespondida, $idaluno);
                 }
 
                 $temrespondida = 0;
                 $temnaorespondida = 0;
                 $idaluno = $r->aluno;
-
             }
 
             if ($r->correct === 1 || $r->correct === 0) {
@@ -472,12 +518,10 @@ class ContentController extends Controller
             } else {
                 $temnaorespondida = 1;
             }
-
-
         }
 
-        if ($idaluno <> 0) {
-
+        // Finaliza a última atividade, se necessário
+        if ($idaluno !== 0) {
             $this->finalizarAtividade($temrespondida, $temnaorespondida, $idaluno);
 
             $newd['atividade_completa'] = $this->atividade_completa;
@@ -485,13 +529,11 @@ class ContentController extends Controller
             $newd['atividade_nao_fizeram'] = $this->atividade_nao_fizeram;
 
             array_push($results, $newd);
-
-
         }
-        //dd($results);
-        // dd($this->listaalunos);
-        // esse total são em relação ao conteúdo... se o aluno fez uma atividade e nao fez outra, ...
-        // ... então está no incompleto
+
+        dd($results);
+
+        // Totais para exibição no relatório
         $totais = [
             'qtos_fizeram' => 0,
             'qtos_nao_fizeram' => 0,
@@ -499,42 +541,22 @@ class ContentController extends Controller
         ];
         foreach ($this->listaalunos as $a) {
             if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0) {
-                $totais['qtos_nao_fizeram'] = $totais['qtos_nao_fizeram'] + 1;
+                $totais['qtos_nao_fizeram'] += 1;
             } else {
                 if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0) {
-                    $totais['qtos_fizeram'] = $totais['qtos_fizeram'] + 1;
+                    $totais['qtos_fizeram'] += 1;
                 } else {
-                    $totais['qtos_incompletos'] = $totais['qtos_incompletos'] + 1;
+                    $totais['qtos_incompletos'] += 1;
                 }
             }
         }
-        session()->put("listaalunos", $this->listaalunos);
-        //dd($results);
-        // dd($this->listaalunos);
-        // esse total são em relação ao conteúdo... se o aluno fez uma atividade e nao fez outra, ...
-        // ... então está no incompleto
 
-         $totais = [
-            'qtos_fizeram' => 0,
-            'qtos_nao_fizeram' => 0,
-            'qtos_incompletos' => 0
-        ];
-        foreach ($this->listaalunos as $a) {
-            if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0) {
-                $totais['qtos_nao_fizeram'] = $totais['qtos_nao_fizeram'] + 1;
-            } else {
-                if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0) {
-                    $totais['qtos_fizeram'] = $totais['qtos_fizeram'] + 1;
-                } else {
-                    $totais['qtos_incompletos'] = $totais['qtos_incompletos'] + 1;
-                }
-            }
-        }
         session()->put("listaalunos", $this->listaalunos);
 
         return view('pages.content.results', compact('results', 'totais', 'turmas', 'turma', 'content', 'activities'));
-
     }
+
+
 
     function resultsListStudents($type)
     {
