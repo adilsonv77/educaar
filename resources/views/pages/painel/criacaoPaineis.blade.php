@@ -83,5 +83,5 @@
         </div>
     </form>
 </div>
-<script src="{{asset('js/painel2.js')}}" type="module"></script>
+<script src="{{asset('js/painel3.js')}}" type="module"></script>
 @endsection

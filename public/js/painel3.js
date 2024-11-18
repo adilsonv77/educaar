@@ -146,11 +146,12 @@ function midiaPreview(event) {
     //É vídeo
     img.style.display = "none"
     vid.style.display = "block"
-    srcVid.src = URL.createObjectURL(event.target.files[0]);
+    srcVid.src = URL.createObjectURL(event.target.files[0])
+    vid.load()
   } else {
     //É imagem
     img.style.display = "block"
     vid.style.display = "none"
-    img.src = URL.createObjectURL(event.target.files[0]);
+    img.src = URL.createObjectURL(event.target.files[0])
   }
 }
