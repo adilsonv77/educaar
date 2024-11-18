@@ -11,7 +11,7 @@ class PainelController extends Controller
 
     public function create()
     {
-        return view('pages.painel.criacaoPaineis', ['titulo' => 'Criação de painéis', 'action' => 'create']);
+        return view('pages.painel.criacaoPaineis', ['titulo' => 'Criação de painéis', 'action' => 'create', 'midiaExtension' => '']);
     }
 
     public function edit($id)
@@ -32,10 +32,19 @@ class PainelController extends Controller
         $data = $request->all();
         $baseFileName = time();
         $action = $data['action'];
-        $midiaExtension = $request->arquivoMidia->getClientOriginalExtension();
+        $midiaExtension = "";
+        if ($action == 'edit' && empty($request->arquivoMidia)) {
+            //Define que a extenção não deve mudar
+            $painel = Painei::where('id', $data['id']);
+            $painel = json_decode($painel->first()->panel);
+            $midiaExtension = $painel->midiaExtension;
+        } else {
+            $midiaExtension = $request->arquivoMidia->getClientOriginalExtension();
+        }
 
         $imgFile = $baseFileName . '.' . $midiaExtension;
-        $request->arquivoMidia->move(public_path('midiasPainel'), $imgFile);
+        if ($action != 'edit' || !empty($request->arquivoMidia))
+            $request->arquivoMidia->move(public_path('midiasPainel'), $imgFile);
         $data['midiasPainel'] = $imgFile;
 
         //Remove os dados desnecessários para serem guardados e adiciona necessários
@@ -60,9 +69,10 @@ class PainelController extends Controller
         }
         $data['arquivoMidia'] = $id . '.' . $midiaExtension;
         $public_path = public_path('midiasPainel');
-        if ($action == 'edit')
+        if ($action == 'edit' && !empty($request->arquivoMidia))
             unlink($public_path . '/' . $id . '.' . $originalExtension);
-        rename($public_path . '/' . $imgFile, $public_path . '/' . $data['arquivoMidia']);
+        if ($action != 'edit' || !empty($request->arquivoMidia))
+            rename($public_path . '/' . $imgFile, $public_path . '/' . $data['arquivoMidia']);
         $painel->update(["panel" => json_encode($data)]);
         return redirect()->route('paineis.create');
     }
