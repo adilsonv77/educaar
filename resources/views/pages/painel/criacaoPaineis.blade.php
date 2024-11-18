@@ -36,12 +36,14 @@
                             </div>
                         </div>
                         <!-- preview da midia -->
-                        <div id="midiaPreview">
-                            <img src="" id="imgMidia" style="dislay: none">
-                            <video id="vidMidia" controls style="dislay: none">
-                                <source id="srcVidMidia" src="@if ($action == 'edit'){{public_path("midiasPainel").'/'.$arquivoMidia}}@endif" type="video/mp4">
+                        <div id="midiaPreview" edit=@if($action == 'edit')"true" @else "false"  style="display: none;" @endif>
+                            <video id="vidMidia" controls @if ($midiaExtension != "mp4") style="display: none" @endif>
+                                <source id="srcVidMidia"
+                                    src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif"
+                                    type="video/mp4">
                             </video>
-                        </div>`
+                            <img src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif" id="imgMidia" @if($midiaExtension == "mp4") style="display: none" @endif>
+                        </div>
                     </div>
                     <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117"
                         placeholder="Digite seu texto aqui"> @if ($action == 'edit') {{$txtInferior}}

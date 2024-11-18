@@ -96,23 +96,46 @@ function selectImage() {
 }
 
 //Colocar imagem e/ou video no painel
+
 const fileBtn = document.getElementById("midiaInput")
 const espacoMidias = document.getElementById("espacoMidias")
+const mediaPreviewArea = document.getElementById("midiaPreview")
 let primeiraVez = true
-fileBtn.onchange = (event) => {
-  if (primeiraVez) {
-    //Esconde a seleção do tipo de midia.
+
+if (mediaPreviewArea.getAttribute("edit") == "true") {
+  document.addEventListener("DOMContentLoaded", () => {
+    mediaPreviewArea.style.display = "flex"
     primeiraVez = false
     midiaArea.style.display = "none";
-    
+
     //Coloca os event listener de configuração de painel quando selecionar
-    document.getElementById("midiaPreview").onclick = () => updateConfiguracoesPainel("midia", null)
-    Array.from(document.getElementById("midiaPreview").children).forEach(child => {
+    mediaPreviewArea.onclick = () => updateConfiguracoesPainel("midia", null)
+    Array.from(mediaPreviewArea.children).forEach(child => {
+      child.addEventListener('click', () => {
+        updateConfiguracoesPainel("midia", null)
+      });
+    });
+  })
+}
+
+
+fileBtn.onchange = (event) => midiaPreview(event)
+function midiaPreview(event) {
+  if (primeiraVez) {
+    //Esconde a seleção do tipo de midia.
+    mediaPreviewArea.setAttribute('style', 'display: flex')
+    primeiraVez = false;
+    midiaArea.style.display = "none";
+
+    //Coloca os event listener de configuração de painel quando selecionar
+    mediaPreviewArea.onclick = () => updateConfiguracoesPainel("midia", null)
+    Array.from(mediaPreviewArea.children).forEach(child => {
       child.addEventListener('click', () => {
         updateConfiguracoesPainel("midia", null)
       });
     });
   }
+
   let img = document.getElementById("imgMidia")
   let vid = document.getElementById("vidMidia")
   let srcVid = document.getElementById("srcVidMidia")
@@ -130,5 +153,4 @@ fileBtn.onchange = (event) => {
     vid.style.display = "none"
     img.src = URL.createObjectURL(event.target.files[0]);
   }
-
 }
