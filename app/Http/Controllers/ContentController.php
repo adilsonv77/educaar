@@ -531,7 +531,7 @@ class ContentController extends Controller
             array_push($results, $newd);
         }
 
-        dd($results);
+        //dd($results);
 
         // Totais para exibição no relatório
         $totais = [
