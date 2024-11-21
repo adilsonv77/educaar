@@ -110,6 +110,17 @@
 
                 <div class="form-group">
                         @if ($acao == 'edit') 
+                            <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
+                        @endif
+                        
+                        <label for="alterar3D">Painel</label>
+                        <input type="file" style="border:none" class="form-control" name="glb"
+                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit') disabled @endif/>
+                       <!-- <input type="text" placeholder="Insira o ID do painel" name="panelId" id="panelId"> -->
+                </div>
+
+                <div class="form-group">
+                        @if ($acao == 'edit') 
                             <input type="checkbox" id="alterarMarcador" name="alterarMarcador" value="S" onclick="HabilitarDesabilitarImagemMarcador()"/>
                         @endif
                         <label for="alterarMarcador">Marcador (PNG ou JPEG ou JPG)*</label>
