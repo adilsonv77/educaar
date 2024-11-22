@@ -17,6 +17,7 @@
 
     <form action="{{ route($userindex) }}" method="GET">
         <div class="form-inline">
+        <label for="">Informe o nome : </label>
             <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $usuarios }}"
                 list="historico" />
             <section class="itens-group">
@@ -25,6 +26,17 @@
         </div>
     </form>
     <br>
+    <style>
+    .form-inline{
+        display: flex;
+        justify-content: flex-start; 
+    }
+
+    .form-inline label {
+      
+      margin-right: 10px;
+    }
+</style>
     <div class="card">
         <div class="card-body">
             @if (!empty($users))

@@ -18,6 +18,7 @@
 
     <form action="{{ route('content.index') }}" method="GET">
         <div class="form-inline">
+        <label for="">Informe o conteudo :</label>
             <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}" list="historico" />
             <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
         </div>
@@ -30,6 +31,18 @@
         </datalist>
     </form>
     <br>
+
+    <style>
+    .form-inline{
+        display: flex;
+        justify-content: flex-start; 
+    }
+
+    .form-inline label {
+      
+      margin-right: 10px;
+    }
+</style>
 
     @if (session('type') !== 'developer')
     <div>

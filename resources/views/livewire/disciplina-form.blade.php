@@ -22,11 +22,24 @@
         <div class="flex justify-between">
             <div class="w-1/4">
                 <div class="form-inline">
+                <label for="">Informe a disciplina : </label>
                     <input class="form-control" type="text" wire:model.defer="filtroTemp" list="disciplinas" />
                     <section class="itens-group">
                         <button class="btn btn-primary btn-lg" type="button" wire:click="aplicarFiltro">Filtrar</button>
                     </section>
                 </div>
+
+                <style>
+                .form-inline{
+                    display: flex;
+                    justify-content: flex-start; 
+                }
+
+                .form-inline label {
+                
+                margin-right: 10px;
+                }
+                </style>
                 <datalist id="disciplinas">
                     @foreach ($disciplinas as $disciplina)
                         <option value="{{ $disciplina->name }}">{{ $disciplina->name }}</option>

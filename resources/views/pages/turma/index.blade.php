@@ -17,8 +17,9 @@
     </div>
     <form action="{{ route('turmas.index') }}" method="GET ">
         @csrf
-        <label for="">Informe o ano Letivo</label>
+        
         <div class="form-inline">
+        <label for="">Informe a turma :</label>
             <select class="form-control" name="ano_id">
                 @foreach ($anosletivos as $item)
                     <option value="{{ $item->id }}" @if ($item->id === $anoletivo->id) selected="selected" @endif>
@@ -31,6 +32,17 @@
         </div>
     </form>
     <br>
+    <style>
+    .form-inline{
+        display: flex;
+        justify-content: flex-start; 
+    }
+
+    .form-inline label {
+      
+      margin-right: 10px;
+    }
+</style>
 
     <div class="card">
         <div class="card-body">
