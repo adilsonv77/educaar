@@ -11,8 +11,9 @@
 <div id="formTurma">
     <form action="{{ route('turmas.listarTurmasAlunosProf') }}" method="GET ">
           @csrf
-          <label for="">Informe a turma:</label>
+          
           <div class="form-inline">
+          <label for="">Informe a turma:</label>
               <select class="form-control" name="turma_id">
                   @foreach ($turmas as $item)
                       <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
@@ -22,15 +23,40 @@
               <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
           </div>
     </form>
-
     <br>
+    
+
     </div>
-    <form action="{{ route('student.naorespondidas') }}">
-        <input type="hidden" name="turma_id" value="{{ $turma->id }}">
-        <button type="submit" class="btn btn-success" >
-             Geral de questões não respondidas
-        </button>
-    </form>
+    <div class="geral">
+        <form  action="{{ route('student.naorespondidas') }}">
+            <input type="hidden" name="turma_id" value="{{ $turma->id }}">
+            <button type="submit" class="btn btn-success" >
+                Geral de questões não respondidas
+            </button>
+        </form>
+    </div>
+    <br>
+
+    <style>
+    .form-inline{
+        display: flex;
+        justify-content: flex-start; 
+    }
+    .form-inline label {
+      
+      margin-right: 10px;
+    }
+
+    .geral{
+    display: flex;
+   
+    justify-content: center;
+
+    }
+
+ 
+</style>
+
     <div class="card">
         <div class="card-body">
             @if (!empty($alunos))
