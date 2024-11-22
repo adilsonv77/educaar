@@ -58,9 +58,18 @@
 
         function HabilitarDesabilitar3D() {
             var alt = document.getElementById("alterar3D");
+            var alt2 = document.getElementById("alterarPainel")
+            let valor = document.getElementById("selectSceneType").value; //Modelo3D selecionado = 1 / Painel selecionado = 2
 
-            document.getElementById("glb").disabled = !alt.checked;
-            document.getElementById("glb").required = alt.checked;
+            if(valor == 1){
+                //glb
+            }
+
+            document.getElementById("glb").disabled = !alt.checked || !alt2.checked;
+            document.getElementById("glb").required = alt.checked && valor == 1;
+
+            document.getElementById("selectPanel").disabled = !alt.checked || !alt2.checked;
+            document.getElementById("panelId").required = alt.checked && valor == 2;
 
             if (!alt.checked) {
                 var upl = document.getElementById("glb");
@@ -154,7 +163,7 @@
                             id="marcador" accept=".png, .jpeg, .jpg"  @if($acao === 'edit') disabled @endif/>
                 </div>
 
-                <input id="panelId" name="panelId" type="hidden" value="">
+                <input id="panelId" name="panelId" type="hidden">
                 <div class="form-group mt-4">
                     <input type="submit" value="Salvar" class="btn btn-success">
                 </div>                   
