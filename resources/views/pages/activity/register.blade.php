@@ -3,6 +3,27 @@
 @endsection
 @section('page-name', $titulo)
 
+@section('style')
+    <style>
+        #selectPanel{
+            border: 1px solid #707070;
+            border-radius: 0;
+            width: 130px;
+            padding: 2px 5px;
+            height: fit-content;
+            margin: 6px 12px;
+            margin-bottom: 38px;
+            background-image: linear-gradient(#e9e9e9,#d9d9d9);
+        }
+
+        #selectPanel:hover{
+            background-color: #a7f2fe;
+            background-image: none;
+            border: 1px solid #319dd7;
+        }
+    </style>
+@endsection
+
 @section('content') 
     <script>
        function upload_check()
@@ -14,7 +35,7 @@
             if (alert !== null) {
                 alert.remove();
             }
-
+            
             if(upl.files[0].size > max)
             {
                 const div = document.createElement("div");
@@ -93,30 +114,35 @@
                             <option value="{{ $item->id }}" @if ($item->id === $content) selected="selected" @endif>{{ $item->total_name }}</option>
                         @endforeach
                     </select>
-
                 </div>
 
                 <div class="form-group">
+                    <label for="">Selecione o tipo da cena*</label>
+                    <select class="form-control" id="selectSceneType" aria-label="">             
+                        <option value="1" selected>Modelo 3D</option>
+                        <option value="2">Painel</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="3DmodelOption">
                         @if ($acao == 'edit') 
                             <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
                         
                         <label for="alterar3D">Modelo 3D (GLB ou GLTF->ZIP)*</label>
                         <span class="alert-danger">Tamanho máximo: 40MB</span>
-                        <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="glb"
-                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit') disabled @endif/>
-                       <!-- <input type="text" placeholder="Insira o ID do painel" name="panelId" id="panelId"> -->
-                </div>
-
-                <div class="form-group">
-                        @if ($acao == 'edit') 
-                            <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
-                        @endif
-                        
-                        <label for="alterar3D">Painel</label>
                         <input type="file" style="border:none" class="form-control" name="glb"
                             id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit') disabled @endif/>
-                       <!-- <input type="text" placeholder="Insira o ID do painel" name="panelId" id="panelId"> -->
+                        <!-- <input type="text" placeholder="Insira o ID do painel" name="panelId" id="panelId"> -->
+                </div>
+
+                <div class="form-group" id="panelOption" style="display: none">
+                        @if ($acao == 'edit') 
+                            <input type="checkbox" id="alterarPainel" name="alterarPainel" value="S" onclick="HabilitarDesabilitar3D()"/>
+                        @endif
+                        
+                        <label for="alterarPainel">Painel*</label>
+                        <input type="button" class="form-control" id="selectPanel" value="Escolher painel" @if($acao === 'edit') disabled @endif/>
                 </div>
 
                 <div class="form-group">
@@ -128,15 +154,30 @@
                             id="marcador" accept=".png, .jpeg, .jpg"  @if($acao === 'edit') disabled @endif/>
                 </div>
 
+                <input id="panelId" name="panelId" type="hidden" value="">
                 <div class="form-group mt-4">
                     <input type="submit" value="Salvar" class="btn btn-success">
-                </div>
-
-
+                </div>                   
+                
+                
             </form>
         </div>
     </div>
     <script>
+        document.getElementById("selectPanel").onclick = ()=>{
+            document.getElementById("panelId").value = prompt("Insira o ID do painel.")
+        }
+
+        document.getElementById("selectSceneType").onchange = ()=>{
+            let valor = document.getElementById("selectSceneType").value;
+            if (valor == 1) {
+                document.getElementById("3DmodelOption").style.display = "block"
+                document.getElementById("panelOption").style.display = "none"
+            }else{
+                document.getElementById("panelOption").style.display = "block"
+                document.getElementById("3DmodelOption").style.display = "none"
+            }
+        }
      </script>
 @endsection
  
