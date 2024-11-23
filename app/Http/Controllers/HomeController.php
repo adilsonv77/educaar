@@ -63,16 +63,10 @@ class HomeController extends Controller
                     ->distinct()
                     ->get();
             } else {
-                $disciplinas = DB::table('disciplinas as d')
-                    ->select('d.id', 'd.name')
-                    ->join('turmas_disciplinas as td', 'd.id', '=', 'td.disciplina_id')
-                    ->join('turmas as t', 'td.turma_id', '=', 't.id')
-                    ->join('alunos_turmas as at', 't.id', '=', 'at.turma_id')
-                    ->where('at.aluno_id', Auth::user()->id)
-                    ->where('t.ano_id', $ano_letivo->id)
-                    ->distinct()
-                    ->get();
-           }
+                $disciplinas = DisciplinaDAO::buscarDisciplinasAluno(Auth::user()->id, $ano_letivo->id)
+                    -> get();
+                
+            }
 
             $rota = route("student.conteudos") . "?id=1";
             return view('mobHome', compact('disciplinas', 'rota'));
