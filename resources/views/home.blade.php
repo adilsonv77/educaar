@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="">
-        @if (session('type') == 'teacher')
+        @if (session('type') == 'teacher' || session('type') == 'developer')
              <div class="col">
                 <div class="row">
                     <div class="col-xl-4 col-xxl-6 col-lg-12 col-sm-6">
@@ -50,6 +50,7 @@
                             <span class="line bg-success"></span>
                         </div>
                     </div>  
+                    @if (session('type') == 'teacher')
                     <div class="col-xl-4 col-xxl-12 col-lg-12 col-md-12">
                         <div class="card border-card">
                             <div class="card-body">
@@ -66,6 +67,7 @@
                             <span class="line bg-warning"></span>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         @endif

@@ -57,5 +57,16 @@ class ActivityDAO
          //dd($sql);
         return $sql;
     }
+
+    public static function buscarActivitiesDoDev($devid)
+    {
+        $sql = DB::table('activities')
+        ->join('contents', 'activities.content_id', '=', 'contents.id')
+        ->join('content_developer','content_developer.content_id','=','contents.id')
+        ->where('content_developer.developer_id',$devid);
+
+        return $sql;
+    }
+    
 }
 
