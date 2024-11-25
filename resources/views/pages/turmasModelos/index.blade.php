@@ -15,20 +15,29 @@
         </form>
     </div>
 
-    {{-- <form action= "{{ route('turmasmodelos.index') }}" method="GET">
+    <form action="{{ route('turmasmodelos.index') }}" method="GET">
+    
         <div class="form-inline">
-                    <input class="form-control" type="text" name="titulo" id="titulo" value= "{{$anoLetivo}}" list= "historico"/>
-                    <section class="itens-group">
-                        <button class="btn btn-primary "type="submit">Pesquisar</button>
-                    </section>
-            </div> 
-            <datalist id="historico">
-                @foreach ($anosletivos as $anoLetivo)
-                    <option value = "{{ $anoLetivo->name }}">{{ $anoLetivo->name }}</option>
-                @endforeach
-            </datalist>          
-        </form>
-        <br> --}}
+        <label for="">Informe a série: </label>
+            <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $turmas }}"
+                list="historico" />
+            <section class="itens-group">
+                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+            </section>
+        </div>
+    </form>
+    <br/>
+    <style>
+    .form-inline{
+        display: flex;
+        justify-content: flex-start; 
+    }
+
+    .form-inline label {
+      
+      margin-right: 10px;
+    }
+</style>
 
     <div class="card">
         <div class="card-body">

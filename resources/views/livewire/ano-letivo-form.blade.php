@@ -23,6 +23,7 @@
         <div class="flex justify-between">
             <div class="w-1/4">
                 <div class="form-inline">
+                <label for="">Informe o ano : </label>
                     <input class="form-control" type="text" wire:model.defer="filtroTemp"
                         list="historico" />
                     <section class="itens-group">
@@ -30,6 +31,18 @@
                         
                     </section>
                 </div>
+
+                <style>
+    .form-inline{
+        display: flex;
+        justify-content: flex-start; 
+    }
+
+    .form-inline label {
+      
+      margin-right: 10px;
+    }
+</style>
                 <datalist id="historico">
                     @foreach ($anosletivos as $anoLetivo)
                         <option value="{{ $anoLetivo->name }}">{{ $anoLetivo->name }}</option>

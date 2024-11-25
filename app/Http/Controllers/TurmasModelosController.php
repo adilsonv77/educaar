@@ -6,6 +6,7 @@ use App\Models\Turma;
 use App\Models\TurmaModelo;
 use App\Models\Content;
 use App\Models\DisciplinaTurmaModelo;
+use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +16,10 @@ use Illuminate\Http\Request;
 class TurmasModelosController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
+        $filtro = $request->titulo;
+
         // DB::connection()->enableQueryLog();
         $where = DB::table('turmas_modelos')
             ->where('school_id', Auth::user()->school_id)
@@ -27,6 +30,8 @@ class TurmasModelosController extends Controller
                         ['turmas_modelos.school_id', '=', 'school_id']
                     ])
             ])
+
+            
             ->addSelect([
                 'conteudos' => DB::table('contents as c')
                     ->selectRaw('count(c.id)')
@@ -36,25 +41,22 @@ class TurmasModelosController extends Controller
                     })->whereColumn('dtm.turma_modelo_id', '=', 'turmas_modelos.id')
             ]);
 
+        if ($filtro) {
+            $where = $where 
+              -> where("serie", "like", '%' . $filtro . '%');
+        }
 
 
-        // ->join('disciplinas_turmas_modelos as dtm','c.disciplina_id','=','dtm.disciplina_id')
-        // ->whereColumn('dtm.turma_modelo_id','=','turmas_modelos.id')])
-
-
-        // dd($where->get());
-
-        // select * from turmas_modelo_disciplina tmd  join contents c 
-        // on c.disciplina_id = tmd.disciplina_id where tmd.turma_id = ?
-
-
+            
         $turmas = $where->paginate(20);
+        
         //dd(DB::getQueryLog());
-    return view('pages.turmasModelos.index', compact('turmas'));
+        return view('pages.turmasModelos.index', compact('turmas'));
     }
     public function create()
     {
         $acao = 'insert';
+        $anosletivos = AnoLetivo::where('school_id', Auth::user()->school_id)->get();
         $disciplinas = DB::table('disciplinas')->get();
         $disciplinas_turma = array();
         foreach ($disciplinas as $d) {
@@ -66,11 +68,13 @@ class TurmasModelosController extends Controller
 
             array_push($disciplinas_turma, $newd);
         }
+        
         $params = [
             'titulo' => 'Adicionar Turma Modelo',
             'acao' => $acao,
             'id' => 0,
             'serie' => '',
+            'anosletivos' => $anosletivos,
             'disciplinas' => $disciplinas_turma,
             'disciplinas_turmas' => []
         ];

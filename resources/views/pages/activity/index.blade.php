@@ -16,14 +16,9 @@
         </form>
     </div>
     <form action="{{ route('activity.index') }}" method="GET">
-        {{-- <div class="form-inline">
-            <input class="form-control" type="text" name="titulo" id="titulo" value="{{ $activity }}"
-                list="historico" />
-            <section class="itens-group">
-                <button class="btn btn-primary "type="submit">Pesquisar</button>
-            </section>
-        </div> --}}
+        
         <div class="form-inline ">
+        <label for="">Informe a atividade :</label>
             <input maxlength="100" class="form-control " type="text" name="titulo" id="titulo" value="{{ $activity }}"
                 list="historico" />
             <section class="itens-group">
@@ -37,6 +32,17 @@
         </datalist>
     </form>
     <br>
+    <style>
+    .form-inline{
+        display: flex;
+        justify-content: flex-start; 
+    }
+
+    .form-inline label {
+      
+      margin-right: 10px;
+    }
+</style>
 
     <div class="card">
         {{-- <div class="card-header">

@@ -2,8 +2,7 @@
 
 namespace App\DAO;
 
-use App\Models\AnoLetivo;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\DB;
 
 class TurmaDAO

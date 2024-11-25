@@ -442,7 +442,9 @@ function createPainel(painel, bloquearPainel) {
       <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117" placeholder="Digite seu texto aqui" disabled>
           `+ painel.txtSuperior + `
       </textarea>
-      `+ midiaHTML + `
+      <div id="midiaPreview">
+        `+ midiaHTML + `
+      </div>
       <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117" placeholder="Digite seu texto aqui" disabled>
           `+ painel.txtInferior + `
       </textarea>

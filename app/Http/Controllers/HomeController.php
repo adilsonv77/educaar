@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\DAO\ActivityDAO;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\Activity;
-use App\Models\Matricula;
-use App\Models\User;
-use App\Models\StudentAnswer;
 use App\Models\School;
-use App\Models\DisciplinaProfessor;
+
 use App\Models\AnoLetivo;
 use App\DAO\ContentDAO;
 use App\DAO\UserDAO;
+use App\DAO\DisciplinaDAO;
+
 
 class HomeController extends Controller
 {
@@ -53,14 +50,6 @@ class HomeController extends Controller
         if (session('type') == 'admin') {
             return view('home', compact('schools'));
         }
-        if(session('type') == 'developer'){
-            $activities= DB::table('activities')
-                        ->join('contents', 'activities.content_id', '=', 'contents.id')
-                        ->join('content_developer','content_developer.content_id','=','contents.id')
-                        ->where('content_developer.developer_id',Auth::user()->id);
-            $activities = $activities->distinct()->paginate(20);
-            return view('home', compact('activities'));
-        }
 
         if (session('type') == 'student') {
             $ano_letivo = AnoLetivo::where('bool_atual', 1)->first();
@@ -74,16 +63,10 @@ class HomeController extends Controller
                     ->distinct()
                     ->get();
             } else {
-                $disciplinas = DB::table('disciplinas as d')
-                    ->select('d.id', 'd.name')
-                    ->join('turmas_disciplinas as td', 'd.id', '=', 'td.disciplina_id')
-                    ->join('turmas as t', 'td.turma_id', '=', 't.id')
-                    ->join('alunos_turmas as at', 't.id', '=', 'at.turma_id')
-                    ->where('at.aluno_id', Auth::user()->id)
-                    ->where('t.ano_id', $ano_letivo->id)
-                    ->distinct()
-                    ->get();
-           }
+                $disciplinas = DisciplinaDAO::buscarDisciplinasAluno(Auth::user()->id, $ano_letivo->id)
+                    -> get();
+                
+            }
 
             $rota = route("student.conteudos") . "?id=1";
             return view('mobHome', compact('disciplinas', 'rota'));
@@ -93,7 +76,26 @@ class HomeController extends Controller
             */
         }
 
-        if (session('type') == 'teacher') {
+        if(session('type') == 'developer'){
+ 
+            $contentCount = ContentDAO::buscarConteudosDeveloper(Auth::user()->id)
+                ->selectRaw("count(distinct(contents.id)) as quantos")->get();
+            $contentCount = $contentCount[0]->quantos;
+
+            $activitiesCount = ActivityDAO::buscarActivitiesDoDev(Auth::user()->id)
+                ->selectRaw("count(distinct(activities.id)) as quantos")->get();
+            $activitiesCount = $activitiesCount[0]->quantos;
+
+            $fechadoCount = ContentDAO::buscarConteudosDeveloper(Auth::user()->id)
+                ->selectRaw("sum(contents.fechado) as quantos")->get();
+            $fechadoCount = $fechadoCount[0]->quantos;
+
+            return view('home', compact('contentCount', 'fechadoCount', 'activitiesCount'));
+        }
+
+
+
+        if (session('type') == 'teacher' || session('type') == 'developer' ) {
          
             DB::enableQueryLog();
 

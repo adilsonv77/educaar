@@ -32,6 +32,9 @@ Route::middleware(['auth'])->group(function () {
     //config
     Route::resource('config', App\Http\Controllers\ConfigController::class);
 
+    //config do prof
+    Route::resource('profconfig', App\Http\Controllers\ProfConfigController::class);
+
     //users
     Route::resource('user', App\Http\Controllers\UserController::class);
     Route::get('/indexAluno', [App\Http\Controllers\UserController::class, 'indexAluno'])->name('user.indexAluno');
