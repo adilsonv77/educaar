@@ -68,7 +68,7 @@
                                     <li class="nav-item dropdown header-profile">
                                         <a class="nav-link" href="javascript:void()" role="button" data-toggle="dropdown">
                                             <div class="header-info">
-                                                <i class="bi bi-person icon-purple"></i>
+                                               
                                                 <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
                                                 <p class="fs-12 mb-0">
 
@@ -96,6 +96,13 @@
                                                 </a>
                                             @endif
 
+                                            @if (session('type') == 'teacher')
+                                                <a href="{{ route('profconfig.index') }}" title="Configurar" ;
+                                                    class="dropdown-item ai-icon">
+                                                    <img src="/gear.png" width="10" alt="" />
+                                                </a>
+                                            @endif
+
                                             <div class="saida">
                                                 <a href="{{ route('logout') }}" title="Sair" ;
                                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
@@ -115,19 +122,14 @@
                                                         </line>
                                                     </svg>
                                                 </a>
+                                            </div>
                                         </a>
+                                    </li>
+                                </ul>
                             </div>
-                            {{--
-                    </div> --}}
-
-                    </a>
-
-                    </li>
-                    </ul>
+                        </nav>
+                    </div>
                 </div>
-                </nav>
-            </div>
-        </div>
 
         <div class="deznav">
             <div class="deznav-scroll">
