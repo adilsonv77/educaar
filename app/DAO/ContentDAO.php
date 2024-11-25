@@ -100,13 +100,42 @@ select a.content_id, q.id, q.question from activities a
         return DB::table('questions as q')
             ->join('activities as a', 'q.activity_id', '=', 'a.id')
             ->join('contents as c', 'a.content_id', '=', 'c.id')
-            ->leftJoin('student_answers as sa', 'q.id', '=', 'sa.question_id') 
+            ->leftJoin('student_answers as sa', 'q.id', '=', 'sa.question_id')
             ->where('a.content_id', $content_id)
-            ->where('c.turma_id', $turma_id) 
-            ->select('q.*', 'sa.correct')  
+            ->where('c.turma_id', $turma_id)
+            ->select('q.*', 'sa.correct')
             ->get();
     }
 
+    private function buscarDisciplinas($anoid, $profid)
+    {
+        /*
+        Retorna as disciplinas com suas turmas desse professor, nesse ano letivo.
+
+        select distinct d.name, tm.serie from turmas_disciplinas td
+            join turmas t on (t.id = td.turma_id)
+            join turmas_modelos tm on (tm.id = t.turma_modelo_id)
+            join disciplinas d on (td.disciplina_id = d.id)
+            where professor_id = 4 and ano_id = 1;
+        */
+
+        $disciplinas = DB::table('turmas_disciplinas')
+            ->select(
+                'turmas_modelos.id as tid',
+                'turmas_modelos.serie as tnome',
+                'disciplinas.id as did',
+                'disciplinas.name as dnome'
+            )
+            ->join("turmas", "turmas.id", "=", "turmas_disciplinas.turma_id")
+            ->join("turmas_modelos", "turmas_modelos.id", "=", "turmas.turma_modelo_id")
+            ->join("disciplinas", "turmas_disciplinas.disciplina_id", "=", "disciplinas.id")
+            ->where("professor_id", "=", $profid)
+            ->where("ano_id", "=", $anoid)
+            ->distinct()
+            ->get();
+
+        return $disciplinas;
+    }
 
 
 }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\DAO\ContentDAO;
 use App\DAO\ResultContentDAO;
 use App\DAO\UserDAO;
+use App\DAO\TurmaDAO;
 
 class ContentController extends Controller
 {
@@ -132,42 +133,6 @@ class ContentController extends Controller
         return view('pages.content.create', $params);
     }
 
-    private function buscarDisciplinas($anoid, $profid)
-    {
-        /*
-        Retorna as disciplinas com suas turmas desse professor, nesse ano letivo.
-
-        select distinct d.name, tm.serie from turmas_disciplinas td
-            join turmas t on (t.id = td.turma_id)
-            join turmas_modelos tm on (tm.id = t.turma_modelo_id)
-            join disciplinas d on (td.disciplina_id = d.id)
-            where professor_id = 4 and ano_id = 1;
-        */
-
-        $disciplinas = DB::table('turmas_disciplinas')
-            ->select(
-                'turmas_modelos.id as tid',
-                'turmas_modelos.serie as tnome',
-                'disciplinas.id as did',
-                'disciplinas.name as dnome'
-            )
-            ->join("turmas", "turmas.id", "=", "turmas_disciplinas.turma_id")
-            ->join("turmas_modelos", "turmas_modelos.id", "=", "turmas.turma_modelo_id")
-            ->join("disciplinas", "turmas_disciplinas.disciplina_id", "=", "disciplinas.id")
-            ->where("professor_id", "=", $profid)
-            ->where("ano_id", "=", $anoid)
-            ->distinct()
-            ->get();
-
-        return $disciplinas;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $data = $request->all();
@@ -343,72 +308,84 @@ class ContentController extends Controller
         $temrespondida = 0;
         $temnaorespondida = 0;
 
-        foreach ($questions as $question) {
-            // Inicializa o contador de alternativas
-            $alternatives_count = [
-                'A' => 0,
-                'B' => 0,
-                'C' => 0,
-                'D' => 0
-            ];
-
-            // Realiza a consulta para contar as respostas
-            $respostas_count = DB::table('student_answers as sa')
-                ->join('questions as q', 'sa.question_id', '=', 'q.id')
-                ->select(
-                    'sa.alternative_answered',
-                    DB::raw('COUNT(sa.id) as respostas_count'),
-                    'q.answer'
-                )
-                ->where('q.id', $question->id) // Filtra pela questão atual
-                ->groupBy('sa.alternative_answered', 'q.answer')
-                ->get();
-
-            $correct_alternative = null;
-
-            foreach ($respostas_count as $response) {
-                if (isset($response->alternative_answered)) {
-                    // Verifica qual alternativa corresponde ao texto retornado
-                    $alternative_answered = strtoupper($response->alternative_answered);
-
-                    // Mapeia as alternativas (A, B, C, D) para o texto das respostas
-                    switch ($alternative_answered) {
-                        case strtoupper($question->a):
-                            $alternative_key = 'A';
-                            break;
-                        case strtoupper($question->b):
-                            $alternative_key = 'B';
-                            break;
-                        case strtoupper($question->c):
-                            $alternative_key = 'C';
-                            break;
-                        case strtoupper($question->d):
-                            $alternative_key = 'D';
-                            break;
-                        default:
-                            $alternative_key = null; // Caso não haja correspondência
-                            break;
-                    }
-
-                    // Se encontrou a correspondência, atualiza o contador de alternativas
-                    if ($alternative_key !== null) {
-                        $alternatives_count[$alternative_key] += $response->respostas_count;
-                    }
-                }
+        // foreach ($questions as $question) {
+        //     $total_alunos = DB::table('student_answers as sa')
+        //         ->join('activities as a', 'sa.activity_id', '=', 'a.id')
+        //         ->join('contents as c', 'a.content_id', '=', 'c.id')
+        //         ->where('c.turma_id', $turma_id)
+        //         ->distinct()
+        //         ->count('sa.user_id');
 
 
-                // Atribui a alternativa correta
-                $correct_alternative = $response->answer;
-            }
+        //     // Inicializa o contador de alternativas
+        //     $alternatives_count = [
+        //         'A' => 0,
+        //         'B' => 0,
+        //         'C' => 0,
+        //         'D' => 0
+        //     ];
 
-            // Adiciona os dados da questão na estrutura de resultados
-            $newd['questions'][] = [
-                'id' => $question->id,
-                'question' => $question->question,
-                'alternatives_count' => $alternatives_count,
-                'correct_alternative' => $correct_alternative ?? 'N/A' // Definindo o valor da alternativa correta
-            ];
-        }
+        //     // Realiza a consulta para contar as respostas
+        //     $respostas_count = DB::table('student_answers as sa')
+        //         ->join('questions as q', 'sa.question_id', '=', 'q.id')
+        //         ->select(
+        //             'sa.alternative_answered',
+        //             DB::raw('COUNT(sa.id) as respostas_count'),
+        //             'q.answer'
+        //         )
+        //         ->where('q.id', $question->id) // Filtra pela questão atual
+        //         ->groupBy('sa.alternative_answered', 'q.answer')
+        //         ->get();
+
+        //     $correct_alternative = null;
+
+        //     $total_respostas = 0;
+
+        //     foreach ($respostas_count as $response) {
+        //         if (isset($response->alternative_answered)) {
+        //             // Verifica qual alternativa corresponde ao texto retornado
+        //             $alternative_answered = strtoupper($response->alternative_answered);
+
+        //             // Mapeia as alternativas (A, B, C, D) para o texto das respostas
+        //             switch ($alternative_answered) {
+        //                 case strtoupper($question->a):
+        //                     $alternative_key = 'A';
+        //                     break;
+        //                 case strtoupper($question->b):
+        //                     $alternative_key = 'B';
+        //                     break;
+        //                 case strtoupper($question->c):
+        //                     $alternative_key = 'C';
+        //                     break;
+        //                 case strtoupper($question->d):
+        //                     $alternative_key = 'D';
+        //                     break;
+        //                 default:
+        //                     $alternative_key = null;
+        //                     break;
+        //             }
+
+        //             // Se encontrou a correspondência, atualiza o contador de alternativas
+        //             if ($alternative_key !== null) {
+        //                 $alternatives_count[$alternative_key] += $response->respostas_count;
+        //                 $total_respostas += $response->respostas_count; // Atualiza o total de respostas
+        //             }
+        //         }
+
+
+        //         // Atribui a alternativa correta
+        //         $correct_alternative = $response->answer;
+        //     }
+
+        //     // Adiciona os dados da questão na estrutura de resultados
+        //     $newd['questions'][] = [
+        //         'id' => $question->id,
+        //         'question' => $question->question,
+        //         'alternatives_count' => $alternatives_count,
+        //         'correct_alternative' => $correct_alternative,
+        //     ];
+
+        // }
 
         // Processa as atividades e alunos
         foreach ($resultsSQL as $r) {
@@ -490,7 +467,13 @@ class ContentController extends Controller
                         'id' => $question->id,
                         'question' => $question->question,
                         'alternatives_count' => $alternatives_count,
-                        'correct_alternative' => $correct_alternative ?? 'N/A' // Se não houver alternativa correta, exibe 'N/A'
+                        'correct_alternative' => $correct_alternative,
+                        'alternatives' => [
+                            'A' => $question->a, // Texto da alternativa A
+                            'B' => $question->b, // Texto da alternativa B
+                            'C' => $question->c, // Texto da alternativa C
+                            'D' => $question->d, // Texto da alternativa D
+                        ]
                     ];
 
                 }
@@ -531,7 +514,7 @@ class ContentController extends Controller
             array_push($results, $newd);
         }
 
-        dd($results);
+        //dd($results);
 
         // Totais para exibição no relatório
         $totais = [
@@ -553,6 +536,7 @@ class ContentController extends Controller
 
         session()->put("listaalunos", $this->listaalunos);
 
+        //dd($results);
         return view('pages.content.results', compact('results', 'totais', 'turmas', 'turma', 'content', 'activities'));
     }
 

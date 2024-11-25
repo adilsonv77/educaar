@@ -8,7 +8,8 @@
 
 @section('script-head')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<link rel="stylesheet" href="{{asset('css/resultados.css')}}">
+<link rel="stylesheet" href="{{asset('css/resultsContents2.css')}}">
+
 
 <script>
     var qntCompletas = {{$totais['qtos_fizeram']}};
@@ -133,17 +134,17 @@
 <table class="table">
     <thead>
         <tr>
-            <th rowspan="2">Atividade</th>
-            @foreach (array_slice($results, 1) as $result)  
-                <th colspan="{{ count($result['questions']) * 4 }}">
+            <th rowspan="2" style="border-bottom: 0px solid black"></th>
+            @foreach ($results as $result) 
+                <th class="atividade" colspan="{{ count($result['questions']) * 4 }}">
                     {{ $result['nome'] ?? 'Nome não disponível' }}
                 </th>
             @endforeach
         </tr>
         <tr>
-        @foreach (array_slice($results, 1) as $result)  
+            @foreach ($results as $result)
                 @foreach ($result['questions'] as $questao)
-                    <th colspan="4">{{ $questao['question'] }}</th>
+                    <th class="questions" colspan="4">{{ $questao['question'] }}</th>
                 @endforeach
             @endforeach
         </tr>
@@ -152,16 +153,16 @@
         @foreach (['Alternativas', 'Correto', 'Incorreto', 'Não Respondeu'] as $rowLabel)
             <tr>
                 <td>{{ $rowLabel }}</td>
-                @foreach (array_slice($results, 1) as $result)  
+                @foreach ($results as $result) 
                     @foreach ($result['questions'] as $questao)
                         @if ($rowLabel === 'Não Respondeu')
-                            <!-- Ocupa a largura de todas as 4 alternativas -->
                             <td colspan="4">
-                                {{ $questao['alternatives_count']['A'] === 0 && $questao['alternatives_count']['B'] === 0 && $questao['alternatives_count']['C'] === 0 && $questao['alternatives_count']['D'] === 0 ? '-' : '' }}
+                                {{ $result['atividade_nao_fizeram'] > 0 ? $result['atividade_nao_fizeram'] : '-' }}
                             </td>
                         @else
                             @foreach (['A', 'B', 'C', 'D'] as $alt)
-                                <td>
+                                <td title="{{ $questao['alternatives'][$alt] ?? 'Descrição não disponível' }}">
+
                                     @if ($rowLabel === 'Alternativas')
                                         {{ $alt }}
                                     @elseif ($rowLabel === 'Correto')
