@@ -7,6 +7,7 @@ use App\Models\AnoLetivo;
 use App\Models\ProfConfig;
 use App\DAO\TurmaDisciplinaDAO;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class ProfConfigController extends Controller
@@ -33,29 +34,76 @@ class ProfConfigController extends Controller
             array_push($turmas, $turma);
         }
 
+        $sql = DB::table('prof_config')
+        ->where([
+            ['professor_id', '=', $prof_id],
+            ['anoletivo_id', '=', $anoletivo->id],
+        ]);
+        $sql = $sql->get();
+
+        $turma_count = count($turmas);
+
+        foreach($sql as $profconfig) {
+            for($i = 0; $i < $turma_count; $i++) {
+                $turma = $turmas[$i];
+                if ($turma['t_id'] == $profconfig->turma_id and $turma['d_id'] == $profconfig->disciplina_id) {
+                    $turmas[$i]['dataCorte'] = $profconfig->dt_corte;
+                   
+                    break;
+                }
+            }
+        }
+        //dd($turmas);
+
         return view('pages.profconfig.edit', compact('turmas'));
     }
 
     public function store(Request $request)
     {
+        
+        $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
+                    ->where('bool_atual', 1)->first();
+        $prof_id = Auth::user()->id;
+        
+
         $ids = $request->keys();
         foreach ($ids as $id) {
             if (str_starts_with($id, "data_")) {
                 
                 //dd($request->input($id));
                 $id_d_t = explode("_", substr($id, 5) );
-                
+                /*
                 $data = array();
-                $data['anoletivo_id'] = AnoLetivo::where('school_id', Auth::user()->school_id)
-                    ->where('bool_atual', 1)->first()->id;
+                $data['anoletivo_id'] = $anoletivo->id;
                 $data['disciplina_id'] = $id_d_t[0];
-                $data['professor_id'] = Auth::user()->id;
+                $data['professor_id'] = $prof_id;
                 $data['turma_id'] = $id_d_t[1];
-                $data['dt_corte'] = date('Y-m-d', strtotime($request->input($id)));
                 
-                ProfConfig::create($data);
+                $data['dt_corte'] = date('Y-m-d', strtotime($request->input($id)));
+*/
+                ProfConfig::updateOrCreate(
+                    ['professor_id' => $prof_id, 'anoletivo_id' => $anoletivo->id, 
+                     'disciplina_id' => $id_d_t[0], 'turma_id' => $id_d_t[1]],
+                    ['dt_corte' => date('Y-m-d', strtotime($request->input($id)))]
+                );
+/*
+                $sql = DB::table('prof_config')
+                    ->where([
+                        ['professor_id', '=', $prof_id],
+                        ['anoletivo_id', '=', $anoletivo->id],
+                        ['disciplina_id', '=', $id_d_t[0]],
+                        ['turma_id', '=', $id_d_t[1]]
+                    ]);
+                $sql = $sql->get();
+                if ($sql->isEmpty()) {
+                    ProfConfig::create($data);
+                } else {
+                    $profconfig = $sql->first();
+                    $profconfig->update($data);
+                }
+                    */
             }
         }
-        dd($ids);
+        return redirect("/");
     }
 }
