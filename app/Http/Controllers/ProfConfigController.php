@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\AnoLetivo;
+use App\Models\ProfConfig;
 use App\DAO\TurmaDisciplinaDAO;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,23 @@ class ProfConfigController extends Controller
     public function store(Request $request)
     {
         $ids = $request->keys();
+        foreach ($ids as $id) {
+            if (str_starts_with($id, "data_")) {
+                
+                //dd($request->input($id));
+                $id_d_t = explode("_", substr($id, 5) );
+                
+                $data = array();
+                $data['anoletivo_id'] = AnoLetivo::where('school_id', Auth::user()->school_id)
+                    ->where('bool_atual', 1)->first()->id;
+                $data['disciplina_id'] = $id_d_t[0];
+                $data['professor_id'] = Auth::user()->id;
+                $data['turma_id'] = $id_d_t[1];
+                $data['dt_corte'] = date('Y-m-d', strtotime($request->input($id)));
+                
+                ProfConfig::create($data);
+            }
+        }
         dd($ids);
     }
 }

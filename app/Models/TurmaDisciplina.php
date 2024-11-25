@@ -17,9 +17,9 @@ class TurmaDisciplina extends Model
     {
         return $this->hasMany(Disciplina::class);
     }  
-    public function TurmaModelo()
+    public function turmaodelo()
     {
-        return $this->belongsTo(TurmaModelo::class);
+        return $this->belongsTo(Turma::class);
     }
     public function professor()
     {
