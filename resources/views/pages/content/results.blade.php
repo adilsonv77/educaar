@@ -8,9 +8,18 @@
 
 @section('script-head')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<link rel="stylesheet" href="{{asset('css/resultsContents2.css')}}">
+<link rel="stylesheet" href="{{asset('css/resultsContents.css')}}">
+<style>
+    .form-inline {
+        display: flex;
+        justify-content: flex-start;
+    }
 
+    .form-inline label {
 
+        margin-right: 10px;
+    }
+</style>
 <script>
     var qntCompletas = {{$totais['qtos_fizeram']}};
     var qntIncompletas = {{$totais['qtos_incompletos']}};
@@ -108,11 +117,12 @@
 @section('content')
 
 <div id="formTurma">
-    <form action="{{ route('content.resultsContents') }}" method="POST">
+    <form action="{{ route('turmas.listarTurmasAlunosProf') }}" method="GET ">
         @csrf
-        <label for="turmasel">Informe a turma:</label>
+
         <div class="form-inline">
-            <select class="form-control" name="turma_id" id="turmasel">
+            <label for="">Informe a turma:</label>
+            <select class="form-control" name="turma_id">
                 @foreach ($turmas as $item)
                     <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
                         {{ $item->nome }}
@@ -161,8 +171,7 @@
                             </td>
                         @else
                             @foreach (['A', 'B', 'C', 'D'] as $alt)
-                                <td title="{{ $questao['alternatives'][$alt] ?? 'Descrição não disponível' }}">
-
+                                <td data-toggle="tooltip" title="{{ $questao['alternatives'][$alt] ?? 'Descrição não disponível' }}">
                                     @if ($rowLabel === 'Alternativas')
                                         {{ $alt }}
                                     @elseif ($rowLabel === 'Correto')

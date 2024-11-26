@@ -12,10 +12,11 @@
 @section('content')
 
 <div id="formTurma">
-    <form action="{{ route('turma.resultados') }}" method="GET">
+    <form action="{{ route('turmas.listarTurmasAlunosProf') }}" method="GET ">
         @csrf
-        <label for="">Informe a turma:</label>
+
         <div class="form-inline">
+            <label for="">Informe a turma:</label>
             <select class="form-control" name="turma_id">
                 @foreach ($turmas as $item)
                     <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
@@ -23,9 +24,7 @@
                     </option>
                 @endforeach
             </select>
-            <section class="itens-group">
-                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
-            </section>
+            <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
         </div>
     </form>
     <br>
@@ -34,12 +33,12 @@
 <style>
     .form-inline {
         display: flex;
-        justify-content: flex-start; 
+        justify-content: flex-start;
     }
 
     .form-inline label {
-      
-      margin-right: 10px;
+
+        margin-right: 10px;
     }
 </style>
 
@@ -77,7 +76,7 @@
                         @foreach ($content['activities'] as $activity)
                             @foreach ($activity['questions'] as $question)
                                 <!-- Tooltip com o texto da pergunta -->
-                                <th data-bs-toggle="tooltip" title="{{ $question['question_text'] ?? 'Pergunta não encontrada' }}">
+                                <th data-toggle="tooltip" title="{{ $question['question_text'] ?? 'Pergunta não encontrada' }}">
                                     Q{{ $loop->iteration }}</th>
                             @endforeach
                         @endforeach
@@ -97,11 +96,11 @@
                                             $status = $response['status'];
                                             $answer = $response['answer'];
                                         @endphp
-                                        <td data-bs-toggle="tooltip" title="{{ $answer }}">
+                                        <td data-toggle="tooltip" title="{{ $answer }}">
                                             {{ $status }} <!-- Exibe o ícone de status -->
                                         </td>
                                     @else
-                                        <td title="Aluno não respondeu">🟡</td>
+                                        <td data-toggle="tooltip" title="Aluno não respondeu">🟡</td>
                                     @endif
                                 @endforeach
                             @endforeach
@@ -111,6 +110,5 @@
             </tbody>
         </table>
     </div>
-
 @endif
 @endsection
