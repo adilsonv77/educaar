@@ -36,7 +36,7 @@
                             </div>
                         </div>
                         <!-- preview da midia -->
-                        <div id="midiaPreview" edit=@if($action == 'edit')"true" @else "false"  style="display: none;" @endif>
+                        <div id="midiaPreview" edit=@if($action == 'edit')"true" @else "false" style="display: none;" @endif>
                             <video id="vidMidia" controls @if ($midiaExtension != "mp4") style="display: none" @endif>
                                 <source id="srcVidMidia"
                                     src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif"

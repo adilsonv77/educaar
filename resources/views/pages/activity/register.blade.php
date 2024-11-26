@@ -6,13 +6,13 @@
 @section('style')
     <style>
         #selectPanel{
-            border: 1px solid #707070;
-            border-radius: 0;
+            border: 1px solid #b3b3b3;
+            font-size: 14px;
             width: 130px;
-            padding: 2px 5px;
+            padding: 2px;
             height: fit-content;
             margin: 6px 12px;
-            margin-bottom: 38px;
+            margin-bottom: 23px;
             background-image: linear-gradient(#e9e9e9,#d9d9d9);
         }
 
@@ -62,14 +62,18 @@
             let valor = document.getElementById("selectSceneType").value; //Modelo3D selecionado = 1 / Painel selecionado = 2
 
             if(valor == 1){
-                //glb
+                alt2.checked = alt.checked;
+            }else{
+                alt.checked = alt2.checked;
             }
 
-            document.getElementById("glb").disabled = !alt.checked || !alt2.checked;
+            //Só usa o input se for habilitado a opção e se o modelo3d for selecionado para a atividade.
+            document.getElementById("glb").disabled = !alt.checked || valor == 2;
             document.getElementById("glb").required = alt.checked && valor == 1;
 
-            document.getElementById("selectPanel").disabled = !alt.checked || !alt2.checked;
-            document.getElementById("panelId").required = alt.checked && valor == 2;
+            //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
+            document.getElementById("selectPanel").disabled = !alt2.checked || valor == 1;
+            document.getElementById("panelId").required = alt2.checked && valor == 2;
 
             if (!alt.checked) {
                 var upl = document.getElementById("glb");
@@ -89,7 +93,6 @@
             }
              
          }
-
     </script>
 
     <div class="card">
@@ -150,8 +153,8 @@
                             <input type="checkbox" id="alterarPainel" name="alterarPainel" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
                         
-                        <label for="alterarPainel">Painel*</label>
-                        <input type="button" class="form-control" id="selectPanel" value="Escolher painel" @if($acao === 'edit') disabled @endif/>
+                        <label for="alterarPainel">Painel*</label><br>
+                        <input type="button" id="selectPanel" value="Escolher painel" @if($acao == 'edit') disabled @endif/>
                 </div>
 
                 <div class="form-group">
@@ -172,6 +175,7 @@
             </form>
         </div>
     </div>
+
     <script>
         document.getElementById("selectPanel").onclick = ()=>{
             document.getElementById("panelId").value = prompt("Insira o ID do painel.")
@@ -186,7 +190,19 @@
                 document.getElementById("panelOption").style.display = "block"
                 document.getElementById("3DmodelOption").style.display = "none"
             }
+
+            var alt = document.getElementById("alterar3D");
+            var alt2 = document.getElementById("alterarPainel")
+
+            //Só usa o input se for habilitado a opção e se o modelo3d for selecionado para a atividade.
+            document.getElementById("glb").disabled = !alt.checked || valor == 2;
+            document.getElementById("glb").required = alt.checked && valor == 1;
+
+            //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
+            document.getElementById("selectPanel").disabled = !alt2.checked || valor == 1;
+            document.getElementById("panelId").required = alt2.checked && valor == 2;
         }
-     </script>
+
+    </script>
 @endsection
  

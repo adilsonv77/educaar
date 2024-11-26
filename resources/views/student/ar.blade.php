@@ -14,7 +14,7 @@
         height: 80vh;
         width: 120vh;
         position: relative;
-        overflow: hidden;
+        overflow: hidden; 
     }
 </style>
 @endsection
