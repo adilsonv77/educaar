@@ -139,14 +139,19 @@ class ActivityController extends Controller
     {
 
         $data = $request->all();
-
-        //Verifica se é cadastro de glb ou de painel
         $idPainel = $data['panelId'];
+        $tipoCena = $data['sceneType']; //1 = Modelo 3D | 2 = Painel.
+
         unset($data['panelId']);
+        unset($data['sceneType']);
+
+        //Verifica se é cadastro de glb ou de painel para poder tratar cada cadastro de forma diferente 
         $usarPainel = false;
-        if (!empty($idPainel)) {
+        if ($tipoCena==2) {
             $data['glb'] = '';
             $usarPainel = true;
+        }else{
+            $data['painel_inicial_id'] = null;
         }
 
         $validator = Validator::make($request->all(), [

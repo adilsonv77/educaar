@@ -130,7 +130,7 @@
 
                 <div class="form-group">
                     <label for="">Selecione o tipo da cena*</label>
-                    <select class="form-control" id="selectSceneType" aria-label="">             
+                    <select class="form-control" id="selectSceneType" name="sceneType" aria-label="">             
                         <option value="1" selected>Modelo 3D</option>
                         <option value="2">Painel</option>
                     </select>
