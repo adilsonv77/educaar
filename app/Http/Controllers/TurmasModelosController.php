@@ -2,73 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Turma;
 use App\Models\TurmaModelo;
-use App\Models\Content;
 use App\Models\DisciplinaTurmaModelo;
 use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Http\Request;
 
 class TurmasModelosController extends Controller
 {
-    //
     public function index(Request $request)
     {
         $filtro = $request->titulo;
 
-        // DB::connection()->enableQueryLog();
         $where = DB::table('turmas_modelos')
             ->where('school_id', Auth::user()->school_id)
             ->addSelect([
-                'qntTurmas' => Turma::selectRaw('count(*)')
-                    ->whereColumn([
-                        ['turmas_modelos.id', '=', 'turma_modelo_id'],
-                        ['turmas_modelos.school_id', '=', 'school_id']
-                    ])
+                'qntTurmas' => DB::table('turmas')
+                    ->selectRaw('count(*)')
+                    ->whereColumn([['turmas_modelos.id', '=', 'turma_modelo_id']])
+                    ->where('school_id', Auth::user()->school_id)
             ])
-
-            
             ->addSelect([
                 'conteudos' => DB::table('contents as c')
                     ->selectRaw('count(c.id)')
                     ->join('disciplinas_turmas_modelos as dtm', function ($join) {
                         $join->on('dtm.disciplina_id', '=', 'c.disciplina_id');
                         $join->on('dtm.turma_modelo_id', '=', 'c.turma_id');
-                    })->whereColumn('dtm.turma_modelo_id', '=', 'turmas_modelos.id')
+                    })
+                    ->whereColumn('dtm.turma_modelo_id', '=', 'turmas_modelos.id')
             ]);
 
         if ($filtro) {
-            $where = $where 
-              -> where("serie", "like", '%' . $filtro . '%');
+            $where = $where->where("serie", "like", '%' . $filtro . '%');
         }
 
-
-            
         $turmas = $where->paginate(20);
-        
-        //dd(DB::getQueryLog());
+
         return view('pages.turmasModelos.index', compact('turmas'));
     }
+
     public function create()
     {
         $acao = 'insert';
         $anosletivos = AnoLetivo::where('school_id', Auth::user()->school_id)->get();
         $disciplinas = DB::table('disciplinas')->get();
-        $disciplinas_turma = array();
-        foreach ($disciplinas as $d) {
-            $newd = [
+
+        $disciplinas_turma = $disciplinas->map(function ($d) {
+            return [
                 'id' => $d->id,
                 'name' => $d->name,
-                'selected' => FALSE
+                'selected' => false
             ];
+        });
 
-            array_push($disciplinas_turma, $newd);
-        }
-        
         $params = [
             'titulo' => 'Adicionar Turma Modelo',
             'acao' => $acao,
@@ -79,56 +66,50 @@ class TurmasModelosController extends Controller
             'disciplinas_turmas' => []
         ];
 
-
         return view('pages.turmasModelos.register', $params);
     }
+
     public function store(Request $request)
     {
-
         $data = $request->all();
-        /*
-        $disciplinasturmas = DB::table('disciplinas_turmas_modelos')
-        ->where('turma_modelo_id', $turma->id)
-        ->get();
-    foreach ($disciplinasturmas as $d) {
-        $d->delete();
-    }
-*/
-        $discs = $request->duallistbox_disc;
-        if ($discs == null) {
-            $discs = [];
+        $discs = $request->duallistbox_disc ?? [];
+
+        // Validação e verificação do nome da turma (agora separado)
+        $nome = $data['serie']; // Nome da turma
+        $exists = TurmaModelo::where('serie', $nome)
+                             ->where('school_id', Auth::user()->school_id)
+                             ->exists();
+
+        if ($exists) {
+            return back()->withErrors(['serie' => 'Este nome de turma já está cadastrado.']);
         }
+
+        // Adiciona o school_id ao dados
         $data['school_id'] = Auth::user()->school_id;
 
+        // Criação ou atualização do modelo de turma
         if ($data['acao'] == 'insert') {
             $turma = TurmaModelo::create($data);
         } else {
-
             $turma = TurmaModelo::find($data['id']);
             $turma->update($data);
-            $deleted = DB::table('disciplinas_turmas_modelos')->where('turma_modelo_id', $turma->id)->delete();
+            DB::table('disciplinas_turmas_modelos')->where('turma_modelo_id', $turma->id)->delete();
         }
 
-        // Adicionar as disciplinas em disciplinas_turmasmodelo
+        // Adicionar as disciplinas à tabela `disciplinas_turmas_modelos`
         foreach ($discs as $disc) {
-
-            $disc_turmamodelo = DisciplinaTurmaModelo::create([
+            DisciplinaTurmaModelo::create([
                 'disciplina_id' => $disc,
-                'turma_modelo_id'  => $turma->id
+                'turma_modelo_id' => $turma->id
             ]);
-
-
-            //$disc_turmamodelo->save();
         }
-
-
 
         return redirect('/turmasmodelos');
     }
+
     public function edit(Request $request, $id)
     {
         $turma = TurmaModelo::find($id);
-
         $disciplinas = DB::table('disciplinas')->get();
         $disciplinasturmas = DB::table('turmas_modelos')
             ->select('disciplinas.id', 'disciplinas.name')
@@ -136,31 +117,15 @@ class TurmasModelosController extends Controller
             ->join('disciplinas', 'disciplinas.id', '=', 'disciplinas_turmas_modelos.disciplina_id')
             ->where('turmas_modelos.id', $turma->id)
             ->get();
-        //SELECT d.id, d.name FROM turmas_modelos tm join disciplinas_turmas_modelos dtm 
-        //on dtm.turma_modelo_id = tm.id join disciplinas d on d.id = dtm.disciplina_id where tm.id = 12;
 
-
-        $disciplinas_turma = array();
-        $disc_index  = array();
-        $c = 0;
-        foreach ($disciplinas as $d) {
-            $newd = [
+        $disciplinas_turma = $disciplinas->map(function ($d) use ($disciplinasturmas) {
+            $selected = $disciplinasturmas->contains('id', $d->id);
+            return [
                 'id' => $d->id,
                 'name' => $d->name,
-                'selected' => FALSE
+                'selected' => $selected
             ];
-
-            array_push($disciplinas_turma, $newd);
-            $disc_index[$c] = $d->id;
-            $c = $c + 1;
-        }
-
-        foreach ($disciplinasturmas as $dt) {
-            $key = array_search($dt->id, $disc_index);
-            if ($key !== FALSE) {
-                $disciplinas_turma[$key]['selected'] = TRUE;
-            }
-        }
+        });
 
         $params = [
             'titulo' => 'Editar Turma Modelo',
@@ -168,10 +133,12 @@ class TurmasModelosController extends Controller
             'id' => $turma->id,
             'disciplinas' => $disciplinas_turma,
             'serie' => $turma->serie,
-
+            'nome' => $turma->nome // Supondo que agora tenha o campo nome
         ];
+
         return view('pages.turmasModelos.register', $params);
     }
+
     public function destroy($id)
     {
         if (session('type') == 'student') {
@@ -182,6 +149,7 @@ class TurmasModelosController extends Controller
         if ($turma != null) {
             $turma->delete();
         }
+
         return redirect('/turmasmodelos');
     }
 }
