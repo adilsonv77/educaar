@@ -59,26 +59,27 @@
         function HabilitarDesabilitar3D() {
             var alt = document.getElementById("alterar3D");
             var alt2 = document.getElementById("alterarPainel")
-            let valor = document.getElementById("selectSceneType").value; //Modelo3D selecionado = 1 / Painel selecionado = 2
-
-            if(valor == 1){
-                alt2.checked = alt.checked;
-            }else{
-                alt.checked = alt2.checked;
-            }
+            let cenaSelecionada = document.getElementById("selectSceneType").value; //Modelo3D selecionado = 1 / Painel selecionado = 2
+            let cenaAtual = document.getElementById("painel_inicial_id").value; //modelo3D = modelo3D / modelo3D != painel
 
             //Só usa o input se for habilitado a opção e se o modelo3d for selecionado para a atividade.
-            document.getElementById("glb").disabled = !alt.checked || valor == 2;
-            document.getElementById("glb").required = alt.checked && valor == 1;
-
-            //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
-            document.getElementById("selectPanel").disabled = !alt2.checked || valor == 1;
-            document.getElementById("panelId").required = alt2.checked && valor == 2;
-
-            if (!alt.checked) {
+            try {
+                document.getElementById("glb").disabled = !alt.checked || cenaSelecionada== 2;
+                document.getElementById("glb").required = (alt.checked && cenaSelecionada== 1); 
+                if (!alt.checked) {
+                    var upl = document.getElementById("glb");
+                    upl.value = "";
+                }
+            } catch (error) {
                 var upl = document.getElementById("glb");
                 upl.value = "";
-            }
+            } 
+            //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
+            try {
+                document.getElementById("selectPanel").disabled = !alt2.checked || cenaSelecionada== 1;
+                document.getElementById("panelId").required = (alt2.checked && cenaSelecionada == 2);
+            } catch (error) {}
+           
          }
 
          function HabilitarDesabilitarImagemMarcador() {
@@ -111,12 +112,12 @@
                 @csrf
                     <input name="id" type="hidden" value="{{$id}}"/>
                     <input name="acao" type="hidden" value="{{$acao}}"/>
+                    <input name="painel_inicial_id" type="hidden" value="{{$painel_inicial_id}}" id="painel_inicial_id"/>
 
                 <div class="form-group">
                     <label for="">Nome da Atividade*</label>
                     <input id="name" type="text" maxlength="100"class="form-control @error('name') is-invalid @enderror" name="name"
                             value="{{ old('name', $name) }}" required autocomplete="name" autofocus/>
-                    
                 </div>
 
                 <div class="form-group">
@@ -137,24 +138,23 @@
                 </div>
 
                 <div class="form-group" id="3DmodelOption">
-                        @if ($acao == 'edit') 
+                        @if ($acao == 'edit' && $painel_inicial_id == 'modelo3D') 
                             <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
                         
                         <label for="alterar3D">Modelo 3D (GLB ou GLTF->ZIP)*</label>
                         <span class="alert-danger">Tamanho máximo: 40MB</span>
                         <input type="file" style="border:none" class="form-control" name="glb"
-                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit') disabled @endif/>
-                        <!-- <input type="text" placeholder="Insira o ID do painel" name="panelId" id="panelId"> -->
+                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit' && $painel_inicial_id == "modelo3D") disabled @elseif($acao == 'edit') required @endif/>
                 </div>
 
                 <div class="form-group" id="panelOption" style="display: none">
-                        @if ($acao == 'edit') 
+                        @if ($acao == 'edit' && $painel_inicial_id != 'modelo3D') 
                             <input type="checkbox" id="alterarPainel" name="alterarPainel" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
                         
                         <label for="alterarPainel">Painel*</label><br>
-                        <input type="button" id="selectPanel" value="Escolher painel" @if($acao == 'edit') disabled @endif/>
+                        <input type="button" id="selectPanel" value="Escolher painel" @if($acao == 'edit' && $painel_inicial_id != "modelo3D") disabled @endif/>
                 </div>
 
                 <div class="form-group">
@@ -166,7 +166,7 @@
                             id="marcador" accept=".png, .jpeg, .jpg"  @if($acao === 'edit') disabled @endif/>
                 </div>
 
-                <input id="panelId" name="panelId" type="hidden">
+                <input id="panelId" name="panelId" type="hidden"  @if($acao === 'edit' && $painel_inicial_id != "modelo3D") required @endif>
                 <div class="form-group mt-4">
                     <input type="submit" value="Salvar" class="btn btn-success">
                 </div>                   

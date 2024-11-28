@@ -104,7 +104,7 @@ class ActivityController extends Controller
             'name' => '',
             'id' => 0,
             'contents' => $contents,
-            'content' => $content
+            'content' => $content,
         ];
 
         return view('pages.activity.register', $params);
@@ -147,10 +147,10 @@ class ActivityController extends Controller
 
         //Verifica se é cadastro de glb ou de painel para poder tratar cada cadastro de forma diferente 
         $usarPainel = false;
-        if ($tipoCena==2) {
+        if ($tipoCena == 2) {
             $data['glb'] = '';
             $usarPainel = true;
-        }else{
+        } else {
             $data['painel_inicial_id'] = null;
         }
 
@@ -193,7 +193,6 @@ class ActivityController extends Controller
 
                     $files = scandir(public_path('modelos3d/' . $filename));
 
-
                     foreach ($files as $file) {
                         if (str_ends_with($file, ".gltf")) {
                             $achou = $file;
@@ -213,9 +212,7 @@ class ActivityController extends Controller
                 } else {
                     return redirect()->back()->withErrors(['msg' => 'Problemas ao descompactar o ZIP.']);
                 }
-
             } else {
-
                 $glbFile = $baseFileName . '.' . $request->glb->getClientOriginalExtension();
                 $request->glb->move(public_path('modelos3d'), $glbFile);
 
@@ -243,7 +240,7 @@ class ActivityController extends Controller
             rename($public_path . '/' . $imgFile, $public_path . '/' . $data['marcador']);
 
             $public_path = public_path('modelos3d');
-            
+
             if ($zipdir === "" && !$usarPainel) {
                 //Se for um arquivo .zip e for para usar o glb
                 $data['glb'] = $activity->id . '.' . $request->glb->getClientOriginalExtension();
@@ -257,7 +254,7 @@ class ActivityController extends Controller
                 $data['painel_inicial_id'] = $idPainel;
             }
             $activity->update($data);
-        } else if (!$usarPainel){
+        } else if (!$usarPainel) {
             $activity = Activity::find($data['id']);
 
             if ($zipdir !== "") {
@@ -273,10 +270,10 @@ class ActivityController extends Controller
             $content->update(['fechado' => 0]);
 
             $activity->update($data);
-        } else{
+        } else {
             $activity = Activity::find($data['id']);
             $data['painel_inicial_id'] = $idPainel;
-            
+
             @unlink(public_path('mind') . "/" . $activity->content_id . ".mind");
 
             $content = Content::find($activity->content_id);
@@ -342,14 +339,17 @@ class ActivityController extends Controller
             )
             ->get();
 
-        //dd($contents);
+        if (empty($activity->painel_inicial_id))
+            $activity->painel_inicial_id = "modelo3D";
+
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,
             'id' => $activity->id,
             'name' => $activity->name,
             'contents' => $contents,
-            'content' => $activity->content_id
+            'content' => $activity->content_id,
+            'painel_inicial_id' => $activity->painel_inicial_id
         ];
 
         return view('pages.activity.register', $params);
@@ -366,7 +366,6 @@ class ActivityController extends Controller
         $activity = Activity::find($id);
 
         if ($activity != null) {
-
             @unlink(public_path('marcadores') . "/" . $activity->marcador);
 
             if (str_contains($activity->glb, "/")) {
