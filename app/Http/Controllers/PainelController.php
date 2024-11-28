@@ -2,21 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Painei;
-use App\Http\Controllers\Controller;
+use App\DAO\PainelDAO;
 use Illuminate\Http\Request;
 
 class PainelController extends Controller
 {
+    protected $painelDAO;
+
+    public function __construct(PainelDAO $painelDAO)
+    {
+        $this->painelDAO = $painelDAO;
+    }
 
     public function create()
     {
-        return view('pages.painel.criacaoPaineis', ['titulo' => 'Criação de painéis', 'action' => 'create', 'midiaExtension' => '']);
+        return view('pages.painel.criacaoPaineis', [
+            'titulo' => 'Criação de painéis',
+            'action' => 'create',
+            'midiaExtension' => ''
+        ]);
     }
 
     public function edit($id)
     {
-        $painel = Painei::where('id', $id)->first();
+        $painel = $this->painelDAO->getById($id);
         if (!empty($painel)) {
             $data = json_decode($painel->panel, true);
             $data['titulo'] = 'Edição de painel';
@@ -33,47 +42,49 @@ class PainelController extends Controller
         $baseFileName = time();
         $action = $data['action'];
         $midiaExtension = "";
+
         if ($action == 'edit' && empty($request->arquivoMidia)) {
-            //Define que a extenção não deve mudar
-            $painel = Painei::where('id', $data['id']);
-            $painel = json_decode($painel->first()->panel);
-            $midiaExtension = $painel->midiaExtension;
+            $painel = $this->painelDAO->getById($data['id']);
+            $painelData = json_decode($painel->panel);
+            $midiaExtension = $painelData->midiaExtension;
         } else {
             $midiaExtension = $request->arquivoMidia->getClientOriginalExtension();
         }
 
         $imgFile = $baseFileName . '.' . $midiaExtension;
-        if ($action != 'edit' || !empty($request->arquivoMidia))
+        if ($action != 'edit' || !empty($request->arquivoMidia)) {
             $request->arquivoMidia->move(public_path('midiasPainel'), $imgFile);
+        }
         $data['midiasPainel'] = $imgFile;
 
-        //Remove os dados desnecessários para serem guardados e adiciona necessários
         $data['midiaExtension'] = $midiaExtension;
-        unset($data['_token']);
-        unset($data['midia']);
-        unset($data['midiasPainel']);
-        unset($data['action']);
+        unset($data['_token'], $data['midia'], $data['midiasPainel'], $data['action']);
 
         $json = ["panel" => json_encode($data)];
         $id = -1;
-        //Criar o painel e salvo o dado
+
         if ($action == 'create') {
-            $painel = Painei::create($json);
+            $painel = $this->painelDAO->create($json);
             $id = $painel->id;
             $data['id'] = $id;
         } else {
             $id = $data['id'];
-            $painel = Painei::where('id', $id);
-            //Pega a extenção do arquivo já guardado no painel
-            $originalExtension = json_decode($painel->first()->panel)->midiaExtension;
+            $painel = $this->painelDAO->getById($id);
+            $originalExtension = json_decode($painel->panel)->midiaExtension;
         }
+
         $data['arquivoMidia'] = $id . '.' . $midiaExtension;
-        $public_path = public_path('midiasPainel');
-        if ($action == 'edit' && !empty($request->arquivoMidia))
-            unlink($public_path . '/' . $id . '.' . $originalExtension);
-        if ($action != 'edit' || !empty($request->arquivoMidia))
-            rename($public_path . '/' . $imgFile, $public_path . '/' . $data['arquivoMidia']);
-        $painel->update(["panel" => json_encode($data)]);
+        $publicPath = public_path('midiasPainel');
+
+        if ($action == 'edit' && !empty($request->arquivoMidia)) {
+            unlink($publicPath . '/' . $id . '.' . $originalExtension);
+        }
+        if ($action != 'edit' || !empty($request->arquivoMidia)) {
+            rename($publicPath . '/' . $imgFile, $publicPath . '/' . $data['arquivoMidia']);
+        }
+
+        $this->painelDAO->updateById($id, ["panel" => json_encode($data)]);
+
         return redirect()->route('paineis.create');
     }
 
@@ -81,5 +92,4 @@ class PainelController extends Controller
     {
         dd($id);
     }
-
 }

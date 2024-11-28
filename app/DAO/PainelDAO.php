@@ -1,0 +1,23 @@
+<?php
+
+namespace App\DAO;
+
+use App\Models\Painei;
+
+class PainelDAO
+{
+    public function getById($id)
+    {
+        return Painei::where('id', $id)->first();
+    }
+
+    public function create(array $data)
+    {
+        return Painei::create($data);
+    }
+
+    public function updateById($id, array $data)
+    {
+        return Painei::where('id', $id)->update($data);
+    }
+}
