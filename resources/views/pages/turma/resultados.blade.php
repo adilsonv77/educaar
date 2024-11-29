@@ -43,72 +43,80 @@
 </style>
 
 @if (!empty($contents))
-    <div class="table-responsive">
-        <table id="table">
-            <thead>
-                <tr>
-                    <th rowspan="2"></th>
-                    @foreach ($contents as $content)
-                                @php
-                                    $colspan_content = 0;
-                                    foreach ($content['activities'] as $activity) {
-                                        foreach ($activity['questions'] as $question) {
-                                            $colspan_content++;
-                                        }
-                                    }
-                                @endphp
-                                <th class="contents" colspan="{{ $colspan_content }}">{{ $content['name'] }}</th>
-                    @endforeach
-                </tr>
-                <tr>
-                    @foreach ($contents as $content)
-                            @foreach ($content['activities'] as $activity)
-                                    @php
-                                        $colspan_activity = count($activity['questions']);
-                                    @endphp
-                                    <th class="activity" colspan="{{ $colspan_activity }}">{{ $activity['name'] }}</th>
-                            @endforeach
-                    @endforeach
-                </tr>
-                <tr>
-                    <td class="aluno">Aluno</td>
-                    @foreach ($contents as $content)
-                        @foreach ($content['activities'] as $activity)
-                            @foreach ($activity['questions'] as $question)
-                                <!-- Tooltip com o texto da pergunta -->
-                                <th data-toggle="tooltip" title="{{ $question['question_text'] ?? 'Pergunta não encontrada' }}">
-                                    Q{{ $loop->iteration }}</th>
-                            @endforeach
-                        @endforeach
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($studentsResponses as $student_name => $contents_responses)
+    <div class="table-container">
+        <div class="table-responsive">
+            <table id="table">
+                <thead>
                     <tr>
-                        <td class="student">{{ $student_name }}</td>
-                        @foreach ($contents as $content_id => $content)
-                            @foreach ($content['activities'] as $activity_id => $activity)
-                                @foreach ($activity['questions'] as $question_id => $question)
-                                    @if (isset($contents_responses[$content_id][$activity_id][$question_id]))
+                        <th class="fixedCol" rowspan="2"></th>
+                        @foreach ($contents as $content)
                                         @php
-                                            $response = $contents_responses[$content_id][$activity_id][$question_id];
-                                            $status = $response['status'];
-                                            $answer = $response['answer'];
+                                            $colspan_content = 0;
+                                            foreach ($content['activities'] as $activity) {
+                                                foreach ($activity['questions'] as $question) {
+                                                    $colspan_content++;
+                                                }
+                                            }
                                         @endphp
-                                        <td data-toggle="tooltip" title="{{ $answer }}">
-                                            {{ $status }} <!-- Exibe o ícone de status -->
-                                        </td>
-                                    @else
-                                        <td data-toggle="tooltip" title="Aluno não respondeu">🟡</td>
-                                    @endif
+                                        <th class="contents" colspan="{{ $colspan_content }}">{{ $content['name'] }}</th>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        @foreach ($contents as $content)
+                                    @foreach ($content['activities'] as $activity)
+                                                @php
+                                                    $colspan_activity = count($activity['questions']);
+                                                @endphp
+                                                <th class="activity" colspan="{{ $colspan_activity }}">{{ $activity['name'] }}</th>
+                                    @endforeach
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <td class="aluno fixedCol">Aluno</td>
+                        @foreach ($contents as $content)
+                            @foreach ($content['activities'] as $activity)
+                                @foreach ($activity['questions'] as $question)
+                                    <!-- Tooltip com o texto da pergunta -->
+                                    <th class="fixedRow" data-toggle="tooltip"
+                                        title="{{ $question['question_text'] ?? 'Pergunta não encontrada' }}">
+                                        Q{{ $loop->iteration }}
+                                    </th>
                                 @endforeach
                             @endforeach
                         @endforeach
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($studentsResponses as $student_name => $contents_responses)
+                        <tr>
+                            <td class="student fixedCol">{{ $student_name }}</td>
+                            @foreach ($contents as $content_id => $content)
+                                @foreach ($content['activities'] as $activity_id => $activity)
+                                    @foreach ($activity['questions'] as $question_id => $question)
+                                        @if (isset($contents_responses[$content_id][$activity_id][$question_id]))
+                                            @php
+                                                $response = $contents_responses[$content_id][$activity_id][$question_id];
+                                                $status = $response['status'];
+                                                $answer = $response['answer'];
+                                            @endphp
+                                            <td data-toggle="tooltip"
+                                                title="Pergunta: {{ $question['question_text'] ?? 'Pergunta não encontrada' }} | Resposta: {{ $answer }}">
+                                                {{ $status }} <!-- Exibe o ícone de status -->
+                                            </td>
+                                        @else
+                                            <td data-toggle="tooltip" title="Aluno não respondeu">
+                                                🟡
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            @endforeach
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 @endif
+
 @endsection
