@@ -59,28 +59,32 @@
         function HabilitarDesabilitar3D() {
             var alt = document.getElementById("alterar3D");
             var alt2 = document.getElementById("alterarPainel")
-            let cenaSelecionada = document.getElementById("selectSceneType").value; //Modelo3D selecionado = 1 / Painel selecionado = 2
+            let cenaSelecionada = document.getElementById("selectSceneType").value;
             let cenaAtual = document.getElementById("painel_inicial_id").value; //modelo3D = modelo3D / modelo3D != painel
 
             //Só usa o input se for habilitado a opção e se o modelo3d for selecionado para a atividade.
             try {
-                document.getElementById("glb").disabled = !alt.checked || cenaSelecionada== 2;
-                document.getElementById("glb").required = (alt.checked && cenaSelecionada== 1); 
+                document.getElementById("glb").disabled = (!alt.checked || cenaSelecionada== "Painel")
+                document.getElementById("glb").required = (alt.checked && cenaSelecionada== "Modelo3D")
                 if (!alt.checked) {
                     var upl = document.getElementById("glb");
                     upl.value = "";
                 }
             } catch (error) {
+                document.getElementById("glb").disabled = !(cenaSelecionada == "Modelo3D" && cenaAtual != "modelo3D");
+                document.getElementById("glb").required = (cenaSelecionada == "Modelo3D" && cenaAtual != "modelo3D"); 
                 var upl = document.getElementById("glb");
                 upl.value = "";
             } 
             //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
             try {
-                document.getElementById("selectPanel").disabled = !alt2.checked || cenaSelecionada== 1;
-                document.getElementById("panelId").required = (alt2.checked && cenaSelecionada == 2);
-            } catch (error) {}
-           
-         }
+                document.getElementById("selectPanel").disabled = (!alt2.checked || cenaSelecionada== "Modelo3D")
+                document.getElementById("panelId").required = (alt2.checked && cenaSelecionada == "Painel")
+            } catch (error) {
+                document.getElementById("selectPanel").disabled = !(cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
+                document.getElementById("panelId").required = (cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
+            }   
+        }
 
          function HabilitarDesabilitarImagemMarcador() {
             var alt = document.getElementById("alterarMarcador");
@@ -92,7 +96,10 @@
                 var upl = document.getElementById("marcador");
                 upl.value = "";
             }
-             
+         }
+
+         function habilitarBotoesEscolhaDeCena() {
+            
          }
     </script>
 
@@ -132,8 +139,8 @@
                 <div class="form-group">
                     <label for="">Selecione o tipo da cena*</label>
                     <select class="form-control" id="selectSceneType" name="sceneType" aria-label="">             
-                        <option value="1" selected>Modelo 3D</option>
-                        <option value="2">Painel</option>
+                        <option value="Modelo3D" selected>Modelo 3D</option>
+                        <option value="Painel">Painel</option>
                     </select>
                 </div>
 
@@ -154,7 +161,7 @@
                         @endif
                         
                         <label for="alterarPainel">Painel*</label><br>
-                        <input type="button" id="selectPanel" value="Escolher painel" @if($acao == 'edit' && $painel_inicial_id != "modelo3D") disabled @endif/>
+                        <input type="button" id="selectPanel" value="Escolher painel" disabled/>
                 </div>
 
                 <div class="form-group">
@@ -166,12 +173,10 @@
                             id="marcador" accept=".png, .jpeg, .jpg"  @if($acao === 'edit') disabled @endif/>
                 </div>
 
-                <input id="panelId" name="panelId" type="hidden"  @if($acao === 'edit' && $painel_inicial_id != "modelo3D") required @endif>
+                <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$painel_inicial_id}}" @endif>
                 <div class="form-group mt-4">
                     <input type="submit" value="Salvar" class="btn btn-success">
-                </div>                   
-                
-                
+                </div>                  
             </form>
         </div>
     </div>
@@ -183,7 +188,7 @@
 
         document.getElementById("selectSceneType").onchange = ()=>{
             let valor = document.getElementById("selectSceneType").value;
-            if (valor == 1) {
+            if (valor == "Modelo3D") {
                 document.getElementById("3DmodelOption").style.display = "block"
                 document.getElementById("panelOption").style.display = "none"
             }else{
@@ -191,16 +196,7 @@
                 document.getElementById("3DmodelOption").style.display = "none"
             }
 
-            var alt = document.getElementById("alterar3D");
-            var alt2 = document.getElementById("alterarPainel")
-
-            //Só usa o input se for habilitado a opção e se o modelo3d for selecionado para a atividade.
-            document.getElementById("glb").disabled = !alt.checked || valor == 2;
-            document.getElementById("glb").required = alt.checked && valor == 1;
-
-            //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
-            document.getElementById("selectPanel").disabled = !alt2.checked || valor == 1;
-            document.getElementById("panelId").required = alt2.checked && valor == 2;
+            HabilitarDesabilitar3D()
         }
 
     </script>

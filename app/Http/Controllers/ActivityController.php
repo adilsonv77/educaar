@@ -137,17 +137,16 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
-
         $data = $request->all();
         $idPainel = $data['panelId'];
-        $tipoCena = $data['sceneType']; //1 = Modelo 3D | 2 = Painel.
+        $tipoCena = $data['sceneType'];
 
         unset($data['panelId']);
         unset($data['sceneType']);
 
         //Verifica se é cadastro de glb ou de painel para poder tratar cada cadastro de forma diferente 
         $usarPainel = false;
-        if ($tipoCena == 2) {
+        if ($tipoCena == "Painel") {
             $data['glb'] = '';
             $usarPainel = true;
         } else {
@@ -222,16 +221,13 @@ class ActivityController extends Controller
         }
 
         if (array_key_exists('marcador', $data)) {
-
             $imgFile = $baseFileName . '.' . $request->marcador->getClientOriginalExtension();
-
             $request->marcador->move(public_path('marcadores'), $imgFile);
-
             $data['marcador'] = $imgFile;
-
         }
 
         if ($data['acao'] == 'insert') {
+            //Insere
             $data['professor_id'] = Auth::user()->id;
             $activity = Activity::create($data);
 
@@ -255,6 +251,7 @@ class ActivityController extends Controller
             }
             $activity->update($data);
         } else if (!$usarPainel) {
+            //Edita modelo 3D
             $activity = Activity::find($data['id']);
 
             if ($zipdir !== "") {
@@ -271,9 +268,15 @@ class ActivityController extends Controller
 
             $activity->update($data);
         } else {
+            //Edita
             $activity = Activity::find($data['id']);
             $data['painel_inicial_id'] = $idPainel;
 
+            //Deleta o arquivo GLB
+            if(!empty($activity->glb)){
+                unlink(public_path('modelos3d/' . $activity->glb));
+            }
+            
             @unlink(public_path('mind') . "/" . $activity->content_id . ".mind");
 
             $content = Content::find($activity->content_id);
