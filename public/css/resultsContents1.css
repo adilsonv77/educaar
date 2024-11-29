@@ -7,10 +7,25 @@ table {
     width: 100%;
 }
 
+.table-container {
+    overflow-x: auto; 
+    width: 100%;
+}
+
+.fixedCol,
+tbody tr td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background-color: #f9f9f9;
+    overflow: hidden;
+}
+
 .table {
     border-collapse: separate;
     border-spacing: 0;
-    width: 100%;
+    width: max-content;
+    table-layout: fixed;
 }
 
 .atividade {
@@ -80,6 +95,7 @@ table th {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    z-index: 2;
 }
 
 [data-toggle="tooltip"]:hover::after,
