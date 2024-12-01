@@ -15,8 +15,7 @@ class DisciplinaDAO
             ->join('alunos_turmas as at', 't.id', '=', 'at.turma_id')
             ->where('at.aluno_id', $alunoid)
             ->where('t.ano_id', $anoletivoid)
-            ->distinct()
-            ->get();
+            ->distinct();
 
         return $sql;
 

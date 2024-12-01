@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use App\DAO\ContentDAO;
+use App\DAO\StudentAppDAO;
 use App\Models\Painei;
 
 class StudentController extends Controller
@@ -75,25 +76,45 @@ class StudentController extends Controller
             ->get();
             //dd($activities);
             
+        $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
+            ->where('bool_atual', 1)->first();
+            
+        $dataCorte = null;
+        $bloquearPorData = 0;
         // verificar quais atividades já foram respondidas        
         foreach ($activities as $activity) {
+            if ($dataCorte == null) {
+                $dataCorte = StudentAppDAO::buscarDataCorte($activity->id, Auth::user()->id, $anoAtual->id)->first();
+
+                // testar quando nao tiver data de corte
+                $dataHoje = now();
+                $diff = date_diff($dataHoje, new \DateTime($dataCorte->dt_corte));
+                //dd($diff->format("%R%a") < 0);
+                if ($diff->format("%R%a") < 0) {
+                    $bloquearPorData = 1;
+                } 
+            }
+            
             //Pega o json do painel da atividade se for um painel.
             $idPainelInicial = $activity->painel_inicial_id;
             if($idPainelInicial != null){
                 //Possui um painel inicial
                 $activity->json = Painei::where('id',$idPainelInicial)->first()->panel;
             }
+            $activity->bloquearPorData = $bloquearPorData;
+            if ($bloquearPorData == 0) {
+                $questions = DB::table('questions')
+                    ->where("activity_id", $activity->id)->get();
+                // uma questao respondida ou nao jah diz tudo da atividade
+                $respondida = DB::table('student_answers as st')
+                    ->join('questions as q', 'st.question_id', '=', 'q.id')
+                    ->where([
+                        ['st.activity_id', '=', $activity->id],
+                        ['st.user_id', '=', Auth::user()->id],
+                    ])->exists();
+                $activity->respondido = ($respondida ? 1 : 0);
+            }
 
-            $questions = DB::table('questions')
-                ->where("activity_id", $activity->id)->get();
-            // uma questao respondida ou nao jah diz tudo da atividade
-            $respondida = DB::table('student_answers as st')
-                ->join('questions as q', 'st.question_id', '=', 'q.id')
-                ->where([
-                    ['st.activity_id', '=', $activity->id],
-                    ['st.user_id', '=', Auth::user()->id],
-                ])->exists();
-            $activity->respondido = ($respondida ? 1 : 0);
         }
 
         session(["content_id" => $content_id]);

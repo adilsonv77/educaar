@@ -102,6 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
           anchor.onTargetFound = () => {
             // console.log("chegou no targetfound")
             buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
+            buttonAR.disabled = (anchor.clazz="#24060e"); // criancas.. nao façam isso em casa
+              
             var bq = document.getElementById("button-ar");
             bq.style.backgroundColor = anchor.clazz;
 
@@ -161,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lastActiveScene = activeScene;
             activeScene = null;
 
-            // para esconder o botaoAR quando o target sair
+            // para esconder os botoes quando o target sair
             buttonAR.style.display = "none";
             bloquear.style.display = "none";
             desbloquear.style.display = "none";
