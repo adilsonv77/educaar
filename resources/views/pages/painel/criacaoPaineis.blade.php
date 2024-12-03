@@ -89,7 +89,7 @@
 <script>
     document.getElementById("midiaInput").addEventListener("change",()=>{
         var upl = document.getElementById("midiaInput");
-        var max = 50 * 1024 * 1024; // 50MB
+        var max = 160 * 1024 * 1024; // 50MB
 
         var alert = document.getElementById("alertaGLB");
         if (alert !== null) {
@@ -108,7 +108,7 @@
             div.appendChild(ul);
 
             const li = document.createElement("li");
-            li.innerHTML = "Tamanho máximo excedido (~" + Math.round(upl.files[0].size / 1024 / 1024) + "MB > 50MB)";
+            li.innerHTML = "Tamanho máximo excedido (~" + Math.round(upl.files[0].size / 1024 / 1024) + "MB > 160MB)";
             ul.appendChild(li);
 
             upl.value = "";

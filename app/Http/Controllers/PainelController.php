@@ -14,6 +14,11 @@ class PainelController extends Controller
         $this->painelDAO = $painelDAO;
     }
 
+    public function index(){
+        $data = $this->painelDAO->getAll();
+        return view('pages.painel.listagemPaineis', ['data'=>$data]);
+    }
+
     public function create()
     {
         return view('pages.painel.criacaoPaineis', [

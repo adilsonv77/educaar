@@ -60,30 +60,37 @@
             var alt = document.getElementById("alterar3D");
             var alt2 = document.getElementById("alterarPainel")
             let cenaSelecionada = document.getElementById("selectSceneType").value;
-            let cenaAtual = document.getElementById("painel_inicial_id").value; //modelo3D = modelo3D / modelo3D != painel
+            let cenaAtual = document.getElementById("painel_inicial_id").value;
+            //Cena atualmente seleciona = "", significa que é o cadastro, e não há cena atual.
+            if(cenaAtual != "" && cenaAtual != "modelo3D")
+                cenaAtual= "Painel";
 
             //Só usa o input se for habilitado a opção e se o modelo3d for selecionado para a atividade.
-            try {
-                document.getElementById("glb").disabled = (!alt.checked || cenaSelecionada== "Painel")
-                document.getElementById("glb").required = (alt.checked && cenaSelecionada== "Modelo3D")
-                if (!alt.checked) {
+            if(cenaAtual!=""){
+                try {
+                    document.getElementById("glb").disabled = (!alt.checked || cenaSelecionada== "Painel")
+                    document.getElementById("glb").required = (alt.checked && cenaSelecionada== "Modelo3D")
+                    if (!alt.checked) {
+                        var upl = document.getElementById("glb");
+                        upl.value = "";
+                    }
+                } catch (error) {
+                    document.getElementById("glb").disabled = !(cenaSelecionada == "Modelo3D" && cenaAtual == "Painel");
+                    document.getElementById("glb").required = (cenaSelecionada == "Modelo3D" && cenaAtual == "Painel"); 
                     var upl = document.getElementById("glb");
                     upl.value = "";
-                }
-            } catch (error) {
-                document.getElementById("glb").disabled = !(cenaSelecionada == "Modelo3D" && cenaAtual != "modelo3D");
-                document.getElementById("glb").required = (cenaSelecionada == "Modelo3D" && cenaAtual != "modelo3D"); 
-                var upl = document.getElementById("glb");
-                upl.value = "";
-            } 
-            //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
-            try {
-                document.getElementById("selectPanel").disabled = (!alt2.checked || cenaSelecionada== "Modelo3D")
-                document.getElementById("panelId").required = (alt2.checked && cenaSelecionada == "Painel")
-            } catch (error) {
-                document.getElementById("selectPanel").disabled = !(cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
-                document.getElementById("panelId").required = (cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
-            }   
+                } 
+                //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
+                try {
+                    document.getElementById("selectPanel").disabled = (!alt2.checked || cenaSelecionada== "Modelo3D")
+                    document.getElementById("panelId").required = (alt2.checked && cenaSelecionada == "Painel")
+                } catch (error) {
+                    document.getElementById("selectPanel").disabled = !(cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
+                    document.getElementById("panelId").required = (cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
+                }  
+            }else{
+
+            }
         }
 
          function HabilitarDesabilitarImagemMarcador() {
@@ -119,7 +126,7 @@
                 @csrf
                     <input name="id" type="hidden" value="{{$id}}"/>
                     <input name="acao" type="hidden" value="{{$acao}}"/>
-                    <input name="painel_inicial_id" type="hidden" value="{{$painel_inicial_id}}" id="painel_inicial_id"/>
+                    <input name="painel_inicial_id" type="hidden" value="{{ $painel_inicial_id ?? ''}}" id="painel_inicial_id"/>
 
                 <div class="form-group">
                     <label for="">Nome da Atividade*</label>
@@ -161,7 +168,7 @@
                         @endif
                         
                         <label for="alterarPainel">Painel*</label><br>
-                        <input type="button" id="selectPanel" value="Escolher painel" disabled/>
+                        <input type="button" id="selectPanel" value="Escolher painel" @if($acao === 'edit') disabled @endif/>
                 </div>
 
                 <div class="form-group">

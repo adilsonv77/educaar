@@ -11,6 +11,11 @@ class PainelDAO
         return Painei::where('id', $id)->first();
     }
 
+    public function getAll()
+    {
+        return Painei::all();
+    }
+
     public function create(array $data)
     {
         return Painei::create($data);
