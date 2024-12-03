@@ -36,13 +36,15 @@
                             </div>
                         </div>
                         <!-- preview da midia -->
-                        <div id="midiaPreview" edit=@if($action == 'edit')"true" @else "false" style="display: none;" @endif>
+                        <div id="midiaPreview" edit=@if($action == 'edit')"true" @else "false" style="display: none;"
+                        @endif>
                             <video id="vidMidia" controls @if ($midiaExtension != "mp4") style="display: none" @endif>
                                 <source id="srcVidMidia"
                                     src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif"
                                     type="video/mp4">
                             </video>
-                            <img src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif" id="imgMidia" @if($midiaExtension == "mp4") style="display: none" @endif>
+                            <img src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif"
+                                id="imgMidia" @if($midiaExtension == "mp4") style="display: none" @endif>
                         </div>
                     </div>
                     <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117"
@@ -69,7 +71,7 @@
                         <input id="youtubeLink" placeholder="Ex: https://www.youtube.com/watch?v=4YEy" name="link"><br>
                         <label id="labelMyFile" for="myfile">Local (somente .png, .jpg, .jpeg)</label><br>
                         <input type="file" style="border:none" name="arquivoMidia" id="midiaInput"
-                            accept=".png, .jpeg, .jpg, .mp4" /><br><br>
+                            accept=".png, .jpeg, .jpg, .mp4" onchange="upload_check()"/><br><br>
                     </div>
                     <div id="blocoTxt">
 
@@ -84,4 +86,33 @@
     </form>
 </div>
 <script src="{{asset('js/painel3.js')}}" type="module"></script>
+<script>
+    document.getElementById("midiaInput").addEventListener("change",()=>{
+        var upl = document.getElementById("midiaInput");
+        var max = 50 * 1024 * 1024; // 50MB
+
+        var alert = document.getElementById("alertaGLB");
+        if (alert !== null) {
+            alert.remove();
+        }
+
+        if (upl.files[0].size > max) {
+            const div = document.createElement("div");
+
+            upl.parentNode.insertBefore(div, upl.nextSibling);
+
+            div.id = "alertaGLB"
+            div.className = "alert alert-danger";
+
+            const ul = document.createElement("ul");
+            div.appendChild(ul);
+
+            const li = document.createElement("li");
+            li.innerHTML = "Tamanho máximo excedido (~" + Math.round(upl.files[0].size / 1024 / 1024) + "MB > 50MB)";
+            ul.appendChild(li);
+
+            upl.value = "";
+        }
+    });
+</script>
 @endsection
