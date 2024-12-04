@@ -7,11 +7,15 @@
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
-<!-- <link rel="stylesheet" href="{{asset('css/painel.css')}}"> -->
+<link rel="stylesheet" href="{{ asset('css/panelConnection.css?v=' . filemtime(public_path('css/panelConnection.css'))) }}">
 @endsection
 
 @section('content')
 <!-- <p>{{$data}}</p> -->
+<div id="container">
+     <div id="card" draggable="true"></div>
+</div>
 
+<script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}">
 @endsection
 

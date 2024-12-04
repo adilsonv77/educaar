@@ -35,7 +35,7 @@
 <body class="h-100">
     <div id="preloader">
         <div class="sk-three-bounce">
-            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce1"></div> 
             <div class="sk-child sk-bounce2"></div>
             <div class="sk-child sk-bounce3"></div>
         </div>
@@ -174,7 +174,7 @@
                                 <span class="nav-text">Atividades</span>
                             </a>
                         </li>
-                        <li><a class="ai-icon" href="{{ route('paineis.create') }}" aria-expanded="false">
+                        <li><a class="ai-icon" href="{{ route('paineis.index') }}" aria-expanded="false">
                                 <i class="bi-bricks"></i>
                                 <span class="nav-text">Painéis</span>
                             </a>
