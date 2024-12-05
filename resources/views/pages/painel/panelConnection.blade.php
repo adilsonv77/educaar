@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', "Listagem paineis")
+@section('page-name', "Conexão de painéis")
 
 @section('script-head')
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -13,7 +13,7 @@
 @section('content')
 <!-- <p>{{$data}}</p> -->
 <div id="container">
-     <div id="card" draggable="true"></div>
+     <button id="addPanel">Adicionar painel</button>
 </div>
 
 <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}">
