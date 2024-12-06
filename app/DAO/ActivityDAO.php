@@ -3,11 +3,16 @@
 namespace App\DAO;
 
 use App\Models\AnoLetivo;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ActivityDAO
 {
+
+    public static function buscarPorPainel($id){
+        return Activity::where('painel_inicial_id',$id);
+    }
 
     public static function buscarActivitiesDoProf($profid, $anoletivoid)
     {

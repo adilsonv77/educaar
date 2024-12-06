@@ -25,4 +25,8 @@ class PainelDAO
     {
         return Painei::where('id', $id)->update($data);
     }
+
+    public function deleteById($id){
+        Painei::where('id',$id)->delete();
+    }
 }

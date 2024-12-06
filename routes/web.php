@@ -16,6 +16,7 @@ Route::prefix('paineis')->group(function(){
     Route::get('/{id}/edit', [PainelController::class, 'edit'])->name('paineis.edit');
     Route::put('/{id}', [PainelController::class, 'update'])->name('paineis.update');
     Route::delete('/{id}', [PainelController::class,'destroy'])->name('paineis.destroy');
+
 });
 
 // use Hash;
