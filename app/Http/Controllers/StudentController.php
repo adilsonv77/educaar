@@ -84,12 +84,14 @@ class StudentController extends Controller
         // verificar quais atividades já foram respondidas        
         foreach ($activities as $activity) {
             if ($dataCorte == null) {
+                dd($activity->id, Auth::user()->id, $anoAtual->id);
+                // tenho que ver pq nao encontra para o Xico01
                 $dataCorte = StudentAppDAO::buscarDataCorte($activity->id, Auth::user()->id, $anoAtual->id)->first();
 
                 if ($dataCorte != null) {
                     $dataHoje = now();
                     $diff = date_diff($dataHoje, new \DateTime($dataCorte->dt_corte));
-                    //dd($diff->format("%R%a") < 0);
+                    dd($diff->format("%R%a") < 0);
                     if ($diff->format("%R%a") < 0) {
                         $bloquearPorData = 1;
                     } 
