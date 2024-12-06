@@ -43,20 +43,25 @@
                                         </td>
                                     </tr>
                             @endforeach
+
+                           
                         </tbody>
                     </table>
 
-                    <div class="form-group row mb-0">
-                        <div class="col-md-6 offset-md-4">
-                            <button type="submit" class="btn btn-primary">
+                    
+                        <div class="col-md-6 offset-md-4" >
+                            <button type="submit" style="width: 50%; display: inline;" class="btn btn-primary">
                                 Salvar
                             </button>
                         </div>
-                    </div>
+                    
                 </form>
             </div>
         @endif
 
     </div>
+
+
+   
 </div>
 @endsection
