@@ -86,13 +86,15 @@ class StudentController extends Controller
             if ($dataCorte == null) {
                 $dataCorte = StudentAppDAO::buscarDataCorte($activity->id, Auth::user()->id, $anoAtual->id)->first();
 
-                // testar quando nao tiver data de corte
-                $dataHoje = now();
-                $diff = date_diff($dataHoje, new \DateTime($dataCorte->dt_corte));
-                //dd($diff->format("%R%a") < 0);
-                if ($diff->format("%R%a") < 0) {
-                    $bloquearPorData = 1;
-                } 
+                if ($dataCorte != null) {
+                    $dataHoje = now();
+                    $diff = date_diff($dataHoje, new \DateTime($dataCorte->dt_corte));
+                    //dd($diff->format("%R%a") < 0);
+                    if ($diff->format("%R%a") < 0) {
+                        $bloquearPorData = 1;
+                    } 
+                }
+                
             }
             
             //Pega o json do painel da atividade se for um painel.
