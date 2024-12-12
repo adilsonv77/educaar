@@ -27,7 +27,7 @@ class ActivityDAO
     /* mudar para:
        select distinct activities.* from turmas_disciplinas 
                     join turmas on turmas_disciplinas.turma_id = turmas.id
-                    join contents on turmas.turma_modelo_id = contents.turma_id and
+                    join contents on turmas.turma_modelo_id = contents.turma_modelo_id and
                                     turmas_disciplinas.disciplina_id = contents.disciplina_id
                 join activities on activities.content_id = contents.id 
                     where turmas_disciplinas.professor_id = 5/209 and ano_id = 4
@@ -37,12 +37,12 @@ class ActivityDAO
             
             ->join('turmas','turmas_disciplinas.turma_id','=','turmas.id')
             ->join('contents', function($join) {
-                        $join->on('turmas.turma_modelo_id', '=', 'contents.turma_id');
+                        $join->on('turmas.turma_modelo_id', '=', 'contents.turma_modelo_id');
                         $join->on('turmas_disciplinas.disciplina_id', '=', 'contents.disciplina_id');
                     })
             ->join('activities', 'activities.content_id', '=', 'contents.id')
             ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
-            //->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_id')
+            //->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_modelo_id')
             ->where('turmas_disciplinas.professor_id', '=', $profid)
             ->where("ano_id", "=", $anoletivoid)
             ->distinct();

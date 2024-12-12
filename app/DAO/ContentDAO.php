@@ -15,7 +15,7 @@ class ContentDAO
         /*
         select distinct contents.* from turmas_disciplinas 
             join turmas on turmas_disciplinas.turma_id = turmas.id
-            join contents on turmas.turma_modelo_id = contents.turma_id and
+            join contents on turmas.turma_modelo_id = contents.turma_modelo_id and
                             turmas_disciplinas.disciplina_id = contents.disciplina_id
             where professor_id = 4 and ano_id = 5
         */
@@ -25,11 +25,11 @@ class ContentDAO
 
             ->join('turmas', 'turmas_disciplinas.turma_id', '=', 'turmas.id')
             ->join('contents', function ($join) {
-                $join->on('turmas.turma_modelo_id', '=', 'contents.turma_id');
+                $join->on('turmas.turma_modelo_id', '=', 'contents.turma_modelo_id');
                 $join->on('turmas_disciplinas.disciplina_id', '=', 'contents.disciplina_id');
             })
             ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
-            ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_id')
+            ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_modelo_id')
             ->where('professor_id', '=', $profid)
             ->where("ano_id", "=", $anoletivoid)
             ->distinct();
@@ -42,7 +42,7 @@ class ContentDAO
     //Não testado e não utilizado
     public static function buscarTodosConteudos($turma)
     {
-        $sql = DB::table('contents')->where('turma_id', '=', $turma);
+        $sql = DB::table('contents')->where('turma_modelo_id', '=', $turma);
         return $sql;
     }
 
@@ -69,7 +69,7 @@ select a.content_id, q.id, q.question from activities a
             ->select('t.id as id', 't.nome as nome')
             ->join('turmas_disciplinas as td', 'td.turma_id', '=', 't.id')
             ->join('turmas_modelos as tm', 't.turma_modelo_id', '=', 'tm.id')
-            ->join('contents as c', 'c.turma_id', '=', 'tm.id')
+            ->join('contents as c', 'c.turma_modelo_id', '=', 'tm.id')
             ->join('activities as a', 'a.content_id', '=', 'c.id')
             ->where([
                 ['td.professor_id', '=', $profid],
@@ -86,7 +86,7 @@ select a.content_id, q.id, q.question from activities a
     {
         $contents = DB::table('contents')
             ->join('disciplinas', 'contents.disciplina_id', '=', 'disciplinas.id')
-            ->join('turmas_modelos', 'contents.turma_id', '=', 'turmas_modelos.id')
+            ->join('turmas_modelos', 'contents.turma_modelo_id', '=', 'turmas_modelos.id')
             ->join('content_developer', 'content_developer.content_id', '=', 'contents.id')
             ->where('content_developer.developer_id', $devid);
 
@@ -100,7 +100,7 @@ select a.content_id, q.id, q.question from activities a
             ->join('contents as c', 'a.content_id', '=', 'c.id')
             ->leftJoin('student_answers as sa', 'q.id', '=', 'sa.question_id')
             ->where('a.content_id', $content_id)
-            ->where('c.turma_id', $turma_id)
+            ->where('c.turma_modelo_id', $turma_id)
             ->select('q.*', 'sa.correct')
             ->get();
     }

@@ -43,7 +43,7 @@ class StudentController extends Controller
                 ->join('turmas as t', 't.id', '=', 'at.turma_id')
                 ->join('disciplinas_turmas_modelos as dtm', 'dtm.turma_modelo_id', '=', 't.turma_modelo_id')
                 ->join('contents as c', function (JoinClause $join) {
-                    $join->on('dtm.turma_modelo_id', '=', 'c.turma_id')->on('c.disciplina_id', '=', 'dtm.disciplina_id');
+                    $join->on('dtm.turma_modelo_id', '=', 'c.turma_modelo_id')->on('c.disciplina_id', '=', 'dtm.disciplina_id');
                 })
                 ->where([
                     ['at.aluno_id', '=', Auth::user()->id],

@@ -35,7 +35,7 @@ class ResultadosController extends Controller
 
         // Buscar conteúdos do professor para a turma selecionada
         $contentsprof = ContentDAO::buscarContentsDoProf($prof_id, $anoletivo->id)
-            ->select('contents.id', 'contents.name', 'contents.turma_id')
+            ->select('contents.id', 'contents.name', 'contents.turma_modelo_id')
             ->get();
         
         $contents = [];

@@ -18,7 +18,7 @@ class FecharController extends Controller
         $content  = DB::table('contents')
             ->select('contents.*', 'disciplinas.name as dname', 'turmas_modelos.serie as tserie')
             ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
-            ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_id')
+            ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_modelo_id')
             ->where('contents.id', $request['content'])
             ->first();
 

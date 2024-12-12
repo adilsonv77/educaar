@@ -12,6 +12,7 @@ class ResultActivityDAO
     {
         $where = DB::table('questions as q')->where('q.activity_id', $activityID);
 
+        // COLOCAR ESSAS DUAS LINHAS ANTES DA CHAMADA DA FUNÇÃO ACIMA        
         session()->put('turma_id', $turma_id);
         session()->put('activity_id', $activityID);
         //total de questões
@@ -102,17 +103,17 @@ class ResultActivityDAO
                     //alunos que não fizeram
 
 
-                    $sql2= DB::table('users as u')
-                    ->select('u.id as id','u.name as nome')
-                    ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'u.id')
-                    ->where('alunt.turma_id', '=', $turma_id)
-                    ->whereNotExists(function($query) use ($questao)
-                    {
-                        $query->select(DB::raw(1))
-                                ->from('student_answers as sta')
-                                ->whereRaw('sta.user_id = u.id')
-                                ->whereRaw('sta.question_id = '. $questao);
-                    });
+            $sql2= DB::table('users as u')
+                ->select('u.id as id','u.name as nome')
+                ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'u.id')
+                ->where('alunt.turma_id', '=', $turma_id)
+                ->whereNotExists(function($query) use ($questao)
+                {
+                    $query->select(DB::raw(1))
+                            ->from('student_answers as sta')
+                            ->whereRaw('sta.user_id = u.id')
+                            ->whereRaw('sta.question_id = '. $questao);
+                });
             $alunos_nao_fizeram= $sql2->get();
             return $alunos_nao_fizeram;
     }
