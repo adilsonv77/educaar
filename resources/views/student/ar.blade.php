@@ -30,7 +30,7 @@
 
 <span id="glbs" style="display: none;">
     @foreach ($activities as $item)
-    <li id="act_{{$item->id}}" usar_class=@if($item->bloquearPorData == 1)"#24060e" @else @if($item->respondido == 1)"#efbecc" @else "" @endif @endif
+    <li id="act_{{$item->id}}" usar_class=@if($item->bloquearPorData == 1)"#000000" @else @if($item->respondido == 1)"#efbecc" @else "" @endif @endif
         @if(!empty($item->painel_inicial_id)) json="{{$item->json}}" @endif painel=@if(!empty($item->painel_inicial_id))
         {{$item->painel_inicial_id}} @else "0" @endif>
         /modelos3d/{{$item->glb}}
