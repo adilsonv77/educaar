@@ -41,7 +41,7 @@ class ResultadosController extends Controller
         $contents = [];
         $contents_id = [];
         foreach ($contentsprof as $linha) {
-            if ($linha->turma_id == $turma_modelo_id) {
+            if ($linha->turma_modelo_id == $turma_modelo_id) {
                 $contents[$linha->id] = [
                     'id' => $linha->id,
                     'name' => $linha->name,
