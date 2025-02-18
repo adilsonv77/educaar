@@ -28,7 +28,7 @@ class TurmasModelosController extends Controller
                     ->selectRaw('count(c.id)')
                     ->join('disciplinas_turmas_modelos as dtm', function ($join) {
                         $join->on('dtm.disciplina_id', '=', 'c.disciplina_id');
-                        $join->on('dtm.turma_modelo_id', '=', 'c.turma_id');
+                        $join->on('dtm.turma_modelo_id', '=', 'c.turma_modelo_id');
                     })
                     ->whereColumn('dtm.turma_modelo_id', '=', 'turmas_modelos.id')
             ]);

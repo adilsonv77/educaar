@@ -33,7 +33,7 @@ class ContentController extends Controller
         if (session('type') == 'admin') {
             $where = DB::table('contents')
                 ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
-                ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_id')
+                ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_modelo_id')
                 ->where('turmas_modelos.school_id', '=', Auth::user()->school_id);
         } else {
             if (session('type') == 'teacher') {
@@ -140,10 +140,10 @@ class ContentController extends Controller
         if (session('type') == 'teacher') {
             $turma_disc = explode("_", $data['disciplina_id']);
 
-            $data['turma_id'] = $turma_disc[0];
+            $data['turma_modelo_id'] = $turma_disc[0];
             $data['disciplina_id'] = $turma_disc[1];
         } else {
-            $data['turma_id'] = $data['turma'];
+            $data['turma_modelo_id'] = $data['turma'];
             $data['disciplina_id'] = $data['disciplina'];
         }
 
@@ -190,9 +190,9 @@ class ContentController extends Controller
         if (session('type') == 'teacher') {
             $disciplinas = $this->buscarDisciplinas($anoLetivo->id, $idprof);
             $params['disciplinas'] = $disciplinas;
-            $params['disciplina'] = $content->turma_id . "_" . $content->disciplina_id;
+            $params['disciplina'] = $content->turma_modelo_id . "_" . $content->disciplina_id;
         } else {
-            $params['turma'] = $content->turma_id;
+            $params['turma'] = $content->turma_modelo_id;
             $params['disciplina'] = $content->disciplina_id;
         }
 
@@ -312,7 +312,7 @@ class ContentController extends Controller
         //     $total_alunos = DB::table('student_answers as sa')
         //         ->join('activities as a', 'sa.activity_id', '=', 'a.id')
         //         ->join('contents as c', 'a.content_id', '=', 'c.id')
-        //         ->where('c.turma_id', $turma_id)
+        //         ->where('c.turma_modelo_id', $turma_id)
         //         ->distinct()
         //         ->count('sa.user_id');
 

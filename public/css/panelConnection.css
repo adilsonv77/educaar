@@ -1,0 +1,19 @@
+#card {
+    width: 100px;
+    height: 100px;
+    background-color: #AFDA9F;
+    border-radius: 5px;
+    cursor: pointer;
+    position: fixed;
+    cursor: grab;
+}
+
+#container {
+    width: 100%;
+    height: calc(100vh - 10rem);
+    background-color: red;
+}
+
+#card:hover {
+    cursor: grabbing;
+}

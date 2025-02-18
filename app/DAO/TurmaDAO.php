@@ -42,7 +42,7 @@ class TurmaDAO
         
         /*select u.name, COUNT(q.id) as qntCorretas from turmas_disciplinas as td
         join turmas as t on td.turma_id = t.id
-        join contents as c on t.turma_modelo_id = c.turma_id and
+        join contents as c on t.turma_modelo_id = c.turma_modelo_id and
                             td.disciplina_id = c.disciplina_id
         join activities as a on a.content_id= c.id
         JOIN questions as q on q.activity_id= a.id
@@ -58,7 +58,7 @@ AND u.id = 8
             ->select("u.name", DB::raw("COUNT(q.id) as qntCorretas"))
             ->join("turmas as t", "td.turma_id", "=", "t.id")
             ->join("contents as c", function($join) {
-                $join->on("t.turma_modelo_id", "=", "c.turma_id")
+                $join->on("t.turma_modelo_id", "=", "c.turma_modelo_id")
                     ->on("td.disciplina_id", "=", "c.disciplina_id");
             })
             ->join("activities as a", "a.content_id", "=", "c.id")
@@ -88,7 +88,7 @@ AND u.id = 8
             ->select("u.name", DB::raw("COUNT(q.id) as qntIncorretas"))
             ->join("turmas as t", "td.turma_id", "=", "t.id")
             ->join("contents as c", function($join) {
-                $join->on("t.turma_modelo_id", "=", "c.turma_id")
+                $join->on("t.turma_modelo_id", "=", "c.turma_modelo_id")
                     ->on("td.disciplina_id", "=", "c.disciplina_id");
             })
             ->join("activities as a", "a.content_id", "=", "c.id")
@@ -116,7 +116,7 @@ AND u.id = 8
         /*
           select COUNT(q.id) as qntQuestoes from turmas_disciplinas as td
             join turmas as t on td.turma_id = t.id
-            join contents as c on t.turma_modelo_id = c.turma_id and
+            join contents as c on t.turma_modelo_id = c.turma_modelo_id and
                                 td.disciplina_id = c.disciplina_id
             join activities as a on a.content_id= c.id
             JOIN questions as q on q.activity_id= a.id
@@ -127,7 +127,7 @@ AND u.id = 8
             ->select(DB::raw("COUNT(q.id) as qntQuestoes"))
             ->join("turmas as t", "td.turma_id", "=", "t.id")
             ->join("contents as c", function($join) {
-                $join->on("t.turma_modelo_id", "=", "c.turma_id")
+                $join->on("t.turma_modelo_id", "=", "c.turma_modelo_id")
                     ->on("td.disciplina_id", "=", "c.disciplina_id");
             })
             ->join("activities as a", "a.content_id", "=", "c.id")
@@ -144,7 +144,7 @@ AND u.id = 8
             ->select("a.name as activity_name", "c.name as content_name", "alternative_answered", "question")
             ->join("turmas as t", "td.turma_id", "=", "t.id")
             ->join("contents as c", function($join) {
-                $join->on("t.turma_modelo_id", "=", "c.turma_id")
+                $join->on("t.turma_modelo_id", "=", "c.turma_modelo_id")
                     ->on("td.disciplina_id", "=", "c.disciplina_id");
             })
             ->join("activities as a", "a.content_id", "=", "c.id")
@@ -172,7 +172,7 @@ AND u.id = 8
             ->select("a.name as activity_name", "c.name as content_name", "alternative_answered", "question")
             ->join("turmas as t", "td.turma_id", "=", "t.id")
             ->join("contents as c", function($join) {
-                $join->on("t.turma_modelo_id", "=", "c.turma_id")
+                $join->on("t.turma_modelo_id", "=", "c.turma_modelo_id")
                     ->on("td.disciplina_id", "=", "c.disciplina_id");
             })
             ->join("activities as a", "a.content_id", "=", "c.id")
@@ -200,7 +200,7 @@ AND u.id = 8
         /*
         SELECT a.name as activity_name, c.name as content_name, alternative_answered, question FROM turmas_disciplinas td 
             join turmas t on t.id = td.turma_id
-            join contents c on c.turma_id = t.turma_modelo_id and c.disciplina_id = td.disciplina_id
+            join contents c on c.turma_modelo_id = t.turma_modelo_id and c.disciplina_id = td.disciplina_id
             join activities a on a.content_id = c.id
             join questions q on q.activity_id = a.id
             
@@ -216,7 +216,7 @@ AND u.id = 8
         ->select("a.name as activity_name", "c.name as content_name", "alternative_answered", "question")
         ->join("turmas as t", "td.turma_id", "=", "t.id")
         ->join("contents as c", function($join) {
-            $join->on("t.turma_modelo_id", "=", "c.turma_id")
+            $join->on("t.turma_modelo_id", "=", "c.turma_modelo_id")
                 ->on("td.disciplina_id", "=", "c.disciplina_id");
         })
         ->join("activities as a", "a.content_id", "=", "c.id")
@@ -236,10 +236,11 @@ AND u.id = 8
     }
 
     public static function buscarQuestoesNaoRespondidasTodosAlunos($turmaid) {
+       /// AQUI TEM UM ERRO
         /*
         select user_name, a.name as activity_name, c.name as content_name FROM 
         (select u.name as user_name, aluno_id, turma_id from alunos_turmas join users u on u.id = aluno_id where turma_id = 16) at
-        join contents c on c.turma_id = at.turma_id
+        join contents c on c.turma_modelo_id = at.turma_id
         join activities a on a.content_id = c.id
         left outer join student_answers sa on sa.activity_id = a.id and sa.user_id = aluno_id
         where sa.id is null
@@ -253,7 +254,7 @@ AND u.id = 8
 
         $sql = DB::table("contents as c")
             ->select("user_name", "a.name as activity_name", "c.name as content_name")
-            ->joinSub($sql_at, "at", "c.turma_id", "=", "at.turma_id")
+            ->joinSub($sql_at, "at", "c.turma_modelo_id", "=", "at.turma_id")
             ->join("activities as a", "a.content_id", "=", "c.id")
             ->leftJoin("student_answers as sa", function ($join) {
                 $join->on('sa.activity_id', '=', 'a.id')

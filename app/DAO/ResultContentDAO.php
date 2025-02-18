@@ -16,7 +16,7 @@ class ResultContentDAO
     {
         /*
          select a.id as activity_id, q.id as question_id, atu.aluno_id as aluno, sta.correct from turmas t 
-             join contents c on c.turma_id = t.turma_modelo_id 
+             join contents c on c.turma_modelo_id = t.turma_modelo_id 
              join activities a on c.id = a.content_id 
              join questions q on q.activity_id = a.id 
              join alunos_turmas atu on atu.turma_id = t.id 
@@ -25,7 +25,7 @@ class ResultContentDAO
          */
 
         $sql = DB::table('turmas as t')
-            ->join("contents as c", "c.turma_id", "=", "t.turma_modelo_id")
+            ->join("contents as c", "c.turma_modelo_id", "=", "t.turma_modelo_id")
             ->join("activities as a", "c.id", "=", "a.content_id")
             ->join("questions as q", "q.activity_id", "=", "a.id")
             ->join("alunos_turmas as atu", "atu.turma_id", "=", "t.id")

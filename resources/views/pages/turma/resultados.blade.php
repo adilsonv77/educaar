@@ -8,6 +8,41 @@
 
 @section('script-head')
 <link rel="stylesheet" href="{{asset('css/resultados.css')}}">
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tableContainer = document.querySelector('.table-responsive');
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+
+        tableContainer.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            tableContainer.classList.add("dragging");
+            startX = e.pageX - tableContainer.offsetLeft;
+            scrollLeft = tableContainer.scrollLeft;
+        });
+
+        tableContainer.addEventListener("mouseleave", () => {
+            isDragging = false;
+            tableContainer.classList.remove("dragging");
+        });
+
+        tableContainer.addEventListener("mouseup", () => {
+            isDragging = false;
+            tableContainer.classList.remove("dragging");
+        });
+
+        tableContainer.addEventListener("mousemove", (e) => {
+            if (!isDragging) return; 
+            e.preventDefault();
+            const x = e.pageX - tableContainer.offsetLeft;
+            const walk = (x - startX) * 2; 
+            tableContainer.scrollLeft = scrollLeft - walk;
+        });
+    });
+</script>
+
 @endsection
 @section('content')
 

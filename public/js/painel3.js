@@ -118,7 +118,6 @@ if (mediaPreviewArea.getAttribute("edit") == "true") {
   })
 }
 
-
 fileBtn.onchange = (event) => midiaPreview(event)
 function midiaPreview(event) {
   if (primeiraVez) {

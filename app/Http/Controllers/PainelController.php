@@ -3,15 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\DAO\PainelDAO;
+use App\DAO\ActivityDAO;
 use Illuminate\Http\Request;
 
 class PainelController extends Controller
 {
     protected $painelDAO;
+    protected $activityDAO;
 
-    public function __construct(PainelDAO $painelDAO)
+    public function __construct(PainelDAO $painelDAO, ActivityDAO $activityDAO)
     {
+        $this->activityDAO = $activityDAO;
         $this->painelDAO = $painelDAO;
+    }
+
+    public function index(){
+        $data = $this->painelDAO->getAll();
+        foreach ($data as $painel) {
+            if ($this->activityDAO->buscarPorPainel($painel->id)->get()->count() != 0) {
+                $painel->sendoUsado = true;
+            }else{
+                $painel->sendoUsado = false;
+            }
+        }
+        return view('pages.painel.panelListing', ['data'=>$data]);
     }
 
     public function create()
@@ -90,6 +105,7 @@ class PainelController extends Controller
 
     public function destroy($id)
     {
-        dd($id);
+       $this->painelDAO->deleteById($id);
+       return redirect()->route('paineis.index');
     }
 }

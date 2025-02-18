@@ -104,7 +104,7 @@ class ActivityController extends Controller
             'name' => '',
             'id' => 0,
             'contents' => $contents,
-            'content' => $content
+            'content' => $content,
         ];
 
         return view('pages.activity.register', $params);
@@ -137,16 +137,20 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
-
         $data = $request->all();
-
-        //Verifica se é cadastro de glb ou de painel
         $idPainel = $data['panelId'];
+        $tipoCena = $data['sceneType'];
+
         unset($data['panelId']);
+        unset($data['sceneType']);
+
+        //Verifica se é cadastro de glb ou de painel para poder tratar cada cadastro de forma diferente 
         $usarPainel = false;
-        if (!empty($idPainel)) {
+        if ($tipoCena == "Painel") {
             $data['glb'] = '';
             $usarPainel = true;
+        } else {
+            $data['painel_inicial_id'] = null;
         }
 
         $validator = Validator::make($request->all(), [
@@ -188,7 +192,6 @@ class ActivityController extends Controller
 
                     $files = scandir(public_path('modelos3d/' . $filename));
 
-
                     foreach ($files as $file) {
                         if (str_ends_with($file, ".gltf")) {
                             $achou = $file;
@@ -208,9 +211,7 @@ class ActivityController extends Controller
                 } else {
                     return redirect()->back()->withErrors(['msg' => 'Problemas ao descompactar o ZIP.']);
                 }
-
             } else {
-
                 $glbFile = $baseFileName . '.' . $request->glb->getClientOriginalExtension();
                 $request->glb->move(public_path('modelos3d'), $glbFile);
 
@@ -220,16 +221,13 @@ class ActivityController extends Controller
         }
 
         if (array_key_exists('marcador', $data)) {
-
             $imgFile = $baseFileName . '.' . $request->marcador->getClientOriginalExtension();
-
             $request->marcador->move(public_path('marcadores'), $imgFile);
-
             $data['marcador'] = $imgFile;
-
         }
 
         if ($data['acao'] == 'insert') {
+            //Insere
             $data['professor_id'] = Auth::user()->id;
             $activity = Activity::create($data);
 
@@ -238,7 +236,7 @@ class ActivityController extends Controller
             rename($public_path . '/' . $imgFile, $public_path . '/' . $data['marcador']);
 
             $public_path = public_path('modelos3d');
-            
+
             if ($zipdir === "" && !$usarPainel) {
                 //Se for um arquivo .zip e for para usar o glb
                 $data['glb'] = $activity->id . '.' . $request->glb->getClientOriginalExtension();
@@ -252,7 +250,8 @@ class ActivityController extends Controller
                 $data['painel_inicial_id'] = $idPainel;
             }
             $activity->update($data);
-        } else if (!$usarPainel){
+        } else if (!$usarPainel) {
+            //Edita modelo 3D
             $activity = Activity::find($data['id']);
 
             if ($zipdir !== "") {
@@ -268,9 +267,15 @@ class ActivityController extends Controller
             $content->update(['fechado' => 0]);
 
             $activity->update($data);
-        } else{
+        } else {
+            //Edita
             $activity = Activity::find($data['id']);
             $data['painel_inicial_id'] = $idPainel;
+
+            //Deleta o arquivo GLB
+            if(!empty($activity->glb)){
+                unlink(public_path('modelos3d/' . $activity->glb));
+            }
             
             @unlink(public_path('mind') . "/" . $activity->content_id . ".mind");
 
@@ -337,14 +342,17 @@ class ActivityController extends Controller
             )
             ->get();
 
-        //dd($contents);
+        if (empty($activity->painel_inicial_id))
+            $activity->painel_inicial_id = "modelo3D";
+
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,
             'id' => $activity->id,
             'name' => $activity->name,
             'contents' => $contents,
-            'content' => $activity->content_id
+            'content' => $activity->content_id,
+            'painel_inicial_id' => $activity->painel_inicial_id
         ];
 
         return view('pages.activity.register', $params);
@@ -361,7 +369,6 @@ class ActivityController extends Controller
         $activity = Activity::find($id);
 
         if ($activity != null) {
-
             @unlink(public_path('marcadores') . "/" . $activity->marcador);
 
             if (str_contains($activity->glb, "/")) {

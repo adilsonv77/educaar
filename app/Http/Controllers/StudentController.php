@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use App\DAO\ContentDAO;
+use App\DAO\StudentAppDAO;
 use App\Models\Painei;
 
 class StudentController extends Controller
@@ -42,7 +43,7 @@ class StudentController extends Controller
                 ->join('turmas as t', 't.id', '=', 'at.turma_id')
                 ->join('disciplinas_turmas_modelos as dtm', 'dtm.turma_modelo_id', '=', 't.turma_modelo_id')
                 ->join('contents as c', function (JoinClause $join) {
-                    $join->on('dtm.turma_modelo_id', '=', 'c.turma_id')->on('c.disciplina_id', '=', 'dtm.disciplina_id');
+                    $join->on('dtm.turma_modelo_id', '=', 'c.turma_modelo_id')->on('c.disciplina_id', '=', 'dtm.disciplina_id');
                 })
                 ->where([
                     ['at.aluno_id', '=', Auth::user()->id],
@@ -75,25 +76,47 @@ class StudentController extends Controller
             ->get();
             //dd($activities);
             
+        $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
+            ->where('bool_atual', 1)->first();
+            
+        $dataCorte = null;
+        $bloquearPorData = 0;
         // verificar quais atividades já foram respondidas        
         foreach ($activities as $activity) {
+            if ($dataCorte == null) {
+                $dataCorte = StudentAppDAO::buscarDataCorte($activity->id, Auth::user()->id, $anoAtual->id)->first();
+
+                if ($dataCorte != null) {
+                    $dataHoje = now();
+                    $diff = date_diff($dataHoje, new \DateTime($dataCorte->dt_corte));
+                    
+                    if ($diff->format("%R%a") < 0) {
+                        $bloquearPorData = 1;
+                    } 
+                }
+                
+            }
+            
             //Pega o json do painel da atividade se for um painel.
             $idPainelInicial = $activity->painel_inicial_id;
             if($idPainelInicial != null){
                 //Possui um painel inicial
                 $activity->json = Painei::where('id',$idPainelInicial)->first()->panel;
             }
+            $activity->bloquearPorData = $bloquearPorData;
+            if ($bloquearPorData == 0) {
+                $questions = DB::table('questions')
+                    ->where("activity_id", $activity->id)->get();
+                // uma questao respondida ou nao jah diz tudo da atividade
+                $respondida = DB::table('student_answers as st')
+                    ->join('questions as q', 'st.question_id', '=', 'q.id')
+                    ->where([
+                        ['st.activity_id', '=', $activity->id],
+                        ['st.user_id', '=', Auth::user()->id],
+                    ])->exists();
+                $activity->respondido = ($respondida ? 1 : 0);
+            }
 
-            $questions = DB::table('questions')
-                ->where("activity_id", $activity->id)->get();
-            // uma questao respondida ou nao jah diz tudo da atividade
-            $respondida = DB::table('student_answers as st')
-                ->join('questions as q', 'st.question_id', '=', 'q.id')
-                ->where([
-                    ['st.activity_id', '=', $activity->id],
-                    ['st.user_id', '=', Auth::user()->id],
-                ])->exists();
-            $activity->respondido = ($respondida ? 1 : 0);
         }
 
         session(["content_id" => $content_id]);

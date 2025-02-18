@@ -1,0 +1,12 @@
+1) Precisa executar essa mudança no banco. O nome da coluna turma_id já gerou muita confusão
+
+ALTER TABLE `contents` CHANGE `turma_id` `turma_modelo_id` BIGINT UNSIGNED NOT NULL;
+
+2) ainda existe o erro em SudentAppDAO::buscarDataCorte
+
+3) Tem um erro em TurmaDAO::buscarQuestoesNaoRespondidasTodosAlunos porque faz uma comparação entre turma_modelo_id do content com 
+turma_id do alunos_turma.... por essas que me incomodei com isso e resolvi mudar o nome da coluna.
+
+4) Precisa conferir ContentController::resultsContents pois parece que às vezes puxa a turma... não sei se é para ser assim mesmo.
+
+5) Existem DAOs usando session().... Usar termo para pesquisar em todo código e rever o uso da session

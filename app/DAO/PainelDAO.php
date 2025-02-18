@@ -11,6 +11,11 @@ class PainelDAO
         return Painei::where('id', $id)->first();
     }
 
+    public function getAll()
+    {
+        return Painei::all();
+    }
+
     public function create(array $data)
     {
         return Painei::create($data);
@@ -19,5 +24,9 @@ class PainelDAO
     public function updateById($id, array $data)
     {
         return Painei::where('id', $id)->update($data);
+    }
+
+    public function deleteById($id){
+        Painei::where('id',$id)->delete();
     }
 }
