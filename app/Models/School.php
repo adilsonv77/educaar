@@ -9,7 +9,7 @@ class School extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'qr_letra', 'qr_numero', 'prof_atual_id'];
+    protected $fillable = ['name', 'prof_atual_id'];
     protected $table = 'schools';
 
 
