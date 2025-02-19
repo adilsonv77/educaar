@@ -10,3 +10,10 @@ turma_id do alunos_turma.... por essas que me incomodei com isso e resolvi mudar
 4) Precisa conferir ContentController::resultsContents pois parece que às vezes puxa a turma... não sei se é para ser assim mesmo.
 
 5) Existem DAOs usando session().... Usar termo para pesquisar em todo código e rever o uso da session
+
+6) testar a listagem de disciplinas do gonino
+
+7) analisar uma senhora mudança: o conteúdo ser de uma turma modelo e nao de turma id. Assim, se o professor é de uma disciplina em alguma turma, na hora de cadastrar o conteudo
+ele deve escolher a turma modelo, nao a turma concretiza. Estudar todos os impactos em fazer essa mudança.
+
+8) Nova feature por parte do aplicativo do aluno: se ele já respondeu as questões de todas as atividades, o botão para entrar no conteúdo deve ficar de outra cor,
