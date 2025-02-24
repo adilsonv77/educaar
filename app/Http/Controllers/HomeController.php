@@ -52,7 +52,9 @@ class HomeController extends Controller
         }
 
         if (session('type') == 'student') {
-            $ano_letivo = AnoLetivo::where('bool_atual', 1)->first();
+            $ano_letivo = AnoLetivo::where('bool_atual', 1)
+                    ->where("school_id", Auth::user()->school_id)
+                    ->first();
 
             // quando o usuário é developer mas o sistema trata como aluno
             

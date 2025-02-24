@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Models\Activity;
-use App\Models\AnoLetivo;
 use App\DAO\ContentDAO;
 
 class DeveloperController extends Controller
