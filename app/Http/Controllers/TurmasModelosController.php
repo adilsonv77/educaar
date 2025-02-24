@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TurmaModelo;
 use App\Models\DisciplinaTurmaModelo;
 use App\Models\AnoLetivo;
+use App\Models\Disciplina;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -46,7 +47,7 @@ class TurmasModelosController extends Controller
     {
         $acao = 'insert';
         $anosletivos = AnoLetivo::where('school_id', Auth::user()->school_id)->get();
-        $disciplinas = DB::table('disciplinas')->get();
+        $disciplinas = Disciplina::where('school_id', Auth::user()->school_id)->get();
 
         $disciplinas_turma = $disciplinas->map(function ($d) {
             return [
@@ -76,12 +77,15 @@ class TurmasModelosController extends Controller
 
         // Validação e verificação do nome da turma (agora separado)
         $nome = $data['serie']; // Nome da turma
-        $exists = TurmaModelo::where('serie', $nome)
+        $turmaModelo = TurmaModelo::where('serie', $nome)
                              ->where('school_id', Auth::user()->school_id)
-                             ->exists();
+                             ->first();
 
-        if ($exists) {
-            return back()->withErrors(['serie' => 'Este nome de turma já está cadastrado.']);
+        if ($turmaModelo != null) {
+            if (($data['acao'] == 'insert') ||
+                (($data['acao'] != 'insert') && ($turmaModelo->id != $data['id']))) {
+                return back()->withErrors(['serie' => 'Este nome de turma já está cadastrado.']);
+            }
         }
 
         // Adiciona o school_id ao dados
@@ -110,7 +114,7 @@ class TurmasModelosController extends Controller
     public function edit(Request $request, $id)
     {
         $turma = TurmaModelo::find($id);
-        $disciplinas = DB::table('disciplinas')->get();
+        $disciplinas = Disciplina::where('school_id', Auth::user()->school_id)->get();
         $disciplinasturmas = DB::table('turmas_modelos')
             ->select('disciplinas.id', 'disciplinas.name')
             ->join('disciplinas_turmas_modelos', 'disciplinas_turmas_modelos.turma_modelo_id', '=', 'turmas_modelos.id')
