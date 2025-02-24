@@ -122,7 +122,7 @@ class ContentController extends Controller
         ];
 
         if (session('type') == 'teacher') {
-            $disciplinas = $this->buscarDisciplinas($anoLetivo->id, $idprof);
+            $disciplinas = ContentDAO::buscarDisciplinas($anoLetivo->id, $idprof);
             $params['disciplinas'] = $disciplinas;
             $params['disciplina'] = "";
         } else {
@@ -188,7 +188,7 @@ class ContentController extends Controller
         ];
 
         if (session('type') == 'teacher') {
-            $disciplinas = $this->buscarDisciplinas($anoLetivo->id, $idprof);
+            $disciplinas = ContentDAO::buscarDisciplinas($anoLetivo->id, $idprof);
             $params['disciplinas'] = $disciplinas;
             $params['disciplina'] = $content->turma_modelo_id . "_" . $content->disciplina_id;
         } else {
