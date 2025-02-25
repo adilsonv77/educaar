@@ -4,69 +4,40 @@
 
 @section('script-head')
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
+    <link rel="stylesheet"
+        href="{{ asset('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css?v=' . filemtime(public_path('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css'))) }}">
+    <link rel="stylesheet"
+        href="{{ asset('editor/dist/ui/trumbowyg.min.css?v=' . filemtime(public_path('editor/dist/ui/trumbowyg.min.css'))) }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .trumbowyg-editor[contenteditable=true]:empty::before {
+            content: attr(placeholder);
+            color: #999;
+        }
+    </style>
 @endsection
 
 @section('content')
-    <div id="summernote"></div>
+    <div id="trumbowyg-demo" placeholder="Insira seu texto aqui"></div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+    <script
+        src="{{ asset('editor/dist/trumbowyg.min.js?v=' . filemtime(public_path('editor/dist/trumbowyg.min.js'))) }}"></script>
+    <script
+        src="{{ asset('editor/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js?v=' . filemtime(public_path('editor/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js'))) }}"></script>
+    <script
+        src="{{ asset('editor/dist/plugins/colors/trumbowyg.colors.min.js?v=' . filemtime(public_path('editor/dist/plugins/colors/trumbowyg.colors.min.js'))) }}"></script>
     <script>
-        $('#summernote').summernote({
-            toolbar: [
-                // [groupName, [list of button]]
-                ['move', ['undo', 'redo']],
-                ['style', ['bold', 'italic', 'strikethrough', 'underline']],
-                ['fonts', ['fontname', 'fontsize', 'forecolor', 'backcolor']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['height', ['height']]
+        $('#trumbowyg-demo').trumbowyg({
+            btns: [
+                ['undo', 'redo'], // Only supported in Blink browsers
+                ['strong', 'em'],
+                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                ['fontfamily', 'formatting','foreColor']
             ],
-            placeholder: 'Insira o seu texto aqui',
-            tabsize: 2,
-            height: 200
+            autogrow: false
         });
     </script>
 @endsection
-<!-- 
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Summernote with Bootstrap 4</title>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
-</head>
-
-<body>
-    <div id="summernote"></div>
-    <script>
-        $('#summernote').summernote({
-            placeholder: 'Hello Bootstrap 4',
-            tabsize: 2,
-            height: 100
-        });
-    </script>
-</body>
-
-</html> -->

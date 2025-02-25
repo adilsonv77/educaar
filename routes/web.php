@@ -8,7 +8,7 @@ use App\Models\School;
 
 //Painéis - Renan
 //Talvez alguns possam ser substituidos por o tal do resource
-Route::get('editor', function () {
+Route::get('teste', function () {
     return view('pages/painel/editor');
 });
 
