@@ -17,17 +17,20 @@ class PainelController extends Controller
         $this->painelDAO = $painelDAO;
     }
 
-    public function index(){
+    public function index()
+    {
         $data = $this->painelDAO->getAll();
         foreach ($data as $painel) {
             if ($this->activityDAO->buscarPorPainel($painel->id)->get()->count() != 0) {
                 $painel->sendoUsado = true;
-            }else{
+            } else {
                 $painel->sendoUsado = false;
             }
         }
+
         $content = "";
         return view('pages.painel.panelListing', ['data' => $data, 'content' => $content]);
+
     }
 
     public function create()
@@ -106,7 +109,7 @@ class PainelController extends Controller
 
     public function destroy($id)
     {
-       $this->painelDAO->deleteById($id);
-       return redirect()->route('paineis.index');
+        $this->painelDAO->deleteById($id);
+        return redirect()->route('paineis.index');
     }
 }

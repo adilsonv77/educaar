@@ -18,16 +18,13 @@
                             </tr>
                         </thead>
                         <tbody>
-
                             @foreach ($results as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>
                                 </tr>
                             @endforeach
-
-                         </tbody>
+                        </tbody>
                     </table>
-
                 </div>
         </div>
     </div>

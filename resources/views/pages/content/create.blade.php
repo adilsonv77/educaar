@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+ <!-- #region-->
 @section('page-name', $titulo)
 
 @section('content')
@@ -8,19 +8,16 @@
             <div class="card-body">
                 <form method="POST" action="{{ route('content.store') }}">
                     @csrf
-
                     <input name="id" type="hidden" value="{{ $id }}" />
                     <input name="acao" type="hidden" value="{{ $acao }}" />
 
-
                     <div class="form-group row">
                         <label for="name">Nome* </label>
-
+                    
                         <div class="col-md-6">
                             <input id="name" type="text" maxlength="100" class="form-control @error('name') is-invalid @enderror"
                                 name="name" value="{{ old('name', $name) }}" required autocomplete="name"
                                 placeholder="Digite aqui o nome do conteúdo" autofocus />
-
                         </div>
                     </div>
                     @if (session('type') == 'teacher')

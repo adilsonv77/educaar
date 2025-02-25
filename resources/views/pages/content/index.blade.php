@@ -10,19 +10,17 @@
 
 @section('page-name', $pageName)
 
-
 @section('script-head')
 @endsection
 
 @section('content')
-
     <form action="{{ route('content.index') }}" method="GET">
         <div class="form-inline">
-        <label for="">Informe o conteudo :</label>
-            <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}" list="historico" />
+            <label for="">Informe o conteudo :</label>
+            <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}"
+                list="historico" />
             <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
         </div>
-
 
         <datalist id="historico">
             @foreach ($contents as $content)
@@ -33,24 +31,25 @@
     <br>
 
     <style>
-    .form-inline{
-        display: flex;
-        justify-content: flex-start; 
-    }
+        .form-inline {
+            display: flex;
+            justify-content: flex-start;
+        }
 
-    .form-inline label {
-      
-      margin-right: 10px;
-    }
-</style>
+        .form-inline label {
+
+            margin-right: 10px;
+        }
+    </style>
 
     @if (session('type') !== 'developer')
-    <div>
-        <form action="{{ route('content.create') }}">
-            @csrf
-            <button class="btn btn-smaller, btn-primary " id="novo" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
-        </form>
-     </div>
+        <div>
+            <form action="{{ route('content.create') }}">
+                @csrf
+                <button class="btn btn-smaller, btn-primary " id="novo" title="Novo"><i
+                        class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+            </form>
+        </div>
     @endif
 
     <div class="card">
@@ -63,8 +62,10 @@
                                 <th>Nome</th>
                                 <th>Disciplina</th>
                                 <th>Série</th>
-                                <th>Fechar</th> 
-                                @if (session('type') == 'teacher')<th>Resultados</th>@endif                                
+                                <th>Fechar</th>
+                                @if (session('type') == 'teacher')
+                                    <th>Resultados</th>
+                                @endif
                                 @if (session('type') !== 'developer')
                                     <th>Selecionar Devs</th>
                                     <th>Editar</th>
@@ -81,62 +82,64 @@
                                     <td>{{ $item->disc_name }}</td>
                                     <td>{{ $item->turma_name }}</td>
 
-                                    
-                                         <!-- Açoes -->
+
+                                    <!-- Açoes -->
                                     <td>
                                         <form action="{{ route('fechar.index') }}">
                                             @csrf
                                             <input type="hidden" name="content" value="{{ $item->id }}">
                                             <button type="submit" id="FecharConteudo" class="btn btn-info"
-                                                @if ($item->qtasatividades == 0 or $item->fechado or $item->qtasQuestoes == 0) disabled @endif 
-                                                @if($item->qtasQuestoes == 0) title="Sem questões" @elseif ($item->fechado) title="Já fechado" @else title="Fechar" @endif >
-                                                <i class="bi bi-lock-fill h2 "  style = "color : #ffffff;"></i> ({{ $item->qtasatividades }})
-
+                                                @if ($item->qtasatividades == 0 or $item->fechado or $item->qtasQuestoes == 0) disabled @endif
+                                                @if ($item->qtasQuestoes == 0) title="Sem questões" @elseif ($item->fechado) title="Já fechado" @else title="Fechar" @endif>
+                                                <i class="bi bi-lock-fill h2 " style = "color : #ffffff;"></i>
+                                                ({{ $item->qtasatividades }})
                                             </button>
                                         </form>
                                     </td>
-                                     
+
 
                                     @if (session('type') == 'teacher')
-                                    <!-- Resultados -->
-                                    <td>
-                                        <form action="{{ route('content.resultsContents') }}">
-                                            @csrf
-                                            <input type="hidden" name="content_id" value="{{ $item->id }}">
-                                            <button type="submit"  class="btn btn-success" @if($item->qtasQuestoes == 0) title="Sem questões" @else title="Resultados" @endif
-                                            @if ($item->qtasatividades == 0 or $item->qtasQuestoes == 0) disabled @endif>
-                                            <i class="bi bi-journal-bookmark h2"  style = "color : #ffffff;"></i>
-                                            </button>
-                                        </form>
-                                    </td>
+                                        <!-- Resultados -->
+                                        <td>
+                                            <form action="{{ route('content.resultsContents') }}">
+                                                @csrf
+                                                <input type="hidden" name="content_id" value="{{ $item->id }}">
+                                                <button type="submit" class="btn btn-success"
+                                                    @if ($item->qtasQuestoes == 0) title="Sem questões" @else title="Resultados" @endif
+                                                    @if ($item->qtasatividades == 0 or $item->qtasQuestoes == 0) disabled @endif>
+                                                    <i class="bi bi-journal-bookmark h2" style = "color : #ffffff;"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     @endif
                                     @if (session('type') !== 'developer')
-                                    <td>
-                                        <form action="{{ route('dev.listDevs') }}">
-                                            @csrf
-                                            <input type="hidden" name="content" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-warning" title="Selecionar Devs">
-                                                <i class="bi bi-person-fill-gear h2"  style = "color : #ffffff;"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                     <!-- Editar -->
-                                    <form action="{{ route('content.edit', $item->id) }}">
-                                            @csrf
-                                            <button type="submit" class="btn btn-warning" title="Editar"> 
-                                                <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                         <!-- Excluir -->
-                                        <button type="button"
+                                        <td>
+                                            <form action="{{ route('dev.listDevs') }}">
+                                                @csrf
+                                                <input type="hidden" name="content" value="{{ $item->id }}">
+                                                <button type="submit" class="btn btn-warning" title="Selecionar Devs">
+                                                    <i class="bi bi-person-fill-gear h2" style = "color : #ffffff;"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <!-- Editar -->
+                                            <form action="{{ route('content.edit', $item->id) }}">
+                                                @csrf
+                                                <button type="submit" class="btn btn-warning" title="Editar">
+                                                    <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <!-- Excluir -->
+                                            <button type="button"
                                                 class="btn btn-danger  @if ($item->qtasatividades > 0) disabled @endif"
-                                                data-toggle="modal" data-target="#modal{{ $item->id }}" title="Excluir">
-                                                <i class="bi bi-trash3 h2"  style = "color : #ffffff;"></i>
-                                        </button>
-                                    </td>
+                                                data-toggle="modal" data-target="#modal{{ $item->id }}"
+                                                title="Excluir">
+                                                <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
+                                            </button>
+                                        </td>
                                     @endif
                                 </tr>
                                 <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog"
@@ -159,8 +162,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                
                             @endforeach
 
                         </tbody>
@@ -173,15 +174,14 @@
                                     <h3>Nenhum aluno respondeu alguma atividade desse conteúdo.</h3>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">OK</button>
-                                    
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                     <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center">
                         {{ $contents->links('vendor.pagination.bootstrap-4') }}
                     </div>
 

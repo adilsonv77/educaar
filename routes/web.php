@@ -8,6 +8,10 @@ use App\Models\School;
 
 //Painéis - Renan
 //Talvez alguns possam ser substituidos por o tal do resource
+Route::get('editor', function () {
+    return view('pages/painel/editor');
+});
+
 use App\Http\Controllers\PainelController;
 Route::prefix('paineis')->group(function(){
     Route::get('/', [PainelController::class, 'index'])->name('paineis.index');

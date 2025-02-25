@@ -73,7 +73,9 @@ class UserController extends Controller
     {
         $titulo = 'Adicionar Aluno';
         $acao = 'insert';
-        $anoletivo = AnoLetivo::where('bool_atual', 1)->first();
+        $anoletivo = AnoLetivo::where('bool_atual', 1)
+                ->where("school_id", Auth::user()->school_id)
+                ->first();
         $turmas = DB::table('turmas')
             ->where([
                 ['ano_id', '=', $anoletivo->id],
@@ -158,7 +160,9 @@ class UserController extends Controller
         ];
 
         if ($user->type == 'student') {
-            $anoletivo = AnoLetivo::where('bool_atual', 1)->first();
+            $anoletivo = AnoLetivo::where('bool_atual', 1)
+            ->where("school_id", Auth::user()->school_id)
+            ->first();
             $turmas = DB::table('turmas')
                 ->where([
                     ['ano_id', '=', $anoletivo->id],

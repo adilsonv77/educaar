@@ -108,7 +108,10 @@ class ContentController extends Controller
             return redirect('/');
         }
         $idprof = Auth::user()->id;
-        $anoLetivo = AnoLetivo::where('bool_atual', 1)->first();
+  
+        $anoLetivo = AnoLetivo::where('bool_atual', 1)
+                        ->where("school_id", Auth::user()->school_id)
+                        ->first();
 
         //var_dump($anoLetivo->id);
         $titulo = 'Adicionar Conteúdo';
@@ -120,9 +123,8 @@ class ContentController extends Controller
             'name' => '',
             'id' => 0
         ];
-
         if (session('type') == 'teacher') {
-            $disciplinas = $this->buscarDisciplinas($anoLetivo->id, $idprof);
+            $disciplinas = ContentDAO::buscarDisciplinas($anoLetivo->id, $idprof);
             $params['disciplinas'] = $disciplinas;
             $params['disciplina'] = "";
         } else {
@@ -188,7 +190,7 @@ class ContentController extends Controller
         ];
 
         if (session('type') == 'teacher') {
-            $disciplinas = $this->buscarDisciplinas($anoLetivo->id, $idprof);
+            $disciplinas = ContentDAO::buscarDisciplinas($anoLetivo->id, $idprof);
             $params['disciplinas'] = $disciplinas;
             $params['disciplina'] = $content->turma_modelo_id . "_" . $content->disciplina_id;
         } else {

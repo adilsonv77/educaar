@@ -105,7 +105,7 @@ select a.content_id, q.id, q.question from activities a
             ->get();
     }
 
-    private function buscarDisciplinas($anoid, $profid)
+    public static function buscarDisciplinas($anoid, $profid)
     {
         /*
         Retorna as disciplinas com suas turmas desse professor, nesse ano letivo.
