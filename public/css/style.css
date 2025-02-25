@@ -27236,7 +27236,7 @@ code {
   color: #B1B1B1; }
 .table td {
   border-color: #f0f1f5;
-  padding: 12px 9px; }
+  padding: 12px; }
   [data-theme-version="dark"] .table td {
     border-color: #333a54; }
 .table.shadow-hover tr:hover {

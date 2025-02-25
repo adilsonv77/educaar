@@ -26,7 +26,8 @@ class PainelController extends Controller
                 $painel->sendoUsado = false;
             }
         }
-        return view('pages.painel.panelListing', ['data'=>$data]);
+        $content = "";
+        return view('pages.painel.panelListing', ['data' => $data, 'content' => $content]);
     }
 
     public function create()
