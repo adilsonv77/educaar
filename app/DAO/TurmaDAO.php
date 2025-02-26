@@ -236,7 +236,6 @@ AND u.id = 8
     }
 
     public static function buscarQuestoesNaoRespondidasTodosAlunos($turmaid) {
-       /// AQUI TEM UM ERRO
         /*
         select user_name, a.name as activity_name, c.name as content_name FROM 
         (select u.name as user_name, aluno_id, turma_id from alunos_turmas join users u on u.id = aluno_id where turma_id = 16) at
