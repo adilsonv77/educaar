@@ -3,6 +3,7 @@
 ALTER TABLE `contents` CHANGE `turma_id` `turma_modelo_id` BIGINT UNSIGNED NOT NULL;
 
 2) ainda existe o erro em SudentAppDAO::buscarDataCorte
+> Resolvido
 
 3) Tem um erro em TurmaDAO::buscarQuestoesNaoRespondidasTodosAlunos porque faz uma comparação entre turma_modelo_id do content com 
 turma_id do alunos_turma.... por essas que me incomodei com isso e resolvi mudar o nome da coluna.

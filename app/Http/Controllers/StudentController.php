@@ -90,7 +90,7 @@ class StudentController extends Controller
                     $dataHoje = now();
                     $diff = date_diff($dataHoje, new \DateTime($dataCorte->dt_corte));
                     
-                    if ($diff->format("%R%a") < 0) {
+                    if ($diff->format("%R%a") <= 0) {
                         $bloquearPorData = 1;
                     } 
                 }
