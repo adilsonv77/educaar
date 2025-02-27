@@ -242,8 +242,16 @@ class QuestionController extends Controller
 
         $activity = Activity::find($activity_id);
 
+        session()->put('turma_id', $turma_id);
+        session()->put('activity_id', $activity->id);
 
         $result= ResultActivityDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
+
+        session()->put('alunos_fizeram_completo', $result['alunos_fizeram_completo']);
+        session()->put('alunos_fizeram_incompleto', $result['alunos_fizeram_incompleto']);
+        session()->put('question_base', $result['question_base']);
+
+
         $questions=ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);
         $respostasSelecionadas= ResultActivityDAO::respostasDosAlunos($activity->id, $turma->id);
 
@@ -273,16 +281,3 @@ class QuestionController extends Controller
         return view('pages.activity.listStudents', compact('results','activity','type'));
     }
 }
-//         SELECT DISTINCT t.id, t.nome FROM `turmas` as t 
-// 			INNER JOIN turmas_disciplinas as td 
-//             on td.turma_id= t.id
-//             INNER JOIN turmas_modelos as tm
-//             on t.turma_modelo_id= tm.id
-//             inner join contents as c 
-//             ON c.turma_id= tm.id
-//             INNER join activities as a 
-//             on a.content_id= c.id
-// WHERE td.professor_id= 4 and t.ano_id= 4 and a.id= 15
-
-
-

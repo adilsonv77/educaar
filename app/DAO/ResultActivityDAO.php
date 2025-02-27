@@ -12,12 +12,8 @@ class ResultActivityDAO
     {
         $where = DB::table('questions as q')->where('q.activity_id', $activityID);
 
-        // COLOCAR ESSAS DUAS LINHAS ANTES DA CHAMADA DA FUNÇÃO ACIMA        
-        session()->put('turma_id', $turma_id);
-        session()->put('activity_id', $activityID);
         //total de questões
         $totalQuestions= $where->count();
-        
 
         $sql = DB::table('questions as q')
         ->select('u.id as id','u.name as nome', DB::raw('COUNT(sta.id) as qntRespondida'))
@@ -44,11 +40,8 @@ class ResultActivityDAO
                     array_push($alunos_fizeram_incompleto,  $aluno);
                 }
             }
-            session()->put('alunos_fizeram_completo', $alunos_fizeram_completo);
-            session()->put('alunos_fizeram_incompleto', $alunos_fizeram_incompleto);
 
             $question_base= $where->first()->id;
-            session()->put('question_base', $question_base);
             //alunos que não fizeram
             $sql2= DB::table('users as u')
                     ->selectRaw('COUNT(u.name) as qntsNaofizeram')
@@ -67,7 +60,8 @@ class ResultActivityDAO
                 'totalQuestions' => $totalQuestions,
                 'alunos_fizeram_completo' => count($alunos_fizeram_completo),
                 'alunos_fizeram_incompleto' => count($alunos_fizeram_incompleto),
-                'alunos_nao_fizeram' => $alunos_nao_fizeram->qntsNaofizeram
+                'alunos_nao_fizeram' => $alunos_nao_fizeram->qntsNaofizeram,
+                'question_base' => $question_base
             ];
             
 
