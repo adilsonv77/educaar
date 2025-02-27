@@ -23,7 +23,6 @@ class ResultContentDAO
              left outer join student_answers sta on sta.question_id = q.id and sta.user_id = atu.aluno_id 
              where t.id = 4 and c.id = 1
          */
-
         $sql = DB::table('turmas as t')
             ->join("contents as c", "c.turma_modelo_id", "=", "t.turma_modelo_id")
             ->join("activities as a", "c.id", "=", "a.content_id")
@@ -45,14 +44,27 @@ class ResultContentDAO
         return $sql;
     }
 
-    public static function getAlternativeCountsForActivity($activityId)
-    {
+    public static function getCountRespostas($questionid) {
+        /*
+        select sa.alternative_answered, COUNT(sa.id) as respostas_count, q.answer from student_answers sa
+            join questions q on q.id = sa.question_id
+            where q.id = 94
+            group by sa.alternative_answered, q.answer
+        */
         return DB::table('student_answers as sa')
-            ->join('questions as q', 'sa.question_id', '=', 'q.id')
-            ->select('sa.alternative_answered', DB::raw('count(*) as count'))
-            ->where('sa.activity_id', $activityId)
-            ->whereIn('sa.alternative_answered', ['A', 'B', 'C', 'D'])
-            ->groupBy('sa.alternative_answered')
-            ->get();
+                ->join('questions as q', 'sa.question_id', '=', 'q.id')
+                ->select(
+                    'sa.alternative_answered',
+                    DB::raw('COUNT(sa.id) as respostas_count'),
+                    'q.answer'
+                )
+                ->where('q.id', $questionid) // Filtra pela questão atual
+                ->groupBy('sa.alternative_answered', 'q.answer')
+                ->get();
+    }
+
+    public static function getQuestoesAtividade($activityid) {
+        return DB::table('questions')->where('activity_id', $activityid)->get();
+
     }
 }

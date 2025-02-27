@@ -9,7 +9,8 @@ ALTER TABLE `contents` CHANGE `turma_id` `turma_modelo_id` BIGINT UNSIGNED NOT N
 turma_id do alunos_turma.... por essas que me incomodei com isso e resolvi mudar o nome da coluna.
 > Resolvido
 
-4) Precisa conferir ContentController::resultsContents pois parece que às vezes puxa a turma... não sei se é para ser assim mesmo.
+4) Precisa conferir ContentController::resultsContents pois parece que às vezes puxa a turma... não sei se é para ser assim mesmo. Todas as A2 tem 1 aluno a mais.
+> Resolvido
 
 5) Existem DAOs usando session().... Usar termo para pesquisar em todo código e rever o uso da session
 
