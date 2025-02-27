@@ -393,15 +393,4 @@ class ActivityController extends Controller
         return redirect(route('activity.index'));
     }
 
-    public function report($activityId, $userId)
-    {
-        $activity = Activity::find($activityId);
-        $activityQuestionsAnswered = StudentAnswer::where('activity_id', $activityId)->where('user_id', $userId)->get();
-        $activityUserTime = StudentTimeActivity::where('activity_id', $activityId)->where('user_id', $userId)->get();
-        $activityAccessUser = StudentAccessActivity::where('activity_id', $activityId)->where('user_id', $userId)->get();
-        $activityGradeUser = StudentGrade::where('activity_id', $activityId)->where('user_id', $userId)->get();
-        $users = User::where('id', $userId)->get();
-
-        return view('pages.activity.report', compact('activity', 'activityQuestionsAnswered', 'activityUserTime', 'activityAccessUser', 'activityGradeUser', 'users', 'activityId', 'userId'));
-    }
 }
