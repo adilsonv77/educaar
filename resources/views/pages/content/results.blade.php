@@ -7,194 +7,194 @@
 @section('page-name', $pageName)
 
 @section('script-head')
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<link rel="stylesheet" href="{{asset('css/resultsContents1.css')}}">
-<style>
-    .form-inline {
-        display: flex;
-        justify-content: flex-start;
-    }
-
-    .form-inline label {
-
-        margin-right: 10px;
-    }
-</style>
-<script>
-    var qntCompletas = {{$totais['qtos_fizeram']}};
-    var qntIncompletas = {{$totais['qtos_incompletos']}};
-    var qntNaoFizeram = {{$totais['qtos_nao_fizeram']}};
-
-    google.charts.load('current', { 'packages': ['corechart', 'bar'] });
-    google.charts.setOnLoadCallback(drawStuff);
-
-    function drawStuff() {
-        drawBarChart();
-        drawPieChart();
-    }
-
-    function drawBarChart() {
-
-        const map1 = new Map();
-
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Atividades');
-        data.addColumn('number', 'Responderam');
-        data.addColumn('number', 'Não respond.');
-        data.addColumn({ type: 'string', role: 'tooltip' });
-        var value;
-
-        @foreach ($results as $item)
-            value = "A" + {{ $loop->index + 1 }};
-            data.addRow([{ f: value + ": " + "{{ $item['nome'] ?? '' }}", v: value }, {{ $item['atividade_completa'] }}, {{ ($item['atividade_incompleta'] + $item['atividade_nao_fizeram']) }}, "{{ $item['nome'] ?? '' }}"]);
-        @endforeach
-
-        var _ticks = [];
-        for (var i = 0; i <= (qntCompletas + qntIncompletas + qntNaoFizeram); i++) {
-            _ticks.push(i);
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="{{asset('css/resultsContents1.css')}}">
+    <style>
+        .form-inline {
+            display: flex;
+            justify-content: flex-start;
         }
 
-        var options = {
-            chart: {
-                title: 'Atividades respondidas',
-            },
-            isStacked: true,
-            colors: ['#5A2D66', '#9C6FA8'],
-            legend: 'bottom',
-            vAxis: {
-                minValue: 0,
-                ticks: _ticks
-            },
-            bar: { groupWidth: '45%' }
-        };
+        .form-inline label {
 
-        var chart = new google.charts.Bar(document.getElementById('barras'));
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-    }
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        var qntCompletas = {{$totais['qtos_fizeram']}};
+        var qntIncompletas = {{$totais['qtos_incompletos']}};
+        var qntNaoFizeram = {{$totais['qtos_nao_fizeram']}};
 
-    function drawPieChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Atividades', 'Alunos'],
-            ['Completo', qntCompletas],
-            ['Incompleto', qntIncompletas],
-            ['Não fizeram', qntNaoFizeram]
-        ]);
+        google.charts.load('current', { 'packages': ['corechart', 'bar'] });
+        google.charts.setOnLoadCallback(drawStuff);
 
-        var options = {
-            title: 'Como está o conteúdo por aluno?',
-            pieHole: 0.4,
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('rosca'));
-        chart.draw(data, options);
-
-        google.visualization.events.addListener(chart, 'select', selectHandler);
-
-        google.visualization.events.addListener(chart, 'onmouseover', mouseOverHandler);
-        google.visualization.events.addListener(chart, 'onmouseout', mouseOutHandler);
-
-        function mouseOverHandler() {
-            document.getElementById('rosca').style.cursor = 'pointer';
+        function drawStuff() {
+            drawBarChart();
+            drawPieChart();
         }
 
-        function mouseOutHandler() {
-            document.getElementById('rosca').style.cursor = 'default';
+        function drawBarChart() {
+
+            const map1 = new Map();
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Atividades');
+            data.addColumn('number', 'Responderam');
+            data.addColumn('number', 'Não respond.');
+            data.addColumn({ type: 'string', role: 'tooltip' });
+            var value;
+
+            @foreach ($results as $item)
+                value = "A" + {{ $loop->index + 1 }};
+                data.addRow([{ f: value + ": " + "{{ $item['nome'] ?? '' }}", v: value }, {{ $item['atividade_completa'] }}, {{ ($item['atividade_incompleta'] + $item['atividade_nao_fizeram']) }}, "{{ $item['nome'] ?? '' }}"]);
+            @endforeach
+
+            var _ticks = [];
+            for (var i = 0; i <= (qntCompletas + qntIncompletas + qntNaoFizeram); i++) {
+                _ticks.push(i);
+            }
+
+            var options = {
+                chart: {
+                    title: 'Atividades respondidas',
+                },
+                isStacked: true,
+                colors: ['#5A2D66', '#9C6FA8'],
+                legend: 'bottom',
+                vAxis: {
+                    minValue: 0,
+                    ticks: _ticks
+                },
+                bar: { groupWidth: '45%' }
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('barras'));
+            chart.draw(data, google.charts.Bar.convertOptions(options));
         }
 
-        function selectHandler() {
-            var selectedItem = chart.getSelection()[0];
-            var type = " ";
-            if (selectedItem) {
-                type = data.getValue(selectedItem.row, 0);
-                var url = "{{ route('content.listStudents', ['type' => 'type_selection']) }}".replace('type_selection', type);
-                window.location.href = url;
+        function drawPieChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Atividades', 'Alunos'],
+                ['Completo', qntCompletas],
+                ['Incompleto', qntIncompletas],
+                ['Não fizeram', qntNaoFizeram]
+            ]);
+
+            var options = {
+                title: 'Como está o conteúdo por aluno?',
+                pieHole: 0.4,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('rosca'));
+            chart.draw(data, options);
+
+            google.visualization.events.addListener(chart, 'select', selectHandler);
+
+            google.visualization.events.addListener(chart, 'onmouseover', mouseOverHandler);
+            google.visualization.events.addListener(chart, 'onmouseout', mouseOutHandler);
+
+            function mouseOverHandler() {
+                document.getElementById('rosca').style.cursor = 'pointer';
+            }
+
+            function mouseOutHandler() {
+                document.getElementById('rosca').style.cursor = 'default';
+            }
+
+            function selectHandler() {
+                var selectedItem = chart.getSelection()[0];
+                var type = " ";
+                if (selectedItem) {
+                    type = data.getValue(selectedItem.row, 0);
+                    var url = "{{ route('content.listStudents', ['type' => 'type_selection']) }}".replace('type_selection', type);
+                    window.location.href = url;
+                }
             }
         }
-    }
-</script>
+    </script>
 @endsection
 
 @section('content')
 
-<div id="formTurma">
-    <form action="{{ route('turmas.listarTurmasAlunosProf') }}" method="GET ">
-        @csrf
+    <div id="formTurma">
+        <form action="{{ route('turmas.listarTurmasAlunosProf') }}" method="GET ">
+            @csrf
 
-        <div class="form-inline">
-            <label for="">Informe a turma:</label>
-            <select class="form-control" name="turma_id">
-                @foreach ($turmas as $item)
-                    <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
-                        {{ $item->nome }}
-                    </option>
-                @endforeach
-            </select>
-            <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
-        </div>
-    </form>
-    <br>
-</div>
-
-<div id="barras" style="width: 1000px; height: 500px;"></div>
-<div id="rosca" style="width: 900px; height: 500px;"></div>
-<div id="tooltipX"
-    style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;">
-</div>
-<div class="table-container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th class ="fixedCol" rowspan="2" style="border-bottom: 0px solid black"></th>
-                @foreach ($results as $result) 
-                    <th class="atividade" colspan="{{ count($result['questions']) * 4 }}">
-                        {{ $result['nome'] ?? 'Nome não disponível' }}
-                    </th>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($results as $result)
-                    @foreach ($result['questions'] as $questao)
-                        <th class="questions" colspan="4">{{ $questao['question'] }}</th>
+            <div class="form-inline">
+                <label for="">Informe a turma:</label>
+                <select class="form-control" name="turma_id">
+                    @foreach ($turmas as $item)
+                        <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
+                            {{ $item->nome }}
+                        </option>
                     @endforeach
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (['Alternativas', 'Correto', 'Incorreto', 'Não Respondeu'] as $rowLabel)
+                </select>
+                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+            </div>
+        </form>
+        <br>
+    </div>
+
+    <div id="barras" style="width: 1000px; height: 500px;"></div>
+    <div id="rosca" style="width: 900px; height: 500px;"></div>
+    <div id="tooltipX"
+        style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;">
+    </div>
+    <div class="table-container">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>{{ $rowLabel }}</td>
+                    <th class="fixedCol" rowspan="2" style="border-bottom: 0px solid black"></th>
                     @foreach ($results as $result) 
+                        <th class="atividade" colspan="{{ count($result['questions']) * 4 }}">
+                            {{ $result['nome'] ?? 'Nome não disponível' }}
+                        </th>
+                    @endforeach
+                </tr>
+                <tr>
+                    @foreach ($results as $result)
                         @foreach ($result['questions'] as $questao)
-                            @if ($rowLabel === 'Não Respondeu')
-                                <td colspan="4">
-                                    {{ $result['atividade_nao_fizeram'] > 0 ? $result['atividade_nao_fizeram'] : '-' }}
-                                </td>
-                            @else
-                                @foreach (['A', 'B', 'C', 'D'] as $alt)
-                                    <td data-toggle="tooltip" title="{{ $questao['alternatives'][$alt] ?? 'Descrição não disponível' }}">
-                                        @if ($rowLabel === 'Alternativas')
-                                            {{ $alt }}
-                                        @elseif ($rowLabel === 'Correto')
-                                            @if ($alt === $questao['correct_alternative'])
-                                                {{ $questao['alternatives_count'][$alt] }}
-                                            @else
-                                                -
-                                            @endif
-                                        @elseif ($rowLabel === 'Incorreto')
-                                            @if ($alt !== $questao['correct_alternative'])
-                                                {{ $questao['alternatives_count'][$alt] > 0 ? $questao['alternatives_count'][$alt] : '-' }}
-                                            @else
-                                                -
-                                            @endif
-                                        @endif
-                                    </td>
-                                @endforeach
-                            @endif
+                            <th class="questions" colspan="4">{{ $questao['question'] }}</th>
                         @endforeach
                     @endforeach
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (['Alternativas', 'Correto', 'Incorreto', 'Não Respondeu'] as $rowLabel)
+                    <tr>
+                        <td>{{ $rowLabel }}</td>
+                        @foreach ($results as $result) 
+                            @foreach ($result['questions'] as $questao)
+                                @if ($rowLabel === 'Não Respondeu')
+                                    <td colspan="4">
+                                        {{ $result['atividade_nao_fizeram'] > 0 ? $result['atividade_nao_fizeram'] : '-' }}
+                                    </td>
+                                @else
+                                    @foreach (['A', 'B', 'C', 'D'] as $alt)
+                                        <td data-toggle="tooltip" title="{{ $questao['alternatives'][$alt] ?? 'Descrição não disponível' }}">
+                                            @if ($rowLabel === 'Alternativas')
+                                                {{ $alt }}
+                                            @elseif ($rowLabel === 'Correto')
+                                                @if ($alt === $questao['correct_alternative'])
+                                                    {{ $questao['alternatives_count'][$alt] }}
+                                                @else
+                                                    -
+                                                @endif
+                                            @elseif ($rowLabel === 'Incorreto')
+                                                @if ($alt !== $questao['correct_alternative'])
+                                                    {{ $questao['alternatives_count'][$alt] > 0 ? $questao['alternatives_count'][$alt] : '-' }}
+                                                @else
+                                                    -
+                                                @endif
+                                            @endif
+                                        </td>
+                                    @endforeach
+                                @endif
+                            @endforeach
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection

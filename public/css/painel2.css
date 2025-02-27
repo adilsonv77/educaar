@@ -16,7 +16,7 @@
     padding: 1.8%;
     padding-bottom: 0 !important;
     border-radius: 3%;
-    box-shadow: -9px 5px 10.2px 0px rgba(0, 0, 0, 0.185);
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.185);
     display: flex;
     font-size: 20px;
     flex-direction: column;
@@ -25,7 +25,7 @@
 
 .painel textarea {
     width: 100%;
-    height: 20%;
+    height: 13.5%;
     font-size: 1.5vh;
     border-radius: 1.5vh;
     padding: 1% 10px;
@@ -48,8 +48,9 @@
     background-color: white;
     aspect-ratio: 1/1 ;
     height: 33.5vh;
-    border-radius: 100%;
+    border-radius: 00%;
     margin: 4% 0;
+    padding-top: 10%;
     font-size: 2vh;
     display: flex;
     flex-direction: column;
@@ -102,7 +103,7 @@
 #areaBtns {
     height: 20%;
     width: 100%;
-    /* background-color: #E8ECEC; */
+    background-color: #E8ECEC;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -114,18 +115,17 @@
     border-radius: 0 0 2vh 2vh;
 }
 
-#add {
+/* #add {
     position: absolute;
     width: fit-content !important;
     height: fit-content !important;
     padding: 0 1.3vh;
-    background-color: #823688;
+    background-color: white;
     border-radius: 100%;
     font-size: 3vh;
     right: 3.6%;
     bottom: 64%;
-    color:white
-}
+} */
 
 .btnPainel {
     background-color: #823688 !important;
@@ -138,7 +138,7 @@
 .selecionado {
     outline: none;
     box-shadow: none;
-    box-shadow: -9px 5px 10.2px 0px rgba(0, 0, 0, 0.185);
+    box-shadow: 0px 0px 20px 0px #8236882c;
 }
 
 textarea:hover {
@@ -152,7 +152,7 @@ textarea:focus {
 #configPainel {
     position: relative;
     background-color: #f8f8f8;
-    box-shadow: -9px 5px 10.2px 0px rgba(0, 0, 0, 0.185);
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.185) !important;
     width: 100%;
     height: 70vh;
     border-radius: 15px;
@@ -197,9 +197,9 @@ textarea:focus {
 }
 
 .fileMidia{
-    margin: auto;
-    width: 50%;
-    aspect-ratio: 1;
+    margin-left: auto;
+    margin-right: auto;
+    width: 6em
 }
 
 #youtubeLink {
@@ -245,7 +245,7 @@ textarea:focus {
 
 }
 
-/* Muda a cor do fundo do editor
+/* Muda a cor do fundo do editor */
 .trumbowyg-box {
     background-color: #7e7e7e !important;
 }
@@ -257,6 +257,4 @@ textarea:focus {
 
 .trumbowyg-button-pane{
     border-radius: 20px 20px 0 0;
-    padding: 0 !important;
-} 
-
+}
