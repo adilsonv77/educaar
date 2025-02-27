@@ -54,11 +54,14 @@
        <b>Nenhum aluno ainda acessou.</b>
   @else
 
+  <div style="background-color: white">
     <div id="barras" style="width: 1000px; height: 800px;"></div>
-    <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
     <div id="rosca" style="width: 900px; height: 500px;"></div>
+  </div>
 
-    <div class="alert alert-primary">
+  <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
+
+  <div class="alert alert-primary">
       <b>Veja mais detalhes ao passar o mouse sobre o título da questão ou a resposta do aluno.</b>
       <ul>
           <li style="list-style:square"> &#9989; : O aluno acertou a questão</li>

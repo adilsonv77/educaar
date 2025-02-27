@@ -134,9 +134,10 @@
         </form>
         <br>
     </div>
-
-    <div id="barras" style="width: 1000px; height: 500px;"></div>
-    <div id="rosca" style="width: 900px; height: 500px;"></div>
+    <div style="background-color: white">
+        <div id="barras" style="width: 1000px; height: 500px;"></div>
+        <div id="rosca" style="width: 900px; height: 500px;"></div>
+    </div>
     <div id="tooltipX"
         style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;">
     </div>
