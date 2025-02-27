@@ -1,30 +1,40 @@
-@extends('layouts.mobile' , ['back' => $rota, 'showBack' => true, 'showOthers' => false])
+@extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => false])
 
 @section('content')
     <div class="">
         @if (session('type') == 'student')
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover ">
-                            <tbody>
-                                @foreach ($conteudos as $item)
-                                    <tr>
-                                        <td>
-                                            <form action="{{ route('student.showActivity') }}">
-                                                @csrf
-                                                <input name="id" type="hidden" value="{{ $item->id }}" />
-                                                <button type="submit" class="btn btn-warning">{{ $item->name }}</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                <tr><td><br/></td></tr> <!-- para deixar um espaço após o último elemento -->
-                            </tbody>
-                        </table>
-                    </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <tbody>
+                        @foreach ($conteudos as $item)
+                            <tr>
+                                <td>
+                                    <form action="{{ route('student.showActivity') }}" method="get">
+                                        @csrf
+                                        <!-- Campo oculto com o ID do conteúdo -->
+                                        <input name="id" type="hidden" value="{{ $item->id }}" />
+
+                                        <!-- Botão com a cor baseada no status de conclusão -->
+                                        <button type="submit" class="btn 
+                                            {{ isset($conteudosRespondidos[$item->id]) && $conteudosRespondidos[$item->id] ? 'btn-success' : 'btn-warning' }}">
+                                            {{ $item->name }}
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        <tr><td><br/></td></tr> <!-- para deixar um espaço após o último elemento -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
+
+
+
+
             @section('script')
                 <script type="module" src="/js/app.js"></script>
             @endsection
@@ -51,10 +61,16 @@
 
                     .btn.btn-warning {
                         width: 100%;
-                        height: 40%
+                        height: 40%;
+                       
                     }
 
-
+                    .btn.btn-success {
+                        width: 100%;
+                        height: 40%;
+                        background-color: #efbecc; 
+                        
+                    }
 
                     .attribution {
                         display: flex;
