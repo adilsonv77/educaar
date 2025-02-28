@@ -17,13 +17,14 @@ Route::get('teste', function () {
 });
 
 use App\Http\Controllers\PainelController;
-Route::prefix('paineis')->group(function(){
+Route::prefix('paineis')->group(function () {
     Route::get('/', [PainelController::class, 'index'])->name('paineis.index');
     Route::get('/create', [PainelController::class, 'create'])->name('paineis.create');
     Route::post('/', [PainelController::class, 'store'])->name('paineis.store');
     Route::get('/{id}/edit', [PainelController::class, 'edit'])->name('paineis.edit');
     Route::put('/{id}', [PainelController::class, 'update'])->name('paineis.update');
-    Route::delete('/{id}', [PainelController::class,'destroy'])->name('paineis.destroy');
+    Route::delete('/{id}', [PainelController::class, 'destroy'])->name('paineis.destroy');
+    Route::get('/paineis/{id}/conexoes', [PainelController::class, 'conexoes'])->name('paineis.conexoes');
 
 });
 
@@ -58,11 +59,13 @@ Route::middleware(['auth'])->group(function () {
 
     //Route::get('/disciplinas', DisciplinaForm::class)->name('disciplinas');
     //Route::resource('class', App\Http\Controllers\DisciplinaController::class);
-    Route::get('/class', function () { return view('pages.disciplina.list'); })->name('class.index');
+    Route::get('/class', function () {
+        return view('pages.disciplina.list'); })->name('class.index');
 
     //ano letivo
     //Route::resource('anoletivo', App\Http\Controllers\AnoLetivoController::class);
-    Route::get('/anoletivo', function () { return view('pages.anoletivo.list');})->name('anoletivo');
+    Route::get('/anoletivo', function () {
+        return view('pages.anoletivo.list'); })->name('anoletivo');
 
     //turmas modelos
     Route::resource('turmasmodelos', App\Http\Controllers\TurmasModelosController::class);
@@ -86,7 +89,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('resultsContents', [App\Http\Controllers\ContentController::class, 'resultsContents'])->name('content.resultsContents');
     Route::get('/listStudents/content/{type}', [App\Http\Controllers\ContentController::class, 'resultsListStudents'])->name('content.listStudents');
     Route::get('/content/list', [App\Http\Controllers\ContentController::class, 'listOfContents'])->name('content.list');
-    
+
 
     //school
     Route::get('/registerStudentDiscipline', [App\Http\Controllers\DisciplinaController::class, 'viewCadastrarAlunoDisciplina'])->name('registerStudentDiscipline');
@@ -123,7 +126,7 @@ Route::middleware(['auth'])->group(function () {
     //teacher
     Route::get('/frequencia', [App\Http\Controllers\FrequenciaController::class, 'index'])->name('teacher.frequencia');
     Route::post('/frequencia', [App\Http\Controllers\FrequenciaController::class, 'index'])->name('teacher.frequencia.filter');
-    
+
     //Lista De alunos em preofessor
     Route::get('/turma/questoesDosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class, 'index'])->name('student.results');
     Route::get('/turma/questoesNaoRespondidasTodosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class, 'todos'])->name('student.naorespondidas');

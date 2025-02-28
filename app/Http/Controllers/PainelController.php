@@ -111,4 +111,12 @@ class PainelController extends Controller
         $this->painelDAO->deleteById($id);
         return redirect()->route('paineis.index');
     }
+
+    public function conexoes($id)
+    {
+        $painel = $this->painelDAO->getById($id); // Busca o painel pelo ID
+
+        return view('pages.painel.conexoes', compact('painel'));
+    }
+
 }
