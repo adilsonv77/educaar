@@ -35,6 +35,7 @@
 </script>
 
 <body class="h-100">
+    @yield('bodyAccess')
     <div id="preloader">
         <div class="sk-three-bounce">
             <div class="sk-child sk-bounce1"></div>

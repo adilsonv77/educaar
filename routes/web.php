@@ -9,7 +9,11 @@ use App\Models\School;
 //Painéis - Renan
 //Talvez alguns possam ser substituidos por o tal do resource
 Route::get('teste', function () {
-    return view('pages/painel/editor');
+    return view('pages.painel.uploadArquivo', [
+        'titulo' => 'Criação de painéis',
+        'action' => 'create',
+        'midiaExtension' => ''
+    ]);
 });
 
 use App\Http\Controllers\PainelController;

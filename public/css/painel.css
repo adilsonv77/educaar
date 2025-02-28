@@ -135,12 +135,6 @@
     border-radius: 100%;
 }
 
-.selecionado {
-    outline: none;
-    box-shadow: none;
-    box-shadow: -9px 5px 10.2px 0px rgba(0, 0, 0, 0.185);
-}
-
 textarea:hover {
     cursor: pointer;
 }

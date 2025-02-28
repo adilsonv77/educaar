@@ -30,7 +30,6 @@ class PainelController extends Controller
 
         $content = "";
         return view('pages.painel.panelListing', ['data' => $data, 'content' => $content]);
-
     }
 
     public function create()
@@ -104,7 +103,7 @@ class PainelController extends Controller
 
         $this->painelDAO->updateById($id, ["panel" => json_encode($data)]);
 
-        return redirect()->route('paineis.create');
+        return redirect()->route('paineis.index');
     }
 
     public function destroy($id)

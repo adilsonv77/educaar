@@ -174,6 +174,5 @@
             @endif
         </div>
     </div>
-
     <script src="{{ asset('js/panelListing.js?v=' . filemtime(public_path('js/panelListing.js'))) }}"></script>
 @endsection

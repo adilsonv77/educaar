@@ -7,22 +7,13 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
-    <link href="{{ asset('css/painel.css?v=' . filemtime(public_path('css/painel.css'))) }}" rel="stylesheet">
-    <link rel="stylesheet"
-        href="{{ asset('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css?v=' . filemtime(public_path('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css'))) }}">
-    <link rel="stylesheet"
-        href="{{ asset('editor/dist/ui/trumbowyg.min.css?v=' . filemtime(public_path('editor/dist/ui/trumbowyg.min.css'))) }}">
+    <link rel="stylesheet" href="{{asset('css/painel.css')}}">
     <style>
-        .trumbowyg-editor[contenteditable=true]:empty::before {
-            content: attr(placeholder);
-            color: #999;
-        }
-
         #opaque-background {
             background-color: #D7D7D7;
             opacity: 0.7;
             position: absolute;
-            z-index: 12;
+            z-index: 6;
             width: 100%;
             height: 100%;
         }
@@ -32,7 +23,7 @@
             height: 100%;
             position: absolute;
             top: 0;
-            display: none;
+            display: flex;
             justify-content: center;
             align-items: center;
         }
@@ -41,7 +32,7 @@
             background-color: white;
             height: 600px;
             width: 600px;
-            z-index: 13;
+            z-index: 8;
             border-radius: 19px;
             padding: 40px 40px;
         }
@@ -92,7 +83,7 @@
             float: left;
         }
 
-        #popup {
+        #popup{
             box-shadow: -10px 12px 17px 0px rgba(0, 0, 0, 0.185);
         }
 
@@ -136,7 +127,7 @@
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
     <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-        de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+                    de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -149,8 +140,8 @@
                 <span class="picture__image"></span>
             </label>
             <!-- <input type="file" name="arquivoMidia" id="midiaInput" accept=".png, .jpeg, .jpg, .mp4"
-                onchange="upload_check()">
-                -este elemento foi movido para dentro do formulario no body, se mt tempo passou apagar comentário. Dia 27/02/25-->
+                    onchange="upload_check()">
+                    -este elemento foi movido para dentro do formulario no body, se mt tempo passou apagar comentário. Dia 27/02/25-->
 
             <p class="pInfo">Formatos suportados: MP4, JPG, JPEG, PNG</p>
             <p class="pInfo" style="float: right">Tamanho máximo: 50MB</p>
@@ -173,61 +164,60 @@
             <div class="row">
                 <div class="col-md-8 coluna linha">
                     <div class="painel">
-                        <!--               ________TEXTO SUPERIOR________               -->
                         <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117"
                             placeholder="Digite seu texto aqui"> @if ($action == 'edit') {{$txtSuperior}}
                             @endif</textarea>
-
-                        <!--               ________    MIDIAS    ________               -->
                         <div id="espacoMidias">
-                            <!-- Circulo que serve como botão para inserir midias pela primeira vez -->
+                            <!-- selecione um tipo de midia -->
                             <div id="midia" tabindex=0 @if ($action == 'edit') style="display: none;" @endif>
-                                <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}">
+                                <p>Selecione um:</p>
+                                <div id="selectType">
+                                    <button id="img">Imagem</button>
+                                    <span>ou</span>
+                                    <button id="vid">Vídeo</button>
+                                </div>
                             </div>
-
-                            <!-- Midia (imagem/video) atualmente enviado -->
+                            <!-- preview da midia -->
                             <div id="midiaPreview" edit=@if($action == 'edit')"true" @else "false" style="display: none;"
                             @endif>
-                                <!-- Video recebido do usuário (se recebido) -->
                                 <video id="vidMidia" controls @if ($midiaExtension != "mp4") style="display: none" @endif>
                                     <source id="srcVidMidia"
                                         src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif"
                                         type="video/mp4">
                                 </video>
-                                <!-- Imagem recebida do usuário (se recebida) -->
                                 <img src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif"
                                     id="imgMidia" @if($midiaExtension == "mp4") style="display: none" @endif>
                             </div>
                         </div>
-
-                        <!--               ________TEXTO INFERIOR________               -->
                         <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117"
                             placeholder="Digite seu texto aqui"> @if ($action == 'edit') {{$txtInferior}}
                             @endif</textarea>
-
-                        <!--               ________    BOTÕES    ________               -->
                         <div id="areaBtns">
-                            <button type="button" id="add">+</button>
+                            <button id="add">+</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 coluna">
-                    <!--Input onde o arquivo de midia é enviado, se encontra aqui pois precisa estar dentro do formulário.-->
-                    <input type="file" style="border:none" name="arquivoMidia" id="midiaInput"
-                        accept=".png, .jpeg, .jpg, .mp4" onchange="upload_check()" />
-
-                    <!--               ________CONFIGURAÇÕES DO PAINEL________               -->
                     <div id="configPainel">
-                        <p id="tituloSelecionado">Configurações de Texto</p> <!--Titulo da configuração selecionada-->
-
-                        <!--Blocos de configuração
-                            Explicação: Existem diferentes tipos de configs, de texto e de botão atualmente. Quando se clica no elemento
-                            a ser editado, o bloco referente as configurações do elemento recebe seu display setado como block.
-                        -->
-                        <div id="blocoTxt">
-                            <div id="trumbowyg-demo" placeholder="Insira seu texto aqui"></div>
+                        <!--Selecione uma mídia-->
+                        <p id="tituloSelecionado">Bloco de Mídia</p>
+                        <hr>
+                        <div id="blocoMidia">
+                            <p>Tipo de mídia</p>
+                            <input type="radio" name="midia" id="midia1">
+                            <label for="midia1">Video</label>
+                            <input type="radio" name="midia" id="midia2">
+                            <label for="midia2">Imagem</label>
+                            <hr>
+                            <label for="youtubeLink" @if ($action == 'edit') value="{{$link}}" @endif>Youtube</label><br>
+                            <input id="youtubeLink" placeholder="Ex: https://www.youtube.com/watch?v=4YEy" name="link"><br>
+                            <label id="labelMyFile" for="myfile">Local (somente .png, .jpg, .jpeg)</label><br>
+                            <input type="file" style="border:none" name="arquivoMidia" id="midiaInput"
+                                accept=".png, .jpeg, .jpg, .mp4" onchange="upload_check()" /><br><br>
                         </div>
+                        <div id="blocoTxt">
 
+                        </div>
                         <div id="blocoBtn">
 
                         </div>
@@ -237,41 +227,8 @@
             </div>
         </form>
     </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
-    <script
-        src="{{ asset('editor/dist/trumbowyg.min.js?v=' . filemtime(public_path('editor/dist/trumbowyg.min.js'))) }}"></script>
-    <script
-        src="{{ asset('editor/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js?v=' . filemtime(public_path('editor/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js'))) }}"></script>
-    <script
-        src="{{ asset('editor/dist/plugins/colors/trumbowyg.colors.min.js?v=' . filemtime(public_path('editor/dist/plugins/colors/trumbowyg.colors.min.js'))) }}"></script>
-    <script src="{{asset('js/painel.js?v=' . filemtime(public_path('js/painel.js')))}}" type="module"></script>
+    <script src="{{asset('js/painel.js')}}" type="module"></script>
     <script>
-        //---------------------------------------------------------------------------------------------------------------------
-        //  1. EDITOR DE TEXTO
-        $('#trumbowyg-demo').trumbowyg({
-            btns: [
-                ['undo', 'redo'], // Only supported in Blink browsers
-                ['strong', 'em'],
-                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                ['fontfamily', 'formatting', 'foreColor']
-            ],
-            autogrow: false
-        });
-
-        // Fazer o texto do bloco aparecer no painel
-        $(document).ready(function () {
-            $('#trumbowyg-demo').on('tbwchange tbwblur', function () {
-                let content = $(this).trumbowyg('html');
-                $('#txtSuperior').val(content);
-            });
-
-            $('#txtSuperior').on('input', function () {
-                $('#trumbowyg-demo').trumbowyg('html', $(this).val());
-            });
-        });
-        //---------------------------------------------------------------------------------------------------------------------
-        //  2. POP UP DE ADICIONAR MÍDIA
         function fecharPopUp() {
             document.getElementById("flex-container").style.display = 'none';
         }
@@ -280,10 +237,9 @@
             document.getElementById("flex-container").style.display = 'flex';
         }
 
-        //---------------------------------------------------------------------------------------------------------------------
-        //  3. VERIFICAR SE O ARQUIVO EXCEDE O TAMANHO MÁXIMO
         document.getElementById("midiaInput").addEventListener("change", () => {
-            fecharPopUp()
+            fecharPopUp();
+
             var upl = document.getElementById("midiaInput");
             var max = 160 * 1024 * 1024; // 50MB
 
@@ -309,6 +265,37 @@
 
                 upl.value = "";
             }
+
+            //Input de arquivo derivado do código do qual a área de input foi retirado. Provavelmente não é necessário para o funcionamento de nada
+            //     código comentado em 27/02/25 se uns meses tiverem passado e o código continua comentado, favor apagar código.  
+            // const inputFile = document.querySelector("#picture__input");
+            // const pictureImage = document.querySelector(".picture__image");
+            // const pictureImageTxt = "Choose an image";
+            // pictureImage.innerHTML = pictureImageTxt;
+
+            // inputFile.addEventListener("change", function (e) {
+            //     const inputTarget = e.target;
+            //     const file = inputTarget.files[0];
+
+            //     if (file) {
+            //         const reader = new FileReader();
+
+            //         reader.addEventListener("load", function (e) {
+            //             const readerTarget = e.target;
+
+            //             const img = document.createElement("img");
+            //             img.src = readerTarget.result;
+            //             img.classList.add("picture__img");
+
+            //             pictureImage.innerHTML = "";
+            //             pictureImage.appendChild(img);
+            //         });
+
+            //         reader.readAsDataURL(file);
+            //     } else {
+            //         pictureImage.innerHTML = pictureImageTxt;
+            //     }
+            // });
         });
     </script>
 @endsection
