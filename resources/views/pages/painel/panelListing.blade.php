@@ -12,13 +12,23 @@
 @endsection
 
 @section('content')
-    <!-- Botão add novo painel -->
     @if (session('type') !== 'developer')
-        <div>
+        <!-- Container para os botões -->
+        <div class="buttons-container">
+            <!-- Botão Novo -->
             <form action="{{ route('paineis.create') }}">
                 @csrf
-                <button class="btn btn-smaller, btn-primary " id="novo" title="Novo"><i class="bi bi-plus-circle-dotted h1"
-                        style="color : #ffffff;"></i></button>
+                <button class="btn btn-primary btn-sm" id="novo" title="Novo">
+                    <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff;"></i>
+                </button>
+            </form>
+
+            <!-- Botão Conexões -->
+            <form action="{{ route('paineis.conexoes') }}" method="GET">
+                @csrf
+                <button class="btn btn-warning btn-sm" type="submit" title="Conexões">
+                    <i class="bi bi-link-45deg"></i> Conexões
+                </button>
             </form>
         </div>
     @endif
@@ -108,7 +118,7 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>ID</th>
-                                <th>Selecionar para conexão</th>
+                                <!-- <th>Selecionar para conexão</th> -->
                                 <th>Tipo de mídia</th>
                                 <th>Editar</th>
                                 <th>Excluir</th>
@@ -119,12 +129,12 @@
                                 <tr>
                                     <td>{{ json_decode($painel->panel)->txtSuperior }}</td>
                                     <td>{{ $painel->id }}</td>
-                                    <td>
-                                        <form action="{{ route('paineis.conexoes', ['id' => $painel->id]) }}" method="GET">
-                                            @csrf
-                                            <button type="submit" class="btn btn-warning" title="Conexões">Conexões</button>
-                                        </form>
-                                    </td>
+                                    <!-- <td>
+                                                                                                                                                                                                                            <form action="{{ route('paineis.conexoes', ['id' => $painel->id]) }}" method="GET">
+                                                                                                                                                                                                                                @csrf
+                                                                                                                                                                                                                                <button type="submit" class="btn btn-warning" title="Conexões">Conexões</button>
+                                                                                                                                                                                                                            </form>
+                                                                                                                                                                                                                        </td> -->
                                     <td>{{ json_decode($painel->panel)->midiaExtension ?? 'N/A' }}</td>
 
                                     <!-- Editar painel -->

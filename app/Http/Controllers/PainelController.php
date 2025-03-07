@@ -112,11 +112,12 @@ class PainelController extends Controller
         return redirect()->route('paineis.index');
     }
 
-    public function conexoes($id)
+    public function conexoes()
     {
-        $painel = $this->painelDAO->getById($id); // Busca o painel pelo ID
+        $painéis = $this->painelDAO->getAll();
 
-        return view('pages.painel.conexoes', compact('painel'));
+        return view('pages.painel.conexoes', compact('painéis'));
     }
+
 
 }

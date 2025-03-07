@@ -1,0 +1,24 @@
+.d-flex-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+.conexoes-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}

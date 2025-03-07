@@ -24,7 +24,7 @@ Route::prefix('paineis')->group(function () {
     Route::get('/{id}/edit', [PainelController::class, 'edit'])->name('paineis.edit');
     Route::put('/{id}', [PainelController::class, 'update'])->name('paineis.update');
     Route::delete('/{id}', [PainelController::class, 'destroy'])->name('paineis.destroy');
-    Route::get('/paineis/{id}/conexoes', [PainelController::class, 'conexoes'])->name('paineis.conexoes');
+    Route::get('/conexoes', [PainelController::class, 'conexoes'])->name('paineis.conexoes');
 
 });
 
@@ -60,12 +60,14 @@ Route::middleware(['auth'])->group(function () {
     //Route::get('/disciplinas', DisciplinaForm::class)->name('disciplinas');
     //Route::resource('class', App\Http\Controllers\DisciplinaController::class);
     Route::get('/class', function () {
-        return view('pages.disciplina.list'); })->name('class.index');
+        return view('pages.disciplina.list');
+    })->name('class.index');
 
     //ano letivo
     //Route::resource('anoletivo', App\Http\Controllers\AnoLetivoController::class);
     Route::get('/anoletivo', function () {
-        return view('pages.anoletivo.list'); })->name('anoletivo');
+        return view('pages.anoletivo.list');
+    })->name('anoletivo');
 
     //turmas modelos
     Route::resource('turmasmodelos', App\Http\Controllers\TurmasModelosController::class);
