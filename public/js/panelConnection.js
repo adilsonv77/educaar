@@ -1,6 +1,5 @@
-
-//Carregar container
-let container = document.getElementById("container")
+// Carregar container
+let container = document.getElementById("canvas");
 let limite = container.getBoundingClientRect();
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -18,24 +17,62 @@ document.addEventListener("DOMContentLoaded", async () => {
     limite = container.getBoundingClientRect();
     container.style.height = limite.height + "px";
     container.style.width = limite.width + "px";
-})
-//Fim carregar container
+});
+// Fim carregar container
 
-//Adicionar painel
-let addBtn = document.getElementById("addPanel")
-
+// Adicionar painel
+let addBtn = document.getElementById("addPanel");
 let zIndexAtual = 0;
 
 addBtn.addEventListener("click", () => {
     const painel = document.createElement('div');
-    painel.id = 'card';
-    painel.style.background = gerarCorAleatoria();
-    painel.setAttribute('draggable', 'true');
+    painel.className = 'painel'; // Adiciona a classe painel
+
+    //ADICIONANDO O STYLE DO PAINEL (BÁSICO)
+    painel.style.width = '194px';
+    painel.style.height = '308px';
+    painel.style.position = 'absolute'; // Para permitir o arrasto
+    painel.style.backgroundColor = 'white'; // Cor de fundo
+    painel.style.border = '1px solid #ccc'; // Borda do painel
+    painel.style.padding = '10px'; // Espaçamento interno
+    painel.style.boxSizing = 'border-box'; // Para incluir padding e border no tamanho total
+
+    // ADICIONANDO O HTML DO PAINAL - BY JAQUE :)
+    painel.innerHTML = `
+        <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117" placeholder="Digite seu texto aqui"></textarea>
+        <div id="espacoMidias">
+            <div id="midia" tabindex=0>
+                <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}">
+            </div>
+            <div id="midiaPreview" edit="false" style="display: none;">
+                <video id="vidMidia" controls style="display: none;">
+                    <source id="srcVidMidia" src="" type="video/mp4">
+                </video>
+                <img src="" id="imgMidia" style="display: none;">
+            </div>
+        </div>
+        <div id="areaBtns">
+            <div class="teste">
+                <div class="circulo"></div>
+                Teste
+            </div>
+            <div class="teste">
+                <div class="circulo"></div>
+                Teste
+            </div>
+            <div class="teste">
+            <div class="circulo"></div>
+                Teste
+            </div>
+            </div>
+    `;
+
     container.appendChild(painel);
 
-    //Adiciona funções de movimentação
-    painel.addEventListener('dragstart', (e) => arrastar(e, new Painel(painel)))
-})
+    // Adiciona funções de movimentação
+    painel.setAttribute('draggable', 'true');
+    painel.addEventListener('dragstart', (e) => arrastar(e, new Painel(painel)));
+});
 
 class Painel {
     constructor(painel) {
@@ -47,54 +84,43 @@ class Painel {
     }
 }
 
-function gerarCorAleatoria() {
-    // Gera um número aleatório entre 0 e 16777215 (0xFFFFFF)
-    const corAleatoria = Math.floor(Math.random() * 16777215).toString(16);
-    // Retorna a cor no formato hexadecimal, preenchendo com zeros à esquerda, se necessário
-    return `#${corAleatoria.padStart(6, '0')}`;
-}
-//Fim de adicionar painel
-
-//Movimentação de um painel
-var chamarFuncaoSoltar;
-
 function arrastar(e, painel) {
     zIndexAtual++;
     painel.painel.style.zIndex = zIndexAtual;
-    painel.startX = e.clientX
-    painel.startY = e.clientY
-    chamarFuncaoSoltar = (e) => soltar(e, painel)
-    document.addEventListener('dragend', chamarFuncaoSoltar)
+    painel.startX = e.clientX;
+    painel.startY = e.clientY;
+    chamarFuncaoSoltar = (e) => soltar(e, painel);
+    document.addEventListener('dragend', chamarFuncaoSoltar);
 }
 
 function soltar(e, painel) {
-    //Movimenta para a posição do mouse
-    painel.newX = painel.painel.offsetLeft - (painel.startX - e.clientX)
-    painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY)
+    // Movimenta para a posição do mouse
+    painel.newX = painel.painel.offsetLeft - (painel.startX - e.clientX);
+    painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY);
 
-    painel.startX = e.clientX
-    painel.startY = e.clientY
+    painel.startX = e.clientX;
+    painel.startY = e.clientY;
 
-    //Verifica se a posição atual é válida.
+    // Verifica se a posição atual é válida.
     let limitesCaixa = painel.painel.getBoundingClientRect();
     limite = container.getBoundingClientRect();
 
     if (painel.newX + limitesCaixa.width > limite.right) {
-        painel.newX = limite.right - limitesCaixa.width
+        painel.newX = limite.right - limitesCaixa.width;
     }
     if (painel.newX < limite.left) {
-        painel.newX = limite.left
+        painel.newX = limite.left;
     }
     if (painel.newY + limitesCaixa.height > limite.bottom) {
-        painel.newY = limite.bottom - limitesCaixa.height
+        painel.newY = limite.bottom - limitesCaixa.height;
     }
     if (painel.newY < limite.top) {
-        painel.newY = limite.top
+        painel.newY = limite.top;
     }
 
-    painel.painel.style.top = (painel.newY) + 'px'
-    painel.painel.style.left = (painel.newX) + 'px'
+    painel.painel.style.top = (painel.newY) + 'px';
+    painel.painel.style.left = (painel.newX) + 'px';
 
     document.removeEventListener('dragend', chamarFuncaoSoltar);
 }
-//Fim da seção de movimentação do painel
+// Fim da seção de movimentação do painel

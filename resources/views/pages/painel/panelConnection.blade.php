@@ -11,7 +11,6 @@
 @endsection
 
 @section('content')
-<!-- <p>{{$data}}</p> -->
 <div id="container">
      <button id="addPanel">Adicionar painel</button>
 </div>
