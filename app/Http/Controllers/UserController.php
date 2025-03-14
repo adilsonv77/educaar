@@ -31,8 +31,14 @@ class UserController extends Controller
             return redirect('/');
         }
 
-        $wusers = User::where('school_id', Auth::user()->school_id)
-            ->where('type', '=', $tipo);
+        $wusers = User::where('users.school_id', Auth::user()->school_id)
+            ->where('users.type', '=', $tipo)
+            ->leftJoin('alunos_turmas', 'users.id', '=', 'alunos_turmas.aluno_id')
+            ->leftJoin('turmas', 'alunos_turmas.turma_id', '=', 'turmas.id')
+            ->select('users.*', DB::raw('GROUP_CONCAT(turmas.nome SEPARATOR ", ") as turma_nome')) // Junta os nomes das turmas
+            ->groupBy('users.id'); // Agrupa pelo ID do usuário
+
+       
 
         if (!empty($tipo2)) {
             $wusers = $wusers->orWhere('type', '=', $tipo2);
@@ -44,7 +50,12 @@ class UserController extends Controller
             $wusers = $wusers->where(DB::raw('concat(name, " - ", username) '), 'like', $r);
         }
 
-        $users = $wusers->paginate(20);
+
+        
+
+        
+        $users = $wusers->distinct()->paginate(20);
+       
         $type = $tipo;
 
         return view('pages.user.index', compact('users', 'usuarios', 'userindex', 'userCreate', 'type'));

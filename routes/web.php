@@ -47,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
 
     //users
     Route::resource('user', App\Http\Controllers\UserController::class);
-    Route::get('/indexAluno', [App\Http\Controllers\UserController::class, 'indexAluno'])->name('user.indexAluno');
+    Route::get('/indexAluno', [App\Http\Controllers\UserController::class, 'indexAluno'])->name('user.indexAluno');  
     Route::get('/indexProf', [App\Http\Controllers\UserController::class, 'indexProf'])->name('user.indexProf');
     Route::get('/indexDev', [App\Http\Controllers\UserController::class, 'indexDev'])->name('user.indexDev');
     Route::get('/createStudent', [App\Http\Controllers\UserController::class, 'createStudent'])->name('user.createStudent');
