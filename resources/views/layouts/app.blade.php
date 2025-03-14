@@ -46,7 +46,7 @@
     <div id="main-wrapper">
         @auth
             <div class="nav-header" id="logo">
-                <a href="home">
+                <a href="{{ url('/home') }}">
                     <img src="{{ asset('images/LOGO_VERTICAL.png') }}" width="120" alt="Imagem" class="img-fluid"
                         id="imagem">
                 </a>

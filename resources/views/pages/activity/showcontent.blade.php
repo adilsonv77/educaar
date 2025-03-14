@@ -10,10 +10,16 @@
             $filetime = @filemtime(public_path('/modelos3d/'.$activity));
             ?>
             @if ($filetime != FALSE)
-                <model-viewer src={{ asset('/modelos3d/'.$activity.'?v=' . $filetime) }}
-                
-                poster="" alt="{{ $name }}" shadow-intensity="1" camera-controls auto-rotate autoplay>
+                <model-viewer src="{{ asset('/modelos3d/'.$activity.'?v=' . $filetime) }}"
+                    poster="" alt="{{ $name }}" shadow-intensity="1" camera-controls auto-rotate autoplay>
                 </model-viewer>
+
+                <!-- Botão de download -->
+                <div style="text-align: center; margin-top: 10px;">
+                    <a href="{{ asset('/modelos3d/'.$activity) }}" download="{{ $activity }}" class="btn btn-primary">
+                        Baixar Modelo 3D
+                    </a>
+                </div>
             @else
                 <div>Arquivo não encontrado</div>
             @endif

@@ -28,9 +28,7 @@ Route::prefix('paineis')->group(function () {
 });
 
 // use Hash;
-Route::get('/', function () {
-    return redirect('/home');
-});
+// Route::get('/', function () { return redirect('/home');});
 
 Auth::routes();
 
