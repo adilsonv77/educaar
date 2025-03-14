@@ -247,9 +247,9 @@
                         <p id="tituloSelecionado">Configurações de Texto</p> <!--Titulo da configuração selecionada-->
 
                         <!--Blocos de configuração
-                                                                                                Explicação: Existem diferentes tipos de configs, de texto e de botão atualmente. Quando se clica no elemento
-                                                                                                a ser editado, o bloco referente as configurações do elemento recebe seu display setado como block.
-                                                                                            -->
+                            Explicação: Existem diferentes tipos de configs, de texto e de botão atualmente. Quando se clica no elemento
+                            a ser editado, o bloco referente as configurações do elemento recebe seu display setado como block.
+                        -->
                         <div id="blocoTxt">
                             <div id="trumbowyg-demo" placeholder="Insira seu texto aqui"></div>
                         </div>
@@ -346,10 +346,6 @@
             }
         }
         
-        document.getElementById("upload-area").addEventListener("drop",(event)=>{
-            console.log("eae");
-            console.log(event);
-        })
         //---------------------------------------------------------------------------------------------------------------------
         //  3. VERIFICAR SE O ARQUIVO EXCEDE O TAMANHO MÁXIMO
         document.getElementById("midiaInput").addEventListener("change", () => {

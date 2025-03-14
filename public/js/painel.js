@@ -77,6 +77,7 @@ if (mediaPreviewArea.getAttribute("edit") == "true") {
 // 3.2 Uma arquivo novo foi INSERIDO
 fileBtn.onchange = (event) => midiaPreview(event);
 function midiaPreview(event) {
+    console.log(fileBtn.files[0]);
     if (primeiraVez) {
         //Esconde a seleção do tipo de midia.
         mediaPreviewArea.setAttribute("style", "display: flex");
@@ -100,17 +101,46 @@ function midiaPreview(event) {
     let srcVid = document.getElementById("srcVidMidia");
 
     //Descobre se arquivo inserido é imagem ou vídeo e mostra ou a tag <video> ou a tag <img>  no html
-    let eVideo = event.target.files[0].name.endsWith(".mp4"); //É video (true) ou imagem (false)?
+    let eVideo = fileBtn.files[0].name.endsWith(".mp4"); //É video (true) ou imagem (false)?
     if (eVideo) {
         //É vídeo
         img.style.display = "none";
         vid.style.display = "block";
-        srcVid.src = URL.createObjectURL(event.target.files[0]);
+        srcVid.src = URL.createObjectURL(fileBtn.files[0]);
         vid.load();
     } else {
         //É imagem
         img.style.display = "block";
         vid.style.display = "none";
-        img.src = URL.createObjectURL(event.target.files[0]);
+        img.src = URL.createObjectURL(fileBtn.files[0]);
     }
 }
+
+// ----- Caso o arquivo for jogado na area de upload -----
+const dropArea = document.getElementById("upload-area");
+const midiaInput = document.getElementById("midiaInput");
+
+// Clique para abrir o seletor de arquivos
+dropArea.addEventListener("click", () => midiaInput.click());
+
+// Evita o comportamento padrão ao arrastar arquivos sobre a página
+["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    dropArea.addEventListener(eventName, (e) => e.preventDefault());
+});
+
+// Adiciona a classe de destaque ao arrastar arquivos sobre a área
+dropArea.addEventListener("dragover", () => dropArea.classList.add("dragover"));
+
+// Remove a classe ao sair da área
+dropArea.addEventListener("dragleave", () =>
+    dropArea.classList.remove("dragover")
+);
+
+// Lidar com arquivos soltos na área
+dropArea.addEventListener("drop", (e) => {
+    const files = e.dataTransfer.files;
+    midiaInput.files = files; // Define o arquivo no input
+    dropArea.classList.remove("dragover");
+    midiaPreview(e);
+    document.getElementById("flex-container").style.display = 'none';
+});
