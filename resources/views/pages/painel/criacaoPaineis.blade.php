@@ -130,13 +130,26 @@
             padding: 10px;
             border-radius: 8px;
         }
+
+        #videoContainer {
+            width: 100%;
+            height: 33.5vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #videoContainer iframe {
+            width: 450px;
+            height: 280px;
+        }
     </style>
 @endsection
 
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
     <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-        de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+                        de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -144,20 +157,17 @@
             <p>Upload file</p>
             <button onclick="fecharPopUp()">X</button>
 
-            <label class="picture" for="midiaInput" tabIndex="0">
+            <label id="upload-area" class="picture" for"midiaInput" tabIndex="0">
                 <img src="{{ asset('icons/paineis/upload.svg') }}" alt="">
                 <span class="picture__image"></span>
-            </label>
-            <!-- <input type="file" name="arquivoMidia" id="midiaInput" accept=".png, .jpeg, .jpg, .mp4"
-                onchange="upload_check()">
-                -este elemento foi movido para dentro do formulario no body, se mt tempo passou apagar comentário. Dia 27/02/25-->
+            </label> 
 
             <p class="pInfo">Formatos suportados: MP4, JPG, JPEG, PNG</p>
             <p class="pInfo" style="float: right">Tamanho máximo: 50MB</p>
             <div style="clear: both;"></div>
 
             <p id="pYoutube">URL YouTube</p>
-            <input type="text">
+            <input id="linkYoutube" type="text" @if ($action == 'edit' && $midiaExtension=="") value="https://www.youtube.com/watch?v={{ $link }} @endif">
         </div>
     </div>
 @endsection
@@ -171,12 +181,14 @@
             <input name="action" type="hidden" value={{$action}} id="actionInput">
             @csrf
             <div class="row">
-                <div class="col-md-8 coluna linha">
+                <div class="col-md-7 coluna linha">
                     <div class="painel">
                         <!--               ________TEXTO SUPERIOR________               -->
-                        <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117"
-                            placeholder="Digite seu texto aqui"> @if ($action == 'edit') {{$txtSuperior}}
-                            @endif</textarea>
+                        <div id="txtSuperior" class="txtPainel">
+                            @if ($action == 'edit'){!!$txtSuperior!!} @endif
+                        </div>
+                        <input type="hidden" class="inputTxtPainel" name="txtSuperior"
+                            value="@if ($action == 'edit') {{$txtSuperior}} @endif">
 
                         <!--               ________    MIDIAS    ________               -->
                         <div id="espacoMidias">
@@ -188,6 +200,18 @@
                             <!-- Midia (imagem/video) atualmente enviado -->
                             <div id="midiaPreview" edit=@if($action == 'edit')"true" @else "false" style="display: none;"
                             @endif>
+                                <!-- Video do youtube recebido do usuário (se recebido) -->
+                                <div id="videoContainer"  @if ($midiaExtension == "") style="display: none" @endif>
+                                    <iframe 
+                                        src="@if($action == 'edit')https://www.youtube.com/embed/{{ $link }}?autoplay=1 @endif"
+                                        title="YouTube video player" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+
+                                <input type="hidden" id="linkForm" name="link"
+                                value="@if ($action == 'edit') {{$link}} @endif">
                                 <!-- Video recebido do usuário (se recebido) -->
                                 <video id="vidMidia" controls @if ($midiaExtension != "mp4") style="display: none" @endif>
                                     <source id="srcVidMidia"
@@ -196,14 +220,16 @@
                                 </video>
                                 <!-- Imagem recebida do usuário (se recebida) -->
                                 <img src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif"
-                                    id="imgMidia" @if($midiaExtension == "mp4") style="display: none" @endif>
+                                    id="imgMidia" @if($midiaExtension == "mp4" || $midiaExtension != "") style="display: none" @endif>
                             </div>
                         </div>
 
                         <!--               ________TEXTO INFERIOR________               -->
-                        <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117"
-                            placeholder="Digite seu texto aqui"> @if ($action == 'edit') {{$txtInferior}}
-                            @endif</textarea>
+                        <div id="txtInferior" class="txtPainel" name="txtInferior">
+                            @if ($action == 'edit') {{$txtInferior}} @endif
+                        </div>
+                        <input type="hidden" class="inputTxtPainel" name="txtInferior"
+                            value="@if ($action == 'edit') {{$txtInferior}} @endif">
 
                         <!--               ________    BOTÕES    ________               -->
                         <div id="areaBtns">
@@ -211,7 +237,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 coluna">
+                <div class="col-md-5 coluna">
                     <!--Input onde o arquivo de midia é enviado, se encontra aqui pois precisa estar dentro do formulário.-->
                     <input type="file" style="border:none" name="arquivoMidia" id="midiaInput"
                         accept=".png, .jpeg, .jpg, .mp4" onchange="upload_check()" />
@@ -221,9 +247,9 @@
                         <p id="tituloSelecionado">Configurações de Texto</p> <!--Titulo da configuração selecionada-->
 
                         <!--Blocos de configuração
-                            Explicação: Existem diferentes tipos de configs, de texto e de botão atualmente. Quando se clica no elemento
-                            a ser editado, o bloco referente as configurações do elemento recebe seu display setado como block.
-                        -->
+                                                                                                Explicação: Existem diferentes tipos de configs, de texto e de botão atualmente. Quando se clica no elemento
+                                                                                                a ser editado, o bloco referente as configurações do elemento recebe seu display setado como block.
+                                                                                            -->
                         <div id="blocoTxt">
                             <div id="trumbowyg-demo" placeholder="Insira seu texto aqui"></div>
                         </div>
@@ -249,26 +275,57 @@
     <script>
         //---------------------------------------------------------------------------------------------------------------------
         //  1. EDITOR DE TEXTO
+        // Criar editor
         $('#trumbowyg-demo').trumbowyg({
             btns: [
                 ['undo', 'redo'], // Only supported in Blink browsers
                 ['strong', 'em'],
-                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                ['fontfamily', 'formatting', 'foreColor']
+                ['fontfamily', 'formatting', 'foreColor'],
+                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull']
             ],
             autogrow: false
         });
 
-        // Fazer o texto do bloco aparecer no painel
+        // Fazer alterações na estrutura do painel de configuração
         $(document).ready(function () {
-            $('#trumbowyg-demo').on('tbwchange tbwblur', function () {
-                let content = $(this).trumbowyg('html');
-                $('#txtSuperior').val(content);
-            });
+            //Adiciona novos elementos no HTML
+            let editorBox = document.getElementsByClassName("trumbowyg-editor-box")[0];
+            editorBox.innerHTML = "<p class=\"pEditorBox\">Texto superior do painel</p>" + editorBox.innerHTML
+            editorBox.outerHTML += editorBox.outerHTML;
 
-            $('#txtSuperior').on('input', function () {
-                $('#trumbowyg-demo').trumbowyg('html', $(this).val());
-            });
+            //Coloca o focus em alguns elementos.
+            let editor1 = document.getElementsByClassName("trumbowyg-editor")[0]
+            let editor2 = document.getElementsByClassName("trumbowyg-editor")[1]
+            let label1 = document.getElementsByClassName("pEditorBox")[0]
+            let label2 = document.getElementsByClassName("pEditorBox")[1]
+
+            editor1.addEventListener("focus", () => {
+                label1.style.color = "#833B8D";
+            })
+            editor2.addEventListener("focus", () => {
+                label2.style.color = "#833B8D";
+            })
+            editor1.addEventListener("blur", () => {
+                label1.style.color = "#CCCCCC";
+            })
+            editor2.addEventListener("blur", () => {
+                label2.style.color = "#CCCCCC";
+            })
+
+            //Transfere os dados do editor para o painel
+            editor1.addEventListener("input", () => {
+                document.getElementById("txtSuperior").innerHTML = editor1.innerHTML;
+                document.getElementsByClassName("inputTxtPainel")[0].value = editor1.innerHTML;
+            })
+            editor2.addEventListener("input", () => {
+                document.getElementById("txtInferior").innerHTML = editor2.innerHTML;
+                document.getElementsByClassName("inputTxtPainel")[1].value = editor2.innerHTML;
+            })
+
+            //Caso for edição, adiciona os valores ao editor de texto.
+            @if ($action == 'edit')
+                editor1.innerHTML = '{!! addslashes($txtSuperior) !!}';
+            @endif
         });
         //---------------------------------------------------------------------------------------------------------------------
         //  2. POP UP DE ADICIONAR MÍDIA
@@ -280,6 +337,19 @@
             document.getElementById("flex-container").style.display = 'flex';
         }
 
+        document.getElementById("linkYoutube").oninput = ()=>{
+            let url = document.getElementById("linkYoutube").value;
+
+            const prefix = "https://www.youtube.com/watch?v=";
+            if(url.startsWith(prefix)){
+                document.getElementById("linkForm").value = url.slice(prefix.length);
+            }
+        }
+        
+        document.getElementById("upload-area").addEventListener("drop",(event)=>{
+            console.log("eae");
+            console.log(event);
+        })
         //---------------------------------------------------------------------------------------------------------------------
         //  3. VERIFICAR SE O ARQUIVO EXCEDE O TAMANHO MÁXIMO
         document.getElementById("midiaInput").addEventListener("change", () => {

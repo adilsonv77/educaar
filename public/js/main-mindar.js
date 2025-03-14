@@ -174,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
               mixer = null;
             }
           };
-
         } else {
           //Usar painel
           //Pega dados do banco (guardados dentro da var "json") e faz um objeto JSON.

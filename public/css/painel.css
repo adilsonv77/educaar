@@ -23,7 +23,7 @@
     align-items: center;
 }
 
-.painel textarea {
+.painel .txtPainel {
     width: 100%;
     height: 20%;
     font-size: 1.5vh;
@@ -31,6 +31,7 @@
     padding: 1% 10px;
     border: none;
     resize: none;
+    background-color: white;
 }
 
 .painel button {
@@ -135,25 +136,23 @@
     border-radius: 100%;
 }
 
-textarea:hover {
+.txtPainel:hover {
     cursor: pointer;
-}
-
-textarea:focus {
-    cursor: text !important;
 }
 
 #configPainel {
     position: relative;
     background-color: #f8f8f8;
     box-shadow: -9px 5px 10.2px 0px rgba(0, 0, 0, 0.185);
-    width: 100%;
-    height: 70vh;
+    width: 90%;
+    height: 76vh;
     border-radius: 15px;
     margin-top: 15px;
-    margin-right: 50px;
     padding: 25px;
-    float: right;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 #configPainel hr {
@@ -175,15 +174,12 @@ textarea:focus {
 }
 
 .submitPanel {
-    position: absolute;
-    bottom: 25px;
-    right: 25px;
     background-color: white;
     border: none;
     border-radius: 15px;
     width: 120px;
-    text-align: center;
     padding: 6px 0;
+    align-self: flex-end;
 }
 
 .submitPanel:nth-child(2n) {
@@ -247,10 +243,54 @@ textarea:focus {
 /* Adiciona uma borda vermelha ao redor do editor */
 .trumbowyg-box {
     border-radius: 20px !important;
+    padding-bottom: 1vh;
 }
 
 .trumbowyg-button-pane{
     border-radius: 20px 20px 0 0;
-    padding: 0 !important;
+    padding-left: 20px !important;
+    margin-bottom: 2vh !important; 
 } 
 
+.trumbowyg-editor-box{
+    margin-top: 0px;
+    padding: 1vh 20px !important;
+}
+
+#trumbowyg-demo{
+    position: relative;
+    border: 1px solid #CCCCCC;
+    border-radius: 17px;
+    padding: 10px;
+    height: 18vh;
+    overflow: auto;
+    transition: border 0.3s;
+}
+
+#trumbowyg-demo:focus{
+    border: 1px solid #833B8D;
+}
+
+#trumbowyg-demo p{
+    line-height: 30px !important;
+    margin: 0 !important;
+}
+
+.painel p{
+    line-height: 30px !important;
+    margin: 0 !important;
+}
+
+.pEditorBox{
+    color: #CCCCCC;
+    transform: translateY(10px);
+    transition:  color 0.3s;
+}
+
+.trumbowyg-box svg, .trumbowyg-modal svg{
+    fill: #833B8D !important; 
+}
+
+.trumbowyg-button-pane .trumbowyg-open-dropdown.trumbowyg-textual-button{
+    color: #833B8D !important;
+}

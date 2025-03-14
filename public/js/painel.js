@@ -5,7 +5,7 @@ const btnAdd = document.getElementById("add");
 btnAdd.onclick = () => {
     if (btns.length != 5) {
         let btn = document.createElement("button");
-        btn.type= "button";
+        btn.type = "button";
         btn.classList = ["btnPainel"];
         btns.push(btn);
         areaBtn.appendChild(btn);
@@ -40,7 +40,7 @@ function updateConfiguracoesPainel(tipo) {
             break;
         case "texto":
             //Seleciona o texto
-            txtSuperior.classList = "selecionado";
+            txtSuperior.classList.add("selecionado");
             //Carrega configs de texto
             tituloConfig.innerText = "Configurações de Texto";
             blocoTxt.style.display = "block";
@@ -67,7 +67,8 @@ if (mediaPreviewArea.getAttribute("edit") == "true") {
         };
         Array.from(mediaPreviewArea.children).forEach((child) => {
             child.addEventListener("click", () => {
-              document.getElementById("flex-container").style.display = "flex";
+                document.getElementById("flex-container").style.display =
+                    "flex";
             });
         });
     });
@@ -88,7 +89,8 @@ function midiaPreview(event) {
         };
         Array.from(mediaPreviewArea.children).forEach((child) => {
             child.addEventListener("click", () => {
-              document.getElementById("flex-container").style.display = "flex";
+                document.getElementById("flex-container").style.display =
+                    "flex";
             });
         });
     }

@@ -268,34 +268,34 @@
 
             //Input de arquivo derivado do código do qual a área de input foi retirado. Provavelmente não é necessário para o funcionamento de nada
             //     código comentado em 27/02/25 se uns meses tiverem passado e o código continua comentado, favor apagar código.  
-            // const inputFile = document.querySelector("#picture__input");
-            // const pictureImage = document.querySelector(".picture__image");
-            // const pictureImageTxt = "Choose an image";
-            // pictureImage.innerHTML = pictureImageTxt;
+            const inputFile = document.querySelector("#picture__input");
+            const pictureImage = document.querySelector(".picture__image");
+            const pictureImageTxt = "Choose an image";
+            pictureImage.innerHTML = pictureImageTxt;
 
-            // inputFile.addEventListener("change", function (e) {
-            //     const inputTarget = e.target;
-            //     const file = inputTarget.files[0];
+            inputFile.addEventListener("change", function (e) {
+                const inputTarget = e.target;
+                const file = inputTarget.files[0];
 
-            //     if (file) {
-            //         const reader = new FileReader();
+                if (file) {
+                    const reader = new FileReader();
 
-            //         reader.addEventListener("load", function (e) {
-            //             const readerTarget = e.target;
+                    reader.addEventListener("load", function (e) {
+                        const readerTarget = e.target;
 
-            //             const img = document.createElement("img");
-            //             img.src = readerTarget.result;
-            //             img.classList.add("picture__img");
+                        const img = document.createElement("img");
+                        img.src = readerTarget.result;
+                        img.classList.add("picture__img");
 
-            //             pictureImage.innerHTML = "";
-            //             pictureImage.appendChild(img);
-            //         });
+                        pictureImage.innerHTML = "";
+                        pictureImage.appendChild(img);
+                    });
 
-            //         reader.readAsDataURL(file);
-            //     } else {
-            //         pictureImage.innerHTML = pictureImageTxt;
-            //     }
-            // });
+                    reader.readAsDataURL(file);
+                } else {
+                    pictureImage.innerHTML = pictureImageTxt;
+                }
+            });
         });
     </script>
 @endsection
