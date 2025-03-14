@@ -1,4 +1,4 @@
-#card {
+/* #card {
     width: 100px;
     height: 100px;
     background-color: #AFDA9F;
@@ -6,14 +6,81 @@
     cursor: pointer;
     position: fixed;
     cursor: grab;
-}
+} */
 
-#container {
+/* #container {
     width: 100%;
     height: calc(100vh - 10rem);
     background-color: red;
-}
-
+} */
+/* 
 #card:hover {
     cursor: grabbing;
+} */
+
+
+/* CSS DA COMEXÃO DE PAINÉIS */
+#areaBtns {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#txtSuperior {
+    width: 100%;
+    height: 56px;
+    border-radius: 8px;
+    background: #FFF;
+}
+
+.painel {
+    padding: 13px;
+}
+
+.teste {
+    display: flex;
+    align-items: center;
+    border: 0.5px solid #833B8D;
+    border-radius: 9px;
+    padding: 5.5px;
+    margin-bottom: 3px;
+    height: 30px;
+    width: 100%;
+}
+
+.circulo {
+    width: 20px;
+    height: 20px;
+    background-color: #823688;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+#midia {
+    position: relative;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255);
+    aspect-ratio: 1/1;
+    height: 115px;
+    border-radius: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.fileMidia {
+    margin: auto;
+    /* width: 50%; */
+    aspect-ratio: 1;
+}
+
+#connectionCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
 }

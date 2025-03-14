@@ -34,12 +34,12 @@ addBtn.addEventListener("click", () => {
     painel.style.position = 'absolute'; // Para permitir o arrasto
     painel.style.backgroundColor = 'white'; // Cor de fundo
     painel.style.border = '1px solid #ccc'; // Borda do painel
-    painel.style.padding = '10px'; // Espaçamento interno
+    painel.style.borderRadius = '22px'
     painel.style.boxSizing = 'border-box'; // Para incluir padding e border no tamanho total
 
     // ADICIONANDO O HTML DO PAINAL - BY JAQUE :)
     painel.innerHTML = `
-        <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117" placeholder="Digite seu texto aqui"></textarea>
+        <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117"></textarea>
         <div id="espacoMidias">
             <div id="midia" tabindex=0>
                 <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}">

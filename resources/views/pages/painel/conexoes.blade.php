@@ -107,14 +107,16 @@
             </div>
             <div id="canvas" class="canvas">
                 <!-- <p>Conteúdo do Canvas</p> -->
-                <img src="{{ asset('images/play.png') }}" alt="">
+                <img src="{{ asset('images/inicioConexoes.svg') }}" alt="">
+                
             </div>
             <!-- <div class="menu-lateral">
-                <p>Menu Lateral</p>
-            </div> -->
+                    <p>Menu Lateral</p>
+                </div> -->
         </div>
     </div>
 @endsection
+
 @section('script')
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
     <script>
@@ -135,8 +137,6 @@
         function updateCanvasScale() {
             canvas.style.transform = `scale(${scale})`;
         }
-
-
     </script>
 
 @endsection
