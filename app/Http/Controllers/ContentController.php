@@ -179,7 +179,9 @@ class ContentController extends Controller
         $titulo = 'Editar Conteúdo';
         $acao = 'edit';
         $idprof = Auth::user()->id;
-        $anoLetivo = AnoLetivo::where('bool_atual', 1)->first(); // errado
+        $anoLetivo = AnoLetivo::where('bool_atual', 1)
+            ->where("school_id", Auth::user()->school_id)
+            ->first(); 
 
         $params = [
             'titulo' => $titulo,
