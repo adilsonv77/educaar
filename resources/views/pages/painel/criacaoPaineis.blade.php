@@ -198,13 +198,13 @@
                             </div>
 
                             <!-- Midia (imagem/video) atualmente enviado -->
-                            <div id="midiaPreview" edit=@if($action == 'edit')"true" @else "false" style="display: none;"
-                            @endif>
+                            <div id="midiaPreview" edit=@if($action == 'edit')"true" @else "false" style="display: none;" @endif>
                                 <!-- Video do youtube recebido do usuário (se recebido) -->
-                                <div id="videoContainer"  @if ($midiaExtension == "") style="display: none" @endif>
+                                <div id="videoContainer"  @if ($midiaExtension != "") style="display: none" @endif>
                                     <iframe 
-                                        src="@if($action == 'edit')https://www.youtube.com/embed/{{ $link }}?autoplay=1 @endif"
-                                        title="YouTube video player" frameborder="0"
+                                        id="srcYoutube"
+                                        @if($action == 'edit')src="https://www.youtube.com/embed/{{ $link }}?autoplay=1"@endif
+                                        title="YouTube video player {{ $midiaExtension }}" frameborder="0"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowfullscreen>
                                     </iframe>
@@ -212,6 +212,7 @@
 
                                 <input type="hidden" id="linkForm" name="link"
                                 value="@if ($action == 'edit') {{$link}} @endif">
+                                
                                 <!-- Video recebido do usuário (se recebido) -->
                                 <video id="vidMidia" controls @if ($midiaExtension != "mp4") style="display: none" @endif>
                                     <source id="srcVidMidia"
@@ -220,7 +221,13 @@
                                 </video>
                                 <!-- Imagem recebida do usuário (se recebida) -->
                                 <img src="@if ($action == 'edit'){{asset('midiasPainel/' . $arquivoMidia)}}@endif"
-                                    id="imgMidia" @if($midiaExtension == "mp4" || $midiaExtension != "") style="display: none" @endif>
+                                    id="imgMidia" @if($midiaExtension == "mp4" || $midiaExtension == "") style="display: none" @endif>
+                                
+                                <!-- Coisas da edição -->
+                                @if ($action == 'edit')
+                                    <input type="hidden" name="midiaExtensionEdit" value="{{$midiaExtension}}">
+                                    <input type="hidden" name="arquivoMidiaEdit" value="{{$arquivoMidia}}">
+                                @endif
                             </div>
                         </div>
 
@@ -335,15 +342,6 @@
 
         function abrirPopUp() {
             document.getElementById("flex-container").style.display = 'flex';
-        }
-
-        document.getElementById("linkYoutube").oninput = ()=>{
-            let url = document.getElementById("linkYoutube").value;
-
-            const prefix = "https://www.youtube.com/watch?v=";
-            if(url.startsWith(prefix)){
-                document.getElementById("linkForm").value = url.slice(prefix.length);
-            }
         }
         
         //---------------------------------------------------------------------------------------------------------------------

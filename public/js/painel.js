@@ -75,9 +75,18 @@ if (mediaPreviewArea.getAttribute("edit") == "true") {
 }
 
 // 3.2 Uma arquivo novo foi INSERIDO
-fileBtn.onchange = (event) => midiaPreview(event);
-function midiaPreview(event) {
-    console.log(fileBtn.files[0]);
+let img = document.getElementById("imgMidia");
+let vid = document.getElementById("vidMidia");
+let srcVid = document.getElementById("srcVidMidia");
+let vidYoutube = document.getElementById("videoContainer");
+let url = document.getElementById("linkYoutube").src;
+let iFrameYoutube = document.getElementById("srcYoutube");
+let idYoutube = "";
+let urlYoutubeInformado = false;
+
+fileBtn.onchange = () => midiaPreview();
+
+function midiaPreview() {
     if (primeiraVez) {
         //Esconde a seleção do tipo de midia.
         mediaPreviewArea.setAttribute("style", "display: flex");
@@ -96,23 +105,46 @@ function midiaPreview(event) {
         });
     }
 
-    let img = document.getElementById("imgMidia");
-    let vid = document.getElementById("vidMidia");
-    let srcVid = document.getElementById("srcVidMidia");
-
-    //Descobre se arquivo inserido é imagem ou vídeo e mostra ou a tag <video> ou a tag <img>  no html
-    let eVideo = fileBtn.files[0].name.endsWith(".mp4"); //É video (true) ou imagem (false)?
-    if (eVideo) {
-        //É vídeo
+    //Descobre se arquivo inserido é imagem ou vídeo ou video youtube e ativa o html correspondente
+    if (urlYoutubeInformado) {
+        //É vídeo do youtube
+        urlYoutubeInformado = false;
         img.style.display = "none";
-        vid.style.display = "block";
-        srcVid.src = URL.createObjectURL(fileBtn.files[0]);
-        vid.load();
-    } else {
-        //É imagem
-        img.style.display = "block";
         vid.style.display = "none";
-        img.src = URL.createObjectURL(fileBtn.files[0]);
+        vidYoutube.style.display = "block";
+        try {
+            vid.pause()
+        } catch (error) {}
+
+        document.getElementById("srcYoutube").src =
+            "https://www.youtube.com/embed/" +
+            document.getElementById("linkForm").value +
+            "?autoplay=1";
+    } else {
+        let eVideo = fileBtn.files[0].name.endsWith(".mp4"); //É video (true) ou imagem (false)?
+        if (eVideo) {
+            //É vídeo
+            img.style.display = "none";
+            vid.style.display = "block";
+            vidYoutube.style.display = "none";
+            document.getElementById("linkYoutube").src = "";
+            document.getElementById("srcYoutube").src = "";
+            document.getElementById("linkForm").value = "";
+            srcVid.src = URL.createObjectURL(fileBtn.files[0]);
+            vid.load();
+        } else {
+            //É imagem
+            img.style.display = "block";
+            vid.style.display = "none";
+            vidYoutube.style.display = "none";
+            try {
+                vid.pause()
+            } catch (error) {}
+            document.getElementById("srcYoutube").src = "";
+            document.getElementById("linkYoutube").src = "";
+            document.getElementById("linkForm").value = "";
+            img.src = URL.createObjectURL(fileBtn.files[0]);
+        }
     }
 }
 
@@ -141,6 +173,37 @@ dropArea.addEventListener("drop", (e) => {
     const files = e.dataTransfer.files;
     midiaInput.files = files; // Define o arquivo no input
     dropArea.classList.remove("dragover");
-    midiaPreview(e);
-    document.getElementById("flex-container").style.display = 'none';
+    midiaPreview();
+    document.getElementById("flex-container").style.display = "none";
 });
+
+// 3.3 Um link do youtube foi inserido
+document.getElementById("linkYoutube").oninput = () => {
+    const prefix = "https://www.youtube.com/watch?v=";
+    const prefix2 = "https://youtu.be/";
+    url = document.getElementById("linkYoutube").value;
+
+    if (url.startsWith(prefix) && url.slice(prefix.length).length == 11) {
+        urlYoutubeInformado = true;
+        document.getElementById("linkForm").value = url.slice(prefix.length);
+        midiaPreview();
+        zerarValores();
+    } else if (
+        url.startsWith(prefix2) &&
+        url.slice(prefix2.length).length == 11
+    ) {
+        urlYoutubeInformado = true;
+        document.getElementById("linkForm").value = url.slice(prefix2.length);
+        midiaPreview();
+        zerarValores();
+    }
+};
+
+function zerarValores() {
+    const inputArquivo = document.querySelector("#midiaInput");
+    const novoInput = document.createElement("input");
+    novoInput.type = "file";
+    novoInput.id = "midiaInput";
+    novoInput.name = "arquivoMidia";
+    inputArquivo.parentNode.replaceChild(novoInput, inputArquivo);
+}
