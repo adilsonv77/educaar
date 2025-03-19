@@ -18,101 +18,155 @@
     <link rel="stylesheet"
         href="{{ asset('css/panelConnection.css?v=' . filemtime(public_path('css/panelConnection.css'))) }}">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
-
-        .AddPainel {
-            position: fixed;
-        }
-
-        .AddPainel {
-            position: fixed;
-            z-index: 1000;
-            width: 63px;
-            height: 31px;
-            flex-shrink: 0;
-            margin-left: 18px;
-            border-radius: 2px;
-        }
-
-        .menu {
-            position: fixed;
-            bottom: 10px;
-            z-index: 1000;
-            width: 63px;
-            height: 31px;
-            flex-shrink: 0;
-            margin-left: 18px;
-            border-radius: 2px;
-            /* background: rgba(131, 59, 141, 0.71); */
-        }
-
-        .canvas-container {
-            overflow: hidden;
-            width: 100vw;
-            height: calc(100vh - 50px);
-            position: relative;
-            margin-right: 346px;
-        }
-
-        .canvas {
-            width: 70000px;
-            height: 70000px;
-            background-color: #f0f0f0;
-            transform-origin: top left;
-            overflow: hidden;
-        }
-
-        .content-body .container {
-            margin: 0px !important;
-        }
-
-        .container-fluid {
-            padding: 0px !important;
-        }
-
-        .container {
-            padding: 0px !important;
-        }
-
-        .menu-lateral {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 346px;
-            height: 100vh;
-            background-color: pink;
-            transform: scale(1);
-            pointer-events: none;
-            position: fixed;
-            padding-top: 120px;
-            z-index: 1000;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
 @endsection
 
 @section('content')
+    <div class="AddPainel">
+        <button id="addPanel">Add painel</button>
+    </div>
+    <!-- MENU LATERAL -->
+    <div class="menu-lateral">
+        <div>
+            <!-- FORMATOS -->
+            <div class="mb-6">
+                <h3>
+                    FORMATO DOS BOTÕES
+                </h3>
+                <div class="tipos">
+                    <div class="linhas">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="blocos">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="alternativas">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CORES -->
+            <div class="mb-6">
+                <h3 class="mb-2">
+                    CORES DOS BOTÕES
+                </h3>
+                <div class="mb-2">
+                    <div id="color-picker-container"></div>
+                </div>
+
+                <!-- <div class="mb-2">
+                                                                        <input type="text" value="#424459" />
+                                                                    </div> -->
+                <!-- <div class="mb-2">
+                                                                        <button class="">
+                                                                            Save
+                                                                        </button>
+                                                                        <button class="">
+                                                                            Clear
+                                                                        </button>
+                                                                    </div> -->
+            </div>
+            <!-- TEXTO DO BOTÃO -->
+            <div class="mb-6">
+                <h3 class="mb-2">
+                    TEXTO DO BOTÃO
+                </h3>
+                <input class="" type="text" />
+            </div>
+
+            <!-- TRANSIÇÕES -->
+            <div class="mb-6">
+                <h3 class="mb-2">TRANSIÇÕES</h3>
+                <div class="select select-transicoes">
+                    <div class="selected" data-default="Nenhuma" data-one="Final da experiência" data-two="Próximo painel">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="arrow">
+                            <path
+                                d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="options">
+                        <div>
+                            <input id="nenhuma" name="option-transicoes" type="radio" checked />
+                            <label class="option" for="nenhuma" data-txt="Nenhuma"></label>
+                        </div>
+                        <div>
+                            <input id="final-experiencia" name="option-transicoes" type="radio" />
+                            <label class="option" for="final-experiencia" data-txt="Final da experiência"></label>
+                        </div>
+                        <div>
+                            <input id="proximo-painel" name="option-transicoes" type="radio" />
+                            <label class="option" for="proximo-painel" data-txt="Próximo painel"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SELECIONAR O PAINEL -->
+            <div class="mb-6">
+                <h3 class="mb-2">SELECIONAR PAINEL</h3>
+                <div class="select select-painel">
+                    <div class="selected" data-default="Painel (nº ID)" data-one="Painel 1" data-two="Painel 2"
+                        data-three="Painel 3">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="arrow">
+                            <path
+                                d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="options">
+                        <div>
+                            <input id="painel-1" name="option-painel" type="radio" checked />
+                            <label class="option" for="painel-1" data-txt="Painel 1"></label>
+                        </div>
+                        <div>
+                            <input id="painel-2" name="option-painel" type="radio" />
+                            <label class="option" for="painel-2" data-txt="Painel 2"></label>
+                        </div>
+                        <div>
+                            <input id="painel-3" name="option-painel" type="radio" />
+                            <label class="option" for="painel-3" data-txt="Painel 3"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTÕES DE SALVAR/EXCLUIR -->
+            <div class="buttons">
+                <button>
+                    Excluir
+                </button>
+                <button>
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANVAS SPACE -->
     <div class="container">
         <div class="canvas-container">
-            <div class="AddPainel">
-                <button id="addPanel">Adicionar painel</button>
-            </div>
-            <div class="menu">
+            <!-- <div class="AddPainel">
+                    <button id="addPanel">Adicionar painel</button>
+                </div> -->
+
+            <div class="menu-zoom">
                 <button id="zoom-in">+</button>
                 <button id="zoom-out">-</button>
             </div>
             <div id="canvas" class="canvas">
-                <!-- <p>Conteúdo do Canvas</p> -->
                 <img src="{{ asset('images/inicioConexoes.svg') }}" alt="">
-                
             </div>
-            <!-- <div class="menu-lateral">
-                    <p>Menu Lateral</p>
-                </div> -->
         </div>
     </div>
 @endsection
@@ -137,6 +191,34 @@
         function updateCanvasScale() {
             canvas.style.transform = `scale(${scale})`;
         }
-    </script>
 
+        const pickr = Pickr.create({
+            el: "#color-picker-container",
+            theme: "nano", // Opções: classic, nano, monolith
+            default: "#3498db",
+            inline: true,
+            showAlways: true,
+            useAsButton: false,
+            components: {
+                preview: true,
+                opacity: true,
+                hue: true,
+                interaction: {
+                    input: true,
+                    hex: false,
+                    rgba: false,
+                    save: true,
+                    clear: true
+                }
+            }
+        });
+
+        // pickr.on("save", (color) => {
+        //     console.log("Cor selecionada:", color.toHEXA().toString());
+        // });
+
+        pickr.on("change", (color) => {
+            console.log("Cor selecionada:", color.toHEXA().toString());
+        });
+    </script>
 @endsection

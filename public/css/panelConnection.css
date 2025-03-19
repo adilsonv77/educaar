@@ -18,8 +18,67 @@
     cursor: grabbing;
 } */
 
+/* #connectionCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+} */
 
-/* CSS DA COMEXÃO DE PAINÉIS */
+/* CSS DA CONEXÃO DE PAINÉIS */
+.AddPainel {
+    position: fixed;
+    z-index: 1000;
+    width: 63px;
+    height: 31px;
+    flex-shrink: 0;
+    margin-left: 18px;
+    border-radius: 2px;
+}
+
+.menu-zoom {
+    position: fixed;
+    bottom: 10px;
+    z-index: 1000;
+    width: 63px;
+    height: 31px;
+    flex-shrink: 0;
+    margin-left: 18px;
+    border-radius: 2px;
+    /* background: rgba(131, 59, 141, 0.71); */
+}
+
+.canvas-container {
+    overflow: hidden;
+    width: 100vw;
+    height: calc(100vh - 50px);
+    position: relative;
+}
+
+.canvas {
+    width: 70000px;
+    height: 70000px;
+    background-color: #f0f0f0;
+    transform-origin: top left;
+    overflow: hidden;
+    position: relative;
+}
+
+.content-body .container {
+    margin: 0px !important;
+}
+
+.container-fluid {
+    padding: 0px !important;
+}
+
+.container {
+    padding: 0px !important;
+}
+
+/* CSS DOS MINI PAINÉIS */
 #areaBtns {
     display: flex;
     flex-direction: column;
@@ -76,11 +135,260 @@
     aspect-ratio: 1;
 }
 
-#connectionCanvas {
+#addPanel{
+    margin: 17px;
+    width: 116px;
     position: absolute;
-    top: 0;
+    right: 20px;
+    top: 20px;
+}
+
+/* CSS MENU LATERAL */
+
+body {
+    overflow: hidden !important;
+}
+
+.menu-lateral {
+    position: fixed;
+    right: 0;
+    width: 346px;
+    height: 100%;
+    background-color: #FFF;
+    box-shadow: -7px 15px 10.2px 0px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+    transform: scale(1);
+    padding: 10px 22px;
+    overflow-y: auto !important
+}
+
+h3 {
+    color: #807E7E;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 10px;
+}
+
+input {
+    width: 300px;
+    height: 45px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    border: 1px solid #C8C8C8;
+}
+
+.tipos {
+    display: flex;
+    justify-content: space-between;
+}
+
+.linhas,
+.blocos,
+.alternativas {
+    width: 90px;
+    height: 90px;
+    border-radius: 9px;
+    border: 1px solid #C8C8C8;
+    padding: 12px 6px;
+}
+
+.linhas div {
+    width: 100%;
+    height: 20px;
+    border-radius: 3px;
+    background: #D9D9D9;
+    margin-bottom: 3px;
+}
+
+.blocos div {
+    width: calc((100% - 3px)/2);
+    height: 31px;
+    border-radius: 3px;
+    background: #D9D9D9;
+
+}
+
+.blocos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.alternativas div {
+    width: 34px;
+    height: 31px;
+    border-radius: 50%;
+    background: #D9D9D9;
+}
+
+.alternativas {
+    padding: 12px 9px !important;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+.mb-6 {
+    margin-bottom: 20px;
+}
+
+button {
+    width: 85px;
+    height: 38px;
+    border-radius: 7px;
+    border: 1px solid #833B8D;
+    background: #833B8D;
+    color: #FFF;
+    text-align: center;
+    font-size: 16px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+/* DROPDOWN */
+.select {
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+    transition: 300ms;
+    color: #B8B5B5;
+    overflow: visible;
+    z-index: 1;
+}
+
+.select:hover {
+    z-index: 10;
+}
+
+.selected {
+    background-color: #FFFFFF;
+    padding: 5px;
+    margin-bottom: 3px;
+    border-radius: 4.5px;
+    border: 1px solid #C3C3C3;
+    position: relative;
+    z-index: 2;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.arrow {
+    position: relative;
+    right: 0px;
+    height: 10px;
+    transform: rotate(-90deg);
+    width: 25px;
+    fill: #B8B5B5;
+    z-index: 100000;
+    transition: 300ms;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    border-radius: 4.5px;
+    padding: 5px;
+    background-color: #FFFFFF;
+    position: absolute;
+    top: 100%;
     left: 0;
     width: 100%;
-    height: 100%;
+    opacity: 0;
+    transition: opacity 300ms ease, transform 300ms ease;
+    transform: translateY(-10px);
+    z-index: 5;
+    border: 1px solid #C3C3C3;
     pointer-events: none;
+}
+
+.select:hover>.options {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+    z-index: 10;
+}
+
+.select:hover>.selected .arrow {
+    transform: rotate(0deg);
+}
+
+.option {
+    border-radius: 4.5px;
+    padding: 5px;
+    transition: 300ms;
+    background-color: #FFFFFF;
+    width: 100%;
+    font-size: 15px;
+    color: #B8B5B5;
+    align-items: center;
+}
+
+.option:hover {
+    background-color: #DFC1E4;
+}
+
+.options input[type="radio"] {
+    display: none;
+}
+
+.options label {
+    display: inline-block;
+}
+
+.options label::before {
+    content: attr(data-txt);
+}
+
+.options input[type="radio"]:checked+label {
+    display: none;
+}
+
+.options input[type="radio"]#nenhuma:checked+label {
+    display: none;
+}
+
+.select:has(.options input[type="radio"]#nenhuma:checked) .selected::before {
+    content: attr(data-default);
+}
+
+.select:has(.options input[type="radio"]#final-experiencia:checked) .selected::before {
+    content: attr(data-one);
+}
+
+/* REVER DEPOIS */
+
+.select:has(.options input[type="radio"]#proximo-painel:checked) .selected::before {
+    content: attr(data-two);
+}
+
+.select:has(.options input[type="radio"]#painel-1:checked) .selected::before {
+    content: attr(data-default);
+}
+
+.select:has(.options input[type="radio"]#painel-2:checked) .selected::before {
+    content: attr(data-one);
+}
+
+.select:has(.options input[type="radio"]#painel-3:checked) .selected::before {
+    content: attr(data-two);
+}
+
+
+/* COLOR PICKER */
+.pickr .pcr-button {
+    width: 100% !important;
+    margin-bottom: 8px;
+}
+
+.pcr-app[data-theme=nano] {
+    width: 100% !important;
 }
