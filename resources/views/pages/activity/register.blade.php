@@ -121,7 +121,7 @@
                     </ul>
                 </div>
             @endif
-            <form method="POST" action="{{ route('activity.store') }}" enctype="multipart/form-data" files="true">
+            <form method="POST" action="{{ route('activity.store') }}" enctype="multipart/form-data" files="true" onsubmit="desativarBotao(this)">>
                 <h3>Atividade</h3>
                 @csrf
                     <input name="id" type="hidden" value="{{$id}}"/>
@@ -181,9 +181,13 @@
                 </div>
 
                 <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$painel_inicial_id}}" @endif>
-                <div class="form-group mt-4">
-                    <input type="submit" value="Salvar" class="btn btn-success">
-                </div>                  
+
+
+                <div class="form-group mt-4" onsubmit="desativarBotao(this)">
+                    <button type="submit" id="btnSalvar" class="btn btn-success">
+                        <i >Salvar</i> 
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -205,6 +209,11 @@
 
             HabilitarDesabilitar3D()
         }
+        function desativarBotao(form) {
+        let botao = form.querySelector("#btnSalvar");
+        botao.disabled = true; 
+        
+    }
 
     </script>
 @endsection
