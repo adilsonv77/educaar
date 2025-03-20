@@ -157,15 +157,15 @@
     </div>
 
     <!-- CANVAS SPACE -->
-    <div class="container">
+    <div class="container-paineis">
         <div class="canvas-container">
             <!-- <div class="AddPainel">
                                 <button id="addPanel">Adicionar painel</button>
                             </div> -->
 
             <div class="menu-zoom">
-                <button id="zoom-in">+</button>
                 <button id="zoom-out">-</button>
+                <button id="zoom-in">+</button>
             </div>
             <div id="canvas" class="canvas">
                 <img src="{{ asset('images/inicioConexoes.svg') }}" alt="">
@@ -176,52 +176,4 @@
 
 @section('script')
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
-    <script>
-        //CANVAS INFINITO
-        let scale = 1;
-        const canvas = document.getElementById('canvas');
-
-        document.getElementById('zoom-in').addEventListener('click', () => {
-            scale += 0.1; // Aumenta o zoom
-            updateCanvasScale();
-        });
-
-        document.getElementById('zoom-out').addEventListener('click', () => {
-            scale = Math.max(scale - 0.1, 0.1); // Diminui o zoom, mas não permite que fique menor que 0.1
-            updateCanvasScale();
-        });
-
-        function updateCanvasScale() {
-            canvas.style.transform = `scale(${scale})`;
-        }
-
-        const pickr = Pickr.create({
-            el: "#color-picker-container",
-            theme: "nano", // Opções: classic, nano, monolith
-            default: "#3498db",
-            inline: true,
-            showAlways: true,
-            useAsButton: false,
-            components: {
-                preview: true,
-                opacity: true,
-                hue: true,
-                interaction: {
-                    input: true,
-                    hex: false,
-                    rgba: false,
-                    save: true,
-                    clear: true
-                }
-            }
-        });
-
-        // pickr.on("save", (color) => {
-        //     console.log("Cor selecionada:", color.toHEXA().toString());
-        // });
-
-        pickr.on("change", (color) => {
-            console.log("Cor selecionada:", color.toHEXA().toString());
-        });
-    </script>
 @endsection

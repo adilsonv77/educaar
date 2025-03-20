@@ -155,18 +155,21 @@ input {
 
 .canvas-container {
     overflow: hidden;
-    width: 100vw;
+    width: calc(100% - 346px);
     height: calc(100vh - 50px);
     position: relative;
 }
 
 .canvas {
-    width: 70000px;
-    height: 70000px;
+    width: 80000px;
+    height: 80000px;
     background-color: #f0f0f0;
     transform-origin: top left;
     overflow: hidden;
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centraliza a div maior */
 }
 
 /* =============================

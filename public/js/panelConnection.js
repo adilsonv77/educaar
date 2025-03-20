@@ -1,3 +1,56 @@
+//Código da Jaque
+//CANVAS INFINITO
+let scale = 1;
+let alternativeScale = 0;
+const canvas = document.getElementById("canvas");
+
+document.getElementById("zoom-in").addEventListener("click", () => {
+    scale += 0.1; // Aumenta o zoom
+    alternativeScale+=1;
+    updateCanvasScale();
+});
+
+document.getElementById("zoom-out").addEventListener("click", () => {
+    scale = Math.max(scale - 0.1, 0.1); // Diminui o zoom, mas não permite que fique menor que 0.1
+    alternativeScale= Math.max(alternativeScale - 1,-9);
+    updateCanvasScale();
+});
+
+function updateCanvasScale() {
+    canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
+}
+
+const pickr = Pickr.create({
+    el: "#color-picker-container",
+    theme: "nano", // Opções: classic, nano, monolith
+    default: "#3498db",
+    inline: true,
+    showAlways: true,
+    useAsButton: false,
+    components: {
+        preview: true,
+        opacity: true,
+        hue: true,
+        interaction: {
+            input: true,
+            hex: false,
+            rgba: false,
+            save: true,
+            clear: true,
+        },
+    },
+});
+
+// pickr.on("save", (color) => {
+//     console.log("Cor selecionada:", color.toHEXA().toString());
+// });
+
+pickr.on("change", (color) => {
+    console.log("Cor selecionada:", color.toHEXA().toString());
+});
+
+//Código do renan
+
 // Carregar container
 let container = document.getElementById("canvas");
 let limite = container.getBoundingClientRect();
@@ -5,10 +58,12 @@ let limite = container.getBoundingClientRect();
 document.addEventListener("DOMContentLoaded", async () => {
     // Insiste que o zoom seja 100%.
     while (window.devicePixelRatio * 100 !== 100) {
-        const resposta = confirm("Para o sistema funcionar adequadamente, não utilize zoom do navegador nesta página! Certifique-se de alterar o seu zoom para \"100%\" usando os atalhos: \"Ctrl +\" \"Ctrl -\"");
+        const resposta = confirm(
+            'Para o sistema funcionar adequadamente, não utilize zoom do navegador nesta página! Certifique-se de alterar o seu zoom para "100%" usando os atalhos: "Ctrl +" "Ctrl -"'
+        );
 
-        // Espera 1 segundo
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // Espera 2 segundo
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
         if (!resposta) {
             break;
@@ -25,17 +80,19 @@ let addBtn = document.getElementById("addPanel");
 let zIndexAtual = 0;
 
 addBtn.addEventListener("click", () => {
-    const painel = document.createElement('div');
-    painel.className = 'painel'; // Adiciona a classe painel
+    const painel = document.createElement("div");
+    painel.className = "painel"; // Adiciona a classe painel
 
     //ADICIONANDO O STYLE DO PAINEL (BÁSICO)
-    painel.style.width = '194px';
-    painel.style.height = '308px';
-    painel.style.position = 'absolute'; // Para permitir o arrasto
-    painel.style.backgroundColor = 'white'; // Cor de fundo
-    painel.style.border = '1px solid #ccc'; // Borda do painel
-    painel.style.borderRadius = '22px'
-    painel.style.boxSizing = 'border-box'; // Para incluir padding e border no tamanho total
+    painel.style.width = "194px";
+    painel.style.height = "308px";
+    painel.style.position = "absolute"; // Para permitir o arrasto
+    painel.style.backgroundColor = "white"; // Cor de fundo
+    painel.style.border = "1px solid #ccc"; // Borda do painel
+    painel.style.borderRadius = "22px";
+    painel.style.top = 80000/2+"px";
+    painel.style.left = 80000/2+"px";
+    painel.style.boxSizing = "border-box"; // Para incluir padding e border no tamanho total
 
     // ADICIONANDO O HTML DO PAINAL - BY JAQUE :)
     painel.innerHTML = `
@@ -70,8 +127,10 @@ addBtn.addEventListener("click", () => {
     container.appendChild(painel);
 
     // Adiciona funções de movimentação
-    painel.setAttribute('draggable', 'true');
-    painel.addEventListener('dragstart', (e) => arrastar(e, new Painel(painel)));
+    painel.setAttribute("draggable", "true");
+    painel.addEventListener("dragstart", (e) =>
+        arrastar(e, new Painel(painel))
+    );
 });
 
 class Painel {
@@ -90,7 +149,7 @@ function arrastar(e, painel) {
     painel.startX = e.clientX;
     painel.startY = e.clientY;
     chamarFuncaoSoltar = (e) => soltar(e, painel);
-    document.addEventListener('dragend', chamarFuncaoSoltar);
+    document.addEventListener("dragend", chamarFuncaoSoltar);
 }
 
 function soltar(e, painel) {
@@ -105,22 +164,23 @@ function soltar(e, painel) {
     let limitesCaixa = painel.painel.getBoundingClientRect();
     limite = container.getBoundingClientRect();
 
-    if (painel.newX + limitesCaixa.width > limite.right) {
-        painel.newX = limite.right - limitesCaixa.width;
+    //N me pergunte pq o do 20 ou 32, só funciona! O 80000 é o tamanho do canvas
+    if (painel.newX + limitesCaixa.width > (80000+(20*alternativeScale))) {
+        painel.newX = (80000+(20*alternativeScale)) - limitesCaixa.width;
     }
-    if (painel.newX < limite.left) {
-        painel.newX = limite.left;
+    if (painel.newX < 0) {
+        painel.newX = 0;
     }
-    if (painel.newY + limitesCaixa.height > limite.bottom) {
-        painel.newY = limite.bottom - limitesCaixa.height;
+    if (painel.newY + limitesCaixa.height > (80000+(32*alternativeScale))) {
+        painel.newY = (80000+(32*alternativeScale)) - limitesCaixa.height;
     }
-    if (painel.newY < limite.top) {
-        painel.newY = limite.top;
+    if (painel.newY < 0) {
+        painel.newY = 0;
     }
 
-    painel.painel.style.top = (painel.newY) + 'px';
-    painel.painel.style.left = (painel.newX) + 'px';
+    painel.painel.style.top = painel.newY + "px";
+    painel.painel.style.left = painel.newX + "px";
 
-    document.removeEventListener('dragend', chamarFuncaoSoltar);
+    document.removeEventListener("dragend", chamarFuncaoSoltar);
 }
 // Fim da seção de movimentação do painel

@@ -127,14 +127,14 @@
                         <tbody>
                             @foreach ($data as $painel)
                                 <tr>
-                                    <td>{{ json_decode($painel->panel)->txtSuperior }}</td>
+                                    <td class="txtSuperior">{!! json_decode($painel->panel)->txtSuperior !!}</td>
                                     <td>{{ $painel->id }}</td>
                                     <!-- <td>
-                                                                                                                                                                                                                            <form action="{{ route('paineis.conexoes', ['id' => $painel->id]) }}" method="GET">
-                                                                                                                                                                                                                                @csrf
-                                                                                                                                                                                                                                <button type="submit" class="btn btn-warning" title="Conexões">Conexões</button>
-                                                                                                                                                                                                                            </form>
-                                                                                                                                                                                                                        </td> -->
+                                        <form action="{{ route('paineis.conexoes', ['id' => $painel->id]) }}" method="GET">
+                                            @csrf
+                                            <button type="submit" class="btn btn-warning" title="Conexões">Conexões</button>
+                                        </form>
+                                    </td> -->
                                     <td>{{ json_decode($painel->panel)->midiaExtension ?? 'N/A' }}</td>
 
                                     <!-- Editar painel -->
