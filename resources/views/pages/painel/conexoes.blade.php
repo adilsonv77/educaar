@@ -65,16 +65,16 @@
                 </div>
 
                 <!-- <div class="mb-2">
-                                                                        <input type="text" value="#424459" />
-                                                                    </div> -->
+                                <input type="text" value="#424459" />
+                            </div> -->
                 <!-- <div class="mb-2">
-                                                                        <button class="">
-                                                                            Save
-                                                                        </button>
-                                                                        <button class="">
-                                                                            Clear
-                                                                        </button>
-                                                                    </div> -->
+                                <button class="">
+                                    Save
+                                </button>
+                                <button class="">
+                                    Clear
+                                </button>
+                            </div> -->
             </div>
             <!-- TEXTO DO BOTÃO -->
             <div class="mb-6">
@@ -114,7 +114,10 @@
 
             <!-- SELECIONAR O PAINEL -->
             <div class="mb-6">
-                <h3 class="mb-2">SELECIONAR PAINEL</h3>
+                <h3 class="mb-2 singleTap">
+                    SELECIONAR PAINEL
+                    <img src="{{ asset('images/singletap.svg') }}" alt="Ícone">
+                </h3>
                 <div class="select select-painel">
                     <div class="selected" data-default="Painel (nº ID)" data-one="Painel 1" data-two="Painel 2"
                         data-three="Painel 3">
@@ -157,8 +160,8 @@
     <div class="container">
         <div class="canvas-container">
             <!-- <div class="AddPainel">
-                    <button id="addPanel">Adicionar painel</button>
-                </div> -->
+                                <button id="addPanel">Adicionar painel</button>
+                            </div> -->
 
             <div class="menu-zoom">
                 <button id="zoom-in">+</button>
