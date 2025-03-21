@@ -162,7 +162,6 @@
             <!-- <div class="AddPainel">
                                 <button id="addPanel">Adicionar painel</button>
                             </div> -->
-
             <div class="menu-zoom">
                 <button id="zoom-out">-</button>
                 <button id="zoom-in">+</button>

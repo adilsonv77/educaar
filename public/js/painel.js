@@ -2,22 +2,31 @@
 let btns = [];
 const areaBtn = document.getElementById("areaBtns");
 const btnAdd = document.getElementById("add");
+
+const maxBtns = {
+    linha: 3,
+    bloco: 6,
+    alternativa: 4,
+};
+
+let tipoAtual = "linha"; // Tipo inicial
+
 btnAdd.onclick = () => {
-    if (btns.length != 5) {
+    if (btns.length < maxBtns[tipoAtual]) {
         let btn = document.createElement("button");
         btn.type = "button";
-        btn.classList = ["btnPainel"];
+        btn.classList.add("btnPainel", tipoAtual);
         btns.push(btn);
         areaBtn.appendChild(btn);
-        if (btns.length == 5) btnAdd.style.display = "none";
+        if (btns.length === maxBtns[tipoAtual]) btnAdd.style.display = "none";
     }
 };
 //---------------------------------------------------------------------------------------------------------------------
 //  2. TROCAR CONFIGURAÇÕES DO PAINEL
 const midiaArea = document.getElementById("midia");
 const txtSuperior = document.getElementById("txtSuperior");
-const txtInferior = document.getElementById("txtInferior");
-let tituloConfig = document.getElementById("tituloSelecionado");
+// const txtInferior = document.getElementById("txtInferior");
+// let tituloConfig = document.getElementById("tituloSelecionado");
 const blocoTxt = document.getElementById("blocoTxt");
 const blocoBtn = document.getElementById("blocoBtn");
 
@@ -32,21 +41,20 @@ txtInferior.onclick = () => updateConfiguracoesPainel("texto");
 function updateConfiguracoesPainel(tipo) {
     blocoBtn.style.display = "none";
     blocoTxt.style.display = "none";
+
     switch (tipo) {
         case "botao":
-            //Carrega configs de um botão
             tituloConfig.innerText = "Botão";
             blocoBtn.style.display = "block";
             break;
         case "texto":
-            //Seleciona o texto
             txtSuperior.classList.add("selecionado");
-            //Carrega configs de texto
             tituloConfig.innerText = "Configurações de Texto";
             blocoTxt.style.display = "block";
             break;
     }
 }
+
 //---------------------------------------------------------------------------------------------------------------------
 //  3. COLOCAR IMAGEM E/OU VIDEO NO PAINEL
 const fileBtn = document.getElementById("midiaInput");
@@ -114,7 +122,7 @@ function midiaPreview() {
         vidYoutube.style.display = "block";
         try {
             vid.pause()
-        } catch (error) {}
+        } catch (error) { }
 
         document.getElementById("srcYoutube").src =
             "https://www.youtube.com/embed/" +
@@ -139,7 +147,7 @@ function midiaPreview() {
             vidYoutube.style.display = "none";
             try {
                 vid.pause()
-            } catch (error) {}
+            } catch (error) { }
             document.getElementById("srcYoutube").src = "";
             document.getElementById("linkYoutube").src = "";
             document.getElementById("linkForm").value = "";
