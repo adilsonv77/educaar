@@ -1,5 +1,5 @@
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import * as THREE from 'three';
 import { MindARThree } from 'mindar-image-three';
 import { CSS3DObject } from "three/addons/renderers/CSS3DRenderer.js"
