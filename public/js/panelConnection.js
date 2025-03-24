@@ -91,6 +91,18 @@ addBtn.addEventListener("click", () => {
         border: 1px solid #ccc; border-radius: 22px; top: 40000px; left: 40000px;
         box-sizing: border-box; cursor: pointer; box-shadow: -7px 9px 10.2px 0px rgba(0, 0, 0, 0.25);`
 
+    //ADICIONANDO O STYLE DO PAINEL (BÁSICO)
+    painel.style.width = "194px";
+    painel.style.height = "308px";
+    painel.style.position = "absolute"; // Para permitir o arrasto
+    painel.style.backgroundColor = "white"; // Cor de fundo
+    painel.style.border = "1px solid #ccc"; // Borda do painel
+    painel.style.borderRadius = "22px";
+    painel.style.top = limiteOriginal.height/2+"px";
+    painel.style.left = limiteOriginal.width/2+"px";
+    painel.style.boxSizing = "border-box"; // Para incluir padding e border no tamanho total
+
+    // ADICIONANDO O HTML DO PAINAL - BY JAQUE :)
     painel.innerHTML = `
         <textarea name="txtSuperior" id="txtSuperior" maxlength="117"></textarea>
         <div id="espacoMidias">
@@ -193,10 +205,12 @@ function arrastar(e, painel) {
     document.addEventListener("dragend", chamarFuncaoSoltar);
 }
 
+let limiteOriginal = container.getBoundingClientRect();
+
 function soltar(e, painel) {
     // Movimenta para a posição do mouse
-    painel.newX = painel.painel.offsetLeft - (painel.startX - e.clientX);
-    painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY);
+    painel.newX = painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
+    painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY) / scale;
 
     painel.startX = e.clientX;
     painel.startY = e.clientY;
@@ -206,14 +220,14 @@ function soltar(e, painel) {
     limite = container.getBoundingClientRect();
 
     //N me pergunte pq o do 20 ou 32, só funciona! O 80000 é o tamanho do canvas
-    if (painel.newX + limitesCaixa.width > (80000 + (20 * alternativeScale))) {
-        painel.newX = (80000 + (20 * alternativeScale)) - limitesCaixa.width;
+    if (painel.newX + limitesCaixa.width > (limiteOriginal.width+(20*alternativeScale))) {
+        painel.newX = (limiteOriginal.width+(20*alternativeScale)) - limitesCaixa.width;
     }
     if (painel.newX < 0) {
         painel.newX = 0;
     }
-    if (painel.newY + limitesCaixa.height > (80000 + (32 * alternativeScale))) {
-        painel.newY = (80000 + (32 * alternativeScale)) - limitesCaixa.height;
+    if (painel.newY + limitesCaixa.height > (limiteOriginal.height+(32*alternativeScale))) {
+        painel.newY = (limiteOriginal.height+(32*alternativeScale)) - limitesCaixa.height;
     }
     if (painel.newY < 0) {
         painel.newY = 0;

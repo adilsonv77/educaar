@@ -175,4 +175,33 @@
 
 @section('script')
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
+
+    <script>
+        const div = document.getElementById("canvas");
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let startLeft = 0, startTop = 0;
+
+        div.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startLeft = div.offsetLeft;
+            startTop = div.offsetTop;
+            div.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            let deltaX = e.clientX - startX;
+            let deltaY = e.clientY - startY;
+            div.style.left = `${startLeft + deltaX}px`;
+            div.style.top = `${startTop + deltaY}px`;
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+            div.style.cursor = "grab";
+        });
+    </script>
 @endsection
