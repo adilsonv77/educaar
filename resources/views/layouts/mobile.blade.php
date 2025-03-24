@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
+    <meta http-equiv="Cache-control" content="no-cache">
+    
     <title>EducaAR</title>
     @yield('style')
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
