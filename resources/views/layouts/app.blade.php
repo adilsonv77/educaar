@@ -178,7 +178,7 @@
                             </li>
                             <li><a class="ai-icon" href="{{ route('paineis.index') }}" aria-expanded="false">
                                     <i class="bi-bricks"></i>
-                                    <span class="nav-text">Painéis</span>
+                                    <span class="nav-text">Cenas</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('turmas.listarTurmasAlunosProf') }}" aria-expanded="false">

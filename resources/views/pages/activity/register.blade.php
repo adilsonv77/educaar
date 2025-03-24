@@ -142,7 +142,13 @@
                         @endforeach
                     </select>
                 </div>
+                <!-- esse campo sai depois quando os painéis estiverem ok -->
+                <input type="hidden" name="sceneType" value="Modelo3D"/>
+                <select id="selectSceneType" style="display:none">
+                    <option value="Modelo3D" selected>Modelo 3D</option>
+                </select>
 
+<!--
                 <div class="form-group">
                     <label for="">Selecione o tipo da cena*</label>
                     <select class="form-control" id="selectSceneType" name="sceneType" aria-label="">             
@@ -150,7 +156,7 @@
                         <option value="Painel">Painel</option>
                     </select>
                 </div>
-
+        -->
                 <div class="form-group" id="3DmodelOption">
                         @if ($acao == 'edit' && $painel_inicial_id == 'modelo3D') 
                             <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
@@ -185,7 +191,7 @@
 
                 <div class="form-group mt-4" onsubmit="desativarBotao(this)">
                     <button type="submit" id="btnSalvar" class="btn btn-success">
-                        <i >Salvar</i> 
+                        Salvar
                     </button>
                 </div>
             </form>
