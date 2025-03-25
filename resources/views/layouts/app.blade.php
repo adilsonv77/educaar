@@ -176,7 +176,7 @@
                                     <span class="nav-text">Atividades</span>
                                 </a>
                             </li>
-                            <li><a class="ai-icon" href="{{ route('paineis.index') }}" aria-expanded="false">
+                            <li><a class="ai-icon" href="{{ route('scenes.index') }}" aria-expanded="false">
                                     <i class="bi-bricks"></i>
                                     <span class="nav-text">Cenas</span>
                                 </a>

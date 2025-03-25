@@ -16,9 +16,11 @@
         <!-- Container para os botões -->
         <div class="buttons-container">
             <!-- Botão Novo -->
-            <form action="{{ route('paineis.create') }}">
+            <form action="{{ route('scenes.store') }}">
                 @csrf
-                <button class="btn btn-primary btn-sm" id="novo" title="Novo">
+                <input type="hidden" name="author_id" value="">
+                <input type="hidden" name="disciplina_id" value="">
+                <button class="btn btn-primary btn-sm" id="novo" title="Novo" type="submit">
                     <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff;"></i>
                 </button>
             </form>
