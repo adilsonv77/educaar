@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Activity;
 use App\Models\Content;
 use App\Models\Question;
