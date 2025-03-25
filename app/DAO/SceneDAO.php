@@ -4,7 +4,7 @@ namespace App\DAO;
 
 use App\Models\Scene;
 
-class PainelDAO
+class SceneDAO
 {
     public function getById($id)
     {

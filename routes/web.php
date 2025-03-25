@@ -5,18 +5,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\School;
+use App\Http\Controllers\PainelController;
+use App\Http\Controllers\SceneController;
+use App\Http\Controllers\ButtonController;
 
 //Painéis - Renan
 //Talvez alguns possam ser substituidos por o tal do resource
-Route::get('teste', function () {
-    return view('pages.painel.panelConnection', [
-        'titulo' => 'Criação de painéis',
-        'action' => 'create',
-        'midiaExtension' => ''
-    ]);
-});
+Route::resource('scenes',SceneController::class);
+Route::resource('buttons',ButtonController::class);
 
-use App\Http\Controllers\PainelController;
 Route::prefix('paineis')->group(function () {
     Route::get('/', [PainelController::class, 'index'])->name('paineis.index');
     Route::get('/create', [PainelController::class, 'create'])->name('paineis.create');

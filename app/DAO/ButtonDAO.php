@@ -4,7 +4,7 @@ namespace App\DAO;
 
 use App\Models\Button;
 
-class PainelDAO
+class ButtonDAO
 {
     public function getById($id)
     {
