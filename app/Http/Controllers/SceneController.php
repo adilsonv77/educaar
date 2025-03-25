@@ -13,19 +13,21 @@ class SceneController extends Controller
     protected $ButtonDAO;
     protected $activityDAO;
     protected $painelDAO;
+    protected $sceneDAO;
 
-    public function __construct(ButtonDAO $ButtonDAO, ActivityDAO $activityDAO, PainelDAO $painelDAO)
+    public function __construct(ButtonDAO $ButtonDAO, ActivityDAO $activityDAO, PainelDAO $painelDAO, SceneDAO $sceneDAO)
     {
         $this->painelDAO = $painelDAO;
         $this->activityDAO = $activityDAO;
         $this->ButtonDAO = $ButtonDAO;
+        $this->sceneDAO = $sceneDAO;
     }
 
     public function index()
     {
-        $data = $this->SceneDAO->getAll();
+        $data = $this->sceneDAO->getAll();
 
-        return view('pages.painel.sceneListing', ['data' => $data]);
+        return view('pages.painel.sceneListing', ['data' => $data, 'content'=>""]);
     }
 
     public function create()
