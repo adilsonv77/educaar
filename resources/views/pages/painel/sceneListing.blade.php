@@ -16,10 +16,10 @@
         <!-- Container para os botões -->
         <div class="buttons-container">
             <!-- Botão Novo -->
-            <form action="{{ route('scenes.store') }}">
+            <form action="{{ route('scenes.store') }}" method="POST">
                 @csrf
-                <input type="hidden" name="author_id" value="">
-                <input type="hidden" name="disciplina_id" value="">
+                <input type="hidden" name="author_id" value="1">
+                <input type="hidden" name="disciplina_id" value="1">
                 <button class="btn btn-primary btn-sm" id="novo" title="Novo" type="submit">
                     <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff;"></i>
                 </button>
@@ -127,21 +127,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $painel)
+                            @foreach ($data as $scene)
                                 <tr>
-                                    <td class="txtSuperior">{!! json_decode($painel->panel)->txtSuperior !!}</td>
-                                    <td>{{ $painel->id }}</td>
+                                    <td>{{ $scene->id }}</td>
                                     <!-- <td>
-                                        <form action="{{ route('paineis.conexoes', ['id' => $painel->id]) }}" method="GET">
+                                        <form action="{{ route('paineis.conexoes', [$scene->id]) }}" method="GET">
                                             @csrf
                                             <button type="submit" class="btn btn-warning" title="Conexões">Conexões</button>
                                         </form>
                                     </td> -->
-                                    <td>{{ json_decode($painel->panel)->midiaExtension ?? 'N/A' }}</td>
+                                    <td>{{ json_decode($scene->panel)->midiaExtension ?? 'N/A' }}</td>
 
                                     <!-- Editar painel -->
                                     <td>
-                                        <form action="{{ route('paineis.edit', ['id' => $painel->id]) }}" method="GET">
+                                        <form action="{{ route('scenes.edit', [$scene->id]) }}" method="GET">
                                             @csrf
                                             <button type="submit" class="btn btn-warning" title="Editar">
                                                 <i class="bi bi-pencil-square h2" style="color: #ffffff;"></i>
@@ -151,27 +150,27 @@
 
                                     <!-- Excluir painel -->
                                     <td>
-                                        <button type="button" class="btn btn-danger @if($painel->sendoUsado) disabled @endif"
-                                            data-toggle="modal" data-target="#modal{{ $painel->id }}" title="Excluir">
+                                        <button type="button" class="btn btn-danger @if($scene->sendoUsado) disabled @endif"
+                                            data-toggle="modal" data-target="#modal{{ $scene->id }}" title="Excluir">
                                             <i class="bi bi-trash3 h2" style="color: #ffffff;"></i>
                                         </button>
                                     </td>
                                 </tr>
 
                                 <!-- Modal de Confirmação de Exclusão -->
-                                <div class="modal fade" id="modal{{ $painel->id }}" tabindex="-1" role="dialog"
+                                <div class="modal fade" id="modal{{ $scene->id }}" tabindex="-1" role="dialog"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-body">
                                                 <h3>Você tem certeza que deseja excluir o painel
-                                                    {{ json_decode($painel->panel)->txtSuperior }}?
+                                                    {{ json_decode($scene->name) }}?
                                                 </h3>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-dismiss="modal">Cancelar</button>
-                                                <form action="{{ route('paineis.destroy', ['id' => $painel->id]) }}" method="POST">
+                                                <form action="{{ route('paineis.destroy', ['id' => $scene->id]) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger">Excluir</button>

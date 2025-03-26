@@ -10,5 +10,6 @@ class Painei extends Model
     use HasFactory;
     protected $fillable = [
         'panel',
+        'scene_id'
     ];
 }

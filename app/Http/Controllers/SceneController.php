@@ -47,14 +47,19 @@ class SceneController extends Controller
         $data = $request->all();
         $nomeTemporario = time();
 
-        $this->painelDAO->create([
+        $cenaCriada = $this->sceneDAO->create([
             'name'=> $nomeTemporario,
             'start_panel_id'=>null,
             'author_id'=>$data['author_id'],
             'disciplina_id'=>$data['disciplina_id']
         ]);
+
+        $this->painelDAO->create([
+            'panel'=>"{\"txtSuperior\":\"\"link\":null,\"txtInferior\":null,\"trumbowyg-demo\":null,\"arquivoMidia\":{},\"midiaExtension\":\"\"}",
+            'scene_id'=> $cenaCriada->id
+        ]);
         
-        return redirect()->route('paineis.index');
+        return redirect()->route('paineis.conexoes');
     }
 
     public function destroy($id)
