@@ -38,8 +38,7 @@ class SceneController extends Controller
 
     public function edit($id)
     {
-        dd("Há fazer");
-        return view('pages.painel.criacaoPaineis', $data);
+        return view('pages.painel.conexoes');
     }
 
     public function store(Request $request)
@@ -51,12 +50,16 @@ class SceneController extends Controller
             'name'=> $nomeTemporario,
             'start_panel_id'=>null,
             'author_id'=>$data['author_id'],
-            'disciplina_id'=>$data['disciplina_id']
+            'disciplina_id'=>null
         ]);
 
-        $this->painelDAO->create([
-            'panel'=>"{\"txtSuperior\":\"\"link\":null,\"txtInferior\":null,\"trumbowyg-demo\":null,\"arquivoMidia\":{},\"midiaExtension\":\"\"}",
+        $painelCriado = $this->painelDAO->create([
+            'panel'=>'{"txtSuperior":"","link":"","arquivoMidia":"","midiaExtension":""}',
             'scene_id'=> $cenaCriada->id
+        ]);
+
+        $this->sceneDAO->updateById($cenaCriada->id, [
+            'start_panel_id'=>$painelCriado->id
         ]);
         
         return redirect()->route('paineis.conexoes');
