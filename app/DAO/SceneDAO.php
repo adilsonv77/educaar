@@ -26,7 +26,14 @@ class SceneDAO
         return Scene::where('id', $id)->update($data);
     }
 
-    public function deleteById($id){
-        Scene::where('id',$id)->delete();
+    public function deleteById($id)
+    {
+        Scene::where('id', $id)->delete();
     }
+
+    public function getByName($name)
+    {
+        return Scene::where('name', 'like', '%' . $name . '%')->get();
+    }
+
 }

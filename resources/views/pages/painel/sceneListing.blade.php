@@ -8,7 +8,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/telainicial.css?v=' . filemtime(public_path('css/telainicial.css'))) }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/panelListing.css?v=' . filemtime(public_path('css/panelListing.css'))) }}">
-    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/style.css?v=' . filemtime(public_path('css/style.css'))) }}">
 @endsection
 
 @section('content')
@@ -28,22 +28,23 @@
     @endif
 
     <!-- Barra de pesquisa -->
-    <form action="{{ route('content.index') }}" method="GET">
+    <form action="{{ route('scenes.index') }}" method="GET">
         <div class="form-inline">
-            <label for="">Informe a disciplina :</label>
-            <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}"
-                list="historico" />
+            <label for="titulo">Informe o nome da cena :</label>
+            <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo"
+                value="{{ request('titulo') }}" list="historico" />
             <section class="itens-group">
                 <button class="btn btn-primary btn-lg" type="submit" style="border-radius: 0 20px 20px 0">Pesquisar</button>
             </section>
         </div>
 
         <datalist id="historico">
-            @foreach ($data as $content)
-                <option value="{{ $content->pesq_name }}">{{ $content->pesq_name }}</option>
+            @foreach ($data as $scene)
+                <option value="{{ $scene->name }}">{{ $scene->name }}</option>
             @endforeach
         </datalist>
     </form>
+
     <br>
 
     <!-- Tabela de Listagem dos Painéis -->
@@ -73,7 +74,7 @@
                                     <!-- DISCIPLINA CENA (VER) -->
                                     <td>{{ $scene->disciplina->name ?? 'Sem disciplina' }}</td>
                                     <!-- PAINEL INICIAL -->
-                                    <td>{{ $scene->start_panel_id  ?? 'N/A'}}</td>
+                                    <td>{{ $scene->start_panel_id ?? 'N/A'}}</td>
                                     <!-- VISUALIZAR CENA -->
                                     <td>
                                         <form action="{{ route('paineis.conexoes', [$scene->id]) }}" method="GET">

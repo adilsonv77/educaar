@@ -23,12 +23,17 @@ class SceneController extends Controller
         $this->sceneDAO = $sceneDAO;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->sceneDAO->getAll();
-        // dd($data[0]["id"]);
-        return view('pages.painel.sceneListing', ['data' => $data, 'content'=>""]);
+        if ($request->has('titulo') && !empty($request->titulo)) {
+            $data = $this->sceneDAO->getByName($request->titulo);
+        } else {
+            $data = $this->sceneDAO->getAll();
+        }
+
+        return view('pages.painel.sceneListing', compact('data'));
     }
+
 
     public function create()
     {
@@ -42,7 +47,7 @@ class SceneController extends Controller
     }
 
     public function store(Request $request)
-    {   
+    {
         $data = $request->all();
         $nomeTemporario = time();
 
@@ -51,17 +56,17 @@ class SceneController extends Controller
             'start_panel_id' => null,
             'author_id' => $data['author_id'],
             'disciplina_id' => $data['disciplina_id'] ?? null,
-        ]);        
+        ]);
 
         $painelCriado = $this->painelDAO->create([
-            'panel'=>'{"txtSuperior":"","link":"","arquivoMidia":"","midiaExtension":""}',
-            'scene_id'=> $cenaCriada->id
+            'panel' => '{"txtSuperior":"","link":"","arquivoMidia":"","midiaExtension":""}',
+            'scene_id' => $cenaCriada->id
         ]);
 
         $this->sceneDAO->updateById($cenaCriada->id, [
-            'start_panel_id'=>$painelCriado->id
+            'start_panel_id' => $painelCriado->id
         ]);
-        
+
         return redirect()->route('paineis.conexoes');
     }
 
