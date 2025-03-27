@@ -26,7 +26,7 @@ class SceneController extends Controller
     public function index()
     {
         $data = $this->sceneDAO->getAll();
-
+        // dd($data[0]["id"]);
         return view('pages.painel.sceneListing', ['data' => $data, 'content'=>""]);
     }
 
@@ -47,11 +47,11 @@ class SceneController extends Controller
         $nomeTemporario = time();
 
         $cenaCriada = $this->sceneDAO->create([
-            'name'=> $nomeTemporario,
-            'start_panel_id'=>null,
-            'author_id'=>$data['author_id'],
-            'disciplina_id'=>null
-        ]);
+            'name' => $nomeTemporario,
+            'start_panel_id' => null,
+            'author_id' => $data['author_id'],
+            'disciplina_id' => $data['disciplina_id'] ?? null,
+        ]);        
 
         $painelCriado = $this->painelDAO->create([
             'panel'=>'{"txtSuperior":"","link":"","arquivoMidia":"","midiaExtension":""}',

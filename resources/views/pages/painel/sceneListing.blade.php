@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', "Listagem de painéis")
+@section('page-name', "Listagem de Cenas")
 
 @section('script-head')
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -24,25 +24,17 @@
                     <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff;"></i>
                 </button>
             </form>
-
-            <!-- Botão Conexões -->
-            <form action="{{ route('paineis.conexoes') }}" method="GET">
-                @csrf
-                <button class="btn btn-warning btn-sm" type="submit" title="Conexões">
-                    <i class="bi bi-link-45deg"></i> Conexões
-                </button>
-            </form>
         </div>
     @endif
 
     <!-- Barra de pesquisa -->
     <form action="{{ route('content.index') }}" method="GET">
         <div class="form-inline">
-            <label for="">Informe o conteúdo :</label>
+            <label for="">Informe a disciplina :</label>
             <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}"
                 list="historico" />
             <section class="itens-group">
-                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+                <button class="btn btn-primary btn-lg" type="submit" style="border-radius: 0 20px 20px 0">Pesquisar</button>
             </section>
         </div>
 
@@ -54,62 +46,6 @@
     </form>
     <br>
 
-    <style>
-        .form-inline {
-            display: flex;
-            justify-content: flex-start;
-            width: 100%;
-        }
-
-        .form-inline label {
-            margin-right: 10px;
-        }
-
-        .form-control {
-            flex-grow: 1;
-            width: auto;
-
-        }
-
-        .btn-primary {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            border-top-right-radius: 20px;
-            border-bottom-right-radius: 20px;
-            border-left: none;
-        }
-
-        /* Estiliza o checkbox desmarcado */
-        input[type="checkbox"] {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #86398e;
-            border-radius: 4px;
-            background-color: #ffffff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Estiliza o checkbox quando marcado */
-        input[type="checkbox"]:checked {
-            background-color: #86398e;
-            border: none;
-        }
-
-        input[type="checkbox"]:checked::after {
-            content: "✔";
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-
     <!-- Tabela de Listagem dos Painéis -->
     <div class="card">
         <div class="card-body">
@@ -118,10 +54,11 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
+                                <th>ID Cena</th>
                                 <th>Nome</th>
-                                <th>ID</th>
-                                <!-- <th>Selecionar para conexão</th> -->
-                                <th>Tipo de mídia</th>
+                                <th>Disciplina</th>
+                                <th>ID Painel Inicial</th>
+                                <th>Abrir</th>
                                 <th>Editar</th>
                                 <th>Excluir</th>
                             </tr>
@@ -129,26 +66,36 @@
                         <tbody>
                             @foreach ($data as $scene)
                                 <tr>
+                                    <!-- ID CENA -->
                                     <td>{{ $scene->id }}</td>
-                                    <!-- <td>
+                                    <!-- NOME CENA -->
+                                    <td>{{ $scene->name }}</td>
+                                    <!-- DISCIPLINA CENA (VER) -->
+                                    <td>{{ $scene->disciplina->name ?? 'Sem disciplina' }}</td>
+                                    <!-- PAINEL INICIAL -->
+                                    <td>{{ $scene->start_panel_id  ?? 'N/A'}}</td>
+                                    <!-- VISUALIZAR CENA -->
+                                    <td>
                                         <form action="{{ route('paineis.conexoes', [$scene->id]) }}" method="GET">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning" title="Conexões">Conexões</button>
-                                        </form>
-                                    </td> -->
-                                    <td>{{ json_decode($scene->panel)->midiaExtension ?? 'N/A' }}</td>
-
-                                    <!-- Editar painel -->
-                                    <td>
-                                        <form action="{{ route('scenes.edit', [$scene->id]) }}" method="GET">
-                                            @csrf
                                             <button type="submit" class="btn btn-warning" title="Editar">
-                                                <i class="bi bi-pencil-square h2" style="color: #ffffff;"></i>
+                                                <i class="bi bi-eye-fill" style="color: #ffffff;"></i>
                                             </button>
                                         </form>
                                     </td>
+                                    <!-- <td>{{ json_decode($scene->panel)->midiaExtension ?? 'N/A' }}</td> -->
+                                    <!-- EDITAR CENA -->
+                                    <td>
+                                        <form action="{{ route('scenes.edit', [$scene->id]) }}" method="GET">
+                                            <form action="{{ route('scenes.edit', [$scene->id]) }}" method="GET">
+                                                @csrf
+                                                <button type="submit" class="btn btn-warning" title="Editar">
+                                                    <i class="bi bi-pencil-square h2" style="color: #ffffff;"></i>
+                                                </button>
+                                            </form>
+                                    </td>
 
-                                    <!-- Excluir painel -->
+                                    <!-- ECLUIR CENA -->
                                     <td>
                                         <button type="button" class="btn btn-danger @if($scene->sendoUsado) disabled @endif"
                                             data-toggle="modal" data-target="#modal{{ $scene->id }}" title="Excluir">
@@ -163,8 +110,8 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-body">
-                                                <h3>Você tem certeza que deseja excluir o painel
-                                                    {{ json_decode($scene->name) }}?
+                                                <h3>Você tem certeza que deseja excluir a cena
+                                                    {{ json_decode($scene->name) }}
                                                 </h3>
                                             </div>
                                             <div class="modal-footer">
@@ -185,7 +132,7 @@
                 </div>
             @else
                 <div>
-                    <h2>Nenhum painel cadastrado</h2>
+                    <h2>Nenhuma cena cadastrada</h2>
                 </div>
             @endif
         </div>

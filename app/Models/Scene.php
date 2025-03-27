@@ -14,4 +14,9 @@ class Scene extends Model
         'author_id',
         'disciplina_id',
     ];
+
+    public function disciplina()
+    {
+        return $this->belongsTo(Disciplina::class, 'disciplina_id');
+    }
 }
