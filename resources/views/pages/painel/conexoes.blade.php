@@ -62,16 +62,16 @@
                 </div>
 
                 <!-- <div class="mb-2">
-                                <input type="text" value="#424459" />
-                            </div> -->
+                                                    <input type="text" value="#424459" />
+                                                </div> -->
                 <!-- <div class="mb-2">
-                                <button class="">
-                                    Save
-                                </button>
-                                <button class="">
-                                    Clear
-                                </button>
-                            </div> -->
+                                                    <button class="">
+                                                        Save
+                                                    </button>
+                                                    <button class="">
+                                                        Clear
+                                                    </button>
+                                                </div> -->
             </div>
             <!-- TEXTO DO BOTÃO -->
             <div class="mb-6">
@@ -157,8 +157,8 @@
     <div class="container-paineis">
         <div class="canvas-container">
             <!-- <div class="AddPainel">
-                <button id="addPanel">Adicionar painel</button>
-            </div> -->
+                                    <button id="addPanel">Adicionar painel</button>
+                                </div> -->
             <div class="menu-zoom">
                 <button id="zoom-out">-</button>
                 <button id="zoom-in">+</button>
@@ -194,37 +194,43 @@
                     </div>
                     <!--Botões do painel-->
                     <div id="areaBtns" class="btn-linhas" style="font-size: 12px;">
-                        <div class="teste"><div class="circulo"></div> Botão 1</div>
-                        <div class="teste"><div class="circulo"></div> Botão 2</div>
-                        <div class="teste"><div class="circulo"></div> Botão 3</div>
+                        <div class="button_Panel">
+                            <div class="circulo"></div> Botão 1
+                        </div>
+                        <div class="button_Panel">
+                            <div class="circulo"></div> Botão 2
+                        </div>
+                        <div class="button_Panel">
+                            <div class="circulo"></div> Botão 3
+                        </div>
                     </div>
+                    <!--Informações do painel-->
                     <!--Informações do painel-->
                     <input type="hidden" name="link" value="{{$painel->panel["link"]}}">
                     <input type="hidden" name="midiaExtension" value="{{ asset("midiasPainel/".$painel->panel["midiaExtension"]) }}">
                     <input type="hidden" name="arquivoMidia" value="{{ asset("midiasPainel/".$painel->panel["arquivoMidia"]) }}">
                 </div>
                 @endforeach
-                <img src= "{{ asset('images/inicioConexoes.svg') }}" alt="">
+                <img src="{{ asset('images/inicioConexoes.svg') }}" alt="">
             </div>
         </div>
-    </div>
 @endsection
 
-@section('script')
-    <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
+    @section('script')
+        <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
 
-    <script>
-        //----PANEL LOADING---------------------------------------------------------------------
-        $(document).ready(function () {
-            let panelsLoaded = document.getElementsByClassName("painel");
+        <script>
+            //----PANEL LOADING---------------------------------------------------------------------
+            $(document).ready(function () {
+                let panelsLoaded = document.getElementsByClassName("painel");
 
-            Array.from(panelsLoaded).forEach(panel => {
-                panel.setAttribute("draggable", "true");
-                panel.addEventListener("dragstart", (e) =>
-                    arrastar(e, new Painel(panel))
-                );
-                panel.addEventListener("click", () => selecionarPainel(panel));
+                Array.from(panelsLoaded).forEach(panel => {
+                    panel.setAttribute("draggable", "true");
+                    panel.addEventListener("dragstart", (e) =>
+                        arrastar(e, new Painel(panel))
+                    );
+                    panel.addEventListener("click", (e) => selecionarPainel(panel, e));
+                });
             });
-        });
-    </script>
-@endsection
+        </script>
+    @endsection

@@ -53,6 +53,7 @@ pickr.on("change", (color) => {
 let container = document.getElementById("canvas");
 let limite = container.getBoundingClientRect();
 let painelSelecionado = null;
+let botaoSelecionado = null;
 let zIndexAtual = 0;
 let addBtn = document.getElementById("addPanel");
 
@@ -89,9 +90,9 @@ addBtn.addEventListener("click", () => {
         </div>
         <!--Botões do painel-->
         <div id="areaBtns" class="btn-linhas" style="font-size: 12px;">
-            <div class="teste"><div class="circulo"></div> Botão 1</div>
-            <div class="teste"><div class="circulo"></div> Botão 2</div>
-            <div class="teste"><div class="circulo"></div> Botão 3</div>
+            <div class="button_Panel"><div class="circulo"></div> Botão 1</div>
+            <div class="button_Panel"><div class="circulo"></div> Botão 2</div>
+            <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
         </div>
         <!--Informações do painel-->
         <input type="hidden" name="midiaExtension" value="">
@@ -100,10 +101,8 @@ addBtn.addEventListener("click", () => {
 
     container.appendChild(painel);
     painel.setAttribute("draggable", "true");
-    painel.addEventListener("dragstart", (e) =>
-        arrastar(e, new Painel(painel))
-    );
-    painel.addEventListener("click", () => selecionarPainel(painel));
+    painel.addEventListener("dragstart", (e) => arrastar(e, new Painel(painel)));
+    painel.addEventListener("click", (e) => selecionarPainel(painel, e));
 });
 
 class Painel {
@@ -116,15 +115,38 @@ class Painel {
     }
 }
 
-//----FORMATO DOS BOTÕES----------------------------------------------------------------------------
-function selecionarPainel(painel) {
+//----FUNÇÃO DE SELECIONAR PAINEL E BOTÃO----------------------------------------------------------------------------
+function selecionarPainel(painel, e) {
+    if (e.target.closest('.button_Panel')) return;
+
     if (painelSelecionado) {
-        painelSelecionado.style.border = "1px solid #ccc";
+        painelSelecionado.classList.remove("selecionado");
     }
+
     painelSelecionado = painel;
-    painelSelecionado.style.border = "1px solid #FFA600";
+    painelSelecionado.classList.add("selecionado");
+    botaoSelecionado.classList.remove("selecionado")
+    botaoSelecionado = null;
 }
 
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("button_Panel")) {
+        e.stopPropagation();
+        selecionarBotao(e.target);
+    }
+});
+
+
+function selecionarBotao(botao) {
+    let botoes = document.querySelectorAll(".button_Panel");
+    botoes.forEach((btn) => btn.classList = "button_Panel");
+    botaoSelecionado = botao;
+    botao.classList.add("selecionado");
+    painelSelecionado.classList.remove("selecionado");
+    painelSelecionado = null;
+}
+
+//----FORMATO DOS BOTÕES----------------------------------------------------------------------------
 function alterarFormatoBotoes(formato) {
     if (!painelSelecionado) return;
     let areaBotoes = painelSelecionado.querySelector("#areaBtns");
@@ -132,24 +154,24 @@ function alterarFormatoBotoes(formato) {
 
     const layouts = {
         linhas: `
-            <div class="teste"><div class="circulo"></div> Botão 1</div>
-            <div class="teste"><div class="circulo"></div> Botão 2</div>
-            <div class="teste"><div class="circulo"></div> Botão 3</div>
+            <div class="button_Panel"><div class="circulo"></div> Botão 1</div>
+            <div class="button_Panel"><div class="circulo"></div> Botão 2</div>
+            <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
         `,
         blocos: `
             <div class="grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; font-size: 12px;">
-                <div class="teste" style="width: 80px; height: 28px;">Botão 1</div>
-                <div class="teste" style="width: 80px; height: 28px;">Botão 2</div>
-                <div class="teste" style="width: 80px; height: 28px;">Botão 3</div>
-                <div class="teste" style="width: 80px; height: 28px;">Botão 4</div>
-                <div class="teste" style="width: 80px; height: 28px;">Botão 5</div>
-                <div class="teste" style="width: 80px; height: 28px;">Botão 6</div>
+                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 1</div>
+                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 2</div>
+                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 3</div>
+                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 4</div>
+                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 5</div>
+                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 6</div>
             </div>
         `,
         alternativas: `
             <div class="alternativas">
-                <div class="teste"><div class="circulo"></div> Opção A</div>
-                <div class="teste"><div class="circulo"></div> Opção B</div>
+                <div class="button_Panel"><div class="circulo"></div> Opção A</div>
+                <div class="button_Panel"><div class="circulo"></div> Opção B</div>
             </div>
         `,
     };
@@ -157,7 +179,7 @@ function alterarFormatoBotoes(formato) {
     // Remover o círculo e ajustar o tamanho
     if (formato === "blocos") {
         areaBotoes.innerHTML = layouts[formato];
-        let botoes = areaBotoes.querySelectorAll(".teste");
+        let botoes = areaBotoes.querySelectorAll(".button_Panel");
         botoes.forEach((botao) => {
             botao.style.width = "80px";
             botao.style.height = "28px";
@@ -184,7 +206,7 @@ document
 let isDraggingPanel = false;
 
 function arrastar(e, painel) {
-    isDraggingPanel=true;
+    isDraggingPanel = true;
     zIndexAtual++;
     painel.painel.style.zIndex = zIndexAtual;
     painel.startX = e.clientX;
@@ -246,7 +268,7 @@ let startLeft = 0, startTop = 0;
 div.addEventListener("mousedown", (e) => {
     //Antes de movimentar espera 0.05 segundos para ver se ta movimentando um painel primeiro
     setTimeout(() => {
-        if(isDraggingPanel) return;
+        if (isDraggingPanel) return;
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
@@ -265,7 +287,7 @@ document.addEventListener("mousemove", (e) => {
 });
 
 document.addEventListener("mouseup", () => {
-    if(isDraggingPanel) return;
+    if (isDraggingPanel) return;
     isDragging = false;
     div.style.cursor = "grab";
 });
