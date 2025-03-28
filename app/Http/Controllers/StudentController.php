@@ -157,7 +157,7 @@ class StudentController extends Controller
         $rota = route("student.conteudos") . "?id=" . $disciplina;
         return view('student.ar', compact('activities', 'rota',));
     }
-
+    
     /**
      * Entra na página de questionario de uma atividade
      */

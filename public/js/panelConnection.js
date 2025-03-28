@@ -1,5 +1,4 @@
-//Código da Jaque
-//CANVAS INFINITO
+//----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM----------------------------------------------------------------------------
 let scale = 1;
 let alternativeScale = 0;
 const canvas = document.getElementById("canvas");
@@ -20,6 +19,7 @@ function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
 }
 
+//----COLOR PICKER----------------------------------------------------------------------------
 const pickr = Pickr.create({
     el: "#color-picker-container",
     theme: "nano", // Opções: classic, nano, monolith
@@ -49,35 +49,17 @@ pickr.on("change", (color) => {
     console.log("Cor selecionada:", color.toHEXA().toString());
 });
 
-//Código do renan
-
-// Geral
+//----ADICIONAR PAINEL----------------------------------------------------------------------------
 let container = document.getElementById("canvas");
 let limite = container.getBoundingClientRect();
 let painelSelecionado = null;
-
-// Adicionar painel
-let addBtn = document.getElementById("addPanel");
 let zIndexAtual = 0;
+let addBtn = document.getElementById("addPanel");
 
 addBtn.addEventListener("click", () => {
     const painel = document.createElement("div");
     painel.className = "painel";
-    // painel.style.cssText = `
-    //     width: 194px; height: 308px; position: absolute; background: #F8F8F8;
-    //     border: 1px solid #ccc; border-radius: 22px; top: 40000px; left: 40000px;
-    //     box-sizing: border-box; cursor: pointer; box-shadow: -7px 9px 10.2px 0px rgba(0, 0, 0, 0.25);`
 
-    // //ADICIONANDO O STYLE DO PAINEL (BÁSICO)
-    // painel.style.position = "absolute"; // Para permitir o arrasto
-    // painel.style.backgroundColor = "white"; // Cor de fundo
-    // painel.style.border = "1px solid #ccc"; // Borda do painel
-    // painel.style.borderRadius = "22px";
-    // painel.style.top = limiteOriginal.height/2+"px";
-    // painel.style.left = limiteOriginal.width/2+"px";
-    // painel.style.boxSizing = "border-box"; // Para incluir padding e border no tamanho total
-
-    // ADICIONANDO O HTML DO PAINAL - BY renan :)
     painel.innerHTML = `          
         <!--Texto do painel-->
         <div class="txtPainel"></div>
@@ -124,6 +106,17 @@ addBtn.addEventListener("click", () => {
     painel.addEventListener("click", () => selecionarPainel(painel));
 });
 
+class Painel {
+    constructor(painel) {
+        this.newX = 0;
+        this.newY = 0;
+        this.startX = 0;
+        this.startY = 0;
+        this.painel = painel;
+    }
+}
+
+//----FORMATO DOS BOTÕES----------------------------------------------------------------------------
 function selecionarPainel(painel) {
     if (painelSelecionado) {
         painelSelecionado.style.border = "1px solid #ccc";
@@ -173,7 +166,6 @@ function alterarFormatoBotoes(formato) {
     } else {
         areaBotoes.innerHTML = layouts[formato];
     }
-
     areaBotoes.innerHTML = layouts[formato];
 }
 
@@ -187,17 +179,12 @@ document
     .querySelector(".alternativas")
     .addEventListener("click", () => alterarFormatoBotoes("alternativas"));
 
-class Painel {
-    constructor(painel) {
-        this.newX = 0;
-        this.newY = 0;
-        this.startX = 0;
-        this.startY = 0;
-        this.painel = painel;
-    }
-}
+
+//----MOVIMENTAÇÃO PAINEL----------------------------------------------------------------------------
+let isDraggingPanel = false;
 
 function arrastar(e, painel) {
+    isDraggingPanel=true;
     zIndexAtual++;
     painel.painel.style.zIndex = zIndexAtual;
     painel.startX = e.clientX;
@@ -209,9 +196,10 @@ function arrastar(e, painel) {
 let limiteOriginal = container.getBoundingClientRect();
 
 function soltar(e, painel) {
+    isDraggingPanel = false;
+
     // Movimenta para a posição do mouse
-    painel.newX =
-        painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
+    painel.newX = painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
     painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY) / scale;
 
     painel.startX = e.clientX;
@@ -248,4 +236,36 @@ function soltar(e, painel) {
 
     document.removeEventListener("dragend", chamarFuncaoSoltar);
 }
-// Fim da seção de movimentação do painel
+
+//----MOVIMENTAÇÃO CANVAS----------------------------------------------------------------------------
+const div = document.getElementById("canvas");
+let isDragging = false;
+let startX = 0, startY = 0;
+let startLeft = 0, startTop = 0;
+
+div.addEventListener("mousedown", (e) => {
+    //Antes de movimentar espera 0.05 segundos para ver se ta movimentando um painel primeiro
+    setTimeout(() => {
+        if(isDraggingPanel) return;
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = div.offsetLeft;
+        startTop = div.offsetTop;
+        div.style.cursor = "grabbing";
+    }, 50);
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (!isDragging || isDraggingPanel) return;
+    let deltaX = e.clientX - startX;
+    let deltaY = e.clientY - startY;
+    div.style.left = `${startLeft + deltaX}px`;
+    div.style.top = `${startTop + deltaY}px`;
+});
+
+document.addEventListener("mouseup", () => {
+    if(isDraggingPanel) return;
+    isDragging = false;
+    div.style.cursor = "grab";
+});

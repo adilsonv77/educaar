@@ -169,8 +169,8 @@
                 @foreach ($paineis as $painel)
                 <div class="painel">                        
                     <!--Texto do painel-->
-                    <div id="txtSuperior" class="txtPainel"></div>
-                    <input type="hidden" class="inputTxtPainel" name="txtSuperior" value="">
+                    <div class="txtPainel"></div>
+                    <input type="hidden" class="inputTxtPainel" name="txt" value="">
                     <!--Midia do painel-->
                     <div class="midia">
                         <!--1. Não informado-->
@@ -215,31 +215,17 @@
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
 
     <script>
-        const div = document.getElementById("canvas");
-        let isDragging = false;
-        let startX = 0, startY = 0;
-        let startLeft = 0, startTop = 0;
+        //----PANEL LOADING---------------------------------------------------------------------
+        $(document).ready(function () {
+            let panelsLoaded = document.getElementsByClassName("painel");
 
-        div.addEventListener("mousedown", (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            startLeft = div.offsetLeft;
-            startTop = div.offsetTop;
-            div.style.cursor = "grabbing";
-        });
-
-        document.addEventListener("mousemove", (e) => {
-            if (!isDragging) return;
-            let deltaX = e.clientX - startX;
-            let deltaY = e.clientY - startY;
-            div.style.left = `${startLeft + deltaX}px`;
-            div.style.top = `${startTop + deltaY}px`;
-        });
-
-        document.addEventListener("mouseup", () => {
-            isDragging = false;
-            div.style.cursor = "grab";
+            Array.from(panelsLoaded).forEach(panel => {
+                panel.setAttribute("draggable", "true");
+                panel.addEventListener("dragstart", (e) =>
+                    arrastar(e, new Painel(panel))
+                );
+                panel.addEventListener("click", () => selecionarPainel(panel));
+            });
         });
     </script>
 @endsection
