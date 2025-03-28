@@ -45,9 +45,8 @@ class SceneController extends Controller
     {
         $paineis = $this->painelDAO->getBySceneId($id);
         foreach ($paineis as $painel) {
-            $painel->panel = json_decode($painel->panel);
+            $painel->panel = json_decode($painel->panel,true);
         }
-
         return view('pages.painel.conexoes',["paineis"=>$paineis]);
     }
 
@@ -64,7 +63,7 @@ class SceneController extends Controller
         ]);
 
         $painelCriado = $this->painelDAO->create([
-            'panel' => '{"txtSuperior":"","link":"","arquivoMidia":"","midiaExtension":""}',
+            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":""}',
             'scene_id' => $cenaCriada->id
         ]);
 
@@ -72,7 +71,8 @@ class SceneController extends Controller
             'start_panel_id' => $painelCriado->id
         ]);
 
-        return redirect()->route('paineis.conexoes');
+        $painelCriado->panel = json_decode($painelCriado->panel,true);
+        return redirect()->route('paineis.conexoes',["paineis"=>[$painelCriado,""]]);
     }
 
     public function destroy($id)

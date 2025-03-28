@@ -164,30 +164,28 @@
                 <button id="zoom-in">+</button>
             </div>
             <div id="canvas" class="canvas">
-                <div id="testeCss"></div>
-
                 @foreach ($paineis as $painel)
                 <div class="painel">                        
                     <!--Texto do painel-->
-                    <div class="txtPainel"></div>
-                    <input type="hidden" class="inputTxtPainel" name="txt" value="">
+                    <div class="txtPainel">{!! $painel->panel["txt"] !!}</div>
+                    <input type="hidden" class="inputTxtPainel" name="txt" value="{!! $painel->panel["txt"] !!}">
                     <!--Midia do painel-->
                     <div class="midia">
                         <!--1. Não informado-->
-                        <div class="no_midia" tabindex=0>
+                        <div class="no_midia" tabindex=0 @if($painel->panel["midiaType"]!="none")style="display: none"@endif>
                             <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}">
                         </div>
                         <!--2. Imagem-->
-                        <img src="" style="display: none">
+                        <img src="{{ asset("midiasPainel/".$painel->panel["arquivoMidia"]) }}" @if($painel->panel["midiaType"]!="image")style="display: none"@endif>
                         <!--3. Vídeo-->
-                        <video id="vidMidia" controls style="display: none;">
-                            <source id="srcVidMidia" src="" type="video/mp4">
+                        <video id="vidMidia" controls @if($painel->panel["midiaType"]!="video")style="display: none"@endif>
+                            <source id="srcVidMidia" src="{{ asset("midiasPainel/".$painel->panel["arquivoMidia"]) }}" type="video/mp4">
                         </video>
                         <!--4. Youtube-->
-                        <div id="videoContainer" style="display: none">
+                        <div id="videoContainer" @if($painel->panel["midiaType"]!="youtube")style="display: none"@endif>
                             <iframe 
                                 id="srcYoutube"
-                                src="https://www.youtube.com/embed/nvZRDKDfguM?autoplay=0"
+                                src="https://www.youtube.com/embed/{{$painel->panel["link"]}}?autoplay=0"
                                 frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowfullscreen>
@@ -201,8 +199,9 @@
                         <div class="teste"><div class="circulo"></div> Botão 3</div>
                     </div>
                     <!--Informações do painel-->
-                    <input type="hidden" name="midiaExtension" value="">
-                    <input type="hidden" name="arquivoMidia" value="">
+                    <input type="hidden" name="link" value="{{$painel->panel["link"]}}">
+                    <input type="hidden" name="midiaExtension" value="{{ asset("midiasPainel/".$painel->panel["midiaExtension"]) }}">
+                    <input type="hidden" name="arquivoMidia" value="{{ asset("midiasPainel/".$painel->panel["arquivoMidia"]) }}">
                 </div>
                 @endforeach
                 <img src= "{{ asset('images/inicioConexoes.svg') }}" alt="">

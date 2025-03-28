@@ -112,9 +112,9 @@ class PainelController extends Controller
 
     public function conexoes()
     {
-        $painéis = $this->painelDAO->getAll();
+        $paineis = $this->painelDAO->getAll();
 
-        return view('pages.painel.conexoes', compact('painéis'));
+        return view('pages.painel.conexoes', compact('paineis'));
     }
 
 
