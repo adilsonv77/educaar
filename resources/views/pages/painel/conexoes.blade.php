@@ -5,13 +5,10 @@
 @section('script-head')
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
     <!-- Feather Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.css">
-
     <!-- Heroicons -->
     <link href="https://cdn.jsdelivr.net/npm/heroicons@1.0.6/outline/heroicons.min.css" rel="stylesheet">
-
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -160,14 +157,55 @@
     <div class="container-paineis">
         <div class="canvas-container">
             <!-- <div class="AddPainel">
-                                <button id="addPanel">Adicionar painel</button>
-                            </div> -->
+                <button id="addPanel">Adicionar painel</button>
+            </div> -->
             <div class="menu-zoom">
                 <button id="zoom-out">-</button>
                 <button id="zoom-in">+</button>
             </div>
             <div id="canvas" class="canvas">
-                <img src="{{ asset('images/inicioConexoes.svg') }}" alt="">
+                <div id="testeCss"></div>
+
+                @foreach ($paineis as $painel)
+                <div class="painel">                        
+                    <!--Texto do painel-->
+                    <div id="txtSuperior" class="txtPainel"></div>
+                    <input type="hidden" class="inputTxtPainel" name="txtSuperior" value="">
+                    <!--Midia do painel-->
+                    <div class="midia">
+                        <!--1. Não informado-->
+                        <div class="no_midia" tabindex=0>
+                            <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}">
+                        </div>
+                        <!--2. Imagem-->
+                        <img src="" style="display: none">
+                        <!--3. Vídeo-->
+                        <video id="vidMidia" controls style="display: none;">
+                            <source id="srcVidMidia" src="" type="video/mp4">
+                        </video>
+                        <!--4. Youtube-->
+                        <div id="videoContainer" style="display: none">
+                            <iframe 
+                                id="srcYoutube"
+                                src="https://www.youtube.com/embed/nvZRDKDfguM?autoplay=0"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                    <!--Botões do painel-->
+                    <div id="areaBtns" class="btn-linhas" style="font-size: 12px;">
+                        <div class="teste"><div class="circulo"></div> Botão 1</div>
+                        <div class="teste"><div class="circulo"></div> Botão 2</div>
+                        <div class="teste"><div class="circulo"></div> Botão 3</div>
+                    </div>
+                    <!--Informações do painel-->
+                    <input type="hidden" name="midiaExtension" value="">
+                    <input type="hidden" name="arquivoMidia" value="">
+                </div>
+                @endforeach
+                <img src= "{{ asset('images/inicioConexoes.svg') }}" alt="">
             </div>
         </div>
     </div>

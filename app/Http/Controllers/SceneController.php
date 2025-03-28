@@ -43,7 +43,12 @@ class SceneController extends Controller
 
     public function edit($id)
     {
-        return view('pages.painel.conexoes');
+        $paineis = $this->painelDAO->getBySceneId($id);
+        foreach ($paineis as $painel) {
+            $painel->panel = json_decode($painel->panel);
+        }
+
+        return view('pages.painel.conexoes',["paineis"=>$paineis]);
     }
 
     public function store(Request $request)

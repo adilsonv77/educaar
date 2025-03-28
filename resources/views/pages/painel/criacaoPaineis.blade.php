@@ -191,7 +191,7 @@
                             value="@if ($action == 'edit') {{$txtSuperior}} @endif">
 
                         <!--               ________    MIDIAS    ________               -->
-                        <div id="espacoMidias">
+                        <div class="midia">
                             <!-- Circulo que serve como botão para inserir midias pela primeira vez -->
                             <div id="midia" tabindex=0 @if ($action == 'edit') style="display: none;" @endif>
                                 <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}">

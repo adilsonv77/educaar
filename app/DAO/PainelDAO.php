@@ -11,6 +11,11 @@ class PainelDAO
         return Painei::where('id', $id)->first();
     }
 
+    public function getBySceneId($id)
+    {
+        return Painei::where('scene_id', $id)->get();
+    }
+
     public function getAll()
     {
         return Painei::all();
