@@ -1,6 +1,6 @@
 //----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM----------------------------------------------------------------------------
-let scale = 1;
-let alternativeScale = 0;
+let scale = 0.7;
+let alternativeScale = -3;
 const canvas = document.getElementById("canvas");
 
 document.getElementById("zoom-in").addEventListener("click", () => {

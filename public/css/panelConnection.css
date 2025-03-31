@@ -169,7 +169,7 @@ input {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: scale(0.7) translate(-50%, -50%);
     /* Centraliza a div maior */
 }
 
@@ -196,18 +196,19 @@ button {
 /* =============================
    MINI PAINEIS
    ============================= */
-
 .painel {
-    padding: 13px;
-    width: 194px;
-    height: 308px;
+    padding: 20px;
+    width: 291px;
+    /* 194 * 1.5 */
+    height: 462px;
+    /* 308 * 1.5 */
     position: absolute;
     background: #F8F8F8;
     border: 1px solid #ccc;
     border-radius: 22px;
     box-sizing: border-box;
     cursor: pointer;
-    box-shadow: -7px 9px 10.2px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: -10.5px 13.5px 15.3px 0px rgba(0, 0, 0, 0.25);
     transition: border 0.2s ease-in-out;
 }
 
@@ -215,6 +216,7 @@ button {
     width: 100%;
     height: 20%;
     font-size: 1.5vh;
+    /* Mantém o tamanho do texto */
     border-radius: 1.5vh;
     padding: 1% 10px;
     border: none;
@@ -227,27 +229,32 @@ button {
 }
 
 .button_Panel.selecionado {
-    border: 1px solid #FFA600; 
+    border: 1px solid #FFA600;
 }
 
 .midia {
     width: 100%;
-    height: 115px;
+    height: 172.5px;
+    /* 115 * 1.5 */
     display: flex;
     justify-content: center;
+    align-items: center;
     margin: 4% 0;
 }
 
 .midia * {
     max-width: 100%;
-    max-height: 115px;
+    max-height: 172.5px;
+    /* 115 * 1.5 */
     object-fit: contain;
 }
 
-#areaBtns {
+.areaBtns {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 146px;
+    justify-content: space-between;
 }
 
 .button_Panel {
@@ -255,18 +262,24 @@ button {
     align-items: center;
     border: 0.5px solid #833B8D;
     border-radius: 9px;
-    padding: 5.5px;
-    margin-bottom: 3px;
-    height: 30px;
+    padding: 8.25px;
+    /* 5.5 * 1.5 */
+    margin-bottom: 4.5px;
+    /* 3 * 1.5 */
+    height: 45px;
+    /* 30 * 1.5 */
     width: 100%;
 }
 
 .circulo {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    /* 20 * 1.5 */
+    height: 30px;
+    /* 20 * 1.5 */
     background-color: #823688;
     border-radius: 50%;
-    margin-right: 15px;
+    margin-right: 22.5px;
+    /* 15 * 1.5 */
 }
 
 .no_midia {
@@ -274,7 +287,8 @@ button {
     cursor: pointer;
     background-color: rgb(255, 255, 255);
     aspect-ratio: 1/1;
-    height: 115px;
+    height: 172.5px;
+    /* 115 * 1.5 */
     border-radius: 100%;
     display: flex;
     flex-direction: column;
@@ -287,18 +301,10 @@ button {
     aspect-ratio: 1;
 }
 
-#midiaPreview {
-    width: 100%;
-    height: 33.5vh;
+.videoContainer {
+    height: 100%;
     display: flex;
-    justify-content: center;
-    margin: 4% 0;
-}
-
-#midiaPreview * {
-    max-width: 100%;
-    max-height: 33.5vh;
-    object-fit: contain;
+    align-items: center;
 }
 
 /* =============================

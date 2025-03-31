@@ -157,8 +157,8 @@
     <div class="container-paineis">
         <div class="canvas-container">
             <!-- <div class="AddPainel">
-                                    <button id="addPanel">Adicionar painel</button>
-                                </div> -->
+                <button id="addPanel">Adicionar painel</button>
+            </div> -->
             <div class="menu-zoom">
                 <button id="zoom-out">-</button>
                 <button id="zoom-in">+</button>
@@ -182,7 +182,7 @@
                             <source id="srcVidMidia" src="{{ asset("midiasPainel/".$painel->panel["arquivoMidia"]) }}" type="video/mp4">
                         </video>
                         <!--4. Youtube-->
-                        <div id="videoContainer" @if($painel->panel["midiaType"]!="youtube")style="display: none"@endif>
+                        <div class="videoContainer" @if($painel->panel["midiaType"]!="youtube")style="display: none"@endif>
                             <iframe 
                                 id="srcYoutube"
                                 src="https://www.youtube.com/embed/{{$painel->panel["link"]}}?autoplay=0"
@@ -193,7 +193,7 @@
                         </div>
                     </div>
                     <!--Botões do painel-->
-                    <div id="areaBtns" class="btn-linhas" style="font-size: 12px;">
+                    <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
                         <div class="button_Panel">
                             <div class="circulo"></div> Botão 1
                         </div>
