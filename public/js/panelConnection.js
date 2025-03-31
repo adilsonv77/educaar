@@ -1,6 +1,6 @@
 //----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM----------------------------------------------------------------------------
 let scale = 0.7;
-let alternativeScale = -3;
+let alternativeScale = 3;
 const canvas = document.getElementById("canvas");
 
 document.getElementById("zoom-in").addEventListener("click", () => {
@@ -101,7 +101,9 @@ addBtn.addEventListener("click", () => {
 
     container.appendChild(painel);
     painel.setAttribute("draggable", "true");
-    painel.addEventListener("dragstart", (e) => arrastar(e, new Painel(painel)));
+    painel.addEventListener("dragstart", (e) =>
+        arrastar(e, new Painel(painel))
+    );
     painel.addEventListener("click", (e) => selecionarPainel(painel, e));
 });
 
@@ -117,7 +119,7 @@ class Painel {
 
 //----FUNÇÃO DE SELECIONAR PAINEL E BOTÃO----------------------------------------------------------------------------
 function selecionarPainel(painel, e) {
-    if (e.target.closest('.button_Panel')) return;
+    if (e.target.closest(".button_Panel")) return;
 
     if (painelSelecionado) {
         painelSelecionado.classList.remove("selecionado");
@@ -125,7 +127,7 @@ function selecionarPainel(painel, e) {
 
     painelSelecionado = painel;
     painelSelecionado.classList.add("selecionado");
-    botaoSelecionado.classList.remove("selecionado")
+    botaoSelecionado.classList.remove("selecionado");
     botaoSelecionado = null;
 }
 
@@ -136,10 +138,9 @@ document.addEventListener("click", (e) => {
     }
 });
 
-
 function selecionarBotao(botao) {
     let botoes = document.querySelectorAll(".button_Panel");
-    botoes.forEach((btn) => btn.classList = "button_Panel");
+    botoes.forEach((btn) => (btn.classList = "button_Panel"));
     botaoSelecionado = botao;
     botao.classList.add("selecionado");
     painelSelecionado.classList.remove("selecionado");
@@ -201,7 +202,6 @@ document
     .querySelector(".alternativas")
     .addEventListener("click", () => alterarFormatoBotoes("alternativas"));
 
-
 //----MOVIMENTAÇÃO PAINEL----------------------------------------------------------------------------
 let isDraggingPanel = false;
 
@@ -221,7 +221,8 @@ function soltar(e, painel) {
     isDraggingPanel = false;
 
     // Movimenta para a posição do mouse
-    painel.newX = painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
+    painel.newX =
+        painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
     painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY) / scale;
 
     painel.startX = e.clientX;
@@ -231,23 +232,15 @@ function soltar(e, painel) {
     let limitesCaixa = painel.painel.getBoundingClientRect();
     limite = container.getBoundingClientRect();
 
-    //N me pergunte pq o do 20 ou 32, só funciona! O 80000 é o tamanho do canvas
-    if (
-        painel.newX + limitesCaixa.width >
-        limiteOriginal.width + 20 * alternativeScale
-    ) {
-        painel.newX =
-            limiteOriginal.width + 20 * alternativeScale - limitesCaixa.width;
+    //N me pergunte pq o do 50 ou 32, só funciona!
+    if (painel.newX + limitesCaixa.width > limiteOriginal.width + 50 * alternativeScale) {
+        painel.newX = 505;
     }
     if (painel.newX < 0) {
         painel.newX = 0;
     }
-    if (
-        painel.newY + limitesCaixa.height >
-        limiteOriginal.height + 32 * alternativeScale
-    ) {
-        painel.newY =
-            limiteOriginal.height + 32 * alternativeScale - limitesCaixa.height;
+    if (painel.newY + limitesCaixa.height >limiteOriginal.height + 32 * alternativeScale) {
+        painel.newY = 338;
     }
     if (painel.newY < 0) {
         painel.newY = 0;
@@ -262,8 +255,10 @@ function soltar(e, painel) {
 //----MOVIMENTAÇÃO CANVAS----------------------------------------------------------------------------
 const div = document.getElementById("canvas");
 let isDragging = false;
-let startX = 0, startY = 0;
-let startLeft = 0, startTop = 0;
+let startX = 0,
+    startY = 0;
+let startLeft = 0,
+    startTop = 0;
 
 div.addEventListener("mousedown", (e) => {
     //Antes de movimentar espera 0.05 segundos para ver se ta movimentando um painel primeiro
