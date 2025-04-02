@@ -87,7 +87,7 @@ addBtn.addEventListener("click", () => {
             </div>
         </div>
         <!--Botões do painel-->
-        <div id="areaBtns" class="btn-linhas" style="font-size: 12px;">
+        <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
             <div class="button_Panel"><div class="circulo"></div> Botão 1</div>
             <div class="button_Panel"><div class="circulo"></div> Botão 2</div>
             <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
@@ -115,7 +115,7 @@ class Painel {
     }
 }
 
-//----FUNÇÃO DE SELECIONAR PAINEL E BOTÃO----------------------------------------------------------------------------
+//----FUNÇÃO DE SELECIONAR PAINEL, BOTÃO E CANVAS----------------------------------------------------------------------------
 function selecionarPainel(painel, e) {
     if (e.target.closest(".button_Panel")) return;
 
@@ -125,7 +125,10 @@ function selecionarPainel(painel, e) {
 
     painelSelecionado = painel;
     painelSelecionado.classList.add("selecionado");
-    botaoSelecionado.classList.remove("selecionado");
+
+    if (botaoSelecionado) {
+        botaoSelecionado.classList.remove("selecionado");
+    }
     botaoSelecionado = null;
 }
 
@@ -133,23 +136,56 @@ document.addEventListener("click", (e) => {
     if (e.target.classList.contains("button_Panel")) {
         e.stopPropagation();
         selecionarBotao(e.target);
+        return;
+    }
+    
+    let painel = e.target.closest(".painel");
+    if (painel) {
+        selecionarPainel(painel, e);
+    } else {
+        selecionarCanvas();
     }
 });
 
 function selecionarBotao(botao) {
     let botoes = document.querySelectorAll(".button_Panel");
-    botoes.forEach((btn) => (btn.classList = "button_Panel"));
+    botoes.forEach((btn) => btn.classList.remove("selecionado"));
     botaoSelecionado = botao;
     botao.classList.add("selecionado");
-    painelSelecionado.classList.remove("selecionado");
-    painelSelecionado = null;
+    
+    if (painelSelecionado) {
+        painelSelecionado.classList.remove("selecionado");
+        painelSelecionado = null;
+    }
 }
+
+function selecionarCanvas() {
+    if (painelSelecionado) {
+        painelSelecionado.classList.remove("selecionado");
+        painelSelecionado = null;
+    }
+    if (botaoSelecionado) {
+        botaoSelecionado.classList.remove("selecionado");
+        botaoSelecionado = null;
+    }
+    document.getElementById("canvas").classList.add("selecionado");
+}
+
 
 //----FORMATO DOS BOTÕES----------------------------------------------------------------------------
 function alterarFormatoBotoes(formato) {
-    if (!painelSelecionado) return;
-    let areaBotoes = painelSelecionado.querySelector("#areaBtns");
-    if (!areaBotoes) return;
+    if (!painelSelecionado) {
+        console.log("Nenhum painel selecionado!");
+        return;
+    }
+
+    let areaBotoes = painelSelecionado.querySelector(".areaBtns");
+    console.log("Área de botões encontrada:", areaBotoes);
+
+    if (!areaBotoes) {
+        console.warn("O painel carregado do banco pode ter uma estrutura diferente. Verifique o HTML.");
+        return;
+    }
 
     const layouts = {
         linhas: `
@@ -187,7 +223,7 @@ function alterarFormatoBotoes(formato) {
     } else {
         areaBotoes.innerHTML = layouts[formato];
     }
-    areaBotoes.innerHTML = layouts[formato];
+    // areaBotoes.innerHTML = layouts[formato];
 }
 
 document
