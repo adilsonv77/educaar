@@ -7,7 +7,7 @@ RUN apk update && \
     apk add --no-cache mysql-client && \
     chmod a+x /etc/periodic/daily/*
 
-FROM php:7.4-fpm
+FROM php:8.4-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
