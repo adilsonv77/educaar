@@ -51,7 +51,6 @@ pickr.on("change", (color) => {
 
 //----ADICIONAR PAINEL----------------------------------------------------------------------------
 let container = document.getElementById("canvas");
-let limite = container.getBoundingClientRect();
 let painelSelecionado = null;
 let botaoSelecionado = null;
 let zIndexAtual = 0;
@@ -60,7 +59,6 @@ let addBtn = document.getElementById("addPanel");
 addBtn.addEventListener("click", () => {
     const painel = document.createElement("div");
     painel.className = "painel";
-
     painel.innerHTML = `          
         <!--Texto do painel-->
         <div class="txtPainel"></div>
@@ -215,32 +213,31 @@ function arrastar(e, painel) {
     document.addEventListener("dragend", chamarFuncaoSoltar);
 }
 
-let limiteOriginal = container.getBoundingClientRect();
-
 function soltar(e, painel) {
     isDraggingPanel = false;
 
+    //Inserir manualmente
+    let alturaMax = 80000;
+    let larguraMax = 80000;
+    let alturaPainel = 462;
+    let larguraPainel = 291;
+
     // Movimenta para a posição do mouse
-    painel.newX =
-        painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
+    painel.newX = painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
     painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY) / scale;
 
     painel.startX = e.clientX;
     painel.startY = e.clientY;
 
     // Verifica se a posição atual é válida.
-    let limitesCaixa = painel.painel.getBoundingClientRect();
-    limite = container.getBoundingClientRect();
-
-    //N me pergunte pq o do 50 ou 32, só funciona!
-    if (painel.newX + limitesCaixa.width > limiteOriginal.width + 50 * alternativeScale) {
-        painel.newX = 505;
+    if ( painel.newX + larguraPainel > larguraMax) {
+        painel.newX =  larguraMax-larguraPainel;
     }
     if (painel.newX < 0) {
         painel.newX = 0;
     }
-    if (painel.newY + limitesCaixa.height >limiteOriginal.height + 32 * alternativeScale) {
-        painel.newY = 338;
+    if (painel.newY + alturaPainel > alturaMax) {
+        painel.newY = alturaMax-alturaPainel;
     }
     if (painel.newY < 0) {
         painel.newY = 0;
@@ -270,7 +267,7 @@ div.addEventListener("mousedown", (e) => {
         startLeft = div.offsetLeft;
         startTop = div.offsetTop;
         div.style.cursor = "grabbing";
-    }, 50);
+    }, 100);
 });
 
 document.addEventListener("mousemove", (e) => {
