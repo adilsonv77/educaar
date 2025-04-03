@@ -36,9 +36,9 @@
                 }
 
                 .form-inline label {
-                
-                margin-right: 10px;
+                    margin-right: 10px;
                 }
+                
                 </style>
                 <datalist id="disciplinas">
                     @foreach ($disciplinas as $disciplina)
