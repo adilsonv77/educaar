@@ -37,6 +37,14 @@ body {
 /* =============================
    MENU LATERAL
    ============================= */
+   .menu-opcoes {
+    display: none;
+}
+
+.menu-opcoes.ativo {
+    display: block;
+}
+
 .menu-lateral {
     position: fixed;
     right: 0;
@@ -68,9 +76,9 @@ input {
     border: 1px solid #C8C8C8;
 }
 
-.mb-6 {
+/* .mb-6 {
     margin-bottom: 20px;
-}
+} */
 
 .singleTap {
     display: flex;
