@@ -1,3 +1,4 @@
+<div>
 <div class="AddPainel">
     <button id="addPanel" wire:click="create({{ $scene_id }})">Add painel</button>
 </div>
@@ -198,6 +199,7 @@
         </div>
     </div>
 </div>
+
 <!-- CANVAS SPACE -->
 <div class="container-paineis">
     <div class="canvas-container">
@@ -210,7 +212,8 @@
             <div class="painel">                        
                 <!--Texto do painel-->
                 <div class="txtPainel">{!! isset($painel->panel["txt"]) ? $painel->panel["txt"] : 'Texto não disponível' !!}</div>
-                <input type="hidden" class="inputTxtPainel" name="txt" value="{!! $painel->panel["txt"] ?? '' !!}">
+                <input type="hidden" class="inputTxtPainel" name="txt" value="{!! $painel->panel["txt"] ?? '' !!}"
+                    wire:model="texto" wire:change="update({{ $painel->panel["id"] }})">
                 <!--Midia do painel-->
                 <div class="midia">
                     <!--1. Não informado-->
@@ -255,3 +258,4 @@
             <img src="{{ asset('images/inicioConexoes.svg') }}" alt="">
         </div>
     </div>
+</div>

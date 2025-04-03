@@ -10,6 +10,7 @@ use App\DAO\PainelDAO;
 class Scene extends Component
 {
 
+    public $texto;
     public $paineis;
     public $scene_id;
 
@@ -36,9 +37,11 @@ class Scene extends Component
         $this->emit('painelCriado');
     }
 
-    public function update($id,$data){
+    public function update($id)
+    {
+        dd($id.' e '.$this->texto);
         $painelDAO = new PainelDAO();
-        
-        $painelDao->updateById($id,$data);
+        $painelDAO->updateById($id, ['txt' => $data]);
     }
+
 }
