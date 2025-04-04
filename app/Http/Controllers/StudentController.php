@@ -105,7 +105,7 @@ class StudentController extends Controller
         }
         $activities = DB::table('activities')
             ->where("content_id", $content_id)
-            ->orderBy('painel_inicial_id', 'desc')
+            ->orderBy('scene_id', 'desc')
             ->get();
             //dd($activities);
             
@@ -131,7 +131,7 @@ class StudentController extends Controller
             }
             
             //Pega o json do painel da atividade se for um painel.
-            $idPainelInicial = $activity->painel_inicial_id;
+            $idPainelInicial = $activity->scene_id;
             if($idPainelInicial != null){
                 //Possui um painel inicial
                 $activity->json = Painei::where('id',$idPainelInicial)->first()->panel;

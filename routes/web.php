@@ -95,6 +95,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/questions', App\Http\Controllers\QuestionController::class);
     Route::get('results', [App\Http\Controllers\QuestionController::class, 'results'])->name('activity.results');
     Route::get('/listStudents/{type}', [App\Http\Controllers\QuestionController::class, 'resultsListStudents'])->name('activity.listStudents');
+    Route::delete('/answers/{id}', [App\Http\Controllers\QuestionController::class, 'destroyAnswers'])->name('answers.destroy');
+
     // Route::get('/question/index', [App\Http\Controllers\QuestionController::class, 'index'])->name('question.index');
     // Route::get('/question/create', [App\Http\Controllers\QuestionController::class, 'create'])->name('question.create');
     // Route::post('/question/store', [App\Http\Controllers\QuestionController::class, 'store'])->name('question.store');

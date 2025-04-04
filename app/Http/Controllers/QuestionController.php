@@ -48,7 +48,18 @@ class QuestionController extends Controller
 
         $questions = DB::table("questions")->where('questions.activity_id', $data)->get();
 
-        return view('pages.questions.index', compact('questions', 'activity'));
+        $alunosPorQuestao = [];
+
+        foreach ($questions as $question) {
+            $alunosPorQuestao[$question->id] = DB::table('student_answers')
+                ->where('question_id', $question->id)
+                ->distinct('user_id')
+                ->count('user_id');
+       
+        }
+
+
+        return view('pages.questions.index', compact('questions', 'activity','alunosPorQuestao'));
     }
 
     public function listOfQuestions()
@@ -186,6 +197,9 @@ class QuestionController extends Controller
             'answer' => $question->answer
         ];
 
+
+
+
         return view('pages.questions.registerQuestions', $params);
     }
 
@@ -203,38 +217,46 @@ class QuestionController extends Controller
         return redirect(route('questions.index', ["activity" => $activity_id]));
     }
 
+    public function destroyAnswers($id)
+    {
+        // Exclui apenas as respostas da questão, sem remover a questão
+        StudentAnswer::where('question_id', $id)->delete();
 
-    public function results(Request $request){
-        $activity= $request->input('activity_id');
+        return redirect()->back()->with('success', 'Respostas excluídas com sucesso.');
+    }
 
-        if($activity){
-            session()->put('activity', $activity); 
+
+    public function results(Request $request)
+    {
+        $activity = $request->input('activity_id');
+
+        if ($activity) {
+            session()->put('activity', $activity);
         }
         $turma_id = $request->input('turma_id');
 
         $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
-        ->where('bool_atual', 1)->first();
+            ->where('bool_atual', 1)->first();
         $activity_id = session()->get('activity');
 
         $where = DB::table('turmas as t')
-            ->select('t.id as id','t.nome as nome')
-            ->join('turmas_disciplinas as td','td.turma_id', '=', 't.id')
-            ->join('turmas_modelos as tm', 't.turma_modelo_id','=','tm.id')
+            ->select('t.id as id', 't.nome as nome')
+            ->join('turmas_disciplinas as td', 'td.turma_id', '=', 't.id')
+            ->join('turmas_modelos as tm', 't.turma_modelo_id', '=', 'tm.id')
             ->join('contents as c', 'c.turma_modelo_id', '=', 'tm.id')
             ->join('activities as a', 'a.content_id', '=', 'c.id')
             ->where([
-                ['td.professor_id','=', Auth::user()->id],
-                ['t.ano_id','=', $anoletivo->id],
+                ['td.professor_id', '=', Auth::user()->id],
+                ['t.ano_id', '=', $anoletivo->id],
                 ['a.id', '=', $activity_id]
             ])
             ->distinct();
 
-            
-        $turmas= $where->get();
+
+        $turmas = $where->get();
 
         if ($turma_id) {
             $turma = Turma::find($turma_id);
-            
         } else {
             $turma = $where->first();
             $turma_id = $turma->id;
@@ -245,39 +267,40 @@ class QuestionController extends Controller
         session()->put('turma_id', $turma_id);
         session()->put('activity_id', $activity->id);
 
-        $result= ResultActivityDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
+        $result = ResultActivityDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
 
         session()->put('alunos_fizeram_completo', $result['alunos_fizeram_completo']);
         session()->put('alunos_fizeram_incompleto', $result['alunos_fizeram_incompleto']);
         session()->put('question_base', $result['question_base']);
 
 
-        $questions=ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);
-        $respostasSelecionadas= ResultActivityDAO::respostasDosAlunos($activity->id, $turma->id);
+        $questions = ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);
+        $respostasSelecionadas = ResultActivityDAO::respostasDosAlunos($activity->id, $turma->id);
 
         //dd($result['alunos_fizeram_completo'], $result['alunos_fizeram_incompleto'], $result['alunos_nao_fizeram']);
 
-        return view('pages.activity.results', compact('result','questions', 'turmas', 'turma', 'activity', 'respostasSelecionadas'));
+        return view('pages.activity.results', compact('result', 'questions', 'turmas', 'turma', 'activity', 'respostasSelecionadas'));
     }
 
-    function resultsListStudents($type){
+    function resultsListStudents($type)
+    {
 
-        $activity_id= session()->get('activity');
+        $activity_id = session()->get('activity');
 
-        $activity= Activity::find($activity_id);
+        $activity = Activity::find($activity_id);
 
-        if($type == 'Completo'){
-            $results= session()->get('alunos_fizeram_completo');    
-        }elseif($type == 'Incompleto'){
-            $results= session()->get('alunos_fizeram_incompleto');
-        }elseif($type == 'Não fizeram'){
+        if ($type == 'Completo') {
+            $results = session()->get('alunos_fizeram_completo');
+        } elseif ($type == 'Incompleto') {
+            $results = session()->get('alunos_fizeram_incompleto');
+        } elseif ($type == 'Não fizeram') {
 
-            $turma_id= session()->get('turma_id');
-            $questao=  session()->get('question_base');
+            $turma_id = session()->get('turma_id');
+            $questao =  session()->get('question_base');
 
-            $results= ResultActivityDAO::getStudentDidNotQuestions($turma_id, $questao);
+            $results = ResultActivityDAO::getStudentDidNotQuestions($turma_id, $questao);
         }
 
-        return view('pages.activity.listStudents', compact('results','activity','type'));
+        return view('pages.activity.listStudents', compact('results', 'activity', 'type'));
     }
 }

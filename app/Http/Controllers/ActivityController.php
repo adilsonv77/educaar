@@ -48,9 +48,7 @@ class ActivityController extends Controller
             );
 
 
-        $activities = $activities->addSelect([
-            'qtnQuest' => Question::selectRaw('count(*)')
-                ->whereColumn('activities.id', '=', 'activity_id')
+        $activities = $activities->addSelect(['qtnQuest' => Question::selectRaw('count(*)')->whereColumn('activities.id', '=', 'activity_id')
 
         ]);
 
