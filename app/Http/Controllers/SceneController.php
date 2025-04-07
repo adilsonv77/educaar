@@ -63,7 +63,7 @@ class SceneController extends Controller
         ]);
 
         $painelCriado = $this->painelDAO->create([
-            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":""}',
+            'panel' => '',
             'scene_id' => $cenaCriada->id
         ]);
 
@@ -71,8 +71,13 @@ class SceneController extends Controller
             'start_panel_id' => $painelCriado->id
         ]);
 
+        $this->painelDAO->updateById($painelCriado->id, [
+            'panel' => '{"id":"'.$painelCriado->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}',
+        ]);
+
         $painelCriado->panel = json_decode($painelCriado->panel,true);
-        return redirect()->route('paineis.conexoes',["paineis"=>[$painelCriado,""]]);
+        
+        return redirect()->action([SceneController::class, 'edit'], ['scene' => $cenaCriada->id]);
     }
 
     public function destroy($id)
