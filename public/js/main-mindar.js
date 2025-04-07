@@ -1,8 +1,10 @@
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import * as THREE from 'three';
 import { MindARThree } from 'mindar-image-three';
-import { CSS3DObject } from "three/addons/renderers/CSS3DRenderer.js"
+
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+
+import { CSS3DObject } from "three/examples/jsm/renderers/CSS3DRenderer.js"
 
 // variáveis
 var buttonAR = null;
