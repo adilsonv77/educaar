@@ -9,39 +9,31 @@ use App\DAO\PainelDAO;
 
 class Scene extends Component
 {
-
-    public $texto;
-    public $paineis;
+    public $paineisRenderizados = [];
     public $scene_id;
 
     public function mount($paineis, $scene_id)
     {
-        $this->paineis = $paineis;
         $this->scene_id = $scene_id;
+        $this->paineisRenderizados = $paineis;
     }
 
-    public function render()
+    public function create()
     {
-        return view('livewire.scene');
-    }
-
-    public function create(){
         $painelDAO = new PainelDAO();
 
-        $painelDAO->create([
-            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":""}',
+        $novo = $painelDAO->create([
+            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}',
             'scene_id' => $this->scene_id
         ]);
 
-        // Atualiza a página sem recarregar
-        $this->emit('painelCriado');
-    }
+        $painelDAO->updateById($novo->id,[
+            'panel'=>'{"id":"'.$novo->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}'
+        ]);
 
-    public function update($id)
-    {
-        dd($id.' e '.$this->texto);
-        $painelDAO = new PainelDAO();
-        $painelDAO->updateById($id, ['txt' => $data]);
+        $novo->panel = json_decode('{"id":"'.$novo->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}',true);
+        
+        $this->paineisRenderizados[] = $novo;
     }
 
 }
