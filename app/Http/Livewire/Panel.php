@@ -18,10 +18,16 @@ class Panel extends Component
         $this->texto = $painel->txt;
     }
 
-    public function update()
+    public function updateText()
     {
-        // Aqui você chama o DAO ou Model para salvar a mudança
-        dd("Painel ID: " . $this->painel->id . " | Texto: " . $this->texto);
+        $painelDAO = new PainelDAO();
+
+        $json = json_decode($this->painel->panel);
+        $json->txt = $this->texto;
+
+        $painelDAO->updateById($this->painel->id,[
+            'panel'=> json_encode($json)
+        ]);
     }
 
     public function render()
