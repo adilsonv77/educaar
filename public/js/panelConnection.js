@@ -121,7 +121,7 @@ function mostrarMenu(tipo) {
     let menu = document.querySelector(`.${tipo}-opcoes`);
     if (menu) {
         menu.classList.add("ativo");
-    
+
     }
 }
 //----FUNÇÃO DE SELECIONAR PAINEL, BOTÃO E CANVAS----------------------------------------------------------------------------
@@ -151,11 +151,16 @@ document.addEventListener("click", (e) => {
         selecionarBotao(e.target);
         return;
     }
-    
+
+    // Impede que cliques no menu lateral troquem a seleção
+    if (e.target.closest(".menu-opcoes")) {
+        return;
+    }
+
     let painel = e.target.closest(".painel");
     if (painel) {
         selecionarPainel(painel, e);
-    } else if(!(e.target.classList.contains("menu-opcoes"))) {
+    } else {
         selecionarCanvas();
     }
 });
@@ -178,7 +183,6 @@ function selecionarBotao(botao) {
 
 
 function selecionarCanvas() {
-    isDraggingPanel = true;
     if (painelSelecionado) {
         painelSelecionado.classList.remove("selecionado");
         painelSelecionado = null;
@@ -187,11 +191,10 @@ function selecionarCanvas() {
         botaoSelecionado.classList.remove("selecionado");
         botaoSelecionado = null;
     }
-    
+
     document.getElementsByClassName("canvas-container")[0].classList.add("selecionado");
 
     mostrarMenu("canvas"); // Atualiza o menu
-    isDraggingPanel = false;
 }
 
 
@@ -217,20 +220,22 @@ function alterarFormatoBotoes(formato) {
             <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
         `,
         blocos: `
-            <div class="grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; font-size: 12px;">
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 1</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 2</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 3</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 4</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 5</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 6</div>
-            </div>
+        <div class="layout-blocos">
+            <div class="button_Panel">Botão 1</div>
+            <div class="button_Panel">Botão 2</div>
+            <div class="button_Panel">Botão 3</div>
+            <div class="button_Panel">Botão 4</div>
+            <div class="button_Panel">Botão 5</div>
+            <div class="button_Panel">Botão 6</div>
+        </div>
         `,
         alternativas: `
-            <div class="alternativas">
-                <div class="button_Panel"><div class="circulo"></div> Opção A</div>
-                <div class="button_Panel"><div class="circulo"></div> Opção B</div>
-            </div>
+        <div class="layout-alternativas">
+            <div class="botao-circular">A</div>
+            <div class="botao-circular">B</div>
+            <div class="botao-circular">C</div>
+            <div class="botao-circular">D</div>
+        </div>
         `,
     };
 
@@ -239,8 +244,8 @@ function alterarFormatoBotoes(formato) {
         areaBotoes.innerHTML = layouts[formato];
         let botoes = areaBotoes.querySelectorAll(".button_Panel");
         botoes.forEach((botao) => {
-            botao.style.width = "80px";
-            botao.style.height = "28px";
+            botao.style.width = "calc((100% - 3px) / 2)";
+            botao.style.height = "calc((100% - 6px) / 3)";
             botao.querySelector(".circulo").style.display = "none"; // Remove o círculo
         });
     } else {
@@ -289,14 +294,14 @@ function soltar(e, painel) {
     painel.startY = e.clientY;
 
     // Verifica se a posição atual é válida.
-    if ( painel.newX + larguraPainel > larguraMax) {
-        painel.newX =  larguraMax-larguraPainel;
+    if (painel.newX + larguraPainel > larguraMax) {
+        painel.newX = larguraMax - larguraPainel;
     }
     if (painel.newX < 0) {
         painel.newX = 0;
     }
     if (painel.newY + alturaPainel > alturaMax) {
-        painel.newY = alturaMax-alturaPainel;
+        painel.newY = alturaMax - alturaPainel;
     }
     if (painel.newY < 0) {
         painel.newY = 0;
@@ -317,20 +322,26 @@ let startLeft = 0,
     startTop = 0;
 
 div.addEventListener("mousedown", (e) => {
-    //Antes de movimentar espera 0.05 segundos para ver se ta movimentando um painel primeiro
+    if (isDraggingPanel) return;
+
+    startX = e.clientX;
+    startY = e.clientY;
+    startLeft = div.offsetLeft;
+    startTop = div.offsetTop;
+
+    isDragging = false; // Inicia como falso
+
     setTimeout(() => {
-        if (isDraggingPanel) return;
-        isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        startLeft = div.offsetLeft;
-        startTop = div.offsetTop;
-        div.style.cursor = "grabbing";
+        if (!isDraggingPanel) { // Se não foi detectado clique em painel/botão
+            isDragging = true;
+            div.style.cursor = "grabbing";
+        }
     }, 100);
 });
 
 document.addEventListener("mousemove", (e) => {
-    if (!isDragging || isDraggingPanel) return;
+    // if (!isDragging || isDraggingPanel) return;
+    if (!isDragging) return;
     let deltaX = e.clientX - startX;
     let deltaY = e.clientY - startY;
     div.style.left = `${startLeft + deltaX}px`;
@@ -338,7 +349,7 @@ document.addEventListener("mousemove", (e) => {
 });
 
 document.addEventListener("mouseup", () => {
-    if (isDraggingPanel) return;
+    // if (isDraggingPanel) return;
     isDragging = false;
     div.style.cursor = "grab";
 });

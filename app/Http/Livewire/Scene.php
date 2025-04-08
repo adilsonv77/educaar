@@ -28,20 +28,24 @@ class Scene extends Component
     public function create(){
         $painelDAO = new PainelDAO();
 
-        $painelDAO->create([
-            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":""}',
+        $painelCriado = $painelDAO->create([
+            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}',
             'scene_id' => $this->scene_id
         ]);
 
+        $painelDAO->updateById($painelCriado->id,[
+            'panel'=>'{"id":"' . $painelCriado->id . '","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}',
+        ]);
+
         // Atualiza a página sem recarregar
-        $this->emit('painelCriado');
+        $this->emit('painelCriado', $painelCriado->id);
     }
 
     public function update($id)
     {
         dd($id.' e '.$this->texto);
         $painelDAO = new PainelDAO();
-        $painelDAO->updateById($id, ['txt' => $data]);
+        $painelDAO->updateById($id, ['txt' => ""]);
     }
 
 }

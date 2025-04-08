@@ -33,11 +33,15 @@
                 </div>
             </div>
             <!-- BLOCO DE TEXTO -->
-            <div id="blocoTxt">
-                <div id="trumbowyg-demo" placeholder="Insira seu texto aqui"></div>
+            <div id="blocoTxt" class="mb-6">
+                <h3>
+                    BLOCO DE TEXTO
+                </h3>
+                <div id="trumbowyg-editor" placeholder="Insira seu texto aqui"></div>
+                <input type="hidden" id="editorInput" name="editorContent">
             </div>
             <!-- BOTÕES DE SALVAR/EXCLUIR -->
-            <div class="buttons">
+            <div class="buttons mb-6">
                 <button>
                     Editar Mídia
                 </button>
@@ -167,9 +171,8 @@
             </div>
             <!-- SELECIONAR DISCIPLINA -->
             <div class="mb-6">
-                <h3 class="mb-2 singleTap">
+                <h3 class="mb-2">
                     SELECIONAR DISCIPLINA CORRESPONDENTE
-                    <img src="{{ asset('images/singletap.svg') }}" alt="Ícone">
                 </h3>
                 <div class="select select-painel">
                     <div class="selected" data-default="Painel (nº ID)" data-one="Painel 1" data-two="Painel 2"

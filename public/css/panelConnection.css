@@ -37,7 +37,7 @@ body {
 /* =============================
    MENU LATERAL
    ============================= */
-   .menu-opcoes {
+.menu-opcoes {
     display: none;
 }
 
@@ -71,14 +71,14 @@ h3 {
 input {
     width: 100%;
     height: 45px;
-    flex-shrink: 0;
+    padding: 10px;
     border-radius: 9px;
     border: 1px solid #C8C8C8;
 }
 
-/* .mb-6 {
+.mb-6 {
     margin-bottom: 20px;
-} */
+}
 
 .singleTap {
     display: flex;
@@ -91,6 +91,8 @@ input {
 .tipos {
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
 }
 
 .linhas,
@@ -140,6 +142,124 @@ input {
     gap: 2px;
 }
 
+.layout-blocos {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: space-between;
+    gap: 3px 0;
+}
+
+.layout-blocos .button_Panel {
+    width: calc((100% - 3px) / 2);
+    height: calc((100% - 6px) / 3);
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.layout-alternativas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 6px;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.botao-circular {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 70px;
+    /* pode ajustar esse valor se quiser menor */
+    max-height: 70px;
+    border: 0.5px solid #833B8D;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #833B8D;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* =============================
+    EDITOR DE TEXTO
+   ============================= */
+.trumbowyg-box,
+.trumbowyg-editor-box {
+    border-radius: 9px;
+}
+
+
+.trumbowyg-button-pane {
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    align-items: center;
+    background: none !important;
+}
+
+.trumbowyg-button-group {
+    flex-shrink: 0;
+    display: flex;
+    gap: 2px;
+}
+
+.trumbowyg-button-pane button{
+    width: 20px !important;
+    height: 20px !important;
+}    
+
+
+.trumbowyg-button-group button {
+    font-size: 12px;
+    padding: 4px 6px;
+    height: auto;
+    line-height: 1;
+}
+
+.trumbowyg-button-group button svg {
+    width: 17px;
+    height: 17px;
+}
+
+.trumbowyg-button-pane .trumbowyg-button-group{
+    align-items: center;
+}
+
+.trumbowyg-button-group button[title="Font"] {
+    color: #833B8D;
+    padding-bottom: 33px !important;
+    font-size: 12px;
+    width: 32px !important;
+}
+
+.trumbowyg-dropdown-backColor:not(.trumbowyg-dropdown--color-list), 
+.trumbowyg-dropdown-foreColor:not(.trumbowyg-dropdown--color-list){
+    left: 0px !important;
+}
+
+.trumbowyg-editor:empty:before {
+    content: attr(placeholder);
+    color: gray;  
+    font-size: 12px;     
+    pointer-events: none;
+    display: block;
+}
+
+.trumbowyg-button-pane button svg {
+    fill: #833B8D; 
+}
+
 /* =============================
    CANVAS E ZOOM
    ============================= */
@@ -185,7 +305,7 @@ input {
    BOTÕES DE AÇÃO
    ============================= */
 button {
-    width: 85px;
+    width: 100%;
     height: 38px;
     border-radius: 7px;
     border: 1px solid #833B8D;
@@ -193,6 +313,8 @@ button {
     color: #FFF;
     text-align: center;
     font-size: 16px;
+
+
 }
 
 .buttons {
@@ -279,6 +401,7 @@ button {
     height: 45px;
     /* 30 * 1.5 */
     width: 100%;
+
 }
 
 .circulo {
