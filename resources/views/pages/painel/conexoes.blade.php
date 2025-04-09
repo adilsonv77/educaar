@@ -158,19 +158,27 @@
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
     <script>
         //----PANEL LOADING---------------------------------------------------------------------
+        function onDragStart(e) {
+            arrastar(e, new Painel(e.currentTarget));
+        }
+
+        function onClick(e) {
+            selecionarPainel(e.currentTarget, e);
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".painel").forEach(panel => {
-                panel.setAttribute("draggable", "true");
-
-                panel.addEventListener("dragstart", (e) => {
-                    arrastar(e, new Painel(panel));
-                });
-
-                panel.addEventListener("click", (e) => {
-                    selecionarPainel(panel, e);
-                });
+                panel.addEventListener("dragstart", onDragStart);
+                panel.addEventListener("click", onClick);
             });
             mostrarMenu("canvas");
+            
+            window.livewire.on("painelCriado",(id)=>{
+                let panel = document.getElementById(id).parentElement;
+
+                panel.addEventListener("dragstart", onDragStart);
+                panel.addEventListener("click", onClick);
+            });
         });
 
         //---------------------------------------------------------------------------------------------------------------------

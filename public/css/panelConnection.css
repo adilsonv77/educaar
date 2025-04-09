@@ -238,6 +238,13 @@ button {
     border: 1px solid #FFA600;
 }
 
+.idPainel{
+    position: absolute;
+    top: -34px;
+    left: 0;
+    font-size: 17px;
+}
+
 .button_Panel.selecionado {
     border: 1px solid #FFA600;
 }

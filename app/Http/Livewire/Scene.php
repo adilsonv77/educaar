@@ -34,6 +34,8 @@ class Scene extends Component
         $novo->panel = json_decode('{"id":"'.$novo->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}',true);
 
         $this->paineisRenderizados[] = $novo;
+
+        $this->emit("painelCriado",$novo->id);
     }
 
 }

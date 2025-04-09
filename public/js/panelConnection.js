@@ -56,55 +56,6 @@ let botaoSelecionado = null;
 let zIndexAtual = 0;
 let addBtn = document.getElementById("addPanel");
 
-addBtn.addEventListener("click", () => {
-    const painel = document.createElement("div");
-    painel.className = "painel";
-    painel.innerHTML = `          
-        <!--Texto do painel-->
-        <div class="txtPainel"></div>
-        <input type="hidden" class="inputTxtPainel" name="txt" value="">
-        <!--Midia do painel-->
-        <div class="midia">
-            <!--1. Não informado-->
-            <div class="no_midia" tabindex=0>
-                <img class="fileMidia" src="${window.location.origin}/images/FileMidia.svg">
-            </div>
-            <!--2. Imagem-->
-            <img src="" style="display: none">
-            <!--3. Vídeo-->
-            <video id="vidMidia" controls style="display: none;">
-                <source id="srcVidMidia" src="" type="video/mp4">
-            </video>
-            <!--4. Youtube-->
-            <div id="videoContainer" style="display: none">
-                <iframe 
-                    id="srcYoutube"
-                    src="https://www.youtube.com/embed/nvZRDKDfguM?autoplay=0"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-        <!--Botões do painel-->
-        <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
-            <div class="button_Panel"><div class="circulo"></div> Botão 1</div>
-            <div class="button_Panel"><div class="circulo"></div> Botão 2</div>
-            <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
-        </div>
-        <!--Informações do painel-->
-        <input type="hidden" name="midiaExtension" value="">
-        <input type="hidden" name="arquivoMidia" value="">
-    `;
-
-    container.appendChild(painel);
-    painel.setAttribute("draggable", "true");
-    painel.addEventListener("dragstart", (e) =>
-        arrastar(e, new Painel(painel))
-    );
-    painel.addEventListener("click", (e) => selecionarPainel(painel, e));
-});
-
 class Painel {
     constructor(painel) {
         this.newX = 0;

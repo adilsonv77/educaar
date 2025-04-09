@@ -3,6 +3,9 @@
     <?php
         $panelData = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
     ?>                  
+
+    <p class="idPainel" id="{{ $panelData["id"] }}">Painel ({{ $panelData["id"] }})</p>    
+
     <div class="txtPainel"><?php echo $panelData["txt"]; ?></div>
 
     <input type="text" class="inputTxtPainel" name="txt" 
@@ -38,7 +41,8 @@
         <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
     </div>
 
-    <input type="hidden" name="link" value="{{$panelData["link"]}}">
-    <input type="hidden" name="midiaExtension" value="{{ asset("midiasPainel/".$panelData["midiaExtension"]) }}">
-    <input type="hidden" name="arquivoMidia" value="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}">
+    <input type="hidden" name="link" wire:model="link" value="{{$panelData["link"]}}"> <!--Link enviado-->
+    <input type="file" name="midia" wire:model="midia" style="display: none"> <!--Arquivo enviado-->
+    <input type="hidden" name="arquivoMidia" value="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}"> <!--Nome arquivo-->
+    <input type="hidden" name="midiaExtension" value="{{ asset("midiasPainel/".$panelData["midiaExtension"]) }}"> <!--Extenção arquivo-->   
 </div>
