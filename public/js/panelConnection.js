@@ -7,12 +7,14 @@ document.getElementById("zoom-in").addEventListener("click", () => {
     scale += 0.1; // Aumenta o zoom
     alternativeScale += 1;
     updateCanvasScale();
+    todasAsLinhas.forEach(linha => linha.position());
 });
 
 document.getElementById("zoom-out").addEventListener("click", () => {
     scale = Math.max(scale - 0.1, 0.1); // Diminui o zoom, mas não permite que fique menor que 0.1
     alternativeScale = Math.max(alternativeScale - 1, -9);
     updateCanvasScale();
+    todasAsLinhas.forEach(linha => linha.position());
 });
 
 function updateCanvasScale() {
@@ -56,8 +58,21 @@ let botaoSelecionado = null;
 let zIndexAtual = 0;
 let addBtn = document.getElementById("addPanel");
 
+
 addBtn.addEventListener("click", () => {
     const painel = document.createElement("div");
+
+    // Supondo que idPainel seja o ID do banco que você já pegou do backend
+    let idPainel = 5; // exemplo
+
+    painel.setAttribute("data-id", idPainel);
+    painel.setAttribute("id", `painel-${idPainel}`);
+
+
+    painel.setAttribute("data-id", idPainel);
+    painel.setAttribute("id", `painel-${idPainel}`);
+
+
     painel.className = "painel";
     painel.innerHTML = `          
         <!--Texto do painel-->
@@ -88,9 +103,9 @@ addBtn.addEventListener("click", () => {
         </div>
         <!--Botões do painel-->
         <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
-            <div class="button_Panel"><div class="circulo"></div> Botão 1</div>
-            <div class="button_Panel"><div class="circulo"></div> Botão 2</div>
-            <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
+            <div class="button_Panel" data-botao="1"><div class="circulo"></div> Botão 1</div>
+            <div class="button_Panel" data-botao="2"><div class="circulo"></div> Botão 2</div>
+            <div class="button_Panel" data-botao="3"><div class="circulo"></div> Botão 3</div>
         </div>
         <!--Informações do painel-->
         <input type="hidden" name="midiaExtension" value="">
@@ -98,11 +113,20 @@ addBtn.addEventListener("click", () => {
     `;
 
     container.appendChild(painel);
+
     painel.setAttribute("draggable", "true");
     painel.addEventListener("dragstart", (e) =>
         arrastar(e, new Painel(painel))
     );
     painel.addEventListener("click", (e) => selecionarPainel(painel, e));
+
+    //teste
+    setTimeout(() => {
+        conectarBotoes(5, 1, 17);
+    }, 100);
+
+
+
 });
 
 class Painel {
@@ -124,6 +148,7 @@ function mostrarMenu(tipo) {
 
     }
 }
+
 //----FUNÇÃO DE SELECIONAR PAINEL, BOTÃO E CANVAS----------------------------------------------------------------------------
 function selecionarPainel(painel, e) {
     isDraggingPanel = true;
@@ -215,26 +240,26 @@ function alterarFormatoBotoes(formato) {
 
     const layouts = {
         linhas: `
-            <div class="button_Panel"><div class="circulo"></div> Botão 1</div>
-            <div class="button_Panel"><div class="circulo"></div> Botão 2</div>
-            <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
+            <div class="button_Panel" data-botao="1"><div class="circulo"></div> Botão 1</div>
+            <div class="button_Panel" data-botao="2"><div class="circulo"></div> Botão 2</div>
+            <div class="button_Panel" data-botao="3"><div class="circulo"></div> Botão 3</div>
         `,
         blocos: `
         <div class="layout-blocos">
-            <div class="button_Panel">Botão 1</div>
-            <div class="button_Panel">Botão 2</div>
-            <div class="button_Panel">Botão 3</div>
-            <div class="button_Panel">Botão 4</div>
-            <div class="button_Panel">Botão 5</div>
-            <div class="button_Panel">Botão 6</div>
+            <div class="button_Panel" data-botao="1">Botão 1</div>
+            <div class="button_Panel" data-botao="2">Botão 2</div>
+            <div class="button_Panel" data-botao="3">Botão 3</div>
+            <div class="button_Panel" data-botao="4">Botão 4</div>
+            <div class="button_Panel" data-botao="5">Botão 5</div>
+            <div class="button_Panel" data-botao="6">Botão 6</div>
         </div>
         `,
         alternativas: `
         <div class="layout-alternativas">
-            <div class="botao-circular">A</div>
-            <div class="botao-circular">B</div>
-            <div class="botao-circular">C</div>
-            <div class="botao-circular">D</div>
+            <div class="botao-circular" data-botao="1">A</div>
+            <div class="botao-circular" data-botao="2">B</div>
+            <div class="botao-circular" data-botao="3">C</div>
+            <div class="botao-circular" data-botao="4">D</div>
         </div>
         `,
     };
@@ -251,6 +276,8 @@ function alterarFormatoBotoes(formato) {
     } else {
         areaBotoes.innerHTML = layouts[formato];
     }
+
+    botoes[0].setAttribute("data-botao", "1"); // Exemplo
     // areaBotoes.innerHTML = layouts[formato];
 }
 
@@ -311,6 +338,7 @@ function soltar(e, painel) {
     painel.painel.style.left = painel.newX + "px";
 
     document.removeEventListener("dragend", chamarFuncaoSoltar);
+
 }
 
 //----MOVIMENTAÇÃO CANVAS----------------------------------------------------------------------------
@@ -332,7 +360,7 @@ div.addEventListener("mousedown", (e) => {
     isDragging = false; // Inicia como falso
 
     setTimeout(() => {
-        if (!isDraggingPanel) { // Se não foi detectado clique em painel/botão
+        if (!isDraggingPanel) { 
             isDragging = true;
             div.style.cursor = "grabbing";
         }
@@ -346,10 +374,85 @@ document.addEventListener("mousemove", (e) => {
     let deltaY = e.clientY - startY;
     div.style.left = `${startLeft + deltaX}px`;
     div.style.top = `${startTop + deltaY}px`;
+
+    todasAsLinhas.forEach(linha => linha.position());
 });
+
 
 document.addEventListener("mouseup", () => {
     // if (isDraggingPanel) return;
     isDragging = false;
     div.style.cursor = "grab";
 });
+
+//----DESENHAR CONEXÃO (LINHA)-testes manual---------------------------------------------------------------------------
+const todasAsLinhas = [];
+function conectarBotoes(idPainelOrigem, numBotao, idPainelDestino) {
+    const origem = document.querySelector(`[data-id="${idPainelOrigem}"]`);
+    const destino = document.querySelector(`[data-id="${idPainelDestino}"]`);
+
+    if (!origem || !destino) {
+        console.warn("Origem ou destino não encontrados.");
+        return;
+    }
+
+    const botao = origem.querySelector(`.button_Panel[data-botao="${numBotao}"]`);
+
+    if (!botao) {
+        console.warn("Botão de origem não encontrado.");
+        return;
+    }
+
+    const linha = new LeaderLine(
+        botao,
+        destino,
+        {
+            color: "#00bfff",
+            size: 4,
+            path: "fluid",
+            startPlug: "disc",
+            endPlug: "arrow3"
+        }
+    );
+
+    todasAsLinhas.push(linha);
+
+    return linha;
+}
+
+let line;
+
+function conectarPainel() {
+    const start = document.querySelector('[data-id="5"] .button_Panel[data-botao="1"]');
+    const end = document.querySelector('[data-id="17"]');
+
+    if (start && end) {
+        line = new LeaderLine(start, end);
+    }
+}
+
+function ativarDrag(painel) {
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    painel.addEventListener('mousedown', function (e) {
+        isDragging = true;
+        offsetX = e.clientX - painel.offsetLeft;
+        offsetY = e.clientY - painel.offsetTop;
+        painel.style.position = 'absolute';
+    });
+
+    document.addEventListener('mousemove', function (e) {
+        if (isDragging) {
+            painel.style.left = (e.clientX - offsetX) + 'px';
+            painel.style.top = (e.clientY - offsetY) + 'px';
+
+            todasAsLinhas.forEach(linha => linha.position());
+        }
+    });
+
+    document.addEventListener('mouseup', function () {
+        isDragging = false;
+    });
+}
+

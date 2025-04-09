@@ -192,6 +192,11 @@ input {
 }
 
 /* =============================
+    CONEXÃO (LINHAS)
+   ============================= */
+
+
+/* =============================
     EDITOR DE TEXTO
    ============================= */
 .trumbowyg-box,
@@ -453,133 +458,5 @@ button {
 }
 
 /* =============================
-   SELETORES E DROPDOWN
+    DROPDOWN
    ============================= */
-.select {
-    width: 100%;
-    cursor: pointer;
-    position: relative;
-    transition: 300ms;
-    color: #B8B5B5;
-    overflow: visible;
-    z-index: 1;
-}
-
-.select:hover {
-    z-index: 10;
-}
-
-.selected {
-    background-color: #FFFFFF;
-    padding: 5px;
-    margin-bottom: 3px;
-    border-radius: 4.5px;
-    border: 1px solid #C3C3C3;
-    position: relative;
-    z-index: 2;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.arrow {
-    position: relative;
-    right: 0px;
-    height: 10px;
-    transform: rotate(-90deg);
-    width: 25px;
-    fill: #B8B5B5;
-    z-index: 100000;
-    transition: 300ms;
-}
-
-.options {
-    display: flex;
-    flex-direction: column;
-    border-radius: 4.5px;
-    padding: 5px;
-    background-color: #FFFFFF;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    opacity: 0;
-    transition: opacity 300ms ease, transform 300ms ease;
-    transform: translateY(-10px);
-    z-index: 5;
-    border: 1px solid #C3C3C3;
-    pointer-events: none;
-}
-
-.select:hover>.options {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: all;
-    z-index: 10;
-}
-
-.select:hover>.selected .arrow {
-    transform: rotate(0deg);
-}
-
-.option {
-    border-radius: 4.5px;
-    padding: 5px;
-    transition: 300ms;
-    background-color: #FFFFFF;
-    width: 100%;
-    font-size: 15px;
-    color: #B8B5B5;
-    align-items: center;
-}
-
-.option:hover {
-    background-color: #DFC1E4;
-}
-
-.options input[type="radio"] {
-    display: none;
-}
-
-.options label {
-    display: inline-block;
-}
-
-.options label::before {
-    content: attr(data-txt);
-}
-
-.options input[type="radio"]:checked+label {
-    display: none;
-}
-
-.options input[type="radio"]#nenhuma:checked+label {
-    display: none;
-}
-
-.select:has(.options input[type="radio"]#nenhuma:checked) .selected::before {
-    content: attr(data-default);
-}
-
-.select:has(.options input[type="radio"]#final-experiencia:checked) .selected::before {
-    content: attr(data-one);
-}
-
-/* REVER DEPOIS */
-
-.select:has(.options input[type="radio"]#proximo-painel:checked) .selected::before {
-    content: attr(data-two);
-}
-
-.select:has(.options input[type="radio"]#painel-1:checked) .selected::before {
-    content: attr(data-default);
-}
-
-.select:has(.options input[type="radio"]#painel-2:checked) .selected::before {
-    content: attr(data-one);
-}
-
-.select:has(.options input[type="radio"]#painel-3:checked) .selected::before {
-    content: attr(data-two);
-}

@@ -30,7 +30,7 @@
     <script src="{{ asset('editor/dist/trumbowyg.min.js') }}"></script>
     <script src="{{ asset('editor/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js') }}"></script>
     <script src="{{ asset('editor/dist/plugins/colors/trumbowyg.colors.min.js') }}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/leader-line-new@1.1.8/leader-line.min.js"> </script>
     <script>
         //----PANEL LOADING---------------------------------------------------------------------
         document.addEventListener("DOMContentLoaded", function () {
@@ -46,6 +46,17 @@
                 });
             });
             mostrarMenu("canvas");
+        });
+
+        //----GERAR CONEXÃO---------------------------------------------------------------------
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.painel').forEach(painel => {
+                ativarDrag(painel);
+            });
+
+            // manualmente por enquanto
+            conectarBotoes("5", "1", "17");
+            conectarBotoes("5", "2", "17")
         });
 
         //---------------------------------------------------------------------------------------------------------------------
@@ -85,6 +96,7 @@
             }, 300); // Dá tempo pro Trumbowyg renderizar
         });
 
-
+        //----Carregar o dropdown-----------------------------------------------------------------------------------------------
+        
     </script>
 @endsection
