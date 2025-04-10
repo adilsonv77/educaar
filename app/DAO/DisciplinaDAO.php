@@ -30,4 +30,11 @@ class DisciplinaDAO
             ->distinct()
             ->get();
     }
+
+    public function updateDisciplinaScene($sceneId, $disciplinaId)
+    {
+        return DB::table('scenes')
+            ->where('id', $sceneId)
+            ->update(['disciplina_id' => $disciplinaId]);
+    }
 }

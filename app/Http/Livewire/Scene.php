@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\DAO\PainelDAO;
 use App\DAO\DisciplinaDAO;
+use App\DAO\SceneDAO;
 
 class Scene extends Component
 {
@@ -16,6 +17,9 @@ class Scene extends Component
     public $scene_id;
     public $disciplinas;
     public $disciplinaSelecionada;
+    public $startPainelId;
+    public $nameScene;
+
 
     public function mount($paineis, $scene_id)
     {
@@ -25,10 +29,15 @@ class Scene extends Component
         $dao = new DisciplinaDAO();
         $this->disciplinas = $dao->getDisciplinasDoProfessor(auth()->user()->id);
 
+        // Busca o id do painel inicial
+        $this->startPainelId = DB::table('scenes')->where('id', $this->scene_id)->value('start_panel_id');
+
+        // Busca o nome da cena no banco
+        $this->nameScene = DB::table('scenes')->where('id', $this->scene_id)->value('name');
+
         // Carrega a disciplina da cena, se já existir
-        $this->disciplinaSelecionada = DB::table('scenes')
-            ->where('id', $scene_id)
-            ->value('disciplina_id');
+        $this->disciplinaSelecionada = DB::table('scenes')->where('id', $scene_id)->value('disciplina_id');
+        //dd($this->disciplinas);
     }
 
     public function render()
@@ -60,13 +69,22 @@ class Scene extends Component
         $painelDAO->updateById($id, ['txt' => ""]);
     }
 
-    public function atualizarDisciplinaCena()
+    public function updateDisciplinaScene()
     {
-        DB::table('scenes')
-            ->where('id', $this->scene_id)
-            ->update(['disciplina_id' => $this->disciplinaSelecionada]);
+        $disciplinaDAO = new DisciplinaDAO();
+        $disciplinaDAO->updateDisciplinaScene($this->scene_id, $this->disciplinaSelecionada);
+    }
 
-        session()->flash('message', 'Disciplina da cena atualizada com sucesso!');
+    public function updateStartPanel($painelId)
+    {
+        $sceneDAO = new SceneDAO();
+        $sceneDAO->updateById($this->scene_id, ['start_panel_id' => $painelId]);
+    }
+
+    public function updatedNameScene()
+    {
+        $sceneDAO = new SceneDAO();
+        $sceneDAO->updateById($this->scene_id, ['name' => $this->nameScene]);
     }
 
 }

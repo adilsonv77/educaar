@@ -114,7 +114,7 @@
             <!-- NOME DA CENA -->
             <div class="mb-6">
                 <h3 class="mb-2">NOME DA CENA</h3>
-                <input class="" type="text" />
+                <input type="text" wire:model.lazy="nameScene" class="form-input" placeholder="Insira o nome da cena" />
             </div>
 
             <!-- SELECIONAR O PAINEL INICIAL -->
@@ -123,39 +123,25 @@
                     SELECIONAR PAINEL INICIAL
                     <img src="{{ asset('images/singletap.svg') }}" alt="Ícone">
                 </h3>
-                <div class="select" data-default="Selecione um painel">
-                    <div class="selected">
-                        <span class="arrow">▶</span>
-                    </div>
+                <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)" class="select-native">
+                    <option disabled selected>Selecione um painel</option>
                     @foreach ($paineis as $painel)
-                        <div>
-                            <input id="painel-{{ $painel->id }}" name="option-painel" type="radio" value="{{ $painel->id }}"/>
-                            <label class="option" for="painel-{{ $painel->id }}" data-txt="Painel {{ $painel->id }}">
-                                Painel {{ $painel->id }}
-                            </label>
-                        </div>
+                        <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
                     @endforeach
-                </div>
+                </select>
             </div>
-
+            
             <!-- SELECIONAR DISCIPLINA -->
             <div class="mb-6">
-                <h3 class="mb-2">SELECIONAR DISCIPLINA CORRESPONDENTE</h3>
+                <h3 class="mb-2">SELECIONAR DISCIPLINA DA CENA</h3>
                 <div class="select" data-default="Selecione uma disciplina">
-                    <div class="selected">
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div>
-                        <select id="disciplina-geral"
-                                wire:model="disciplinaSelecionada"
-                                wire:change="atualizarDisciplinaCena"
-                                class="border rounded p-1">
-                            <option value="">-- Selecione --</option>
-                            @foreach($disciplinas as $disciplina)
-                                <option value="{{ $disciplina->id }}">{{ $disciplina->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <!-- reutilizar css do dropdown painel -->
+                    <select wire:model="disciplinaSelecionada" wire:change="updateDisciplinaScene"name="disciplina_id" class="select-native">
+                        <option disabled selected>Selecione uma disciplina</option>
+                        @foreach($disciplinas as $disciplina)
+                            <option value="{{ $disciplina->id }}">{{ $disciplina->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>
