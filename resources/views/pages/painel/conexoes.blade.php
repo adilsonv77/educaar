@@ -149,8 +149,34 @@
     </style>
 @endsection
 
+@section('bodyAccess')
+    <!--Pop up upload de arquivo-->
+    <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
+        de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+    <div id="flex-container">
+        <div id="opaque-background"></div>
+
+        <div id="popup">
+            <p>Upload file</p>
+            <button onclick="fecharPopUp()">X</button>
+
+            <label id="upload-area" class="picture" tabIndex="0">
+                <img src="{{ asset('icons/paineis/upload.svg') }}" alt="">
+                <span class="picture__image"></span>
+            </label> 
+
+            <p class="pInfo">Formatos suportados: MP4, JPG, JPEG, PNG</p>
+            <p class="pInfo" style="float: right">Tamanho máximo: 50MB</p>
+            <div style="clear: both;"></div>
+
+            <p id="pYoutube">URL YouTube</p>
+            <input id="linkYoutube" type="text" onchange="enviarYoutube()">
+        </div>
+    </div>
+@endsection
+
 @section('content')
-    @livewire('scene', ['paineis' => $paineis,"scene_id"=>$scene_id]);
+    @livewire('scene', ['paineis' => $paineis,"scene_id"=>$scene_id])
     @livewireScripts
 @endsection
 
@@ -170,6 +196,7 @@
             document.querySelectorAll(".painel").forEach(panel => {
                 panel.addEventListener("dragstart", onDragStart);
                 panel.addEventListener("click", onClick);
+                adicionarInteracaoPopup(panel.querySelector('.idPainel').id);
             });
             mostrarMenu("canvas");
             
@@ -178,6 +205,7 @@
 
                 panel.addEventListener("dragstart", onDragStart);
                 panel.addEventListener("click", onClick);
+                adicionarInteracaoPopup(id);
             });
         });
 

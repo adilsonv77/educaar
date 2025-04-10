@@ -3,12 +3,15 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\DAO\PainelDAO;
 
 class Panel extends Component
 {
+    use WithFileUploads;
+
     public $painel;
     public $texto;
     public $midia;
@@ -17,10 +20,15 @@ class Panel extends Component
     public function mount($painel)
     {
         $this->painel = $painel;
-        $this->texto = $painel->txt;
+
+        // Garante que esteja decodificado (caso venha string do banco)
+        $json = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
+
+        $this->texto = $json['txt'] ?? '';
+        $this->link = $json['link'] ?? '';
     }
 
-    public function updateText()
+    public function updatedTexto()
     {
         $painelDAO = new PainelDAO();
 
@@ -34,7 +42,7 @@ class Panel extends Component
         $this->emitSelf('$refresh');
     }
 
-    public function updateMidia()
+    public function updatedMidia()
     {
         $painelDAO = new PainelDAO();
         $id = $this->painel->id;
@@ -48,6 +56,7 @@ class Panel extends Component
         $possuiLinkYoutube = !empty($this->link);
 
         if ($arquivoRecebido) {
+            dd("Algo errado");
             $midiaExtension = $this->midia->getClientOriginalExtension();
             $nomeTemporario = $baseFileName . '.' . $midiaExtension;
             $nomeReal = $id . '.' . $midiaExtension;
@@ -58,15 +67,21 @@ class Panel extends Component
             }
 
             // Salva novo arquivo
-            $this->midia->storeAs('midiasPainel', $nomeTemporario, 'public');
+            $this->midia->storeAs('midiasPainel', $nomeTemporario, 'public_direct');
             rename($publicPath . '/' . $nomeTemporario, $publicPath . '/' . $nomeReal);
 
             // Atualiza o JSON
             $json['arquivoMidia'] = $nomeReal;
             $json['midiaExtension'] = $midiaExtension;
-            $json['midiaType'] = 'image'; // Ou detecta dinamicamente com base na extensão, se preferir
             $json['link'] = '';
+
+            if($midiaExtension == "mp4"){
+                $json['midiaType'] = 'video'; // Ou detecta dinamicamente com base na extensão, se preferir
+            }else{
+                $json['midiaType'] = 'image'; // Ou detecta dinamicamente com base na extensão, se preferir
+            }
         } elseif ($possuiLinkYoutube) {
+            dd("Algo certo");
             if (!empty($json['midiaExtension'])) {
                 @unlink($publicPath . '/' . $id . '.' . $json['midiaExtension']);
             }
@@ -79,6 +94,10 @@ class Panel extends Component
 
         $painelDAO->updateById($id, ['panel' => json_encode($json)]);
         $this->painel->panel = $json; // Atualiza o painel renderizado também
+    }
+
+    public function updatedLink(){
+        updatedMidia();
     }
 
     public function render()
