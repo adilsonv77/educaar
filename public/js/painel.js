@@ -69,7 +69,7 @@ if (mediaPreviewArea.getAttribute("edit") == "true") {
         primeiraVez = false;
         midiaArea.style.display = "none";
 
-        //Faz o popup aparecer quando clicar
+        //Coloca os event listener de configuração de painel quando selecionar
         mediaPreviewArea.onclick = () => {
             document.getElementById("flex-container").style.display = "flex";
         };

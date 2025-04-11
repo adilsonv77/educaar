@@ -58,6 +58,77 @@ let botaoSelecionado = null;
 let zIndexAtual = 0;
 let addBtn = document.getElementById("addPanel");
 
+
+addBtn.addEventListener("click", () => {
+    const painel = document.createElement("div");
+
+    // Supondo que idPainel seja o ID do banco que você já pegou do backend
+    let idPainel = 5; // exemplo
+
+    painel.setAttribute("data-id", idPainel);
+    painel.setAttribute("id", `painel-${idPainel}`);
+
+
+    painel.setAttribute("data-id", idPainel);
+    painel.setAttribute("id", `painel-${idPainel}`);
+
+
+    painel.className = "painel";
+    painel.innerHTML = `          
+        <!--Texto do painel-->
+        <div class="txtPainel"></div>
+        <input type="hidden" class="inputTxtPainel" name="txt" value="">
+        <!--Midia do painel-->
+        <div class="midia">
+            <!--1. Não informado-->
+            <div class="no_midia" tabindex=0>
+                <img class="fileMidia" src="${window.location.origin}/images/FileMidia.svg">
+            </div>
+            <!--2. Imagem-->
+            <img src="" style="display: none">
+            <!--3. Vídeo-->
+            <video id="vidMidia" controls style="display: none;">
+                <source id="srcVidMidia" src="" type="video/mp4">
+            </video>
+            <!--4. Youtube-->
+            <div id="videoContainer" style="display: none">
+                <iframe 
+                    id="srcYoutube"
+                    src="https://www.youtube.com/embed/nvZRDKDfguM?autoplay=0"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+        <!--Botões do painel-->
+        <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
+            <div class="button_Panel" data-botao="1"><div class="circulo"></div> Botão 1</div>
+            <div class="button_Panel" data-botao="2"><div class="circulo"></div> Botão 2</div>
+            <div class="button_Panel" data-botao="3"><div class="circulo"></div> Botão 3</div>
+        </div>
+        <!--Informações do painel-->
+        <input type="hidden" name="midiaExtension" value="">
+        <input type="hidden" name="arquivoMidia" value="">
+    `;
+
+    container.appendChild(painel);
+
+    painel.setAttribute("draggable", "true");
+    painel.addEventListener("dragstart", (e) =>
+        arrastar(e, new Painel(painel))
+    );
+    painel.addEventListener("click", (e) => selecionarPainel(painel, e));
+
+    //teste
+    setTimeout(() => {
+        conectarBotoes(5, 1, 17);
+    }, 100);
+
+
+
+});
+
 class Painel {
     constructor(painel) {
         this.newX = 0;
@@ -69,13 +140,12 @@ class Painel {
 }
 //----FUNÇÃO DE MOSTRAR MENUS------------------------------------------------------------------------------------------------
 function mostrarMenu(tipo) {
-    document
-        .querySelectorAll(".menu-opcoes")
-        .forEach((menu) => menu.classList.remove("ativo"));
+    document.querySelectorAll(".menu-opcoes").forEach(menu => menu.classList.remove("ativo"));
 
     let menu = document.querySelector(`.${tipo}-opcoes`);
     if (menu) {
         menu.classList.add("ativo");
+
     }
 }
 
@@ -98,6 +168,7 @@ function selecionarPainel(painel, e) {
 
     mostrarMenu("painel"); // Atualiza o menu
 }
+
 
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("button_Panel")) {
@@ -135,6 +206,7 @@ function selecionarBotao(botao) {
     mostrarMenu("botao"); // Atualiza o menu
 }
 
+
 function selecionarCanvas() {
     if (painelSelecionado) {
         painelSelecionado.classList.remove("selecionado");
@@ -150,6 +222,7 @@ function selecionarCanvas() {
     mostrarMenu("canvas"); // Atualiza o menu
 }
 
+
 //----FORMATO DOS BOTÕES----------------------------------------------------------------------------
 function alterarFormatoBotoes(formato) {
     if (!painelSelecionado) {
@@ -161,9 +234,7 @@ function alterarFormatoBotoes(formato) {
     console.log("Área de botões encontrada:", areaBotoes);
 
     if (!areaBotoes) {
-        console.warn(
-            "O painel carregado do banco pode ter uma estrutura diferente. Verifique o HTML."
-        );
+        console.warn("O painel carregado do banco pode ter uma estrutura diferente. Verifique o HTML.");
         return;
     }
 
@@ -243,8 +314,7 @@ function soltar(e, painel) {
     let larguraPainel = 291;
 
     // Movimenta para a posição do mouse
-    painel.newX =
-        painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
+    painel.newX = painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
     painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY) / scale;
 
     painel.startX = e.clientX;
@@ -386,166 +456,3 @@ function ativarDrag(painel) {
     });
 }
 
-//----MOSTRAR POPUP QUANDO SELECIONAR------------------------------------------------------------------------------------------------
-function fecharPopUp() {
-    document.getElementById("flex-container").style.display = "none";
-}
-
-let painelPopup = null;
-function abrirPopUp(id) {
-    painelPopup = id;
-
-    let painel = document.getElementById(id).parentElement;
-
-    // Define o input file correspondente a este painel
-    inputAtivo = painel.querySelector("#file-" + id);
-
-    // Atualiza o atributo "for" da label para apontar pro input atual
-    const dropLabel = document.getElementById("upload-area");
-    dropLabel.setAttribute("for", "#file-" + id);
-
-    // Abre o pop-up
-    document.getElementById("flex-container").style.display = "flex";
-}
-
-function adicionarInteracaoPopup(id) {
-    let painel = document.getElementById(id).parentElement;
-    let fileBtn = painel.querySelector("#file-" + id); //Tem multiplos
-    let midiaArea = painel.querySelector(".midia");
-
-    let img = painel.querySelector(".imgMidia");
-    let vid = painel.querySelector(".vidMidia");
-    let srcVid = painel.querySelector("#srcVidMidia");
-    let vidYoutube = painel.querySelector(".youtubeMidia");
-    let url = document.getElementById("linkYoutube").src;
-    let idYoutube = painel.querySelector("#link-" + id);
-    let iFrameYoutube = painel.querySelector("#srcYoutube");
-    let urlYoutubeInformado = false;
-
-    fileBtn.onchange = () => midiaPreview();
-
-    //Faz o popup aparecer quando clicar
-    midiaArea.onclick = () => {
-        abrirPopUp(id);
-    };
-    Array.from(midiaArea.children).forEach((child) => {
-        child.onclick = () => {
-            abrirPopUp(id);
-        };
-    });
-
-    //Carrega a imagem no painel
-    function midiaPreview() {
-        //Descobre se arquivo inserido é imagem ou vídeo ou video youtube e ativa o html correspondente
-        if (urlYoutubeInformado) {
-            //É vídeo do youtube
-            urlYoutubeInformado = false;
-            img.style.display = "none";
-            vid.style.display = "none";
-            vidYoutube.style.display = "block";
-            try {
-                vid.pause();
-            } catch (error) {}
-
-            iFrameYoutube.src =
-                "https://www.youtube.com/embed/" +
-                idYoutube.value +
-                "?autoplay=1";
-        } else {
-            let eVideo = fileBtn.files[0].name.endsWith(".mp4"); //É video (true) ou imagem (false)?
-            if (eVideo) {
-                //É vídeo
-                img.style.display = "none";
-                vid.style.display = "block";
-                vidYoutube.style.display = "none";
-
-                document.getElementById("linkYoutube").src = "";
-                iFrameYoutube.src = "";
-                idYoutube.value = "";
-                srcVid.src = URL.createObjectURL(fileBtn.files[0]);
-                vid.load();
-            } else {
-                //É imagem
-                img.style.display = "block";
-                vid.style.display = "none";
-                vidYoutube.style.display = "none";
-                try {
-                    vid.pause();
-                } catch (error) {}
-
-                document.getElementById("linkYoutube").src = "";
-                iFrameYoutube.src = "";
-                idYoutube.value = "";
-                img.src = URL.createObjectURL(fileBtn.files[0]);
-            }
-        }
-    }
-}
-let inputAtivo = null;
-
-const dropArea = document.getElementById("upload-area");
-
-// Clique para abrir o seletor de arquivos
-dropArea.addEventListener("click", () => {
-    if (inputAtivo) inputAtivo.click();
-});
-
-// Evita comportamento padrão ao arrastar arquivos
-["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-    dropArea.addEventListener(eventName, (e) => e.preventDefault());
-});
-
-// Destaque visual
-dropArea.addEventListener("dragover", () => dropArea.classList.add("dragover"));
-dropArea.addEventListener("dragleave", () =>
-    dropArea.classList.remove("dragover")
-);
-
-// Solta arquivos na área
-dropArea.addEventListener("drop", (e) => {
-    if (!inputAtivo) return;
-
-    const files = e.dataTransfer.files;
-
-    // Cria um DataTransfer para simular a seleção
-    const dataTransfer = new DataTransfer();
-    for (const file of files) {
-        dataTransfer.items.add(file);
-    }
-    inputAtivo.files = dataTransfer.files;
-
-    dropArea.classList.remove("dragover");
-
-    // Chama a função de preview (passando o inputAtivo, se quiser adaptar)
-    midiaPreview();
-
-    // Fecha o pop-up, se quiser
-    document.getElementById("flex-container").style.display = "none";
-});
-
-// 3.3 Um link do youtube foi inserido
-document.getElementById("linkYoutube").oninput = () => {
-    const prefix = "https://www.youtube.com/watch?v=";
-    const prefix2 = "https://youtu.be/";
-    url = document.getElementById("linkYoutube").value;
-
-    const inputHidden = document.getElementById("link-" + painelPopup);
-    if (!painelPopup) return;
-
-    if (url.startsWith(prefix) && url.slice(prefix.length).length == 11) {
-        urlYoutubeInformado = true;
-        inputHidden.value = url.slice(prefix.length); 
-        sendValueLivewire(painelPopup, inputHidden.value)
-    } else if (
-        url.startsWith(prefix2) &&
-        url.slice(prefix2.length).length == 11
-    ) {
-        urlYoutubeInformado = true;
-        inputHidden.value = url.slice(prefix2.length);
-        sendValueLivewire(painelPopup, inputHidden.value)
-    }
-};
-
-function sendValueLivewire(id, link) {
-    window.livewire.emit('updateLink', { id: id, link: link });
-}
