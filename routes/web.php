@@ -85,6 +85,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('resultsContents', [App\Http\Controllers\ContentController::class, 'resultsContents'])->name('content.resultsContents');
     Route::get('/listStudents/content/{type}', [App\Http\Controllers\ContentController::class, 'resultsListStudents'])->name('content.listStudents');
     Route::get('/content/list', [App\Http\Controllers\ContentController::class, 'listOfContents'])->name('content.list');
+    Route::get('/content/atividades/pdf/{id}', [App\Http\Controllers\ContentController::class, 'baixarAtividadesPDF'])->name('content.atividades.pdf');
+
 
 
     //school
