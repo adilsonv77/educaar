@@ -79,7 +79,7 @@
                     </h3>
                     <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)" class="select-native">
                         <option disabled selected>Selecione um painel</option>
-                        @foreach ($paineis as $painel)
+                        @foreach ($paineisRenderizados as $painel)
                             <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
                         @endforeach
                     </select>
@@ -102,7 +102,7 @@
                     </h3>
                     <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)" class="select-native">
                         <option disabled selected>Selecione um painel</option>
-                        @foreach ($paineis as $painel)
+                        @foreach ($paineisRenderizados as $painel)
                             <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
                         @endforeach
                     </select>
