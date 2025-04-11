@@ -40,8 +40,8 @@
         <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
     </div>
 
-    <input type="hidden" name="link" wire:model.lazy="link" value="{{$panelData["link"]}}" id="link-{{ $panelData["id"] }}"> <!--Link enviado-->
-    <input type="file" name="midia" wire:model.lazy="midia" style="display: none" id="file-{{ $panelData["id"] }}"> <!--Arquivo enviado-->
+    <input type="hidden" name="link" wire:model="link" wire:change="updateLink" value="{{$panelData["link"]}}" id="link-{{ $panelData["id"] }}"> <!--Link enviado-->
+    <input type="file" name="midia" wire:model="midia" style="display: none" id="file-{{ $panelData["id"] }}"> <!--Arquivo enviado-->
     <input type="hidden" name="arquivoMidia" value="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}"> <!--Nome arquivo-->
     <input type="hidden" name="midiaExtension" value="{{ asset("midiasPainel/".$panelData["midiaExtension"]) }}"> <!--Extenção arquivo-->   
 </div>

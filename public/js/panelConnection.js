@@ -67,12 +67,13 @@ class Painel {
 }
 //----FUNÇÃO DE MOSTRAR MENUS------------------------------------------------------------------------------------------------
 function mostrarMenu(tipo) {
-    document.querySelectorAll(".menu-opcoes").forEach(menu => menu.classList.remove("ativo"));
+    document
+        .querySelectorAll(".menu-opcoes")
+        .forEach((menu) => menu.classList.remove("ativo"));
 
     let menu = document.querySelector(`.${tipo}-opcoes`);
     if (menu) {
         menu.classList.add("ativo");
-    
     }
 }
 //----FUNÇÃO DE SELECIONAR PAINEL, BOTÃO E CANVAS----------------------------------------------------------------------------
@@ -95,18 +96,17 @@ function selecionarPainel(painel, e) {
     mostrarMenu("painel"); // Atualiza o menu
 }
 
-
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("button_Panel")) {
         e.stopPropagation();
         selecionarBotao(e.target);
         return;
     }
-    
+
     let painel = e.target.closest(".painel");
     if (painel) {
         selecionarPainel(painel, e);
-    } else if(!(e.target.classList.contains("menu-opcoes"))) {
+    } else if (!e.target.classList.contains("menu-opcoes")) {
         selecionarCanvas();
     }
 });
@@ -127,7 +127,6 @@ function selecionarBotao(botao) {
     mostrarMenu("botao"); // Atualiza o menu
 }
 
-
 function selecionarCanvas() {
     isDraggingPanel = true;
     if (painelSelecionado) {
@@ -138,13 +137,14 @@ function selecionarCanvas() {
         botaoSelecionado.classList.remove("selecionado");
         botaoSelecionado = null;
     }
-    
-    document.getElementsByClassName("canvas-container")[0].classList.add("selecionado");
+
+    document
+        .getElementsByClassName("canvas-container")[0]
+        .classList.add("selecionado");
 
     mostrarMenu("canvas"); // Atualiza o menu
     isDraggingPanel = false;
 }
-
 
 //----FORMATO DOS BOTÕES----------------------------------------------------------------------------
 function alterarFormatoBotoes(formato) {
@@ -157,7 +157,9 @@ function alterarFormatoBotoes(formato) {
     console.log("Área de botões encontrada:", areaBotoes);
 
     if (!areaBotoes) {
-        console.warn("O painel carregado do banco pode ter uma estrutura diferente. Verifique o HTML.");
+        console.warn(
+            "O painel carregado do banco pode ter uma estrutura diferente. Verifique o HTML."
+        );
         return;
     }
 
@@ -233,21 +235,22 @@ function soltar(e, painel) {
     let larguraPainel = 291;
 
     // Movimenta para a posição do mouse
-    painel.newX = painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
+    painel.newX =
+        painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
     painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY) / scale;
 
     painel.startX = e.clientX;
     painel.startY = e.clientY;
 
     // Verifica se a posição atual é válida.
-    if ( painel.newX + larguraPainel > larguraMax) {
-        painel.newX =  larguraMax-larguraPainel;
+    if (painel.newX + larguraPainel > larguraMax) {
+        painel.newX = larguraMax - larguraPainel;
     }
     if (painel.newX < 0) {
         painel.newX = 0;
     }
     if (painel.newY + alturaPainel > alturaMax) {
-        painel.newY = alturaMax-alturaPainel;
+        painel.newY = alturaMax - alturaPainel;
     }
     if (painel.newY < 0) {
         painel.newY = 0;
@@ -296,7 +299,7 @@ document.addEventListener("mouseup", () => {
 
 //----MOSTRAR POPUP QUANDO SELECIONAR------------------------------------------------------------------------------------------------
 function fecharPopUp() {
-    document.getElementById("flex-container").style.display = 'none';
+    document.getElementById("flex-container").style.display = "none";
 }
 
 let painelPopup = null;
@@ -306,11 +309,11 @@ function abrirPopUp(id) {
     let painel = document.getElementById(id).parentElement;
 
     // Define o input file correspondente a este painel
-    inputAtivo = painel.querySelector("#file-"+id);
+    inputAtivo = painel.querySelector("#file-" + id);
 
     // Atualiza o atributo "for" da label para apontar pro input atual
     const dropLabel = document.getElementById("upload-area");
-    dropLabel.setAttribute("for", "#file-"+id);
+    dropLabel.setAttribute("for", "#file-" + id);
 
     // Abre o pop-up
     document.getElementById("flex-container").style.display = "flex";
@@ -318,24 +321,28 @@ function abrirPopUp(id) {
 
 function adicionarInteracaoPopup(id) {
     let painel = document.getElementById(id).parentElement;
-    let fileBtn = painel.querySelector("#file-"+id); //Tem multiplos
-    let midiaArea = painel.querySelector(".midia")
+    let fileBtn = painel.querySelector("#file-" + id); //Tem multiplos
+    let midiaArea = painel.querySelector(".midia");
 
     let img = painel.querySelector(".imgMidia");
     let vid = painel.querySelector(".vidMidia");
     let srcVid = painel.querySelector("#srcVidMidia");
     let vidYoutube = painel.querySelector(".youtubeMidia");
     let url = document.getElementById("linkYoutube").src;
-    let idYoutube = painel.querySelector("#link-"+id);
+    let idYoutube = painel.querySelector("#link-" + id);
     let iFrameYoutube = painel.querySelector("#srcYoutube");
     let urlYoutubeInformado = false;
 
     fileBtn.onchange = () => midiaPreview();
 
     //Faz o popup aparecer quando clicar
-    midiaArea.onclick = ()=> {abrirPopUp(id)};
+    midiaArea.onclick = () => {
+        abrirPopUp(id);
+    };
     Array.from(midiaArea.children).forEach((child) => {
-        child.onclick = ()=> {abrirPopUp(id)};
+        child.onclick = () => {
+            abrirPopUp(id);
+        };
     });
 
     //Carrega a imagem no painel
@@ -348,11 +355,13 @@ function adicionarInteracaoPopup(id) {
             vid.style.display = "none";
             vidYoutube.style.display = "block";
             try {
-                vid.pause()
-            } catch (error) { }
-    
+                vid.pause();
+            } catch (error) {}
+
             iFrameYoutube.src =
-                "https://www.youtube.com/embed/"+idYoutube.value+"?autoplay=1";
+                "https://www.youtube.com/embed/" +
+                idYoutube.value +
+                "?autoplay=1";
         } else {
             let eVideo = fileBtn.files[0].name.endsWith(".mp4"); //É video (true) ou imagem (false)?
             if (eVideo) {
@@ -372,8 +381,8 @@ function adicionarInteracaoPopup(id) {
                 vid.style.display = "none";
                 vidYoutube.style.display = "none";
                 try {
-                    vid.pause()
-                } catch (error) { }
+                    vid.pause();
+                } catch (error) {}
 
                 document.getElementById("linkYoutube").src = "";
                 iFrameYoutube.src = "";
@@ -382,7 +391,6 @@ function adicionarInteracaoPopup(id) {
             }
         }
     }
-
 }
 let inputAtivo = null;
 
@@ -400,7 +408,9 @@ dropArea.addEventListener("click", () => {
 
 // Destaque visual
 dropArea.addEventListener("dragover", () => dropArea.classList.add("dragover"));
-dropArea.addEventListener("dragleave", () => dropArea.classList.remove("dragover"));
+dropArea.addEventListener("dragleave", () =>
+    dropArea.classList.remove("dragover")
+);
 
 // Solta arquivos na área
 dropArea.addEventListener("drop", (e) => {
@@ -424,13 +434,29 @@ dropArea.addEventListener("drop", (e) => {
     document.getElementById("flex-container").style.display = "none";
 });
 
-function enviarYoutube() {
-    let valor = document.getElementById("linkYoutube").value;
-    if (!painelPopup) return;
+// 3.3 Um link do youtube foi inserido
+document.getElementById("linkYoutube").oninput = () => {
+    const prefix = "https://www.youtube.com/watch?v=";
+    const prefix2 = "https://youtu.be/";
+    url = document.getElementById("linkYoutube").value;
 
     const inputHidden = document.getElementById("link-" + painelPopup);
-    
-    if (inputHidden) {
-        inputHidden.value = valor;
+    if (!painelPopup) return;
+
+    if (url.startsWith(prefix) && url.slice(prefix.length).length == 11) {
+        urlYoutubeInformado = true;
+        inputHidden.value = url.slice(prefix.length); 
+        sendValueLivewire(painelPopup, inputHidden.value)
+    } else if (
+        url.startsWith(prefix2) &&
+        url.slice(prefix2.length).length == 11
+    ) {
+        urlYoutubeInformado = true;
+        inputHidden.value = url.slice(prefix2.length);
+        sendValueLivewire(painelPopup, inputHidden.value)
     }
+};
+
+function sendValueLivewire(id, link) {
+    window.livewire.emit('updateLink', { id: id, link: link });
 }

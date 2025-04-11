@@ -10,6 +10,8 @@ use App\DAO\PainelDAO;
 
 class Panel extends Component
 {
+    protected $listeners = ['updateLink'];
+
     use WithFileUploads;
 
     public $painel;
@@ -42,7 +44,7 @@ class Panel extends Component
         $this->emitSelf('$refresh');
     }
 
-    public function updatedMidia()
+    public function updatedMidia($recebeuLink = null)
     {
         $painelDAO = new PainelDAO();
         $id = $this->painel->id;
@@ -56,7 +58,6 @@ class Panel extends Component
         $possuiLinkYoutube = !empty($this->link);
 
         if ($arquivoRecebido) {
-            dd("Algo errado");
             $midiaExtension = $this->midia->getClientOriginalExtension();
             $nomeTemporario = $baseFileName . '.' . $midiaExtension;
             $nomeReal = $id . '.' . $midiaExtension;
@@ -80,8 +81,7 @@ class Panel extends Component
             }else{
                 $json['midiaType'] = 'image'; // Ou detecta dinamicamente com base na extensão, se preferir
             }
-        } elseif ($possuiLinkYoutube) {
-            dd("Algo certo");
+        } elseif ($recebeuLink) {
             if (!empty($json['midiaExtension'])) {
                 @unlink($publicPath . '/' . $id . '.' . $json['midiaExtension']);
             }
@@ -91,13 +91,15 @@ class Panel extends Component
             $json['arquivoMidia'] = '';
             $json['midiaExtension'] = '';
         }
-
         $painelDAO->updateById($id, ['panel' => json_encode($json)]);
         $this->painel->panel = $json; // Atualiza o painel renderizado também
     }
 
-    public function updatedLink(){
-        updatedMidia();
+    public function updateLink($payload){
+        if ($payload['id'] != $this->painel->id) return;
+        // só roda se for o painel certo
+        $this->link = $payload['link'];
+        $this->updatedMidia(true);
     }
 
     public function render()

@@ -170,7 +170,7 @@
             <div style="clear: both;"></div>
 
             <p id="pYoutube">URL YouTube</p>
-            <input id="linkYoutube" type="text" onchange="enviarYoutube()">
+            <input id="linkYoutube" type="text">
         </div>
     </div>
 @endsection
@@ -194,20 +194,26 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".painel").forEach(panel => {
-                panel.addEventListener("dragstart", onDragStart);
-                panel.addEventListener("click", onClick);
-                adicionarInteracaoPopup(panel.querySelector('.idPainel').id);
+                let id = panel.querySelector('.idPainel').id;
+
+                atribuirListeners(panel, id);
             });
             mostrarMenu("canvas");
             
             window.livewire.on("painelCriado",(id)=>{
                 let panel = document.getElementById(id).parentElement;
 
-                panel.addEventListener("dragstart", onDragStart);
-                panel.addEventListener("click", onClick);
-                adicionarInteracaoPopup(id);
+                atribuirListeners(panel, id);
             });
         });
+
+        function atribuirListeners(panel, id) {
+            let inputLink = panel.querySelector("#file-"+id);
+
+            panel.addEventListener("dragstart", onDragStart);
+            panel.addEventListener("click", onClick);
+            adicionarInteracaoPopup(id);
+        }
 
         //---------------------------------------------------------------------------------------------------------------------
         // EDITOR DE TEXTO
