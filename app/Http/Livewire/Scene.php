@@ -6,6 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\DAO\PainelDAO;
+use App\DAO\SceneDAO;
 use App\DAO\DisciplinaDAO;
 
 class Scene extends Component
