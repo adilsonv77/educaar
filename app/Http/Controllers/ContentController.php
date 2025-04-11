@@ -1,9 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use Barryvdh\DomPDF\Facade\Pdf;
-use App\DAO\ActivityDao;
 
 use App\Models\Question;
 use App\Models\Turma;
@@ -112,10 +108,10 @@ class ContentController extends Controller
             return redirect('/');
         }
         $idprof = Auth::user()->id;
-
+  
         $anoLetivo = AnoLetivo::where('bool_atual', 1)
-            ->where("school_id", Auth::user()->school_id)
-            ->first();
+                        ->where("school_id", Auth::user()->school_id)
+                        ->first();
 
         //var_dump($anoLetivo->id);
         $titulo = 'Adicionar Conteúdo';
@@ -164,6 +160,7 @@ class ContentController extends Controller
 
             $content = Content::find($data['id']);
             $content->update($data);
+
         }
 
         return redirect('/content');
@@ -184,7 +181,7 @@ class ContentController extends Controller
         $idprof = Auth::user()->id;
         $anoLetivo = AnoLetivo::where('bool_atual', 1)
             ->where("school_id", Auth::user()->school_id)
-            ->first();
+            ->first(); 
 
         $params = [
             'titulo' => $titulo,
@@ -206,35 +203,6 @@ class ContentController extends Controller
 
         return view('pages.content.create', $params);
     }
-
-    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
-
-    public function baixarAtividadesPDF($id)
-    {
-        $profId = Auth::id(); // ID do professor logado
-
-        $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
-            ->where('bool_atual', 1)
-            ->first();
-
-        $anoletivo_id = $anoletivoAtual->id;
-
-        // Buscar conteúdos e atividades do professor no ano letivo atual
-        $conteudo = Content::findOrFail($id); // pega só o conteúdo clicado
-
-        $atividades = Activity::with('questions')
-            ->where('content_id', $id)
-            ->get();
-
-        $pdf = PDF::loadView('pages.content.toPdf', compact('conteudo', 'atividades'));
-
-        return $pdf->download("conteudo_{$conteudo->id}.pdf");
-    }
-
-
-
-    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
     /**
      * Remove the specified resource from storage.
@@ -263,6 +231,7 @@ class ContentController extends Controller
 
         if (array_key_exists($idaluno, $this->listaalunos)) {
             $aluno = $this->listaalunos[$idaluno];
+
         } else {
             $aluno = [
                 'incompleto' => 0,
@@ -288,6 +257,7 @@ class ContentController extends Controller
 
         $aluno['id'] = $idaluno;
         $this->listaalunos[$idaluno] = $aluno;
+
     }
 
     public function resultsContents(Request $request)
@@ -362,7 +332,7 @@ class ContentController extends Controller
                 ];
 
                 // Obtém as questões da atividade
-                $questions = ResultContentDAO::getQuestoesAtividade($r->activity_id);
+                $questions = ResultContentDAO::getQuestoesAtividade($r->activity_id); 
                 foreach ($questions as $question) {
                     // Conta as respostas para cada alternativa
                     $alternatives_count = [
@@ -373,7 +343,7 @@ class ContentController extends Controller
                     ];
 
                     $respostas_count = ResultContentDAO::getCountRespostas($question->id);
-
+                   
                     $correct_alternative = null;
 
                     foreach ($respostas_count as $response) {
@@ -421,9 +391,10 @@ class ContentController extends Controller
                             'D' => $question->d, // Texto da alternativa D
                         ]
                     ];
+
                 }
 
-
+                
 
                 // Zera os contadores para a próxima atividade
                 $idaluno = 0;
@@ -488,8 +459,6 @@ class ContentController extends Controller
 
 
 
-
-
     function resultsListStudents($type)
     {
 
@@ -516,5 +485,6 @@ class ContentController extends Controller
         $content = Content::find($id);
 
         return view('pages.content.listStudents', compact('results', 'content', 'type'));
+
     }
 }
