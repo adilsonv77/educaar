@@ -37,7 +37,7 @@ body {
 /* =============================
    MENU LATERAL
    ============================= */
-   .menu-opcoes {
+.menu-opcoes {
     display: none;
 }
 
@@ -91,6 +91,8 @@ input {
 .tipos {
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
 }
 
 .linhas,
@@ -140,9 +142,132 @@ input {
     gap: 2px;
 }
 
+.layout-blocos {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: space-between;
+    gap: 3px 0;
+}
+
+.layout-blocos .button_Panel {
+    width: calc((100% - 3px) / 2);
+    height: calc((100% - 6px) / 3);
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.layout-alternativas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 6px;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.botao-circular {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 70px;
+    /* pode ajustar esse valor se quiser menor */
+    max-height: 70px;
+    border: 0.5px solid #833B8D;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #833B8D;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
 /* =============================
-   CANVAS E ZOOM
+    CONEXÃO (LINHAS)
    ============================= */
+
+
+/* =============================
+    EDITOR DE TEXTO
+   ============================= */
+.trumbowyg-box,
+.trumbowyg-editor-box {
+    border-radius: 9px;
+}
+
+
+.trumbowyg-button-pane {
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    align-items: center;
+    background: none !important;
+}
+
+.trumbowyg-button-group {
+    flex-shrink: 0;
+    display: flex;
+    gap: 2px;
+}
+
+.trumbowyg-button-pane button {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+
+.trumbowyg-button-group button {
+    font-size: 12px;
+    padding: 4px 6px;
+    height: auto;
+    line-height: 1;
+}
+
+.trumbowyg-button-group button svg {
+    width: 17px;
+    height: 17px;
+}
+
+.trumbowyg-button-pane .trumbowyg-button-group {
+    align-items: center;
+}
+
+.trumbowyg-button-group button[title="Font"] {
+    color: #833B8D;
+    padding-bottom: 33px !important;
+    font-size: 12px;
+    width: 32px !important;
+}
+
+.trumbowyg-dropdown-backColor:not(.trumbowyg-dropdown--color-list),
+.trumbowyg-dropdown-foreColor:not(.trumbowyg-dropdown--color-list) {
+    left: 0px !important;
+}
+
+.trumbowyg-editor:empty:before {
+    content: attr(placeholder);
+    color: gray;
+    font-size: 12px;
+    pointer-events: none;
+    display: block;
+}
+
+.trumbowyg-button-pane button svg {
+    fill: #833B8D;
+}
+
+/* =============================
+      CANVAS E ZOOM
+      ============================= */
 .menu-zoom {
     position: fixed;
     bottom: 10px;
@@ -238,7 +363,7 @@ button {
     border: 1px solid #FFA600;
 }
 
-.idPainel{
+.idPainel {
     position: absolute;
     top: -34px;
     left: 0;
@@ -337,135 +462,42 @@ button {
 }
 
 /* =============================
-   SELETORES E DROPDOWN
+    DROPDOWN
    ============================= */
-.select {
+   .select {
+    position: relative;
     width: 100%;
-    cursor: pointer;
-    position: relative;
-    transition: 300ms;
-    color: #B8B5B5;
-    overflow: visible;
-    z-index: 1;
 }
 
-.select:hover {
-    z-index: 10;
-}
-
-.selected {
-    background-color: #FFFFFF;
-    padding: 5px;
-    margin-bottom: 3px;
-    border-radius: 4.5px;
+.select-native {
+    width: 100%;
+    height: 45px;
+    padding: 10px;
     border: 1px solid #C3C3C3;
-    position: relative;
-    z-index: 2;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.arrow {
-    position: relative;
-    right: 0px;
-    height: 10px;
-    transform: rotate(-90deg);
-    width: 25px;
-    fill: #B8B5B5;
-    z-index: 100000;
-    transition: 300ms;
+    font-size: 16px;
+    border-radius: 9px;
+    cursor: pointer;
+    background-color: white;
 }
 
 .options {
-    display: flex;
-    flex-direction: column;
-    border-radius: 4.5px;
-    padding: 5px;
-    background-color: #FFFFFF;
+    display: none;
     position: absolute;
-    top: 100%;
-    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
     width: 100%;
-    opacity: 0;
-    transition: opacity 300ms ease, transform 300ms ease;
-    transform: translateY(-10px);
-    z-index: 5;
-    border: 1px solid #C3C3C3;
-    pointer-events: none;
+    z-index: 1000;
+    border-radius: 9px;
+    overflow: hidden;
 }
 
-.select:hover>.options {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: all;
-    z-index: 10;
+.options div {
+    padding: 10px;
+    cursor: pointer;
 }
 
-.select:hover>.selected .arrow {
-    transform: rotate(0deg);
-}
-
-.option {
-    border-radius: 4.5px;
-    padding: 5px;
-    transition: 300ms;
-    background-color: #FFFFFF;
-    width: 100%;
-    font-size: 15px;
-    color: #B8B5B5;
-    align-items: center;
-}
-
-.option:hover {
+.options div:hover {
     background-color: #DFC1E4;
-}
-
-.options input[type="radio"] {
-    display: none;
-}
-
-.options label {
-    display: inline-block;
-}
-
-.options label::before {
-    content: attr(data-txt);
-}
-
-.options input[type="radio"]:checked+label {
-    display: none;
-}
-
-.options input[type="radio"]#nenhuma:checked+label {
-    display: none;
-}
-
-.select:has(.options input[type="radio"]#nenhuma:checked) .selected::before {
-    content: attr(data-default);
-}
-
-.select:has(.options input[type="radio"]#final-experiencia:checked) .selected::before {
-    content: attr(data-one);
-}
-
-/* REVER DEPOIS */
-
-.select:has(.options input[type="radio"]#proximo-painel:checked) .selected::before {
-    content: attr(data-two);
-}
-
-.select:has(.options input[type="radio"]#painel-1:checked) .selected::before {
-    content: attr(data-default);
-}
-
-.select:has(.options input[type="radio"]#painel-2:checked) .selected::before {
-    content: attr(data-one);
-}
-
-.select:has(.options input[type="radio"]#painel-3:checked) .selected::before {
-    content: attr(data-two);
 }
 
 /* =============================

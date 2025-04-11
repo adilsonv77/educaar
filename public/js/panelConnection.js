@@ -67,9 +67,7 @@ class Painel {
 }
 //----FUNÇÃO DE MOSTRAR MENUS------------------------------------------------------------------------------------------------
 function mostrarMenu(tipo) {
-    document
-        .querySelectorAll(".menu-opcoes")
-        .forEach((menu) => menu.classList.remove("ativo"));
+    document.querySelectorAll(".menu-opcoes").forEach(menu => menu.classList.remove("ativo"));
 
     let menu = document.querySelector(`.${tipo}-opcoes`);
     if (menu) {
@@ -157,33 +155,33 @@ function alterarFormatoBotoes(formato) {
     console.log("Área de botões encontrada:", areaBotoes);
 
     if (!areaBotoes) {
-        console.warn(
-            "O painel carregado do banco pode ter uma estrutura diferente. Verifique o HTML."
-        );
+        console.warn("O painel carregado do banco pode ter uma estrutura diferente. Verifique o HTML.");
         return;
     }
 
     const layouts = {
         linhas: `
-            <div class="button_Panel"><div class="circulo"></div> Botão 1</div>
-            <div class="button_Panel"><div class="circulo"></div> Botão 2</div>
-            <div class="button_Panel"><div class="circulo"></div> Botão 3</div>
+            <div class="button_Panel" data-botao="1"><div class="circulo"></div> Botão 1</div>
+            <div class="button_Panel" data-botao="2"><div class="circulo"></div> Botão 2</div>
+            <div class="button_Panel" data-botao="3"><div class="circulo"></div> Botão 3</div>
         `,
         blocos: `
-            <div class="grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; font-size: 12px;">
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 1</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 2</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 3</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 4</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 5</div>
-                <div class="button_Panel" style="width: 80px; height: 28px;">Botão 6</div>
-            </div>
+        <div class="layout-blocos">
+            <div class="button_Panel" data-botao="1">Botão 1</div>
+            <div class="button_Panel" data-botao="2">Botão 2</div>
+            <div class="button_Panel" data-botao="3">Botão 3</div>
+            <div class="button_Panel" data-botao="4">Botão 4</div>
+            <div class="button_Panel" data-botao="5">Botão 5</div>
+            <div class="button_Panel" data-botao="6">Botão 6</div>
+        </div>
         `,
         alternativas: `
-            <div class="alternativas">
-                <div class="button_Panel"><div class="circulo"></div> Opção A</div>
-                <div class="button_Panel"><div class="circulo"></div> Opção B</div>
-            </div>
+        <div class="layout-alternativas">
+            <div class="botao-circular" data-botao="1">A</div>
+            <div class="botao-circular" data-botao="2">B</div>
+            <div class="botao-circular" data-botao="3">C</div>
+            <div class="botao-circular" data-botao="4">D</div>
+        </div>
         `,
     };
 
@@ -192,13 +190,15 @@ function alterarFormatoBotoes(formato) {
         areaBotoes.innerHTML = layouts[formato];
         let botoes = areaBotoes.querySelectorAll(".button_Panel");
         botoes.forEach((botao) => {
-            botao.style.width = "80px";
-            botao.style.height = "28px";
+            botao.style.width = "calc((100% - 3px) / 2)";
+            botao.style.height = "calc((100% - 6px) / 3)";
             botao.querySelector(".circulo").style.display = "none"; // Remove o círculo
         });
     } else {
         areaBotoes.innerHTML = layouts[formato];
     }
+
+    botoes[0].setAttribute("data-botao", "1"); // Exemplo
     // areaBotoes.innerHTML = layouts[formato];
 }
 
@@ -459,4 +459,75 @@ document.getElementById("linkYoutube").oninput = () => {
 
 function sendValueLivewire(id, link) {
     window.livewire.emit('updateLink', { id: id, link: link });
+}
+
+//----DESENHAR CONEXÃO (LINHA)-testes manual---------------------------------------------------------------------------
+const todasAsLinhas = [];
+function conectarBotoes(idPainelOrigem, numBotao, idPainelDestino) {
+    const origem = document.querySelector(`[data-id="${idPainelOrigem}"]`);
+    const destino = document.querySelector(`[data-id="${idPainelDestino}"]`);
+
+    if (!origem || !destino) {
+        console.warn("Origem ou destino não encontrados.");
+        return;
+    }
+
+    const botao = origem.querySelector(`.button_Panel[data-botao="${numBotao}"]`);
+
+    if (!botao) {
+        console.warn("Botão de origem não encontrado.");
+        return;
+    }
+
+    const linha = new LeaderLine(
+        botao,
+        destino,
+        {
+            color: "#00bfff",
+            size: 4,
+            path: "fluid",
+            startPlug: "disc",
+            endPlug: "arrow3"
+        }
+    );
+
+    todasAsLinhas.push(linha);
+
+    return linha;
+}
+
+let line;
+
+function conectarPainel() {
+    const start = document.querySelector('[data-id="5"] .button_Panel[data-botao="1"]');
+    const end = document.querySelector('[data-id="17"]');
+
+    if (start && end) {
+        line = new LeaderLine(start, end);
+    }
+}
+
+function ativarDrag(painel) {
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    painel.addEventListener('mousedown', function (e) {
+        isDragging = true;
+        offsetX = e.clientX - painel.offsetLeft;
+        offsetY = e.clientY - painel.offsetTop;
+        painel.style.position = 'absolute';
+    });
+
+    document.addEventListener('mousemove', function (e) {
+        if (isDragging) {
+            painel.style.left = (e.clientX - offsetX) + 'px';
+            painel.style.top = (e.clientY - offsetY) + 'px';
+
+            todasAsLinhas.forEach(linha => linha.position());
+        }
+    });
+
+    document.addEventListener('mouseup', function () {
+        isDragging = false;
+    });
 }

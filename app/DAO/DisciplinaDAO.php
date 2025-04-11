@@ -20,4 +20,21 @@ class DisciplinaDAO
         return $sql;
 
     }
+
+    public function getDisciplinasDoProfessor($professorId)
+    {
+        return DB::table('turmas_disciplinas')
+            ->join('disciplinas', 'turmas_disciplinas.disciplina_id', '=', 'disciplinas.id')
+            ->where('turmas_disciplinas.professor_id', $professorId)
+            ->select('disciplinas.id', 'disciplinas.name')
+            ->distinct()
+            ->get();
+    }
+
+    public function updateDisciplinaScene($sceneId, $disciplinaId)
+    {
+        return DB::table('scenes')
+            ->where('id', $sceneId)
+            ->update(['disciplina_id' => $disciplinaId]);
+    }
 }
