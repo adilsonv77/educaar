@@ -37,7 +37,7 @@
                     <div id="trumbowyg-editor" placeholder="Insira seu texto aqui"></div>
                     <input type="hidden" id="editorInput" name="editorContent">
                 </div>
-
+                
                 <!-- BOTÕES DE SALVAR/EXCLUIR -->
                 <!-- <div class="buttons mb-6">
                     <button>Editar Mídia</button>
@@ -60,52 +60,29 @@
                     <h3 class="mb-2">TEXTO DO BOTÃO</h3>
                     <input class="" type="text" />
                 </div>
-
+                
                 <!-- TRANSIÇÕES -->
                 <div class="mb-6">
                     <h3 class="mb-2">TRANSIÇÕES</h3>
-                    <div class="select select-transicoes">
-                        <div class="selected" data-default="Nenhuma" data-one="Final da experiência" data-two="Próximo painel">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="arrow">
-                                <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path>
-                            </svg>
-                        </div>
-                        <div class="options">
-                            <div>
-                                <input id="nenhuma" name="option-transicoes" type="radio" checked />
-                                <label class="option" for="nenhuma" data-txt="Nenhuma"></label>
-                            </div>
-                            <div>
-                                <input id="final-experiencia" name="option-transicoes" type="radio" />
-                                <label class="option" for="final-experiencia" data-txt="Final da experiência"></label>
-                            </div>
-                            <div>
-                                <input id="proximo-painel" name="option-transicoes" type="radio" />
-                                <label class="option" for="proximo-painel" data-txt="Próximo painel"></label>
-                            </div>
-                        </div>
+                        <select class="select-native">
+                            <option disabled selected>Nenhuma</option>
+                            <option>Próximo Painél</option>
+                            <option>Final da Experiência</option>
+                        </select>
                     </div>
                 </div>
-
                 <!-- SELECIONAR O PAINEL -->
                 <div class="mb-6">
                     <h3 class="mb-2 singleTap">
                         SELECIONAR PAINEL
                         <img src="{{ asset('images/singletap.svg') }}" alt="Ícone">
                     </h3>
-                    <div class="select" data-default="Selecione um painel">
-                        <div class="selected">
-                            <span class="arrow">▶</span>
-                        </div>
+                    <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)" class="select-native">
+                        <option disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
-                            <div>
-                                <input id="painel-{{ $painel->id }}" name="option-painel" type="radio" value="{{ $painel->id }}"/>
-                                <label class="option" for="painel-{{ $painel->id }}" data-txt="Painel {{ $painel->id }}">
-                                    Painel {{ $painel->id }}
-                                </label>
-                            </div>
+                            <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
                         @endforeach
-                    </div>
+                    </select>
                 </div>
             </div>
 
@@ -130,7 +107,7 @@
                         @endforeach
                     </select>
                 </div>
-                
+
                 <!-- SELECIONAR DISCIPLINA -->
                 <div class="mb-6">
                     <h3 class="mb-2">SELECIONAR DISCIPLINA DA CENA</h3>

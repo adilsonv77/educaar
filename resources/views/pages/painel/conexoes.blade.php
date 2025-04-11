@@ -85,7 +85,7 @@
         //----GERAR CONEXÃO---------------------------------------------------------------------
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll('.painel').forEach(painel => {
-                //ativarDrag(painel);
+                ativarDrag(painel);
             });
 
             // manualmente por enquanto
