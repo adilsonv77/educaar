@@ -147,7 +147,7 @@ class ActivityController extends Controller
             $data['glb'] = '';
             $usarPainel = true;
         } else {
-            $data['painel_inicial_id'] = null;
+            $data['scene_id'] = null;
         }
 
         $validator = Validator::make($request->all(), [
@@ -244,7 +244,7 @@ class ActivityController extends Controller
                 rename($public_path . '/' . $zipdir, $public_path . '/' . $activity->id);
             } else {
                 //Se não for para usar um glb, e usar um painel
-                $data['painel_inicial_id'] = $idPainel;
+                $data['scene_id'] = $idPainel;
             }
             $activity->update($data);
         } else if (!$usarPainel) {
@@ -267,7 +267,7 @@ class ActivityController extends Controller
         } else {
             //Edita
             $activity = Activity::find($data['id']);
-            $data['painel_inicial_id'] = $idPainel;
+            $data['scene_id'] = $idPainel;
 
             //Deleta o arquivo GLB
             if(!empty($activity->glb)){
@@ -339,8 +339,8 @@ class ActivityController extends Controller
             )
             ->get();
 
-        if (empty($activity->painel_inicial_id))
-            $activity->painel_inicial_id = "modelo3D";
+        if (empty($activity->scene_id))
+            $activity->scene_id = "modelo3D";
 
         $params = [
             'titulo' => $titulo,
@@ -349,7 +349,7 @@ class ActivityController extends Controller
             'name' => $activity->name,
             'contents' => $contents,
             'content' => $activity->content_id,
-            'painel_inicial_id' => $activity->painel_inicial_id
+            'scene_id' => $activity->scene_id
         ];
 
         return view('pages.activity.register', $params);

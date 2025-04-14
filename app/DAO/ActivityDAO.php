@@ -11,7 +11,7 @@ class ActivityDAO
 {
 
     public static function buscarPorPainel($id){
-        return Activity::where('painel_inicial_id',$id);
+        return Activity::where('scene_id',$id);
     }
 
     public static function buscarActivitiesDoProf($profid, $anoletivoid)

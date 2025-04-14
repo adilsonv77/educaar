@@ -60,7 +60,7 @@
             var alt = document.getElementById("alterar3D");
             var alt2 = document.getElementById("alterarPainel")
             let cenaSelecionada = document.getElementById("selectSceneType").value;
-            let cenaAtual = document.getElementById("painel_inicial_id").value;
+            let cenaAtual = document.getElementById("scene_id").value;
             //Cena atualmente seleciona = "", significa que é o cadastro, e não há cena atual.
             if(cenaAtual != "" && cenaAtual != "modelo3D")
                 cenaAtual= "Painel";
@@ -126,7 +126,7 @@
                 @csrf
                     <input name="id" type="hidden" value="{{$id}}"/>
                     <input name="acao" type="hidden" value="{{$acao}}"/>
-                    <input name="painel_inicial_id" type="hidden" value="{{ $painel_inicial_id ?? ''}}" id="painel_inicial_id"/>
+                    <input name="scene_id" type="hidden" value="{{ $scene_id ?? ''}}" id="scene_id"/>
 
                 <div class="form-group">
                     <label for="">Nome da Atividade*</label>
@@ -158,18 +158,18 @@
                 </div>
         -->
                 <div class="form-group" id="3DmodelOption">
-                        @if ($acao == 'edit' && $painel_inicial_id == 'modelo3D') 
+                        @if ($acao == 'edit' && $scene_id == 'modelo3D') 
                             <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
                         
                         <label for="alterar3D">Modelo 3D (GLB ou GLTF->ZIP)*</label>
                         <span class="alert-danger">Tamanho máximo: 40MB</span>
                         <input type="file" style="border:none" class="form-control" name="glb"
-                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit' && $painel_inicial_id == "modelo3D") disabled @elseif($acao == 'edit') required @endif/>
+                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit' && $scene_id == "modelo3D") disabled @elseif($acao == 'edit') required @endif/>
                 </div>
 
                 <div class="form-group" id="panelOption" style="display: none">
-                        @if ($acao == 'edit' && $painel_inicial_id != 'modelo3D') 
+                        @if ($acao == 'edit' && $scene_id != 'modelo3D') 
                             <input type="checkbox" id="alterarPainel" name="alterarPainel" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
                         
@@ -186,7 +186,7 @@
                             id="marcador" accept=".png, .jpeg, .jpg"  @if($acao === 'edit') disabled @endif/>
                 </div>
 
-                <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$painel_inicial_id}}" @endif>
+                <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$scene_id}}" @endif>
 
 
                 <div class="form-group mt-4" onsubmit="desativarBotao(this)">

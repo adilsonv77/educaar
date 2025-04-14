@@ -68,6 +68,7 @@
                                 @endif
                                 @if (session('type') !== 'developer')
                                     <th>Selecionar Devs</th>
+                                    <th>PDF</th>
                                     <th>Editar</th>
                                     <th>Excluir</th>
                                 @endif
@@ -122,6 +123,18 @@
                                                 </button>
                                             </form>
                                         </td>
+
+                                        <td>
+                                        <form action="{{ route('content.atividades.pdf', ['id' => $item->id]) }}">
+                                                @csrf
+                                                <input type="hidden" name="content" value="{{ $item->id }}">
+                                                <button type="submit" class="btn btn-warning" title="Minheeuuu">
+                                                    <i class="bi bi-person-fill-gear h2" style = "color : #ffffff;"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+
+                                        
                                         <td>
                                             <!-- Editar -->
                                             <form action="{{ route('content.edit', $item->id) }}">
