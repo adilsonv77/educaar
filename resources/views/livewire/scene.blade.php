@@ -33,8 +33,10 @@
                     </div>
                 </div>
                 <!-- BLOCO DE TEXTO -->
-                <div id="blocoTxt">
-                    <div id="trumbowyg-demo" placeholder="Insira seu texto aqui"></div>
+                <div id="blocoTxt" class="mb-6">
+                    <h3>BLOCO DE TEXTO</h3>
+                    <div id="trumbowyg-editor" placeholder="Insira seu texto aqui"></div>
+                    <input type="hidden" id="editorInput" name="editorContent">
                 </div>
                 <!-- BOTÕES DE SALVAR/EXCLUIR -->
                 <div class="buttons">
@@ -68,29 +70,11 @@
                 <!-- TRANSIÇÕES -->
                 <div class="mb-6">
                     <h3 class="mb-2">TRANSIÇÕES</h3>
-                    <div class="select select-transicoes">
-                        <div class="selected" data-default="Nenhuma" data-one="Final da experiência" data-two="Próximo painel">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="arrow">
-                                <path
-                                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
-                                </path>
-                            </svg>
-                        </div>
-                        <div class="options">
-                            <div>
-                                <input id="nenhuma" name="option-transicoes" type="radio" checked />
-                                <label class="option" for="nenhuma" data-txt="Nenhuma"></label>
-                            </div>
-                            <div>
-                                <input id="final-experiencia" name="option-transicoes" type="radio" />
-                                <label class="option" for="final-experiencia" data-txt="Final da experiência"></label>
-                            </div>
-                            <div>
-                                <input id="proximo-painel" name="option-transicoes" type="radio" />
-                                <label class="option" for="proximo-painel" data-txt="Próximo painel"></label>
-                            </div>
-                        </div>
-                    </div>
+                    <select class="select-native">
+                        <option disabled selected>Nenhuma</option>
+                        <option>Próximo Painél</option>
+                        <option>Final da Experiência</option>
+                    </select>
                 </div>
                 <!-- SELECIONAR O PAINEL -->
                 <div class="mb-6">
@@ -98,30 +82,13 @@
                         SELECIONAR PAINEL
                         <img src="{{ asset('images/singletap.svg') }}" alt="Ícone">
                     </h3>
-                    <div class="select select-painel">
-                        <div class="selected" data-default="Painel (nº ID)" data-one="Painel 1" data-two="Painel 2"
-                            data-three="Painel 3">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="arrow">
-                                <path
-                                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
-                                </path>
-                            </svg>
-                        </div>
-                        <div class="options">
-                            <div>
-                                <input id="painel-1" name="option-painel" type="radio" checked />
-                                <label class="option" for="painel-1" data-txt="Painel 1"></label>
-                            </div>
-                            <div>
-                                <input id="painel-2" name="option-painel" type="radio" />
-                                <label class="option" for="painel-2" data-txt="Painel 2"></label>
-                            </div>
-                            <div>
-                                <input id="painel-3" name="option-painel" type="radio" />
-                                <label class="option" for="painel-3" data-txt="Painel 3"></label>
-                            </div>
-                        </div>
-                    </div>
+                    <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)"
+                        class="select-native">
+                        <option disabled selected>Selecione um painel</option>
+                        @foreach ($paineisRenderizados as $painel)
+                            <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
@@ -129,10 +96,9 @@
             <div class="menu-opcoes canvas-opcoes">
                 <!-- NOME DA CENA -->
                 <div class="mb-6">
-                    <h3 class="mb-2">
-                        NOME DA CENA
-                    </h3>
-                    <input class="" type="text" />
+                    <h3 class="mb-2">NOME DA CENA</h3>
+                    <input type="text" wire:model.lazy="nameScene" class="form-input"
+                        placeholder="Insira o nome da cena" />
                 </div>
                 <!-- SELECIONAR O PAINEL INICIAL-->
                 <div class="mb-6">
@@ -140,60 +106,29 @@
                         SELECIONAR PAINEL INICIAL
                         <img src="{{ asset('images/singletap.svg') }}" alt="Ícone">
                     </h3>
-                    <div class="select select-painel">
-                        <div class="selected" data-default="Painel (nº ID)" data-one="Painel 1" data-two="Painel 2"
-                            data-three="Painel 3">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="arrow">
-                                <path
-                                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
-                                </path>
-                            </svg>
-                        </div>
-                        <div class="options">
-                            <div>
-                                <input id="painel-1" name="option-painel" type="radio" checked />
-                                <label class="option" for="painel-1" data-txt="Painel 1"></label>
-                            </div>
-                            <div>
-                                <input id="painel-2" name="option-painel" type="radio" />
-                                <label class="option" for="painel-2" data-txt="Painel 2"></label>
-                            </div>
-                            <div>
-                                <input id="painel-3" name="option-painel" type="radio" />
-                                <label class="option" for="painel-3" data-txt="Painel 3"></label>
-                            </div>
-                        </div>
-                    </div>
+                    <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)"
+                        class="select-native">
+                        <option disabled selected>Selecione um painel</option>
+                        @foreach ($paineisRenderizados as $painel)
+                            <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <!-- SELECIONAR DISCIPLINA -->
                 <div class="mb-6">
-                    <h3 class="mb-2 singleTap">
-                        SELECIONAR DISCIPLINA CORRESPONDENTE
-                        <img src="{{ asset('images/singletap.svg') }}" alt="Ícone">
+                    <h3 class="mb-2">
+                        SELECIONAR DISCIPLINA DA CENA
                     </h3>
-                    <div class="select select-painel">
-                        <div class="selected" data-default="Painel (nº ID)" data-one="Painel 1" data-two="Painel 2"
-                            data-three="Painel 3">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="arrow">
-                                <path
-                                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
-                                </path>
-                            </svg>
-                        </div>
-                        <div class="options">
-                            <div>
-                                <input id="painel-1" name="option-painel" type="radio" checked />
-                                <label class="option" for="painel-1" data-txt="Disciplina 1"></label>
-                            </div>
-                            <div>
-                                <input id="painel-2" name="option-painel" type="radio" />
-                                <label class="option" for="painel-2" data-txt="Disciplina 2"></label>
-                            </div>
-                            <div>
-                                <input id="painel-3" name="option-painel" type="radio" />
-                                <label class="option" for="painel-3" data-txt="Disciplina 3"></label>
-                            </div>
-                        </div>
+                    <div class="select" data-default="Selecione uma disciplina">
+                        <select wire:model="disciplinaSelecionada" wire:change="updateDisciplinaScene"
+                            name="disciplina_id" class="select-native">
+                            <option disabled selected>Selecione uma disciplina</option>
+                            @foreach($disciplinas as $disciplina)
+                                <option value="{{ is_object($disciplina) ? $disciplina->id : $disciplina['id'] }}">
+                                    {{ is_object($disciplina) ? $disciplina->name : $disciplina['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -209,7 +144,7 @@
             </div>
             <div id="canvas" class="canvas">
                 @foreach ($paineisRenderizados as $painel)
-                    @livewire('panel', ['painel' => $painel], key($painel->id))    
+                    @livewire('panel', ['painel' => $painel], key($painel->id))
                 @endforeach
                 @livewireScripts
                 <img src="{{ asset('images/inicioConexoes.svg') }}" alt="">

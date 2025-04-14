@@ -3,6 +3,7 @@ let scale = 0.7;
 let alternativeScale = 3;
 const canvas = document.getElementById("canvas");
 
+
 document.getElementById("zoom-in").addEventListener("click", () => {
     scale += 0.1; // Aumenta o zoom
     alternativeScale += 1;
@@ -95,6 +96,14 @@ function selecionarPainel(painel, e) {
 }
 
 document.addEventListener("click", (e) => {
+    // Se o clique for dentro do menu ou em um elemento interativo, não faz nada
+    if (
+        e.target.closest(".menu-opcoes") ||
+        ["SELECT", "OPTION", "INPUT", "LABEL", "BUTTON", "TEXTAREA"].includes(e.target.tagName)
+    ) {
+        return;
+    }
+
     if (e.target.classList.contains("button_Panel")) {
         e.stopPropagation();
         selecionarBotao(e.target);
@@ -356,7 +365,7 @@ function adicionarInteracaoPopup(id) {
             vidYoutube.style.display = "block";
             try {
                 vid.pause();
-            } catch (error) {}
+            } catch (error) { }
 
             iFrameYoutube.src =
                 "https://www.youtube.com/embed/" +
@@ -382,7 +391,7 @@ function adicionarInteracaoPopup(id) {
                 vidYoutube.style.display = "none";
                 try {
                     vid.pause();
-                } catch (error) {}
+                } catch (error) { }
 
                 document.getElementById("linkYoutube").src = "";
                 iFrameYoutube.src = "";
@@ -445,7 +454,7 @@ document.getElementById("linkYoutube").oninput = () => {
 
     if (url.startsWith(prefix) && url.slice(prefix.length).length == 11) {
         urlYoutubeInformado = true;
-        inputHidden.value = url.slice(prefix.length); 
+        inputHidden.value = url.slice(prefix.length);
         sendValueLivewire(painelPopup, inputHidden.value)
     } else if (
         url.startsWith(prefix2) &&
