@@ -13,6 +13,12 @@
     <!-- EDITOR DE TEXTO -->
     <link rel="stylesheet" href="{{ asset('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css?v=' . filemtime(public_path('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css'))) }}">
     <link rel="stylesheet" href="{{ asset('editor/dist/ui/trumbowyg.min.css?v=' . filemtime(public_path('editor/dist/ui/trumbowyg.min.css'))) }}">
+    <style>
+        .content-body{
+            padding-top: 0rem !important; 
+            margin-top: 7.5rem !important;
+        }    
+    </style>    
 @endsection
 
 @section('bodyAccess')
@@ -126,7 +132,8 @@
                 } else {
                     console.log("Botão ainda não está disponível.");
                 }
-            }, 300); // Dá tempo pro Trumbowyg renderizar
+            }, 300); // Dá tempo pro Trumbowyg renderizar           
         });
+        //---------------------------------------------------------------------------------------------------------------------
     </script>
 @endsection

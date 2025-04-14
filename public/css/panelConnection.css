@@ -332,8 +332,8 @@ button {
    MINI PAINEIS
    ============================= */
 .painel {
-    top: 40000px;
-    left: 40000px;
+    top: calc(40000px - (462px)/2);
+    left: calc(40000px - (291px)/2);
     padding: 20px;
     width: 291px;
     /* 194 * 1.5 */
