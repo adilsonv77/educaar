@@ -82,7 +82,6 @@ class SceneController extends Controller
 
     public function destroy($id)
     {
-        dd("Há fazer");
         return redirect()->route('paineis.index');
     }
 }

@@ -403,6 +403,15 @@ function adicionarInteracaoPopup(id) {
 }
 let inputAtivo = null;
 
+let editarMidiaBtn = document.getElementById("editarMidia")
+editarMidiaBtn.onclick = ()=>abrirPopUp(painelSelecionado.querySelector(".idPainel").id)
+
+let excluirPainelBtn = document.getElementById("excluirPainel")
+excluirPainelBtn.onclick = ()=>{
+    $id = painelSelecionado.querySelector(".idPainel").id;
+    window.livewire.emit('deletePainel', $id);
+}
+
 const dropArea = document.getElementById("upload-area");
 
 // Clique para abrir o seletor de arquivos

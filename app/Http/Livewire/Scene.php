@@ -11,6 +11,8 @@ use App\DAO\SceneDAO;
 
 class Scene extends Component
 {
+    protected $listeners = ['deletePainel','dd'];
+
     public $paineisRenderizados = [];
     public $scene_id;
     public $disciplinas;
@@ -56,6 +58,23 @@ class Scene extends Component
         $this->emit("painelCriado",$novo->id);
     }
 
+    public function deletePainel($id)
+    {
+        $id = (int) $id;
+        $painelDAO = new PainelDAO();
+
+        // Filtra usando Collection
+        $this->paineisRenderizados = $this->paineisRenderizados->reject(function ($painel) use ($id) {
+            return $painel->id == $id;
+        })->values(); // Reindexa os itens da Collection
+
+        // Remove do banco
+        $painelDAO->deleteById($id);
+
+        // (Opcional) Emitir um evento se quiser avisar algo pro front
+        $this->emit('painelDeletado', $id);
+    }
+
     public function updateDisciplinaScene()
     {
         $disciplinaDAO = new DisciplinaDAO();
@@ -72,6 +91,14 @@ class Scene extends Component
     {
         $sceneDAO = new SceneDAO();
         $sceneDAO->updateById($this->scene_id, ['name' => $this->nameScene]);
+    }
+
+    //Fazer dd por JS para testes
+    //window.livewire.emit("dd","variavel");
+    public function dd($var)
+    {
+        dd($this->paineisRenderizados);
+        dd($var);
     }
 
 }

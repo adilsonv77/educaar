@@ -40,10 +40,10 @@
                 </div>
                 <!-- BOTÕES DE SALVAR/EXCLUIR -->
                 <div class="buttons">
-                    <button>
+                    <button id="editarMidia">
                         Editar Mídia
                     </button>
-                    <button>
+                    <button id="excluirPainel">
                         Excluir
                     </button>
                 </div>

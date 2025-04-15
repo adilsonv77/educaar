@@ -78,13 +78,12 @@
 
             window.livewire.on("painelCriado", (id) => {
                 let panel = document.getElementById(id).parentElement;
-
                 atribuirListeners(panel, id);
             });
         });
 
         function atribuirListeners(panel, id) {
-            let inputLink = panel.querySelector("#file-" + id);
+            let inputLink = panel.querySelector("#file-"+id);
 
             panel.addEventListener("dragstart", onDragStart);
             panel.addEventListener("click", onClick);
