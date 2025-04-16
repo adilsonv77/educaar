@@ -35,7 +35,9 @@
                 <!-- BLOCO DE TEXTO -->
                 <div id="blocoTxt" class="mb-6">
                     <h3>BLOCO DE TEXTO</h3>
-                    <div id="trumbowyg-editor" placeholder="Insira seu texto aqui"></div>
+                    <div wire:ignore>
+                        <div id="trumbowyg-editor" placeholder="Insira seu texto aqui"></div>
+                    </div>
                     <input type="hidden" id="editorInput" name="editorContent">
                 </div>
                 <!-- BOTÕES DE SALVAR/EXCLUIR -->
@@ -80,7 +82,8 @@
                 <div class="mb-6">
                     <h3 class="mb-2 singleTap">
                         SELECIONAR PAINEL
-                        <img src="{{ asset('images/singletap.svg') }}" alt="Ícone">
+                        <img class="tapSelect" src="{{ asset('images/singletap.svg') }}" alt="Ícone"
+                            style="cursor: pointer;">
                     </h3>
                     <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)"
                         class="select-native">
@@ -104,7 +107,8 @@
                 <div class="mb-6">
                     <h3 class="mb-2 singleTap">
                         SELECIONAR PAINEL INICIAL
-                        <img src="{{ asset('images/singletap.svg') }}" alt="Ícone">
+                        <img class="tapSelect" src="{{ asset('images/singletap.svg') }}" alt="Ícone"
+                            style="cursor: pointer;">
                     </h3>
                     <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)"
                         class="select-native">

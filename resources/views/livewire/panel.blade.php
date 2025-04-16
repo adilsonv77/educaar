@@ -6,7 +6,7 @@
 
     <p class="idPainel" id="{{ $panelData["id"] }}">Painel ({{ $panelData["id"] }})</p>    
 
-    <div class="txtPainel">{{$texto}}</div>
+    <div class="txtPainel">{!! $texto !!}</div>
 
     <input type="hidden" class="inputTxtPainel" name="txt" 
         wire:model.lazy="texto">

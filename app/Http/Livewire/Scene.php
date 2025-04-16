@@ -11,7 +11,7 @@ use App\DAO\SceneDAO;
 
 class Scene extends Component
 {
-    protected $listeners = ['deletePainel','dd'];
+    protected $listeners = ['deletePainel','dd', 'updateStartPanel'];
 
     public $paineisRenderizados = [];
     public $scene_id;
@@ -19,6 +19,8 @@ class Scene extends Component
     public $disciplinaSelecionada;
     public $startPainelId;
     public $nameScene;
+    public $isSelectingInitialPanel = false;
+
 
     public function mount($paineis, $scene_id)
     {
@@ -83,8 +85,12 @@ class Scene extends Component
 
     public function updateStartPanel($painelId)
     {
+        $this->startPainelId = $painelId;
+
         $sceneDAO = new SceneDAO();
         $sceneDAO->updateById($this->scene_id, ['start_panel_id' => $painelId]);
+
+        $this->emit('startPanelUpdated', $painelId);
     }
 
     public function updatedNameScene()

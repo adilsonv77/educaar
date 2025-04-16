@@ -76,6 +76,7 @@ function mostrarMenu(tipo) {
     }
 }
 //----FUNÇÃO DE SELECIONAR PAINEL, BOTÃO E CANVAS----------------------------------------------------------------------------
+
 function selecionarPainel(painel, e) {
     isDraggingPanel = true;
     if (e.target.closest(".button_Panel")) return;
@@ -152,6 +153,47 @@ function selecionarCanvas() {
     mostrarMenu("canvas"); // Atualiza o menu
     isDraggingPanel = false;
 }
+
+//----SELECIONAR PELA IMAGEM----------------------------------------------------------------------------
+
+let modoSelecionarPainelInicial = false;
+
+document.querySelectorAll('.tapSelect').forEach(btn => {
+    btn.addEventListener('click', function () {
+        modoSelecionarPainelInicial = !modoSelecionarPainelInicial;
+
+        if (modoSelecionarPainelInicial) {
+            console.log("Modo de seleção de painel inicial ativado. Clique em um painel.");
+        } else {
+            console.log("Modo de seleção de painel inicial desativado.");
+        }
+    });
+});
+
+// Interceptar clique em painel só se o modo estiver ativo
+document.addEventListener("click", function (e) {
+    if (!modoSelecionarPainelInicial) return;
+
+    const painel = e.target.closest('.painel');
+    if (!painel) return;
+
+    e.stopPropagation();
+
+    const idPainel = painel.querySelector('.idPainel')?.id;
+    if (!idPainel) {
+        console.warn("Painel clicado não tem ID válido.");
+        return;
+    }
+
+    console.log("Painel selecionado como inicial:", idPainel);
+
+    // Envia pro Livewire
+    window.livewire.emit('updateStartPanel', idPainel);
+
+    // Sai do modo de seleção
+    modoSelecionarPainelInicial = false;
+    document.querySelectorAll('.tapSelect').forEach(btn => btn.classList.remove('selected'));
+});
 
 //----FORMATO DOS BOTÕES----------------------------------------------------------------------------
 function alterarFormatoBotoes(formato) {
@@ -404,10 +446,10 @@ function adicionarInteracaoPopup(id) {
 let inputAtivo = null;
 
 let editarMidiaBtn = document.getElementById("editarMidia")
-editarMidiaBtn.onclick = ()=>abrirPopUp(painelSelecionado.querySelector(".idPainel").id)
+editarMidiaBtn.onclick = () => abrirPopUp(painelSelecionado.querySelector(".idPainel").id)
 
 let excluirPainelBtn = document.getElementById("excluirPainel")
-excluirPainelBtn.onclick = ()=>{
+excluirPainelBtn.onclick = () => {
     $id = painelSelecionado.querySelector(".idPainel").id;
     window.livewire.emit('deletePainel', $id);
 }
@@ -547,5 +589,33 @@ function ativarDrag(painel) {
 
     document.addEventListener('mouseup', function () {
         isDragging = false;
+    });
+}
+
+//CARREGAR O TEXTO DO EDITOR--------------------------------------------------------------
+
+document.addEventListener('livewire:load', function () {
+    inicializarTrumbowygs();
+});
+
+window.livewire.hook('message.processed', (message, component) => {
+    inicializarTrumbowygs();
+});
+
+function inicializarTrumbowygs() {
+    document.querySelectorAll('.editor-trumbowyg').forEach((editor) => {
+        if (!editor.classList.contains('trumbowyg-initialized')) {
+            $(editor).trumbowyg();
+
+            // Marca como inicializado pra não reinicializar
+            editor.classList.add('trumbowyg-initialized');
+
+            const painelId = editor.id.replace('editor-', '');
+
+            $(editor).on('tbwchange', function () {
+                const html = $(editor).trumbowyg('html');
+                window.livewire.emit('updateTextoFromEditor', painelId, html);
+            });
+        }
     });
 }

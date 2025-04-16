@@ -13,20 +13,22 @@
 
     <!-- EDITOR DE TEXTO -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css?v=' . filemtime(public_path('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css'))) }}">
-    <link rel="stylesheet" href="{{ asset('editor/dist/ui/trumbowyg.min.css?v=' . filemtime(public_path('editor/dist/ui/trumbowyg.min.css'))) }}">
+    <link rel="stylesheet"
+        href="{{ asset('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css?v=' . filemtime(public_path('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css'))) }}">
+    <link rel="stylesheet"
+        href="{{ asset('editor/dist/ui/trumbowyg.min.css?v=' . filemtime(public_path('editor/dist/ui/trumbowyg.min.css'))) }}">
     <style>
-        .content-body{
-            padding-top: 0rem !important; 
+        .content-body {
+            padding-top: 0rem !important;
             margin-top: 7.5rem !important;
-        }    
-    </style>    
+        }
+    </style>
 @endsection
 
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
     <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-            de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+                                                        de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -59,6 +61,12 @@
     <script src="{{ asset('editor/dist/plugins/colors/trumbowyg.colors.min.js') }}"></script>
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
     <script>
+        $(document).ready(function () {
+            $('.tapSelect').click(function () {
+                $(this).toggleClass('selected');
+            });
+        });
+
         //----PANEL LOADING---------------------------------------------------------------------
         function onDragStart(e) {
             arrastar(e, new Painel(e.currentTarget));
@@ -74,16 +82,19 @@
 
                 atribuirListeners(panel, id);
             });
-            mostrarMenu("canvas");
 
             window.livewire.on("painelCriado", (id) => {
                 let panel = document.getElementById(id).parentElement;
                 atribuirListeners(panel, id);
             });
+
+
+
+            mostrarMenu("canvas");
         });
 
         function atribuirListeners(panel, id) {
-            let inputLink = panel.querySelector("#file-"+id);
+            let inputLink = panel.querySelector("#file-" + id);
 
             panel.addEventListener("dragstart", onDragStart);
             panel.addEventListener("click", onClick);
@@ -103,40 +114,59 @@
 
         //---------------------------------------------------------------------------------------------------------------------
         // EDITOR DE TEXTO
-        // Criar editor
-        $(document).ready(function () {
-            //Reset no CSS
-            $('.trumbowyg').trumbowyg({
-                resetCss: true
-            });
+        function initTrumbowygEditor() {
+            const $editor = $('#trumbowyg-editor');
 
-            $('#trumbowyg-editor').trumbowyg({
+            if (!$editor.length) {
+                console.warn('❌ Editor não encontrado');
+                return;
+            }
+
+            if ($editor.parent().hasClass('trumbowyg-box')) {
+                try {
+                    $editor.trumbowyg('destroy');
+                } catch (e) {
+                    console.warn('Erro ao destruir o editor:', e);
+                }
+            }
+
+            $editor.trumbowyg({
                 btns: [
                     ['undo', 'redo'],
                     ['strong', 'em'],
                     ['fontfamily', 'formatting', 'foreColor'],
                     ['justifyLeft', 'justifyCenter', 'justifyFull']
                 ],
-                autogrow: false
+                autogrow: false,
+                resetCss: true
             });
 
-            $('#trumbowyg-editor').on('tbwchange', function () {
-                $('#editorInput').val($('#trumbowyg-editor').trumbowyg('html'));
-            });
-        });
+            $editor.off('tbwchange').on('tbwchange', function () {
+                const html = $editor.trumbowyg('html');
+                $('#editorInput').val(html);
 
-        // Criar editor
-        document.addEventListener('DOMContentLoaded', function () {
-            setTimeout(function () {
-                const btn = document.querySelector('button[title="Font"]');
-                if (btn) {
-                    console.log("Botão encontrado! Alterando texto...");
-                    btn.textContent = 'F ';
-                } else {
-                    console.log("Botão ainda não está disponível.");
+                const painelSelecionado = $('.painel.selected');
+                const painelId = painelSelecionado.find('.idPainel').attr('id');
+
+                if (painelId) {
+                    Livewire.emit('updateTextoFromEditor', painelId, html);
                 }
-            }, 300); // Dá tempo pro Trumbowyg renderizar           
+            });
+
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initTrumbowygEditor();
         });
+
+        Livewire.hook('message.processed', (message, component) => {
+            // Aguarda o próximo tick para garantir que o DOM foi totalmente atualizado
+            setTimeout(() => {
+                initTrumbowygEditor();
+            }, 50);
+        });
+
         //---------------------------------------------------------------------------------------------------------------------
+
     </script>
 @endsection

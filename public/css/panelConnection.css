@@ -85,6 +85,12 @@ input {
     justify-content: space-between;
 }
 
+.selected {
+    box-shadow: 0 0 8px #833B8D, 0 0 16px #833B8D, 0 0 24px #833B8D;
+    border-radius: 30px; 
+}
+
+
 /* =============================
    FORMATOS DOS BOTÕES
    ============================= */
@@ -467,7 +473,7 @@ button {
 /* =============================
     DROPDOWN
    ============================= */
-   .select {
+.select {
     position: relative;
     width: 100%;
 }
