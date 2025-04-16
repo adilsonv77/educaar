@@ -75,9 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
         var li = glbs.children[i];
 
         //Verifica se é um painel ou um modelo3d
-        const painelInicial = li.getAttribute("painel")
-        const usarModelo = painelInicial == 0;
-
+        const usarModelo = li.getAttribute("painel") == 0;
+        
         //Alterar para 
         if (usarModelo) {
           const glb = await loadGLTF(li.textContent);
@@ -179,17 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           //Usar painel
           //Pega dados do banco (guardados dentro da var "json") e faz um objeto JSON.
-          const jsonAtribute = li.getAttribute("json")
-          const jsonObject = JSON.parse(jsonAtribute)
+          const json = JSON.parse(li.getAttribute("json"))
 
           //Gera painel HTML
-          paineis[jsonObject.id] = jsonObject;
-          createPainel(jsonObject, false)
+          paineis[json.id] = json;
+          createPainel(json, false)
 
-          let painelHtml = document.getElementById(jsonObject.id);
+          let painelHtml = document.getElementById(json.id);
 
           //Pega aquele elemento HTML criado e liga com o mindAR
-
           const obj = new CSS3DObject(painelHtml)
 
           const cssAnchor = mindarThree.addCSSAnchor(i)
@@ -204,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             buttonAR.style.display = "block";
             bloquear.style.display = "block";
 
-            if (jsonObject.midiaExtension == "mp4") {
+            if (json.midiaExtension == "mp4") {
               painelHtml.getElementsByTagName("video")[0].play();
             }
           }
@@ -221,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bloquear.style.display = "none";
             desbloquear.style.display = "none";
 
-            if (jsonObject.midiaExtension == "mp4") {
+            if (json.midiaExtension == "mp4") {
               painelHtml.getElementsByTagName("video")[0].pause();
             }
           }
@@ -412,48 +409,69 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: false });
 });
 
-//Função para criar um painel
+//-------CRIA PAINEL---------------------------------------------------------------------------------------------------------
 function createPainel(painel, bloquearPainel) {
+  //Cria elemento HTML
   const container = document.createElement('div');
   container.classList.add('painel');
+
+  //Define se é painel bloqueado ou do MINDAR
   if (!bloquearPainel) {
-    //Painel criado para ser mostrado em AR
+    //MINDAR
     container.id = painel.id;
     container.style.visibility = 'hidden';
     container.style.display = "none";
   } else {
-    //Painel criado para ser mostrado quando o painel é bloqueado
+    //Bloqueado
     container.classList.add('painelCelular');
     container.style.zIndex = "1";
     container.id = painel.id + 'lock';
   }
-  var midiaHTML;
-  if (painel.midiaExtension == "mp4") {
-    //Vídeo
-    midiaHTML = `
-      <video controls class="midiaApresentada">
-        <source src="${window.location.origin + '/midiasPainel/' + painel.arquivoMidia}" type="video/mp4">
-      </video>
-    `
-  } else {
-    //Imagem
-    midiaHTML = `
-      <img class="midiaApresentada" src="${window.location.origin + '/midiasPainel/' + painel.arquivoMidia}">
-    `
+
+  //Define qual tipo de midia deve ser mostrado
+  let midiaHTML;
+  switch (painel.midiaType) {
+    case "image":
+      midiaHTML=`
+        <img class="imgMidia" src="${window.location.origin + '/midiasPainel/' + painel.arquivoMidia}">
+      `
+      break;
+      case "video":
+      midiaHTML=`
+        <video class="vidMidia" controls">
+          <source id="srcVidMidia" src="${window.location.origin + '/midiasPainel/' + painel.arquivoMidia}" type="video/mp4">
+        </video>
+      `
+      break;
+      case "youtube":
+      midiaHTML=`
+        <div class="videoContainer youtubeMidia">
+          <iframe 
+            id="srcYoutube"
+            src="https://www.youtube.com/embed/${painel.link}?autoplay=0"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+      `
+      break;
   }
+
+  //Constróio o HTML
   container.innerHTML = `
-      <textarea name="txtSuperior" id="txtSuperior" type="text" maxlength="117" placeholder="Digite seu texto aqui" disabled>
-          `+ painel.txtSuperior + `
-      </textarea>
-      <div id="midiaPreview">
+      <div class="txtPainel">${painel.txt}</div>
+
+      <div class="midia">
         `+ midiaHTML + `
       </div>
-      <textarea name="txtInferior" id="txtInferior" type="text" maxlength="117" placeholder="Digite seu texto aqui" disabled>
-          `+ painel.txtInferior + `
-      </textarea>
-      <div id="areaBtns">
-        
+
+      <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
+        <div class="button_Panel" data-botao="1"><div class="circulo"></div> Botão 1</div>
+        <div class="button_Panel" data-botao="2"><div class="circulo"></div> Botão 2</div>
+        <div class="button_Panel" data-botao="3"><div class="circulo"></div> Botão 3</div>
       </div>
   `;
+
   document.getElementById("painelContainer").appendChild(container);
 }

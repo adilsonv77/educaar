@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use App\DAO\ContentDAO;
 use App\DAO\StudentAppDAO;
 use App\Models\Painei;
-
-
+use App\DAO\PainelDAO;
+use App\Dao\SceneDAO;
 
 class StudentController extends Controller
 {
@@ -127,14 +127,14 @@ class StudentController extends Controller
                         $bloquearPorData = 1;
                     } 
                 }
-                
             }
             
             //Pega o json do painel da atividade se for um painel.
-            $idPainelInicial = $activity->scene_id;
+            $idPainelInicial = SceneDAO::getById($activity->scene_id)->start_panel_id;
+            
             if($idPainelInicial != null){
                 //Possui um painel inicial
-                $activity->json = Painei::where('id',$idPainelInicial)->first()->panel;
+                $activity->json = PainelDAO::getById($idPainelInicial)->panel;
             }
             $activity->bloquearPorData = $bloquearPorData;
             if ($bloquearPorData == 0) {

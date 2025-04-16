@@ -6,7 +6,7 @@ use App\Models\Painei;
 
 class PainelDAO
 {
-    public function getById($id)
+    public static function getById($id)
     {
         return Painei::where('id', $id)->first();
     }

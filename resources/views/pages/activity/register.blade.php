@@ -82,10 +82,10 @@
                 } 
                 //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
                 try {
-                    document.getElementById("selectPanel").disabled = (!alt2.checked || cenaSelecionada== "Modelo3D")
+                    document.getElementById("selectScene").disabled = (!alt2.checked || cenaSelecionada== "Modelo3D")
                     document.getElementById("panelId").required = (alt2.checked && cenaSelecionada == "Painel")
                 } catch (error) {
-                    document.getElementById("selectPanel").disabled = !(cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
+                    document.getElementById("selectScene").disabled = !(cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
                     document.getElementById("panelId").required = (cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
                 }  
             }else{
@@ -121,19 +121,21 @@
                     </ul>
                 </div>
             @endif
-            <form method="POST" action="{{ route('activity.store') }}" enctype="multipart/form-data" files="true" onsubmit="desativarBotao(this)">>
+            <form method="POST" action="{{ route('activity.store') }}" enctype="multipart/form-data" files="true" onsubmit="desativarBotao(this)">
                 <h3>Atividade</h3>
                 @csrf
-                    <input name="id" type="hidden" value="{{$id}}"/>
-                    <input name="acao" type="hidden" value="{{$acao}}"/>
-                    <input name="scene_id" type="hidden" value="{{ $scene_id ?? ''}}" id="scene_id"/>
+                <input name="id" type="hidden" value="{{$id}}"/>
+                <input name="acao" type="hidden" value="{{$acao}}"/>
+                <input name="scene_id" type="hidden" value="{{ $scene_id ?? ''}}" id="scene_id"/>
 
+                <!------------NOME DA ATIVIDADE-------------->
                 <div class="form-group">
                     <label for="">Nome da Atividade*</label>
                     <input id="name" type="text" maxlength="100"class="form-control @error('name') is-invalid @enderror" name="name"
                             value="{{ old('name', $name) }}" required autocomplete="name" autofocus/>
                 </div>
 
+                <!-----------SELECIONAR CONTEÚDO------------->
                 <div class="form-group">
                     <label for="">Conteúdo*</label>
                     <select class="form-control" name="content_id" aria-label="">
@@ -142,21 +144,16 @@
                         @endforeach
                     </select>
                 </div>
-                <!-- esse campo sai depois quando os painéis estiverem ok -->
-                <input type="hidden" name="sceneType" value="Modelo3D"/>
-                <select id="selectSceneType" style="display:none">
-                    <option value="Modelo3D" selected>Modelo 3D</option>
-                </select>
-
-<!--
+                <!-------SELECIONAR TIPO DE ATIVIDADE-------->
                 <div class="form-group">
-                    <label for="">Selecione o tipo da cena*</label>
+                    <label for="">Selecione o tipo de atividade*</label>
                     <select class="form-control" id="selectSceneType" name="sceneType" aria-label="">             
                         <option value="Modelo3D" selected>Modelo 3D</option>
-                        <option value="Painel">Painel</option>
+                        <option value="Cena">Cena</option>
                     </select>
                 </div>
-        -->
+
+                <!-------------ENVIAR MODELO3D--------------->
                 <div class="form-group" id="3DmodelOption">
                         @if ($acao == 'edit' && $scene_id == 'modelo3D') 
                             <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
@@ -168,15 +165,21 @@
                             id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit' && $scene_id == "modelo3D") disabled @elseif($acao == 'edit') required @endif/>
                 </div>
 
+                <!------------SELECIONAR CENA--------------->
                 <div class="form-group" id="panelOption" style="display: none">
                         @if ($acao == 'edit' && $scene_id != 'modelo3D') 
                             <input type="checkbox" id="alterarPainel" name="alterarPainel" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
-                        
-                        <label for="alterarPainel">Painel*</label><br>
-                        <input type="button" id="selectPanel" value="Escolher painel" @if($acao === 'edit') disabled @endif/>
+
+                        <label for="alterarPainel">Cena*</label><br>
+                        <select class="form-control" id="selectScene" name="scene" aria-label="" @if($acao === 'edit') disabled @endif>
+                            @foreach ($scenes as $scene)
+                                <option value="{{$scene->id}}" @if ($acao == "edit" && $scene->id == $scene_id) selected @endif>{{$scene->name}}</option>
+                            @endforeach             
+                        </select>
                 </div>
 
+                <!----------------MARCADOR----------------->
                 <div class="form-group">
                         @if ($acao == 'edit') 
                             <input type="checkbox" id="alterarMarcador" name="alterarMarcador" value="S" onclick="HabilitarDesabilitarImagemMarcador()"/>
@@ -188,10 +191,10 @@
 
                 <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$scene_id}}" @endif>
 
-
+                <!-----------------SUBMIT------------------>
                 <div class="form-group mt-4" onsubmit="desativarBotao(this)">
                     <button type="submit" id="btnSalvar" class="btn btn-success">
-                        Salvar
+                       Salvar
                     </button>
                 </div>
             </form>
@@ -199,9 +202,9 @@
     </div>
 
     <script>
-        document.getElementById("selectPanel").onclick = ()=>{
-            document.getElementById("panelId").value = prompt("Insira o ID do painel.")
-        }
+        // document.getElementById("selectPanel").onclick = ()=>{
+        //     document.getElementById("panelId").value = prompt("Insira o ID do painel.")
+        // }
 
         document.getElementById("selectSceneType").onchange = ()=>{
             let valor = document.getElementById("selectSceneType").value;
@@ -215,12 +218,11 @@
 
             HabilitarDesabilitar3D()
         }
-        function desativarBotao(form) {
-        let botao = form.querySelector("#btnSalvar");
-        botao.disabled = true; 
         
-    }
-
+        function desativarBotao(form) {
+            let botao = form.querySelector("#btnSalvar");
+            botao.disabled = true; 
+        }
     </script>
 @endsection
  

@@ -21,7 +21,7 @@ class DisciplinaDAO
 
     }
 
-    public function getDisciplinasDoProfessor($professorId)
+    public static function getDisciplinasDoProfessor($professorId)
     {
         return DB::table('turmas_disciplinas')
             ->join('disciplinas', 'turmas_disciplinas.disciplina_id', '=', 'disciplinas.id')

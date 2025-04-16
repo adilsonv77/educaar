@@ -6,7 +6,7 @@ use App\Models\Scene;
 
 class SceneDAO
 {
-    public function getById($id)
+    public static function getById($id)
     {
         return Scene::where('id', $id)->first();
     }
@@ -36,4 +36,8 @@ class SceneDAO
         return Scene::where('name', 'like', '%' . $name . '%')->get();
     }
 
+    public static function getByDisciplinaId($id)
+    {
+        return Scene::where('disciplina_id', $id)->get();
+    }
 }

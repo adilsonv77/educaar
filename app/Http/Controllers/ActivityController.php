@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\DAO\ContentDAO;
 use App\DAO\ActivityDAO;
+use App\DAO\DisciplinaDAO;
+use App\DAO\SceneDAO;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -94,6 +96,15 @@ class ActivityController extends Controller
                 DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
             )
             ->get();
+      
+        $disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);
+
+        $scenes = collect();
+
+        foreach ($disciplinas as $disciplina) {
+            $scenes = $scenes->merge(SceneDAO::getByDisciplinaId($disciplina->id));
+        }
+
         $content = 0;
         $params = [
             'titulo' => $titulo,
@@ -102,6 +113,7 @@ class ActivityController extends Controller
             'id' => 0,
             'contents' => $contents,
             'content' => $content,
+            'scenes' => $scenes,
         ];
 
         return view('pages.activity.register', $params);
@@ -135,15 +147,15 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $idPainel = $data['panelId'];
-        $tipoCena = $data['sceneType'];
+        $idScene = $data['scene'];
+        $tipoAtividade = $data['sceneType'];
 
         unset($data['panelId']);
         unset($data['sceneType']);
 
         //Verifica se é cadastro de glb ou de painel para poder tratar cada cadastro de forma diferente 
         $usarPainel = false;
-        if ($tipoCena == "Painel") {
+        if ($tipoAtividade == "Cena") {
             $data['glb'] = '';
             $usarPainel = true;
         } else {
@@ -244,7 +256,7 @@ class ActivityController extends Controller
                 rename($public_path . '/' . $zipdir, $public_path . '/' . $activity->id);
             } else {
                 //Se não for para usar um glb, e usar um painel
-                $data['scene_id'] = $idPainel;
+                $data['scene_id'] = $idScene;
             }
             $activity->update($data);
         } else if (!$usarPainel) {
@@ -265,9 +277,9 @@ class ActivityController extends Controller
 
             $activity->update($data);
         } else {
-            //Edita
+            //Editar
             $activity = Activity::find($data['id']);
-            $data['scene_id'] = $idPainel;
+            $data['scene_id'] = $idScene;
 
             //Deleta o arquivo GLB
             if(!empty($activity->glb)){
@@ -342,6 +354,13 @@ class ActivityController extends Controller
         if (empty($activity->scene_id))
             $activity->scene_id = "modelo3D";
 
+        $disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);
+        $scenes = collect();
+
+        foreach ($disciplinas as $disciplina) {
+            $scenes = $scenes->merge(SceneDAO::getByDisciplinaId($disciplina->id));
+        }
+
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,
@@ -349,7 +368,8 @@ class ActivityController extends Controller
             'name' => $activity->name,
             'contents' => $contents,
             'content' => $activity->content_id,
-            'scene_id' => $activity->scene_id
+            'scene_id' => $activity->scene_id,
+            'scenes' => $scenes,
         ];
 
         return view('pages.activity.register', $params);
