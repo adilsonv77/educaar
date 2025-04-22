@@ -3,11 +3,13 @@
 @section('style')
     <!--Nao dar erro do ngrok:-->
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-<link rel="stylesheet" href="{{asset('css/painel.css')}}">
 <style>
     #painelContainer {
         display: flex;
         justify-content: center;
+        align-items: center;
+        height: 85%;
+        transform: scale(1.2);
     }
 
     #my-ar-container {
@@ -16,7 +18,6 @@
         position: relative;
         overflow: hidden; 
     }
-
     
 /* =============================
    MINI PAINEIS
@@ -78,6 +79,14 @@
     object-fit: contain;
 }
 
+.midia iframe{
+    width: 500px;
+    height: 290px;
+    transform: scale(0.5);
+    max-width: 5000px !important;
+    max-height: 50000px !important;
+}
+
 .areaBtns {
     display: flex;
     flex-direction: column;
@@ -133,6 +142,8 @@
 
 .videoContainer {
     height: 100%;
+    max-width: 5000px !important;
+    max-height: 50000px !important;
     display: flex;
     align-items: center;
 }
@@ -140,7 +151,6 @@
 @endsection
 
 @section('content')
-
 <span id="mind" style="display: none;">/mind/{{session()->get('content_id')}}.mind</span>
 
 <script>

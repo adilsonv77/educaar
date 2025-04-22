@@ -228,8 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
         bloquear = document.getElementById("showObject");
         desbloquear = document.getElementById("removeObject");
       }
+      
       if (isSetup) {
-
         document.getElementById("showObject").addEventListener('click', () => {
           bloquear.style.display = "none";
           desbloquear.style.display = "block";
@@ -258,7 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             createPainel(paineis[activeScene.element.id], true)
           }
-
         });
 
         document.getElementById("removeObject").addEventListener('click', () => {
