@@ -4,20 +4,20 @@
     <!--Nao dar erro do ngrok:-->
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <style>
-    #painelContainer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 85%;
-        transform: scale(1.2);
-    }
+#painelContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85%;
+    transform: scale(1.2);
+}
 
-    #my-ar-container {
-        height: 80vh;
-        width: 120vh;
-        position: relative;
-        overflow: hidden; 
-    }
+#my-ar-container {
+    height: 80vh;
+    width: 120vh;
+    position: relative;
+    overflow: hidden; 
+}
     
 /* =============================
    MINI PAINEIS
