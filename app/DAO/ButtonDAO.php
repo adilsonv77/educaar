@@ -11,6 +11,12 @@ class ButtonDAO
         return Button::where('id', $id)->first();
     }
 
+    public static function getByOriginId($id)
+    {
+        return Button::where('origin_id', $id)->get();
+    }
+
+
     public function getAll()
     {
         return Button::all();

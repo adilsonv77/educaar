@@ -7,13 +7,16 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\DAO\PainelDAO;
+use App\DAO\ButtonDAO;
 
 class Panel extends Component
 {
-    protected $listeners = ['updateLink'];
+    protected $listeners = ['updateLink','createButton'];
 
     use WithFileUploads;
 
+    public $buttonRenderizados = [];
+    public $paineisRenderizados = [];
     public $painel;
     public $texto;
     public $midia;
@@ -22,6 +25,7 @@ class Panel extends Component
     public function mount($painel)
     {
         $this->painel = $painel;
+        $this->buttonRenderizados = ButtonDAO::getByOriginId($painel->id);
 
         // Garante que esteja decodificado (caso venha string do banco)
         $json = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
@@ -100,6 +104,24 @@ class Panel extends Component
         // só roda se for o painel certo
         $this->link = $payload['link'];
         $this->updatedMidia(true);
+    }
+
+    public function createButton($payload){
+        if ($payload['id'] != $this->painel->id) return;
+
+        $buttonDAO = new ButtonDAO();
+
+        $novo = $buttonDAO->create([
+            'origin_id'=>$this->painel->id,
+            'destination_id'=>null,
+            'configurations'=>'{"color":"#833B8D","text":"","type":"linhas"}'
+        ]);
+
+        $novo->configurations = json_decode('{"color":"#833B8D","text":"","type":"linhas"}',true);
+
+        $this->buttonRenderizados = ButtonDAO::getByOriginId($this->painel->id);
+
+        $this->emit("buttonCriado",$novo->id);
     }
 
     public function render()

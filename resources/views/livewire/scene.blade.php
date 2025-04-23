@@ -10,8 +10,9 @@
                 <!-- FORMATOS -->
                 <div class="mb-6">
                     <h3>
-                        FORMATO DOS BOTÕES
+                        FORMATO DOS BOTÕES 
                     </h3>
+                    <button id="addButton">teste</button>
                     <div class="tipos">
                         <div class="linhas">
                             <div></div>

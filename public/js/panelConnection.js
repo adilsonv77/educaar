@@ -75,8 +75,8 @@ function mostrarMenu(tipo) {
         menu.classList.add("ativo");
     }
 }
-//----FUNÇÃO DE SELECIONAR PAINEL, BOTÃO E CANVAS----------------------------------------------------------------------------
 
+//----FUNÇÃO DE SELECIONAR PAINEL, BOTÃO E CANVAS----------------------------------------------------------------------------
 function selecionarPainel(painel, e) {
     isDraggingPanel = true;
     if (e.target.closest(".button_Panel")) return;
@@ -593,7 +593,6 @@ function ativarDrag(painel) {
 }
 
 //CARREGAR O TEXTO DO EDITOR--------------------------------------------------------------
-
 document.addEventListener('livewire:load', function () {
     inicializarTrumbowygs();
 });
@@ -618,4 +617,12 @@ function inicializarTrumbowygs() {
             });
         }
     });
+}
+
+//----CRIAR NOVOS BOTÕES------------------------------------------------------------------------------------------
+let addBtnBtn = document.getElementById("addButton")
+
+addBtnBtn.onclick = ()=>{
+    let id = painelSelecionado.querySelector(".idPainel").id;
+    window.livewire.emit('createButton', { id: id });
 }

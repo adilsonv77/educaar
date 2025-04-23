@@ -88,7 +88,9 @@
                 atribuirListeners(panel, id);
             });
 
-
+            window.livewire.on("buttonCriado", (id) => {
+                //atribuir listeners o botão
+            });
 
             mostrarMenu("canvas");
         });
