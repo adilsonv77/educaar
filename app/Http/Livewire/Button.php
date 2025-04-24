@@ -11,6 +11,8 @@ use App\DAO\ButtonDAO;
 class Button extends Component
 {
     use WithFileUploads;
+
+    public $listeners = ["updateTexto"];
     public $button;
     public $texto;
     public $cor;
@@ -24,14 +26,14 @@ class Button extends Component
 
         $json = is_string($button->configurations) ? json_decode($button->configurations, true) : $button->configurations;
 
-        $this->texto = $json['txt'] ?? '';
+        $this->texto = $json['text'] ?? '';
         $this->cor = $json['color'] ?? '';
         $this->painelOrigem = $button->origin_id;
         $this->painelDestino = $button->destination_id;
         $this->transicao = $json['type'] ?? '';
     }
 
-    public function updatedTexto($payload)
+    public function updateTexto($payload)
     {
         if ($payload['id'] != $this->button->id) return;
 
@@ -39,7 +41,7 @@ class Button extends Component
 
         $json = json_decode($this->button->configurations);
         $this->texto = $payload['text'];
-        $json->txt = $payload['text'];;
+        $json->text = $payload['text'];
 
         $buttonDAO->updateById($this->button->id, [
             'configurations' => json_encode($json)

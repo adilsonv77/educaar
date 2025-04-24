@@ -68,7 +68,7 @@
                     <h3 class="mb-2">
                         TEXTO DO BOTÃO
                     </h3>
-                    <input class="" type="text" />
+                    <input class="" type="text" id="btnTxt"/>
                 </div>
                 <!-- TRANSIÇÕES -->
                 <div class="mb-6">

@@ -1,3 +1,3 @@
 <div class="button_Panel">
-    <div class="circulo"></div> Botão 1
+    <div id="{{ $button->id }}" class="circulo"></div> {{ $texto ? $texto : "Botão ".$button->id}}
 </div>

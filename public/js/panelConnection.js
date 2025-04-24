@@ -619,10 +619,23 @@ function inicializarTrumbowygs() {
     });
 }
 
-//----CRIAR NOVOS BOTÕES------------------------------------------------------------------------------------------
+//----CONFIGURAR BOTÕES------------------------------------------------------------------------------------------
+// 1. Criar botões
 let addBtnBtn = document.getElementById("addButton")
 
 addBtnBtn.onclick = ()=>{
     let id = painelSelecionado.querySelector(".idPainel").id;
     window.livewire.emit('createButton', { id: id });
+}
+
+// 2. Alterar texto botão
+let btnTxt = document.getElementById("btnTxt")
+
+let debouceTimer;
+
+btnTxt.oninput = ()=>{ 
+    clearTimeout(debouceTimer);
+    debouceTimer = setTimeout(() => {
+        window.livewire.emit('updateTexto',{id: botaoSelecionado.querySelector(".circulo").id, text: btnTxt.value})
+    }, 1000);
 }
