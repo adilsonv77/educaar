@@ -11,7 +11,7 @@ use App\DAO\ButtonDAO;
 
 class Panel extends Component
 {
-    protected $listeners = ['updateLink','createButton'];
+    protected $listeners = ['updateLink','createButton', 'salvarTexto'];
 
     use WithFileUploads;
 
@@ -34,19 +34,27 @@ class Panel extends Component
         $this->link = $json['link'] ?? '';
     }
 
-    public function updatedTexto()
+    public function salvarTexto($painelId, $novoTexto)
     {
+        if ($this->painel->id != $painelId)
+            return;
+
+        $json = is_string($this->painel->panel) ? json_decode($this->painel->panel, true) : (array) $this->painel->panel;
+        $json['txt'] = $novoTexto;
+
         $painelDAO = new PainelDAO();
+        $painelDAO->updateById($painelId, ['panel' => json_encode($json)]);
 
-        $json = json_decode($this->painel->panel);
-        $json->txt = $this->texto;
+        $this->painel->panel = $json;
+        $this->texto = $novoTexto;
 
-        $painelDAO->updateById($this->painel->id,[
-            'panel'=> json_encode($json)
+        $this->dispatchBrowserEvent('atualizarTextoPainel', [
+            'painelId' => $painelId,
+            'novoTexto' => $novoTexto,
         ]);
-
-        $this->emitSelf('$refresh');
+        
     }
+
 
     public function updatedMidia($recebeuLink = null)
     {
@@ -80,9 +88,9 @@ class Panel extends Component
             $json['midiaExtension'] = $midiaExtension;
             $json['link'] = '';
 
-            if($midiaExtension == "mp4"){
+            if ($midiaExtension == "mp4") {
                 $json['midiaType'] = 'video'; // Ou detecta dinamicamente com base na extensão, se preferir
-            }else{
+            } else {
                 $json['midiaType'] = 'image'; // Ou detecta dinamicamente com base na extensão, se preferir
             }
         } elseif ($recebeuLink) {
@@ -99,8 +107,10 @@ class Panel extends Component
         $this->painel->panel = $json; // Atualiza o painel renderizado também
     }
 
-    public function updateLink($payload){
-        if ($payload['id'] != $this->painel->id) return;
+    public function updateLink($payload)
+    {
+        if ($payload['id'] != $this->painel->id)
+            return;
         // só roda se for o painel certo
         $this->link = $payload['link'];
         $this->updatedMidia(true);
@@ -126,6 +136,6 @@ class Panel extends Component
 
     public function render()
     {
-        return view('livewire.panel');
+        return view('livewire.panel', ['texto' => $this->texto,]);
     }
 }

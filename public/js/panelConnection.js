@@ -90,6 +90,12 @@ function selecionarPainel(painel, e) {
     botaoSelecionado = null;
 
     mostrarMenu("painel"); // Atualiza o menu
+
+    const editor = $('#trumbowyg-editor');
+    const textoPainel = painel.getAttribute('data-texto');
+    if (editor.length && textoPainel !== null) {
+        editor.trumbowyg('html', textoPainel);
+    }
 }
 
 document.addEventListener("click", (e) => {
@@ -133,7 +139,7 @@ function selecionarBotao(botao) {
 
     //Carrega as informações daquele botão no menu.
     let btnInfo = botaoSelecionado.querySelector("#buttonInfo")
-    
+
     btnTxt.value = botaoSelecionado.textContent.trim();
     selectTransicao.value = btnInfo.getAttribute("transition");
     setTimeout(() => {
@@ -600,35 +606,7 @@ function ativarDrag(painel) {
     });
 }
 
-//CARREGAR O TEXTO DO EDITOR--------------------------------------------------------------
-document.addEventListener('livewire:load', function () {
-    inicializarTrumbowygs();
-});
-
-window.livewire.hook('message.processed', (message, component) => {
-    inicializarTrumbowygs();
-});
-
-function inicializarTrumbowygs() {
-    document.querySelectorAll('.editor-trumbowyg').forEach((editor) => {
-        if (!editor.classList.contains('trumbowyg-initialized')) {
-            $(editor).trumbowyg();
-
-            // Marca como inicializado pra não reinicializar
-            editor.classList.add('trumbowyg-initialized');
-
-            const painelId = editor.id.replace('editor-', '');
-
-            $(editor).on('tbwchange', function () {
-                const html = $(editor).trumbowyg('html');
-                window.livewire.emit('updateTextoFromEditor', painelId, html);
-            });
-        }
-    });
-}
-
-//----CONFIGURAR BOTÕES------------------------------------------------------------------------------------------
-// 1. Criar botões
+//----CRIAR NOVOS BOTÕES------------------------------------------------------------------------------------------
 let addBtnBtn = document.getElementById("addButton")
 
 addBtnBtn.onclick = () => {
@@ -657,6 +635,6 @@ pickr.on("change", (color) => {
 });
 
 // 4. Altera transição
-selectTransicao.onchange = ()=>{
+selectTransicao.onchange = () => {
     window.livewire.emit('updateTransicao', { id: botaoSelecionado.querySelector(".circulo").id, transition: selectTransicao.value })
 }

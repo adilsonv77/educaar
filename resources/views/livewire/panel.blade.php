@@ -1,4 +1,5 @@
-<div class="painel" draggable="true">
+<div class="painel" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}">
+
     <!--Esse php previne erros-->    
     <?php
         $panelData = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
@@ -6,7 +7,7 @@
 
     <p class="idPainel" id="{{ $panelData["id"] }}">Painel ({{ $panelData["id"] }})</p>    
 
-    <div class="txtPainel">{!! $texto !!}</div>
+    <div class="txtPainel">{!! $panelData["txt"] !!}</div>
 
     <input type="hidden" class="inputTxtPainel" name="txt" 
         wire:model.lazy="texto">

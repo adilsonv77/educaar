@@ -28,7 +28,7 @@
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
     <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-                                                        de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+                                                                                                                                    de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -88,9 +88,7 @@
                 atribuirListeners(panel, id);
             });
 
-            window.livewire.on("buttonCriado", (id) => {
-                //atribuir listeners o botão
-            });
+
 
             mostrarMenu("canvas");
         });
@@ -132,6 +130,7 @@
                 }
             }
 
+            // Inicializa o Trumbowyg
             $editor.trumbowyg({
                 btns: [
                     ['undo', 'redo'],
@@ -143,29 +142,62 @@
                 resetCss: true
             });
 
-            $editor.off('tbwchange').on('tbwchange', function () {
-                const html = $editor.trumbowyg('html');
-                $('#editorInput').val(html);
+            let debounceTimer;
+            let ultimoTextoSalvo = '';
 
-                const painelSelecionado = $('.painel.selected');
-                const painelId = painelSelecionado.find('.idPainel').attr('id');
+            $editor.on('keyup', function () {
+                clearTimeout(debounceTimer);
 
-                if (painelId) {
-                    Livewire.emit('updateTextoFromEditor', painelId, html);
-                }
+                debounceTimer = setTimeout(() => {
+                    const texto = $editor.trumbowyg('html');
+                    const painelSelecionado = document.querySelector(".painel.selecionado");
+
+                    if (painelSelecionado && texto !== ultimoTextoSalvo) {
+                        const txtPainel = painelSelecionado.querySelector(".txtPainel");
+                        if (txtPainel) {
+                            txtPainel.innerHTML = texto;
+                        }
+
+                        const painelId = painelSelecionado?.dataset?.painelId;
+                        if (painelId) {
+                            window.livewire.emit('salvarTexto', painelId, texto);
+                            ultimoTextoSalvo = texto;
+                            console.log("Texto salvo:", texto);
+                        }
+                    }
+                }, 3000); // Espera 3s depois da última tecla
             });
 
         }
+
+        window.addEventListener('atualizarTextoPainel', (event) => {
+            const { painelId, novoTexto } = event.detail;
+            const painel = document.querySelector(`.painel[data-painel-id="${painelId}"]`);
+            if (painel) {
+                painel.setAttribute('data-texto', novoTexto);
+            }
+        });
+
 
         document.addEventListener('DOMContentLoaded', function () {
             initTrumbowygEditor();
         });
 
         Livewire.hook('message.processed', (message, component) => {
-            // Aguarda o próximo tick para garantir que o DOM foi totalmente atualizado
-            setTimeout(() => {
-                initTrumbowygEditor();
-            }, 50);
+            if (message.updateQueue && message.updateQueue.some(m => m.payload?.event === 'salvarTexto')) {
+                setTimeout(() => {
+                    initTrumbowygEditor();
+
+                    const painelSelecionado = document.querySelector(".painel.selecionado");
+                    const editor = $('#trumbowyg-editor');
+                    if (painelSelecionado && editor.length) {
+                        const novoTexto = painelSelecionado.getAttribute('data-texto');
+                        if (novoTexto !== null) {
+                            editor.trumbowyg('html', novoTexto);
+                        }
+                    }
+                }, 50);
+            }
         });
 
         //---------------------------------------------------------------------------------------------------------------------
