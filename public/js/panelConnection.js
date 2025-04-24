@@ -1,4 +1,4 @@
-//----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM----------------------------------------------------------------------------
+//----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM------------------------------------------------------
 let scale = 0.7;
 let alternativeScale = 3;
 const canvas = document.getElementById("canvas");
@@ -36,7 +36,7 @@ const pickr = Pickr.create({
             input: true,
             hex: false,
             rgba: false,
-            save: true,
+            save: false,
             clear: true,
         },
     },
@@ -45,10 +45,6 @@ const pickr = Pickr.create({
 // pickr.on("save", (color) => {
 //     console.log("Cor selecionada:", color.toHEXA().toString());
 // });
-
-pickr.on("change", (color) => {
-    console.log("Cor selecionada:", color.toHEXA().toString());
-});
 
 //----ADICIONAR PAINEL----------------------------------------------------------------------------
 let container = document.getElementById("canvas");
@@ -119,6 +115,9 @@ document.addEventListener("click", (e) => {
     }
 });
 
+let btnTxt = document.getElementById("btnTxt")
+let btnColor = document.getElementsByClassName("pcr-result")[0]
+
 function selecionarBotao(botao) {
     isDraggingPanel = true;
     let botoes = document.querySelectorAll(".button_Panel");
@@ -131,6 +130,14 @@ function selecionarBotao(botao) {
         painelSelecionado.classList.remove("selecionado");
         painelSelecionado = null;
     }
+
+    //Carrega as informações daquele botão no menu.
+    let btnInfo = botaoSelecionado.querySelector("#buttonInfo")
+    
+    btnTxt.value = botaoSelecionado.textContent.trim();
+    setTimeout(() => {
+        pickr.setColor(btnInfo.getAttribute("color"));
+    }, 100);
 
     mostrarMenu("botao"); // Atualiza o menu
 }
@@ -623,19 +630,27 @@ function inicializarTrumbowygs() {
 // 1. Criar botões
 let addBtnBtn = document.getElementById("addButton")
 
-addBtnBtn.onclick = ()=>{
+addBtnBtn.onclick = () => {
     let id = painelSelecionado.querySelector(".idPainel").id;
     window.livewire.emit('createButton', { id: id });
 }
 
 // 2. Alterar texto botão
-let btnTxt = document.getElementById("btnTxt")
-
 let debouceTimer;
 
-btnTxt.oninput = ()=>{ 
+btnTxt.oninput = () => {
     clearTimeout(debouceTimer);
     debouceTimer = setTimeout(() => {
-        window.livewire.emit('updateTexto',{id: botaoSelecionado.querySelector(".circulo").id, text: btnTxt.value})
+        window.livewire.emit('updateTexto', { id: botaoSelecionado.querySelector(".circulo").id, text: btnTxt.value })
     }, 1000);
 }
+
+// 3. Altera cor botão
+let corInput = document.getElementsByClassName("pcr-result")[0];
+
+pickr.on("change", (color) => {
+    clearTimeout(debouceTimer);
+    debouceTimer = setTimeout(() => {
+        window.livewire.emit('updateCor', { id: botaoSelecionado.querySelector(".circulo").id, color: color.toHEXA().toString() })
+    }, 1000);
+});

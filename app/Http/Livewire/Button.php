@@ -12,7 +12,7 @@ class Button extends Component
 {
     use WithFileUploads;
 
-    public $listeners = ["updateTexto"];
+    public $listeners = ["updateTexto","updateCor"];
     public $button;
     public $texto;
     public $cor;
@@ -42,6 +42,23 @@ class Button extends Component
         $json = json_decode($this->button->configurations);
         $this->texto = $payload['text'];
         $json->text = $payload['text'];
+
+        $buttonDAO->updateById($this->button->id, [
+            'configurations' => json_encode($json)
+        ]);
+
+        $this->emitSelf('$refresh');
+    }
+
+    public function updateCor($payload)
+    {
+        if ($payload['id'] != $this->button->id) return;
+
+        $buttonDAO = new ButtonDAO();
+
+        $json = json_decode($this->button->configurations);
+        $this->cor = $payload['color'];
+        $json->color = $payload['color'];
 
         $buttonDAO->updateById($this->button->id, [
             'configurations' => json_encode($json)
