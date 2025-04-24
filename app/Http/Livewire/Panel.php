@@ -114,10 +114,10 @@ class Panel extends Component
         $novo = $buttonDAO->create([
             'origin_id'=>$this->painel->id,
             'destination_id'=>null,
-            'configurations'=>'{"color":"#833B8D","text":"","type":"linhas"}'
+            'configurations'=>'{"color":"#833B8D","text":"","type":"linhas","transition":""}'
         ]);
 
-        $novo->configurations = json_decode('{"color":"#833B8D","text":"","type":"linhas"}',true);
+        $novo->configurations = json_decode('{"color":"#833B8D","text":"","type":"linhas","transition":""}',true);
 
         $this->buttonRenderizados = ButtonDAO::getByOriginId($this->painel->id);
 

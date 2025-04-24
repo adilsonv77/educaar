@@ -74,9 +74,9 @@
                 <div class="mb-6">
                     <h3 class="mb-2">TRANSIÇÕES</h3>
                     <select class="select-native">
-                        <option disabled selected>Nenhuma</option>
-                        <option>Próximo Painél</option>
-                        <option>Final da Experiência</option>
+                        <option value="" disabled selected>Nenhuma</option>
+                        <option value="proximo">Próximo Painél</option>
+                        <option value="final">Final da Experiência</option>
                     </select>
                 </div>
                 <!-- SELECIONAR O PAINEL -->

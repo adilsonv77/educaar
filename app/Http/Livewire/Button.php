@@ -12,11 +12,12 @@ class Button extends Component
 {
     use WithFileUploads;
 
-    public $listeners = ["updateTexto","updateCor"];
+    public $listeners = ["updateTexto","updateCor","updateTransicao"];
     public $button;
     public $texto;
     public $cor;
     public $painelOrigem;
+    public $tipo;
     public $transicao;
     public $painelDestino;
 
@@ -26,11 +27,12 @@ class Button extends Component
 
         $json = is_string($button->configurations) ? json_decode($button->configurations, true) : $button->configurations;
 
+        $this->tipo = $json["type"];
         $this->texto = $json['text'] ?? '';
         $this->cor = $json['color'] ?? '';
         $this->painelOrigem = $button->origin_id;
         $this->painelDestino = $button->destination_id;
-        $this->transicao = $json['type'] ?? '';
+        $this->transicao = $json['transition'] ?? '';
     }
 
     public function updateTexto($payload)
@@ -59,6 +61,23 @@ class Button extends Component
         $json = json_decode($this->button->configurations);
         $this->cor = $payload['color'];
         $json->color = $payload['color'];
+
+        $buttonDAO->updateById($this->button->id, [
+            'configurations' => json_encode($json)
+        ]);
+
+        $this->emitSelf('$refresh');
+    }
+
+    public function updateTransicao($payload)
+    {
+        if ($payload['id'] != $this->button->id) return;
+
+        $buttonDAO = new ButtonDAO();
+
+        $json = json_decode($this->button->configurations);
+        $this->transicao = $payload['transition'];
+        $json->transition = $payload['transition'];
 
         $buttonDAO->updateById($this->button->id, [
             'configurations' => json_encode($json)

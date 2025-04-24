@@ -116,7 +116,7 @@ document.addEventListener("click", (e) => {
 });
 
 let btnTxt = document.getElementById("btnTxt")
-let btnColor = document.getElementsByClassName("pcr-result")[0]
+let selectTransicao = document.getElementsByClassName("select-native")[0];
 
 function selecionarBotao(botao) {
     isDraggingPanel = true;
@@ -135,6 +135,7 @@ function selecionarBotao(botao) {
     let btnInfo = botaoSelecionado.querySelector("#buttonInfo")
     
     btnTxt.value = botaoSelecionado.textContent.trim();
+    selectTransicao.value = btnInfo.getAttribute("transition");
     setTimeout(() => {
         pickr.setColor(btnInfo.getAttribute("color"));
     }, 100);
@@ -654,3 +655,8 @@ pickr.on("change", (color) => {
         window.livewire.emit('updateCor', { id: botaoSelecionado.querySelector(".circulo").id, color: color.toHEXA().toString() })
     }, 1000);
 });
+
+// 4. Altera transição
+selectTransicao.onchange = ()=>{
+    window.livewire.emit('updateTransicao', { id: botaoSelecionado.querySelector(".circulo").id, transition: selectTransicao.value })
+}
