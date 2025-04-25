@@ -17,7 +17,6 @@ class Button extends Component
     public $texto;
     public $cor;
     public $painelOrigem;
-    public $tipo;
     public $transicao;
     public $painelDestino;
 
@@ -27,7 +26,6 @@ class Button extends Component
 
         $json = is_string($button->configurations) ? json_decode($button->configurations, true) : $button->configurations;
 
-        $this->tipo = $json["type"];
         $this->texto = $json['text'] ?? '';
         $this->cor = $json['color'] ?? '';
         $this->painelOrigem = $button->origin_id;

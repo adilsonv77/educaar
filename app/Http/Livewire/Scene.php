@@ -45,15 +45,15 @@ class Scene extends Component
         $painelDAO = new PainelDAO();
 
         $novo = $painelDAO->create([
-            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}',
+            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas"}',
             'scene_id' => $this->scene_id
         ]);
 
         $painelDAO->updateById($novo->id,[
-            'panel'=>'{"id":"'.$novo->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}'
+            'panel'=>'{"id":"'.$novo->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas"}'
         ]);
 
-        $novo->panel = json_decode('{"id":"'.$novo->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}',true);
+        $novo->panel = json_decode('{"id":"'.$novo->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas"}',true);
 
         $this->paineisRenderizados[] = $novo;
 

@@ -36,9 +36,11 @@
     </div>
 
     <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
-        @foreach ($buttonRenderizados as $button)
-            @livewire('button', ['button' => $button, ""], key($button->id))
-        @endforeach
+        <div id="layout" class="layout-{{ $btnFormat }}">
+            @foreach ($buttonRenderizados as $button)
+                @livewire('button', ['button' => $button, ""], key($button->id))
+            @endforeach
+        </div>
     </div>
 
     <input type="hidden" name="link" wire:model="link" wire:change="updateLink" value="{{$panelData["link"]}}" id="link-{{ $panelData["id"] }}"> <!--Link enviado-->

@@ -184,7 +184,7 @@ btn2.addEventListener('click', function () {
     if (!modoSelecionarPainelInicial) {
         modoSelecionarPainelInicial = "Painel Normal";
         lastBtnId = botaoSelecionado.querySelector(".circulo").id;
-    }else{
+    } else {
         modoSelecionarPainelInicial = false;
     }
 });
@@ -199,18 +199,18 @@ document.addEventListener("click", function (e) {
     if (!painel) return;
 
     e.stopPropagation();
-    
+
     const idPainel = painel.querySelector('.idPainel')?.id;
     if (!idPainel) {
         console.warn("Painel clicado não tem ID válido.");
         return;
     }
 
-    if (modoSelecionarPainelInicial == "Painel Normal"){
+    if (modoSelecionarPainelInicial == "Painel Normal") {
         selectPainel.value = idPainel;
         mudarPainelDestino(lastBtnId);
         document.querySelectorAll('.tapSelect')[0].classList.remove('selected');
-    }else{
+    } else {
         // Envia pro Livewire
         window.livewire.emit('updateStartPanel', idPainel);
 
@@ -236,47 +236,21 @@ function alterarFormatoBotoes(formato) {
         return;
     }
 
-    const layouts = {
-        linhas: `
-            <div class="button_Panel" data-botao="1"><div class="circulo"></div> Botão 1</div>
-            <div class="button_Panel" data-botao="2"><div class="circulo"></div> Botão 2</div>
-            <div class="button_Panel" data-botao="3"><div class="circulo"></div> Botão 3</div>
-        `,
-        blocos: `
-        <div class="layout-blocos">
-            <div class="button_Panel" data-botao="1">Botão 1</div>
-            <div class="button_Panel" data-botao="2">Botão 2</div>
-            <div class="button_Panel" data-botao="3">Botão 3</div>
-            <div class="button_Panel" data-botao="4">Botão 4</div>
-            <div class="button_Panel" data-botao="5">Botão 5</div>
-            <div class="button_Panel" data-botao="6">Botão 6</div>
-        </div>
-        `,
-        alternativas: `
-        <div class="layout-alternativas">
-            <div class="botao-circular" data-botao="1">A</div>
-            <div class="botao-circular" data-botao="2">B</div>
-            <div class="botao-circular" data-botao="3">C</div>
-            <div class="botao-circular" data-botao="4">D</div>
-        </div>
-        `,
-    };
-
-    // Remover o círculo e ajustar o tamanho
-    if (formato === "blocos") {
-        areaBotoes.innerHTML = layouts[formato];
-        let botoes = areaBotoes.querySelectorAll(".button_Panel");
-        botoes.forEach((botao) => {
-            botao.style.width = "calc((100% - 3px) / 2)";
-            botao.style.height = "calc((100% - 6px) / 3)";
-            botao.querySelector(".circulo").style.display = "none"; // Remove o círculo
-        });
-    } else {
-        areaBotoes.innerHTML = layouts[formato];
+    let layout = painelSelecionado.querySelector("#layout")
+    switch (formato) {
+        case "linhas":
+            layout.classList = "layout-linhas";
+            break;
+        case "blocos":
+            layout.classList = "layout-blocos";
+            break;
+        case "alternativas":
+            layout.classList = "layout-alternativas";
+            break;
     }
 
-    botoes[0].setAttribute("data-botao", "1"); // Exemplo
-    // areaBotoes.innerHTML = layouts[formato];
+    //Guardar no banco
+    window.livewire.emit("updateBtnFormat", { id: painelSelecionado.querySelector(".idPainel").id, btnFormat: formato })
 }
 
 document
@@ -652,7 +626,7 @@ selectTransicao.onchange = () => {
 }
 
 // 5. Altera o painel de destino
-selectPainel.onchange = ()=>mudarPainelDestino(botaoSelecionado.querySelector(".circulo").id);
+selectPainel.onchange = () => mudarPainelDestino(botaoSelecionado.querySelector(".circulo").id);
 function mudarPainelDestino(id) {
     window.livewire.emit('updatePainelDestino', { id: id, destination_id: selectPainel.value })
 }

@@ -179,11 +179,10 @@ input {
     height: 100%;
 }
 
-.botao-circular {
+.layout-alternativas .button_Panel{
     aspect-ratio: 1 / 1;
     width: 100%;
     max-width: 70px;
-    /* pode ajustar esse valor se quiser menor */
     max-height: 70px;
     border: 0.5px solid #833B8D;
     border-radius: 50%;
@@ -195,8 +194,15 @@ input {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    padding: 0; 
+    margin-bottom: 0;
+    height: 100%;
+    text-align: center;
 }
 
+.layout-alternativas .circulo {
+    display: none;
+}
 /* =============================
     CONEXÃO (LINHAS)
    ============================= */
@@ -419,7 +425,6 @@ button {
     height: 45px;
     /* 30 * 1.5 */
     width: 100%;
-
 }
 
 .circulo {

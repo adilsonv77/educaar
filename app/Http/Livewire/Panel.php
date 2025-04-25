@@ -11,7 +11,7 @@ use App\DAO\ButtonDAO;
 
 class Panel extends Component
 {
-    protected $listeners = ['updateLink','createButton', 'salvarTexto'];
+    protected $listeners = ['updateLink','updateBtnFormat','createButton', 'salvarTexto'];
 
     use WithFileUploads;
 
@@ -21,6 +21,7 @@ class Panel extends Component
     public $texto;
     public $midia;
     public $link;
+    public $btnFormat;
 
     public function mount($painel)
     {
@@ -32,6 +33,7 @@ class Panel extends Component
 
         $this->texto = $json['txt'] ?? '';
         $this->link = $json['link'] ?? '';
+        $this->btnFormat = $json['btnFormat'] ??'';
     }
 
     public function salvarTexto($painelId, $novoTexto)
@@ -134,8 +136,26 @@ class Panel extends Component
         $this->emit("buttonCriado",$novo->id);
     }
 
+    public function updateBtnFormat($payload)
+    {
+        if ($payload['id'] != $this->painel->id) return;
+
+        $painelDAO = new PainelDAO();
+
+        $json = json_decode($this->painel->panel);
+        $this->btnFormat = $payload['btnFormat'];
+        $json->btnFormat = $payload['btnFormat'];
+
+        $painelDAO->updateById($this->painel->id, [
+            'panel' => json_encode($json)
+        ]);
+
+        $this->emitSelf('$refresh');
+    }
+
     public function render()
     {
         return view('livewire.panel', ['texto' => $this->texto,]);
     }
+
 }
