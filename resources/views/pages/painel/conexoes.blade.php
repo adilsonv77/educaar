@@ -28,7 +28,7 @@
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
     <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-                                                                                                                                    de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+        de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -87,8 +87,6 @@
                 let panel = document.getElementById(id).parentElement;
                 atribuirListeners(panel, id);
             });
-
-
 
             mostrarMenu("canvas");
         });
@@ -199,7 +197,6 @@
                 }, 50);
             }
         });
-
         //---------------------------------------------------------------------------------------------------------------------
 
     </script>

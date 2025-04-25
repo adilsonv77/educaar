@@ -86,8 +86,7 @@
                         <img class="tapSelect" src="{{ asset('images/singletap.svg') }}" alt="Ícone"
                             style="cursor: pointer;">
                     </h3>
-                    <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)"
-                        class="select-native">
+                    <select class="select-native">
                         <option disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
                             <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>

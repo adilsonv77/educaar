@@ -20,7 +20,7 @@ function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
 }
 
-//----COLOR PICKER----------------------------------------------------------------------------
+//----COLOR PICKER--------------------------------------------------------------------------------
 const pickr = Pickr.create({
     el: "#color-picker-container",
     theme: "nano", // Opções: classic, nano, monolith
@@ -46,7 +46,7 @@ const pickr = Pickr.create({
 //     console.log("Cor selecionada:", color.toHEXA().toString());
 // });
 
-//----ADICIONAR PAINEL----------------------------------------------------------------------------
+//----ADICIONAR PAINEL--------------------------------------------------------------------------------------------------------
 let container = document.getElementById("canvas");
 let painelSelecionado = null;
 let botaoSelecionado = null;
@@ -121,7 +121,7 @@ document.addEventListener("click", (e) => {
     }
 });
 
-let btnTxt = document.getElementById("btnTxt")
+let btnTxt = document.getElementById("btnTxt");
 let selectTransicao = document.getElementsByClassName("select-native")[0];
 
 function selecionarBotao(botao) {
@@ -138,9 +138,10 @@ function selecionarBotao(botao) {
     }
 
     //Carrega as informações daquele botão no menu.
-    let btnInfo = botaoSelecionado.querySelector("#buttonInfo")
+    let btnInfo = botaoSelecionado.querySelector("#buttonInfo");
 
     btnTxt.value = botaoSelecionado.textContent.trim();
+    selectPainel.value = btnInfo.getAttribute("destination_id");
     selectTransicao.value = btnInfo.getAttribute("transition");
     setTimeout(() => {
         pickr.setColor(btnInfo.getAttribute("color"));
@@ -168,23 +169,29 @@ function selecionarCanvas() {
     isDraggingPanel = false;
 }
 
-//----SELECIONAR PELA IMAGEM----------------------------------------------------------------------------
-
+//----SELECIONAR PAINEL INICIAL CLICANDO NO PAINEL-------------------------------------------------------------------
 let modoSelecionarPainelInicial = false;
 
-document.querySelectorAll('.tapSelect').forEach(btn => {
-    btn.addEventListener('click', function () {
-        modoSelecionarPainelInicial = !modoSelecionarPainelInicial;
+let btn = document.querySelectorAll('.tapSelect')[1];
 
-        if (modoSelecionarPainelInicial) {
-            console.log("Modo de seleção de painel inicial ativado. Clique em um painel.");
-        } else {
-            console.log("Modo de seleção de painel inicial desativado.");
-        }
-    });
+btn.addEventListener('click', function () {
+    modoSelecionarPainelInicial = !modoSelecionarPainelInicial;
+});
+
+let btn2 = document.querySelectorAll('.tapSelect')[0];
+let lastBtnId;
+btn2.addEventListener('click', function () {
+    if (!modoSelecionarPainelInicial) {
+        modoSelecionarPainelInicial = "Painel Normal";
+        lastBtnId = botaoSelecionado.querySelector(".circulo").id;
+    }else{
+        modoSelecionarPainelInicial = false;
+    }
 });
 
 // Interceptar clique em painel só se o modo estiver ativo
+let selectPainel = document.getElementsByClassName("select-native")[1]
+
 document.addEventListener("click", function (e) {
     if (!modoSelecionarPainelInicial) return;
 
@@ -192,21 +199,26 @@ document.addEventListener("click", function (e) {
     if (!painel) return;
 
     e.stopPropagation();
-
+    
     const idPainel = painel.querySelector('.idPainel')?.id;
     if (!idPainel) {
         console.warn("Painel clicado não tem ID válido.");
         return;
     }
 
-    console.log("Painel selecionado como inicial:", idPainel);
+    if (modoSelecionarPainelInicial == "Painel Normal"){
+        selectPainel.value = idPainel;
+        mudarPainelDestino(lastBtnId);
+        document.querySelectorAll('.tapSelect')[0].classList.remove('selected');
+    }else{
+        // Envia pro Livewire
+        window.livewire.emit('updateStartPanel', idPainel);
 
-    // Envia pro Livewire
-    window.livewire.emit('updateStartPanel', idPainel);
+        document.querySelectorAll('.tapSelect')[1].classList.remove('selected');
+    }
 
     // Sai do modo de seleção
     modoSelecionarPainelInicial = false;
-    document.querySelectorAll('.tapSelect').forEach(btn => btn.classList.remove('selected'));
 });
 
 //----FORMATO DOS BOTÕES----------------------------------------------------------------------------
@@ -606,7 +618,7 @@ function ativarDrag(painel) {
     });
 }
 
-//----CRIAR NOVOS BOTÕES------------------------------------------------------------------------------------------
+//----CONFIGURAR BOTÕES------------------------------------------------------------------------------------------
 let addBtnBtn = document.getElementById("addButton")
 
 addBtnBtn.onclick = () => {
@@ -637,4 +649,10 @@ pickr.on("change", (color) => {
 // 4. Altera transição
 selectTransicao.onchange = () => {
     window.livewire.emit('updateTransicao', { id: botaoSelecionado.querySelector(".circulo").id, transition: selectTransicao.value })
+}
+
+// 5. Altera o painel de destino
+selectPainel.onchange = ()=>mudarPainelDestino(botaoSelecionado.querySelector(".circulo").id);
+function mudarPainelDestino(id) {
+    window.livewire.emit('updatePainelDestino', { id: id, destination_id: selectPainel.value })
 }
