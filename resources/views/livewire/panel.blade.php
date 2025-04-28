@@ -1,4 +1,4 @@
-<div class="painel" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}">
+<div class="painel" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" draggable="true">
 
     <!--Esse php previne erros-->    
     <?php
