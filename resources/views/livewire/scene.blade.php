@@ -93,6 +93,8 @@
                         @endforeach
                     </select>
                 </div>
+                <!-- EXCLUIR BOTÃO -->
+                <button id="deleteBtn">Excluir botão</button>
             </div>
 
             <!-- Quando o canvas está "selecionado" -->

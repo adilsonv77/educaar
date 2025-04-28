@@ -11,12 +11,11 @@ use App\DAO\ButtonDAO;
 
 class Panel extends Component
 {
-    protected $listeners = ['updateLink','updateBtnFormat','createButton', 'salvarTexto'];
+    protected $listeners = ['updateLink','updateBtnFormat','createButton','deleteBtn', 'salvarTexto'];
 
     use WithFileUploads;
 
     public $buttonRenderizados = [];
-    public $paineisRenderizados = [];
     public $painel;
     public $texto;
     public $midia;
@@ -149,6 +148,22 @@ class Panel extends Component
         $painelDAO->updateById($this->painel->id, [
             'panel' => json_encode($json)
         ]);
+
+        $this->emitSelf('$refresh');
+    }
+
+    public function deleteBtn($payload){
+        if ($payload['id_painel'] != $this->painel->id) return;
+
+        $buttonDAO = new ButtonDAO();
+
+        $id = $payload['id'];
+
+        $buttonDAO->deleteById($id);
+
+        $this->buttonRenderizados = $this->buttonRenderizados->reject(function ($button) use ($id) {
+            return $button->id == $id;
+        })->values(); 
 
         $this->emitSelf('$refresh');
     }
