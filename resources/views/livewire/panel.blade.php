@@ -14,18 +14,18 @@
 
     <div class="midia">
         <div class="no_midia" tabindex=0 @if($panelData["midiaType"]!="none")style="display: none"@endif>
-            <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}">
+            <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}" draggable="false">
         </div>
 
         <img class="imgMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}" 
-             @if($panelData["midiaType"]!="image")style="display: none"@endif>
+             @if($panelData["midiaType"]!="image")style="display: none"@endif draggable="false">
 
-        <video class="vidMidia" controls @if($panelData["midiaType"]!="video")style="display: none"@endif>
-            <source id="srcVidMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}" type="video/mp4">
+        <video class="vidMidia" controls @if($panelData["midiaType"]!="video")style="display: none"@endif draggable="false">
+            <source id="srcVidMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}" type="video/mp4" draggable="false">
         </video>
 
         <div class="videoContainer youtubeMidia" @if($panelData["midiaType"]!="youtube")style="display: none"@endif>
-            <iframe 
+            <iframe
                 id="srcYoutube"
                 src="https://www.youtube.com/embed/{{$panelData["link"]}}?autoplay=0"
                 frameborder="0"

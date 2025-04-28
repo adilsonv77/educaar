@@ -333,6 +333,7 @@ div.addEventListener("mousedown", (e) => {
         startLeft = div.offsetLeft;
         startTop = div.offsetTop;
         div.style.cursor = "grabbing";
+        e.preventDefault();
     }, 100);
 });
 
