@@ -3,22 +3,21 @@ let scale = 0.7;
 let alternativeScale = 3;
 const canvas = document.getElementById("canvas");
 
+function updateCanvasScale() {
+    canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
+}
 
-document.getElementById("zoom-in").addEventListener("click", () => {
-    scale += 0.1; // Aumenta o zoom
+document.getElementById("zoom-in")?.addEventListener("click", () => {
+    scale += 0.1;
     alternativeScale += 1;
     updateCanvasScale();
 });
 
-document.getElementById("zoom-out").addEventListener("click", () => {
-    scale = Math.max(scale - 0.1, 0.1); // Diminui o zoom, mas não permite que fique menor que 0.1
+document.getElementById("zoom-out")?.addEventListener("click", () => {
+    scale = Math.max(scale - 0.1, 0.1);
     alternativeScale = Math.max(alternativeScale - 1, -9);
     updateCanvasScale();
 });
-
-function updateCanvasScale() {
-    canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
-}
 
 //----COLOR PICKER--------------------------------------------------------------------------------
 const pickr = Pickr.create({
@@ -83,7 +82,7 @@ function selecionarPainel(painel, e) {
     }
 
     painelSelecionado = painel;
-    
+
     painelSelecionado.classList.add("selecionado");
 
     if (botaoSelecionado) {
@@ -266,65 +265,144 @@ document
     .addEventListener("click", () => alterarFormatoBotoes("alternativas"));
 
 //----MOVIMENTAÇÃO PAINEL----------------------------------------------------------------------------
-let isDraggingPanel = false;
+// let isDraggingPanel = false;
 
-function arrastar(e, painel) {
-    isDraggingPanel = true;
-    zIndexAtual++;
-    painel.painel.style.zIndex = zIndexAtual;
-    painel.startX = e.clientX;
-    painel.startY = e.clientY;
-    chamarFuncaoSoltar = (e) => soltar(e, painel);
-    document.addEventListener("dragend", chamarFuncaoSoltar);
+// function arrastar(e, painel) {
+//     isDraggingPanel = true;
+//     zIndexAtual++;
+//     painel.painel.style.zIndex = zIndexAtual;
+//     painel.startX = e.clientX;
+//     painel.startY = e.clientY;
+//     chamarFuncaoSoltar = (e) => soltar(e, painel);
+//     document.addEventListener("dragend", chamarFuncaoSoltar);
+// }
+
+// function soltar(e, painel) {
+//     isDraggingPanel = false;
+
+//     //Inserir manualmente
+//     let alturaMax = 80000;
+//     let larguraMax = 80000;
+//     let alturaPainel = 462;
+//     let larguraPainel = 291;
+
+//     // Movimenta para a posição do mouse
+//     painel.newX = (painel.painel.offsetLeft - (painel.startX - e.clientX)) / scale;
+//     painel.newY = (painel.painel.offsetTop - (painel.startY - e.clientY)) / scale;
+
+//     painel.startX = e.clientX;
+//     painel.startY = e.clientY;
+
+//     // Verifica se a posição atual é válida.
+//     if (painel.newX + larguraPainel > larguraMax) {
+//         painel.newX = larguraMax - larguraPainel;
+//     }
+//     if (painel.newX < 0) {
+//         painel.newX = 0;
+//     }
+//     if (painel.newY + alturaPainel > alturaMax) {
+//         painel.newY = alturaMax - alturaPainel;
+//     }
+//     if (painel.newY < 0) {
+//         painel.newY = 0;
+//     }
+
+//     painel.painel.style.top = painel.newY + "px";
+//     painel.painel.style.left = painel.newX + "px";
+
+//     // Atualiza as coordenadas no banco de dados
+//     Livewire.emit('atualizarCoordenadas', painel.painel.id, painel.newX, painel.newY);
+
+//     document.removeEventListener("dragend", chamarFuncaoSoltar);
+// }
+
+//----MOVIMENTAÇÃO PAINEL (Personalizada)----------------------------------------------------------------------------
+function habilitarArrastoPersonalizado(painelElement) {
+    let offsetX, offsetY, isDragging = false;
+
+    painelElement.addEventListener("mousedown", function (e) {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        isDragging = true;
+
+        const rect = painelElement.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        document.body.style.userSelect = "none";
+        painelElement.style.zIndex = ++zIndexAtual;
+    });
+
+    document.addEventListener("mousemove", function (e) {
+        if (!isDragging) return;
+
+        const canvasRect = canvas.getBoundingClientRect();
+        let newX = (e.clientX - canvasRect.left - offsetX) / scale;
+        let newY = (e.clientY - canvasRect.top - offsetY) / scale;
+
+        newX = Math.max(0, Math.min(newX, 80000 - 291));
+        newY = Math.max(0, Math.min(newY, 80000 - 462));
+
+        painelElement.style.left = `${newX}px`;
+        painelElement.style.top = `${newY}px`;
+    });
+
+    document.addEventListener("mouseup", function () {
+        if (!isDragging) return;
+        isDragging = false;
+        document.body.style.userSelect = "";
+
+        const x = parseFloat(painelElement.style.left);
+        const y = parseFloat(painelElement.style.top);
+        const id = parseInt(painelElement.querySelector('.idPainel').id);
+
+        if (!isNaN(id)) {
+            console.log("Enviando coordenadas", id, x, y);
+            window.livewire.emit("updateCoordinate", id, x, y);
+        }
+    });
 }
 
-function soltar(e, painel) {
-    isDraggingPanel = false;
+//----ATUALIZAR LISTENERS DOS PAINÉIS EXISTENTES E NOVOS------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".painel").forEach(panel => {
+        let id = panel.querySelector('.idPainel')?.id;
+        if (id) {
+            atribuirListeners(panel, id);
+            habilitarArrastoPersonalizado(panel);
+        }
+    });
 
-    //Inserir manualmente
-    let alturaMax = 80000;
-    let larguraMax = 80000;
-    let alturaPainel = 462;
-    let larguraPainel = 291;
+    window.livewire.on("painelCriado", (id) => {
+        let panel = document.getElementById(id);
+        if (!panel) return;
 
-    // Movimenta para a posição do mouse
-    painel.newX =
-        painel.painel.offsetLeft - (painel.startX - e.clientX) / scale;
-    painel.newY = painel.painel.offsetTop - (painel.startY - e.clientY) / scale;
+        try {
+            const painelData = JSON.parse(panel.dataset.panel);
+            panel.style.left = painelData.x + "px";
+            panel.style.top = painelData.y + "px";
+        } catch (e) {
+            console.warn("Falha ao aplicar posição inicial ao novo painel:", e);
+        }
 
-    painel.startX = e.clientX;
-    painel.startY = e.clientY;
+        atribuirListeners(panel, id);
+        habilitarArrastoPersonalizado(panel);
+    });
+});
 
-    // Verifica se a posição atual é válida.
-    if (painel.newX + larguraPainel > larguraMax) {
-        painel.newX = larguraMax - larguraPainel;
-    }
-    if (painel.newX < 0) {
-        painel.newX = 0;
-    }
-    if (painel.newY + alturaPainel > alturaMax) {
-        painel.newY = alturaMax - alturaPainel;
-    }
-    if (painel.newY < 0) {
-        painel.newY = 0;
-    }
-
-    painel.painel.style.top = painel.newY + "px";
-    painel.painel.style.left = painel.newX + "px";
-
-    document.removeEventListener("dragend", chamarFuncaoSoltar);
+function atribuirListeners(panel, id) {
+    let inputLink = panel.querySelector("#file-" + id);
+    panel.addEventListener("click", (e) => selecionarPainel(panel, e));
+    adicionarInteracaoPopup(id);
 }
 
 //----MOVIMENTAÇÃO CANVAS----------------------------------------------------------------------------
 const div = document.getElementById("canvas");
 let isDragging = false;
-let startX = 0,
-    startY = 0;
-let startLeft = 0,
-    startTop = 0;
+let startX = 0, startY = 0;
+let startLeft = 0, startTop = 0;
 
 div.addEventListener("mousedown", (e) => {
-    //Antes de movimentar espera 0.05 segundos para ver se ta movimentando um painel primeiro
     setTimeout(() => {
         if (isDraggingPanel) return;
         isDragging = true;
@@ -636,7 +714,7 @@ function mudarPainelDestino(id) {
 
 // 6. Deletar botão
 let deleteBtn = document.getElementById("deleteBtn")
-deleteBtn.onclick = ()=>{
+deleteBtn.onclick = () => {
     let painel = botaoSelecionado.querySelector(".circulo").parentElement.parentElement.parentElement.parentElement;
-    window.livewire.emit('deleteBtn',{id: botaoSelecionado.querySelector(".circulo").id, id_painel: painel.querySelector(".idPainel").id})
+    window.livewire.emit('deleteBtn', { id: botaoSelecionado.querySelector(".circulo").id, id_painel: painel.querySelector(".idPainel").id })
 }

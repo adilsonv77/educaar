@@ -28,7 +28,7 @@
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
     <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-        de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+            de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -74,29 +74,6 @@
 
         function onClick(e) {
             selecionarPainel(e.currentTarget, e);
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".painel").forEach(panel => {
-                let id = panel.querySelector('.idPainel').id;
-
-                atribuirListeners(panel, id);
-            });
-
-            window.livewire.on("painelCriado", (id) => {
-                let panel = document.getElementById(id).parentElement;
-                atribuirListeners(panel, id);
-            });
-
-            mostrarMenu("canvas");
-        });
-
-        function atribuirListeners(panel, id) {
-            let inputLink = panel.querySelector("#file-" + id);
-
-            panel.addEventListener("dragstart", onDragStart);
-            panel.addEventListener("click", onClick);
-            adicionarInteracaoPopup(id);
         }
 
         //----GERAR CONEXÃO---------------------------------------------------------------------

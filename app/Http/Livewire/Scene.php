@@ -11,7 +11,7 @@ use App\DAO\SceneDAO;
 
 class Scene extends Component
 {
-    protected $listeners = ['deletePainel','dd', 'updateStartPanel'];
+    protected $listeners = ['deletePainel', 'dd', 'updateStartPanel', 'updateCoordinate' ];
 
     public $paineisRenderizados = [];
     public $scene_id;
@@ -45,19 +45,19 @@ class Scene extends Component
         $painelDAO = new PainelDAO();
 
         $novo = $painelDAO->create([
-            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas"}',
+            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas","x":"0","y":"0"}',
             'scene_id' => $this->scene_id
         ]);
 
-        $painelDAO->updateById($novo->id,[
-            'panel'=>'{"id":"'.$novo->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas"}'
+        $painelDAO->updateById($novo->id, [
+            'panel' => '{"id":' . $novo->id . ',"txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas","x":"0","y":"0"}',
         ]);
 
-        $novo->panel = json_decode('{"id":"'.$novo->id.'","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas"}',true);
+        $novo->panel = json_decode('{"id":"' . $novo->id . '","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas","x":"0","y":"0"}', true);
 
         $this->paineisRenderizados[] = $novo;
 
-        $this->emit("painelCriado",$novo->id);
+        $this->emit("painelCriado", $novo->id);
     }
 
     public function deletePainel($id)
@@ -97,6 +97,22 @@ class Scene extends Component
     {
         $sceneDAO = new SceneDAO();
         $sceneDAO->updateById($this->scene_id, ['name' => $this->nameScene]);
+    }
+
+    public function updateCoordinate($painelId, $x, $y)
+    {
+        $painelDAO = new PainelDAO();
+        $painelRaw = DB::table('paineis')->where('id', $painelId)->value('panel');
+
+        if ($painelRaw) {
+            $panelData = json_decode($painelRaw, true);
+            $panelData['x'] = $x;
+            $panelData['y'] = $y;
+
+            $painelDAO->updateById($painelId, [
+                'panel' => json_encode($panelData)
+            ]);
+        }
     }
 
     //Fazer dd por JS para testes
