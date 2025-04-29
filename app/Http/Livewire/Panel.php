@@ -11,7 +11,7 @@ use App\DAO\ButtonDAO;
 
 class Panel extends Component
 {
-    protected $listeners = ['updateLink','updateBtnFormat','createButton','deleteBtn', 'salvarTexto'];
+    protected $listeners = ['updateLink','updateBtnFormat','createButton','updatedMidia','deleteBtn', 'salvarTexto'];
 
     use WithFileUploads;
 
@@ -56,7 +56,6 @@ class Panel extends Component
         
     }
 
-
     public function updatedMidia($recebeuLink = null)
     {
         $painelDAO = new PainelDAO();
@@ -68,7 +67,6 @@ class Panel extends Component
         $baseFileName = time();
 
         $arquivoRecebido = !empty($this->midia);
-        $possuiLinkYoutube = !empty($this->link);
 
         if ($arquivoRecebido) {
             $midiaExtension = $this->midia->getClientOriginalExtension();

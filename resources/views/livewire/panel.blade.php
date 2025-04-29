@@ -1,9 +1,11 @@
-<div class="painel" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" draggable="true">
+<?php
+    $panelData = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
+?>
 
-    <!--Esse php previne erros-->    
-    <?php
-        $panelData = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
-    ?>                  
+<div class="painel"
+     data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" data-panel='@json($panelData)' style="left: {{ $panelData['x'] ?? 0 }}px; top: {{ $panelData['y'] ?? 0 }}px;">
+
+    <!--Esse php previne erros-->             
 
     <p class="idPainel" id="{{ $panelData["id"] }}">Painel ({{ $panelData["id"] }})</p>    
 
