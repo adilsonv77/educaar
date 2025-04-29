@@ -117,7 +117,7 @@ class Scene extends Component
 
     //Fazer dd por JS para testes
     //window.livewire.emit("dd","variavel");
-    public function dd($var)
+    public function dd2($var)
     {
         dd($this->paineisRenderizados);
         dd($var);

@@ -451,9 +451,13 @@ function abrirPopUp(id) {
     document.getElementById("flex-container").style.display = "flex";
 }
 
+let urlYoutubeInformado = false;
+let inputAtivo = null;
+const midiaPreviewPorInput = new Map();
+
 function adicionarInteracaoPopup(id) {
     let painel = document.getElementById(id).parentElement;
-    let fileBtn = painel.querySelector("#file-" + id); //Tem multiplos
+    let fileBtn = painel.querySelector("#file-" + id);
     let midiaArea = painel.querySelector(".midia");
 
     let img = painel.querySelector(".imgMidia");
@@ -463,68 +467,49 @@ function adicionarInteracaoPopup(id) {
     let url = document.getElementById("linkYoutube").src;
     let idYoutube = painel.querySelector("#link-" + id);
     let iFrameYoutube = painel.querySelector("#srcYoutube");
-    let urlYoutubeInformado = false;
 
-    fileBtn.onchange = () => midiaPreview();
-
-    //Faz o popup aparecer quando clicar
-    midiaArea.onclick = () => {
-        abrirPopUp(id);
-    };
-    Array.from(midiaArea.children).forEach((child) => {
-        child.onclick = () => {
-            abrirPopUp(id);
-        };
-    });
-
-    //Carrega a imagem no painel
-    function midiaPreview() {
-        //Descobre se arquivo inserido é imagem ou vídeo ou video youtube e ativa o html correspondente
+    const midiaPreview = () => {
         if (urlYoutubeInformado) {
-            //É vídeo do youtube
             urlYoutubeInformado = false;
             img.style.display = "none";
             vid.style.display = "none";
             vidYoutube.style.display = "block";
-            try {
-                vid.pause();
-            } catch (error) { }
-
-            iFrameYoutube.src =
-                "https://www.youtube.com/embed/" +
-                idYoutube.value +
-                "?autoplay=1";
+            try { vid.pause(); } catch (error) {}
+            iFrameYoutube.src = "https://www.youtube.com/embed/" + idYoutube.value + "?autoplay=1";
         } else {
-            let eVideo = fileBtn.files[0].name.endsWith(".mp4"); //É video (true) ou imagem (false)?
+            let eVideo = fileBtn.files[0].name.endsWith(".mp4");
             if (eVideo) {
-                //É vídeo
                 img.style.display = "none";
                 vid.style.display = "block";
                 vidYoutube.style.display = "none";
-
                 document.getElementById("linkYoutube").src = "";
                 iFrameYoutube.src = "";
                 idYoutube.value = "";
                 srcVid.src = URL.createObjectURL(fileBtn.files[0]);
                 vid.load();
             } else {
-                //É imagem
                 img.style.display = "block";
                 vid.style.display = "none";
                 vidYoutube.style.display = "none";
-                try {
-                    vid.pause();
-                } catch (error) { }
-
+                try { vid.pause(); } catch (error) {}
                 document.getElementById("linkYoutube").src = "";
                 iFrameYoutube.src = "";
                 idYoutube.value = "";
                 img.src = URL.createObjectURL(fileBtn.files[0]);
             }
         }
-    }
+    };
+
+    // vincula o midiaPreview a esse input
+    fileBtn.onchange = midiaPreview;
+    midiaPreviewPorInput.set(fileBtn, midiaPreview);
+
+    // clique no painel abre popup
+    midiaArea.onclick = () => abrirPopUp(id);
+    Array.from(midiaArea.children).forEach(child => {
+        child.onclick = () => abrirPopUp(id);
+    });
 }
-let inputAtivo = null;
 
 let editarMidiaBtn = document.getElementById("editarMidia")
 editarMidiaBtn.onclick = () => abrirPopUp(painelSelecionado.querySelector(".idPainel").id)
@@ -553,13 +538,11 @@ dropArea.addEventListener("dragleave", () =>
     dropArea.classList.remove("dragover")
 );
 
-// Solta arquivos na área
 dropArea.addEventListener("drop", (e) => {
     if (!inputAtivo) return;
 
     const files = e.dataTransfer.files;
 
-    // Cria um DataTransfer para simular a seleção
     const dataTransfer = new DataTransfer();
     for (const file of files) {
         dataTransfer.items.add(file);
@@ -568,11 +551,20 @@ dropArea.addEventListener("drop", (e) => {
 
     dropArea.classList.remove("dragover");
 
-    // Chama a função de preview (passando o inputAtivo, se quiser adaptar)
-    midiaPreview();
+    // Chama a função de preview associada ao input atual
+    const midiaPreview = midiaPreviewPorInput.get(inputAtivo);
+    if (midiaPreview) midiaPreview();
 
-    // Fecha o pop-up, se quiser
-    document.getElementById("flex-container").style.display = "none";
+    fecharPopUp();
+
+    let file = dataTransfer.files[0]
+    let painel = inputAtivo.parentElement;
+    let wire = window.livewire.find(painel.getAttribute('wire:id'));
+    if (file) {
+        wire.upload('midia', file);
+    }
+
+    //window.livewire.emit("updatedMidia",null,dataTransfer.files[0]);
 });
 
 // 3.3 Um link do youtube foi inserido
