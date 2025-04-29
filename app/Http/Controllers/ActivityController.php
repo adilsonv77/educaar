@@ -147,7 +147,6 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $idScene = $data['scene'];
         $tipoAtividade = $data['sceneType'];
 
         unset($data['panelId']);
@@ -158,6 +157,7 @@ class ActivityController extends Controller
         if ($tipoAtividade == "Cena") {
             $data['glb'] = '';
             $usarPainel = true;
+            $idScene = $data['scene'];
         } else {
             $data['scene_id'] = null;
         }
@@ -351,6 +351,7 @@ class ActivityController extends Controller
             )
             ->get();
 
+        
         if (empty($activity->scene_id))
             $activity->scene_id = "modelo3D";
 
@@ -369,7 +370,7 @@ class ActivityController extends Controller
             'contents' => $contents,
             'content' => $activity->content_id,
             'scene_id' => $activity->scene_id,
-            'scenes' => $scenes,
+            'scenes' => $scenes
         ];
 
         return view('pages.activity.register', $params);

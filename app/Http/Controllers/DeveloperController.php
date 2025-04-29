@@ -148,13 +148,20 @@ class DeveloperController extends Controller
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
                     )
             ->get();
+
+        if (empty($activity->scene_id))
+            $activity->scene_id = "modelo3D";
+        $scenes = collect();
+
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,
             'id' => $activity->id,
             'name' => $activity->name,
             'contents' => $contents,
-            'content' => $activity->content_id
+            'content' => $activity->content_id,
+            'scene_id' => $activity->scene_id,
+            'scenes' => $scenes
         ];
         return view('pages.activity.register', $params);
     }
