@@ -8,12 +8,20 @@ document.getElementById("zoom-in").addEventListener("click", () => {
     scale += 0.1; // Aumenta o zoom
     alternativeScale += 1;
     updateCanvasScale();
+    document.getElementById("resizeZoom").hidden = false;
 });
 
 document.getElementById("zoom-out").addEventListener("click", () => {
     scale = Math.max(scale - 0.1, 0.1); // Diminui o zoom, mas não permite que fique menor que 0.1
     alternativeScale = Math.max(alternativeScale - 1, -9);
     updateCanvasScale();
+    document.getElementById("resizeZoom").hidden = false;
+});
+
+document.getElementById("resizeZoom").addEventListener("click", () =>{
+    scale = 0.7;
+    updateCanvasScale();
+    document.getElementById("resizeZoom").hidden = true;
 });
 
 function updateCanvasScale() {

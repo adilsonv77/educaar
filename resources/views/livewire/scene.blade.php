@@ -147,6 +147,7 @@
             <div class="menu-zoom">
                 <button id="zoom-out">-</button>
                 <button id="zoom-in">+</button>
+                <button id="resizeZoom" hidden>Redefinir zoom</button>
             </div>
             <div id="canvas" class="canvas">
                 @foreach ($paineisRenderizados as $painel)
