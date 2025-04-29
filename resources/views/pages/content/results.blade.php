@@ -117,7 +117,7 @@
 @section('content')
 
     <div id="formTurma">
-        <form action="{{ route('turmas.listarTurmasAlunosProf') }}" method="GET ">
+        <form action="{{ route('content.resultsContents') }}" method="GET ">
             @csrf
 
             <div class="form-inline">
