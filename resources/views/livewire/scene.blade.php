@@ -149,7 +149,6 @@
                 <button id="zoom-in">+</button>
                 <button id="resizeZoom" hidden>Redefinir zoom</button>
             </div>
-            
             <div id="canvas" class="canvas">
                 @foreach ($paineisRenderizados as $painel)
                     @livewire('panel', ['painel' => $painel], key($painel->id))

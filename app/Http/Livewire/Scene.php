@@ -11,7 +11,7 @@ use App\DAO\SceneDAO;
 
 class Scene extends Component
 {
-    protected $listeners = ['deletePainel', 'dd', 'updateStartPanel', 'updateCoordinate' ];
+    protected $listeners = ['deletePainel', 'dd', 'updateStartPanel', 'updateCoordinate'];
 
     public $paineisRenderizados = [];
     public $scene_id;
@@ -44,21 +44,24 @@ class Scene extends Component
     {
         $painelDAO = new PainelDAO();
 
-        $novo = $painelDAO->create([
-            'panel' => '{"txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas","x":"0","y":"0"}',
-            'scene_id' => $this->scene_id
-        ]);
+        // Define posição inicial próxima do centro da cena com leve deslocamento
+        $xInicial = 40000 - round(291 / 2) + 40;
+        $yInicial = 40000 - round(462 / 2) + 40;
 
-        $painelDAO->updateById($novo->id, [
-            'panel' => '{"id":' . $novo->id . ',"txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas","x":"0","y":"0"}',
-        ]);
+        $json = ["txt" => "", "link" => "", "arquivoMidia" => "", "midiaExtension" => "", "midiaType" => "none", "btnFormat" => "linhas", "x" => $xInicial, "y" => $yInicial];
 
-        $novo->panel = json_decode('{"id":"' . $novo->id . '","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","btnFormat":"linhas","x":"0","y":"0"}', true);
+        $novo = $painelDAO->create(['panel' => json_encode($json), 'scene_id' => $this->scene_id]);
 
+        $json['id'] = $novo->id;
+
+        $painelDAO->updateById($novo->id, ['panel' => json_encode($json),]);
+
+        $novo->panel = $json;
         $this->paineisRenderizados[] = $novo;
 
         $this->emit("painelCriado", $novo->id);
     }
+
 
     public function deletePainel($id)
     {

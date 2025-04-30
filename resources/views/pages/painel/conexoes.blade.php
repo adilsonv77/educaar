@@ -28,7 +28,7 @@
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
     <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-            de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+                de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -76,6 +76,41 @@
             selecionarPainel(e.currentTarget, e);
         }
 
+        //----ATUALIZAR LISTENERS DOS PAINÉIS EXISTENTES E NOVOS------------------------------------------------------------
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".painel").forEach(panel => {
+                let id = panel.querySelector('.idPainel')?.id;
+                if (id) {
+                    atribuirListeners(panel, id);
+                    habilitarArrastoPersonalizado(panel);
+                }
+            });
+
+            window.livewire.on("painelCriado", (id) => {
+                let panel = document.getElementById(id);
+                if (!panel) return;
+
+                try {
+                    const painelData = JSON.parse(panel.dataset.panel);
+                    if (painelData.x != null && painelData.y != null) {
+                        panel.style.left = painelData.x + "px";
+                        panel.style.top = painelData.y + "px";
+                    }
+                } catch (e) {
+                    console.warn("Falha ao aplicar posição inicial ao novo painel:", e);
+                }
+
+                atribuirListeners(panel, id);
+                habilitarArrastoPersonalizado(panel);
+            });
+        });
+
+        function atribuirListeners(panel, id) {
+            let inputLink = panel.querySelector("#file-" + id);
+            panel.addEventListener("click", (e) => selecionarPainel(panel, e));
+            adicionarInteracaoPopup(id);
+        }
+        
         //----GERAR CONEXÃO---------------------------------------------------------------------
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll('.painel').forEach(painel => {

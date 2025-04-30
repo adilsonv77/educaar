@@ -21,7 +21,7 @@ document.getElementById("zoom-out")?.addEventListener("click", () => {
     document.getElementById("resizeZoom").hidden = false;
 });
 
-document.getElementById("resizeZoom").addEventListener("click", () =>{
+document.getElementById("resizeZoom").addEventListener("click", () => {
     scale = 0.7;
     updateCanvasScale();
     document.getElementById("resizeZoom").hidden = true;
@@ -371,39 +371,6 @@ function habilitarArrastoPersonalizado(painelElement) {
     });
 }
 
-//----ATUALIZAR LISTENERS DOS PAINÉIS EXISTENTES E NOVOS------------------------------------------------------------
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".painel").forEach(panel => {
-        let id = panel.querySelector('.idPainel')?.id;
-        if (id) {
-            atribuirListeners(panel, id);
-            habilitarArrastoPersonalizado(panel);
-        }
-    });
-
-    window.livewire.on("painelCriado", (id) => {
-        let panel = document.getElementById(id);
-        if (!panel) return;
-
-        try {
-            const painelData = JSON.parse(panel.dataset.panel);
-            panel.style.left = painelData.x + "px";
-            panel.style.top = painelData.y + "px";
-        } catch (e) {
-            console.warn("Falha ao aplicar posição inicial ao novo painel:", e);
-        }
-
-        atribuirListeners(panel, id);
-        habilitarArrastoPersonalizado(panel);
-    });
-});
-
-function atribuirListeners(panel, id) {
-    let inputLink = panel.querySelector("#file-" + id);
-    panel.addEventListener("click", (e) => selecionarPainel(panel, e));
-    adicionarInteracaoPopup(id);
-}
-
 //----MOVIMENTAÇÃO CANVAS----------------------------------------------------------------------------
 const div = document.getElementById("canvas");
 let isDragging = false;
@@ -411,6 +378,7 @@ let startX = 0, startY = 0;
 let startLeft = 0, startTop = 0;
 
 div.addEventListener("mousedown", (e) => {
+    if (e.target.closest(".painel")) return;
     setTimeout(() => {
         if (isDraggingPanel) return;
         isDragging = true;
@@ -422,6 +390,7 @@ div.addEventListener("mousedown", (e) => {
         e.preventDefault();
     }, 100);
 });
+
 
 document.addEventListener("mousemove", (e) => {
     if (!isDragging || isDraggingPanel) return;
@@ -482,7 +451,7 @@ function adicionarInteracaoPopup(id) {
             img.style.display = "none";
             vid.style.display = "none";
             vidYoutube.style.display = "block";
-            try { vid.pause(); } catch (error) {}
+            try { vid.pause(); } catch (error) { }
             iFrameYoutube.src = "https://www.youtube.com/embed/" + idYoutube.value + "?autoplay=1";
         } else {
             let eVideo = fileBtn.files[0].name.endsWith(".mp4");
@@ -499,7 +468,7 @@ function adicionarInteracaoPopup(id) {
                 img.style.display = "block";
                 vid.style.display = "none";
                 vidYoutube.style.display = "none";
-                try { vid.pause(); } catch (error) {}
+                try { vid.pause(); } catch (error) { }
                 document.getElementById("linkYoutube").src = "";
                 iFrameYoutube.src = "";
                 idYoutube.value = "";

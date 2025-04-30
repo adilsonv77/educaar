@@ -1,11 +1,15 @@
+ <!--Esse php previne erros-->     
 <?php
     $panelData = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
 ?>
 
-<div class="painel"
-     data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" data-panel='@json($panelData)' style="left: {{ $panelData['x'] ?? 0 }}px; top: {{ $panelData['y'] ?? 0 }}px;">
+@php
+    $x = $panelData['x'] ?? null;
+    $y = $panelData['y'] ?? null;
+    $style = ($x !== null && $y !== null) ? "left: {$x}px; top: {$y}px;" : "";
+@endphp
 
-    <!--Esse php previne erros-->             
+<div class="painel" id="{{ $panelData['id'] }}" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" data-panel='@json($panelData)' style="{{ $style }}">        
 
     <p class="idPainel" id="{{ $panelData["id"] }}">Painel ({{ $panelData["id"] }})</p>    
 
