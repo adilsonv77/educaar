@@ -93,7 +93,8 @@
             float: right;
             margin-top: 5px;
             background: none;
-            border: none
+            color: black;
+            border: none;
         }
 
         #popup button:focus {
@@ -132,8 +133,10 @@
         <div id="opaque-background"></div>
 
         <div id="popup">
+
             <p>Upload file</p>
             <button onclick="fecharPopUp()">X</button>
+            
 
             <label class="picture" for="midiaInput" tabIndex="0">
                 <img src="{{ asset('icons/paineis/upload.svg') }}" alt="">
