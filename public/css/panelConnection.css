@@ -281,23 +281,35 @@ input {
 /* =============================
       CANVAS E ZOOM
       ============================= */
-.menu-zoom {
-    position: fixed;
-    bottom: 10px;
-    z-index: 1000;
-    width: 63px;
-    height: 31px;
-    margin-left: 18px;
-    display: flex;
-}
-
-#zoom-in,
-#zoom-out {
+      .menu-zoom {
+        position: fixed;
+        bottom: 10px;
+        z-index: 1000;
+        margin-left: 18px;
+        display: flex;
+    }
+    
+    #zoom-in,
+    #zoom-out {
+        width: 46.67px;
+        height: 38px;
+        flex-shrink: 0; 
+        border-radius: 2px;
+        border: 1px solid rgb(240 240 240);
+        background: rgba(131, 59, 141, 0.71);
+        font-size: 20px;
+    }
+    
+    #resizeZoom {
+    height: 38px;
+    font-size: 12px;
+    flex-shrink: 0;
     border-radius: 2px;
     border: 1px solid rgb(240 240 240);
     background: rgba(131, 59, 141, 0.71);
-    font-size: 20px;
-}
+    color: white;
+    }
+
 
 .canvas-container {
     overflow: hidden;
