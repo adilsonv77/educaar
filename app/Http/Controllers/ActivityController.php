@@ -33,25 +33,31 @@ class ActivityController extends Controller
      */
     public function index(Request $request)
     {
-
         if (session('type') == 'student') {
             return redirect('/');
         }
 
-        //DB::connection()->enableQueryLog();
         $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
         $anoletivo_id = $anoletivoAtual->id;
 
+
+       
+
+        $nomesConteudo = ActivityDAO::buscarActivitiesDoProf(Auth::user()->id, $anoletivo_id)
+            ->select('contents.name AS nome_conteudo')
+            ->distinct()
+            ->pluck('nome_conteudo');
+
+        
         $activities = ActivityDAO::buscarActivitiesDoProf(Auth::user()->id, $anoletivo_id)
             ->select(
                 'activities.*',
+                'contents.name AS nome_conteudo',
                 DB::raw('concat(activities.name, " - ", disciplinas.name, " (", contents.name, ")") AS pesq_name')
             );
 
-
         $activities = $activities->addSelect(['qtnQuest' => Question::selectRaw('count(*)')->whereColumn('activities.id', '=', 'activity_id')
-
         ]);
 
         $act = $request->titulo;
@@ -59,16 +65,22 @@ class ActivityController extends Controller
             $r = '%' . $act . '%';
             $activities = $activities->where(DB::raw('concat(activities.name, " - ", disciplinas.name, " (", contents.name, ")") '), 'like', $r);
         }
+
+        $conteudo = $request->conteudo;
+        if ($conteudo) {
+            $activities = $activities->where('contents.name', $conteudo);
+        }
+
         $activities = $activities->distinct()->paginate(20);
-        /*
-               $pesq = array();
-               foreach ($activities as $act) {
-                   array_push($pesq, $act->pesq_name);
-               }
-               $pesq = array_unique($pesq);
-       */
+
         $activity = $request->titulo;
-        return view('pages.activity.index', compact('activities', 'activity'));
+
+       
+
+
+
+        
+        return view('pages.activity.index', compact('activities', 'activity', 'nomesConteudo'));
 
     }
 
