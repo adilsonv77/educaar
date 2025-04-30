@@ -119,7 +119,6 @@
     <div id="formTurma">
         <form action="{{ route('content.resultsContents') }}" method="GET ">
             @csrf
-
             <div class="form-inline">
                 <label for="">Informe a turma:</label>
                 <select class="form-control" name="turma_id">
@@ -134,68 +133,75 @@
         </form>
         <br>
     </div>
-    <div style="background-color: white">
-        <div id="barras" style="width: 1000px; height: 500px;"></div>
-        <div id="rosca" style="width: 900px; height: 500px;"></div>
-    </div>
-    <div id="tooltipX"
-        style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;">
-    </div>
-    <div class="table-container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="fixedCol" rowspan="2" style="border-bottom: 0px solid black"></th>
-                    @foreach ($results as $result) 
-                        <th class="atividade" colspan="{{ count($result['questions']) * 4 }}">
-                            {{ $result['nome'] ?? 'Nome não disponível' }}
-                        </th>
-                    @endforeach
-                </tr>
-                <tr>
-                    @foreach ($results as $result)
-                        @foreach ($result['questions'] as $questao)
-                            <th class="questions" colspan="4">{{ $questao['question'] }}</th>
-                        @endforeach
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (['Alternativas', 'Correto', 'Incorreto', 'Não Respondeu'] as $rowLabel)
+
+    @if (!empty($results))
+        <div style="background-color: white">
+            <div id="barras" style="width: 1000px; height: 500px;"></div>
+            <div id="rosca" style="width: 900px; height: 500px;"></div>
+        </div>
+
+    
+        <div class="table-container">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>{{ $rowLabel }}</td>
+                        <th class="fixedCol" rowspan="2" style="border-bottom: 0px solid black"></th>
                         @foreach ($results as $result) 
+                            <th class="atividade" colspan="{{ count($result['questions']) * 4 }}">
+                                {{ $result['nome'] ?? 'Nome não disponível' }}
+                            </th>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        @foreach ($results as $result)
                             @foreach ($result['questions'] as $questao)
-                                @if ($rowLabel === 'Não Respondeu')
-                                    <td colspan="4">
-                                        {{ $result['atividade_nao_fizeram'] > 0 ? $result['atividade_nao_fizeram'] : '-' }}
-                                    </td>
-                                @else
-                                    @foreach (['A', 'B', 'C', 'D'] as $alt)
-                                        <td data-toggle="tooltip" title="{{ $questao['alternatives'][$alt] ?? 'Descrição não disponível' }}">
-                                            @if ($rowLabel === 'Alternativas')
-                                                {{ $alt }}
-                                            @elseif ($rowLabel === 'Correto')
-                                                @if ($alt === $questao['correct_alternative'])
-                                                    {{ $questao['alternatives_count'][$alt] }}
-                                                @else
-                                                    -
-                                                @endif
-                                            @elseif ($rowLabel === 'Incorreto')
-                                                @if ($alt !== $questao['correct_alternative'])
-                                                    {{ $questao['alternatives_count'][$alt] > 0 ? $questao['alternatives_count'][$alt] : '-' }}
-                                                @else
-                                                    -
-                                                @endif
-                                            @endif
-                                        </td>
-                                    @endforeach
-                                @endif
+                                <th class="questions" colspan="4">{{ $questao['question'] }}</th>
                             @endforeach
                         @endforeach
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach (['Alternativas', 'Correto', 'Incorreto', 'Não Respondeu'] as $rowLabel)
+                        <tr>
+                            <td>{{ $rowLabel }}</td>
+                            @foreach ($results as $result) 
+                                @foreach ($result['questions'] as $questao)
+                                    @if ($rowLabel === 'Não Respondeu')
+                                        <td colspan="4">
+                                            {{ $result['atividade_nao_fizeram'] > 0 ? $result['atividade_nao_fizeram'] : '-' }}
+                                        </td>
+                                    @else
+                                        @foreach (['A', 'B', 'C', 'D'] as $alt)
+                                            <td data-toggle="tooltip" title="{{ $questao['alternatives'][$alt] ?? 'Descrição não disponível' }}">
+                                                @if ($rowLabel === 'Alternativas')
+                                                    {{ $alt }}
+                                                @elseif ($rowLabel === 'Correto')
+                                                    @if ($alt === $questao['correct_alternative'])
+                                                        {{ $questao['alternatives_count'][$alt] }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                @elseif ($rowLabel === 'Incorreto')
+                                                    @if ($alt !== $questao['correct_alternative'])
+                                                        {{ $questao['alternatives_count'][$alt] > 0 ? $questao['alternatives_count'][$alt] : '-' }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <div style="background-color: white; padding: 20px; border-radius: 20px;">
+            <h2>Não há resultados disponíveis</h2>
+        </div>
+    @endif
+
 @endsection
