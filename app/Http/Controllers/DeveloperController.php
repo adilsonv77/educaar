@@ -51,6 +51,9 @@ class DeveloperController extends Controller
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name'))
             ->get();
         $content = 0;
+
+        $scenes = collect();
+
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,
@@ -58,6 +61,7 @@ class DeveloperController extends Controller
             'id' => 0,
             'contents' => $contents,
             'content' => $content,
+            'scenes' => $scenes
         ];
 
         return view('pages.activity.register', $params);

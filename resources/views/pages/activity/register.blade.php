@@ -145,7 +145,7 @@
                     </select>
                 </div>
                 <!-------SELECIONAR TIPO DE ATIVIDADE-------->
-                <!--
+                
                 <div class="form-group">
                     <label for="">Selecione o tipo de atividade*</label>
                     <select class="form-control" id="selectSceneType" name="sceneType" aria-label="">             
@@ -153,10 +153,8 @@
                         <option value="Cena">Cena</option>
                     </select>
                 </div>
-                RENAN, DEIXAR ASSIM EM COMENTÁRIO ATÉ EU ATUALIZAR O SERVIDOR.... 
-                ASSIM QUE EU ATUALIZAR EU TIRO DO COMENTÁRIO.
-                -->
-                <input type="hidden" name="sceneType" value="Modelo3D"/>
+                
+                <!-- <input type="hidden" id="selectSceneType" name="sceneType" value="Modelo3D"/> -->
                 <!-------------ENVIAR MODELO3D--------------->
                 <div class="form-group" id="3DmodelOption">
                         @if ($acao == 'edit' && $scene_id == 'modelo3D') 

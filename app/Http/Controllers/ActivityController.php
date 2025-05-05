@@ -180,7 +180,7 @@ class ActivityController extends Controller
             'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg']
         ]);
 
-        if ($validator->fails()) {
+      if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
