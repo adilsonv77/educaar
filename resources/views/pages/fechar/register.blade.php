@@ -47,13 +47,14 @@
 
                 <div class="form-group mt-4" style="width: 100%">
 
+                    <p style="text-align: center; font-size: 70%; margin: 0px 0px 5px; visibility: hidden" id="aguarde" >Aguarde...</p>
                     <div style="width: 50%; display: block;  margin-left: auto; margin-right: auto;">
                         <div class="progress" style="height: 20px">
                             <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                             Compilando</div>
                         </div>
                         <br/>
-                        <input type="button" value="Fechar" class="btn btn-success button_pre_compiler" style="width: 30%; display: block;  margin-left: auto; margin-right: auto;">
+                        <input type="button" value="Fechar" class="btn btn-success button_pre_compiler" style="width: 30%; display: block;  margin-left: auto; margin-right: auto;" id="fechar">
                     </div>
                     <div class="click_compilar" style="display:none">Clique-me</div>
 
@@ -72,7 +73,6 @@
         var mostrarAvanco = function(percent) {
             var pb = document.getElementById("progressbar");
             pb.style = "width: " + percent + "%";
-
         }
 
         document.mostrarAvanco = mostrarAvanco;
@@ -81,6 +81,7 @@
         botao[0].addEventListener('click', function() {
            this.disabled = "disabled";
            this.cursor = "not-allowed";
+           document.getElementById("aguarde").style.visibility = "visible";
 
            var botaoX = document.getElementsByClassName("button_compiler");
            botaoX[0].click();
