@@ -15,6 +15,10 @@ Executar somentes esses dois comandos no terminal:
 
 ps.: utilizem o terminal do vscode ou abra a pasta educaar no terminal para executar esses dois comandos. 
 
+No servidor é:
+        sudo docker compose build app
+        sudo docker compose up d
+
 #docker-compose exec app rm -rf vendor composer.lock
 #docker-compose exec app composer install
 #docker-compose exec app composer remove consoletvs/charts
