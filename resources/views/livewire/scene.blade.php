@@ -10,8 +10,12 @@
                 <!-- FORMATOS -->
                 <div class="mb-6">
                     <h3>
-                        FORMATO DOS BOTÕES 
+                        BOTÕES 
                     </h3>
+                    <p>FORMATAÇÃO DOS BOTÕES</p>
+                    <!-- <button class="btn btn-sm btn-primary " id="novo" title="Novo">
+                    <i class="bi bi-plus-circle-dotted h1" style="color : #ffffff;">
+                    ::before -->
                     <button id="addButton">teste</button>
                     <div class="tipos">
                         <div class="linhas">

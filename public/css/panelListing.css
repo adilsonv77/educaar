@@ -26,7 +26,7 @@
 .form-inline {
     display: flex;
     justify-content: flex-start;
-    width: 100%;
+    width: 78%;
 }
 
 .form-inline label {
@@ -46,5 +46,4 @@
     border-bottom-right-radius: 20px;
     border-left: none;
 }
-
 

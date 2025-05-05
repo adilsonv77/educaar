@@ -79,8 +79,8 @@
                                     <td>
                                         <form action="{{ route('paineis.conexoes', [$scene->id]) }}" method="GET">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning" title="Editar">
-                                                <i class="bi bi-eye-fill" style="color: #ffffff;"></i>
+                                            <button type="submit" class="btn btn-primary" title="Editar">
+                                                <i class="bi bi-eye-fill h2" style="color: #ffffff; font-size: 30px;"></i>
                                             </button>
                                         </form>
                                     </td>
