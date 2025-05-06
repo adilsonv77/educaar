@@ -1,4 +1,3 @@
- <!--Esse php previne erros-->     
 <?php
     $panelData = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
 ?>

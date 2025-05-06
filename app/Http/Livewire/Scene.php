@@ -11,7 +11,7 @@ use App\DAO\SceneDAO;
 
 class Scene extends Component
 {
-    protected $listeners = ['deletePainel', 'dd', 'updateStartPanel', 'updateCoordinate'];
+    protected $listeners = ['deletePainel', 'dd', 'updateStartPanel', 'updateCoordinate', 'updateCanvasPosition'];
 
     public $paineisRenderizados = [];
     public $scene_id;
@@ -100,6 +100,7 @@ class Scene extends Component
     {
         $sceneDAO = new SceneDAO();
         $sceneDAO->updateById($this->scene_id, ['name' => $this->nameScene]);
+        dd($this->paineisRenderizados);
     }
 
     public function updateCoordinate($painelId, $x, $y)
@@ -117,6 +118,18 @@ class Scene extends Component
             ]);
         }
     }
+
+    public function updateCanvasPosition($payload)
+    {
+        $left = $payload['left'];
+        $top = $payload['top'];
+
+        DB::table('scenes')->where('id', $this->scene_id)->update([
+            'canvas_left' => $left,
+            'canvas_top' => $top
+        ]);
+    }
+
 
     //Fazer dd por JS para testes
     //window.livewire.emit("dd","variavel");
