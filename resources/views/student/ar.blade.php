@@ -39,7 +39,6 @@
     width: 100%;
     height: 20%;
     font-size: 1.5vh;
-    /* Mantém o tamanho do texto */
     border-radius: 1.5vh;
     padding: 1% 10px;
     border: none;
@@ -65,7 +64,6 @@
 .midia {
     width: 100%;
     height: 172.5px;
-    /* 115 * 1.5 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,7 +73,6 @@
 .midia * {
     max-width: 100%;
     max-height: 172.5px;
-    /* 115 * 1.5 */
     object-fit: contain;
 }
 
@@ -101,24 +98,19 @@
     border: 0.5px solid #833B8D;
     border-radius: 9px;
     padding: 8.25px;
-    /* 5.5 * 1.5 */
     margin-bottom: 4.5px;
-    /* 3 * 1.5 */
     height: 45px;
-    /* 30 * 1.5 */
     width: 100%;
 
 }
 
 .circulo {
     width: 30px;
-    /* 20 * 1.5 */
     height: 30px;
-    /* 20 * 1.5 */
     background-color: #823688;
     border-radius: 50%;
     margin-right: 22.5px;
-    /* 15 * 1.5 */
+
 }
 
 .no_midia {
@@ -127,7 +119,6 @@
     background-color: rgb(255, 255, 255);
     aspect-ratio: 1/1;
     height: 172.5px;
-    /* 115 * 1.5 */
     border-radius: 100%;
     display: flex;
     flex-direction: column;
@@ -147,6 +138,62 @@
     display: flex;
     align-items: center;
 }
+
+.layout-blocos {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: flex-start;
+    gap: 3px 0;
+}
+
+.layout-blocos .button_Panel {
+    width: calc((100% - 3px) / 2);
+    height: calc((100% - 6px) / 3);
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.layout-alternativas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 6px;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.layout-alternativas .button_Panel{
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 70px;
+    max-height: 70px;
+    border: 0.5px solid #833B8D;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #833B8D;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0; 
+    margin-bottom: 0;
+    height: 100%;
+    text-align: center;
+}
+
+.layout-alternativas .circulo {
+    display: none;
+}
 </style>
 @endsection
 
@@ -158,13 +205,50 @@
     mind.textContent = mind.textContent + "?" + Math.floor(Math.random() * 100000);
 </script>
 
+<!--Carrega os dados de cenas,painéis e botões recebidos pelo controller no html, para o JS pegar depois.-->
+<div id="scenes">
+    @foreach ($scenes as $scene)
+        <div id="scene-{{ $scene->id }}" start_panel_id="{{ $scene->start_panel_id }}">
+            @foreach ($panels as $panel)
+                @if($panel->scene_id == $scene->id)
+                    <div id="panel-{{ $panel->id }}" json="{{ $panel->panel }}">
+                        @foreach ($buttons as $button)
+                            @if($button->origin_id == $panel->id)
+                                <div id="button-{{ $button->id }}"
+                                    raw_id = "{{ $button->id }}"
+                                    json="{{ $button->configurations }}"
+                                    destination_id="{{ $button->destination_id }}"
+                                ></div>
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
+            @endforeach
+        </div>
+    @endforeach
+</div>
+
 <span id="glbs" style="display: none;">
     @foreach ($activities as $item)
-    <li id="act_{{$item->id}}" usar_class=@if($item->bloquearPorData == 1)"#000000" @else @if($item->respondido == 1)"#efbecc" @else "" @endif @endif
-        @if(!empty($item->scene_id)) json="{{$item->json}}" @endif painel=@if(!empty($item->scene_id))
-        {{$item->scene_id}} @else "0" @endif>
-        /modelos3d/{{$item->glb}}
-    </li>
+        <li id="act_{{$item->id}}"
+            usar_class=
+            @if($item->bloquearPorData == 1)
+                "#000000" 
+                @else 
+                    @if($item->respondido == 1)
+                    "#efbecc" 
+                    @else 
+                    "" 
+                @endif 
+            @endif
+            
+            @if(!empty($item->scene_id)) 
+                scene_id="{{$item->scene_id}}"
+            @else
+                scene_id="0"
+            @endif
+        >/modelos3d/{{$item->glb}}
+        </li>
     @endforeach
 </span>
 
@@ -176,13 +260,12 @@
     </div>
 </div>
 
-<div id="painelContainer">
+<div id="painelContainer" style="display: none;">
 
 </div>
 <div id="my-ar-container">
     
 </div>
-
 @endsection
 
 @section('script')	

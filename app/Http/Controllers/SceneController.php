@@ -34,13 +34,6 @@ class SceneController extends Controller
         return view('pages.painel.sceneListing', compact('data'));
     }
 
-
-    public function create()
-    {
-        dd("Há fazer");
-        return view('pages.painel.criacaoPaineis');
-    }
-
     public function edit($id)
     {
         $paineis = $this->painelDAO->getBySceneId($id);
@@ -80,8 +73,4 @@ class SceneController extends Controller
         return redirect()->action([SceneController::class, 'edit'], ['scene' => $cenaCriada->id]);
     }
 
-    public function destroy($id)
-    {
-        return redirect()->route('paineis.index');
-    }
 }

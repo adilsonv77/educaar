@@ -6,7 +6,7 @@ use App\Models\Button;
 
 class ButtonDAO
 {
-    public function getById($id)
+    public static function getById($id)
     {
         return Button::where('id', $id)->first();
     }

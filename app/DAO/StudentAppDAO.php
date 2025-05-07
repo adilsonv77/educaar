@@ -7,6 +7,15 @@ use Illuminate\Support\Facades\DB;
 
 class StudentAppDAO
 {
+    public static function verificaAtividadeRespondida($activity_id,$user_id){
+        return DB::table('student_answers as st')
+        ->join('questions as q', 'st.question_id', '=', 'q.id')
+        ->where([
+            ['st.activity_id', '=', $activity_id],
+            ['st.user_id', '=', $user_id]
+        ])->exists();
+    }
+
     public static function buscarDataCorte($activity_id, $aluno_id, $ano_id) {
         /*
 SELECT pc.* FROM activities a

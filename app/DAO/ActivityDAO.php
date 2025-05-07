@@ -73,5 +73,12 @@ class ActivityDAO
         return $sql;
     }
     
+    public static function buscarActivitiesPorConteudo($content_id){
+        return DB::table('activities')
+            ->where("content_id", $content_id)
+            ->orderBy('scene_id', 'desc')
+            ->get();
+    }
+
 }
 
