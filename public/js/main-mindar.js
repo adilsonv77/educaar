@@ -487,24 +487,42 @@ function createPanel(panel_info) {
 
   let buttons = panel_info.children;
   Array.from(buttons).forEach(button => {
-    let newButton = createButton(button)
+    let newButton = createButton(button,panel.id)
     panel_html.querySelector("#layout").appendChild(newButton)
   });
 
   return panel_html;
 }
 
-function createButton(button_info) {
+function createButton(button_info,panel_id) {
   let button = JSON.parse(button_info.getAttribute("json"))
 
   const button_html = document.createElement('div');
-  button_html.id = "button-display-" + button_info.getAttribute("raw_id");
+  button_html.id = "button-display-" + button_info.getAttribute("destination_id");
   button_html.classList.add('button_Panel');
   button_html.style = "border: 1px solid "+button.color;
 
   button_html.innerHTML=`
     <div class="circulo" style="background-color: `+button.color+`"></div> `+button.text+`
   `
+
+  button_html.onclick = ()=>{
+    let panel_loaded = document.getElementById("panel-display-"+panel_id); 
+    let panel = document.getElementById("panel-display-"+button_info.getAttribute("destination_id"))
+
+    panel_loaded.style.display="none";
+    panel.style.display="block";
+
+    try {
+      let panel_lock_loaded = document.getElementById("panel-display-"+panel_id+"-lock");
+      let panel_lock = document.getElementById("panel-display-"+button_info.getAttribute("destination_id")+"-lock")
+
+      panel_lock_loaded.style.display="none";
+      panel_lock.style.display="block";
+    } catch (error) {
+      console.log("Não tem painel bloqueado");
+    }
+  }
 
   return button_html;
 }

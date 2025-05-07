@@ -39,7 +39,6 @@
     width: 100%;
     height: 20%;
     font-size: 1.5vh;
-    /* Mantém o tamanho do texto */
     border-radius: 1.5vh;
     padding: 1% 10px;
     border: none;
@@ -65,7 +64,6 @@
 .midia {
     width: 100%;
     height: 172.5px;
-    /* 115 * 1.5 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,7 +73,6 @@
 .midia * {
     max-width: 100%;
     max-height: 172.5px;
-    /* 115 * 1.5 */
     object-fit: contain;
 }
 
@@ -101,24 +98,19 @@
     border: 0.5px solid #833B8D;
     border-radius: 9px;
     padding: 8.25px;
-    /* 5.5 * 1.5 */
     margin-bottom: 4.5px;
-    /* 3 * 1.5 */
     height: 45px;
-    /* 30 * 1.5 */
     width: 100%;
 
 }
 
 .circulo {
     width: 30px;
-    /* 20 * 1.5 */
     height: 30px;
-    /* 20 * 1.5 */
     background-color: #823688;
     border-radius: 50%;
     margin-right: 22.5px;
-    /* 15 * 1.5 */
+
 }
 
 .no_midia {
@@ -127,7 +119,6 @@
     background-color: rgb(255, 255, 255);
     aspect-ratio: 1/1;
     height: 172.5px;
-    /* 115 * 1.5 */
     border-radius: 100%;
     display: flex;
     flex-direction: column;
