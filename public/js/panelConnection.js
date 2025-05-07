@@ -28,26 +28,30 @@ document.getElementById("resizeZoom").addEventListener("click", () => {
 });
 
 //----COLOR PICKER--------------------------------------------------------------------------------
-const pickr = Pickr.create({
-    el: "#color-picker-container",
-    theme: "nano", // Opções: classic, nano, monolith
-    default: "#3498db",
-    inline: true,
-    showAlways: true,
-    useAsButton: false,
-    components: {
-        preview: true,
-        opacity: true,
-        hue: true,
-        interaction: {
-            input: true,
-            hex: false,
-            rgba: false,
-            save: false,
-            clear: true,
-        },
-    },
+document.addEventListener("DOMContentLoaded", function () {
+    if (document.querySelector("#color-picker-container")) {
+        window.pickr = Pickr.create({
+            el: "#color-picker-container",
+            theme: "nano",
+            default: "#3498db",
+            inline: true,
+            showAlways: true,
+            useAsButton: false,
+            components: {
+                preview: true,
+                opacity: true,
+                hue: true,
+                interaction: {
+                    input: true,
+                    clear: true,
+                },
+            },
+        });
+    } else {
+        console.warn("❌ Container do Color Picker não encontrado.");
+    }
 });
+
 
 // pickr.on("save", (color) => {
 //     console.log("Cor selecionada:", color.toHEXA().toString());
@@ -70,49 +74,21 @@ class Painel {
     }
 }
 //----FUNÇÃO DE MOSTRAR MENUS------------------------------------------------------------------------------------------------
+let menuAtivoAtual = "canvas"; 
+
 function mostrarMenu(tipo) {
     document.querySelectorAll(".menu-opcoes").forEach(menu => menu.classList.remove("ativo"));
 
-    let menu = document.querySelector(`.${tipo}-opcoes`);
+    const menu = document.querySelector(`.${tipo}-opcoes`);
     if (menu) {
         menu.classList.add("ativo");
+        menuAtivoAtual = tipo; 
     }
 }
 
-//----FUNÇÃO DE SELECIONAR PAINEL, BOTÃO E CANVAS----------------------------------------------------------------------------
-
-function selecionarPainel(painel, e) {
-    isDraggingPanel = true;
-    if (e.target.closest(".button_Panel")) return;
-
-    if (painelSelecionado) {
-        painelSelecionado.classList.remove("selecionado");
-    }
-
-    painelSelecionado = painel;
-
-    painelSelecionado.classList.add("selecionado");
-
-    if (botaoSelecionado) {
-        botaoSelecionado.classList.remove("selecionado");
-    }
-    botaoSelecionado = null;
-
-    mostrarMenu("painel"); // Atualiza o menu
-
-    const editor = $('#trumbowyg-editor');
-    const textoPainel = painel.getAttribute('data-texto');
-    if (editor.length && textoPainel !== null) {
-        editor.trumbowyg('html', textoPainel);
-    }
-}
-
+//----CLIQUE GLOBAL------------------------------------------------------------------------------------------------
 document.addEventListener("click", (e) => {
-    // Se o clique for dentro do menu ou em um elemento interativo, não faz nada
-    if (
-        e.target.closest(".menu-opcoes") ||
-        ["SELECT", "OPTION", "INPUT", "LABEL", "BUTTON", "TEXTAREA"].includes(e.target.tagName)
-    ) {
+    if (e.target.closest(".menu-opcoes")) {
         return;
     }
 
@@ -122,31 +98,54 @@ document.addEventListener("click", (e) => {
         return;
     }
 
-    let painel = e.target.closest(".painel");
+    const painel = e.target.closest(".painel");
     if (painel) {
         selecionarPainel(painel, e);
-    } else if (!e.target.classList.contains("menu-opcoes")) {
-        selecionarCanvas();
+        e.stopPropagation();
+        return;
     }
+
+    selecionarCanvas();
 });
 
-let btnTxt = document.getElementById("btnTxt");
-let selectTransicao = document.getElementsByClassName("select-native")[0];
 
+//----FUNÇÃO DE SELECIONAR PAINEL------------------------------------------------------------------------------------------------
+function selecionarPainel(painel, e) {
+    isDraggingPanel = true;
+
+    if (e.target.closest(".button_Panel")) return;
+
+    // limpa seleção anterior
+    if (painelSelecionado) painelSelecionado.classList.remove("selecionado");
+    if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
+
+    painelSelecionado = painel;
+    botaoSelecionado = null;
+
+    painel.classList.add("selecionado");
+    mostrarMenu("painel");
+
+    const editor = $('#trumbowyg-editor');
+    const textoPainel = painel.getAttribute('data-texto');
+    if (editor.length && textoPainel !== null) {
+        editor.trumbowyg('html', textoPainel);
+    }
+}
+
+//----FUNÇÃO DE SELECIONAR BOTÃO------------------------------------------------------------------------------------------------
 function selecionarBotao(botao) {
     isDraggingPanel = true;
-    let botoes = document.querySelectorAll(".button_Panel");
-    botoes.forEach((btn) => btn.classList.remove("selecionado"));
 
+    if (painelSelecionado) painelSelecionado.classList.remove("selecionado");
+    if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
+
+    painelSelecionado = null;
     botaoSelecionado = botao;
+
     botao.classList.add("selecionado");
+    mostrarMenu("botao");
 
-    if (painelSelecionado) {
-        painelSelecionado.classList.remove("selecionado");
-        painelSelecionado = null;
-    }
-
-    //Carrega as informações daquele botão no menu.
+    //Carrega as informações do botão no menu
     let btnInfo = botaoSelecionado.querySelector("#buttonInfo");
 
     btnTxt.value = botaoSelecionado.textContent.trim();
@@ -155,26 +154,21 @@ function selecionarBotao(botao) {
     setTimeout(() => {
         pickr.setColor(btnInfo.getAttribute("color"));
     }, 100);
-
-    mostrarMenu("botao"); // Atualiza o menu
 }
 
+//----FUNÇÃO DE SELECIONAR CANVAS------------------------------------------------------------------------------------------------
 function selecionarCanvas() {
     isDraggingPanel = true;
-    if (painelSelecionado) {
-        painelSelecionado.classList.remove("selecionado");
-        painelSelecionado = null;
-    }
-    if (botaoSelecionado) {
-        botaoSelecionado.classList.remove("selecionado");
-        botaoSelecionado = null;
-    }
 
-    document
-        .getElementsByClassName("canvas-container")[0]
-        .classList.add("selecionado");
+    if (painelSelecionado) painelSelecionado.classList.remove("selecionado");
+    if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
 
-    mostrarMenu("canvas"); // Atualiza o menu
+    painelSelecionado = null;
+    botaoSelecionado = null;
+
+    document.querySelector(".canvas-container").classList.add("selecionado");
+
+    mostrarMenu("canvas");
     isDraggingPanel = false;
 }
 

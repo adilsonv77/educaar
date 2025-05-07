@@ -8,7 +8,7 @@
     <link rel="stylesheet"
         href="{{ asset('css/panelConnection.css?v=' . filemtime(public_path('css/panelConnection.css'))) }}">
     <!-- SELETOR DE CORES -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
 
     <!-- EDITOR DE TEXTO -->
@@ -28,7 +28,7 @@
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
     <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-                de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+                                                de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -61,13 +61,14 @@
     <script src="{{ asset('editor/dist/plugins/colors/trumbowyg.colors.min.js') }}"></script>
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
     <script>
+        // ---------------------------------------------TOGGLE EM SELECT PERSONALIZADO---------------------------------------------
         $(document).ready(function () {
             $('.tapSelect').click(function () {
                 $(this).toggleClass('selected');
             });
         });
 
-        //----PANEL LOADING---------------------------------------------------------------------
+        // ---------------------------------------------DRAG & CLICK DOS PAINÉIS---------------------------------------------
         function onDragStart(e) {
             arrastar(e, new Painel(e.currentTarget));
         }
@@ -76,8 +77,9 @@
             selecionarPainel(e.currentTarget, e);
         }
 
-        //----ATUALIZAR LISTENERS DOS PAINÉIS EXISTENTES E NOVOS------------------------------------------------------------
+        // ---------------------------------------------APLICAR LISTENERS AOS PAINÉIS EXISTENTES E NOVOS---------------------------------------------
         document.addEventListener("DOMContentLoaded", function () {
+            // Painéis já existentes
             document.querySelectorAll(".painel").forEach(panel => {
                 let id = panel.querySelector('.idPainel')?.id;
                 if (id) {
@@ -86,6 +88,7 @@
                 }
             });
 
+            // Painel criado via Livewire
             window.livewire.on("painelCriado", (id) => {
                 let panel = document.getElementById(id);
                 if (!panel) return;
@@ -102,7 +105,12 @@
 
                 atribuirListeners(panel, id);
                 habilitarArrastoPersonalizado(panel);
+                mostrarMenu("painel");
             });
+
+
+            mostrarMenu("canvas");
+            console.log("menu");
         });
 
         function atribuirListeners(panel, id) {
@@ -110,8 +118,8 @@
             panel.addEventListener("click", (e) => selecionarPainel(panel, e));
             adicionarInteracaoPopup(id);
         }
-        
-        //----GERAR CONEXÃO---------------------------------------------------------------------
+
+        //---------------------------------------------GERAR CONEXÃO---------------------------------------------
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll('.painel').forEach(painel => {
                 //ativarDrag(painel);
@@ -122,8 +130,7 @@
             conectarBotoes("117", "2", "17")
         });
 
-        //---------------------------------------------------------------------------------------------------------------------
-        // EDITOR DE TEXTO
+        //---------------------------------------------EDITOR DE TEXTO---------------------------------------------
         function initTrumbowygEditor() {
             const $editor = $('#trumbowyg-editor');
 
@@ -175,7 +182,7 @@
                             console.log("Texto salvo:", texto);
                         }
                     }
-                }, 3000); // Espera 3s depois da última tecla
+                }, 1000); // Espera 3s depois da última tecla
             });
 
         }
@@ -193,22 +200,32 @@
             initTrumbowygEditor();
         });
 
-        Livewire.hook('message.processed', (message, component) => {
-            if (message.updateQueue && message.updateQueue.some(m => m.payload?.event === 'salvarTexto')) {
-                setTimeout(() => {
-                    initTrumbowygEditor();
+        document.addEventListener("DOMContentLoaded", function () {
+            window.livewire.hook('message.processed', (message, component) => {
+                const painelSelecionado = document.querySelector(".painel.selecionado");
+                const botaoSelecionado = document.querySelector(".botao.selecionado");
 
-                    const painelSelecionado = document.querySelector(".painel.selecionado");
-                    const editor = $('#trumbowyg-editor');
-                    if (painelSelecionado && editor.length) {
-                        const novoTexto = painelSelecionado.getAttribute('data-texto');
-                        if (novoTexto !== null) {
-                            editor.trumbowyg('html', novoTexto);
+                console.log("Menu reaberto após Livewire");
+
+                if (message.updateQueue && message.updateQueue.some(m => m.payload?.event === 'salvarTexto')) {
+                    setTimeout(() => {
+                        initTrumbowygEditor();
+
+                        const painelSelecionado = document.querySelector(".painel.selecionado");
+                        const editor = $('#trumbowyg-editor');
+                        if (painelSelecionado && editor.length) {
+                            const novoTexto = painelSelecionado.getAttribute('data-texto');
+                            if (novoTexto !== null) {
+                                editor.trumbowyg('html', novoTexto);
+                            }
                         }
-                    }
-                }, 50);
-            }
+                    }, 50);
+                }
+
+                mostrarMenu(menuAtivoAtual);
+            });
         });
+
         //---------------------------------------------------------------------------------------------------------------------
 
     </script>
