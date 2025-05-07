@@ -158,13 +158,50 @@
     mind.textContent = mind.textContent + "?" + Math.floor(Math.random() * 100000);
 </script>
 
+<!--Carrega os dados de cenas,painéis e botões recebidos pelo controller no html, para o JS pegar depois.-->
+<div id="scenes">
+    @foreach ($scenes as $scene)
+        <div id="scene-{{ $scene->id }}" start_panel_id="{{ $scene->start_panel_id }}">
+            @foreach ($panels as $panel)
+                @if($panel->scene_id == $scene->id)
+                    <div id="panel-{{ $panel->id }}" json="{{ $panel->panel }}">
+                        @foreach ($buttons as $button)
+                            @if($button->origin_id == $panel->id)
+                                <div id="button-{{ $button->id }}"
+                                    raw_id = "{{ $button->id }}"
+                                    json="{{ $button->configurations }}"
+                                    destination_id="{{ $button->destination_id }}"
+                                ></div>
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
+            @endforeach
+        </div>
+    @endforeach
+</div>
+
 <span id="glbs" style="display: none;">
     @foreach ($activities as $item)
-    <li id="act_{{$item->id}}" usar_class=@if($item->bloquearPorData == 1)"#000000" @else @if($item->respondido == 1)"#efbecc" @else "" @endif @endif
-        @if(!empty($item->scene_id)) json="{{$item->json}}" @endif painel=@if(!empty($item->scene_id))
-        {{$item->scene_id}} @else "0" @endif>
-        /modelos3d/{{$item->glb}}
-    </li>
+        <li id="act_{{$item->id}}"
+            usar_class=
+            @if($item->bloquearPorData == 1)
+                "#000000" 
+                @else 
+                    @if($item->respondido == 1)
+                    "#efbecc" 
+                    @else 
+                    "" 
+                @endif 
+            @endif
+            
+            @if(!empty($item->scene_id)) 
+                scene_id="{{$item->scene_id}}"
+            @else
+                scene_id="0"
+            @endif
+        >/modelos3d/{{$item->glb}}
+        </li>
     @endforeach
 </span>
 
@@ -176,13 +213,12 @@
     </div>
 </div>
 
-<div id="painelContainer">
+<div id="painelContainer" style="display: none;">
 
 </div>
 <div id="my-ar-container">
     
 </div>
-
 @endsection
 
 @section('script')	

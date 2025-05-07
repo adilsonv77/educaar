@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DAO\ActivityDAO;
+use App\DAO\ButtonDAO;
 use Illuminate\Http\Request;
 use App\Models\Activity;
 use App\Models\StudentAnswer;
@@ -15,6 +17,7 @@ use App\DAO\StudentAppDAO;
 use App\Models\Painei;
 use App\DAO\PainelDAO;
 use App\Dao\SceneDAO;
+use App\Dao\QuestionDAO;
 
 class StudentController extends Controller
 {
@@ -24,14 +27,14 @@ class StudentController extends Controller
      * 
      */
     public function indexContentStudent(Request $request)
-{
-    // Valida se o ID da disciplina foi enviado
+    {
+        // Valida se o ID da disciplina foi enviado
         if ($request->has('id')) {
             session()->put('disciplina', $request->id);
         }
-    
+
         $id = session()->get("disciplina");
-    
+
         // Verifica se o usuário tem permissão correta
         if (Auth::user()->type != session('type')) {
             $conteudos = ContentDAO::buscarConteudosDeveloper(Auth::user()->id)
@@ -42,7 +45,7 @@ class StudentController extends Controller
             $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
                 ->where('bool_atual', 1)
                 ->first();
-    
+
             $conteudos = DB::table('alunos_turmas as at')
                 ->select('c.name', 'c.id')
                 ->join('turmas as t', 't.id', '=', 'at.turma_id')
@@ -60,37 +63,37 @@ class StudentController extends Controller
                 ->distinct()
                 ->get();
         }
-    // Aqui você pode calcular o valor de 'conteudoRespondido' com base nas respostas do aluno
-    $conteudosRespondidos = [];
-    foreach ($conteudos as $conteudo) {
-        // Conta questões respondidas dentro do conteúdo
-        $respondidas = DB::table('student_answers as sa')
-            ->join('questions as q', 'sa.question_id', '=', 'q.id')
-            ->join('activities as a', 'q.activity_id', '=', 'a.id')
-            ->where('a.content_id', $conteudo->id)
-            ->where('sa.user_id', Auth::user()->id)
-            ->distinct('sa.question_id')
-            ->count('sa.question_id');
+        // Aqui você pode calcular o valor de 'conteudoRespondido' com base nas respostas do aluno
+        $conteudosRespondidos = [];
+        foreach ($conteudos as $conteudo) {
+            // Conta questões respondidas dentro do conteúdo
+            $respondidas = DB::table('student_answers as sa')
+                ->join('questions as q', 'sa.question_id', '=', 'q.id')
+                ->join('activities as a', 'q.activity_id', '=', 'a.id')
+                ->where('a.content_id', $conteudo->id)
+                ->where('sa.user_id', Auth::user()->id)
+                ->distinct('sa.question_id')
+                ->count('sa.question_id');
 
-        // Conta total de questões no conteúdo
-        $totalQuestoes = DB::table('questions as q')
-            ->join('activities as a', 'q.activity_id', '=', 'a.id')
-            ->where('a.content_id', $conteudo->id)
-            ->count();
+            // Conta total de questões no conteúdo
+            $totalQuestoes = DB::table('questions as q')
+                ->join('activities as a', 'q.activity_id', '=', 'a.id')
+                ->where('a.content_id', $conteudo->id)
+                ->count();
 
-        // Se todas as questões foram respondidas, marca como concluído
-        $conteudosRespondidos[$conteudo->id] = ($respondidas === $totalQuestoes);
-    }
+            // Se todas as questões foram respondidas, marca como concluído
+            $conteudosRespondidos[$conteudo->id] = ($respondidas === $totalQuestoes);
+        }
 
         // dd($totalQuestoes, $respondidas);
 
-    // Log::info("Total de questões: $totalQuestoes, Questões respondidas: $respondidas");
-    // dd($conteudosRespondidos);
-    // dd($respondido);
+        // Log::info("Total de questões: $totalQuestoes, Questões respondidas: $respondidas");
+        // dd($conteudosRespondidos);
+        // dd($respondido);
 
-    $rota = route("home");
+        $rota = route("home");
         return view('student.indexContentStudent', compact('conteudos', 'rota', 'conteudosRespondidos'));
-}
+    }
 
 
     /**
@@ -99,65 +102,62 @@ class StudentController extends Controller
     public function showActivity(Request $request)
     {
         $data = $request->all();
-        $content_id = $request->id;
-        if ($content_id == null) {
-            $content_id = session()->get("content_id");
-        }
-        $activities = DB::table('activities')
-            ->where("content_id", $content_id)
-            ->orderBy('scene_id', 'desc')
-            ->get();
-            //dd($activities);
-            
+        $content_id = $request->id == null ? session()->get("content_id") : $request->id;
+        $activities = ActivityDAO::buscarActivitiesPorConteudo($content_id);
         $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
-            
         $dataCorte = null;
         $bloquearPorData = 0;
-        // verificar quais atividades já foram respondidas        
+        $scenes = [];
+        $panels = [];
+        $buttons = [];
+
         foreach ($activities as $activity) {
+            // verificar quais atividades já foram respondidas  
             if ($dataCorte == null) {
                 $dataCorte = StudentAppDAO::buscarDataCorte($activity->id, Auth::user()->id, $anoAtual->id)->first();
 
                 if ($dataCorte != null) {
-                    $dataHoje = now();
-                    $diff = date_diff($dataHoje, new \DateTime($dataCorte->dt_corte));
-                    
+                    $diff = date_diff(now(), new \DateTime($dataCorte->dt_corte));
+
                     if ($diff->format("%R%a") <= 0) {
                         $bloquearPorData = 1;
-                    } 
+                    }
                 }
             }
-            
-            //Pega o json do painel da atividade se for um painel.
-            $idPainelInicial = SceneDAO::getById($activity->scene_id)->start_panel_id;
-            
-            if($idPainelInicial != null){
-                //Possui um painel inicial
-                $activity->json = PainelDAO::getById($idPainelInicial)->panel;
-            }
+
             $activity->bloquearPorData = $bloquearPorData;
             if ($bloquearPorData == 0) {
-                $questions = DB::table('questions')
-                    ->where("activity_id", $activity->id)->get();
+                //$questions = QuestionDAO::getByActivityId($activity->id); remover se n houver erros 30/04
                 // uma questao respondida ou nao jah diz tudo da atividade
-                $respondida = DB::table('student_answers as st')
-                    ->join('questions as q', 'st.question_id', '=', 'q.id')
-                    ->where([
-                        ['st.activity_id', '=', $activity->id],
-                        ['st.user_id', '=', Auth::user()->id],
-                    ])->exists();
-                $activity->respondido = ($respondida ? 1 : 0);
+                $respondida = StudentAppDAO::verificaAtividadeRespondida($activity->id, Auth::user()->id);
+                $activity->respondido = $respondida ? 1 : 0;
             }
 
+            //Possui um painel inicial
+            $scene_id = $activity->scene_id;
+            if ($scene_id != null) {
+                //Pegar paineis e botões e atribui para uma array de paineis
+                $idPainelInicial = SceneDAO::getById($scene_id)->start_panel_id;
+                $activity->json = PainelDAO::getById($idPainelInicial)->panel;
+                $scenes[] = SceneDAO::getById($scene_id);
+                $scenePanels = PainelDAO::getBySceneId($scene_id);
+                foreach ($scenePanels as $panel) {
+                    $panels[] = $panel;
+                    $panelButtons = ButtonDAO::getByOriginId($panel->id);
+                    foreach ($panelButtons as $button) {
+                        $buttons[] = $button;
+                    }
+                }
+            }
         }
-
+        
         session(["content_id" => $content_id]);
         $disciplina = session()->get("disciplina");
         $rota = route("student.conteudos") . "?id=" . $disciplina;
-        return view('student.ar', compact('activities', 'rota',));
+        return view('student.ar', compact('activities', 'rota','scenes','panels','buttons'));
     }
-    
+
     /**
      * Entra na página de questionario de uma atividade
      */
@@ -176,12 +176,12 @@ class StudentController extends Controller
 
         $where = DB::table('questions')
             ->where("activity_id", $activity_id)->addSelect([
-                'alternative_answered' => DB::table('student_answers')
-                    ->select('student_answers.alternative_answered')
-                    ->whereColumn('student_answers.question_id', '=', 'questions.id')
-                    ->whereColumn('student_answers.activity_id', '=', 'questions.activity_id')
-                    ->where('student_answers.user_id', '=', Auth::user()->id)
-            ]);
+                    'alternative_answered' => DB::table('student_answers')
+                        ->select('student_answers.alternative_answered')
+                        ->whereColumn('student_answers.question_id', '=', 'questions.id')
+                        ->whereColumn('student_answers.activity_id', '=', 'questions.activity_id')
+                        ->where('student_answers.user_id', '=', Auth::user()->id)
+                ]);
         $questions = $where->get();
 
         foreach ($questions as $item) {
@@ -190,9 +190,9 @@ class StudentController extends Controller
             $item->options = $options;
         }
         session()->put('questoes', $questions);
-        $respondida =$this->respondida();
+        $respondida = $this->respondida();
 
-        $rota = route("student.showActivity") ;
+        $rota = route("student.showActivity");
 
         return view('student.atividadeAr', compact('questions', 'respondida', 'rota'));
     }
@@ -206,7 +206,7 @@ class StudentController extends Controller
             precisa verificar se a questão já foi respondida...
            isso pode acontecer quando o mesmo usuário se loga simultaneamente em mais equipamentos,
            e entra na atividade. 
-        */ 
+        */
         // dd("Salvando");
 
         DB::beginTransaction();
@@ -214,8 +214,7 @@ class StudentController extends Controller
         $questions = session()->get('questoes');
         $questoes = [];
 
-        foreach ($questions as $q)
-        {
+        foreach ($questions as $q) {
             array_push($questoes, $q->id);
         }
 
@@ -223,22 +222,22 @@ class StudentController extends Controller
             ->whereIn('question_id', $questoes)
             ->where('user_id', Auth::user()->id)
             ->exists();
-        
+
         if (!$respondida) {
 
             $datareq = $request->all();
             foreach ($questions as $questao) {
                 $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
-                
-                try{
+
+                try {
                     $respop = $datareq["questao" . $questao->id];
                     $data['question_id'] = $questao->id;
-                    $data['user_id'] =  Auth::user()->id;
-                    $data['activity_id'] =  $questao->activity_id;
+                    $data['user_id'] = Auth::user()->id;
+                    $data['activity_id'] = $questao->activity_id;
                     $opcao = $questao->options[$respop];
                     //dd($respop . " - " . $opcao . " - " . $questao->a . " - " . implode(" ; ", $questao->options));
-                    
-                    $data['alternative_answered'] =  $opcao; // havia um erro na estrutura do banco que esse campo era de somente 1!!!
+
+                    $data['alternative_answered'] = $opcao; // havia um erro na estrutura do banco que esse campo era de somente 1!!!
                     // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
 
                     if ($opcao == $questao->a) {
@@ -246,14 +245,14 @@ class StudentController extends Controller
                     } else {
                         $data['correct'] = false;
                     }
-                    
+
                     //dd($data);
                     // gravar no banco uma linha da resposta
                     StudentAnswer::create($data);
 
-                    }catch(Exception $e){
-                        continue;
-                    }
+                } catch (Exception $e) {
+                    continue;
+                }
             }
 
             DB::commit();
@@ -261,20 +260,21 @@ class StudentController extends Controller
             DB::commit();
 
             return redirect()->back()
-            ->withInput()
-            ->withErrors([
-                'respondida' => 'Questionário já respondido por outro login. Você somente consegue retornar.'
-            ]);
+                ->withInput()
+                ->withErrors([
+                        'respondida' => 'Questionário já respondido por outro login. Você somente consegue retornar.'
+                    ]);
 
         }
 
         return redirect('/students/activity');
     }
 
-    private function respondida() {
-        $questions= session()->get('questoes');
+    private function respondida()
+    {
+        $questions = session()->get('questoes');
 
-        $reposta=0;
+        $reposta = 0;
         // vou fazer o sistema de resposta assim: 
         // 1- retorna que o questionário foi respondido completo
         // -1 -retorna que o questionário não foi respondido completo
@@ -282,18 +282,18 @@ class StudentController extends Controller
         // dd($questions);
         $qntQuestoes = count($questions);
         $qntRespondidas = 0;
-        foreach($questions as $question){
-            if($question->alternative_answered != null){
-                $qntRespondidas +=1 ;
+        foreach ($questions as $question) {
+            if ($question->alternative_answered != null) {
+                $qntRespondidas += 1;
             }
         }
 
-        if($qntRespondidas == $qntQuestoes){
+        if ($qntRespondidas == $qntQuestoes) {
             $reposta = 1;
-        }else{
-            if($qntRespondidas == 0){
+        } else {
+            if ($qntRespondidas == 0) {
                 $reposta = 0;
-            }else{
+            } else {
                 $reposta = -1;
             }
         }
@@ -327,22 +327,22 @@ class StudentController extends Controller
     }
 
     public function atividadesRealizadas()
-{
-    $user_id = auth()->user()->id;
-    $conteudos = Content::all(); // Ou a lógica que você usa para recuperar os conteúdos
-    $conteudosRespondidos = [];
+    {
+        $user_id = auth()->user()->id;
+        $conteudos = Content::all(); // Ou a lógica que você usa para recuperar os conteúdos
+        $conteudosRespondidos = [];
 
-    
 
-    // Verifica para cada conteúdo se o aluno completou
-    foreach ($conteudos as $item) {
-        $conteudosRespondidos[$item->id] = Conteudo::conteudoCompleto($item->id, $user_id);
+
+        // Verifica para cada conteúdo se o aluno completou
+        foreach ($conteudos as $item) {
+            $conteudosRespondidos[$item->id] = Conteudo::conteudoCompleto($item->id, $user_id);
+        }
+
+        dd($conteudosRespondidos);
+
+        return view('student.realizadas', compact('conteudos', 'conteudosRespondidos'));
     }
-
-    dd($conteudosRespondidos);
-
-    return view('student.realizadas', compact('conteudos', 'conteudosRespondidos'));
-}
 
 
 
