@@ -479,14 +479,16 @@ function createPanel(panel_info) {
       </div>
 
       <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
+        <div id="layout" class="layout-`+ panel.btnFormat +`">
 
+        </div>
       </div>
   `;
 
   let buttons = panel_info.children;
   Array.from(buttons).forEach(button => {
     let newButton = createButton(button)
-    panel_html.querySelector(".areaBtns").appendChild(newButton)
+    panel_html.querySelector("#layout").appendChild(newButton)
   });
 
   return panel_html;
@@ -501,7 +503,7 @@ function createButton(button_info) {
   button_html.style = "border: 1px solid "+button.color;
 
   button_html.innerHTML=`
-    <div class="circulo" style="background: "`+button.color+`"></div> `+button.text+`
+    <div class="circulo" style="background-color: `+button.color+`"></div> `+button.text+`
   `
 
   return button_html;

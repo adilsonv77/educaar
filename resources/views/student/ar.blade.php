@@ -147,6 +147,62 @@
     display: flex;
     align-items: center;
 }
+
+.layout-blocos {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: flex-start;
+    gap: 3px 0;
+}
+
+.layout-blocos .button_Panel {
+    width: calc((100% - 3px) / 2);
+    height: calc((100% - 6px) / 3);
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.layout-alternativas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 6px;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.layout-alternativas .button_Panel{
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 70px;
+    max-height: 70px;
+    border: 0.5px solid #833B8D;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #833B8D;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0; 
+    margin-bottom: 0;
+    height: 100%;
+    text-align: center;
+}
+
+.layout-alternativas .circulo {
+    display: none;
+}
 </style>
 @endsection
 
