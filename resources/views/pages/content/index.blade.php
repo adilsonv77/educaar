@@ -86,16 +86,26 @@
 
                                     <!-- Açoes -->
                                     <td>
-                                        <form action="{{ route('fechar.index') }}">
-                                            @csrf
-                                            <input type="hidden" name="content" value="{{ $item->id }}">
-                                            <button type="submit" id="FecharConteudo" class="btn btn-info"
-                                                @if ($item->qtasatividades == 0 or $item->fechado or $item->qtasQuestoes == 0) disabled @endif
-                                                @if ($item->qtasQuestoes == 0) title="Sem questões" @elseif ($item->fechado) title="Já fechado" @else title="Fechar" @endif>
-                                                <i class="bi bi-lock-fill h2 " style = "color : #ffffff;"></i>
-                                                ({{ $item->qtasatividades }})
-                                            </button>
-                                        </form>
+
+                                    @php
+                                        
+                                    $isFecharEnabled = ($item->qtasatividades > 0 && !$item->fechado && $item->qtasQuestoes > 0);
+                                   
+                                    $isPdfDisabled = $isFecharEnabled || $item->qtasatividades == 0 || $item->qtasQuestoes == 0;
+                                    @endphp
+
+                                    <form action="{{ route('fechar.index') }}">
+                                        @csrf
+                                        <input type="hidden" name="content" value="{{ $item->id }}">
+                                        <button type="submit" id="FecharConteudo" class="btn btn-info"
+                                            {{ !$isFecharEnabled ? 'disabled' : '' }}
+                                            @if ($item->qtasQuestoes == 0) title="Sem questões" 
+                                            @elseif ($item->fechado) title="Já fechado" 
+                                            @else title="Fechar" @endif>
+                                            <i class="bi bi-lock-fill h2" style="color: #ffffff;"></i>
+                                            ({{ $item->qtasatividades }})
+                                        </button>
+                                    </form>
                                     </td>
 
 
@@ -124,15 +134,23 @@
                                             </form>
                                         </td>
 
+
+
+                                        <!--Pdf-->
                                         <td>
-                                        <form action="{{ route('content.atividades.pdf', ['id' => $item->id]) }}">
-                                                @csrf
-                                                <input type="hidden" name="content" value="{{ $item->id }}">
-                                                <button type="submit" class="btn btn-warning" title="Minheeuuu">
-                                                    <i class="bi bi-person-fill-gear h2" style = "color : #ffffff;"></i>
+                                        
+                                            <!-- Botão de Visualizar PDF -->
+                                            <form action="{{ route('content.atividades.pdf', ['id' => $item->id]) }}" method="GET" target="_blank" style="display: inline;">
+                                                <button type="submit" 
+                                                        class="btn btn-warning" 
+                                                        title="Visualizar PDF" 
+                                                        {{ $isPdfDisabled ? 'disabled' : '' }}>
+                                                    <i class="bi bi-filetype-pdf h2" style="color: #ffffff;"></i>
                                                 </button>
                                             </form>
                                         </td>
+
+
 
                                         
                                         <td>
