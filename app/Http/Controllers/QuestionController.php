@@ -58,8 +58,23 @@ class QuestionController extends Controller
        
         }
 
+        $qtdRespostas = [];
 
-        return view('pages.questions.index', compact('questions', 'activity','alunosPorQuestao'));
+foreach ($questions as $question) {
+    // Contagem dos alunos que responderam a cada questão
+    $alunosPorQuestao[$question->id] = DB::table('student_answers')
+        ->where('question_id', $question->id)
+        ->distinct('user_id')
+        ->count('user_id');
+
+    // Coleta todas as respostas para cada questão, agora como um array
+    $qtdRespostas[$question->id] = DB::table('student_answers')
+        ->where('question_id', $question->id)
+        ->get();  // 'get' retorna as respostas como um array de objetos
+}
+
+
+        return view('pages.questions.index', compact('questions', 'activity','alunosPorQuestao', 'qtdRespostas'));
     }
 
     public function listOfQuestions()
