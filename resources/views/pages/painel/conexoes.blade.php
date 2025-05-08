@@ -4,9 +4,9 @@
 
 @section('script-head')
     <!-- CSS PAINEL CONEXÕES -->
-
     <link rel="stylesheet"
         href="{{ asset('css/panelConnection.css?v=' . filemtime(public_path('css/panelConnection.css'))) }}">
+
     <!-- SELETOR DE CORES -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
@@ -17,6 +17,7 @@
         href="{{ asset('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css?v=' . filemtime(public_path('editor/dist/plugins/colors/ui/trumbowyg.colors.min.css'))) }}">
     <link rel="stylesheet"
         href="{{ asset('editor/dist/ui/trumbowyg.min.css?v=' . filemtime(public_path('editor/dist/ui/trumbowyg.min.css'))) }}">
+
     <style>
         .content-body {
             padding-top: 0rem !important;
@@ -28,7 +29,7 @@
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
     <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-                                                de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+                                                                            de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -60,6 +61,8 @@
     <script src="{{ asset('editor/dist/trumbowyg.min.js') }}"></script>
     <script src="{{ asset('editor/dist/plugins/colors/trumbowyg.colors.min.js') }}"></script>
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
+    <!-- LINHAS DE CONEXÕES -->
+    <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
     <script>
         // ---------------------------------------------TOGGLE EM SELECT PERSONALIZADO---------------------------------------------
         $(document).ready(function () {
@@ -98,6 +101,7 @@
                     if (painelData.x != null && painelData.y != null) {
                         panel.style.left = painelData.x + "px";
                         panel.style.top = painelData.y + "px";
+                        atualizarTodasConexoes();
                     }
                 } catch (e) {
                     console.warn("Falha ao aplicar posição inicial ao novo painel:", e);
@@ -120,14 +124,29 @@
         }
 
         //---------------------------------------------GERAR CONEXÃO---------------------------------------------
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll('.painel').forEach(painel => {
-                //ativarDrag(painel);
-            });
+        document.addEventListener("DOMContentLoaded", () => {
+            const selectTransicao = document.getElementById("selectTransicao");
+            const selectPainelDestino = document.getElementById("selectPainelDestino");
 
-            // manualmente por enquanto
-            conectarBotoes("117", "1", "130");
-            conectarBotoes("117", "2", "17")
+            function tentarConectar() {
+                const transicao = document.getElementById("selectTransicao").value;
+                const destinoId = document.getElementById("selectPainelDestino").value;
+
+                if (transicao === "proximo" && destinoId) {
+                    const botaoSelecionado = document.querySelector(".button_Panel.selecionado");
+
+                    if (!botaoSelecionado) {
+                        console.warn("Nenhum botão selecionado.");
+                        return;
+                    }
+
+                    const idBotaoOrigem = botaoSelecionado.dataset.id; // <- aqui usamos o ID do botão
+                    conectarBotoes(idBotaoOrigem, destinoId); // origem = botão, destino = painel
+                }
+            }
+
+            selectTransicao.addEventListener("change", tentarConectar);
+            selectPainelDestino.addEventListener("change", tentarConectar);
         });
 
         //---------------------------------------------EDITOR DE TEXTO---------------------------------------------
@@ -221,8 +240,9 @@
                         }
                     }, 50);
                 }
-
                 mostrarMenu(menuAtivoAtual);
+
+                setTimeout(() => atualizarTodasConexoes(), 50);
             });
         });
 

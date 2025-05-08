@@ -398,7 +398,7 @@ button {
 }
 
 .button_Panel.selecionado {
-    border: 1px solid #FFA600;
+    border: 1px solid #FFA600 !important;
 }
 
 .midia {

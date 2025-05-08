@@ -7,6 +7,11 @@ function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
 }
 
+function updateCanvasScale() {
+    canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
+    atualizarTodasConexoes();
+}
+
 document.getElementById("zoom-in")?.addEventListener("click", () => {
     scale += 0.1;
     alternativeScale += 1;
@@ -74,7 +79,7 @@ class Painel {
     }
 }
 //----FUNÇÃO DE MOSTRAR MENUS------------------------------------------------------------------------------------------------
-let menuAtivoAtual = "canvas"; 
+let menuAtivoAtual = "canvas";
 
 function mostrarMenu(tipo) {
     document.querySelectorAll(".menu-opcoes").forEach(menu => menu.classList.remove("ativo"));
@@ -82,7 +87,7 @@ function mostrarMenu(tipo) {
     const menu = document.querySelector(`.${tipo}-opcoes`);
     if (menu) {
         menu.classList.add("ativo");
-        menuAtivoAtual = tipo; 
+        menuAtivoAtual = tipo;
     }
 }
 
@@ -347,6 +352,8 @@ function habilitarArrastoPersonalizado(painelElement) {
 
         painelElement.style.left = `${newX}px`;
         painelElement.style.top = `${newY}px`;
+        atualizarTodasConexoes();
+
     });
 
     document.addEventListener("mouseup", function () {
@@ -392,6 +399,7 @@ document.addEventListener("mousemove", (e) => {
     let deltaY = e.clientY - startY;
     div.style.left = `${startLeft + deltaX}px`;
     div.style.top = `${startTop + deltaY}px`;
+    atualizarTodasConexoes();
 });
 
 document.addEventListener("mouseup", () => {
@@ -566,74 +574,37 @@ function sendValueLivewire(id, link) {
 }
 
 //----DESENHAR CONEXÃO (LINHA)-testes manual---------------------------------------------------------------------------
-const todasAsLinhas = [];
-function conectarBotoes(idPainelOrigem, numBotao, idPainelDestino) {
-    const origem = document.querySelector(`[data-id="${idPainelOrigem}"]`);
-    const destino = document.querySelector(`[data-id="${idPainelDestino}"]`);
+const conexoes = {}; // Ex: { 'painel_1:destino_5': LeaderLineInstance }
 
-    if (!origem || !destino) {
-        console.warn("Origem ou destino não encontrados.");
-        return;
-    }
+function conectarBotoes(idBotao, idPainel) {
+    const startElem = document.querySelector(".button_Panel.selecionado"); // botão origem
+    const endElem = document.getElementById(idPainel); // painel destino via select
 
-    const botao = origem.querySelector(`.button_Panel[data-botao="${numBotao}"]`);
-
-    if (!botao) {
-        console.warn("Botão de origem não encontrado.");
+    if (!startElem || !endElem) {
+        console.warn("Elemento de origem ou destino não encontrado.");
         return;
     }
 
     const linha = new LeaderLine(
-        botao,
-        destino,
+        startElem,
+        endElem,
         {
-            color: "#00bfff",
+            color: 'rgba(30, 144, 255, 0.7)',
             size: 4,
-            path: "fluid",
-            startPlug: "disc",
-            endPlug: "arrow3"
+            path: 'fluid',
+            startPlug: 'disc',
+            endPlug: 'arrow3',
+            startSocket: 'auto',
+            endSocket: 'auto'
         }
     );
 
-    todasAsLinhas.push(linha);
 
-    return linha;
-}
-
-let line;
-
-function conectarPainel() {
-    const start = document.querySelector('[data-id="5"] .button_Panel[data-botao="1"]');
-    const end = document.querySelector('[data-id="17"]');
-
-    if (start && end) {
-        line = new LeaderLine(start, end);
-    }
-}
-
-function ativarDrag(painel) {
-    let isDragging = false;
-    let offsetX, offsetY;
-
-    painel.addEventListener('mousedown', function (e) {
-        isDragging = true;
-        offsetX = e.clientX - painel.offsetLeft;
-        offsetY = e.clientY - painel.offsetTop;
-        painel.style.position = 'absolute';
-    });
-
-    document.addEventListener('mousemove', function (e) {
-        if (isDragging) {
-            painel.style.left = (e.clientX - offsetX) + 'px';
-            painel.style.top = (e.clientY - offsetY) + 'px';
-
-            todasAsLinhas.forEach(linha => linha.position());
-        }
-    });
-
-    document.addEventListener('mouseup', function () {
-        isDragging = false;
-    });
+    function atualizarTodasConexoes() {
+        todasAsConexoes.forEach((linha) => {
+            linha.position(); // Atualiza a posição da linha
+        });
+    }    
 }
 
 //----CONFIGURAR BOTÕES------------------------------------------------------------------------------------------

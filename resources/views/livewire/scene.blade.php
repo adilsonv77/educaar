@@ -10,9 +10,10 @@
                 <!-- FORMATOS -->
                 <div class="mb-6">
                     <h3>
-                        FORMATO DOS BOTÕES 
+                        BOTÕES 
                     </h3>
                     <button id="addButton">teste</button>
+                    
                     <div class="tipos">
                         <div class="linhas">
                             <div></div>
@@ -73,7 +74,7 @@
                 <!-- TRANSIÇÕES -->
                 <div class="mb-6">
                     <h3 class="mb-2">TRANSIÇÕES</h3>
-                    <select class="select-native">
+                    <select id="selectTransicao" class="select-native">
                         <option value="" disabled selected>Nenhuma</option>
                         <option value="proximo">Próximo Painél</option>
                         <option value="final">Final da Experiência</option>
@@ -86,7 +87,7 @@
                         <img class="tapSelect" src="{{ asset('images/singletap.svg') }}" alt="Ícone"
                             style="cursor: pointer;">
                     </h3>
-                    <select class="select-native">
+                    <select id="selectPainelDestino" class="select-native">
                         <option disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
                             <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
