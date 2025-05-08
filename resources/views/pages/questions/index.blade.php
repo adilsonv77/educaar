@@ -31,7 +31,6 @@ $pageName = 'Questões';
                     <tr>
                         <th>Nome</th>
                         <th>Editar</th>
-                        <th>Respostas</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
@@ -59,15 +58,8 @@ $pageName = 'Questões';
 
                         <td>
                             @php
-                                $qtdAlunos = $alunosPorQuestao[$item->id] ?? 0;
-                                $qtdRespostasArray = $qtdRespostas[$item->id] ?? []; // Um array de respostas
+                            $qtdAlunos = $alunosPorQuestao[$item->id] ?? 0;
                             @endphp
-
-                            {{ count($qtdRespostasArray) }}
-                        </td>
-
-
-                        <td>
 
                             <button type="button" class="btn btn-danger" data-toggle="modal" @if (($alunosPorQuestao[$item->id] ?? 0) > 0) disabled @endif
                                 data-target="#modal{{ $item->id }}"
