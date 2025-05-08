@@ -15,6 +15,7 @@ var mindarThree = null;
 var isSetup = false;
 var bloquear = null;
 var desbloquear = null;
+var cenas = [];
 
 // Função para mostrar progresso
 function mostrarAvanco(percent) {
@@ -209,9 +210,16 @@ document.addEventListener('DOMContentLoaded', () => {
           desbloquear.style.display = "none";
 
           // Pausar vídeo tocando.
-          // if (json.midiaExtension == "mp4") {
-          //   sceneHtml.getElementsByTagName("video")[0].pause();
-          // }
+          let activePanel = sceneHtml.querySelector("panel-display-"+cenas[scene_id]);
+          let activeLockPanel = sceneHtml.querySelector("panel-display-"+cenas[scene_id]+"-lock");
+          if(!activeLockPanel) activeLockPanel = activePanel; //Previne erros caso não houver painel bloqueado
+          
+          if(activePanel.classList.contains("video")){
+            activePanel.querySelector(".vidMidia").pause();
+            activeLockPanel.querySelector(".vidMidia").pause();
+          }else if(activePanel.classList.contains("youtube")){
+
+          }
         }
       }
 
@@ -231,24 +239,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Se a cena ativa é um painel
         if (activeScene.children.length == 0) {
-          //Por algum motivo a tela só desaparece se esperar 1 milésimo de 1 segundo .
+          //Por algum motivo a tela só desaparece se esperar 1 milésimo de 1 segundo.
           setTimeout(() => {
             activeScene.element.style.visibility = "hidden";
             activeScene.element.style.display = "none";
             try {
               //Caso houver um vídeo, ele precisa ser mutado
               activeScene.element.getElementsByTagName("video")[0].pause()
-            } catch (e) {
-              //Caso não houver vídeo, não há erros
-            }
+            } catch (e) { }
           }, 1);
 
           document.getElementById("my-ar-container").style.display = "none";
           document.getElementById("painelContainer").style.display = "flex";
-          
+
           let scene_id = activeScene.element.id;
           scene_id = scene_id.substring(14)
-          
+
           createScene(scene_id, true)
         }
       });
@@ -406,6 +412,10 @@ function createScene(id, bloquearPainel) {
   scene.id = "scene-display-" + id;
   scene.classList = "scene";
 
+  //Guarda o painel inicial como o painel ativo, caso for a primeira vez carregando.
+  if (!cenas[id])
+    cenas[id] = document.getElementById("scene-" + id).getAttribute("start_panel_id");
+
   //Define se é painel bloqueado ou do MINDAR
   if (!bloquearPainel) {
     //MINDAR
@@ -413,14 +423,15 @@ function createScene(id, bloquearPainel) {
     scene.style.display = "none";
   } else {
     //Bloqueado
-    scene.classList.add('painelCelular');
     scene.style.zIndex = "1";
-    scene.id = "scene-display-" + id +"-lock";
+    scene.id = "scene-display-" + id + "-lock";
+    let activePanel = document.getElementById("panel-display-"+cenas[id]);
+    activePanel.querySelector(".vidMidia").pause();
   }
 
   let paineis = scene_info.children;
   Array.from(paineis).forEach(painel => {
-    let newPanel = createPanel(painel)
+    let newPanel = createPanel(painel,id)
     scene.appendChild(newPanel)
   });
 
@@ -429,15 +440,16 @@ function createScene(id, bloquearPainel) {
   return scene;
 }
 
-function createPanel(panel_info) {
-  let panelInicialId = panel_info.parentElement.getAttribute("start_panel_id")
+function createPanel(panel_info,scene_id) {
+  let panelAtivoId = cenas[scene_id];
   let panel = JSON.parse(panel_info.getAttribute("json"))
 
   //Cria elemento HTML
   const panel_html = document.createElement('div');
   panel_html.id = "panel-display-" + panel.id;
   panel_html.classList.add('painel');
-  if (panelInicialId != panel.id) 
+  panel_html.classList.add(panel.midiaType)
+  if (panelAtivoId != panel.id)
     panel_html.style.display = "none";
 
   //Define qual tipo de midia deve ser mostrado
@@ -475,11 +487,11 @@ function createPanel(panel_info) {
       <div class="txtPainel">${panel.txt}</div>
 
       <div class="midia">
-        `+ midiaHTML +`
+        `+ midiaHTML + `
       </div>
 
       <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
-        <div id="layout" class="layout-`+ panel.btnFormat +`">
+        <div id="layout" class="layout-`+ panel.btnFormat + `">
 
         </div>
       </div>
@@ -487,38 +499,40 @@ function createPanel(panel_info) {
 
   let buttons = panel_info.children;
   Array.from(buttons).forEach(button => {
-    let newButton = createButton(button,panel.id)
+    let newButton = createButton(button, panel.id, scene_id)
     panel_html.querySelector("#layout").appendChild(newButton)
   });
 
   return panel_html;
 }
 
-function createButton(button_info,panel_id) {
+function createButton(button_info, panel_id, scene_id) {
   let button = JSON.parse(button_info.getAttribute("json"))
 
   const button_html = document.createElement('div');
   button_html.id = "button-display-" + button_info.getAttribute("destination_id");
   button_html.classList.add('button_Panel');
-  button_html.style = "border: 1px solid "+button.color;
+  button_html.style = "border: 1px solid " + button.color;
 
-  button_html.innerHTML=`
-    <div class="circulo" style="background-color: `+button.color+`"></div> `+button.text+`
+  button_html.innerHTML = `
+    <div class="circulo" style="background-color: `+ button.color + `"></div> ` + button.text + `
   `
 
-  button_html.onclick = ()=>{
-    let panel_loaded = document.getElementById("panel-display-"+panel_id); 
-    let panel = document.getElementById("panel-display-"+button_info.getAttribute("destination_id"))
+  button_html.onclick = () => {
+    cenas[scene_id] = button_info.getAttribute("destination_id");
+    
+    let panel_loaded = document.getElementById("panel-display-" + panel_id);
+    let panel = document.getElementById("panel-display-" + button_info.getAttribute("destination_id"))
 
-    panel_loaded.style.display="none";
-    panel.style.display="block";
+    panel_loaded.style.display = "none";
+    panel.style.display = "block";
 
     try {
-      let panel_lock_loaded = document.getElementById("panel-display-"+panel_id+"-lock");
-      let panel_lock = document.getElementById("panel-display-"+button_info.getAttribute("destination_id")+"-lock")
+      let panel_lock_loaded = document.getElementById("panel-display-" + panel_id + "-lock");
+      let panel_lock = document.getElementById("panel-display-" + button_info.getAttribute("destination_id") + "-lock")
 
-      panel_lock_loaded.style.display="none";
-      panel_lock.style.display="block";
+      panel_lock_loaded.style.display = "none";
+      panel_lock.style.display = "block";
     } catch (error) {
       console.log("Não tem painel bloqueado");
     }
