@@ -568,3 +568,7 @@ function pauseVideo(panel) {
 
   panel.querySelector(".youtubeMidia").appendChild(iframe)
 }
+
+function endExperience() {
+  
+}

@@ -625,30 +625,31 @@ btnTxt.oninput = () => {
     }, 1000);
 }
 
-// 3. Altera cor botão
-let corInput = document.getElementsByClassName("pcr-result")[0];
-
-pickr.on("change", (color) => {
-    clearTimeout(debouceTimer);
-    debouceTimer = setTimeout(() => {
-        window.livewire.emit('updateCor', { id: botaoSelecionado.querySelector(".circulo").id, color: color.toHEXA().toString() })
-    }, 1000);
-});
-
-// 4. Altera transição
+// 3. Altera transição
 selectTransicao.onchange = () => {
     window.livewire.emit('updateTransicao', { id: botaoSelecionado.querySelector(".circulo").id, transition: selectTransicao.value })
 }
 
-// 5. Altera o painel de destino
-selectPainel.onchange = () => mudarPainelDestino(botaoSelecionado.querySelector(".circulo").id);
+// 4. Altera o painel de destino
+selectPainel.onchange = () => {mudarPainelDestino(botaoSelecionado.querySelector(".circulo").id)};
 function mudarPainelDestino(id) {
+    alert("alou")
     window.livewire.emit('updatePainelDestino', { id: id, destination_id: selectPainel.value })
 }
 
-// 6. Deletar botão
+// 5. Deletar botão
 let deleteBtn = document.getElementById("deleteBtn")
 deleteBtn.onclick = () => {
     let painel = botaoSelecionado.querySelector(".circulo").parentElement.parentElement.parentElement.parentElement;
     window.livewire.emit('deleteBtn', { id: botaoSelecionado.querySelector(".circulo").id, id_painel: painel.querySelector(".idPainel").id })
 }
+
+// 6. Altera cor botão
+let corInput = document.getElementsByClassName("pcr-result")[0];
+
+window.pickr.on("change", (color) => {
+    clearTimeout(debouceTimer);
+    debouceTimer = setTimeout(() => {
+        window.livewire.emit('updateCor', { id: botaoSelecionado.querySelector(".circulo").id, color: color.toHEXA().toString() })
+    }, 1000);
+});
