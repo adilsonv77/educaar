@@ -229,7 +229,7 @@ class ContentController extends Controller
 
         $pdf = PDF::loadView('pages.content.toPdf', compact('conteudo', 'atividades'));
 
-        return $pdf->download("conteudo_{$conteudo->id}.pdf");
+        return $pdf->stream("conteudo_{$conteudo->id}.pdf");
     }
 
 

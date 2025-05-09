@@ -40,7 +40,8 @@ class SceneController extends Controller
         foreach ($paineis as $painel) {
             $painel->panel = json_decode($painel->panel,true);
         }
-        return view('pages.painel.conexoes',["paineis"=>$paineis,"scene_id"=>$id]);
+        $scene_name = SceneDao::getById($id)->name;
+        return view('pages.painel.conexoes',["paineis"=>$paineis,"scene_id"=>$id,"scene_name"=>$scene_name]);
     }
 
     public function store(Request $request)

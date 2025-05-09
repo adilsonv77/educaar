@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', "Conexões do Painel")
+@section('page-name', $scene_name)
 
 @section('script-head')
     <!-- CSS PAINEL CONEXÕES -->
@@ -112,9 +112,7 @@
                 mostrarMenu("painel");
             });
 
-
             mostrarMenu("canvas");
-            console.log("menu");
         });
 
         function atribuirListeners(panel, id) {

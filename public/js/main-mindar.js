@@ -210,15 +210,15 @@ document.addEventListener('DOMContentLoaded', () => {
           desbloquear.style.display = "none";
 
           // Pausar vídeo tocando.
-          let activePanel = sceneHtml.querySelector("panel-display-"+cenas[scene_id]);
-          let activeLockPanel = sceneHtml.querySelector("panel-display-"+cenas[scene_id]+"-lock");
-          if(!activeLockPanel) activeLockPanel = activePanel; //Previne erros caso não houver painel bloqueado
+          let activePanel = sceneHtml.querySelector("#panel-display-"+cenas[scene_id]);
+          let activeLockPanel = sceneHtml.querySelector("#panel-display-"+cenas[scene_id]+"-lock");
+          if(!activeLockPanel) activeLockPanel = activePanel; //Previne erros caso não houver painel bloqueado      
           
           if(activePanel.classList.contains("video")){
             activePanel.querySelector(".vidMidia").pause();
             activeLockPanel.querySelector(".vidMidia").pause();
           }else if(activePanel.classList.contains("youtube")){
-
+            pauseVideo(activePanel)
           }
         }
       }
@@ -518,6 +518,7 @@ function createButton(button_info, panel_id, scene_id) {
     <div class="circulo" style="background-color: `+ button.color + `"></div> ` + button.text + `
   `
 
+  //Passar para o próximo painel ou finalizar experiência
   button_html.onclick = () => {
     cenas[scene_id] = button_info.getAttribute("destination_id");
     
@@ -527,9 +528,21 @@ function createButton(button_info, panel_id, scene_id) {
     panel_loaded.style.display = "none";
     panel.style.display = "block";
 
+    if(panel_loaded.classList.contains("video")){
+      panel_loaded.querySelector(".vidMidia").pause();
+    }else if(panel_loaded.classList.contains("youtube")){
+      pauseVideo(panel_loaded);
+    }
+
     try {
       let panel_lock_loaded = document.getElementById("panel-display-" + panel_id + "-lock");
       let panel_lock = document.getElementById("panel-display-" + button_info.getAttribute("destination_id") + "-lock")
+
+      if(panel_lock_loaded.classList.contains("video")){
+        panel_lock_loaded.querySelector(".vidMidia").pause();
+      }else if(panel_lock_loaded.classList.contains("youtube")){
+        pauseVideo(panel_lock_loaded);
+      }
 
       panel_lock_loaded.style.display = "none";
       panel_lock.style.display = "block";
@@ -539,4 +552,19 @@ function createButton(button_info, panel_id, scene_id) {
   }
 
   return button_html;
+}
+
+function pauseVideo(panel) {
+  let iframe = panel.querySelector("iframe")
+  let src = iframe.src;
+  iframe.remove()
+
+  iframe = document.createElement('iframe');
+  iframe.id= "srcYoutube";
+  iframe.src= src;
+  iframe.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;";
+  iframe.setAttribute('frameborder', '0');
+  iframe.setAttribute('allowfullscreen', '');
+
+  panel.querySelector(".youtubeMidia").appendChild(iframe)
 }

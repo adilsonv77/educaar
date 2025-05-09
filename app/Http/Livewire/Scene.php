@@ -100,7 +100,6 @@ class Scene extends Component
     {
         $sceneDAO = new SceneDAO();
         $sceneDAO->updateById($this->scene_id, ['name' => $this->nameScene]);
-        dd($this->paineisRenderizados);
     }
 
     public function updateCoordinate($painelId, $x, $y)
