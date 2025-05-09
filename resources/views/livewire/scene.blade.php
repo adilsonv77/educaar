@@ -1,6 +1,6 @@
 <div>
     <div class="AddPainel">
-        <button id="addPanel" wire:click="create">Add painel</button>
+        <button id="addPanel" wire:click="create" class="button">Add painel</button>
     </div>
     <!-- MENU LATERAL -->
     <div class="menu-lateral">
@@ -9,11 +9,13 @@
             <div class="menu-opcoes painel-opcoes">
                 <!-- FORMATOS -->
                 <div class="mb-6">
-                    <h3>
-                        BOTÕES 
-                    </h3>
-                    <button id="addButton">teste</button>
-                    
+                <div class="divBotoes">
+                        <h3 id="buttonsh3">
+                            BOTÕES 
+                        </h3>
+                        <button style="border: none; background-color: #FFF"><i
+                            class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;" id="addButton" style="border: none !important;"></i></button>
+                </div>
                     <div class="tipos">
                         <div class="linhas">
                             <div></div>
@@ -44,10 +46,10 @@
                 </div>
                 <!-- BOTÕES DE SALVAR/EXCLUIR -->
                 <div class="buttons">
-                    <button id="editarMidia">
+                    <button id="editarMidia" class="button">
                         Editar Mídia
                     </button>
-                    <button id="excluirPainel">
+                    <button id="excluirPainel" class="button">
                         Excluir
                     </button>
                 </div>
@@ -95,7 +97,7 @@
                     </select>
                 </div>
                 <!-- EXCLUIR BOTÃO -->
-                <button id="deleteBtn">Excluir botão</button>
+                <button id="deleteBtn" class="button">Excluir botão</button>
             </div>
 
             <!-- Quando o canvas está "selecionado" -->
@@ -146,9 +148,9 @@
     <div class="container-paineis">
         <div class="canvas-container">
             <div class="menu-zoom">
-                <button id="zoom-out">-</button>
-                <button id="zoom-in">+</button>
-                <button id="resizeZoom" hidden>Redefinir zoom</button>
+                <button id="zoom-out" class="button">-</button>
+                <button id="zoom-in" class="button">+</button>
+                <button id="resizeZoom" hidden class="button">Redefinir zoom</button>
             </div>
             <div id="canvas" class="canvas">
                 @livewireScripts

@@ -55,6 +55,16 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.warn("❌ Container do Color Picker não encontrado.");
     }
+
+    document.querySelector(".linhas").addEventListener("click", (e) => {
+        selecionarFormato(e.currentTarget); // Chama a função ao clicar na div "linhas"
+    });
+    document.querySelector(".blocos").addEventListener("click", (e) => {
+        selecionarFormato(e.currentTarget); // Chama a função ao clicar na div "blocos"
+    });
+    document.querySelector(".alternativas").addEventListener("click", (e) => {
+        selecionarFormato(e.currentTarget); // Chama a função ao clicar na div "alternativas"
+    });
 });
 
 
@@ -651,4 +661,21 @@ let deleteBtn = document.getElementById("deleteBtn")
 deleteBtn.onclick = () => {
     let painel = botaoSelecionado.querySelector(".circulo").parentElement.parentElement.parentElement.parentElement;
     window.livewire.emit('deleteBtn', { id: botaoSelecionado.querySelector(".circulo").id, id_painel: painel.querySelector(".idPainel").id })
+}
+
+//----FUNÇÃO DE SELECIONAR FORMATO------------------------------------------------------------------------------------------------
+function selecionarFormato(elemento) {
+    // Remove a seleção anterior de todas as divs de formato
+    document.querySelectorAll('.linhas, .blocos, .alternativas').forEach((element) => {
+        element.addEventListener('click', function() {
+            // Remove a classe 'selecionado' de todas as divs
+            document.querySelectorAll('.linhas, .blocos, .alternativas').forEach((el) => {
+                el.classList.remove('selecionado');
+            });
+    
+            // Adiciona a classe 'selecionado' à div clicada
+            this.classList.add('selecionado');
+        });
+    });
+    
 }
