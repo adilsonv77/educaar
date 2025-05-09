@@ -409,7 +409,9 @@ document.addEventListener("mousemove", (e) => {
     let deltaY = e.clientY - startY;
     div.style.left = `${startLeft + deltaX}px`;
     div.style.top = `${startTop + deltaY}px`;
-    atualizarTodasConexoes();
+    if (isDragging) {
+        atualizarTodasConexoes();
+    }
 });
 
 document.addEventListener("mouseup", () => {
@@ -584,37 +586,28 @@ function sendValueLivewire(id, link) {
 }
 
 //----DESENHAR CONEXÃO (LINHA)-testes manual---------------------------------------------------------------------------
-const conexoes = {}; // Ex: { 'painel_1:destino_5': LeaderLineInstance }
+const todasAsLinhas = [];
+
+function atualizarTodasConexoes() {
+    todasAsLinhas.forEach(linha => linha.position());
+}
 
 function conectarBotoes(idBotao, idPainel) {
-    const startElem = document.querySelector(".button_Panel.selecionado"); // botão origem
-    const endElem = document.getElementById(idPainel); // painel destino via select
+    const startElem = document.querySelector(".button_Panel.selecionado");
+    const endElem = document.getElementById(idPainel);
 
-    if (!startElem || !endElem) {
-        console.warn("Elemento de origem ou destino não encontrado.");
-        return;
-    }
+    const linha = new LeaderLine(startElem, endElem, {
+        color: 'rgba(30, 144, 255, 0.7)',
+        size: 4,
+        path: 'fluid',
+        startPlug: 'disc',
+        endPlug: 'arrow3',
+        startSocket: 'auto',
+        endSocket: 'auto'
+    });
 
-    const linha = new LeaderLine(
-        startElem,
-        endElem,
-        {
-            color: 'rgba(30, 144, 255, 0.7)',
-            size: 4,
-            path: 'fluid',
-            startPlug: 'disc',
-            endPlug: 'arrow3',
-            startSocket: 'auto',
-            endSocket: 'auto'
-        }
-    );
-
-
-    function atualizarTodasConexoes() {
-        todasAsConexoes.forEach((linha) => {
-            linha.position(); // Atualiza a posição da linha
-        });
-    }    
+    todasAsLinhas.push(linha);
+    return linha;
 }
 
 //----FUNÇÃO DE SELECIONAR FORMATO------------------------------------------------------------------------------------------------

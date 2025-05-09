@@ -143,7 +143,7 @@
                 }
             }
 
-            selectTransicao.addEventListener("change", tentarConectar);
+            // selectTransicao.addEventListener("change", tentarConectar);
             selectPainelDestino.addEventListener("change", tentarConectar);
         });
 
