@@ -8,7 +8,7 @@
     $style = ($x !== null && $y !== null) ? "left: {$x}px; top: {$y}px;" : "";
 @endphp
 
-<div class="painel" id="{{ $panelData['id'] }}" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" data-panel='@json($panelData)' style="{{ $style }}">        
+<div class="painel" id="{{ $panelData['id'] }}" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" data-panel='@json($panelData)' style="{{ $style }}"> 
 
     <p class="idPainel" id="{{ $panelData["id"] }}">Painel ({{ $panelData["id"] }})</p>    
 

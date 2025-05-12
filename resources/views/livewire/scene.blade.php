@@ -11,7 +11,7 @@
                 <div class="mb-6">
                     <div class="divBotoes">
                         <h3 id="buttonsh3">
-                            BOTÕES 
+                            BOTÕES
                         </h3>
                         <button style="border: none; background-color: #FFF">
                             <i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;" id="addButton" style="border: none !important;"></i>
@@ -72,7 +72,7 @@
                     <h3 class="mb-2">
                         TEXTO DO BOTÃO
                     </h3>
-                    <input class="" type="text" id="btnTxt"/>
+                    <input class="" type="text" id="btnTxt" />
                 </div>
                 <!-- TRANSIÇÕES -->
                 <div class="mb-6">
@@ -158,7 +158,8 @@
                 @foreach ($paineisRenderizados as $painel)
                     @livewire('panel', ['painel' => $painel], key($painel->id))
                 @endforeach
-                <img src="{{ asset('images/inicioConexoes.svg') }}" alt="">
+                <img id="indicadorInicio" src="{{ asset('images/inicioConexoes.svg') }}" alt=""
+                    style="position: absolute; display: none;">
             </div>
         </div>
     </div>

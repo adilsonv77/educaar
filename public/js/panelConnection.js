@@ -8,12 +8,15 @@ let scale = 0.7;
 let alternativeScale = 3;
 const canvas = document.getElementById("canvas");
 
-function updateCanvasScale() {
-    canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
-}
 
 function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
+    atualizarTodasConexoes();
+}
+
+function aplicarZoom(novoZoom) {
+    const canvas = document.getElementById('canvas');
+    canvas.style.transform = `scale(${novoZoom})`;
     atualizarTodasConexoes();
 }
 
@@ -427,6 +430,7 @@ document.addEventListener("mouseup", () => {
     if (isDraggingPanel) return;
     isDragging = false;
     div.style.cursor = "grab";
+    atualizarTodasConexoes();
 });
 
 //----MOSTRAR POPUP QUANDO SELECIONAR------------------------------------------------------------------------------------------------
@@ -596,17 +600,29 @@ function sendValueLivewire(id, link) {
 
 //----DESENHAR CONEXÃO (LINHA)-testes manual---------------------------------------------------------------------------
 const todasAsLinhas = [];
+const linhasPorBotao = new Map();
 
+// Essa função atualiza a posição das linhas quando o canvas ou os painéis se movem
 function atualizarTodasConexoes() {
-    todasAsLinhas.forEach(linha => linha.position());
+    requestAnimationFrame(() => {
+        todasAsLinhas.forEach(linha => linha.position());
+    });
 }
 
-function conectarBotoes(idBotao, idPainel) {
-    const startElem = document.querySelector(".button_Panel.selecionado");
+// Conectar um botão específico (passando o botão como elemento e os IDs)
+function conectarBotoes(startElem, idOrigem, idPainel) {
     const endElem = document.getElementById(idPainel);
 
+    if (!startElem || !endElem) return;
+
+    // Remove a linha antiga se já existir
+    if (linhasPorBotao.has(idOrigem)) {
+        linhasPorBotao.get(idOrigem).remove();
+        linhasPorBotao.delete(idOrigem);
+    }
+
     const linha = new LeaderLine(startElem, endElem, {
-        color: 'rgba(30, 144, 255, 0.7)',
+        color: '#833B8D',
         size: 4,
         path: 'fluid',
         startPlug: 'disc',
@@ -615,25 +631,48 @@ function conectarBotoes(idBotao, idPainel) {
         endSocket: 'auto'
     });
 
+    linhasPorBotao.set(idOrigem, linha);
     todasAsLinhas.push(linha);
     return linha;
 }
+
+// Recriar conexões salvas ao carregar a tela
+function recriarConexoes() {
+    // Limpa linhas antigas
+    todasAsLinhas.forEach(linha => linha.remove());
+    todasAsLinhas.length = 0;
+    linhasPorBotao.clear();
+
+    document.querySelectorAll(".button_Panel").forEach(botao => {
+        const botaoId = botao.querySelector(".circulo")?.id;
+        const infoDiv = botao.querySelector("#buttonInfo");
+        const destinoId = infoDiv?.getAttribute("destination_id");
+
+        if (botaoId && destinoId) {
+            const destinoElem = document.getElementById(destinoId);
+            if (destinoElem) {
+                conectarBotoes(botao, botaoId, destinoId);
+            }
+        }
+    });
+}
+//----FUNÇÃO DE GERAR CONEXÃO INICIAL------------------------------------------------------------------------------------------------
 
 //----FUNÇÃO DE SELECIONAR FORMATO------------------------------------------------------------------------------------------------
 function selecionarFormato(elemento) {
     // Remove a seleção anterior de todas as divs de formato
     document.querySelectorAll('.linhas, .blocos, .alternativas').forEach((element) => {
-        element.addEventListener('click', function() {
+        element.addEventListener('click', function () {
             // Remove a classe 'selecionado' de todas as divs
             document.querySelectorAll('.linhas, .blocos, .alternativas').forEach((el) => {
                 el.classList.remove('selecionado');
             });
-    
+
             // Adiciona a classe 'selecionado' à div clicada
             this.classList.add('selecionado');
         });
     });
-    
+
 }
 
 //----CONFIGURAR BOTÕES------------------------------------------------------------------------------------------
@@ -673,7 +712,7 @@ selectTransicao.onchange = () => {
 }
 
 // 4. Altera o painel de destino
-selectPainel.onchange = () => {mudarPainelDestino(botaoSelecionado.querySelector(".circulo").id)};
+selectPainel.onchange = () => { mudarPainelDestino(botaoSelecionado.querySelector(".circulo").id) };
 function mudarPainelDestino(id) {
     window.livewire.emit('updatePainelDestino', { id: id, destination_id: selectPainel.value })
 }

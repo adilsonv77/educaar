@@ -112,6 +112,7 @@
             });
 
             mostrarMenu("canvas");
+            recriarConexoes();
         });
 
         function atribuirListeners(panel, id) {
@@ -216,10 +217,35 @@
             initTrumbowygEditor();
         });
 
+        let zoomAtual = 0.7;
+        let canvasLeft = 0;
+        let canvasTop = 0;
+
+        window.livewire.hook('message.sent', () => {
+            const canvas = document.getElementById("canvas");
+
+            // Salva o zoom atual (usando transform matrix)
+            const transform = window.getComputedStyle(canvas).transform;
+            if (transform && transform.includes("matrix")) {
+                const valores = transform.match(/matrix\(([^)]+)\)/)[1].split(', ');
+                zoomAtual = parseFloat(valores[0]);
+            }
+
+            // Salva a posição atual
+            canvasLeft = canvas.offsetLeft;
+            canvasTop = canvas.offsetTop;
+        });
+        
         document.addEventListener("DOMContentLoaded", function () {
             window.livewire.hook('message.processed', (message, component) => {
                 const painelSelecionado = document.querySelector(".painel.selecionado");
                 const botaoSelecionado = document.querySelector(".botao.selecionado");
+
+                if (painelInicial) {
+                    aplicarConexaoInicial(painelInicial.id);
+                } else {
+                    removerConexaoInicial();
+                }
 
                 console.log("Menu reaberto após Livewire");
 
@@ -239,7 +265,25 @@
                 }
                 mostrarMenu(menuAtivoAtual);
 
-                setTimeout(() => atualizarTodasConexoes(), 50);
+                document.querySelectorAll(".painel").forEach(panel => {
+                    let id = panel.querySelector('.idPainel')?.id;
+                    if (id) {
+                        atribuirListeners(panel, id);
+                        habilitarArrastoPersonalizado(panel);
+                    }
+                });
+
+                const canvas = document.getElementById("canvas");
+                canvas.style.transform = `scale(${zoomAtual}) translate(-50%, -50%)`;
+                canvas.style.left = `${canvasLeft}px`;
+                canvas.style.top = `${canvasTop}px`;
+
+                scale = zoomAtual;
+
+                const restaurarZoom = document.getElementById("resizeZoom");
+                restaurarZoom.hidden = (scale === 0.7);
+                recriarConexoes();
+                atualizarTodasConexoes()
             });
         });
 

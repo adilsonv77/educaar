@@ -11,7 +11,7 @@ use App\DAO\SceneDAO;
 
 class Scene extends Component
 {
-    protected $listeners = ['deletePainel', 'updateStartPanel', 'updateCoordinate', 'updateCanvasPosition'];
+    protected $listeners = ['deletePainel', 'updateStartPanel', 'updateCoordinate'];
 
     public $paineisRenderizados = [];
     public $scene_id;
@@ -117,17 +117,6 @@ class Scene extends Component
                 'panel' => json_encode($panelData)
             ]);
         }
-    }
-
-    public function updateCanvasPosition($payload)
-    {
-        $left = $payload['left'];
-        $top = $payload['top'];
-
-        DB::table('scenes')->where('id', $this->scene_id)->update([
-            'canvas_left' => $left,
-            'canvas_top' => $top
-        ]);
     }
 
 }
