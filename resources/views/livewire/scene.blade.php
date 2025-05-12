@@ -9,13 +9,14 @@
             <div class="menu-opcoes painel-opcoes">
                 <!-- FORMATOS -->
                 <div class="mb-6">
-                <div class="divBotoes">
+                    <div class="divBotoes">
                         <h3 id="buttonsh3">
                             BOTÕES 
                         </h3>
-                        <button style="border: none; background-color: #FFF"><i
-                            class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;" id="addButton" style="border: none !important;"></i></button>
-                </div>
+                        <button style="border: none; background-color: #FFF">
+                            <i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;" id="addButton" style="border: none !important;"></i>
+                        </button>
+                    </div>
                     <div class="tipos">
                         <div class="linhas">
                             <div></div>

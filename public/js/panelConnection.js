@@ -130,6 +130,7 @@ document.addEventListener("click", (e) => {
 
 
 //----FUNÇÃO DE SELECIONAR PAINEL------------------------------------------------------------------------------------------------
+let qtdBotoes = 0;
 function selecionarPainel(painel, e) {
     isDraggingPanel = true;
 
@@ -150,6 +151,8 @@ function selecionarPainel(painel, e) {
     if (editor.length && textoPainel !== null) {
         editor.trumbowyg('html', textoPainel);
     }
+
+    qtdBotoes = painelSelecionado.querySelector("#layout").children.length
 }
 
 //----FUNÇÃO DE SELECIONAR BOTÃO------------------------------------------------------------------------------------------------
@@ -251,11 +254,13 @@ function alterarFormatoBotoes(formato) {
         return;
     }
 
-    let areaBotoes = painelSelecionado.querySelector(".areaBtns");
-    console.log("Área de botões encontrada:", areaBotoes);
+    let qtdBotoes = painelSelecionado.querySelector("#layout").children.length;
 
-    if (!areaBotoes) {
-        console.warn("O painel carregado do banco pode ter uma estrutura diferente. Verifique o HTML.");
+    if (formato == "linhas" && qtdBotoes > 3){
+        alert("Você não pode trocar formatos, o formato de linhas suporta até 3 botões. Exclua alguns botões e tente novamente.")
+        return;
+    }else if (formato == "alternativas" && qtdBotoes > 4){
+        alert("Você não pode trocar formatos, o formato de círculos suporta até 4 botões. Exclua alguns botões e tente novamente")
         return;
     }
 
@@ -636,6 +641,19 @@ let addBtnBtn = document.getElementById("addButton")
 
 addBtnBtn.onclick = () => {
     let id = painelSelecionado.querySelector(".idPainel").id;
+    let tipoFormato = painelSelecionado.querySelector("#layout").classList[0];
+    
+    if (tipoFormato == "layout-blocos" && qtdBotoes >= 6) {
+        alert("Você não pode adicionar mais botões, o formato de blocos suporta até 6 botões")
+        return;
+    }else if (tipoFormato == "layout-linhas" && qtdBotoes >= 3){
+        alert("Você não pode adicionar mais botões, o formato de linhas suporta até 3 botões")
+        return;
+    }else if (tipoFormato == "layout-alternativas" && qtdBotoes >= 4){
+        alert("Você não pode adicionar mais botões, o formato de círculos suporta até 4 botões")
+        return;
+    }
+    qtdBotoes++;
     window.livewire.emit('createButton', { id: id });
 }
 
