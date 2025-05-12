@@ -52,7 +52,7 @@
 @endsection
 
 @section('content')
-    @livewire('scene', ['paineis' => $paineis, "scene_id" => $scene_id,"nameScene"=>$nameScene])
+    @livewire('scene', ['paineis' => $paineis, "scene_id" => $scene_id, "nameScene" => $nameScene])
     @livewireScripts
 @endsection
 
@@ -180,23 +180,23 @@
             let ultimoTextoSalvo = '';
 
             $editor.on('keyup', function () {
+                const texto = $editor.trumbowyg('html');
+                const painelSelecionado = document.querySelector(".painel.selecionado");
+
+                const txtPainel = painelSelecionado.querySelector(".txtPainel");
+
+                if (txtPainel) {
+                    txtPainel.innerHTML = texto;
+                }
+
                 clearTimeout(debounceTimer);
 
                 debounceTimer = setTimeout(() => {
-                    const texto = $editor.trumbowyg('html');
-                    const painelSelecionado = document.querySelector(".painel.selecionado");
-
                     if (painelSelecionado && texto !== ultimoTextoSalvo) {
-                        const txtPainel = painelSelecionado.querySelector(".txtPainel");
-                        if (txtPainel) {
-                            txtPainel.innerHTML = texto;
-                        }
-
                         const painelId = painelSelecionado?.dataset?.painelId;
                         if (painelId) {
                             window.livewire.emit('salvarTexto', painelId, texto);
                             ultimoTextoSalvo = texto;
-                            console.log("Texto salvo:", texto);
                         }
                     }
                 }, 1000); // Espera 3s depois da última tecla
@@ -235,19 +235,17 @@
             canvasLeft = canvas.offsetLeft;
             canvasTop = canvas.offsetTop;
         });
-        
+
         document.addEventListener("DOMContentLoaded", function () {
             window.livewire.hook('message.processed', (message, component) => {
                 const painelSelecionado = document.querySelector(".painel.selecionado");
                 const botaoSelecionado = document.querySelector(".botao.selecionado");
 
-                if (painelInicial) {
-                    aplicarConexaoInicial(painelInicial.id);
-                } else {
-                    removerConexaoInicial();
-                }
-
-                console.log("Menu reaberto após Livewire");
+                // if (painelInicial) {
+                //     aplicarConexaoInicial(painelInicial.id);
+                // } else {
+                //     removerConexaoInicial();
+                // }
 
                 if (message.updateQueue && message.updateQueue.some(m => m.payload?.event === 'salvarTexto')) {
                     setTimeout(() => {

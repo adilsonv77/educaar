@@ -703,7 +703,7 @@ btnTxt.oninput = () => {
     clearTimeout(debouceTimer);
     debouceTimer = setTimeout(() => {
         window.livewire.emit('updateTexto', { id: botaoSelecionado.querySelector(".circulo").id, text: btnTxt.value })
-    }, 1000);
+    }, 10);
 }
 
 // 3. Altera transição
