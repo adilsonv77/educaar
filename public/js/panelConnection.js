@@ -1,3 +1,8 @@
+//----UPDATE NOME DA CENA AO ALTERAR------------------------------------------------------
+window.livewire.on("updateHtmlSceneName",(sceneName)=>{
+    document.getElementsByClassName("dashboard_bar")[0].innerText = sceneName;
+})
+
 //----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM------------------------------------------------------
 let scale = 0.7;
 let alternativeScale = 3;
@@ -402,7 +407,6 @@ div.addEventListener("mousedown", (e) => {
     }, 100);
 });
 
-
 document.addEventListener("mousemove", (e) => {
     if (!isDragging || isDraggingPanel) return;
     let deltaX = e.clientX - startX;
@@ -653,7 +657,6 @@ selectTransicao.onchange = () => {
 // 4. Altera o painel de destino
 selectPainel.onchange = () => {mudarPainelDestino(botaoSelecionado.querySelector(".circulo").id)};
 function mudarPainelDestino(id) {
-    alert("alou")
     window.livewire.emit('updatePainelDestino', { id: id, destination_id: selectPainel.value })
 }
 

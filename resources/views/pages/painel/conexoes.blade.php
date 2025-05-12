@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', $scene_name)
+@section('page-name', $nameScene)
 
 @section('script-head')
     <!-- CSS PAINEL CONEXÕES -->
@@ -28,8 +28,7 @@
 
 @section('bodyAccess')
     <!--Pop up upload de arquivo-->
-    <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro
-                                                                            de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
+    <!--Explicação: Ele teve que ficar dentro do body, ao colocar o elemento dentro da section content, ele fica dentro de um "Main wrapper" que possui um tamanho menor que o tamanho inteiro da tela-->
     <div id="flex-container">
         <div id="opaque-background"></div>
 
@@ -53,7 +52,7 @@
 @endsection
 
 @section('content')
-    @livewire('scene', ['paineis' => $paineis, "scene_id" => $scene_id])
+    @livewire('scene', ['paineis' => $paineis, "scene_id" => $scene_id,"nameScene"=>$nameScene])
     @livewireScripts
 @endsection
 

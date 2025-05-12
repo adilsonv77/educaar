@@ -105,7 +105,7 @@
                 <!-- NOME DA CENA -->
                 <div class="mb-6">
                     <h3 class="mb-2">NOME DA CENA</h3>
-                    <input type="text" wire:model.lazy="nameScene" class="form-input"
+                    <input type="text" wire:model="nameScene" class="form-input"
                         placeholder="Insira o nome da cena" />
                 </div>
                 <!-- SELECIONAR O PAINEL INICIAL-->
