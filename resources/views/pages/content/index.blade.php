@@ -16,7 +16,7 @@
 @section('content')
     <form action="{{ route('content.index') }}" method="GET">
         <div class="form-inline">
-            <label for="">Informe o conteudo :</label>
+            <label for="">Informe o conteúdo :</label>
             <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}"
                 list="historico" />
             <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
