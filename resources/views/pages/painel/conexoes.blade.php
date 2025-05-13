@@ -105,7 +105,7 @@
                 } catch (e) {
                     console.warn("Falha ao aplicar posição inicial ao novo painel:", e);
                 }
-
+                
                 atribuirListeners(panel, id);
                 habilitarArrastoPersonalizado(panel);
                 mostrarMenu("painel");
@@ -146,7 +146,7 @@
             // selectTransicao.addEventListener("change", tentarConectar);
             selectPainelDestino.addEventListener("change", tentarConectar);
         });
-
+        
         //---------------------------------------------EDITOR DE TEXTO---------------------------------------------
         function initTrumbowygEditor() {
             const $editor = $('#trumbowyg-editor');
@@ -181,8 +181,6 @@
 
             $editor.on('keyup', function () {
                 const texto = $editor.trumbowyg('html');
-                const painelSelecionado = document.querySelector(".painel.selecionado");
-
                 const txtPainel = painelSelecionado.querySelector(".txtPainel");
 
                 if (txtPainel) {
@@ -194,6 +192,7 @@
                 debounceTimer = setTimeout(() => {
                     if (painelSelecionado && texto !== ultimoTextoSalvo) {
                         const painelId = painelSelecionado?.dataset?.painelId;
+                        
                         if (painelId) {
                             window.livewire.emit('salvarTexto', painelId, texto);
                             ultimoTextoSalvo = texto;
@@ -252,6 +251,7 @@
                         initTrumbowygEditor();
 
                         const painelSelecionado = document.querySelector(".painel.selecionado");
+
                         const editor = $('#trumbowyg-editor');
                         if (painelSelecionado && editor.length) {
                             const novoTexto = painelSelecionado.getAttribute('data-texto');
@@ -266,10 +266,10 @@
                 document.querySelectorAll(".painel").forEach(panel => {
                     let id = panel.querySelector('.idPainel')?.id;
                     if (id) {
-                        atribuirListeners(panel, id);
+                        //atribuirListeners(panel, id);
                         habilitarArrastoPersonalizado(panel);
                     }
-                });
+                }); 
 
                 const canvas = document.getElementById("canvas");
                 canvas.style.transform = `scale(${zoomAtual}) translate(-50%, -50%)`;
@@ -284,7 +284,6 @@
                 atualizarTodasConexoes()
             });
         });
-
         //---------------------------------------------------------------------------------------------------------------------
 
     </script>

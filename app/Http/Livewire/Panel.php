@@ -60,6 +60,7 @@ class Panel extends Component
     {
         $painelDAO = new PainelDAO();
         $id = $this->painel->id;
+
         $painelAtual = $painelDAO->getById($id);
         $json = json_decode($painelAtual->panel, true);
 
@@ -104,6 +105,12 @@ class Panel extends Component
         }
         $painelDAO->updateById($id, ['panel' => json_encode($json)]);
         $this->painel->panel = $json; // Atualiza o painel renderizado também
+
+        $this->emit('$refresh');
+
+        if ($json['midiaType']=='video') {
+            $this->emit("carregarVideo", $id);
+        }
     }
 
     public function updateLink($payload)

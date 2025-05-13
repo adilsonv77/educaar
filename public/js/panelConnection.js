@@ -1,8 +1,7 @@
 //----UPDATE NOME DA CENA AO ALTERAR------------------------------------------------------
-window.livewire.on("updateHtmlSceneName",(sceneName)=>{
+window.livewire.on("updateHtmlSceneName", (sceneName) => {
     document.getElementsByClassName("dashboard_bar")[0].innerText = sceneName;
 })
-
 //----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM------------------------------------------------------
 let scale = 0.7;
 let alternativeScale = 3;
@@ -259,10 +258,10 @@ function alterarFormatoBotoes(formato) {
 
     let qtdBotoes = painelSelecionado.querySelector("#layout").children.length;
 
-    if (formato == "linhas" && qtdBotoes > 3){
+    if (formato == "linhas" && qtdBotoes > 3) {
         alert("Você não pode trocar formatos, o formato de linhas suporta até 3 botões. Exclua alguns botões e tente novamente.")
         return;
-    }else if (formato == "alternativas" && qtdBotoes > 4){
+    } else if (formato == "alternativas" && qtdBotoes > 4) {
         alert("Você não pode trocar formatos, o formato de círculos suporta até 4 botões. Exclua alguns botões e tente novamente")
         return;
     }
@@ -389,7 +388,6 @@ function habilitarArrastoPersonalizado(painelElement) {
         const id = parseInt(painelElement.querySelector('.idPainel').id);
 
         if (!isNaN(id)) {
-            console.log("Enviando coordenadas", id, x, y);
             window.livewire.emit("updateCoordinate", id, x, y);
         }
     });
@@ -442,10 +440,8 @@ let painelPopup = null;
 function abrirPopUp(id) {
     painelPopup = id;
 
-    let painel = document.getElementById(id).parentElement;
-
     // Define o input file correspondente a este painel
-    inputAtivo = painel.querySelector("#file-" + id);
+    inputAtivo = document.querySelector("#file-" + id);
 
     // Atualiza o atributo "for" da label para apontar pro input atual
     const dropLabel = document.getElementById("upload-area");
@@ -453,6 +449,14 @@ function abrirPopUp(id) {
 
     // Abre o pop-up
     document.getElementById("flex-container").style.display = "flex";
+
+    let painel = document.getElementById(id)
+
+    if (painel.querySelector("video").style.display != 'none') {
+        setTimeout(() => {
+            painel.querySelector("video").pause()
+        }, 500);
+    }
 }
 
 let urlYoutubeInformado = false;
@@ -460,56 +464,57 @@ let inputAtivo = null;
 const midiaPreviewPorInput = new Map();
 
 function adicionarInteracaoPopup(id) {
-    let painel = document.getElementById(id).parentElement;
+    let painel = document.getElementById(id);
     let fileBtn = painel.querySelector("#file-" + id);
     let midiaArea = painel.querySelector(".midia");
 
-    let img = painel.querySelector(".imgMidia");
-    let vid = painel.querySelector(".vidMidia");
-    let srcVid = painel.querySelector("#srcVidMidia");
-    let vidYoutube = painel.querySelector(".youtubeMidia");
-    let url = document.getElementById("linkYoutube").src;
-    let idYoutube = painel.querySelector("#link-" + id);
-    let iFrameYoutube = painel.querySelector("#srcYoutube");
+    // let img = painel.querySelector(".imgMidia");
+    // let vid = painel.querySelector(".vidMidia");
+    // let srcVid = painel.querySelector("#srcVidMidia");
+    // let vidYoutube = painel.querySelector(".youtubeMidia");
+    // let url = document.getElementById("linkYoutube").src;
+    // let idYoutube = painel.querySelector("#link-" + id);
+    // let iFrameYoutube = painel.querySelector("#srcYoutube");
 
     const midiaPreview = () => {
-        if (urlYoutubeInformado) {
-            urlYoutubeInformado = false;
-            img.style.display = "none";
-            vid.style.display = "none";
-            vidYoutube.style.display = "block";
-            try { vid.pause(); } catch (error) { }
-            iFrameYoutube.src = "https://www.youtube.com/embed/" + idYoutube.value + "?autoplay=1";
-        } else {
-            let eVideo = fileBtn.files[0].name.endsWith(".mp4");
-            if (eVideo) {
-                img.style.display = "none";
-                vid.style.display = "block";
-                vidYoutube.style.display = "none";
-                document.getElementById("linkYoutube").src = "";
-                iFrameYoutube.src = "";
-                idYoutube.value = "";
-                srcVid.src = URL.createObjectURL(fileBtn.files[0]);
-                vid.load();
-            } else {
-                img.style.display = "block";
-                vid.style.display = "none";
-                vidYoutube.style.display = "none";
-                try { vid.pause(); } catch (error) { }
-                document.getElementById("linkYoutube").src = "";
-                iFrameYoutube.src = "";
-                idYoutube.value = "";
-                img.src = URL.createObjectURL(fileBtn.files[0]);
-            }
-        }
+        // if (urlYoutubeInformado) {
+        //     urlYoutubeInformado = false;
+        //     img.style.display = "none";
+        //     vid.style.display = "none";
+        //     vidYoutube.style.display = "block";
+        //     try { vid.pause(); } catch (error) { }
+        //     iFrameYoutube.src = "https://www.youtube.com/embed/" + idYoutube.value + "?autoplay=1";
+        // } else {
+        //     let eVideo = fileBtn.files[0].name.endsWith(".mp4");
+        //     if (eVideo) {
+        //         img.style.display = "none";
+        //         vid.style.display = "block";
+        //         vidYoutube.style.display = "none";
+        //         document.getElementById("linkYoutube").src = "";
+        //         iFrameYoutube.src = "";
+        //         idYoutube.value = "";
+        //         srcVid.src = URL.createObjectURL(fileBtn.files[0]);
+        //         vid.load();
+        //     } else {
+        //         img.style.display = "block";
+        //         vid.style.display = "none";
+        //         vidYoutube.style.display = "none";
+        //         try { vid.pause(); } catch (error) { }
+        //         document.getElementById("linkYoutube").src = "";
+        //         iFrameYoutube.src = "";
+        //         idYoutube.value = "";
+        //         img.src = URL.createObjectURL(fileBtn.files[0]);
+        //     }
+        // }
     };
 
     // vincula o midiaPreview a esse input
-    fileBtn.onchange = midiaPreview;
+    //fileBtn.onchange = midiaPreview;
     midiaPreviewPorInput.set(fileBtn, midiaPreview);
 
     // clique no painel abre popup
     midiaArea.onclick = () => abrirPopUp(id);
+
     Array.from(midiaArea.children).forEach(child => {
         child.onclick = () => abrirPopUp(id);
     });
@@ -523,6 +528,10 @@ excluirPainelBtn.onclick = () => {
     $id = painelSelecionado.querySelector(".idPainel").id;
     window.livewire.emit('deletePainel', $id);
 }
+
+window.livewire.on("carregarVideo", (id) => {
+    document.getElementById(id).querySelector("video").load()
+})
 
 const dropArea = document.getElementById("upload-area");
 
@@ -681,14 +690,14 @@ let addBtnBtn = document.getElementById("addButton")
 addBtnBtn.onclick = () => {
     let id = painelSelecionado.querySelector(".idPainel").id;
     let tipoFormato = painelSelecionado.querySelector("#layout").classList[0];
-    
+
     if (tipoFormato == "layout-blocos" && qtdBotoes >= 6) {
         alert("Você não pode adicionar mais botões, o formato de blocos suporta até 6 botões")
         return;
-    }else if (tipoFormato == "layout-linhas" && qtdBotoes >= 3){
+    } else if (tipoFormato == "layout-linhas" && qtdBotoes >= 3) {
         alert("Você não pode adicionar mais botões, o formato de linhas suporta até 3 botões")
         return;
-    }else if (tipoFormato == "layout-alternativas" && qtdBotoes >= 4){
+    } else if (tipoFormato == "layout-alternativas" && qtdBotoes >= 4) {
         alert("Você não pode adicionar mais botões, o formato de círculos suporta até 4 botões")
         return;
     }
