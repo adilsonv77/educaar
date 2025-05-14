@@ -32,7 +32,7 @@ $pageName = 'Atividades';
 
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown button
+            Conteúdos
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         @foreach ($nomesConteudo as $nome)
@@ -82,7 +82,7 @@ $pageName = 'Atividades';
                     <td style="width: 60%;">{{ $item->name }}</td>
                     <td style="width: 25%;">
 
-                        <img src="{{ asset('/marcadores/'.$item->marcador.'?v=' . @filemtime(public_path('/marcadores/'.$item->marcador))) }}" width="200" height="200">
+                        <img src="{{ asset('/marcadores/'.$item->marcador.'?v=' . random_int(0,10000)) }}" width="200" height="200">
                     </td>
                     <td style="width: 10%;"><a href="/activity/{{ $item->id }}" class="btn btn-primary" title="Visualizar">
                             <i class="bi bi-eye-fill h2" style="color : #ffffff;"></i>

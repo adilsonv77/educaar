@@ -36,7 +36,7 @@
                             @foreach ($activities as $activity)
                                 <tr>
                                 <td style="width: 60%;">{{ $activity->name }}</td>
-                                <td style="width: 25%;"><img src="/marcadores/{{ $activity->marcador }}"
+                                <td style="width: 25%;"><img src="/marcadores/{{ $activity->marcador }}?v={{ random_int(0,10000) }}"
                                             alt=""width="200" height="200"></td>
                                     <td style="width: 10%;"><a href="/activity/{{ $activity->id }}"
                                             class="btn btn-primary"><i class="bi bi-eye-fill h2" style = "color : #ffffff;"></i></a>
