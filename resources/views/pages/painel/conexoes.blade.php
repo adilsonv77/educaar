@@ -123,28 +123,13 @@
 
         //---------------------------------------------GERAR CONEXÃO---------------------------------------------
         document.addEventListener("DOMContentLoaded", () => {
+            positionIndicadorInicio();
+
             const selectTransicao = document.getElementById("selectTransicao");
             const selectPainelDestino = document.getElementById("selectPainelDestino");
 
-            function tentarConectar() {
-                const transicao = document.getElementById("selectTransicao").value;
-                const destinoId = document.getElementById("selectPainelDestino").value;
-
-                if (transicao === "proximo" && destinoId) {
-                    const botaoSelecionado = document.querySelector(".button_Panel.selecionado");
-
-                    if (!botaoSelecionado) {
-                        console.warn("Nenhum botão selecionado.");
-                        return;
-                    }
-
-                    const idBotaoOrigem = botaoSelecionado.dataset.id; // <- aqui usamos o ID do botão
-                    conectarBotoes(idBotaoOrigem, destinoId); // origem = botão, destino = painel
-                }
-            }
-
-            // selectTransicao.addEventListener("change", tentarConectar);
-            selectPainelDestino.addEventListener("change", tentarConectar);
+            selectTransicao.addEventListener("change", () => { tentarConectarOuRemover(); positionIndicadoresNenhuma();});
+            selectPainelDestino.addEventListener("change", () => {tentarConectarOuRemover();positionIndicadoresNenhuma();});
         });
 
         //---------------------------------------------EDITOR DE TEXTO---------------------------------------------
@@ -257,12 +242,6 @@
                 const painelSelecionado = document.querySelector(".painel.selecionado");
                 const botaoSelecionado = document.querySelector(".botao.selecionado");
 
-                // if (painelInicial) {
-                //     aplicarConexaoInicial(painelInicial.id);
-                // } else {
-                //     removerConexaoInicial();
-                // }
-
                 if (message.updateQueue && message.updateQueue.some(m => m.payload?.event === 'salvarTexto')) {
                     setTimeout(() => {
                         initTrumbowygEditor();
@@ -299,6 +278,7 @@
                 restaurarZoom.hidden = (scale === 0.7);
                 recriarConexoes();
                 atualizarTodasConexoes()
+                positionIndicadorInicio();
             });
         });
         //---------------------------------------------------------------------------------------------------------------------

@@ -7,16 +7,19 @@ let scale = 0.7;
 let alternativeScale = 3;
 const canvas = document.getElementById("canvas");
 
-
 function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
     atualizarTodasConexoes();
+    positionIndicadorInicio()
+    positionIndicadoresNenhuma();
 }
 
 function aplicarZoom(novoZoom) {
     const canvas = document.getElementById('canvas');
     canvas.style.transform = `scale(${novoZoom})`;
     atualizarTodasConexoes();
+    positionIndicadorInicio()
+    positionIndicadoresNenhuma();
 }
 
 function zoomIn() {
@@ -88,11 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
-// pickr.on("save", (color) => {
-//     console.log("Cor selecionada:", color.toHEXA().toString());
-// });
-
 //----ADICIONAR PAINEL--------------------------------------------------------------------------------------------------------
 let container = document.getElementById("canvas");
 let painelSelecionado = null;
@@ -109,6 +107,7 @@ class Painel {
         this.painel = painel;
     }
 }
+
 //----FUNÇÃO DE MOSTRAR MENUS------------------------------------------------------------------------------------------------
 let menuAtivoAtual = "canvas";
 
@@ -119,6 +118,24 @@ function mostrarMenu(tipo) {
     if (menu) {
         menu.classList.add("ativo");
         menuAtivoAtual = tipo;
+
+        // Só executa lógica de transição se for o menu de botões
+        if (tipo === "botao") {
+            const selectTransicao = document.getElementById("selectTransicao");
+            const painelContainer = document.getElementById("selecaoPainelContainer");
+
+            if (selectTransicao && painelContainer) {
+                function atualizarVisibilidadePainel() {
+                    painelContainer.style.display = selectTransicao.value === "proximo" ? "block" : "none";
+                }
+
+                atualizarVisibilidadePainel();
+
+                // Evita múltiplos listeners duplicados
+                selectTransicao.removeEventListener("change", atualizarVisibilidadePainel);
+                selectTransicao.addEventListener("change", atualizarVisibilidadePainel);
+            }
+        }
     }
 }
 
@@ -143,7 +160,6 @@ document.addEventListener("click", (e) => {
 
     selecionarCanvas();
 });
-
 
 //----FUNÇÃO DE SELECIONAR PAINEL------------------------------------------------------------------------------------------------
 let qtdBotoes = 0;
@@ -308,58 +324,6 @@ document
     .querySelector(".alternativas")
     .addEventListener("click", () => alterarFormatoBotoes("alternativas"));
 
-//----MOVIMENTAÇÃO PAINEL----------------------------------------------------------------------------
-// let isDraggingPanel = false;
-
-// function arrastar(e, painel) {
-//     isDraggingPanel = true;
-//     zIndexAtual++;
-//     painel.painel.style.zIndex = zIndexAtual;
-//     painel.startX = e.clientX;
-//     painel.startY = e.clientY;
-//     chamarFuncaoSoltar = (e) => soltar(e, painel);
-//     document.addEventListener("dragend", chamarFuncaoSoltar);
-// }
-
-// function soltar(e, painel) {
-//     isDraggingPanel = false;
-
-//     //Inserir manualmente
-//     let alturaMax = 80000;
-//     let larguraMax = 80000;
-//     let alturaPainel = 462;
-//     let larguraPainel = 291;
-
-//     // Movimenta para a posição do mouse
-//     painel.newX = (painel.painel.offsetLeft - (painel.startX - e.clientX)) / scale;
-//     painel.newY = (painel.painel.offsetTop - (painel.startY - e.clientY)) / scale;
-
-//     painel.startX = e.clientX;
-//     painel.startY = e.clientY;
-
-//     // Verifica se a posição atual é válida.
-//     if (painel.newX + larguraPainel > larguraMax) {
-//         painel.newX = larguraMax - larguraPainel;
-//     }
-//     if (painel.newX < 0) {
-//         painel.newX = 0;
-//     }
-//     if (painel.newY + alturaPainel > alturaMax) {
-//         painel.newY = alturaMax - alturaPainel;
-//     }
-//     if (painel.newY < 0) {
-//         painel.newY = 0;
-//     }
-
-//     painel.painel.style.top = painel.newY + "px";
-//     painel.painel.style.left = painel.newX + "px";
-
-//     // Atualiza as coordenadas no banco de dados
-//     Livewire.emit('atualizarCoordenadas', painel.painel.id, painel.newX, painel.newY);
-
-//     document.removeEventListener("dragend", chamarFuncaoSoltar);
-// }
-
 //----MOVIMENTAÇÃO PAINEL (Personalizada)----------------------------------------------------------------------------
 function habilitarArrastoPersonalizado(painelElement) {
     let offsetX, offsetY, isDragging = false;
@@ -390,6 +354,8 @@ function habilitarArrastoPersonalizado(painelElement) {
         painelElement.style.left = `${newX}px`;
         painelElement.style.top = `${newY}px`;
         atualizarTodasConexoes();
+        positionIndicadorInicio();
+        positionIndicadoresNenhuma();
 
     });
 
@@ -436,6 +402,8 @@ document.addEventListener("mousemove", (e) => {
     div.style.top = `${startTop + deltaY}px`;
     if (isDragging) {
         atualizarTodasConexoes();
+        positionIndicadorInicio();
+        positionIndicadoresNenhuma();
     }
 });
 
@@ -443,6 +411,10 @@ document.addEventListener("mouseup", () => {
     if (isDraggingPanel) return;
     isDragging = false;
     div.style.cursor = "grab";
+
+    canvasLeft = div.offsetLeft;
+    canvasTop = div.offsetTop;
+    zoomAtual = scale;
     atualizarTodasConexoes();
 });
 
@@ -629,7 +601,9 @@ const linhasPorBotao = new Map();
 // Essa função atualiza a posição das linhas quando o canvas ou os painéis se movem
 function atualizarTodasConexoes() {
     requestAnimationFrame(() => {
-        todasAsLinhas.forEach(linha => linha.position());
+        linhasPorBotao.forEach(linha => {
+            if (linha.position) linha.position();
+        });
     });
 }
 
@@ -639,7 +613,7 @@ function conectarBotoes(startElem, idOrigem, idPainel) {
 
     if (!startElem || !endElem) return;
 
-    // Remove a linha antiga se já existir
+    // Remove a linha antiga
     if (linhasPorBotao.has(idOrigem)) {
         linhasPorBotao.get(idOrigem).remove();
         linhasPorBotao.delete(idOrigem);
@@ -656,23 +630,29 @@ function conectarBotoes(startElem, idOrigem, idPainel) {
     });
 
     linhasPorBotao.set(idOrigem, linha);
-    todasAsLinhas.push(linha);
+
+    const infoDiv = startElem.querySelector('#buttonInfo');
+    if (infoDiv) {
+        infoDiv.setAttribute('destination_id', idPainel);
+    }
+
     return linha;
 }
 
 // Recriar conexões salvas ao carregar a tela
 function recriarConexoes() {
-    // Limpa linhas antigas
     todasAsLinhas.forEach(linha => linha.remove());
-    todasAsLinhas.length = 0;
+    linhasPorBotao.forEach(l => l.remove());
     linhasPorBotao.clear();
+
 
     document.querySelectorAll(".button_Panel").forEach(botao => {
         const botaoId = botao.querySelector(".circulo")?.id;
         const infoDiv = botao.querySelector("#buttonInfo");
         const destinoId = infoDiv?.getAttribute("destination_id");
+        const transicao = infoDiv?.getAttribute("transition");
 
-        if (botaoId && destinoId) {
+        if (botaoId && destinoId && transicao === "proximo") {
             const destinoElem = document.getElementById(destinoId);
             if (destinoElem) {
                 conectarBotoes(botao, botaoId, destinoId);
@@ -680,7 +660,143 @@ function recriarConexoes() {
         }
     });
 }
+
+function tentarConectarOuRemover() {
+    const transicao = selectTransicao.value;
+    const destinoId = selectPainelDestino.value;
+
+    const botaoSelecionado = document.querySelector(".button_Panel.selecionado");
+    if (!botaoSelecionado) {
+        console.warn("Nenhum botão selecionado.");
+        return;
+    }
+
+    const idBotaoOrigem = botaoSelecionado.querySelector(".circulo")?.id;
+    if (!idBotaoOrigem) return;
+
+    const infoDiv = botaoSelecionado.querySelector("#buttonInfo");
+    if (!infoDiv) return;
+
+    // Atualiza o atributo transition com a nova seleção
+    infoDiv.setAttribute("transition", transicao);
+
+    // Se for "proximo", conectar
+    if (transicao === "proximo") {
+        if (destinoId) {
+            infoDiv.setAttribute("destination_id", destinoId);
+            conectarBotoes(botaoSelecionado, idBotaoOrigem, destinoId);
+        } else {
+            // Se ainda não foi escolhido nenhum painel, não conecta ainda
+            infoDiv.removeAttribute("destination_id");
+        }
+    } else {
+        // Se não, remove linha específica do botão
+        if (linhasPorBotao.has(idBotaoOrigem)) {
+            linhasPorBotao.get(idBotaoOrigem).remove();
+            linhasPorBotao.delete(idBotaoOrigem);
+        }
+        // Limpa
+        infoDiv.removeAttribute("destination_id");
+
+    }
+}
+
 //----FUNÇÃO DE GERAR CONEXÃO INICIAL------------------------------------------------------------------------------------------------
+let linhaIndicador = null;
+
+function positionIndicadorInicio() {
+    const canvas = document.getElementById('canvas');
+    const img = document.getElementById('indicadorInicio');
+    const startId = canvas?.dataset?.startId;
+
+    if (!startId || !img || !canvas) {
+        if (img) img.style.display = 'none';
+        if (linhaIndicador) {
+            linhaIndicador.remove();
+            linhaIndicador = null;
+        }
+        return;
+    }
+
+    const painel = document.getElementById(startId);
+    if (!painel) {
+        img.style.display = 'none';
+        if (linhaIndicador) {
+            linhaIndicador.remove();
+            linhaIndicador = null;
+        }
+        return;
+    }
+
+    function reposicionar() {
+        const imgHeight = img.offsetHeight || 40; // fallback caso 0
+        const top = painel.offsetTop + (painel.offsetHeight / 2) - (imgHeight / 2);
+        const left = painel.offsetLeft - 140;
+
+        img.style.top = `${top}px`;
+        img.style.left = `${left}px`;
+        img.style.display = 'block';
+
+        if (linhaIndicador) {
+            linhaIndicador.remove(); // remove a antiga
+            linhaIndicador = null;
+        }
+
+        linhaIndicador = new LeaderLine(
+            img,
+            painel,
+            {
+                color: '#833B8D',
+                size: 4,
+                path: 'straight',
+                startSocket: 'right',
+                endSocket: 'left',
+                endPlug: 'none'
+            }
+        );
+    }
+
+    requestAnimationFrame(() => {
+        reposicionar();
+    });
+}
+//----FUNÇÃO DE GERAR SEM CONEXÃO------------------------------------------------------------------------------------------------
+const imagensNenhuma = [];
+
+function positionIndicadoresNenhuma() {
+    // Remove imagens anteriores
+    imagensNenhuma.forEach(img => img.remove());
+    imagensNenhuma.length = 0;
+
+    document.querySelectorAll(".button_Panel").forEach(botao => {
+        const infoDiv = botao.querySelector("#buttonInfo");
+        const transicao = infoDiv?.getAttribute("transition");
+
+        if (transicao === "Nenhuma") {
+            const circulo = botao.querySelector(".circulo");
+            if (!circulo) return;
+
+            const template = document.getElementById("indicadorNenhuma");
+            if (!template) return;
+
+            const img = template.cloneNode(true);
+            img.removeAttribute("id");
+            img.style.display = "block";
+            img.style.position = "absolute";
+
+            // Posicionamento relativo ao botão
+            const top = circulo.offsetTop + (circulo.offsetHeight / 2) - 20;
+            const left = circulo.offsetLeft + circulo.offsetWidth + 10;
+
+            img.style.top = `${botao.offsetTop + top}px`;
+            img.style.left = `${botao.offsetLeft + left}px`;
+
+            // Adiciona ao canvas
+            document.getElementById("canvas").appendChild(img);
+            imagensNenhuma.push(img);
+        }
+    });
+}
 
 //----FUNÇÃO DE SELECIONAR FORMATO------------------------------------------------------------------------------------------------
 function selecionarFormato(elemento) {
