@@ -19,25 +19,39 @@ function aplicarZoom(novoZoom) {
     atualizarTodasConexoes();
 }
 
-document.getElementById("zoom-in")?.addEventListener("click", () => {
+function zoomIn() {
     scale += 0.1;
     alternativeScale += 1;
     updateCanvasScale();
     document.getElementById("resizeZoom").hidden = false;
-});
+}
 
-document.getElementById("zoom-out")?.addEventListener("click", () => {
+function zoomOut() {
     scale = Math.max(scale - 0.1, 0.1);
     alternativeScale = Math.max(alternativeScale - 1, -9);
     updateCanvasScale();
     document.getElementById("resizeZoom").hidden = false;
-});
+}
+
+document.getElementById("zoom-in")?.addEventListener("click", zoomIn);
+
+document.getElementById("zoom-out")?.addEventListener("click", zoomOut);
 
 document.getElementById("resizeZoom").addEventListener("click", () => {
     scale = 0.7;
     updateCanvasScale();
     document.getElementById("resizeZoom").hidden = true;
 });
+
+canvas.onmousewheel = (e)=>{
+    if(e.deltaY < 0){
+        zoomIn()
+    }else{
+        zoomOut()
+    }
+}
+
+
 
 //----COLOR PICKER--------------------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
@@ -133,6 +147,7 @@ document.addEventListener("click", (e) => {
 
 //----FUNÇÃO DE SELECIONAR PAINEL------------------------------------------------------------------------------------------------
 let qtdBotoes = 0;
+let isDraggingPanel = false;
 function selecionarPainel(painel, e) {
     isDraggingPanel = true;
 
