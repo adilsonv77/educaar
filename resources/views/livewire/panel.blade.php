@@ -18,11 +18,11 @@
         wire:model.lazy="texto">
 
     <div class="midia">
-        <div class="no_midia" tabindex=0 @if($panelData["midiaType"]!="none")style="display: none"@endif>
+        <div class="no_midia" tabindex=0 @if($panelData["midiaType"]!="none")style="display: none" @endif>
             <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}" draggable="false">
         </div>
 
-        <img class="imgMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}" 
+        <img class="imgMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}?v={{ random_int(0,10000) }}" 
              @if($panelData["midiaType"]!="image")style="display: none"@endif draggable="false">
 
         <video class="vidMidia" controls @if($panelData["midiaType"]!="video")style="display: none"@endif draggable="false">

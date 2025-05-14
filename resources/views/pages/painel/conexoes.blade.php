@@ -105,7 +105,7 @@
                 } catch (e) {
                     console.warn("Falha ao aplicar posição inicial ao novo painel:", e);
                 }
-                
+
                 atribuirListeners(panel, id);
                 habilitarArrastoPersonalizado(panel);
                 mostrarMenu("painel");
@@ -146,7 +146,7 @@
             // selectTransicao.addEventListener("change", tentarConectar);
             selectPainelDestino.addEventListener("change", tentarConectar);
         });
-        
+
         //---------------------------------------------EDITOR DE TEXTO---------------------------------------------
         function initTrumbowygEditor() {
             const $editor = $('#trumbowyg-editor');
@@ -179,7 +179,25 @@
             let debounceTimer;
             let ultimoTextoSalvo = '';
 
-            $editor.on('keyup', function () {
+            $editor.on('keyup', enviarDadosController);
+
+            const menuEdicao = document.getElementsByClassName("trumbowyg-button-pane")[0]
+            menuEdicao.onclick = () => {
+                enviarDadosController() //Envia dados imediatamente editados (como centralizar o texto)
+
+                function esperarClique(e) { //Envia dados que precisam uma segunda seleção (como a cor do texto)
+                    enviarDadosController()
+                    // Remove este listener após o clique
+                    document.removeEventListener("click", esperarClique);
+                }
+
+                // Adiciona o listener que espera o próximo clique
+                setTimeout(() => {
+                    document.addEventListener("click", esperarClique);
+                }, 100);
+            };
+
+            function enviarDadosController() {
                 const texto = $editor.trumbowyg('html');
                 const txtPainel = painelSelecionado.querySelector(".txtPainel");
 
@@ -192,15 +210,14 @@
                 debounceTimer = setTimeout(() => {
                     if (painelSelecionado && texto !== ultimoTextoSalvo) {
                         const painelId = painelSelecionado?.dataset?.painelId;
-                        
+
                         if (painelId) {
                             window.livewire.emit('salvarTexto', painelId, texto);
                             ultimoTextoSalvo = texto;
                         }
                     }
                 }, 1000); // Espera 3s depois da última tecla
-            });
-
+            }
         }
 
         window.addEventListener('atualizarTextoPainel', (event) => {
@@ -269,7 +286,7 @@
                         //atribuirListeners(panel, id);
                         habilitarArrastoPersonalizado(panel);
                     }
-                }); 
+                });
 
                 const canvas = document.getElementById("canvas");
                 canvas.style.transform = `scale(${zoomAtual}) translate(-50%, -50%)`;
