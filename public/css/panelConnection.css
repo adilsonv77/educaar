@@ -87,7 +87,7 @@ input {
 
 .selected {
     box-shadow: 0 0 8px #833B8D, 0 0 16px #833B8D, 0 0 24px #833B8D;
-    border-radius: 30px; 
+    border-radius: 30px;
 }
 
 
@@ -179,7 +179,7 @@ input {
     height: 100%;
 }
 
-.layout-alternativas .button_Panel{
+.layout-alternativas .button_Panel {
     aspect-ratio: 1 / 1;
     width: 100%;
     max-width: 70px;
@@ -194,7 +194,7 @@ input {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    padding: 0; 
+    padding: 0;
     margin-bottom: 0;
     height: 100%;
     text-align: center;
@@ -203,11 +203,12 @@ input {
 .layout-alternativas .circulo {
     display: none;
 }
+
 /* =============================
     CONEXÃO (LINHAS)
    ============================= */
 
-   
+
 
 /* =============================
     EDITOR DE TEXTO
@@ -215,8 +216,25 @@ input {
 .trumbowyg-box,
 .trumbowyg-editor-box {
     border-radius: 9px;
+    height: 0 !important;
+    overflow: hidden !important;
 }
 
+.trumbowyg-box {
+    min-height: 135px !important;
+    overflow: visible !important;
+}
+
+.trumbowyg-editor {
+    padding: 10px 0 !important;
+    scale: 1.07;
+    transform: translateX(3px); 
+    width: 92% !important;
+}
+
+#blocoTxt .trumbowyg-editor.trumbowyg-reset-css p {
+    margin-bottom: 0 !important;
+}
 
 .trumbowyg-button-pane {
     display: flex;
@@ -278,29 +296,29 @@ input {
     fill: #833B8D;
 }
 
-/* =============================
-      CANVAS E ZOOM
-      ============================= */
-      .menu-zoom {
-        position: fixed;
-        bottom: 10px;
-        z-index: 1000;
-        margin-left: 18px;
-        display: flex;
-    }
-    
-    #zoom-in,
-    #zoom-out {
-        width: 46.67px;
-        height: 38px;
-        flex-shrink: 0; 
-        border-radius: 2px;
-        border: 1px solid rgb(240 240 240);
-        background: rgba(131, 59, 141, 0.71);
-        font-size: 20px;
-    }
-    
-    #resizeZoom {
+/*  =============================
+            CANVAS E ZOOM
+    ============================= */
+.menu-zoom {
+    position: fixed;
+    bottom: 10px;
+    z-index: 1000;
+    margin-left: 18px;
+    display: flex;
+}
+
+#zoom-in,
+#zoom-out {
+    width: 46.67px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 2px;
+    border: 1px solid rgb(240 240 240);
+    background: rgba(131, 59, 141, 0.71);
+    font-size: 20px;
+}
+
+#resizeZoom {
     height: 38px;
     font-size: 12px;
     flex-shrink: 0;
@@ -308,7 +326,7 @@ input {
     border: 1px solid rgb(240 240 240);
     background: rgba(131, 59, 141, 0.71);
     color: white;
-    }
+}
 
 
 .canvas-container {
@@ -359,9 +377,7 @@ input {
     left: calc(40000px - (291px)/2);
     padding: 20px;
     width: 291px;
-    /* 194 * 1.5 */
     height: 462px;
-    /* 308 * 1.5 */
     position: absolute;
     background: #F8F8F8;
     border: 1px solid #ccc;
@@ -373,15 +389,21 @@ input {
 }
 
 .painel .txtPainel {
-    width: 100%;
+    word-wrap: break-word;
+    scale: 1.1;
+    margin-left: 10px;
+    width: 90%;
     height: 20%;
-    font-size: 1.5vh;
-    /* Mantém o tamanho do texto */
+    font-size: 10px;
     border-radius: 1.5vh;
     padding: 1% 10px;
     border: none;
     resize: none;
     background-color: white;
+}
+
+.painel .txtPainel p {
+    margin-bottom: 0;
 }
 
 .painel.selecionado {
@@ -619,8 +641,8 @@ input {
     color: black;
     border: none;
     position: absolute;
-    top: 30px;    
-    right: 30px;  
+    top: 30px;
+    right: 30px;
     cursor: pointer;
 }
 
@@ -677,27 +699,29 @@ input {
     cursor: pointer;
 }
 
-i#addButton.bi.bi-plus-circle-dotted.h1{
-    font-size: 25px !important; /* tamanho do ícone, ajuste conforme desejar */
+i#addButton.bi.bi-plus-circle-dotted.h1 {
+    font-size: 25px !important;
+    /* tamanho do ícone, ajuste conforme desejar */
     border: none !important;
 }
 
-#buttonh3{
+#buttonh3 {
     margin-top: 10px;
 }
 
-.divBotoes{
+.divBotoes {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* para alinhamento vertical */
-    position: relative; /* manter o position original */
+    align-items: center;
+    /* para alinhamento vertical */
+    position: relative;
+    /* manter o position original */
 }
 
 .linhas.selecionado,
 .blocos.selecionado,
 .alternativas.selecionado {
     border: 1px solid #FFA600;
-    border-radius: 9px; /* Mantém o estilo dos botões */
+    border-radius: 9px;
+    /* Mantém o estilo dos botões */
 }
-
-    
