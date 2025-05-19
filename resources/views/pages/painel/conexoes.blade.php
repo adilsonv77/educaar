@@ -121,17 +121,6 @@
             adicionarInteracaoPopup(id);
         }
 
-        //---------------------------------------------GERAR CONEXÃO---------------------------------------------
-        document.addEventListener("DOMContentLoaded", () => {
-            positionIndicadorInicio();
-
-            const selectTransicao = document.getElementById("selectTransicao");
-            const selectPainelDestino = document.getElementById("selectPainelDestino");
-
-            selectTransicao.addEventListener("change", () => { tentarConectarOuRemover(); positionIndicadoresNenhuma();});
-            selectPainelDestino.addEventListener("change", () => {tentarConectarOuRemover();positionIndicadoresNenhuma();});
-        });
-
         //---------------------------------------------EDITOR DE TEXTO---------------------------------------------
         function initTrumbowygEditor() {
             const $editor = $('#trumbowyg-editor');
@@ -237,7 +226,18 @@
             canvasTop = canvas.offsetTop;
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", () => {
+            positionIndicadorInicio();
+            positionTodosIndicadoresNenhuma();
+
+            const selectTransicao = document.getElementById("selectTransicao");
+            if (selectTransicao) {
+                selectTransicao.addEventListener("change", () => {
+                    tentarConectarOuRemover();
+                    positionTodosIndicadoresNenhuma();
+                });
+            }
+
             window.livewire.hook('message.processed', (message, component) => {
                 const painelSelecionado = document.querySelector(".painel.selecionado");
                 const botaoSelecionado = document.querySelector(".botao.selecionado");
@@ -247,7 +247,6 @@
                         initTrumbowygEditor();
 
                         const painelSelecionado = document.querySelector(".painel.selecionado");
-
                         const editor = $('#trumbowyg-editor');
                         if (painelSelecionado && editor.length) {
                             const novoTexto = painelSelecionado.getAttribute('data-texto');
@@ -257,12 +256,12 @@
                         }
                     }, 50);
                 }
+
                 mostrarMenu(menuAtivoAtual);
 
                 document.querySelectorAll(".painel").forEach(panel => {
                     let id = panel.querySelector('.idPainel')?.id;
                     if (id) {
-                        //atribuirListeners(panel, id);
                         habilitarArrastoPersonalizado(panel);
                     }
                 });
@@ -271,17 +270,16 @@
                 canvas.style.transform = `scale(${zoomAtual}) translate(-50%, -50%)`;
                 canvas.style.left = `${canvasLeft}px`;
                 canvas.style.top = `${canvasTop}px`;
-
                 scale = zoomAtual;
 
                 const restaurarZoom = document.getElementById("resizeZoom");
                 restaurarZoom.hidden = (scale === 0.7);
+
                 recriarConexoes();
-                atualizarTodasConexoes()
+                atualizarTodasConexoes();
                 positionIndicadorInicio();
+                positionTodosIndicadoresNenhuma();
             });
         });
-        //---------------------------------------------------------------------------------------------------------------------
-
     </script>
 @endsection

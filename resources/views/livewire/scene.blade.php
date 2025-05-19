@@ -14,8 +14,8 @@
                             BOTÕES
                         </h3>
                         <button style="border: none; background-color: #FFF">
-                            <i class="bi bi-plus-circle-dotted h1" style="color : #ffffff;" id="addButton"
-                                style="border: none !important;"></i>
+                            <i class="bi bi-plus-circle-dotted h1" id="addButton"
+                                style="color: #ffffff; border: none !important;"></i>
                         </button>
                     </div>
                     <div class="tipos">
@@ -79,6 +79,7 @@
                 <div class="mb-6">
                     <h3 class="mb-2">TRANSIÇÕES</h3>
                     <select id="selectTransicao" class="select-native">
+                        <option value="" disabled selected>Selecione uma transição</option>
                         <option value="nenhuma">Nenhuma</option>
                         <option value="proximo">Próximo Painél</option>
                         <option value="final">Final da Experiência</option>
@@ -92,12 +93,11 @@
                             style="cursor: pointer;">
                     </h3>
                     <select class="selectPainelDestino select-native">
-                        <option disabled selected>Selecione um painel</option>
+                        <option value="" disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
                             <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
                         @endforeach
                     </select>
-
                 </div>
 
                 <!-- EXCLUIR BOTÃO -->
@@ -161,10 +161,9 @@
                     @livewire('panel', ['painel' => $painel], key($painel->id))
                 @endforeach
                 <img id="indicadorInicio" src="{{ asset('images/inicioConexoes.svg') }}" alt=""
-                    style="position: absolute; display: none;">
+                    style="position: absolute; display: none; width: 40px; height: 40px;">
                 <img id="indicadorNenhuma" src="{{ asset('images/semConexoes.svg') }}" alt="Sem conexão"
-                    style="position: absolute; display: none;">
-
+                    style="display: none; width: 40px; height: 40px;">
             </div>
         </div>
     </div>

@@ -2,6 +2,7 @@
 window.livewire.on("updateHtmlSceneName", (sceneName) => {
     document.getElementsByClassName("dashboard_bar")[0].innerText = sceneName;
 })
+
 //----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM------------------------------------------------------
 let scale = 0.7;
 let alternativeScale = 3;
@@ -11,7 +12,7 @@ function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
     atualizarTodasConexoes();
     positionIndicadorInicio()
-    positionIndicadoresNenhuma();
+    positionTodosIndicadoresNenhuma();
 }
 
 function aplicarZoom(novoZoom) {
@@ -19,7 +20,7 @@ function aplicarZoom(novoZoom) {
     canvas.style.transform = `scale(${novoZoom})`;
     atualizarTodasConexoes();
     positionIndicadorInicio()
-    positionIndicadoresNenhuma();
+    positionTodosIndicadoresNenhuma();
 }
 
 function zoomIn() {
@@ -46,15 +47,13 @@ document.getElementById("resizeZoom").addEventListener("click", () => {
     document.getElementById("resizeZoom").hidden = true;
 });
 
-canvas.onmousewheel = (e)=>{
-    if(e.deltaY < 0){
+canvas.onmousewheel = (e) => {
+    if (e.deltaY < 0) {
         zoomIn()
-    }else{
+    } else {
         zoomOut()
     }
 }
-
-
 
 //----COLOR PICKER--------------------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
@@ -355,7 +354,7 @@ function habilitarArrastoPersonalizado(painelElement) {
         painelElement.style.top = `${newY}px`;
         atualizarTodasConexoes();
         positionIndicadorInicio();
-        positionIndicadoresNenhuma();
+        positionTodosIndicadoresNenhuma();
 
     });
 
@@ -403,7 +402,7 @@ document.addEventListener("mousemove", (e) => {
     if (isDragging) {
         atualizarTodasConexoes();
         positionIndicadorInicio();
-        positionIndicadoresNenhuma();
+        positionTodosIndicadoresNenhuma();
     }
 });
 
@@ -594,7 +593,7 @@ function sendValueLivewire(id, link) {
     window.livewire.emit('updateLink', { id: id, link: link });
 }
 
-//----DESENHAR CONEXÃO (LINHA)-testes manual---------------------------------------------------------------------------
+//----DESENHAR CONEXÃO (LINHA)---------------------------------------------------------------------------
 const todasAsLinhas = [];
 const linhasPorBotao = new Map();
 
@@ -662,6 +661,9 @@ function recriarConexoes() {
 }
 
 function tentarConectarOuRemover() {
+    let selectPainelDestino = document.getElementsByClassName("selectPainelDestino")[0];
+    let selectTransicao = document.getElementById("selectTransicao");
+
     const transicao = selectTransicao.value;
     const destinoId = selectPainelDestino.value;
 
@@ -698,6 +700,12 @@ function tentarConectarOuRemover() {
         // Limpa
         infoDiv.removeAttribute("destination_id");
 
+
+        if (selectPainelDestino) {
+            selectPainelDestino.value = '';
+        }
+
+        window.livewire.emit('updatePainelDestino', { id: idBotaoOrigem, destination_id: null });
     }
 }
 
@@ -761,40 +769,73 @@ function positionIndicadorInicio() {
     });
 }
 //----FUNÇÃO DE GERAR SEM CONEXÃO------------------------------------------------------------------------------------------------
-const imagensNenhuma = [];
+const imagensNenhumaMap = new Map();
+const linhasNenhumaMap = new Map();
 
-function positionIndicadoresNenhuma() {
-    // Remove imagens anteriores
-    imagensNenhuma.forEach(img => img.remove());
-    imagensNenhuma.length = 0;
+function positionIndicadorNenhuma(botao) {
+    if (!botao) return;
 
-    document.querySelectorAll(".button_Panel").forEach(botao => {
-        const infoDiv = botao.querySelector("#buttonInfo");
-        const transicao = infoDiv?.getAttribute("transition");
+    const infoDiv = botao.querySelector("#buttonInfo");
+    const transicao = infoDiv?.getAttribute("transition");
 
-        if (transicao === "Nenhuma") {
-            const circulo = botao.querySelector(".circulo");
-            if (!circulo) return;
+    const canvasContainer = document.querySelector(".canvas-container");
+    if (!canvasContainer) return;
 
-            const template = document.getElementById("indicadorNenhuma");
-            if (!template) return;
+    // Remove anteriores
+    if (imagensNenhumaMap.has(botao)) {
+        imagensNenhumaMap.get(botao).remove();
+        imagensNenhumaMap.delete(botao);
+    }
+    if (linhasNenhumaMap.has(botao)) {
+        linhasNenhumaMap.get(botao).remove();
+        linhasNenhumaMap.delete(botao);
+    }
 
-            const img = template.cloneNode(true);
-            img.removeAttribute("id");
-            img.style.display = "block";
-            img.style.position = "absolute";
+    // Apenas para transição "" ou "nenhuma"
+    if (transicao !== "" && transicao?.toLowerCase() !== "nenhuma") return;
 
-            // Posicionamento relativo ao botão
-            const top = circulo.offsetTop + (circulo.offsetHeight / 2) - 20;
-            const left = circulo.offsetLeft + circulo.offsetWidth + 10;
+    const template = document.getElementById("indicadorNenhuma");
+    if (!template) return;
 
-            img.style.top = `${botao.offsetTop + top}px`;
-            img.style.left = `${botao.offsetLeft + left}px`;
+    const img = template.cloneNode(true);
+    img.style.display = "block";
+    img.style.position = "absolute";
 
-            // Adiciona ao canvas
-            document.getElementById("canvas").appendChild(img);
-            imagensNenhuma.push(img);
+    const botaoRect = botao.getBoundingClientRect();
+    const canvasRect = canvasContainer.getBoundingClientRect();
+
+    const top = (botaoRect.top + botaoRect.height / 2 - 20) - canvasRect.top;
+    const left = (botaoRect.left - 70 - 40) - canvasRect.left;
+
+    img.style.top = `${top}px`;
+    img.style.left = `${left}px`;
+
+    img.style.transform = `scale(${scale})`;
+    img.style.transformOrigin = 'top left';
+
+    canvasContainer.appendChild(img);
+    imagensNenhumaMap.set(botao, img);
+
+    // Cria linha
+    const linha = new LeaderLine(
+        LeaderLine.pointAnchor(img, { x: "100%", y: "50%" }),
+        LeaderLine.pointAnchor(botao, { x: "0%", y: "50%" }),
+        {
+            color: '#833B8D',
+            size: 4,
+            path: 'straight',
+            startSocket: 'right',
+            endSocket: 'left',
+            endPlug: 'none'
         }
+    );
+
+    linhasNenhumaMap.set(botao, linha);
+}
+
+function positionTodosIndicadoresNenhuma() {
+    document.querySelectorAll(".button_Panel").forEach(botao => {
+        positionIndicadorNenhuma(botao);
     });
 }
 
@@ -865,11 +906,10 @@ deleteBtn.onclick = () => {
 }
 
 // 6. Altera cor botão
-let corInput = document.getElementsByClassName("pcr-result")[0];
-
-window.pickr.on("change", (color) => {
-    clearTimeout(debouceTimer);
-    debouceTimer = setTimeout(() => {
-        window.livewire.emit('updateCor', { id: botaoSelecionado.querySelector(".circulo").id, color: color.toHEXA().toString() })
-    }, 1000);
-});
+// let corInput = document.getElementsByClassName("pcr-result")[0];
+// window.pickr.on("change", (color) => {
+//     clearTimeout(debouceTimer);
+//     debouceTimer = setTimeout(() => {
+//         window.livewire.emit('updateCor', { id: botaoSelecionado.querySelector(".circulo").id, color: color.toHEXA().toString() })
+//     }, 1000);
+// });
