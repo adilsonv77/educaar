@@ -71,7 +71,9 @@ $pageName = 'Atividades';
                     <th>Marcador</th>
                     <th>Visualizar</th>
                     @if (session('type') == 'teacher')<th>Resultados</th>@endif
+                   
                     <th>Questões</th>
+                    <th>Clonar</th>
                     <th>Editar</th>
                     <th>Excluir</th>
                 </tr>
@@ -100,6 +102,11 @@ $pageName = 'Atividades';
                     </td>
 
 
+                    
+                    
+
+
+
                     <td style="width: 10%;">
                         <form action="{{ route('questions.index', $item->id) }}">
                             @csrf
@@ -109,6 +116,16 @@ $pageName = 'Atividades';
                             </button>
                         </form>
                     </td>
+
+                    <td style="width: 10%;">
+                    <form action="{{ route('activity.clone', $item->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-info" title="Clonar">
+                            <i class="bi bi-copy h2" style="color: #ffffff;"></i>
+                        </button>
+                    </form>
+                    </td>
+
 
                     <td style="width: 70px;">
                         <form action="{{ route('activity.edit', $item->id) }}">

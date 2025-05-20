@@ -23,6 +23,7 @@ use App\DAO\DisciplinaDAO;
 use App\DAO\SceneDAO;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ActivityController extends Controller
 {
@@ -421,6 +422,58 @@ class ActivityController extends Controller
         }
 
         return redirect(route('activity.index'));
+    }
+
+
+
+    public function clone($id)
+    {
+        $activity = Activity::find($id);
+    
+        if (!$activity) {
+            return redirect()->back()->withErrors(['msg' => 'Atividade não encontrada.']);
+        }
+    
+        // Clonar a atividade
+        $clonedActivity = $activity->replicate();
+        $clonedActivity->name = $activity->name . ' (Cópia)';
+        $clonedActivity->created_at = now();
+        $clonedActivity->updated_at = now();
+    
+        // Gerar novos nomes únicos para os arquivos
+        $novoNomeImagem = 'imagem_' . Str::uuid() . '.jpg';
+        $novoNomeModelo = 'modelo_' . Str::uuid() . '.' . pathinfo($activity->modelo_3d, PATHINFO_EXTENSION);
+    
+        // Caminhos antigos
+        $caminhoImagemAntigo = public_path('marcadores/' . $activity->marcador);
+        $caminhoModeloAntigo = public_path('modelos/' . $activity->modelo_3d); // Ajuste o diretório conforme seu projeto
+    
+        // Caminhos novos
+        $caminhoImagemNovo = public_path('marcadores/' . $novoNomeImagem);
+        $caminhoModeloNovo = public_path('modelos/' . $novoNomeModelo);
+    
+        // Copiar arquivos
+        if (file_exists($caminhoImagemAntigo)) {
+            copy($caminhoImagemAntigo, $caminhoImagemNovo);
+            $clonedActivity->marcador = $novoNomeImagem;
+        }
+    
+        if (file_exists($caminhoModeloAntigo)) {
+            copy($caminhoModeloAntigo, $caminhoModeloNovo);
+            $clonedActivity->modelo_3d = $novoNomeModelo;
+        }
+    
+        $clonedActivity->save();
+    
+        // Clonar as questões relacionadas
+        $questions = Question::where('activity_id', $activity->id)->get();
+        foreach ($questions as $question) {
+            $clonedQuestion = $question->replicate();
+            $clonedQuestion->activity_id = $clonedActivity->id;
+            $clonedQuestion->save();
+        }
+    
+        return redirect(route('activity.index'))->with('success', 'Atividade clonada com sucesso!');
     }
 
 }

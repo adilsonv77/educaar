@@ -99,12 +99,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/listStudents/{type}', [App\Http\Controllers\QuestionController::class, 'resultsListStudents'])->name('activity.listStudents');
     Route::delete('/answers/{id}', [App\Http\Controllers\QuestionController::class, 'destroyAnswers'])->name('answers.destroy');
 
+
     // Route::get('/question/index', [App\Http\Controllers\QuestionController::class, 'index'])->name('question.index');
     // Route::get('/question/create', [App\Http\Controllers\QuestionController::class, 'create'])->name('question.create');
     // Route::post('/question/store', [App\Http\Controllers\QuestionController::class, 'store'])->name('question.store');
 
     //activity
     Route::resource('activity', App\Http\Controllers\ActivityController::class);
+    Route::post('/activity/clone/{id}', [App\Http\Controllers\ActivityController::class, 'clone'])->name('activity.clone');
+
+
 
     //fechar
     Route::resource('fechar', App\Http\Controllers\FecharController::class);
