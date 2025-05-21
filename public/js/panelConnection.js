@@ -4,26 +4,19 @@ window.livewire.on("updateHtmlSceneName", (sceneName) => {
 })
 
 //----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM------------------------------------------------------
+const canvas = document.getElementById("canvas");
 let scale = 0.7;
 let alternativeScale = 3;
-const canvas = document.getElementById("canvas");
 
 function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
+
     atualizarTodasConexoes();
     positionIndicadorInicio()
     positionTodosIndicadoresNenhuma();
 }
 
-function aplicarZoom(novoZoom) {
-    const canvas = document.getElementById('canvas');
-    canvas.style.transform = `scale(${novoZoom})`;
-    atualizarTodasConexoes();
-    positionIndicadorInicio()
-    positionTodosIndicadoresNenhuma();
-}
-
-function zoomIn() {
+function zoomIn(e) {
     scale += 0.1;
     alternativeScale += 1;
     updateCanvasScale();
@@ -37,7 +30,7 @@ function zoomOut() {
     document.getElementById("resizeZoom").hidden = false;
 }
 
-document.getElementById("zoom-in")?.addEventListener("click", zoomIn);
+document.getElementById("zoom-in")?.addEventListener("click", (e) => zoomIn(e));
 
 document.getElementById("zoom-out")?.addEventListener("click", zoomOut);
 
@@ -49,7 +42,7 @@ document.getElementById("resizeZoom").addEventListener("click", () => {
 
 canvas.onmousewheel = (e) => {
     if (e.deltaY < 0) {
-        zoomIn()
+        zoomIn(e)
     } else {
         zoomOut()
     }
@@ -377,7 +370,7 @@ function habilitarArrastoPersonalizado(painelElement) {
 const div = document.getElementById("canvas");
 let isDragging = false;
 let startX = 0, startY = 0;
-let startLeft = 0, startTop = 0;
+let startLeft = 0, startTop = 0, startLeftPoint = 0, startTopPoint = 0;
 
 div.addEventListener("mousedown", (e) => {
     if (e.target.closest(".painel")) return;
@@ -388,17 +381,41 @@ div.addEventListener("mousedown", (e) => {
         startY = e.clientY;
         startLeft = div.offsetLeft;
         startTop = div.offsetTop;
+        startLeftPoint= centroCordenadas.offsetLeft;
+        startTopPoint = centroCordenadas.offsetTop;
         div.style.cursor = "grabbing";
         e.preventDefault();
     }, 100);
 });
 
+//Coisas novas
+let centroCamera = [(canvas.getBoundingClientRect().width * 1.41) / 2, (canvas.getBoundingClientRect().height * 1.41) / 2];
+let centroCordenadas = document.createElement("div")
+centroCordenadas.style.position = "absolute"
+centroCordenadas.style.top = centroCamera[1]+"px"
+centroCordenadas.style.left = centroCamera[0]+"px"
+
+canvas.append(centroCordenadas)
+
 document.addEventListener("mousemove", (e) => {
     if (!isDragging || isDraggingPanel) return;
+    
     let deltaX = e.clientX - startX;
     let deltaY = e.clientY - startY;
+    
     div.style.left = `${startLeft + deltaX}px`;
     div.style.top = `${startTop + deltaY}px`;
+    
+    let scaleLeft = deltaX;
+    let scaleTop = deltaY;
+
+    let leftCentro = (startLeftPoint - scaleLeft);
+    let topCentro = (startTopPoint - scaleTop);
+    centroCordenadas.style.top = `${topCentro}px`;
+    centroCordenadas.style.left = `${leftCentro}px`;
+    
+    canvas.style.transformOrigin = (leftCentro-centroCamera[0])+"px "+(topCentro-centroCamera[1])+"px";
+    
     if (isDragging) {
         atualizarTodasConexoes();
         positionIndicadorInicio();
@@ -413,6 +430,7 @@ document.addEventListener("mouseup", () => {
 
     canvasLeft = div.offsetLeft;
     canvasTop = div.offsetTop;
+
     zoomAtual = scale;
     atualizarTodasConexoes();
 });

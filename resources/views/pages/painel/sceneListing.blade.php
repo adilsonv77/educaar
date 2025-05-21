@@ -96,7 +96,7 @@
                                             </form>
                                     </td>
 
-                                    <!-- ECLUIR CENA -->
+                                    <!-- EXCLUIR CENA -->
                                     <td>
                                         <button type="button" class="btn btn-danger @if($scene->sendoUsado) disabled @endif"
                                             data-toggle="modal" data-target="#modal{{ $scene->id }}" title="Excluir">
@@ -104,7 +104,6 @@
                                         </button>
                                     </td>
                                 </tr>
-
                                 <!-- Modal de Confirmação de Exclusão -->
                                 <div class="modal fade" id="modal{{ $scene->id }}" tabindex="-1" role="dialog"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -118,9 +117,10 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-dismiss="modal">Cancelar</button>
-                                                <form action="{{ route('paineis.destroy', ['id' => $scene->id]) }}" method="POST">
+                                                <form action="{{ route('scenes.destroy', [$scene->id]) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
+                                                    <input type="hidden" value="{{ $scene->id }}">
                                                     <button type="submit" class="btn btn-danger">Excluir</button>
                                                 </form>
                                             </div>

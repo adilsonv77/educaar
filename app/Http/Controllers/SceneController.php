@@ -74,4 +74,9 @@ class SceneController extends Controller
         return redirect()->action([SceneController::class, 'edit'], ['scene' => $cenaCriada->id]);
     }
 
+    public function destroy($id)
+    {
+        $this->sceneDAO->deleteById($id);
+        return redirect()->route('scenes.index');
+    }
 }
