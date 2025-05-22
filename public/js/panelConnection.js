@@ -388,9 +388,12 @@ div.addEventListener("mousedown", (e) => {
     }, 100);
 });
 
-//Coisas novas
-let centroCamera = [(canvas.getBoundingClientRect().width * 1.41) / 2, (canvas.getBoundingClientRect().height * 1.41) / 2];
+//Centro da câmera usado para o zoom em direção para onde a câmera esta olhando.
+let centroCamera = [(canvas.getBoundingClientRect().width * 1.428) / 2, (canvas.getBoundingClientRect().height * 1.428) / 2];
 let centroCordenadas = document.createElement("div")
+// centroCordenadas.style.background = "red";
+// centroCordenadas.style.height = "50px";
+// centroCordenadas.style.width = "50px";
 centroCordenadas.style.position = "absolute"
 centroCordenadas.style.top = centroCamera[1]+"px"
 centroCordenadas.style.left = centroCamera[0]+"px"
@@ -399,7 +402,7 @@ canvas.append(centroCordenadas)
 
 document.addEventListener("mousemove", (e) => {
     if (!isDragging || isDraggingPanel) return;
-    
+
     let deltaX = e.clientX - startX;
     let deltaY = e.clientY - startY;
     

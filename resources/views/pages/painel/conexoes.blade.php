@@ -275,6 +275,12 @@
                 const restaurarZoom = document.getElementById("resizeZoom");
                 restaurarZoom.hidden = (scale === 0.7);
 
+                canvas.append(centroCordenadas)
+
+                canvas.style.transformOrigin =
+                    (parseInt(centroCordenadas.style.left) - centroCamera[1]) + "px " + 
+                    (parseInt(centroCordenadas.style.top)-centroCamera[0])+"px";
+
                 recriarConexoes();
                 atualizarTodasConexoes();
                 positionIndicadorInicio();
