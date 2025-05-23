@@ -373,6 +373,8 @@ let startX = 0, startY = 0;
 let startLeft = 0, startTop = 0, startLeftPoint = 0, startTopPoint = 0;
 
 div.addEventListener("mousedown", (e) => {
+    console.log("Alou");
+    
     if (e.target.closest(".painel")) return;
     setTimeout(() => {
         if (isDraggingPanel) return;
@@ -403,20 +405,25 @@ canvas.append(centroCordenadas)
 document.addEventListener("mousemove", (e) => {
     if (!isDragging || isDraggingPanel) return;
 
-    let deltaX = e.clientX - startX;
-    let deltaY = e.clientY - startY;
-    
-    div.style.left = `${startLeft + deltaX}px`;
-    div.style.top = `${startTop + deltaY}px`;
-    
-    let scaleLeft = deltaX;
-    let scaleTop = deltaY;
+    //Define o quanto foi movimentado mouse
+    let deltaX = (e.clientX - startX)/scale;
+    let deltaY = (e.clientY - startY)/scale;
 
-    let leftCentro = (startLeftPoint - scaleLeft);
-    let topCentro = (startTopPoint - scaleTop);
+    //Calcula a posição que devia ocupar. (Posição inicial + movimentação feita)
+    //Obs: O código joga o canvas na posição oposta que se deseja ir, revelando novas partes na direção movimentada.
+    div.style.left = `${(startLeft + deltaX)}px`;
+    div.style.top = `${(startTop + deltaY)}px`;
+    
+    //Calcula a posição do centro. (Posição inicial centro - movimentação feita). 
+    //Obs: O canvas jogou o centro na direção oposta, se corrige isso subtraindo a movimentação feita do centro.
+    let leftCentro = (startLeftPoint - deltaX);
+    let topCentro = (startTopPoint - deltaY);
+
+    //Aplica-se os valores do centro
     centroCordenadas.style.top = `${topCentro}px`;
     centroCordenadas.style.left = `${leftCentro}px`;
     
+    //Define com base no centro, onde deve ser feito o zoom no canvas caso houver.
     canvas.style.transformOrigin = (leftCentro-centroCamera[0])+"px "+(topCentro-centroCamera[1])+"px";
     
     if (isDragging) {
