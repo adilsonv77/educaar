@@ -52,11 +52,27 @@
 @endsection
 
 @section('content')
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3 id="msgModal"></h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @livewire('scene', ['paineis' => $paineis, "scene_id" => $scene_id, "nameScene" => $nameScene])
     @livewireScripts
 @endsection
 
 @section('script')
+
+
     <script src="{{ asset('editor/dist/trumbowyg.min.js') }}"></script>
     <script src="{{ asset('editor/dist/plugins/colors/trumbowyg.colors.min.js') }}"></script>
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
@@ -278,8 +294,8 @@
                 canvas.append(centroCordenadas)
 
                 canvas.style.transformOrigin =
-                    (parseInt(centroCordenadas.style.left) - centroCamera[1]) + "px " + 
-                    (parseInt(centroCordenadas.style.top)-centroCamera[0])+"px";
+                    (parseInt(centroCordenadas.style.left) - centroCamera[1]) + "px " +
+                    (parseInt(centroCordenadas.style.top) - centroCamera[0]) + "px";
 
                 recriarConexoes();
                 atualizarTodasConexoes();

@@ -133,7 +133,7 @@ function mostrarMenu(tipo) {
 
 //----CLIQUE GLOBAL------------------------------------------------------------------------------------------------
 document.addEventListener("click", (e) => {
-    if (e.target.closest(".menu-opcoes") || e.target.closest(".menu-lateral")) return;
+    if (e.target.closest(".menu-opcoes") || e.target.closest(".menu-lateral") || e.target.closest("#confirmModal")) return;
 
     if (e.target.classList.contains("button_Panel")) {
         e.stopPropagation();
@@ -272,10 +272,10 @@ function alterarFormatoBotoes(formato) {
     let qtdBotoes = painelSelecionado.querySelector("#layout").children.length;
 
     if (formato == "linhas" && qtdBotoes > 3) {
-        alert("Você não pode trocar formatos, o formato de linhas suporta até 3 botões. Exclua alguns botões e tente novamente.")
+        enviarMsg("Você não pode trocar formatos, o formato de linhas suporta até 3 botões. Exclua alguns botões e tente novamente.")
         return;
     } else if (formato == "alternativas" && qtdBotoes > 4) {
-        alert("Você não pode trocar formatos, o formato de círculos suporta até 4 botões. Exclua alguns botões e tente novamente")
+        enviarMsg("Você não pode trocar formatos, o formato de círculos suporta até 4 botões. Exclua alguns botões e tente novamente")
         return;
     }
 
@@ -877,22 +877,29 @@ function selecionarFormato(elemento) {
 //----CONFIGURAR BOTÕES------------------------------------------------------------------------------------------
 let addBtnBtn = document.getElementById("addButton")
 
+// 1. Criar novo botão
 addBtnBtn.onclick = () => {
     let id = painelSelecionado.querySelector(".idPainel").id;
     let tipoFormato = painelSelecionado.querySelector("#layout").classList[0];
 
     if (tipoFormato == "layout-blocos" && qtdBotoes >= 6) {
-        alert("Você não pode adicionar mais botões, o formato de blocos suporta até 6 botões")
+        enviarMsg("Você não pode adicionar mais botões, o formato de blocos suporta até 6 botões")
         return;
     } else if (tipoFormato == "layout-linhas" && qtdBotoes >= 3) {
-        alert("Você não pode adicionar mais botões, o formato de linhas suporta até 3 botões")
+        enviarMsg("Você não pode adicionar mais botões, o formato de linhas suporta até 3 botões")
         return;
     } else if (tipoFormato == "layout-alternativas" && qtdBotoes >= 4) {
-        alert("Você não pode adicionar mais botões, o formato de círculos suporta até 4 botões")
+        enviarMsg("Você não pode adicionar mais botões, o formato de círculos suporta até 4 botões")
         return;
     }
     qtdBotoes++;
     window.livewire.emit('createButton', { id: id });
+}
+
+function enviarMsg(mensagem) {
+    document.getElementById('msgModal').textContent = mensagem;
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    confirmModal.show();
 }
 
 // 2. Alterar texto botão
