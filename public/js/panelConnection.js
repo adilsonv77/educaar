@@ -52,60 +52,50 @@ canvas.onmousewheel = (e) => {
 }
 
 //----COLOR PICKER--------------------------------------------------------------------------------
+let pickrInicializado = false;
+
 function iniciarPickr() {
-    const container = document.querySelector("#color-picker-container");
+    const container = document.getElementById("color-picker-container");
 
-    if (!container) {
-        console.warn("⚠️ Color picker container não encontrado no DOM.");
-        return;
-    }
-
-    if (window.pickr) {
-        try {
-            if (window.pickr._root && window.pickr._root.app && window.pickr._root.app.parentNode) {
-                window.pickr.destroyAndRemove();
-            }
-        } catch (err) {
-            console.warn("Erro ao destruir Pickr:", err);
-        }
-    }
-
-    // Cria nova instância
-    window.pickr = Pickr.create({
-        el: container,
-        theme: "nano",
-        default: "#3498db",
-        inline: true,
-        showAlways: true,
-        useAsButton: false,
-        components: {
-            preview: true,
-            opacity: true,
-            hue: true,
-            interaction: {
-                input: true,
-                clear: true,
+    if (!pickrInicializado && container) {
+        window.pickr = Pickr.create({
+            el: '#color-picker-container',
+            theme: 'nano',
+            default: '#3498db',
+            inline: true,
+            showAlways: true,
+            useAsButton: false,
+            components: {
+                preview: true,
+                opacity: true,
+                hue: true,
+                interaction: {
+                    input: true,
+                    clear: true,
+                },
             },
-        },
-    });
+        });
 
-    // Só adiciona evento após estar totalmente carregado
-    window.pickr.on("change", (color) => {
-        clearTimeout(debouceTimer);
-        debouceTimer = setTimeout(() => {
-            if (botaoSelecionado?.querySelector(".circulo")) {
-                window.livewire.emit("updateCor", {
-                    id: botaoSelecionado.querySelector(".circulo").id,
-                    color: color.toHEXA().toString(),
-                });
-            }
-        }, 1000);
-    });
+        pickrInicializado = true;
+
+        window.pickr.on("change", (color) => {
+            clearTimeout(debouceTimer);
+            debouceTimer = setTimeout(() => {
+                const circulo = botaoSelecionado?.querySelector(".circulo");
+                if (circulo) {
+                    window.livewire.emit("updateCor", {
+                        id: circulo.id,
+                        color: color.toHEXA().toString()
+                    });
+                }
+            }, 1000);
+        });
+    } else if (window.pickr && container) {
+        // Se já existe, atualize apenas a cor
+        const corAtual = botaoSelecionado?.querySelector("#buttonInfo")?.getAttribute("color");
+        if (corAtual) window.pickr.setColor(corAtual);
+    }
 }
-
-document.addEventListener("DOMContentLoaded", iniciarPickr);
-document.addEventListener("livewire:load", iniciarPickr);
-document.addEventListener("livewire:update", iniciarPickr);
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -148,8 +138,9 @@ function mostrarMenu(tipo) {
         menu.classList.add("ativo");
         menuAtivoAtual = tipo;
 
-        // Só executa lógica de transição se for o menu de botões
         if (tipo === "botao") {
+            iniciarPickr(); // Aqui reinicializa ou atualiza
+
             const selectTransicao = document.getElementById("selectTransicao");
             const painelContainer = document.getElementById("selecaoPainelContainer");
 
@@ -160,7 +151,6 @@ function mostrarMenu(tipo) {
 
                 atualizarVisibilidadePainel();
 
-                // Evita múltiplos listeners duplicados
                 selectTransicao.removeEventListener("change", atualizarVisibilidadePainel);
                 selectTransicao.addEventListener("change", atualizarVisibilidadePainel);
             }
@@ -214,32 +204,27 @@ function selecionarPainel(painel, e) {
 
 //----FUNÇÃO DE SELECIONAR BOTÃO------------------------------------------------------------------------------------------------
 function selecionarBotao(botao) {
-    if (painelSelecionado) painelSelecionado.classList.remove("selecionado");
     if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
-
-    painelSelecionado = null;
     botaoSelecionado = botao;
-
     botao.classList.add("selecionado");
+
     mostrarMenu("botao");
 
-    //Carrega as informações do botão no menu
     let btnInfo = botaoSelecionado.querySelector("#buttonInfo");
 
     btnTxt.value = botaoSelecionado.textContent.trim();
     selectPainel.value = btnInfo.getAttribute("destination_id");
     selectTransicao.value = btnInfo.getAttribute("transition");
-    setTimeout(() => {
-        pickr.setColor(btnInfo.getAttribute("color"));
-        const pickerContainer = document.querySelector('#color-picker-container');
-        if (pickerContainer) {
-            console.log("Display do color picker:", getComputedStyle(pickerContainer).display);
-        } else {
-            console.warn("⚠️ Color picker container não encontrado no DOM.");
-        }
-    }, 100);
 
+    // Atualiza a cor no pickr, sem reiniciar
+    if (window.pickr && btnInfo.getAttribute("color")) {
+        window.pickr.setColor(btnInfo.getAttribute("color"));
+    }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    iniciarPickr();
+});
 
 //----FUNÇÃO DE SELECIONAR CANVAS------------------------------------------------------------------------------------------------
 function selecionarCanvas() {
@@ -906,10 +891,3 @@ deleteBtn.onclick = () => {
 }
 
 //6. Altera cor botão
-let corInput = document.getElementsByClassName("pcr-result")[0];
-window.pickr.on("change", (color) => {
-    clearTimeout(debouceTimer);
-    debouceTimer = setTimeout(() => {
-        window.livewire.emit('updateCor', { id: botaoSelecionado.querySelector(".circulo").id, color: color.toHEXA().toString() })
-    }, 1000);
-});

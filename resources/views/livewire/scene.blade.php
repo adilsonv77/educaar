@@ -60,10 +60,8 @@
             <!-- Quando o botão está selecionado -->
             <div class="menu-opcoes botao-opcoes">
                 <!-- CORES -->
-                <div class="mb-6">
-                    <h3 class="mb-2">
-                        CORES DOS BOTÕES
-                    </h3>
+                <div class="mb-6" wire:ignore>
+                    <h3 class="mb-2">CORES DOS BOTÕES</h3>
                     <div class="mb-2">
                         <div id="color-picker-container"></div>
                     </div>

@@ -243,6 +243,7 @@
                 if (message.updateQueue && message.updateQueue.some(m => m.payload?.event === 'salvarTexto')) {
                     setTimeout(() => {
                         initTrumbowygEditor();
+
                         const painelSelecionado = document.querySelector(".painel.selecionado");
                         const editor = $('#trumbowyg-editor');
                         if (painelSelecionado && editor.length) {
@@ -255,12 +256,7 @@
                         if (botaoSelecionado?.id) {
                             const novoBotao = document.getElementById(botaoSelecionado.id);
                             if (novoBotao) {
-                                selecionarBotao(novoBotao);
-                                setTimeout(() => {
-                                    requestAnimationFrame(() => {
-                                        iniciarPickr();
-                                    });
-                                }, 100);
+                                selecionarBotao(novoBotao); // já inicia o Pickr internamente
                             }
                         }
                     }, 50);
