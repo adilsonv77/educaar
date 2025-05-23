@@ -12,7 +12,7 @@ function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
 
     atualizarTodasConexoes();
-    positionIndicadorInicio()
+    positionIndicadorInicio();
     positionTodosIndicadoresNenhuma();
 }
 
@@ -133,9 +133,7 @@ function mostrarMenu(tipo) {
 
 //----CLIQUE GLOBAL------------------------------------------------------------------------------------------------
 document.addEventListener("click", (e) => {
-    if (e.target.closest(".menu-opcoes")) {
-        return;
-    }
+    if (e.target.closest(".menu-opcoes") || e.target.closest(".menu-lateral")) return;
 
     if (e.target.classList.contains("button_Panel")) {
         e.stopPropagation();
@@ -155,10 +153,7 @@ document.addEventListener("click", (e) => {
 
 //----FUNÇÃO DE SELECIONAR PAINEL------------------------------------------------------------------------------------------------
 let qtdBotoes = 0;
-let isDraggingPanel = false;
 function selecionarPainel(painel, e) {
-    isDraggingPanel = true;
-
     if (e.target.closest(".button_Panel")) return;
 
     // limpa seleção anterior
@@ -182,8 +177,6 @@ function selecionarPainel(painel, e) {
 
 //----FUNÇÃO DE SELECIONAR BOTÃO------------------------------------------------------------------------------------------------
 function selecionarBotao(botao) {
-    isDraggingPanel = true;
-
     if (painelSelecionado) painelSelecionado.classList.remove("selecionado");
     if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
 
@@ -206,8 +199,6 @@ function selecionarBotao(botao) {
 
 //----FUNÇÃO DE SELECIONAR CANVAS------------------------------------------------------------------------------------------------
 function selecionarCanvas() {
-    isDraggingPanel = true;
-
     if (painelSelecionado) painelSelecionado.classList.remove("selecionado");
     if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
 
@@ -217,7 +208,6 @@ function selecionarCanvas() {
     document.querySelector(".canvas-container").classList.add("selecionado");
 
     mostrarMenu("canvas");
-    isDraggingPanel = false;
 }
 
 //----SELECIONAR PAINEL INICIAL CLICANDO NO PAINEL-------------------------------------------------------------------
@@ -371,13 +361,22 @@ const div = document.getElementById("canvas");
 let isDragging = false;
 let startX = 0, startY = 0;
 let startLeft = 0, startTop = 0, startLeftPoint = 0, startTopPoint = 0;
+div.addEventListener('contextmenu', event => event.preventDefault());
+
+//Centro da câmera usado para o zoom em direção para onde a câmera esta olhando.
+let centroCamera = [(canvas.getBoundingClientRect().width * 1.428) / 2, (canvas.getBoundingClientRect().height * 1.428) / 2];
+let centroCordenadas = document.createElement("div")
+centroCordenadas.style.position = "absolute"
+centroCordenadas.style.top = centroCamera[1]+"px"
+centroCordenadas.style.left = centroCamera[0]+"px"
+//        Descomente as linhas abaixo para poder vizualizar o centro da tela.
+// centroCordenadas.style.background = "red"; centroCordenadas.style.borderRadius = "100%";
+// centroCordenadas.style.width = "50px"; centroCordenadas.style.height = "50px";
 
 div.addEventListener("mousedown", (e) => {
-    console.log("Alou");
+    if (e.target.closest(".painel") || e.button != 1) return;
     
-    if (e.target.closest(".painel")) return;
     setTimeout(() => {
-        if (isDraggingPanel) return;
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
@@ -390,20 +389,10 @@ div.addEventListener("mousedown", (e) => {
     }, 100);
 });
 
-//Centro da câmera usado para o zoom em direção para onde a câmera esta olhando.
-let centroCamera = [(canvas.getBoundingClientRect().width * 1.428) / 2, (canvas.getBoundingClientRect().height * 1.428) / 2];
-let centroCordenadas = document.createElement("div")
-// centroCordenadas.style.background = "red";
-// centroCordenadas.style.height = "50px";
-// centroCordenadas.style.width = "50px";
-centroCordenadas.style.position = "absolute"
-centroCordenadas.style.top = centroCamera[1]+"px"
-centroCordenadas.style.left = centroCamera[0]+"px"
-
 canvas.append(centroCordenadas)
 
 document.addEventListener("mousemove", (e) => {
-    if (!isDragging || isDraggingPanel) return;
+    if (!isDragging) return;
 
     //Define o quanto foi movimentado mouse
     let deltaX = (e.clientX - startX)/scale;
@@ -433,8 +422,9 @@ document.addEventListener("mousemove", (e) => {
     }
 });
 
-document.addEventListener("mouseup", () => {
-    if (isDraggingPanel) return;
+document.addEventListener("mouseup", (e) => {
+    if (e.button!=1) return;
+    
     isDragging = false;
     div.style.cursor = "grab";
 
