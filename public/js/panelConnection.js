@@ -10,13 +10,16 @@ let alternativeScale = 3;
 
 function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
-
-    atualizarTodasConexoes();
-    positionIndicadorInicio()
-    positionTodosIndicadoresNenhuma();
+    atualizarTudo();
 }
 
-function zoomIn(e) {
+function aplicarZoom(novoZoom) {
+    const canvas = document.getElementById('canvas');
+    canvas.style.transform = `scale(${novoZoom})`;
+    atualizarTudo();
+}
+
+function zoomIn() {
     scale += 0.1;
     alternativeScale += 1;
     updateCanvasScale();
@@ -49,29 +52,63 @@ canvas.onmousewheel = (e) => {
 }
 
 //----COLOR PICKER--------------------------------------------------------------------------------
-document.addEventListener("DOMContentLoaded", function () {
-    if (document.querySelector("#color-picker-container")) {
-        window.pickr = Pickr.create({
-            el: "#color-picker-container",
-            theme: "nano",
-            default: "#3498db",
-            inline: true,
-            showAlways: true,
-            useAsButton: false,
-            components: {
-                preview: true,
-                opacity: true,
-                hue: true,
-                interaction: {
-                    input: true,
-                    clear: true,
-                },
-            },
-        });
-    } else {
-        console.warn("❌ Container do Color Picker não encontrado.");
+function iniciarPickr() {
+    const container = document.querySelector("#color-picker-container");
+
+    if (!container) {
+        console.warn("⚠️ Color picker container não encontrado no DOM.");
+        return;
     }
 
+    if (window.pickr) {
+        try {
+            if (window.pickr._root && window.pickr._root.app && window.pickr._root.app.parentNode) {
+                window.pickr.destroyAndRemove();
+            }
+        } catch (err) {
+            console.warn("Erro ao destruir Pickr:", err);
+        }
+    }
+
+    // Cria nova instância
+    window.pickr = Pickr.create({
+        el: container,
+        theme: "nano",
+        default: "#3498db",
+        inline: true,
+        showAlways: true,
+        useAsButton: false,
+        components: {
+            preview: true,
+            opacity: true,
+            hue: true,
+            interaction: {
+                input: true,
+                clear: true,
+            },
+        },
+    });
+
+    // Só adiciona evento após estar totalmente carregado
+    window.pickr.on("change", (color) => {
+        clearTimeout(debouceTimer);
+        debouceTimer = setTimeout(() => {
+            if (botaoSelecionado?.querySelector(".circulo")) {
+                window.livewire.emit("updateCor", {
+                    id: botaoSelecionado.querySelector(".circulo").id,
+                    color: color.toHEXA().toString(),
+                });
+            }
+        }, 1000);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", iniciarPickr);
+document.addEventListener("livewire:load", iniciarPickr);
+document.addEventListener("livewire:update", iniciarPickr);
+
+
+document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".linhas").addEventListener("click", (e) => {
         selecionarFormato(e.currentTarget); // Chama a função ao clicar na div "linhas"
     });
@@ -201,7 +238,14 @@ function selecionarBotao(botao) {
     selectTransicao.value = btnInfo.getAttribute("transition");
     setTimeout(() => {
         pickr.setColor(btnInfo.getAttribute("color"));
+        const pickerContainer = document.querySelector('#color-picker-container');
+        if (pickerContainer) {
+            console.log("Display do color picker:", getComputedStyle(pickerContainer).display);
+        } else {
+            console.warn("⚠️ Color picker container não encontrado no DOM.");
+        }
     }, 100);
+
 }
 
 //----FUNÇÃO DE SELECIONAR CANVAS------------------------------------------------------------------------------------------------
@@ -222,7 +266,6 @@ function selecionarCanvas() {
 
 //----SELECIONAR PAINEL INICIAL CLICANDO NO PAINEL-------------------------------------------------------------------
 let modoSelecionarPainelInicial = false;
-
 let btn = document.querySelectorAll('.tapSelect')[1];
 
 btn.addEventListener('click', function () {
@@ -333,23 +376,28 @@ function habilitarArrastoPersonalizado(painelElement) {
         painelElement.style.zIndex = ++zIndexAtual;
     });
 
+    let animationFrame;
+
     document.addEventListener("mousemove", function (e) {
         if (!isDragging) return;
 
-        const canvasRect = canvas.getBoundingClientRect();
-        let newX = (e.clientX - canvasRect.left - offsetX) / scale;
-        let newY = (e.clientY - canvasRect.top - offsetY) / scale;
+        if (animationFrame) cancelAnimationFrame(animationFrame);
 
-        newX = Math.max(0, Math.min(newX, 80000 - 291));
-        newY = Math.max(0, Math.min(newY, 80000 - 462));
+        animationFrame = requestAnimationFrame(() => {
+            const canvasRect = canvas.getBoundingClientRect();
+            let newX = (e.clientX - canvasRect.left - offsetX) / scale;
+            let newY = (e.clientY - canvasRect.top - offsetY) / scale;
 
-        painelElement.style.left = `${newX}px`;
-        painelElement.style.top = `${newY}px`;
-        atualizarTodasConexoes();
-        positionIndicadorInicio();
-        positionTodosIndicadoresNenhuma();
+            newX = Math.max(0, Math.min(newX, 80000 - 291));
+            newY = Math.max(0, Math.min(newY, 80000 - 462));
 
+            painelElement.style.left = `${newX}px`;
+            painelElement.style.top = `${newY}px`;
+
+            atualizarTudo(); // só uma chamada por frame!
+        });
     });
+
 
     document.addEventListener("mouseup", function () {
         if (!isDragging) return;
@@ -427,9 +475,7 @@ document.addEventListener("mousemove", (e) => {
     canvas.style.transformOrigin = (leftCentro-centroCamera[0])+"px "+(topCentro-centroCamera[1])+"px";
     
     if (isDragging) {
-        atualizarTodasConexoes();
-        positionIndicadorInicio();
-        positionTodosIndicadoresNenhuma();
+        atualizarTudo();
     }
 });
 
@@ -442,7 +488,6 @@ document.addEventListener("mouseup", () => {
     canvasTop = div.offsetTop;
 
     zoomAtual = scale;
-    atualizarTodasConexoes();
 });
 
 //----MOSTRAR POPUP QUANDO SELECIONAR------------------------------------------------------------------------------------------------
@@ -621,7 +666,18 @@ function sendValueLivewire(id, link) {
     window.livewire.emit('updateLink', { id: id, link: link });
 }
 
-//----DESENHAR CONEXÃO (LINHA)---------------------------------------------------------------------------
+//----DESENHAR CONEXÃO ---------------------------------------------------------------------------
+const linhasNenhuma = new Map();
+const linhasFinalConexao = new Map();
+const cacheIndicadorNenhuma = new Map();
+const cacheIndicadorFinal = new Map();
+
+function atualizarTudo() {
+    atualizarTodasConexoes();
+    positionIndicadorInicio();
+}
+
+//----DESENHAR CONEXÃO - ENTRE PAINEIS---------------------------------------------------------------------------
 const todasAsLinhas = [];
 const linhasPorBotao = new Map();
 
@@ -741,131 +797,50 @@ function tentarConectarOuRemover() {
 let linhaIndicador = null;
 
 function positionIndicadorInicio() {
-    const canvas = document.getElementById('canvas');
-    const img = document.getElementById('indicadorInicio');
-    const startId = canvas?.dataset?.startId;
+    const canvas = document.getElementById("canvas");
+    const startId = canvas.getAttribute("data-start-id");
+    if (!startId) return;
 
-    if (!startId || !img || !canvas) {
-        if (img) img.style.display = 'none';
-        if (linhaIndicador) {
-            linhaIndicador.remove();
-            linhaIndicador = null;
-        }
-        return;
-    }
+    const painel = document.querySelector(`.painel[id='${startId}']`);
+    if (!painel) return;
 
-    const painel = document.getElementById(startId);
-    if (!painel) {
-        img.style.display = 'none';
-        if (linhaIndicador) {
-            linhaIndicador.remove();
-            linhaIndicador = null;
-        }
-        return;
-    }
+    const img = document.getElementById("indicadorInicio");
+    if (!img) return;
 
-    function reposicionar() {
-        const imgHeight = img.offsetHeight || 40; // fallback caso 0
-        const top = painel.offsetTop + (painel.offsetHeight / 2) - (imgHeight / 2);
-        const left = painel.offsetLeft - 140;
+    const painelRect = painel.getBoundingClientRect();
+    const canvasRect = canvas.getBoundingClientRect();
 
-        img.style.top = `${top}px`;
-        img.style.left = `${left}px`;
-        img.style.display = 'block';
+    const x = (painelRect.left - canvasRect.left) / scale - 140;
+    const y = (painelRect.top - canvasRect.top + painelRect.height / 2) / scale - 20;
 
-        if (linhaIndicador) {
-            linhaIndicador.remove(); // remove a antiga
-            linhaIndicador = null;
-        }
-
-        linhaIndicador = new LeaderLine(
-            img,
-            painel,
-            {
-                color: '#833B8D',
-                size: 4,
-                path: 'straight',
-                startSocket: 'right',
-                endSocket: 'left',
-                endPlug: 'none'
-            }
-        );
-    }
-
-    requestAnimationFrame(() => {
-        reposicionar();
-    });
-}
-//----FUNÇÃO DE GERAR SEM CONEXÃO------------------------------------------------------------------------------------------------
-const imagensNenhumaMap = new Map();
-const linhasNenhumaMap = new Map();
-
-function positionIndicadorNenhuma(botao) {
-    if (!botao) return;
-
-    const infoDiv = botao.querySelector("#buttonInfo");
-    const transicao = infoDiv?.getAttribute("transition");
-
-    const canvasContainer = document.querySelector(".canvas-container");
-    if (!canvasContainer) return;
-
-    // Remove anteriores
-    if (imagensNenhumaMap.has(botao)) {
-        imagensNenhumaMap.get(botao).remove();
-        imagensNenhumaMap.delete(botao);
-    }
-    if (linhasNenhumaMap.has(botao)) {
-        linhasNenhumaMap.get(botao).remove();
-        linhasNenhumaMap.delete(botao);
-    }
-
-    // Apenas para transição "" ou "nenhuma"
-    if (transicao !== "" && transicao?.toLowerCase() !== "nenhuma") return;
-
-    const template = document.getElementById("indicadorNenhuma");
-    if (!template) return;
-
-    const img = template.cloneNode(true);
+    img.style.left = `${x}px`;
+    img.style.top = `${y}px`;
     img.style.display = "block";
-    img.style.position = "absolute";
 
-    const botaoRect = botao.getBoundingClientRect();
-    const canvasRect = canvasContainer.getBoundingClientRect();
+    // opcional: recriar a linha de conexão se quiser
+    if (linhaIndicador) {
+        linhaIndicador.remove();
+        linhaIndicador = null;
+    }
 
-    const top = (botaoRect.top + botaoRect.height / 2 - 20) - canvasRect.top;
-    const left = (botaoRect.left - 70 - 40) - canvasRect.left;
-
-    img.style.top = `${top}px`;
-    img.style.left = `${left}px`;
-
-    img.style.transform = `scale(${scale})`;
-    img.style.transformOrigin = 'top left';
-
-    canvasContainer.appendChild(img);
-    imagensNenhumaMap.set(botao, img);
-
-    // Cria linha
-    const linha = new LeaderLine(
-        LeaderLine.pointAnchor(img, { x: "100%", y: "50%" }),
-        LeaderLine.pointAnchor(botao, { x: "0%", y: "50%" }),
+    linhaIndicador = new LeaderLine(
+        img,
+        painel,
         {
-            color: '#833B8D',
-            size: 4,
-            path: 'straight',
-            startSocket: 'right',
-            endSocket: 'left',
-            endPlug: 'none'
+            color: "#0b5ed7",
+            size: 3,
+            startPlug: "disc",
+            endPlug: "arrow3",
+            path: "fluid"
         }
     );
-
-    linhasNenhumaMap.set(botao, linha);
 }
 
-function positionTodosIndicadoresNenhuma() {
-    document.querySelectorAll(".button_Panel").forEach(botao => {
-        positionIndicadorNenhuma(botao);
-    });
-}
+//----FUNÇÃO DE GERAR SEM CONEXÃO------------------------------------------------------------------------------------------------
+
+//----FUNÇÃO DE GERAR CONEXÃO FINAL ------------------------------------------------------------------------------------------------
+
+//INDICADORES -------------------------------------------------------------------------------
 
 //----FUNÇÃO DE SELECIONAR FORMATO------------------------------------------------------------------------------------------------
 function selecionarFormato(elemento) {
@@ -933,11 +908,11 @@ deleteBtn.onclick = () => {
     window.livewire.emit('deleteBtn', { id: botaoSelecionado.querySelector(".circulo").id, id_painel: painel.querySelector(".idPainel").id })
 }
 
-// 6. Altera cor botão
-// let corInput = document.getElementsByClassName("pcr-result")[0];
-// window.pickr.on("change", (color) => {
-//     clearTimeout(debouceTimer);
-//     debouceTimer = setTimeout(() => {
-//         window.livewire.emit('updateCor', { id: botaoSelecionado.querySelector(".circulo").id, color: color.toHEXA().toString() })
-//     }, 1000);
-// });
+//6. Altera cor botão
+let corInput = document.getElementsByClassName("pcr-result")[0];
+window.pickr.on("change", (color) => {
+    clearTimeout(debouceTimer);
+    debouceTimer = setTimeout(() => {
+        window.livewire.emit('updateCor', { id: botaoSelecionado.querySelector(".circulo").id, color: color.toHEXA().toString() })
+    }, 1000);
+});

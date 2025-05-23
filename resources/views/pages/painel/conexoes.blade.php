@@ -81,7 +81,6 @@
 
         // ---------------------------------------------APLICAR LISTENERS AOS PAINÉIS EXISTENTES E NOVOS---------------------------------------------
         document.addEventListener("DOMContentLoaded", function () {
-            // Painéis já existentes
             document.querySelectorAll(".painel").forEach(panel => {
                 let id = panel.querySelector('.idPainel')?.id;
                 if (id) {
@@ -90,7 +89,6 @@
                 }
             });
 
-            // Painel criado via Livewire
             window.livewire.on("painelCriado", (id) => {
                 let panel = document.getElementById(id);
                 if (!panel) return;
@@ -113,10 +111,10 @@
 
             mostrarMenu("canvas");
             recriarConexoes();
+            positionIndicadorInicio();
         });
 
         function atribuirListeners(panel, id) {
-            let inputLink = panel.querySelector("#file-" + id);
             panel.addEventListener("click", (e) => selecionarPainel(panel, e));
             adicionarInteracaoPopup(id);
         }
@@ -138,7 +136,6 @@
                 }
             }
 
-            // Inicializa o Trumbowyg
             $editor.trumbowyg({
                 btns: [
                     ['undo', 'redo'],
@@ -155,19 +152,14 @@
 
             $editor.on('keyup', enviarDadosController);
 
-            const menuEdicao = document.getElementsByClassName("trumbowyg-button-pane")[0]
+            const menuEdicao = document.getElementsByClassName("trumbowyg-button-pane")[0];
             menuEdicao.onclick = () => {
-                enviarDadosController() //Envia dados imediatamente editados (como centralizar o texto)
-
-                function esperarClique(e) { //Envia dados que precisam uma segunda seleção (como a cor do texto)
-                    enviarDadosController()
-                    // Remove este listener após o clique
-                    document.removeEventListener("click", esperarClique);
-                }
-
-                // Adiciona o listener que espera o próximo clique
+                enviarDadosController();
                 setTimeout(() => {
-                    document.addEventListener("click", esperarClique);
+                    document.addEventListener("click", function esperarClique() {
+                        enviarDadosController();
+                        document.removeEventListener("click", esperarClique);
+                    });
                 }, 100);
             };
 
@@ -190,7 +182,7 @@
                             ultimoTextoSalvo = texto;
                         }
                     }
-                }, 1000); // Espera 3s depois da última tecla
+                }, 1000);
             }
         }
 
@@ -202,7 +194,6 @@
             }
         });
 
-
         document.addEventListener('DOMContentLoaded', function () {
             initTrumbowygEditor();
         });
@@ -213,45 +204,47 @@
 
         window.livewire.hook('message.sent', () => {
             const canvas = document.getElementById("canvas");
-
-            // Salva o zoom atual (usando transform matrix)
             const transform = window.getComputedStyle(canvas).transform;
             if (transform && transform.includes("matrix")) {
                 const valores = transform.match(/matrix\(([^)]+)\)/)[1].split(', ');
                 zoomAtual = parseFloat(valores[0]);
             }
-
-            // Salva a posição atual
             canvasLeft = canvas.offsetLeft;
             canvasTop = canvas.offsetTop;
         });
 
         document.addEventListener("DOMContentLoaded", () => {
-            positionIndicadorInicio();
-            positionTodosIndicadoresNenhuma();
-
             const selectTransicao = document.getElementById("selectTransicao");
             if (selectTransicao) {
                 selectTransicao.addEventListener("change", () => {
                     tentarConectarOuRemover();
-                    positionTodosIndicadoresNenhuma();
+                    atualizarConexoesFinal();
                 });
+
             }
 
             window.livewire.hook('message.processed', (message, component) => {
-                const painelSelecionado = document.querySelector(".painel.selecionado");
-                const botaoSelecionado = document.querySelector(".botao.selecionado");
-
                 if (message.updateQueue && message.updateQueue.some(m => m.payload?.event === 'salvarTexto')) {
                     setTimeout(() => {
                         initTrumbowygEditor();
-
                         const painelSelecionado = document.querySelector(".painel.selecionado");
                         const editor = $('#trumbowyg-editor');
                         if (painelSelecionado && editor.length) {
                             const novoTexto = painelSelecionado.getAttribute('data-texto');
                             if (novoTexto !== null) {
                                 editor.trumbowyg('html', novoTexto);
+                            }
+                        }
+
+                        if (botaoSelecionado?.id) {
+                            const novoBotao = document.getElementById(botaoSelecionado.id);
+                            if (novoBotao) {
+                                selecionarBotao(novoBotao);
+                                setTimeout(() => {
+                                    requestAnimationFrame(() => {
+                                        iniciarPickr();
+                                    });
+                                }, 100);
                             }
                         }
                     }, 50);
@@ -278,14 +271,13 @@
                 canvas.append(centroCordenadas)
 
                 canvas.style.transformOrigin =
-                    (parseInt(centroCordenadas.style.left) - centroCamera[1]) + "px " + 
-                    (parseInt(centroCordenadas.style.top)-centroCamera[0])+"px";
+                    (parseInt(centroCordenadas.style.left) - centroCamera[1]) + "px " +
+                    (parseInt(centroCordenadas.style.top) - centroCamera[0]) + "px";
 
                 recriarConexoes();
-                atualizarTodasConexoes();
-                positionIndicadorInicio();
-                positionTodosIndicadoresNenhuma();
+                atualizarTudo();
             });
         });
+
     </script>
 @endsection

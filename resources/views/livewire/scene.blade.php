@@ -161,9 +161,11 @@
                     @livewire('panel', ['painel' => $painel], key($painel->id))
                 @endforeach
                 <img id="indicadorInicio" src="{{ asset('images/inicioConexoes.svg') }}" alt=""
-                    style="position: absolute; display: none; width: 40px; height: 40px;">
-                <img id="indicadorNenhuma" src="{{ asset('images/semConexoes.svg') }}" alt="Sem conexão"
-                    style="display: none; width: 40px; height: 40px;">
+                    style="pointer-events: none; position: absolute; display: block; width: 40px; height: 40px;">
+                <img id="indicadorNenhuma" src="{{ asset('images/semConexoes.svg') }}" alt=""
+                    style="pointer-events: none; position: absolute; display: block; width: 30px; height: 30px;">
+                <img id="indicadorFinal" src="{{ asset('images/endConnection.svg') }}" alt=""
+                    style="pointer-events: none; position: absolute; display: block; width: 40px; height: 40px;">
             </div>
         </div>
     </div>

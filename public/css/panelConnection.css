@@ -208,6 +208,13 @@ input {
     CONEXÃO (LINHAS)
    ============================= */
 
+img[data-id-origem] {
+    z-index: 1000;
+    pointer-events: none;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+}
 
 
 /* =============================
@@ -228,7 +235,7 @@ input {
 .trumbowyg-editor {
     padding: 10px 0 !important;
     scale: 1.07;
-    transform: translateX(3px); 
+    transform: translateX(3px);
     width: 92% !important;
 }
 
@@ -506,6 +513,15 @@ input {
 
 .pcr-app[data-theme=nano] {
     width: 100% !important;
+    z-index: 9999 !important;
+    display: block !important;
+    visibility: visible !important;
+    position: relative;
+}
+
+#color-picker-container {
+    display: block !important;
+    visibility: visible !important;
 }
 
 /* =============================
