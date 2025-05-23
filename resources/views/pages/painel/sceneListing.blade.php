@@ -18,8 +18,8 @@
             <!-- Botão Novo -->
             <form action="{{ route('scenes.store') }}" method="POST">
                 @csrf
-                <input type="hidden" name="author_id" value="1">
-                <input type="hidden" name="disciplina_id" value="1">
+                <input type="hidden" name="author_id" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="disciplina_id" value="">
                 <button class="btn btn-primary btn-sm" id="novo" title="Novo" type="submit">
                     <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff;"></i>
                 </button>
