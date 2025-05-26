@@ -446,17 +446,17 @@ class ActivityController extends Controller
         $clonedActivity->save(); // Salva para gerar o ID
     
         // Gerar novos nomes com base no ID do clone
-        $novoNomeImagem = 'imagem_' . $clonedActivity->id . '.jpg';
-        $extensaoModelo = pathinfo($activity->modelo_3d, PATHINFO_EXTENSION);
-        $novoNomeModelo = 'modelo_' . $clonedActivity->id . '.' . $extensaoModelo;
+        $novoNomeImagem = $clonedActivity->id . '.' . pathinfo($activity->marcador, PATHINFO_EXTENSION);
+        $extensaoModelo = pathinfo($activity->glb, PATHINFO_EXTENSION);
+        $novoNomeModelo = $clonedActivity->id . '.' . $extensaoModelo;
     
         // Caminhos antigos
         $caminhoImagemAntigo = public_path('marcadores/' . $activity->marcador);
-        $caminhoModeloAntigo = public_path('modelos/' . $activity->modelo_3d);
+        $caminhoModeloAntigo = public_path('modelos3d/' . $activity->glb);
     
         // Caminhos novos
         $caminhoImagemNovo = public_path('marcadores/' . $novoNomeImagem);
-        $caminhoModeloNovo = public_path('modelos/' . $novoNomeModelo);
+        $caminhoModeloNovo = public_path('modelos3d/' . $novoNomeModelo);
     
         // Copiar arquivos se existirem
         if (File::exists($caminhoImagemAntigo)) {
@@ -466,7 +466,7 @@ class ActivityController extends Controller
     
         if (File::exists($caminhoModeloAntigo)) {
             File::copy($caminhoModeloAntigo, $caminhoModeloNovo);
-            $clonedActivity->modelo_3d = $novoNomeModelo;  // ESSENCIAL!
+            $clonedActivity->glb = $novoNomeModelo;  // ESSENCIAL!
         }
     
         // Salva as alterações no clone
