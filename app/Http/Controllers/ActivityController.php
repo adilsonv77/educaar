@@ -25,6 +25,8 @@ use App\DAO\SceneDAO;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\File;
+
 class ActivityController extends Controller
 {
     /**
@@ -426,6 +428,8 @@ class ActivityController extends Controller
 
 
 
+ 
+
     public function clone($id)
     {
         $activity = Activity::find($id);
@@ -439,34 +443,38 @@ class ActivityController extends Controller
         $clonedActivity->name = $activity->name . ' (Cópia)';
         $clonedActivity->created_at = now();
         $clonedActivity->updated_at = now();
+        $clonedActivity->save(); // Salva para gerar o ID
     
-        // Gerar novos nomes únicos para os arquivos
-        $novoNomeImagem = 'imagem_' . Str::uuid() . '.jpg';
-        $novoNomeModelo = 'modelo_' . Str::uuid() . '.' . pathinfo($activity->modelo_3d, PATHINFO_EXTENSION);
+        // Gerar novos nomes com base no ID do clone
+        $novoNomeImagem = 'imagem_' . $clonedActivity->id . '.jpg';
+        $extensaoModelo = pathinfo($activity->modelo_3d, PATHINFO_EXTENSION);
+        $novoNomeModelo = 'modelo_' . $clonedActivity->id . '.' . $extensaoModelo;
     
         // Caminhos antigos
         $caminhoImagemAntigo = public_path('marcadores/' . $activity->marcador);
-        $caminhoModeloAntigo = public_path('modelos/' . $activity->modelo_3d); // Ajuste o diretório conforme seu projeto
+        $caminhoModeloAntigo = public_path('modelos/' . $activity->modelo_3d);
     
         // Caminhos novos
         $caminhoImagemNovo = public_path('marcadores/' . $novoNomeImagem);
         $caminhoModeloNovo = public_path('modelos/' . $novoNomeModelo);
     
-        // Copiar arquivos
-        if (file_exists($caminhoImagemAntigo)) {
-            copy($caminhoImagemAntigo, $caminhoImagemNovo);
+        // Copiar arquivos se existirem
+        if (File::exists($caminhoImagemAntigo)) {
+            File::copy($caminhoImagemAntigo, $caminhoImagemNovo);
             $clonedActivity->marcador = $novoNomeImagem;
         }
     
-        if (file_exists($caminhoModeloAntigo)) {
-            copy($caminhoModeloAntigo, $caminhoModeloNovo);
-            $clonedActivity->modelo_3d = $novoNomeModelo;
+        if (File::exists($caminhoModeloAntigo)) {
+            File::copy($caminhoModeloAntigo, $caminhoModeloNovo);
+            $clonedActivity->modelo_3d = $novoNomeModelo;  // ESSENCIAL!
         }
     
+        // Salva as alterações no clone
         $clonedActivity->save();
     
         // Clonar as questões relacionadas
         $questions = Question::where('activity_id', $activity->id)->get();
+    
         foreach ($questions as $question) {
             $clonedQuestion = $question->replicate();
             $clonedQuestion->activity_id = $clonedActivity->id;
@@ -475,5 +483,6 @@ class ActivityController extends Controller
     
         return redirect(route('activity.index'))->with('success', 'Atividade clonada com sucesso!');
     }
+
 
 }

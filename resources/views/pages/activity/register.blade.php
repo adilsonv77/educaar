@@ -122,6 +122,10 @@
                 </div>
             @endif
             <form method="POST" action="{{ route('activity.store') }}" enctype="multipart/form-data" files="true" onsubmit="desativarBotao(this)">
+
+           
+
+
                 <h3>Atividade</h3>
                 @csrf
                 <input name="id" type="hidden" value="{{$id}}"/>
@@ -191,6 +195,9 @@
                             id="marcador" accept=".png, .jpeg, .jpg"  @if($acao === 'edit') disabled @endif/>
                 </div>
 
+
+
+               
                 <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$scene_id}}" @endif>
 
                 <!-----------------SUBMIT------------------>
