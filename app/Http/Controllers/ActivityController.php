@@ -481,7 +481,9 @@ class ActivityController extends Controller
             $clonedQuestion->save();
         }
     
-        return redirect(route('activity.index'))->with('success', 'Atividade clonada com sucesso!');
+        return redirect()->route('pages.activity.edit', ['id' => $clonedActivity->id])
+    ->with('success', 'Atividade clonada com sucesso!');
+
     }
 
 

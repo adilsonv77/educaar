@@ -107,6 +107,8 @@ Route::middleware(['auth'])->group(function () {
     //activity
     Route::resource('activity', App\Http\Controllers\ActivityController::class);
     Route::post('/activity/clone/{id}', [App\Http\Controllers\ActivityController::class, 'clone'])->name('activity.clone');
+    Route::get('/activity/edit/{id}', [App\Http\Controllers\ActivityController::class, 'edit'])->name('pages.activity.edit');
+
 
 
 
