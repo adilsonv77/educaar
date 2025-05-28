@@ -97,6 +97,10 @@
 
         // ---------------------------------------------APLICAR LISTENERS AOS PAINÉIS EXISTENTES E NOVOS---------------------------------------------
         document.addEventListener("DOMContentLoaded", function () {
+            atualizarIndicadorInicio();
+            atualizarIndicadoresDeTransicao();
+            atualizarIndicadoresDeFinal();
+
             document.querySelectorAll(".painel").forEach(panel => {
                 let id = panel.querySelector('.idPainel')?.id;
                 if (id) {
@@ -127,7 +131,6 @@
 
             mostrarMenu("canvas");
             recriarConexoes();
-            positionIndicadorInicio();
         });
 
         function atribuirListeners(panel, id) {
@@ -230,11 +233,12 @@
         });
 
         document.addEventListener("DOMContentLoaded", () => {
+            atualizarIndicadoresDeTransicao();
+            atualizarIndicadoresDeFinal();
             const selectTransicao = document.getElementById("selectTransicao");
             if (selectTransicao) {
                 selectTransicao.addEventListener("change", () => {
                     tentarConectarOuRemover();
-                    atualizarConexoesFinal();
                 });
             }
             window.livewire.emit("buscarDadosIniciais");
@@ -243,6 +247,8 @@
             })
 
             window.livewire.hook('message.processed', (message, component) => {
+                atualizarIndicadoresDeTransicao();
+                atualizarIndicadoresDeFinal();
                 if (message.updateQueue && message.updateQueue.some(m => m.payload?.event === 'salvarTexto')) {
                     setTimeout(() => {
                         initTrumbowygEditor();
@@ -276,7 +282,15 @@
 
                 carregarCanvas(centroCordenadas.style.top, centroCordenadas.style.left, scale, canvasTop, canvasLeft);
                 recriarConexoes();
-                atualizarTudo();
+                atualizarTodasConexoes();
+                atualizarIndicadorInicio();
+            });
+
+            window.livewire.on("buttonCriado", (id) => {
+                setTimeout(() => {
+                    atualizarIndicadoresDeTransicao();
+                    atualizarIndicadoresDeFinal();
+                }, 50);
             });
         });
 

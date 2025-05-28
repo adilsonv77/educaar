@@ -457,6 +457,7 @@ img[data-id-origem] {
     margin-bottom: 4.5px;
     height: 45px;
     width: 100%;
+    position: relative;
 }
 
 .circulo {
@@ -729,3 +730,40 @@ i#addButton.bi.bi-plus-circle-dotted.h1 {
     border-radius: 9px;
     /* Mantém o estilo dos botões */
 }
+
+/* =============================
+   CONEXÕES
+   ============================= */
+#indicadorInicio {
+    pointer-events: none;
+    position: absolute;
+    display: block;
+    width: 40px;
+    height: 40px;
+}
+
+#indicadorNenhuma {
+    pointer-events: none;
+    position: absolute;
+    display: block;
+    width: 30px;
+    height: 30px;
+}
+
+#indicadorFinal {
+    pointer-events: none;
+    position: absolute;
+    display: block;
+    width: 40px;
+    height: 40px;
+}
+
+.indicadorNenhumaClone {
+    width: 30px;
+    height: 30px;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1000;
+}
+
+

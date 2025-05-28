@@ -10,13 +10,13 @@ let alternativeScale = 3;
 
 function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
-    atualizarTudo();
+    atualizarTodasConexoes();
 }
 
 function aplicarZoom(novoZoom) {
     const canvas = document.getElementById('canvas');
     canvas.style.transform = `scale(${novoZoom})`;
-    atualizarTudo();
+    atualizarTodasConexoes();
 }
 
 function zoomIn() {
@@ -363,6 +363,7 @@ function habilitarArrastoPersonalizado(painelElement) {
         if (animationFrame) cancelAnimationFrame(animationFrame);
 
         animationFrame = requestAnimationFrame(() => {
+            const canvas = document.getElementById("canvas");
             const canvasRect = canvas.getBoundingClientRect();
             let newX = (e.clientX - canvasRect.left - offsetX) / scale;
             let newY = (e.clientY - canvasRect.top - offsetY) / scale;
@@ -373,10 +374,16 @@ function habilitarArrastoPersonalizado(painelElement) {
             painelElement.style.left = `${newX}px`;
             painelElement.style.top = `${newY}px`;
 
-            atualizarTudo(); // só uma chamada por frame!
+            atualizarTodasConexoes();
+
+            // Se o painel arrastado for o inicial, atualiza o indicador em tempo real
+            const startId = canvas.getAttribute("data-start-id");
+            const painelId = painelElement.querySelector('.idPainel')?.id;
+            if (painelId === startId) {
+                atualizarIndicadorInicio();
+            }
         });
     });
-
 
     document.addEventListener("mouseup", function () {
         if (!isDragging) return;
@@ -390,8 +397,15 @@ function habilitarArrastoPersonalizado(painelElement) {
         if (!isNaN(id)) {
             window.livewire.emit("updateCoordinate", id, x, y);
         }
+
+        const painelId = painelElement.querySelector('.idPainel')?.id;
+        const startId = document.getElementById("canvas").getAttribute("data-start-id");
+        if (painelId === startId) {
+            atualizarIndicadorInicio();
+        }
     });
 }
+
 
 //----MOVIMENTAÇÃO CANVAS----------------------------------------------------------------------------
 const div = document.getElementById("canvas");
@@ -453,12 +467,11 @@ document.addEventListener("mousemove", (e) => {
     canvas.style.transformOrigin = (leftCentro - centroCamera[0]) + "px " + (topCentro - centroCamera[1]) + "px";
 
     if (isDragging) {
-        atualizarTudo();
+        atualizarTodasConexoes();
     }
 });
 
 document.addEventListener("mouseup", (e) => {
-    //Solta o zoom
     if (e.button != 1) return;
 
     isDragging = false;
@@ -623,17 +636,6 @@ function sendValueLivewire(id, link) {
     window.livewire.emit('updateLink', { id: id, link: link });
 }
 
-//----DESENHAR CONEXÃO ---------------------------------------------------------------------------
-const linhasNenhuma = new Map();
-const linhasFinalConexao = new Map();
-const cacheIndicadorNenhuma = new Map();
-const cacheIndicadorFinal = new Map();
-
-function atualizarTudo() {
-    atualizarTodasConexoes();
-    positionIndicadorInicio();
-}
-
 //----DESENHAR CONEXÃO - ENTRE PAINEIS---------------------------------------------------------------------------
 const todasAsLinhas = [];
 const linhasPorBotao = new Map();
@@ -659,13 +661,19 @@ function conectarBotoes(startElem, idOrigem, idPainel) {
         linhasPorBotao.delete(idOrigem);
     }
 
+    // Determinar se o botão é filho par ou ímpar
+    const parent = startElem.parentElement;
+    const children = Array.from(parent.children).filter(el => el.classList.contains("button_Panel"));
+    const index = children.indexOf(startElem);
+    const startSocket = index % 2 === 0 ? 'left' : 'right'; 
+
     const linha = new LeaderLine(startElem, endElem, {
         color: '#833B8D',
         size: 4,
         path: 'fluid',
         startPlug: 'disc',
         endPlug: 'arrow3',
-        startSocket: 'auto',
+        startSocket: startSocket,
         endSocket: 'auto'
     });
 
@@ -750,71 +758,120 @@ function tentarConectarOuRemover() {
     }
 }
 
-//----FUNÇÃO DE GERAR CONEXÃO INICIAL------------------------------------------------------------------------------------------------
-let linhaIndicador = null;
-
-function positionIndicadorInicio() {
+//----DESENHAR CONEXÃO - PAINEL INICIAL------------------------------------------------------------------------------------------------
+function atualizarIndicadorInicio() {
     const canvas = document.getElementById("canvas");
+    const indicador = document.getElementById("indicadorInicio");
     const startId = canvas.getAttribute("data-start-id");
-    if (!startId) return;
 
-    const painel = document.querySelector(`.painel[id='${startId}']`);
+    if (!startId || !indicador) return;
+
+    const painel = document.getElementById(startId);
     if (!painel) return;
-
-    const img = document.getElementById("indicadorInicio");
-    if (!img) return;
 
     const painelRect = painel.getBoundingClientRect();
     const canvasRect = canvas.getBoundingClientRect();
 
-    const x = (painelRect.left - canvasRect.left) / scale - 140;
-    const y = (painelRect.top - canvasRect.top + painelRect.height / 2) / scale - 20;
+    const left = painel.offsetLeft - 50;
+    const top = painel.offsetTop + (painel.offsetHeight / 2) - 20;
 
-    img.style.left = `${x}px`;
-    img.style.top = `${y}px`;
-    img.style.display = "block";
+    indicador.style.left = `${left}px`;
+    indicador.style.top = `${top}px`;
+    indicador.style.display = "block";
+}
 
-    // opcional: recriar a linha de conexão se quiser
-    if (linhaIndicador) {
-        linhaIndicador.remove();
-        linhaIndicador = null;
-    }
+//----DESENHAR CONEXÃO - NENHUMA ------------------------------------------------------------------------------------------------
+function atualizarIndicadoresDeTransicao() {
+    document.querySelectorAll(".button_Panel").forEach(botao => {
+        const infoDiv = botao.querySelector("#buttonInfo");
+        if (!infoDiv) return;
 
-    linhaIndicador = new LeaderLine(
-        img,
-        painel,
-        {
-            color: "#0b5ed7",
-            size: 3,
-            startPlug: "disc",
-            endPlug: "arrow3",
-            path: "fluid"
+        const transicao = infoDiv.getAttribute("transition");
+
+        // Remove indicadores antigos
+        botao.querySelector(".indicadorTransicao")?.remove();
+        botao.querySelector(".indicadorNenhuma")?.remove();
+
+        if (transicao === "" || transicao === "nenhuma") {
+            const layoutContainer = botao.closest(".painel")?.querySelector("#layout");
+            const layout = layoutContainer?.classList[0];
+
+            let lado = "esquerda";
+
+            if (layout === "layout-blocos" || layout === "layout-alternativas") {
+                // Conta os botões dentro do mesmo painel
+                const botoes = Array.from(botao.parentElement.querySelectorAll(".button_Panel"));
+                const index = botoes.indexOf(botao);
+
+                // Se o índice for par (0, 2...), está na coluna da esquerda
+                lado = (index % 2 === 0) ? "esquerda" : "direita";
+            }
+
+            const offset = 100;
+
+            const indicador = document.createElement("img");
+            indicador.classList.add("indicadorNenhuma");
+            indicador.src = "/images/semConexoes.svg";
+            indicador.style.position = "absolute";
+            indicador.style.width = "24px";
+            indicador.style.height = "24px";
+            indicador.style.zIndex = 20;
+            indicador.style.display = "block";
+
+            indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 24) + "px";
+            indicador.style.top = "50%";
+            indicador.style.transform = "translateY(-50%)";
+
+            botao.appendChild(indicador);
         }
-    );
-}
-
-//----FUNÇÃO DE GERAR SEM CONEXÃO------------------------------------------------------------------------------------------------
-
-//----FUNÇÃO DE GERAR CONEXÃO FINAL ------------------------------------------------------------------------------------------------
-
-//INDICADORES -------------------------------------------------------------------------------
-
-//----FUNÇÃO DE SELECIONAR FORMATO------------------------------------------------------------------------------------------------
-function selecionarFormato(elemento) {
-    // Remove a seleção anterior de todas as divs de formato
-    document.querySelectorAll('.linhas, .blocos, .alternativas').forEach((element) => {
-        element.addEventListener('click', function () {
-            // Remove a classe 'selecionado' de todas as divs
-            document.querySelectorAll('.linhas, .blocos, .alternativas').forEach((el) => {
-                el.classList.remove('selecionado');
-            });
-
-            // Adiciona a classe 'selecionado' à div clicada
-            this.classList.add('selecionado');
-        });
     });
-
 }
+//----DESENHAR CONEXÃO - FINAL DA EXPERIÊNCIA ---------------------------------------------------------------------------------
+function atualizarIndicadoresDeFinal() {
+    document.querySelectorAll(".button_Panel").forEach(botao => {
+        const infoDiv = botao.querySelector("#buttonInfo");
+        if (!infoDiv) return;
+
+        const transicao = infoDiv.getAttribute("transition");
+
+        // Remover indicador final anterior
+        const indicadorFinalExistente = botao.querySelector(".indicadorFinal");
+        if (indicadorFinalExistente) indicadorFinalExistente.remove();
+
+        if (transicao === "final") {
+            const layoutContainer = botao.closest(".painel")?.querySelector("#layout");
+            const layout = layoutContainer?.classList[0];
+
+            const botoes = Array.from(botao.parentElement.children).filter(el => el.classList.contains("button_Panel"));
+            const index = botoes.indexOf(botao);
+
+            // Lógica do lado baseada na paridade
+            let lado = "esquerda";
+            if (layout === "layout-alternativas" && index % 2 === 1) {
+                lado = "direita";
+            }
+
+            const botaoX = botao.offsetLeft;
+            const botaoWidth = botao.offsetWidth;
+            const offset = 100;
+
+            const indicador = document.createElement("img");
+            indicador.classList.add("indicadorFinal");
+            indicador.src = "/images/endConnection.svg";
+            indicador.style.position = "absolute";
+            indicador.style.width = "40px";   // ⬅️ aqui você altera o tamanho
+            indicador.style.height = "40px";  // ⬅️ idem
+            indicador.style.zIndex = 20;
+            indicador.style.display = "block";
+            indicador.style.left = (lado === "esquerda" ? -offset : botaoWidth + offset - 40) + "px";
+            indicador.style.top = "50%";
+            indicador.style.transform = "translateY(-50%)";
+
+            botao.appendChild(indicador);
+        }
+    });
+}
+
 
 //----CONFIGURAR BOTÕES------------------------------------------------------------------------------------------
 let addBtnBtn = document.getElementById("addButton")
