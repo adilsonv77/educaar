@@ -407,8 +407,8 @@ centroCordenadas.style.position = "absolute"
 centroCordenadas.style.top = centroCamera[1] + "px"
 centroCordenadas.style.left = centroCamera[0] + "px"
 //        Descomente as linhas abaixo para poder vizualizar o centro da tela.
-centroCordenadas.style.background = "red"; centroCordenadas.style.borderRadius = "100%";
-centroCordenadas.style.width = "50px"; centroCordenadas.style.height = "50px";
+// centroCordenadas.style.background = "red"; centroCordenadas.style.borderRadius = "100%";
+// centroCordenadas.style.width = "50px"; centroCordenadas.style.height = "50px";
 
 div.addEventListener("mousedown", (e) => {
     if (e.target.closest(".painel") || e.button != 1) return;
@@ -537,6 +537,11 @@ editarMidiaBtn.onclick = () => abrirPopUp(painelSelecionado.querySelector(".idPa
 let excluirPainelBtn = document.getElementById("excluirPainel")
 excluirPainelBtn.onclick = () => {
     $id = painelSelecionado.querySelector(".idPainel").id;
+    if ($id = canvas.getAttribute("data-start-id")) {
+        enviarMsg("Você não pode deletar o painel inicial da cena!")
+        return;
+    }
+
     window.livewire.emit('deletePainel', $id);
 }
 
