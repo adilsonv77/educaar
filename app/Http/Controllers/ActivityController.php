@@ -27,6 +27,7 @@ use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\File;
 
+
 class ActivityController extends Controller
 {
     /**
@@ -426,65 +427,77 @@ class ActivityController extends Controller
         return redirect(route('activity.index'));
     }
 
-
-
- 
-
-    public function clone($id)
-    {
-        $activity = Activity::find($id);
     
-        if (!$activity) {
-            return redirect()->back()->withErrors(['msg' => 'Atividade não encontrada.']);
+
+
+public function clone($id)
+{
+    $activity = Activity::find($id);
+
+    if (!$activity) {
+        return redirect()->back()->withErrors(['msg' => 'Atividade não encontrada.']);
+    }
+
+    // Clonar a atividade
+    $clonedActivity = $activity->replicate();
+    $clonedActivity->name = $activity->name . ' (Cópia)';
+    $clonedActivity->created_at = now();
+    $clonedActivity->updated_at = now();
+    $clonedActivity->save(); // Salva para gerar o ID
+
+    // === Clonagem do marcador ===
+    $novoNomeImagem = $clonedActivity->id . '.' . pathinfo($activity->marcador, PATHINFO_EXTENSION);
+    $caminhoImagemAntigo = public_path('marcadores/' . $activity->marcador);
+    $caminhoImagemNovo = public_path('marcadores/' . $novoNomeImagem);
+
+    if (File::exists($caminhoImagemAntigo)) {
+        File::copy($caminhoImagemAntigo, $caminhoImagemNovo);
+        $clonedActivity->marcador = $novoNomeImagem;
+    }
+
+    // === Clonagem do modelo 3D ===
+    $publicModelosPath = public_path('modelos3d');
+
+    if (str_contains($activity->glb, '/')) {
+        // Caso seja glTF (pasta + arquivo)
+        list($origFolder, $origFile) = explode('/', $activity->glb, 2);
+        $sourceDir = $publicModelosPath . '/' . $origFolder;
+        $destDir = $publicModelosPath . '/' . $clonedActivity->id;
+
+        if (File::exists($sourceDir)) {
+            File::copyDirectory($sourceDir, $destDir);
+            $clonedActivity->glb = $clonedActivity->id . '/' . $origFile;
         }
-    
-        // Clonar a atividade
-        $clonedActivity = $activity->replicate();
-        $clonedActivity->name = $activity->name . ' (Cópia)';
-        $clonedActivity->created_at = now();
-        $clonedActivity->updated_at = now();
-        $clonedActivity->save(); // Salva para gerar o ID
-    
-        // Gerar novos nomes com base no ID do clone
-        $novoNomeImagem = $clonedActivity->id . '.' . pathinfo($activity->marcador, PATHINFO_EXTENSION);
+    } else {
+        // Caso seja GLB (arquivo único)
         $extensaoModelo = pathinfo($activity->glb, PATHINFO_EXTENSION);
         $novoNomeModelo = $clonedActivity->id . '.' . $extensaoModelo;
-    
-        // Caminhos antigos
-        $caminhoImagemAntigo = public_path('marcadores/' . $activity->marcador);
-        $caminhoModeloAntigo = public_path('modelos3d/' . $activity->glb);
-    
-        // Caminhos novos
-        $caminhoImagemNovo = public_path('marcadores/' . $novoNomeImagem);
-        $caminhoModeloNovo = public_path('modelos3d/' . $novoNomeModelo);
-    
-        // Copiar arquivos se existirem
-        if (File::exists($caminhoImagemAntigo)) {
-            File::copy($caminhoImagemAntigo, $caminhoImagemNovo);
-            $clonedActivity->marcador = $novoNomeImagem;
-        }
-    
+
+        $caminhoModeloAntigo = $publicModelosPath . '/' . $activity->glb;
+        $caminhoModeloNovo = $publicModelosPath . '/' . $novoNomeModelo;
+
         if (File::exists($caminhoModeloAntigo)) {
             File::copy($caminhoModeloAntigo, $caminhoModeloNovo);
-            $clonedActivity->glb = $novoNomeModelo;  // ESSENCIAL!
+            $clonedActivity->glb = $novoNomeModelo;
         }
-    
-        // Salva as alterações no clone
-        $clonedActivity->save();
-    
-        // Clonar as questões relacionadas
-        $questions = Question::where('activity_id', $activity->id)->get();
-    
-        foreach ($questions as $question) {
-            $clonedQuestion = $question->replicate();
-            $clonedQuestion->activity_id = $clonedActivity->id;
-            $clonedQuestion->save();
-        }
-    
-        return redirect()->route('pages.activity.edit', ['id' => $clonedActivity->id])
-    ->with('success', 'Atividade clonada com sucesso!');
-
     }
+
+    // Salva as alterações no clone
+    $clonedActivity->save();
+
+    // Clonar as questões relacionadas
+    $questions = Question::where('activity_id', $activity->id)->get();
+
+    foreach ($questions as $question) {
+        $clonedQuestion = $question->replicate();
+        $clonedQuestion->activity_id = $clonedActivity->id;
+        $clonedQuestion->save();
+    }
+
+    return redirect()->route('pages.activity.edit', ['id' => $clonedActivity->id])
+        ->with('success', 'Atividade clonada com sucesso!');
+}
+
 
 
 }
