@@ -13,6 +13,11 @@ class Scene extends Model
         'start_panel_id',
         'author_id',
         'disciplina_id',
+        'canvasTop',
+        'canvasLeft',
+        'centroTop',
+        'centroLeft',
+        'scale',
     ];
 
     public function disciplina()

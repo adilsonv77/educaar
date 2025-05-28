@@ -11,7 +11,7 @@ use App\DAO\SceneDAO;
 
 class Scene extends Component
 {
-    protected $listeners = ['deletePainel', 'updateStartPanel', 'updateCoordinate'];
+    protected $listeners = ['deletePainel', 'updateStartPanel', 'updateCoordinate','updateCanvasPosition','buscarDadosIniciais'];
 
     public $paineisRenderizados = [];
     public $scene_id;
@@ -80,6 +80,10 @@ class Scene extends Component
         $this->emit('painelDeletado', $id);
     }
 
+    public function updateCanvasPosition($data){
+        SceneDAO::updateById($this->scene_id,["canvasTop"=>$data[0],"canvasLeft"=>$data[1],"scale"=>$data[2],"centroTop"=>$data[3],"centroLeft"=>$data[4]]);
+    }
+
     public function updateDisciplinaScene()
     {
         $disciplinaDAO = new DisciplinaDAO();
@@ -117,6 +121,17 @@ class Scene extends Component
                 'panel' => json_encode($panelData)
             ]);
         }
+    }
+
+    public function buscarDadosIniciais(){
+        $scene = SceneDAO::getById($this->scene_id);
+        $centroTop = $scene["centroTop"];
+        $centroLeft = $scene["centroLeft"];
+        $scale = $scene["scale"];
+        $canvasTop = $scene["canvasTop"];
+        $canvasLeft = $scene["canvasLeft"];
+
+        $this->emit("carregarCanvas",[$centroTop, $centroLeft, $scale, $canvasTop, $canvasLeft]);
     }
 
 }

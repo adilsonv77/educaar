@@ -236,8 +236,11 @@
                     tentarConectarOuRemover();
                     atualizarConexoesFinal();
                 });
-
             }
+            window.livewire.emit("buscarDadosIniciais");
+            window.livewire.on('carregarCanvas', ($data) => {
+                carregarCanvas($data[0], $data[1], $data[2], $data[3], $data[4])
+            })
 
             window.livewire.hook('message.processed', (message, component) => {
                 if (message.updateQueue && message.updateQueue.some(m => m.payload?.event === 'salvarTexto')) {
@@ -271,25 +274,33 @@
                     }
                 });
 
-                const canvas = document.getElementById("canvas");
-                canvas.style.transform = `scale(${zoomAtual}) translate(-50%, -50%)`;
-                canvas.style.left = `${canvasLeft}px`;
-                canvas.style.top = `${canvasTop}px`;
-                scale = zoomAtual;
-
-                const restaurarZoom = document.getElementById("resizeZoom");
-                restaurarZoom.hidden = (scale === 0.7);
-
-                canvas.append(centroCordenadas)
-
-                canvas.style.transformOrigin =
-                    (parseInt(centroCordenadas.style.left) - centroCamera[1]) + "px " +
-                    (parseInt(centroCordenadas.style.top) - centroCamera[0]) + "px";
-
+                carregarCanvas(centroCordenadas.style.top, centroCordenadas.style.left, scale, canvasTop, canvasLeft);
                 recriarConexoes();
                 atualizarTudo();
             });
         });
+
+        function carregarCanvas(centroTop, centroLeft, zoom, canvasTop2, canvasLeft2) {
+            const canvas = document.getElementById("canvas");
+            centroCordenadas.style.top = centroTop;
+            centroCordenadas.style.left = centroLeft;
+            canvas.style.left = `${canvasLeft2}px`;
+            canvas.style.top = `${canvasTop2}px`;
+            canvasLeft = canvasLeft2;
+            canvasTop = canvasTop2;
+
+            scale = zoom;
+            canvas.style.transform = `scale(${zoom}) translate(-50%, -50%)`;
+
+            const restaurarZoom = document.getElementById("resizeZoom");
+            restaurarZoom.hidden = (scale === 0.7);
+
+            canvas.append(centroCordenadas)
+
+            canvas.style.transformOrigin =
+                (parseInt(centroCordenadas.style.left) - centroCamera[1]) + "px " +
+                (parseInt(centroCordenadas.style.top) - centroCamera[0]) + "px";
+        }
 
     </script>
 @endsection

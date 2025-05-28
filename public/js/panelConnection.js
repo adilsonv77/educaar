@@ -307,9 +307,13 @@ function alterarFormatoBotoes(formato) {
         return;
     }
 
-    let layout = painelSelecionado.querySelector("#layout")
+    let layout = painelSelecionado.querySelector("#layout");
+    let txtBtn = document.getElementById("btnTxt");
+    txtBtn.setAttribute("maxlength", "6");
+
     switch (formato) {
         case "linhas":
+            txtBtn.setAttribute("maxlength", "20");
             layout.classList = "layout-linhas";
             break;
         case "blocos":
@@ -400,22 +404,22 @@ div.addEventListener('contextmenu', event => event.preventDefault());
 let centroCamera = [(canvas.getBoundingClientRect().width * 1.428) / 2, (canvas.getBoundingClientRect().height * 1.428) / 2];
 let centroCordenadas = document.createElement("div")
 centroCordenadas.style.position = "absolute"
-centroCordenadas.style.top = centroCamera[1]+"px"
-centroCordenadas.style.left = centroCamera[0]+"px"
+centroCordenadas.style.top = centroCamera[1] + "px"
+centroCordenadas.style.left = centroCamera[0] + "px"
 //        Descomente as linhas abaixo para poder vizualizar o centro da tela.
-// centroCordenadas.style.background = "red"; centroCordenadas.style.borderRadius = "100%";
-// centroCordenadas.style.width = "50px"; centroCordenadas.style.height = "50px";
+centroCordenadas.style.background = "red"; centroCordenadas.style.borderRadius = "100%";
+centroCordenadas.style.width = "50px"; centroCordenadas.style.height = "50px";
 
 div.addEventListener("mousedown", (e) => {
     if (e.target.closest(".painel") || e.button != 1) return;
-    
+
     setTimeout(() => {
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
         startLeft = div.offsetLeft;
         startTop = div.offsetTop;
-        startLeftPoint= centroCordenadas.offsetLeft;
+        startLeftPoint = centroCordenadas.offsetLeft;
         startTopPoint = centroCordenadas.offsetTop;
         div.style.cursor = "grabbing";
         e.preventDefault();
@@ -428,14 +432,14 @@ document.addEventListener("mousemove", (e) => {
     if (!isDragging) return;
 
     //Define o quanto foi movimentado mouse
-    let deltaX = (e.clientX - startX)/scale;
-    let deltaY = (e.clientY - startY)/scale;
+    let deltaX = (e.clientX - startX) / scale;
+    let deltaY = (e.clientY - startY) / scale;
 
     //Calcula a posição que devia ocupar. (Posição inicial + movimentação feita)
     //Obs: O código joga o canvas na posição oposta que se deseja ir, revelando novas partes na direção movimentada.
     div.style.left = `${(startLeft + deltaX)}px`;
     div.style.top = `${(startTop + deltaY)}px`;
-    
+
     //Calcula a posição do centro. (Posição inicial centro - movimentação feita). 
     //Obs: O canvas jogou o centro na direção oposta, se corrige isso subtraindo a movimentação feita do centro.
     let leftCentro = (startLeftPoint - deltaX);
@@ -444,18 +448,19 @@ document.addEventListener("mousemove", (e) => {
     //Aplica-se os valores do centro
     centroCordenadas.style.top = `${topCentro}px`;
     centroCordenadas.style.left = `${leftCentro}px`;
-    
+
     //Define com base no centro, onde deve ser feito o zoom no canvas caso houver.
-    canvas.style.transformOrigin = (leftCentro-centroCamera[0])+"px "+(topCentro-centroCamera[1])+"px";
-    
+    canvas.style.transformOrigin = (leftCentro - centroCamera[0]) + "px " + (topCentro - centroCamera[1]) + "px";
+
     if (isDragging) {
         atualizarTudo();
     }
 });
 
 document.addEventListener("mouseup", (e) => {
-    if (e.button!=1) return;
-    
+    //Solta o zoom
+    if (e.button != 1) return;
+
     isDragging = false;
     div.style.cursor = "grab";
 
@@ -463,6 +468,10 @@ document.addEventListener("mouseup", (e) => {
     canvasTop = div.offsetTop;
 
     zoomAtual = scale;
+});
+
+window.addEventListener('beforeunload', function (e) {
+    window.livewire.emit('updateCanvasPosition', [canvasTop, canvasLeft, scale, centroCordenadas.style.top, centroCordenadas.style.left]);
 });
 
 //----MOSTRAR POPUP QUANDO SELECIONAR------------------------------------------------------------------------------------------------
@@ -491,6 +500,9 @@ function abrirPopUp(id) {
             painel.querySelector("video").pause()
         }, 500);
     }
+
+    //Salvar as cordenadas por precaução.
+    window.livewire.emit('updateCanvasPosition', [canvasTop, canvasLeft, scale, centroCordenadas.style.top, centroCordenadas.style.left]);
 }
 
 let urlYoutubeInformado = false;
@@ -502,44 +514,9 @@ function adicionarInteracaoPopup(id) {
     let fileBtn = painel.querySelector("#file-" + id);
     let midiaArea = painel.querySelector(".midia");
 
-    // let img = painel.querySelector(".imgMidia");
-    // let vid = painel.querySelector(".vidMidia");
-    // let srcVid = painel.querySelector("#srcVidMidia");
-    // let vidYoutube = painel.querySelector(".youtubeMidia");
-    // let url = document.getElementById("linkYoutube").src;
-    // let idYoutube = painel.querySelector("#link-" + id);
-    // let iFrameYoutube = painel.querySelector("#srcYoutube");
-
     const midiaPreview = () => {
-        // if (urlYoutubeInformado) {
-        //     urlYoutubeInformado = false;
-        //     img.style.display = "none";
-        //     vid.style.display = "none";
-        //     vidYoutube.style.display = "block";
-        //     try { vid.pause(); } catch (error) { }
-        //     iFrameYoutube.src = "https://www.youtube.com/embed/" + idYoutube.value + "?autoplay=1";
-        // } else {
-        //     let eVideo = fileBtn.files[0].name.endsWith(".mp4");
-        //     if (eVideo) {
-        //         img.style.display = "none";
-        //         vid.style.display = "block";
-        //         vidYoutube.style.display = "none";
-        //         document.getElementById("linkYoutube").src = "";
-        //         iFrameYoutube.src = "";
-        //         idYoutube.value = "";
-        //         srcVid.src = URL.createObjectURL(fileBtn.files[0]);
-        //         vid.load();
-        //     } else {
-        //         img.style.display = "block";
-        //         vid.style.display = "none";
-        //         vidYoutube.style.display = "none";
-        //         try { vid.pause(); } catch (error) { }
-        //         document.getElementById("linkYoutube").src = "";
-        //         iFrameYoutube.src = "";
-        //         idYoutube.value = "";
-        //         img.src = URL.createObjectURL(fileBtn.files[0]);
-        //     }
-        // }
+      //Por agr ta aqui só n dar erros por remover ele.
+      //Se estiver lendo isso dps da data 23/06/2025, apague qualquer instancia desse método sendo chamado.
     };
 
     // vincula o midiaPreview a esse input

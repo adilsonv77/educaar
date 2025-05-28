@@ -21,7 +21,7 @@ class SceneDAO
         return Scene::create($data);
     }
 
-    public function updateById($id, array $data)
+    public static function updateById($id, array $data)
     {
         return Scene::where('id', $id)->update($data);
     }
