@@ -10,7 +10,15 @@ let alternativeScale = 3;
 
 function updateCanvasScale() {
     canvas.style.transform = `scale(${scale}) translate(-50%, -50%)`;
-    atualizarTodasConexoes();
+
+    requestAnimationFrame(() => {
+        atualizarTodasConexoes();
+        linhasPorBotao.forEach(linha => {
+            linha.setOptions({
+                size: 4 * scale,
+            });
+        });
+    });
 }
 
 function aplicarZoom(novoZoom) {
@@ -61,7 +69,6 @@ function iniciarPickr() {
         window.pickr = Pickr.create({
             el: '#color-picker-container',
             theme: 'nano',
-            default: '#3498db',
             inline: true,
             showAlways: true,
             useAsButton: false,
@@ -78,22 +85,37 @@ function iniciarPickr() {
 
         pickrInicializado = true;
 
+        let primeiraInteracao = true;
+
+        window.pickr.on("init", instance => {
+            primeiraInteracao = false;
+        });
+
         window.pickr.on("change", (color) => {
+            if (primeiraInteracao) {
+                return;
+            }
+
             clearTimeout(debouceTimer);
             debouceTimer = setTimeout(() => {
+                const novaCor = color.toHEXA().toString();
                 const circulo = botaoSelecionado?.querySelector(".circulo");
+                const info = botaoSelecionado?.querySelector("#buttonInfo");
+
                 if (circulo) {
+                    circulo.style.backgroundColor = novaCor;
+                    if (info) info.setAttribute("color", novaCor);
+
+                    const linha = linhasPorBotao.get(circulo.id);
+                    if (linha) linha.setOptions({ color: novaCor });
+
                     window.livewire.emit("updateCor", {
                         id: circulo.id,
-                        color: color.toHEXA().toString()
+                        color: novaCor
                     });
                 }
             }, 1000);
         });
-    } else if (window.pickr && container) {
-        // Se já existe, atualize apenas a cor
-        const corAtual = botaoSelecionado?.querySelector("#buttonInfo")?.getAttribute("color");
-        if (corAtual) window.pickr.setColor(corAtual);
     }
 }
 
@@ -210,17 +232,28 @@ function selecionarBotao(botao) {
 
     mostrarMenu("botao");
 
-    let btnInfo = botaoSelecionado.querySelector("#buttonInfo");
+    const btnInfo = botao.querySelector("#buttonInfo");
+    const circulo = botao.querySelector(".circulo");
 
-    btnTxt.value = botaoSelecionado.textContent.trim();
+    btnTxt.value = botao.textContent.trim();
     selectPainel.value = btnInfo.getAttribute("destination_id");
     selectTransicao.value = btnInfo.getAttribute("transition");
 
-    // Atualiza a cor no pickr, sem reiniciar
-    if (window.pickr && btnInfo.getAttribute("color")) {
-        window.pickr.setColor(btnInfo.getAttribute("color"));
+    const corAtual = btnInfo.getAttribute("color");
+
+    if (window.pickr && corAtual) {
+        setTimeout(() => {
+            window.pickr.setColor(corAtual);
+        }, 10);
+    }
+
+    if (corAtual && circulo) {
+        circulo.style.backgroundColor = corAtual;
+        const linha = linhasPorBotao.get(circulo.id);
+        if (linha) linha.setOptions({ color: corAtual });
     }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     iniciarPickr();
@@ -324,8 +357,13 @@ function alterarFormatoBotoes(formato) {
             break;
     }
 
-    //Guardar no banco
-    window.livewire.emit("updateBtnFormat", { id: painelSelecionado.querySelector(".idPainel").id, btnFormat: formato })
+    requestAnimationFrame(() => {
+        atualizarIndicadoresDeTransicao();
+        atualizarIndicadoresDeFinal();
+        atualizarTodasConexoes();
+    });
+
+    window.livewire.emit("updateBtnFormat", { id: painelSelecionado.querySelector(".idPainel").id, btnFormat: formato });
 }
 
 document
@@ -528,8 +566,8 @@ function adicionarInteracaoPopup(id) {
     let midiaArea = painel.querySelector(".midia");
 
     const midiaPreview = () => {
-      //Por agr ta aqui só n dar erros por remover ele.
-      //Se estiver lendo isso dps da data 23/06/2025, apague qualquer instancia desse método sendo chamado.
+        //Por agr ta aqui só n dar erros por remover ele.
+        //Se estiver lendo isso dps da data 23/06/2025, apague qualquer instancia desse método sendo chamado.
     };
 
     // vincula o midiaPreview a esse input
@@ -640,7 +678,6 @@ function sendValueLivewire(id, link) {
 const todasAsLinhas = [];
 const linhasPorBotao = new Map();
 
-// Essa função atualiza a posição das linhas quando o canvas ou os painéis se movem
 function atualizarTodasConexoes() {
     requestAnimationFrame(() => {
         linhasPorBotao.forEach(linha => {
@@ -649,32 +686,39 @@ function atualizarTodasConexoes() {
     });
 }
 
-// Conectar um botão específico (passando o botão como elemento e os IDs)
 function conectarBotoes(startElem, idOrigem, idPainel) {
     const endElem = document.getElementById(idPainel);
-
     if (!startElem || !endElem) return;
 
-    // Remove a linha antiga
     if (linhasPorBotao.has(idOrigem)) {
         linhasPorBotao.get(idOrigem).remove();
         linhasPorBotao.delete(idOrigem);
     }
 
-    // Determinar se o botão é filho par ou ímpar
-    const parent = startElem.parentElement;
-    const children = Array.from(parent.children).filter(el => el.classList.contains("button_Panel"));
-    const index = children.indexOf(startElem);
-    const startSocket = index % 2 === 0 ? 'left' : 'right'; 
+    const layoutContainer = startElem.closest(".painel")?.querySelector("#layout");
+    const layout = layoutContainer?.classList[0]; 
 
+    let startSocket = "left";
+
+    if (layout === "layout-blocos" || layout === "layout-alternativas") {
+        const botoes = Array.from(startElem.parentElement.querySelectorAll(".button_Panel"));
+        const index = botoes.indexOf(startElem);
+        startSocket = (index % 2 === 0) ? "left" : "right";
+    } else if (layout === "layout-linhas") {
+        startSocket = "left";
+    }
+
+    const offset = 20 * (1 / scale);
     const linha = new LeaderLine(startElem, endElem, {
         color: '#833B8D',
-        size: 4,
+        size: 4 * scale,
         path: 'fluid',
         startPlug: 'disc',
         endPlug: 'arrow3',
-        startSocket: startSocket,
-        endSocket: 'auto'
+        startPlugSize: 4 * scale,
+        endPlugSize: 8 * scale,
+        startSocket: ['left', offset], 
+        
     });
 
     linhasPorBotao.set(idOrigem, linha);
@@ -703,7 +747,13 @@ function recriarConexoes() {
         if (botaoId && destinoId && transicao === "proximo") {
             const destinoElem = document.getElementById(destinoId);
             if (destinoElem) {
-                conectarBotoes(botao, botaoId, destinoId);
+                const linha = conectarBotoes(botao, botaoId, destinoId);
+
+                // 🟡 Aplica a cor salva (se houver)
+                const corSalva = infoDiv?.getAttribute("color");
+                if (linha && corSalva) {
+                    linha.setOptions({ color: corSalva });
+                }
             }
         }
     });
@@ -833,37 +883,33 @@ function atualizarIndicadoresDeFinal() {
         if (!infoDiv) return;
 
         const transicao = infoDiv.getAttribute("transition");
-
-        // Remover indicador final anterior
-        const indicadorFinalExistente = botao.querySelector(".indicadorFinal");
-        if (indicadorFinalExistente) indicadorFinalExistente.remove();
+        botao.querySelector(".indicadorFinal")?.remove();
 
         if (transicao === "final") {
             const layoutContainer = botao.closest(".painel")?.querySelector("#layout");
             const layout = layoutContainer?.classList[0];
 
-            const botoes = Array.from(botao.parentElement.children).filter(el => el.classList.contains("button_Panel"));
-            const index = botoes.indexOf(botao);
-
-            // Lógica do lado baseada na paridade
             let lado = "esquerda";
-            if (layout === "layout-alternativas" && index % 2 === 1) {
-                lado = "direita";
+
+            if (layout === "layout-blocos" || layout === "layout-alternativas") {
+                const botoes = Array.from(botao.parentElement.querySelectorAll(".button_Panel"));
+                const index = botoes.indexOf(botao);
+
+                lado = (index % 2 === 0) ? "esquerda" : "direita";
             }
 
-            const botaoX = botao.offsetLeft;
-            const botaoWidth = botao.offsetWidth;
             const offset = 100;
 
             const indicador = document.createElement("img");
             indicador.classList.add("indicadorFinal");
             indicador.src = "/images/endConnection.svg";
             indicador.style.position = "absolute";
-            indicador.style.width = "40px";   // ⬅️ aqui você altera o tamanho
-            indicador.style.height = "40px";  // ⬅️ idem
+            indicador.style.width = "40px";
+            indicador.style.height = "40px";
             indicador.style.zIndex = 20;
             indicador.style.display = "block";
-            indicador.style.left = (lado === "esquerda" ? -offset : botaoWidth + offset - 40) + "px";
+
+            indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 40) + "px";
             indicador.style.top = "50%";
             indicador.style.transform = "translateY(-50%)";
 
@@ -871,7 +917,6 @@ function atualizarIndicadoresDeFinal() {
         }
     });
 }
-
 
 //----CONFIGURAR BOTÕES------------------------------------------------------------------------------------------
 let addBtnBtn = document.getElementById("addButton")
@@ -928,5 +973,3 @@ deleteBtn.onclick = () => {
     let painel = botaoSelecionado.querySelector(".circulo").parentElement.parentElement.parentElement.parentElement;
     window.livewire.emit('deleteBtn', { id: botaoSelecionado.querySelector(".circulo").id, id_painel: painel.querySelector(".idPainel").id })
 }
-
-//6. Altera cor botão
