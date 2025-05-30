@@ -79,6 +79,10 @@
     <!-- LINHAS DE CONEXÕES -->
     <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
     <script>
+        // ---------------------------------------------CARREGAR CANVAS---------------------------------------------
+        let preloader = document.getElementById("preloader");
+        let mainWrapper = document.getElementById("main-wrapper");
+
         // ---------------------------------------------TOGGLE EM SELECT PERSONALIZADO---------------------------------------------
         $(document).ready(function () {
             $('.tapSelect').click(function () {
@@ -241,9 +245,20 @@
                     tentarConectarOuRemover();
                 });
             }
+
+            mainWrapper.style.display = "none";
+            let carregando = setInterval(() => {
+                preloader.style.display = "block"
+            }, 100);
+
             window.livewire.emit("buscarDadosIniciais");
             window.livewire.on('carregarCanvas', ($data) => {
                 carregarCanvas($data[0], $data[1], $data[2], $data[3], $data[4])
+                clearInterval(carregando);
+
+                mainWrapper.style.display = "block";
+                preloader.style.display = "none"
+
             })
 
             window.livewire.hook('message.processed', (message, component) => {
@@ -309,7 +324,7 @@
             const restaurarZoom = document.getElementById("resizeZoom");
             restaurarZoom.hidden = (scale === 0.7);
 
-            canvas.append(centroCordenadas)
+            canvas.append(centroCordenadas);
 
             canvas.style.transformOrigin =
                 (parseInt(centroCordenadas.style.left) - centroCamera[1]) + "px " +
