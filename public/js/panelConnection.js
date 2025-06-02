@@ -3,6 +3,23 @@ window.livewire.on("updateHtmlSceneName", (sceneName) => {
     document.getElementsByClassName("dashboard_bar")[0].innerText = sceneName;
 })
 
+//----UPDATE DISCIPLINA AO ALTERAR------------------------------------------------------
+window.livewire.on("updateHtmlDiscipline",()=>{
+    let defaultOption = document.getElementsByClassName("default_option")[0];
+    if (document.getElementsByClassName("select-native")[3].value != "") {
+        defaultOption.disabled = true;
+    }
+})
+
+document.addEventListener("DOMContentLoaded",()=>{
+    setTimeout(() => {
+        let defaultOption = document.getElementsByClassName("default_option")[0];
+        if (document.getElementsByClassName("select-native")[3].value != "") {
+            defaultOption.disabled = "true";
+        }
+    }, 1400);
+})
+
 //----CONFIGURAÇÕES DO CANVAS INFINITO E ZOOM------------------------------------------------------
 const canvas = document.getElementById("canvas");
 let scale = 0.7;
@@ -118,7 +135,6 @@ function iniciarPickr() {
         });
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".linhas").addEventListener("click", (e) => {
@@ -253,7 +269,6 @@ function selecionarBotao(botao) {
         if (linha) linha.setOptions({ color: corAtual });
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
     iniciarPickr();
@@ -618,6 +633,7 @@ dropArea.addEventListener("dragleave", () =>
     dropArea.classList.remove("dragover")
 );
 
+// Droppou um arquivo no drop área
 dropArea.addEventListener("drop", (e) => {
     if (!inputAtivo) return;
 
@@ -798,7 +814,6 @@ function tentarConectarOuRemover() {
         }
         // Limpa
         infoDiv.removeAttribute("destination_id");
-
 
         if (selectPainelDestino) {
             selectPainelDestino.value = '';

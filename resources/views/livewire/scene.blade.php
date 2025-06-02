@@ -132,7 +132,7 @@
                     <div class="select" data-default="Selecione uma disciplina">
                         <select wire:model="disciplinaSelecionada" wire:change="updateDisciplinaScene"
                             name="disciplina_id" class="select-native">
-                            <option disabled selected>Selecione uma disciplina</option>
+                            <option selected class="default_option" value="">Selecione uma disciplina</option>
                             @foreach($disciplinas as $disciplina)
                                 <option value="{{ is_object($disciplina) ? $disciplina->id : $disciplina['id'] }}">
                                     {{ is_object($disciplina) ? $disciplina->name : $disciplina['name'] }}

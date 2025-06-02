@@ -88,6 +88,7 @@ class Scene extends Component
     {
         $disciplinaDAO = new DisciplinaDAO();
         $disciplinaDAO->updateDisciplinaScene($this->scene_id, $this->disciplinaSelecionada);
+        $this->emit("updateHtmlDiscipline");
     }
 
     public function updateStartPanel($painelId)
