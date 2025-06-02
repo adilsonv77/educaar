@@ -58,7 +58,7 @@
                 <div class="table-responsive">
                     <table class="table table-hover table-responsive-sm">
                         <thead>
-                            <tr>
+                            <tr style="text-align: center;">
                                 <th>Nome</th>
                                 <th>Disciplina</th>
                                 <th>Série</th>
@@ -77,7 +77,7 @@
                         <tbody>
 
                             @foreach ($contents as $item)
-                                <tr>
+                                <tr style="text-align: center;">
 
                                     <td>{{ $item->content_name }}</td>
                                     <td>{{ $item->disc_name }}</td>

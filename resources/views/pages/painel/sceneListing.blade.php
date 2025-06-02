@@ -54,7 +54,7 @@
                 <div class="table-responsive">
                     <table class="table table-hover table-responsive-sm">
                         <thead>
-                            <tr>
+                            <tr style="text-align: center;">
                                 <th>ID Cena</th>
                                 <th>Nome</th>
                                 <th>Disciplina</th>
@@ -66,7 +66,7 @@
                         </thead>
                         <tbody>
                             @foreach ($data as $scene)
-                                <tr>
+                                <tr style="text-align: center;">
                                     <!-- ID CENA -->
                                     <td>{{ $scene->id }}</td>
                                     <!-- NOME CENA -->

@@ -28,7 +28,7 @@ $pageName = 'Questões';
         <div class="table-responsive">
             <table class="table table-hover table-responsive-sm">
                 <thead>
-                    <tr>
+                    <tr style="text-align: center;">
                         <th>Nome</th>
                         <th>Editar</th>
                         <th>Ação</th>
@@ -37,7 +37,7 @@ $pageName = 'Questões';
                 <tbody>
 
                     @foreach ($questions as $item)
-                    <tr>
+                    <tr style="text-align: center;">
                         {{-- !<td>{{ $item->name }}</td>
                         <td><a href="/question/create{{ $activity->id }}" class="btn btn-primary1">Editar</a></td>
                         <td>

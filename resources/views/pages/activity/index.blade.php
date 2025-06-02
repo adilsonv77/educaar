@@ -66,7 +66,7 @@ $pageName = 'Atividades';
     <div class="table-responsive">
         <table class="table table-hover table-responsive-sm">
             <thead>
-                <tr>
+                <tr style="text-align: center;">
                     <th>Nome</th>
                     <th>Marcador</th>
                     <th>Visualizar</th>
@@ -80,7 +80,7 @@ $pageName = 'Atividades';
             </thead>
             <tbody>
                 @foreach ($activities as $item)
-                <tr>
+                <tr style="text-align: center;">
                     <td style="width: 60%;">{{ $item->name }}</td>
                     <td style="width: 25%;">
 
