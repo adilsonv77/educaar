@@ -210,14 +210,14 @@ document.addEventListener('DOMContentLoaded', () => {
           desbloquear.style.display = "none";
 
           // Pausar vídeo tocando.
-          let activePanel = sceneHtml.querySelector("#panel-display-"+cenas[scene_id]);
-          let activeLockPanel = sceneHtml.querySelector("#panel-display-"+cenas[scene_id]+"-lock");
-          if(!activeLockPanel) activeLockPanel = activePanel; //Previne erros caso não houver painel bloqueado      
-          
-          if(activePanel.classList.contains("video")){
+          let activePanel = sceneHtml.querySelector("#panel-display-" + cenas[scene_id]);
+          let activeLockPanel = sceneHtml.querySelector("#panel-display-" + cenas[scene_id] + "-lock");
+          if (!activeLockPanel) activeLockPanel = activePanel; //Previne erros caso não houver painel bloqueado      
+
+          if (activePanel.classList.contains("video")) {
             activePanel.querySelector(".vidMidia").pause();
             activeLockPanel.querySelector(".vidMidia").pause();
-          }else if(activePanel.classList.contains("youtube")){
+          } else if (activePanel.classList.contains("youtube")) {
             pauseVideo(activePanel)
           }
         }
@@ -425,13 +425,13 @@ function createScene(id, bloquearPainel) {
     //Bloqueado
     scene.style.zIndex = "1";
     scene.id = "scene-display-" + id + "-lock";
-    let activePanel = document.getElementById("panel-display-"+cenas[id]);
+    let activePanel = document.getElementById("panel-display-" + cenas[id]);
     activePanel.querySelector(".vidMidia").pause();
   }
 
   let paineis = scene_info.children;
   Array.from(paineis).forEach(painel => {
-    let newPanel = createPanel(painel,id)
+    let newPanel = createPanel(painel, id)
     scene.appendChild(newPanel)
   });
 
@@ -440,7 +440,7 @@ function createScene(id, bloquearPainel) {
   return scene;
 }
 
-function createPanel(panel_info,scene_id) {
+function createPanel(panel_info, scene_id) {
   let panelAtivoId = cenas[scene_id];
   let panel = JSON.parse(panel_info.getAttribute("json"))
 
@@ -519,18 +519,24 @@ function createButton(button_info, panel_id, scene_id) {
   `
 
   //Passar para o próximo painel ou finalizar experiência
-  button_html.onclick = () => {
+  if (button.transition == "proximo") {
+    button_html.onclick = trocarPainel;
+  } else {
+    button_html.onclick = finalizarExperiencia;
+  }
+
+  function trocarPainel() {
     cenas[scene_id] = button_info.getAttribute("destination_id");
-    
+
     let panel_loaded = document.getElementById("panel-display-" + panel_id);
     let panel = document.getElementById("panel-display-" + button_info.getAttribute("destination_id"))
 
     panel_loaded.style.display = "none";
     panel.style.display = "block";
 
-    if(panel_loaded.classList.contains("video")){
+    if (panel_loaded.classList.contains("video")) {
       panel_loaded.querySelector(".vidMidia").pause();
-    }else if(panel_loaded.classList.contains("youtube")){
+    } else if (panel_loaded.classList.contains("youtube")) {
       pauseVideo(panel_loaded);
     }
 
@@ -538,9 +544,9 @@ function createButton(button_info, panel_id, scene_id) {
       let panel_lock_loaded = document.getElementById("panel-display-" + panel_id + "-lock");
       let panel_lock = document.getElementById("panel-display-" + button_info.getAttribute("destination_id") + "-lock")
 
-      if(panel_lock_loaded.classList.contains("video")){
+      if (panel_lock_loaded.classList.contains("video")) {
         panel_lock_loaded.querySelector(".vidMidia").pause();
-      }else if(panel_lock_loaded.classList.contains("youtube")){
+      } else if (panel_lock_loaded.classList.contains("youtube")) {
         pauseVideo(panel_lock_loaded);
       }
 
@@ -549,6 +555,10 @@ function createButton(button_info, panel_id, scene_id) {
     } catch (error) {
       console.log("Não tem painel bloqueado");
     }
+  }
+
+  function finalizarExperiencia() {
+    location.reload();
   }
 
   return button_html;
@@ -560,15 +570,11 @@ function pauseVideo(panel) {
   iframe.remove()
 
   iframe = document.createElement('iframe');
-  iframe.id= "srcYoutube";
-  iframe.src= src;
-  iframe.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;";
+  iframe.id = "srcYoutube";
+  iframe.src = src;
+  iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;";
   iframe.setAttribute('frameborder', '0');
   iframe.setAttribute('allowfullscreen', '');
 
   panel.querySelector(".youtubeMidia").appendChild(iframe)
-}
-
-function endExperience() {
-  
 }
