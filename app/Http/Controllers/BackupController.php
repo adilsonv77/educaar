@@ -38,11 +38,6 @@ class BackupController extends Controller{
             ->pluck('TABLE_NAME')
             ->toArray();
 
-    //     mysql> SELECT table_name, table_type, engine
-    //    FROM information_schema.tables
-    //    WHERE table_schema = 'db5'
-    //    ORDER BY table_name; -- table_type pega o tipo da table (view ou table)
-
         // Monta lista de tabelas
         $tableNames = [];
         foreach ($tables as $table) {
@@ -93,7 +88,7 @@ class BackupController extends Controller{
             $sorted = $tableNames;
         }
 
-        // Gerar dump sem FK (CREATE TABLE + dados)
+        // Mostrar os create table
         foreach ($sorted as $tableName) {
 
             $createTable = DB::select("SHOW CREATE TABLE `$tableName`");
@@ -139,7 +134,6 @@ class BackupController extends Controller{
             }
         }
 
-        // Agora adiciona todas as FKs juntas no final do arquivo
         // Agora adiciona todas as FKs juntas no final do arquivo
         foreach ($sorted as $tableName) {
             $foreignKeys = DB::select("
@@ -191,6 +185,7 @@ class BackupController extends Controller{
         $this->copyFolder(public_path('marcadores'),base_path('backup/marcadores'));
         $this->copyFolder(public_path('mind'),base_path('backup/mind'));
         $this->copyFolder(public_path('modelos3d'),base_path('backup/modelos3d'));
+        $this->copyFolder(public_path('midiasPainel'),base_path('backup/midiasPainel'));
         $this->databaseBackup();
 
         $zip = new \ZipArchive();
@@ -236,6 +231,7 @@ class BackupController extends Controller{
         File::deleteDirectory(base_path('backup/marcadores'));
         File::deleteDirectory(base_path('backup/mind'));
         File::deleteDirectory(base_path('backup/modelos3d'));
+        File::deleteDirectory(base_path('backup/midiasPainel'));
         File::delete(base_path("backup/databaseBackup.sql"));
 
         return $response;
