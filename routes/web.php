@@ -8,6 +8,7 @@ use App\Models\School;
 use App\Http\Controllers\PainelController;
 use App\Http\Controllers\SceneController;
 use App\Http\Controllers\ButtonController;
+use App\Http\Controllers\BackupController;
 
 //Painéis - Renan
 //Talvez alguns possam ser substituidos por o tal do resource
@@ -137,11 +138,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/turma/questoesDosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class, 'index'])->name('student.results');
     Route::get('/turma/questoesNaoRespondidasTodosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class, 'todos'])->name('student.naorespondidas');
 
+    
+
+
 });
+
+//backup
+Route::get('/create-zip', [BackupController::class, 'createZip'])->name('create.zip');
+// Route::get('/show-zip', [BackupController::class, 'showZip'])->name('show.zip');
+// Route::get('/download-zip', [BackupController::class, 'downloadZip'])->name('download.zip');
+// Route::get('/database-backup', [BackupController::class, 'databaseBackup'])->name('database.backup');
+// Route::get('/copy-marcadores', [BackupController::class, 'copyMarcadores'])->name('copy.marcadores');
+// Route::get('/copy-modelos', [BackupController::class, 'copyModelos'])->name('copy.modelos');
+// Route::get('/copy-mind', [BackupController::class, 'copyMind'])->name('copy.mind');
 
 //webservice para receber o arquivo mind
 Route::post('/receivemind', 'App\Http\Controllers\ReceiveMindController@receive');
-
 
 // nao sao mais usadas.... provavelmente excluir !!!
 Route::get('/students/novas', [App\Http\Controllers\StudentController::class, 'novasAtividades']);

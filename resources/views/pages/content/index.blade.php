@@ -20,6 +20,7 @@
             <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}"
                 list="historico" />
             <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+
         </div>
 
         <datalist id="historico">

@@ -256,6 +256,11 @@
                                     <span class="nav-text">Conteúdos</span>
                                 </a>
                             </li>
+                            <li><a class="ai-icon" href="{{ route('create.zip') }}" aria-expanded="false" id="backup">
+                                    <i class="bi bi-database-down"></i>
+                                    <span class="nav-text">Backup</span>
+                                </a>
+                            </li>
                         @endif
                     </ul>
                 </div>
@@ -274,7 +279,6 @@
         <div class="content-body">
             <div class="container-fluid">
                 @yield('content')
-
             </div>
         </div>
 
@@ -293,6 +297,10 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+
 
     @yield('script')
 
