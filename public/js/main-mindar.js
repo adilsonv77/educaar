@@ -426,7 +426,7 @@ function createScene(id, bloquearPainel) {
     scene.style.zIndex = "1";
     scene.id = "scene-display-" + id + "-lock";
     let activePanel = document.getElementById("panel-display-" + cenas[id]);
-    activePanel.querySelector(".vidMidia").pause();
+    activePanel.querySelector(".vidMidia") ? activePanel.querySelector(".vidMidia").pause() : console.log("Painel sem video");
   }
 
   let paineis = scene_info.children;

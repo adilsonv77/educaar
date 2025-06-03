@@ -4,14 +4,14 @@ window.livewire.on("updateHtmlSceneName", (sceneName) => {
 })
 
 //----UPDATE DISCIPLINA AO ALTERAR------------------------------------------------------
-window.livewire.on("updateHtmlDiscipline",()=>{
+window.livewire.on("updateHtmlDiscipline", () => {
     let defaultOption = document.getElementsByClassName("default_option")[0];
     if (document.getElementsByClassName("select-native")[3].value != "") {
         defaultOption.disabled = true;
     }
 })
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
         let defaultOption = document.getElementsByClassName("default_option")[0];
         if (document.getElementsByClassName("select-native")[3].value != "") {
@@ -543,6 +543,8 @@ window.addEventListener('beforeunload', function (e) {
 //----MOSTRAR POPUP QUANDO SELECIONAR------------------------------------------------------------------------------------------------
 function fecharPopUp() {
     document.getElementById("flex-container").style.display = "none";
+
+    
 }
 
 let painelPopup = null;
@@ -566,6 +568,8 @@ function abrirPopUp(id) {
             painel.querySelector("video").pause()
         }, 500);
     }
+
+    inputAtivo.addEventListener("change",fecharPopUp);
 
     //Salvar as cordenadas por precaução.
     window.livewire.emit('updateCanvasPosition', [canvasTop, canvasLeft, scale, centroCordenadas.style.top, centroCordenadas.style.left]);
@@ -659,8 +663,6 @@ dropArea.addEventListener("drop", (e) => {
     if (file) {
         wire.upload('midia', file);
     }
-
-    //window.livewire.emit("updatedMidia",null,dataTransfer.files[0]);
 });
 
 // 3.3 Um link do youtube foi inserido
@@ -676,6 +678,7 @@ document.getElementById("linkYoutube").oninput = () => {
         urlYoutubeInformado = true;
         inputHidden.value = url.slice(prefix.length);
         sendValueLivewire(painelPopup, inputHidden.value)
+        fecharPopUp();
     } else if (
         url.startsWith(prefix2) &&
         url.slice(prefix2.length).length == 11
@@ -683,6 +686,7 @@ document.getElementById("linkYoutube").oninput = () => {
         urlYoutubeInformado = true;
         inputHidden.value = url.slice(prefix2.length);
         sendValueLivewire(painelPopup, inputHidden.value)
+        fecharPopUp();
     }
 };
 
@@ -712,7 +716,7 @@ function conectarBotoes(startElem, idOrigem, idPainel) {
     }
 
     const layoutContainer = startElem.closest(".painel")?.querySelector("#layout");
-    const layout = layoutContainer?.classList[0]; 
+    const layout = layoutContainer?.classList[0];
 
     let startSocket = "left";
 
@@ -733,8 +737,8 @@ function conectarBotoes(startElem, idOrigem, idPainel) {
         endPlug: 'arrow3',
         startPlugSize: 4 * scale,
         endPlugSize: 8 * scale,
-        startSocket: ['left', offset], 
-        
+        startSocket: ['left', offset],
+
     });
 
     linhasPorBotao.set(idOrigem, linha);
