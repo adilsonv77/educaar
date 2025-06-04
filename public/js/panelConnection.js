@@ -545,18 +545,17 @@ let carregar;
 
 function fecharPopUp(naoCarregarMidia) {
     clearInterval(carregar);
-
     //Verica se precisa fazer a animação de carregar midia
     if (naoCarregarMidia != true) {
         let painel = document.getElementById(painelPopup);
         painel.querySelector(".loading").style.display = "block";
         painel.querySelector(".loadedMidia").style.display = "none";
 
-        //Meio bugado mas vai
+        //Meio bugado mas funciona
         setTimeout(() => {
             carregar = setInterval(() => {
                 let painel = document.getElementById(painelPopup);
-                console.log(painel.querySelector(".loading").style.transform);
+                
                 painel.querySelector(".loading").style.transition = "transform 25s linear";
                 if (!painel.querySelector(".loading").style.transform) {
                     painel.querySelector(".loading").style.transform = "rotate(0deg)";

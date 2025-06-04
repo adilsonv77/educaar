@@ -69,7 +69,7 @@ class Panel extends Component
 
         $arquivoRecebido = !empty($this->midia);
 
-        if ($arquivoRecebido) {
+        if ($arquivoRecebido && $recebeuLink !== true) {
             $midiaExtension = $this->midia->getClientOriginalExtension();
             $nomeTemporario = $baseFileName . '.' . $midiaExtension;
             $nomeReal = $id . '.' . $midiaExtension;
@@ -89,9 +89,9 @@ class Panel extends Component
             $json['link'] = '';
 
             if ($midiaExtension == "mp4") {
-                $json['midiaType'] = 'video'; // Ou detecta dinamicamente com base na extensão, se preferir
+                $json['midiaType'] = 'video'; // Detecta dinamicamente com base na extensão, se preferir
             } else {
-                $json['midiaType'] = 'image'; // Ou detecta dinamicamente com base na extensão, se preferir
+                $json['midiaType'] = 'image'; // Detecta dinamicamente com base na extensão, se preferir
             }
         } elseif ($recebeuLink) {
             if (!empty($json['midiaExtension'])) {
