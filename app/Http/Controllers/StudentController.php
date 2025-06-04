@@ -218,8 +218,7 @@ class StudentController extends Controller
         foreach ($questions as $q) {
             array_push($questoes, $q->id);
         }
-        $questions = $questions->toArray();
-        shuffle($questions);
+      
 
         $respondida = DB::table('student_answers')
             ->whereIn('question_id', $questoes)
