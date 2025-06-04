@@ -611,21 +611,11 @@ function abrirPopUp(id) {
 
 let urlYoutubeInformado = false;
 let inputAtivo = null;
-const midiaPreviewPorInput = new Map();
 
 function adicionarInteracaoPopup(id) {
     let painel = document.getElementById(id);
     let fileBtn = painel.querySelector("#file-" + id);
     let midiaArea = painel.querySelector(".midia");
-
-    const midiaPreview = () => {
-        //Por agr ta aqui só n dar erros por remover ele.
-        //Se estiver lendo isso dps da data 23/06/2025, apague qualquer instancia desse método sendo chamado.
-    };
-
-    // vincula o midiaPreview a esse input
-    //fileBtn.onchange = midiaPreview;
-    midiaPreviewPorInput.set(fileBtn, midiaPreview);
 
     // clique no painel abre popup
     Array.from(midiaArea.children).forEach(child => {
@@ -638,13 +628,13 @@ editarMidiaBtn.onclick = () => abrirPopUp(painelSelecionado.querySelector(".idPa
 
 let excluirPainelBtn = document.getElementById("excluirPainel")
 excluirPainelBtn.onclick = () => {
-    $id = painelSelecionado.querySelector(".idPainel").id;
-    if ($id = canvas.getAttribute("data-start-id")) {
+    let id = painelSelecionado.querySelector(".idPainel").id;
+    if (id == canvas.getAttribute("data-start-id")) {
         enviarMsg("Você não pode deletar o painel inicial da cena!")
         return;
     }
 
-    window.livewire.emit('deletePainel', $id);
+    window.livewire.emit('deletePainel', id);
 }
 
 window.livewire.on("carregarVideo", (id) => {
@@ -682,11 +672,7 @@ dropArea.addEventListener("drop", (e) => {
     inputAtivo.files = dataTransfer.files;
 
     dropArea.classList.remove("dragover");
-
-    // Chama a função de preview associada ao input atual
-    const midiaPreview = midiaPreviewPorInput.get(inputAtivo);
-    if (midiaPreview) midiaPreview();
-
+    
     fecharPopUp();
 
     let file = dataTransfer.files[0]
