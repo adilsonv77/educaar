@@ -21,6 +21,7 @@
                                             {{ isset($conteudosRespondidos[$item->id]) && $conteudosRespondidos[$item->id] ? 'btn-success' : 'btn-warning' }}">
                                             {{ $item->name }}
                                         </button>
+                                        
                                     </form>
                                 </td>
                             </tr>
@@ -62,13 +63,15 @@
                     .btn.btn-warning {
                         width: 100%;
                         height: 40%;
+                      
                        
                     }
 
                     .btn.btn-success {
                         width: 100%;
                         height: 40%;
-                        background-color: #efbecc; 
+                        /* background-color: #efbecc;  */
+                        background-color: gray;
                         
                     }
 

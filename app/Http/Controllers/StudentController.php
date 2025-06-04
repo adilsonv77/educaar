@@ -183,6 +183,7 @@ class StudentController extends Controller
                         ->where('student_answers.user_id', '=', Auth::user()->id)
                 ]);
         $questions = $where->get();
+        $questions = $questions->shuffle();
 
         foreach ($questions as $item) {
             $options = [$item->a, $item->b, $item->c, $item->d];
@@ -217,6 +218,8 @@ class StudentController extends Controller
         foreach ($questions as $q) {
             array_push($questoes, $q->id);
         }
+        $questions = $questions->toArray();
+        shuffle($questions);
 
         $respondida = DB::table('student_answers')
             ->whereIn('question_id', $questoes)
