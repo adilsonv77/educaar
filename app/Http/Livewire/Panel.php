@@ -106,7 +106,7 @@ class Panel extends Component
         $painelDAO->updateById($id, ['panel' => json_encode($json)]);
         $this->painel->panel = $json; // Atualiza o painel renderizado também
 
-        $this->emit('$refresh');
+        $this->emit("stopLoading");
 
         if ($json['midiaType']=='video') {
             $this->emit("carregarVideo", $id);

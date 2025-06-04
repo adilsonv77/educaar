@@ -23,6 +23,10 @@
             padding-top: 0rem !important;
             margin-top: 7.5rem !important;
         }
+
+        .loading{
+            transition: transform 25s linear;
+        }
     </style>
 @endsection
 
@@ -34,7 +38,7 @@
 
         <div id="popup">
             <p>Upload file</p>
-            <button onclick="fecharPopUp()">X</button>
+            <button onclick="fecharPopUp(true)">X</button>
 
             <label id="upload-area" class="picture" tabIndex="0">
                 <img src="{{ asset('icons/paineis/upload.svg') }}" alt="">

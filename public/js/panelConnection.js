@@ -541,11 +541,46 @@ window.addEventListener('beforeunload', function (e) {
 });
 
 //----MOSTRAR POPUP QUANDO SELECIONAR------------------------------------------------------------------------------------------------
-function fecharPopUp() {
-    document.getElementById("flex-container").style.display = "none";
+let carregar;
 
-    
+function fecharPopUp(naoCarregarMidia) {
+    clearInterval(carregar);
+
+    //Verica se precisa fazer a animação de carregar midia
+    if (naoCarregarMidia != true) {
+        let painel = document.getElementById(painelPopup);
+        painel.querySelector(".loading").style.display = "block";
+        painel.querySelector(".loadedMidia").style.display = "none";
+
+        //Meio bugado mas vai
+        setTimeout(() => {
+            carregar = setInterval(() => {
+                let painel = document.getElementById(painelPopup);
+                console.log(painel.querySelector(".loading").style.transform);
+                painel.querySelector(".loading").style.transition = "transform 25s linear";
+                if (!painel.querySelector(".loading").style.transform) {
+                    painel.querySelector(".loading").style.transform = "rotate(0deg)";
+                } else {
+                    painel.querySelector(".loading").style.transform = "rotate(10000deg)";
+                }
+
+                if (painel.querySelector(".loading").style.display != "block") {
+                    fecharPopUp(false);
+                }
+            }, 1);
+        }, 1);
+    }
+
+    document.getElementById("flex-container").style.display = "none";
 }
+
+window.livewire.on("stopLoading", () => {
+    clearInterval(carregar);
+
+    let painel = document.getElementById(painelPopup);
+    painel.querySelector(".loading").style.display = "none";
+    painel.querySelector(".loadedMidia").style.display = "block";
+})
 
 let painelPopup = null;
 function abrirPopUp(id) {
@@ -569,7 +604,7 @@ function abrirPopUp(id) {
         }, 500);
     }
 
-    inputAtivo.addEventListener("change",fecharPopUp);
+    inputAtivo.addEventListener("change", fecharPopUp);
 
     //Salvar as cordenadas por precaução.
     window.livewire.emit('updateCanvasPosition', [canvasTop, canvasLeft, scale, centroCordenadas.style.top, centroCordenadas.style.left]);
