@@ -555,7 +555,7 @@ function fecharPopUp(naoCarregarMidia) {
         setTimeout(() => {
             carregar = setInterval(() => {
                 let painel = document.getElementById(painelPopup);
-                
+
                 painel.querySelector(".loading").style.transition = "transform 25s linear";
                 if (!painel.querySelector(".loading").style.transform) {
                     painel.querySelector(".loading").style.transform = "rotate(0deg)";
@@ -628,8 +628,6 @@ function adicionarInteracaoPopup(id) {
     midiaPreviewPorInput.set(fileBtn, midiaPreview);
 
     // clique no painel abre popup
-    midiaArea.onclick = () => abrirPopUp(id);
-
     Array.from(midiaArea.children).forEach(child => {
         child.onclick = () => abrirPopUp(id);
     });
