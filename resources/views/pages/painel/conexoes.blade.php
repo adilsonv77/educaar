@@ -24,7 +24,25 @@
             margin-top: 7.5rem !important;
         }
 
-        .loading{
+        .loading {
+            transition: transform 25s linear;
+        }
+
+        .areaBtns .loading {
+            position: absolute;
+            align-self: center;
+            height: 146px;
+            width: calc(100% - 40px);
+            background: #00000059;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .areaBtns .loading img {
+            height: 80%;
+            margin-top: 6%;
             transition: transform 25s linear;
         }
     </style>
@@ -305,7 +323,7 @@
                 atualizarIndicadorInicio();
             });
 
-            window.livewire.on("buttonCriado", (id) => {
+            window.livewire.on("buttonCriado", () => {
                 setTimeout(() => {
                     atualizarIndicadoresDeTransicao();
                     atualizarIndicadoresDeFinal();

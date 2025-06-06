@@ -32,7 +32,9 @@ class ButtonDAO
         return Button::where('id', $id)->update($data);
     }
 
-    public function deleteById($id){
+    public static function deleteById($id){
         Button::where('id',$id)->delete();
     }
+
+    
 }

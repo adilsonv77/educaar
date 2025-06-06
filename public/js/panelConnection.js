@@ -244,6 +244,8 @@ function selecionarPainel(painel, e) {
 function selecionarBotao(botao) {
     if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
     botaoSelecionado = botao;
+    painelSelecionado = botao.parentElement.parentElement.parentElement;
+
     botao.classList.add("selecionado");
 
     mostrarMenu("botao");
@@ -258,9 +260,9 @@ function selecionarBotao(botao) {
     const corAtual = btnInfo.getAttribute("color");
 
     if (window.pickr && corAtual) {
-        setTimeout(() => {
-            window.pickr.setColor(corAtual);
-        }, 10);
+        // setTimeout(() => {
+        //     window.pickr.setColor(corAtual);
+        // }, 10);
     }
 
     if (corAtual && circulo) {
@@ -672,7 +674,7 @@ dropArea.addEventListener("drop", (e) => {
     inputAtivo.files = dataTransfer.files;
 
     dropArea.classList.remove("dragover");
-    
+
     fecharPopUp();
 
     let file = dataTransfer.files[0]
@@ -974,7 +976,9 @@ addBtnBtn.onclick = () => {
         return;
     }
     qtdBotoes++;
+    botoesCriando++;
     window.livewire.emit('createButton', { id: id });
+    loadingBtn()
 }
 
 function enviarMsg(mensagem) {
@@ -1006,7 +1010,42 @@ function mudarPainelDestino(id) {
 
 // 5. Deletar botão
 let deleteBtn = document.getElementById("deleteBtn")
+
 deleteBtn.onclick = () => {
     let painel = botaoSelecionado.querySelector(".circulo").parentElement.parentElement.parentElement.parentElement;
     window.livewire.emit('deleteBtn', { id: botaoSelecionado.querySelector(".circulo").id, id_painel: painel.querySelector(".idPainel").id })
+    loadingBtn();
 }
+
+// 6. Carregar botões função
+let carregarBtn;
+function loadingBtn() {
+    painelSelecionado.querySelector(".areaBtns .loading").style.display = "flex"
+
+    let roda = painelSelecionado.querySelector(".areaBtns .loading *")
+    clearInterval(carregarBtn)
+    carregarBtn = setInterval(() => {
+        if (!roda.style.transform) {
+            roda.style.transform = "rotate(0deg)";
+        } else {
+            roda.style.transform = "rotate(10000deg)";
+        }
+
+        if (roda.style.display != "block") {
+            loadingBtn();
+        }
+    }, 1);
+}
+
+let botoesCriando = 0;
+window.livewire.on("stopLoadingBtn", () => {
+    botoesCriando--;
+    if(botoesCriando < 0) botoesCriando = 0;
+
+    if(botoesCriando == 0){
+        painelSelecionado.querySelector(".areaBtns .loading").style.display = "none"
+        clearInterval(carregarBtn);
+    }else{
+        loadingBtn()
+    }
+})

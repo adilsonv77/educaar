@@ -46,6 +46,9 @@
     </div>
 
     <div class="areaBtns" class="btn-linhas" style="font-size: 12px;">
+        <div class="loading" style="display: none; align-self: center;">
+            <img src="{{ asset("images/circle.png") }}" alt="Carregando midia...">
+        </div>
         <div id="layout" class="layout-{{ $btnFormat }}">
             @foreach ($buttonRenderizados as $button)
                 @livewire('button', ['button' => $button, ""], key($button->id))

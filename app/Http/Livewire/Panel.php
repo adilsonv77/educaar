@@ -8,10 +8,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\DAO\PainelDAO;
 use App\DAO\ButtonDAO;
+use App\DAO\TestDAO;
+use App\Models\Button;
+use App\Models\Test;
 
 class Panel extends Component
 {
-    protected $listeners = ['updateLink','updateBtnFormat','createButton','updatedMidia','deleteBtn', 'salvarTexto'];
+    protected $listeners = ['updateLink', 'updateBtnFormat', 'createButton', 'updatedMidia', 'deleteBtn', 'salvarTexto', 'teste'];
 
     use WithFileUploads;
 
@@ -21,6 +24,7 @@ class Panel extends Component
     public $midia;
     public $link;
     public $btnFormat;
+    public $num;
 
     public function mount($painel)
     {
@@ -32,7 +36,8 @@ class Panel extends Component
 
         $this->texto = $json['txt'] ?? '';
         $this->link = $json['link'] ?? '';
-        $this->btnFormat = $json['btnFormat'] ??'';
+        $this->btnFormat = $json['btnFormat'] ?? '';
+        $this->num = 0;
     }
 
     public function salvarTexto($painelId, $novoTexto)
@@ -53,7 +58,7 @@ class Panel extends Component
             'painelId' => $painelId,
             'novoTexto' => $novoTexto,
         ]);
-        
+
     }
 
     public function updatedMidia($recebeuLink = null)
@@ -108,7 +113,7 @@ class Panel extends Component
 
         $this->emit("stopLoading");
 
-        if ($json['midiaType']=='video') {
+        if ($json['midiaType'] == 'video') {
             $this->emit("carregarVideo", $id);
         }
     }
@@ -122,27 +127,31 @@ class Panel extends Component
         $this->updatedMidia(true);
     }
 
-    public function createButton($payload){
-        if ($payload['id'] != $this->painel->id) return;
+    public function createButton($payload)
+    {
+        if ($payload['id'] != $this->painel->id)
+            return;
 
         $buttonDAO = new ButtonDAO();
 
         $novo = $buttonDAO->create([
-            'origin_id'=>$this->painel->id,
-            'destination_id'=>null,
-            'configurations'=>'{"color":"#833B8D","text":"","type":"linhas","transition":""}'
+            'origin_id' => $this->painel->id,
+            'destination_id' => null,
+            'configurations' => '{"color":"#833B8D","text":"","type":"linhas","transition":""}'
         ]);
 
-        $novo->configurations = json_decode('{"color":"#833B8D","text":"","type":"linhas","transition":""}',true);
+        $novo->configurations = json_decode('{"color":"#833B8D","text":"","type":"linhas","transition":""}', true);
 
         $this->buttonRenderizados = ButtonDAO::getByOriginId($this->painel->id);
 
-        $this->emit("buttonCriado",$novo->id);
+        $this->emit("buttonCriado");
+        $this->emit("stopLoadingBtn");
     }
 
     public function updateBtnFormat($payload)
     {
-        if ($payload['id'] != $this->painel->id) return;
+        if ($payload['id'] != $this->painel->id)
+            return;
 
         $painelDAO = new PainelDAO();
 
@@ -157,20 +166,27 @@ class Panel extends Component
         $this->emitSelf('$refresh');
     }
 
-    public function deleteBtn($payload){
-        if ($payload['id_painel'] != $this->painel->id) return;
+    public function deleteBtn($payload)
+    {
+        if ($payload['id_painel'] != $this->painel->id)
+            return;
 
-        $buttonDAO = new ButtonDAO();
-
-        $id = $payload['id'];
-
-        $buttonDAO->deleteById($id);
+        $id = (int) $payload['id'];
+        
+        ButtonDAO::deleteById($id);
 
         $this->buttonRenderizados = $this->buttonRenderizados->reject(function ($button) use ($id) {
             return $button->id == $id;
-        })->values(); 
+        })->values();
+        
+        $this->emit("stopLoadingBtn");
+    }
 
-        $this->emitSelf('$refresh');
+    public function teste($payload)
+    {
+        if ($payload['id_painel'] != $this->painel->id)
+            return;
+        Button::destroy($payload['id']);
     }
 
     public function render()
