@@ -11,6 +11,18 @@ $pageName = 'Questões';
 
 @section('page-name', $pageName)
 
+@php
+$temRespostas = false;
+foreach($questions as $q) {
+    if(($alunosPorQuestao[$q->id] ?? 0) > 0) {
+        $temRespostas = true;
+        break;
+    }
+}
+@endphp
+
+
+
 @section('content')
 
 
@@ -19,7 +31,11 @@ $pageName = 'Questões';
         <h4 class="card-title">Atividade: {{ $activity->name }} </h4>
         <form action="{{ route('questions.create') }}" style="display:block;width:100px">
             @csrf
-            <button type="submit" class="btn btn-success" text-align: center>Criar questão</button>
+            <button type="submit" class="btn btn-success" 
+                    @if ($temRespostas) disabled @endif>
+                    Criar questão
+                </button>
+
         </form>
 
     </div>
