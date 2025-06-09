@@ -157,8 +157,7 @@
                         <option value="Cena">Cena</option>
                     </select>
                 </div>
-                
-                <input type="hidden" id="selectSceneType" name="sceneType" value="Modelo3D"/>
+
                 <!-------------ENVIAR MODELO3D--------------->
                 <div class="form-group" id="3DmodelOption">
                         @if ($acao == 'edit' && $scene_id == 'modelo3D') 
@@ -178,7 +177,8 @@
                         @endif
 
                         <label for="alterarPainel">Cena*</label><br>
-                        <select class="form-control" id="selectScene" name="scene" aria-label="" @if($acao === 'edit') disabled @endif>
+                        <select class="form-control" id="selectScene" name="scene" aria-label="" @if($acao === 'edit') disabled @endif
+                            @if ($acao === 'edit' && $scene_id != "modelo3D") value = {{ $scene_id }} @endif>
                             @foreach ($scenes as $scene)
                                 <option value="{{$scene->id}}" @if ($acao == "edit" && $scene->id == $scene_id) selected @endif>{{$scene->name}}</option>
                             @endforeach             
@@ -211,10 +211,6 @@
     </div>
 
     <script>
-        // document.getElementById("selectPanel").onclick = ()=>{
-        //     document.getElementById("panelId").value = prompt("Insira o ID do painel.")
-        // }
-
         document.getElementById("selectSceneType").onchange = ()=>{
             let valor = document.getElementById("selectSceneType").value;
             if (valor == "Modelo3D") {

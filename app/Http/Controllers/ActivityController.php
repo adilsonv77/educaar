@@ -46,14 +46,14 @@ class ActivityController extends Controller
         $anoletivo_id = $anoletivoAtual->id;
 
 
-       
+
 
         $nomesConteudo = ActivityDAO::buscarActivitiesDoProf(Auth::user()->id, $anoletivo_id)
             ->select('contents.name AS nome_conteudo')
             ->distinct()
             ->pluck('nome_conteudo');
 
-        
+
         $activities = ActivityDAO::buscarActivitiesDoProf(Auth::user()->id, $anoletivo_id)
             ->select(
                 'activities.*',
@@ -61,7 +61,8 @@ class ActivityController extends Controller
                 DB::raw('concat(activities.name, " - ", disciplinas.name, " (", contents.name, ")") AS pesq_name')
             );
 
-        $activities = $activities->addSelect(['qtnQuest' => Question::selectRaw('count(*)')->whereColumn('activities.id', '=', 'activity_id')
+        $activities = $activities->addSelect([
+            'qtnQuest' => Question::selectRaw('count(*)')->whereColumn('activities.id', '=', 'activity_id')
         ]);
 
         $act = $request->titulo;
@@ -79,11 +80,11 @@ class ActivityController extends Controller
 
         $activity = $request->titulo;
 
-       
 
 
 
-        
+
+
         return view('pages.activity.index', compact('activities', 'activity', 'nomesConteudo'));
 
     }
@@ -112,7 +113,7 @@ class ActivityController extends Controller
                 DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
             )
             ->get();
-      
+
         $disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);
 
         $scenes = collect();
@@ -164,16 +165,16 @@ class ActivityController extends Controller
     {
         $data = $request->all();
         $tipoAtividade = $data['sceneType'];
-
         unset($data['panelId']);
         unset($data['sceneType']);
 
         //Verifica se é cadastro de glb ou de painel para poder tratar cada cadastro de forma diferente 
         $usarPainel = false;
+        
         if ($tipoAtividade == "Cena") {
             $data['glb'] = '';
             $usarPainel = true;
-            $idScene = $data['scene'];
+            $idScene = $data["scene_id"] == null ? $data['scene'] : $data["scene_id"];
         } else {
             $data['scene_id'] = null;
         }
@@ -184,7 +185,7 @@ class ActivityController extends Controller
             'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg']
         ]);
 
-      if ($validator->fails()) {
+        if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
@@ -298,10 +299,10 @@ class ActivityController extends Controller
             $data['scene_id'] = $idScene;
 
             //Deleta o arquivo GLB
-            if(!empty($activity->glb)){
+            if (!empty($activity->glb)) {
                 unlink(public_path('modelos3d/' . $activity->glb));
             }
-            
+
             @unlink(public_path('mind') . "/" . $activity->content_id . ".mind");
 
             $content = Content::find($activity->content_id);
@@ -340,7 +341,6 @@ class ActivityController extends Controller
         ];
 
         return view('pages.activity.showcontent', $params);
-
     }
 
     /**
@@ -367,7 +367,7 @@ class ActivityController extends Controller
             )
             ->get();
 
-        
+
         if (empty($activity->scene_id))
             $activity->scene_id = "modelo3D";
 
@@ -409,13 +409,11 @@ class ActivityController extends Controller
                 $posbarra = strpos($activity->glb, "/");
                 $dirname = substr($activity->glb, 0, $posbarra);
                 self::deleteDir(public_path('modelos3d') . "/" . $dirname);
-
             } else {
                 @unlink(public_path('modelos3d') . "/" . $activity->glb);
             }
 
             $activity->delete();
-
 
             @unlink(public_path('mind') . "/" . $activity->content_id . ".mind");
 
@@ -427,76 +425,76 @@ class ActivityController extends Controller
         return redirect(route('activity.index'));
     }
 
-    
 
 
-public function clone($id)
-{
-    $activity = Activity::find($id);
 
-    if (!$activity) {
-        return redirect()->back()->withErrors(['msg' => 'Atividade não encontrada.']);
-    }
+    public function clone($id)
+    {
+        $activity = Activity::find($id);
 
-    // Clonar a atividade
-    $clonedActivity = $activity->replicate();
-    $clonedActivity->name = $activity->name . ' (Cópia)';
-    $clonedActivity->created_at = now();
-    $clonedActivity->updated_at = now();
-    $clonedActivity->save(); // Salva para gerar o ID
-
-    // === Clonagem do marcador ===
-    $novoNomeImagem = $clonedActivity->id . '.' . pathinfo($activity->marcador, PATHINFO_EXTENSION);
-    $caminhoImagemAntigo = public_path('marcadores/' . $activity->marcador);
-    $caminhoImagemNovo = public_path('marcadores/' . $novoNomeImagem);
-
-    if (File::exists($caminhoImagemAntigo)) {
-        File::copy($caminhoImagemAntigo, $caminhoImagemNovo);
-        $clonedActivity->marcador = $novoNomeImagem;
-    }
-
-    // === Clonagem do modelo 3D ===
-    $publicModelosPath = public_path('modelos3d');
-
-    if (str_contains($activity->glb, '/')) {
-        // Caso seja glTF (pasta + arquivo)
-        list($origFolder, $origFile) = explode('/', $activity->glb, 2);
-        $sourceDir = $publicModelosPath . '/' . $origFolder;
-        $destDir = $publicModelosPath . '/' . $clonedActivity->id;
-
-        if (File::exists($sourceDir)) {
-            File::copyDirectory($sourceDir, $destDir);
-            $clonedActivity->glb = $clonedActivity->id . '/' . $origFile;
+        if (!$activity) {
+            return redirect()->back()->withErrors(['msg' => 'Atividade não encontrada.']);
         }
-    } else {
-        // Caso seja GLB (arquivo único)
-        $extensaoModelo = pathinfo($activity->glb, PATHINFO_EXTENSION);
-        $novoNomeModelo = $clonedActivity->id . '.' . $extensaoModelo;
 
-        $caminhoModeloAntigo = $publicModelosPath . '/' . $activity->glb;
-        $caminhoModeloNovo = $publicModelosPath . '/' . $novoNomeModelo;
+        // Clonar a atividade
+        $clonedActivity = $activity->replicate();
+        $clonedActivity->name = $activity->name . ' (Cópia)';
+        $clonedActivity->created_at = now();
+        $clonedActivity->updated_at = now();
+        $clonedActivity->save(); // Salva para gerar o ID
 
-        if (File::exists($caminhoModeloAntigo)) {
-            File::copy($caminhoModeloAntigo, $caminhoModeloNovo);
-            $clonedActivity->glb = $novoNomeModelo;
+        // === Clonagem do marcador ===
+        $novoNomeImagem = $clonedActivity->id . '.' . pathinfo($activity->marcador, PATHINFO_EXTENSION);
+        $caminhoImagemAntigo = public_path('marcadores/' . $activity->marcador);
+        $caminhoImagemNovo = public_path('marcadores/' . $novoNomeImagem);
+
+        if (File::exists($caminhoImagemAntigo)) {
+            File::copy($caminhoImagemAntigo, $caminhoImagemNovo);
+            $clonedActivity->marcador = $novoNomeImagem;
         }
+
+        // === Clonagem do modelo 3D ===
+        $publicModelosPath = public_path('modelos3d');
+
+        if (str_contains($activity->glb, '/')) {
+            // Caso seja glTF (pasta + arquivo)
+            list($origFolder, $origFile) = explode('/', $activity->glb, 2);
+            $sourceDir = $publicModelosPath . '/' . $origFolder;
+            $destDir = $publicModelosPath . '/' . $clonedActivity->id;
+
+            if (File::exists($sourceDir)) {
+                File::copyDirectory($sourceDir, $destDir);
+                $clonedActivity->glb = $clonedActivity->id . '/' . $origFile;
+            }
+        } else {
+            // Caso seja GLB (arquivo único)
+            $extensaoModelo = pathinfo($activity->glb, PATHINFO_EXTENSION);
+            $novoNomeModelo = $clonedActivity->id . '.' . $extensaoModelo;
+
+            $caminhoModeloAntigo = $publicModelosPath . '/' . $activity->glb;
+            $caminhoModeloNovo = $publicModelosPath . '/' . $novoNomeModelo;
+
+            if (File::exists($caminhoModeloAntigo)) {
+                File::copy($caminhoModeloAntigo, $caminhoModeloNovo);
+                $clonedActivity->glb = $novoNomeModelo;
+            }
+        }
+
+        // Salva as alterações no clone
+        $clonedActivity->save();
+
+        // Clonar as questões relacionadas
+        $questions = Question::where('activity_id', $activity->id)->get();
+
+        foreach ($questions as $question) {
+            $clonedQuestion = $question->replicate();
+            $clonedQuestion->activity_id = $clonedActivity->id;
+            $clonedQuestion->save();
+        }
+
+        return redirect()->route('pages.activity.edit', ['id' => $clonedActivity->id])
+            ->with('success', 'Atividade clonada com sucesso!');
     }
-
-    // Salva as alterações no clone
-    $clonedActivity->save();
-
-    // Clonar as questões relacionadas
-    $questions = Question::where('activity_id', $activity->id)->get();
-
-    foreach ($questions as $question) {
-        $clonedQuestion = $question->replicate();
-        $clonedQuestion->activity_id = $clonedActivity->id;
-        $clonedQuestion->save();
-    }
-
-    return redirect()->route('pages.activity.edit', ['id' => $clonedActivity->id])
-        ->with('success', 'Atividade clonada com sucesso!');
-}
 
 
 
