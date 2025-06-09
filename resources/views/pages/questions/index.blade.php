@@ -45,7 +45,7 @@ foreach($questions as $q) {
             <table class="table table-hover table-responsive-sm">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>Nome</th>
+                        <th style="text-align: left;">Nome</th>
                         <th>Editar</th>
                         <th>Ação</th>
                     </tr>
@@ -62,7 +62,7 @@ foreach($questions as $q) {
                             </button>
                         </td> --}}
 
-                        <td>{{ $item->question }}</td>
+                        <td style="text-align: left;">{{ $item->question }}</td>
                         <td>
                             <form action="{{ route('questions.edit', $item->id) }}">
                                 @csrf

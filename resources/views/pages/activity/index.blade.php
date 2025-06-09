@@ -67,7 +67,7 @@ $pageName = 'Atividades';
         <table class="table table-hover table-responsive-sm">
             <thead>
                 <tr style="text-align: center;">
-                    <th>Nome</th>
+                    <th style="text-align: left;">Nome</th>
                     <th>Marcador</th>
                     <th>Visualizar</th>
                     @if (session('type') == 'teacher')<th>Resultados</th>@endif
@@ -81,7 +81,7 @@ $pageName = 'Atividades';
             <tbody>
                 @foreach ($activities as $item)
                 <tr style="text-align: center;">
-                    <td style="width: 60%;">{{ $item->name }}</td>
+                    <td style="width: 60%;text-align: left;">{{ $item->name }}</td>
                     <td style="width: 25%;">
 
                         <img src="{{ asset('/marcadores/'.$item->marcador.'?v=' . random_int(0,10000)) }}" width="200" height="200">
@@ -94,7 +94,7 @@ $pageName = 'Atividades';
                         <form action="{{ route('activity.results', $item->id) }}">
                             @csrf
                             <input type="hidden" name="activity_id" value="{{ $item->id }}">
-                            <button type="submit" class="btn btn-success" title="Resultados" @if ($item->qtnQuest == 0) disabled @endif
+                            <button type="submit" class="btn btn-info" title="Resultados" @if ($item->qtnQuest == 0) disabled @endif
                                 text-align:center>
                                 <i class="bi bi-journal-bookmark h2" style="color : #ffffff;"></i>
                             </button>

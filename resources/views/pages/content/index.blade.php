@@ -60,7 +60,7 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr style="text-align: center;">
-                                <th>Nome</th>
+                                <th style="text-align: left;">Nome</th>
                                 <th>Disciplina</th>
                                 <th>Série</th>
                                 <th>Fechar</th>
@@ -80,7 +80,7 @@
                             @foreach ($contents as $item)
                                 <tr style="text-align: center;">
 
-                                    <td>{{ $item->content_name }}</td>
+                                    <td style="text-align: left;">{{ $item->content_name }}</td>
                                     <td>{{ $item->disc_name }}</td>
                                     <td>{{ $item->turma_name }}</td>
 
@@ -116,7 +116,7 @@
                                             <form action="{{ route('content.resultsContents') }}">
                                                 @csrf
                                                 <input type="hidden" name="content_id" value="{{ $item->id }}">
-                                                <button type="submit" class="btn btn-success"
+                                                <button type="submit" class="btn btn-warning"
                                                     @if ($item->qtasQuestoes == 0) title="Sem questões" @else title="Resultados" @endif
                                                     @if ($item->qtasatividades == 0 or $item->qtasQuestoes == 0) disabled @endif>
                                                     <i class="bi bi-journal-bookmark h2" style = "color : #ffffff;"></i>
@@ -124,6 +124,7 @@
                                             </form>
                                         </td>
                                     @endif
+
                                     @if (session('type') !== 'developer')
                                         <td>
                                             <form action="{{ route('dev.listDevs') }}">
