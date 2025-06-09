@@ -158,7 +158,7 @@
                     </select>
                 </div>
                 
-                <!-- <input type="hidden" id="selectSceneType" name="sceneType" value="Modelo3D"/> -->
+                <input type="hidden" id="selectSceneType" name="sceneType" value="Modelo3D"/>
                 <!-------------ENVIAR MODELO3D--------------->
                 <div class="form-group" id="3DmodelOption">
                         @if ($acao == 'edit' && $scene_id == 'modelo3D') 

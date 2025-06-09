@@ -219,7 +219,7 @@ document.addEventListener("click", (e) => {
 //----FUNÇÃO DE SELECIONAR PAINEL------------------------------------------------------------------------------------------------
 let qtdBotoes = 0;
 function selecionarPainel(painel, e) {
-    if (e.target.closest(".button_Panel")) return;
+    if (e != null && e.target.closest(".button_Panel")) return;
 
     // limpa seleção anterior
     if (painelSelecionado) painelSelecionado.classList.remove("selecionado");
@@ -756,9 +756,8 @@ function conectarBotoes(startElem, idOrigem, idPainel) {
         startPlug: 'disc',
         endPlug: 'arrow3',
         startPlugSize: 4 * scale,
-        endPlugSize: 8 * scale,
+        endPlugSize: 4 * scale,
         startSocket: ['left', offset],
-
     });
 
     linhasPorBotao.set(idOrigem, linha);
@@ -1044,6 +1043,7 @@ window.livewire.on("stopLoadingBtn", () => {
 
     if(botoesCriando == 0){
         painelSelecionado.querySelector(".areaBtns .loading").style.display = "none"
+        selecionarPainel(painelSelecionado)
         clearInterval(carregarBtn);
     }else{
         loadingBtn()
