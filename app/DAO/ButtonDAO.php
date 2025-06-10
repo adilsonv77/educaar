@@ -27,7 +27,7 @@ class ButtonDAO
         return Button::create($data);
     }
 
-    public function updateById($id, array $data)
+    public static function updateById($id, array $data)
     {
         return Button::where('id', $id)->update($data);
     }

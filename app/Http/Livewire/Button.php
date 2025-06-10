@@ -12,13 +12,15 @@ class Button extends Component
 {
     use WithFileUploads;
 
-    public $listeners = ["updateTexto","updateCor","updateTransicao","updatePainelDestino"];
+    public $listeners = ["updateTexto","updateCor","updateTransicao","updatePainelDestino","updateCoordinateButton"];
     public $button;
     public $texto;
     public $cor;
     public $painelOrigem;
     public $transicao;
     public $painelDestino;
+    public $linhaX;
+    public $linhaY;
 
     public function mount($button)
     {
@@ -31,6 +33,8 @@ class Button extends Component
         $this->painelOrigem = $button->origin_id;
         $this->painelDestino = $button->destination_id;
         $this->transicao = $json['transition'] ?? '';
+        $this->linhaX = $json['linhaX'];
+        $this->linhaY = $json['linhaY'];
     }
 
     public function updateTexto($payload)
@@ -97,6 +101,20 @@ class Button extends Component
         ]);
 
         $this->emitSelf('$refresh');
+    }
+
+    public function updateCoordinateButton($id, $x, $y){
+        if($id != $this->button->id) return;
+
+        $json = json_decode($this->button->configurations);
+        $this->linhaX = $x;
+        $this->linhaY = $y;
+        $json->linhaX = $x;
+        $json->linhaY = $y;
+
+        ButtonDao::updateById($id,[
+            'configurations' => json_encode($json)
+        ]);
     }
 
     public function render()

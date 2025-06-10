@@ -31,7 +31,10 @@ function updateCanvasScale() {
     requestAnimationFrame(() => {
         atualizarTodasConexoes();
         linhasPorBotao.forEach(linha => {
-            linha.setOptions({
+            linha[0].setOptions({
+                size: 4 * scale,
+            });
+            linha[1].setOptions({
                 size: 4 * scale,
             });
         });
@@ -124,8 +127,10 @@ function iniciarPickr() {
                     if (info) info.setAttribute("color", novaCor);
 
                     const linha = linhasPorBotao.get(circulo.id);
-                    if (linha) linha.setOptions({ color: novaCor });
-
+                    if (linha) {
+                        linha[0].setOptions({ color: novaCor });
+                        linha[1].setOptions({ color: novaCor });
+                    }
                     window.livewire.emit("updateCor", {
                         id: circulo.id,
                         color: novaCor
@@ -268,7 +273,10 @@ function selecionarBotao(botao) {
     if (corAtual && circulo) {
         circulo.style.backgroundColor = corAtual;
         const linha = linhasPorBotao.get(circulo.id);
-        if (linha) linha.setOptions({ color: corAtual });
+        if (linha) {
+            linha[0].setOptions({ color: corAtual });
+            linha[1].setOptions({ color: corAtual });
+        }
     }
 }
 
@@ -447,10 +455,14 @@ function habilitarArrastoPersonalizado(painelElement) {
 
         const x = parseFloat(painelElement.style.left);
         const y = parseFloat(painelElement.style.top);
-        const id = parseInt(painelElement.querySelector('.idPainel').id);
-
-        if (!isNaN(id)) {
+        let id;
+        if (!isNaN(painelElement.id)) {
+            id = parseInt(painelElement.querySelector('.idPainel').id);
             window.livewire.emit("updateCoordinate", id, x, y);
+        }else{
+            id = painelElement.id
+            id = parseInt(id.substring(4))
+            window.livewire.emit("updateCoordinateButton", id, x, y)
         }
 
         const painelId = painelElement.querySelector('.idPainel')?.id;
@@ -721,7 +733,8 @@ const linhasPorBotao = new Map();
 function atualizarTodasConexoes() {
     requestAnimationFrame(() => {
         linhasPorBotao.forEach(linha => {
-            if (linha.position) linha.position();
+            if (linha[0].position) linha[0].position();
+            if (linha[1].position) linha[1].position();
         });
     });
 }
@@ -730,11 +743,33 @@ function conectarBotoes(startElem, idOrigem, idPainel) {
     const endElem = document.getElementById(idPainel);
     if (!startElem || !endElem) return;
 
+    //Criar ponto do meio
+    let ponto = document.createElement("div")
+    canvas.append(ponto);
+    ponto.classList = "ponto";
+
+    ponto.id = "btn-" + idOrigem;
+
+    let yMeioEnd = (parseInt(endElem.style.top) + 231);
+    let xMeioEnd = (parseInt(endElem.style.left) + 145.5);
+    let startPanel = startElem.parentElement.parentElement.parentElement;
+    let yMeioStart = (parseInt(startPanel.style.top) + 231);
+    let xMeioStart = (parseInt(startPanel.style.left) + 145.5);
+
+    let xMeio = xMeioStart + (xMeioEnd - xMeioStart) / 2;
+    let yMeio = yMeioStart + (yMeioEnd - yMeioStart) / 2;
+
+    ponto.style.top = yMeio + "px";
+    ponto.style.left = xMeio + "px";
+
+    habilitarArrastoPersonalizado(ponto);
+
     if (linhasPorBotao.has(idOrigem)) {
         linhasPorBotao.get(idOrigem).remove();
         linhasPorBotao.delete(idOrigem);
     }
 
+    //Descobre de que lado as linhas tem que sair
     const layoutContainer = startElem.closest(".painel")?.querySelector("#layout");
     const layout = layoutContainer?.classList[0];
 
@@ -749,31 +784,41 @@ function conectarBotoes(startElem, idOrigem, idPainel) {
     }
 
     const offset = 20 * (1 / scale);
-    const linha = new LeaderLine(startElem, endElem, {
+    const linha1 = new LeaderLine(startElem, ponto, {
         color: '#833B8D',
         size: 4 * scale,
-        path: 'fluid',
+        path: 'straight',
         startPlug: 'disc',
-        endPlug: 'arrow3',
-        startPlugSize: 4 * scale,
-        endPlugSize: 4 * scale,
+        endPlug: 'behind',
+        startPlugSize: 2 * scale,
+        endPlugSize: 3 * scale,
         startSocket: ['left', offset],
     });
 
-    linhasPorBotao.set(idOrigem, linha);
+    const linha2 = new LeaderLine(ponto, endElem, {
+        color: '#833B8D',
+        size: 4 * scale,
+        path: 'straight',
+        startPlug: 'none',
+        endPlug: 'arrow3',
+        startPlugSize: 2 * scale,
+        endPlugSize: 3 * scale,
+        startSocket: ['left', offset],
+    });
+
+    linhasPorBotao.set(idOrigem, [linha1, linha2]);
 
     const infoDiv = startElem.querySelector('#buttonInfo');
     if (infoDiv) {
         infoDiv.setAttribute('destination_id', idPainel);
     }
 
-    return linha;
+    return [linha1, linha2];
 }
-
 // Recriar conexões salvas ao carregar a tela
 function recriarConexoes() {
     todasAsLinhas.forEach(linha => linha.remove());
-    linhasPorBotao.forEach(l => l.remove());
+    linhasPorBotao.forEach(l => { l[0].remove(); l[1].remove() });
     linhasPorBotao.clear();
 
 
@@ -791,7 +836,8 @@ function recriarConexoes() {
                 // 🟡 Aplica a cor salva (se houver)
                 const corSalva = infoDiv?.getAttribute("color");
                 if (linha && corSalva) {
-                    linha.setOptions({ color: corSalva });
+                    linha[0].setOptions({ color: corSalva });
+                    linha[1].setOptions({ color: corSalva });
                 }
             }
         }
@@ -1039,13 +1085,13 @@ function loadingBtn() {
 let botoesCriando = 0;
 window.livewire.on("stopLoadingBtn", () => {
     botoesCriando--;
-    if(botoesCriando < 0) botoesCriando = 0;
+    if (botoesCriando < 0) botoesCriando = 0;
 
-    if(botoesCriando == 0){
+    if (botoesCriando == 0) {
         painelSelecionado.querySelector(".areaBtns .loading").style.display = "none"
         selecionarPainel(painelSelecionado)
         clearInterval(carregarBtn);
-    }else{
+    } else {
         loadingBtn()
     }
 })
