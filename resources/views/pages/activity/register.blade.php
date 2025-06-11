@@ -57,6 +57,26 @@
         };
 
         function HabilitarDesabilitar3D() {
+            let tipoAtividade = document.getElementById("selectSceneType").value;
+
+            let alt1 = document.getElementById("alterar3D");
+            let alt2 = document.getElementById("alterarPainel")
+
+            let alt1checked = (alt1 == null) || (alt1.checked);
+            let alt2checked = (alt2 == null) || (alt2.checked);
+
+            if (tipoAtividade === "Modelo3D") {
+                document.getElementById("glb").disabled = !alt1checked;
+                document.getElementById("glb").required = alt1checked;
+                document.getElementById("selectScene").required = false;
+            } else {
+                document.getElementById("selectScene").disabled = !alt2checked;
+                document.getElementById("selectScene").required = alt2checked;
+                document.getElementById("glb").required = false;
+            }
+
+/*
+
             var alt = document.getElementById("alterar3D");
             var alt2 = document.getElementById("alterarPainel")
             let cenaSelecionada = document.getElementById("selectSceneType").value;
@@ -91,6 +111,7 @@
             }else{
 
             }
+ */ 
         }
 
          function HabilitarDesabilitarImagemMarcador() {
@@ -98,11 +119,12 @@
 
             document.getElementById("marcador").disabled = !alt.checked;
             document.getElementById("marcador").required = alt.checked;
-
+/*
             if (!alt.checked) {
                 var upl = document.getElementById("marcador");
                 upl.value = "";
             }
+                */
          }
 
          function habilitarBotoesEscolhaDeCena() {
@@ -153,26 +175,26 @@
                 <div class="form-group">
                     <label for="">Selecione o tipo de atividade*</label>
                     <select class="form-control" id="selectSceneType" name="sceneType" aria-label="">             
-                        <option value="Modelo3D" selected>Modelo 3D</option>
-                        <option value="Cena">Cena</option>
+                        <option value="Modelo3D" @if($scene_id === 'modelo3D') selected @endif>Modelo 3D</option>
+                        <option value="Cena" @if($scene_id != 'modelo3D') selected @endif>Cena</option>
                     </select>
                 </div>
 
                 <!-------------ENVIAR MODELO3D--------------->
-                <div class="form-group" id="3DmodelOption">
-                        @if ($acao == 'edit' && $scene_id == 'modelo3D') 
+                <div class="form-group" id="3DmodelOption"  @if($scene_id != 'modelo3D')  style="display: none" @endif >
+                        @if ($acao == 'edit'  && $scene_id === 'modelo3D' ) 
                             <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
                         
                         <label for="alterar3D">Modelo 3D (GLB ou GLTF->ZIP)*</label>
                         <span class="alert-danger">Tamanho máximo: 40MB</span>
-                        <input type="file" style="border:none" class="form-control" name="glb"
-                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit' && $scene_id == "modelo3D") disabled @elseif($acao == 'edit') required @endif/>
+                        <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="glb"
+                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit' && $scene_id == "modelo3D") disabled  @endif/>
                 </div>
 
                 <!------------SELECIONAR CENA--------------->
-                <div class="form-group" id="panelOption" style="display: none">
-                        @if ($acao == 'edit' && $scene_id != 'modelo3D') 
+                <div class="form-group" id="panelOption"  @if($scene_id === 'modelo3D')  style="display: none" @endif>
+                        @if ($acao == 'edit' && $scene_id != 'modelo3D' ) 
                             <input type="checkbox" id="alterarPainel" name="alterarPainel" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
 
@@ -221,7 +243,7 @@
                 document.getElementById("3DmodelOption").style.display = "none"
             }
 
-            HabilitarDesabilitar3D()
+            HabilitarDesabilitar3D();
         }
         
         function desativarBotao(form) {

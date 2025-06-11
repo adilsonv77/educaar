@@ -131,6 +131,7 @@ class ActivityController extends Controller
             'contents' => $contents,
             'content' => $content,
             'scenes' => $scenes,
+            'scene_id' => "modelo3D"
         ];
 
         return view('pages.activity.register', $params);
@@ -166,17 +167,17 @@ class ActivityController extends Controller
         $data = $request->all();
         $tipoAtividade = $data['sceneType'];
         unset($data['panelId']);
-        unset($data['sceneType']);
+        unset($data['scene_id']);
 
         //Verifica se é cadastro de glb ou de painel para poder tratar cada cadastro de forma diferente 
         $usarPainel = false;
         
         if ($tipoAtividade == "Cena") {
-            $data['glb'] = '';
+            unset($data['glb']);
             $usarPainel = true;
-            $idScene = $data["scene_id"] == null ? $data['scene'] : $data["scene_id"];
+        //    $idScene = $data['scene']; // $data["scene_id"] == null ? $data['scene'] : $data["scene_id"];
         } else {
-            $data['scene_id'] = null;
+            $data['scene'] = null;
         }
 
         $validator = Validator::make($request->all(), [
@@ -255,6 +256,7 @@ class ActivityController extends Controller
         if ($data['acao'] == 'insert') {
             //Insere
             $data['professor_id'] = Auth::user()->id;
+            $data['scene_id'] = $data['scene'];
             $activity = Activity::create($data);
 
             $data['marcador'] = $activity->id . '.' . $request->marcador->getClientOriginalExtension();
@@ -273,7 +275,7 @@ class ActivityController extends Controller
                 rename($public_path . '/' . $zipdir, $public_path . '/' . $activity->id);
             } else {
                 //Se não for para usar um glb, e usar um painel
-                $data['scene_id'] = $idScene;
+                $data['scene_id'] = $data['scene'];
             }
             $activity->update($data);
         } else if (!$usarPainel) {
@@ -291,12 +293,13 @@ class ActivityController extends Controller
 
             $content = Content::find($activity->content_id);
             $content->update(['fechado' => 0]);
-
+            $data['scene_id'] = null;
             $activity->update($data);
         } else {
             //Editar
             $activity = Activity::find($data['id']);
-            $data['scene_id'] = $idScene;
+            if (array_key_exists('scene', $data))
+                $data['scene_id'] = $data['scene'];
 
             //Deleta o arquivo GLB
             if (!empty($activity->glb)) {
