@@ -89,6 +89,9 @@
                                                 @if (session('type') == 'developer')
                                                     Desenvolvedor
                                                 @endif
+                                                @if (session('type') == 'adminMaster')
+                                                    Administrador Master
+                                                @endif
                                             </p>
 
                                         </div>
@@ -256,6 +259,8 @@
                                     <span class="nav-text">Conteúdos</span>
                                 </a>
                             </li>
+                        @endif
+                        @if (session('type') == 'adminMaster')
                             <li><a class="ai-icon" href="{{ route('create.zip') }}" aria-expanded="false" id="backup">
                                     <i class="bi bi-database-down"></i>
                                     <span class="nav-text">Backup</span>

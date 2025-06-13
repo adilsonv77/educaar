@@ -138,7 +138,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/turma/questoesDosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class, 'index'])->name('student.results');
     Route::get('/turma/questoesNaoRespondidasTodosAlunos', [App\Http\Controllers\QuestoesAcertadasController::class, 'todos'])->name('student.naorespondidas');
 
-    
+    Route::get('/create-zip', [BackupController::class, 'createZip'])->name('create.zip');
 
 
 });

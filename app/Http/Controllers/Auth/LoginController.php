@@ -63,7 +63,6 @@ class LoginController extends Controller
         return $this->username;
     }
 
-
     public function login(Request $request)
     {
         $this->validate($request, [

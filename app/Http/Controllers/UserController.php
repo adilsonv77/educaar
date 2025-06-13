@@ -343,4 +343,6 @@ class UserController extends Controller
 
         return redirect()->route('turmas.turmasAlunosIndex', $data);
     }
+
+    
 }

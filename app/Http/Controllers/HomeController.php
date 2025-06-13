@@ -51,6 +51,11 @@ class HomeController extends Controller
             return view('home', compact('schools'));
         }
 
+        if (session('type') == 'adminMaster') {
+            return view('home');
+        }
+
+
         if (session('type') == 'student') {
             $ano_letivo = AnoLetivo::where('bool_atual', 1)
                     ->where("school_id", Auth::user()->school_id)
