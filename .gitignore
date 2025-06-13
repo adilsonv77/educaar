@@ -26,3 +26,4 @@ database/modelos/modelo01.mwb.bak
 .env
 .env.secrets
 /public/backup/*
+/public/backup
