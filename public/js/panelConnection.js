@@ -907,12 +907,12 @@ function atualizarIndicadoresDeTransicao() {
             indicador.classList.add("indicadorNenhuma");
             indicador.src = "/images/semConexoes.svg";
             indicador.style.position = "absolute";
-            indicador.style.width = "24px";
-            indicador.style.height = "24px";
+            indicador.style.width = "30px";
+            indicador.style.height = "30px";
             indicador.style.zIndex = 20;
             indicador.style.display = "block";
 
-            indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 24) + "px";
+            // indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 24) + "px";
             indicador.style.top = "50%";
             indicador.style.transform = "translateY(-50%)";
 
