@@ -190,6 +190,12 @@ class BackupController extends Controller{
 
         $zip = new \ZipArchive();
         $date = date("d-m-Y");
+
+        $publicBackupFolder = public_path('backupEducaar');
+        if(!File::exists($publicBackupFolder)){
+            File::makeDirectory($publicBackupFolder, 0755, true);
+        }
+        
         $filename = public_path('backupEducaar/'.$date.'.zip');
         $basePath = base_path('backup');
 
