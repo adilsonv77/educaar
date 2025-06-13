@@ -953,7 +953,7 @@ function atualizarIndicadoresDeFinal() {
             indicador.style.zIndex = 20;
             indicador.style.display = "block";
 
-            indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 40) + "px";
+            indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 120) + "px";
             indicador.style.top = "50%";
             indicador.style.transform = "translateY(-50%)";
 
