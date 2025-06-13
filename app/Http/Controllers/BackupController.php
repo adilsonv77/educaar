@@ -190,7 +190,7 @@ class BackupController extends Controller{
 
         $zip = new \ZipArchive();
         $date = date("d-m-Y");
-        $filename = public_path('backup/'.$date.'.zip');
+        $filename = public_path('backupEducaar/'.$date.'.zip');
         $basePath = base_path('backup');
 
         if ($zip->open($filename, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === TRUE) {
@@ -209,7 +209,7 @@ class BackupController extends Controller{
             \Log::error('Erro ao criar o ZIP.');
         }
 
-        $backupPath = public_path('backup');
+        $backupPath = public_path('backupEducaar');
         $backupFiles = File::allFiles($backupPath);
 
         foreach ($backupFiles as $backupFile) {

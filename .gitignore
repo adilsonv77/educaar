@@ -27,3 +27,4 @@ database/modelos/modelo01.mwb.bak
 .env.secrets
 /public/backup/*
 /public/backup
+/public/backupEducaar/*
