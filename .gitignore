@@ -24,3 +24,4 @@ database/modelos/modelo01.mwb.bak
 /public/midiasPainel/*
 !/public/midiasPainel/.gitkeep
 .env
+.env.secrets
