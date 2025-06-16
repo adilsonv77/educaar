@@ -675,7 +675,10 @@ const dropArea = document.getElementById("upload-area");
 
 // Clique para abrir o seletor de arquivos
 dropArea.addEventListener("click", () => {
-    if (inputAtivo) inputAtivo.click();
+    if (inputAtivo) {
+        inputAtivo.setAttribute("accept", ".jpg,.jpeg,.png,.mp4");
+        inputAtivo.click();
+    }
 });
 
 // Evita comportamento padrão ao arrastar arquivos
