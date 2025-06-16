@@ -14,7 +14,7 @@ use App\Models\Test;
 
 class Panel extends Component
 {
-    protected $listeners = ['updateLink', 'updateBtnFormat', 'createButton', 'updatedMidia', 'deleteBtn', 'salvarTexto', 'teste'];
+    protected $listeners = ['updateLink', 'updateBtnFormat', 'createButton', 'updatedMidia', 'deleteBtn', 'salvarTexto', 'teste','resetYoutubeLink' => 'resetarLinkYoutube'];
 
     use WithFileUploads;
 
@@ -25,6 +25,13 @@ class Panel extends Component
     public $link;
     public $btnFormat;
     public $num;
+    
+   
+    public function resetarLinkYoutube()
+    {
+        $this->link = '';
+    }
+    
 
     public function mount($painel)
     {
@@ -60,6 +67,8 @@ class Panel extends Component
         ]);
 
     }
+   
+
 
     public function updatedMidia($recebeuLink = null)
     {
@@ -126,6 +135,8 @@ class Panel extends Component
         $this->link = $payload['link'];
         $this->updatedMidia(true);
     }
+
+   
 
     public function createButton($payload)
     {

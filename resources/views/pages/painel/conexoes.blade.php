@@ -82,6 +82,8 @@
     </div>
 @endsection
 
+
+
 @section('content')
     <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">

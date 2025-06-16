@@ -584,33 +584,61 @@ window.livewire.on("stopLoading", () => {
 })
 
 let painelPopup = null;
+//ISSO AQUI É O CODIGO ANTIGO, SÓ RESTIRAR ISO SE PASSAR EM TODOS OS TESTES, SE N TIVER DADO PAU POR PELOEMNOS UMA SEMANA DE USO CONTIUO, VC TIRA, SEANO EU N VOU LEMBRAR COMO FUNCIONA
+// function abrirPopUp(id) {
+//     painelPopup = id;
+
+//     // Define o input file correspondente a este painel
+//     inputAtivo = document.querySelector("#file-" + id);
+
+//     // Atualiza o atributo "for" da label para apontar pro input atual
+//     const dropLabel = document.getElementById("upload-area");
+//     dropLabel.setAttribute("for", "#file-" + id);
+
+//     // Abre o pop-up
+//     document.getElementById("flex-container").style.display = "flex";
+
+//     // ✅ Limpa o campo do YouTube
+//     const inputYoutube = document.getElementById("linkYoutube");
+//     if (inputYoutube) inputYoutube.value = "";
+
+//     let painel = document.getElementById(id);
+
+//     if (painel.querySelector("video").style.display != 'none') {
+//         setTimeout(() => {
+//             painel.querySelector("video").pause()
+//         }, 500);
+//     }
+
+//     inputAtivo.addEventListener("change", fecharPopUp);
+
+//     // Salvar as coordenadas por precaução
+//     window.livewire.emit('updateCanvasPosition', [canvasTop, canvasLeft, scale, centroCordenadas.style.top, centroCordenadas.style.left]);
+// }
+
 function abrirPopUp(id) {
     painelPopup = id;
 
-    // Define o input file correspondente a este painel
     inputAtivo = document.querySelector("#file-" + id);
-
-    // Atualiza o atributo "for" da label para apontar pro input atual
     const dropLabel = document.getElementById("upload-area");
     dropLabel.setAttribute("for", "#file-" + id);
 
-    // Abre o pop-up
     document.getElementById("flex-container").style.display = "flex";
 
-    let painel = document.getElementById(id)
-
+    let painel = document.getElementById(id);
     if (painel.querySelector("video").style.display != 'none') {
-        setTimeout(() => {
-            painel.querySelector("video").pause()
-        }, 500);
+        setTimeout(() => painel.querySelector("video").pause(), 500);
     }
 
     inputAtivo.addEventListener("change", fecharPopUp);
 
-    //Salvar as cordenadas por precaução.
-    window.livewire.emit('updateCanvasPosition', [canvasTop, canvasLeft, scale, centroCordenadas.style.top, centroCordenadas.style.left]);
-}
+    // 🧽 LIMPA o campo visualmente no HTML
+    const inputYoutube = document.getElementById("linkYoutube");
+    if (inputYoutube) inputYoutube.value = "";
 
+    // 🔁 Solicita que o Livewire limpe o valor interno também
+    window.livewire.emit('resetYoutubeLink');
+}
 let urlYoutubeInformado = false;
 let inputAtivo = null;
 
