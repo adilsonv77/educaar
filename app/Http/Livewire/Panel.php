@@ -200,25 +200,9 @@ class Panel extends Component
         Button::destroy($payload['id']);
     }
 
-    public function getMaxButtonsProperty()
-    {
-        return match ($this->btnFormat) {
-            'linhas' => 3,
-            'blocos' => 6,
-            'alternativas' => 4,
-            default => 3,
-        };
-    }
-
     public function render()
     {
-        return view('livewire.panel', [
-        'texto' => $this->texto,
-        'maxButtons' => $this->maxButtons,
-        'btnFormat' => $this->btnFormat,
-        'buttonRenderizados' => $this->buttonRenderizados,
-        'painel' => $this->painel,
-    ]);
+        return view('livewire.panel', ['texto' => $this->texto,]);
     }
 
 }
