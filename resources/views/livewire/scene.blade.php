@@ -1,9 +1,10 @@
 <div>
     <div class="AddPainel">
-        <button id="addPanel" wire:click="create" class="button" style="width: 50px; height: 50px; border-radius: 50%;">
+        <button id="addPanel" wire:click="create" class="button">Add painel</button>
+        <!-- <button id="addPanel" wire:click="create" class="button" style="width: 50px; height: 50px; border-radius: 50%;">
                             <i class="bi bi-plus-circle-dotted h1"
                                 style="color: #ffffff; border: none !important; align-items: center;" ></i>
-                        </button>
+                        </button> -->
     </div>
     <!-- MENU LATERAL -->
     <div class="menu-lateral">
@@ -16,6 +17,10 @@
                         <h3 id="buttonsh3">
                             BOTÕES
                         </h3>
+                        <button style="border: none; background-color: #FFF">
+                            <i class="bi bi-plus-circle-dotted h1" id="addButton"
+                                style="color: #ffffff; border: none !important;"></i>
+                        </button>
                     </div>
                     <div class="tipos">
                         <div class="linhas">
