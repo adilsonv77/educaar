@@ -53,6 +53,14 @@
             @foreach ($buttonRenderizados as $button)
                 @livewire('button', ['button' => $button, ""], key($button->id))
             @endforeach
+
+            @if (count($buttonRenderizados) < $maxButtons)
+                <button class="button_Panel placeholder disabled-look" style="border: 1px dotted #833B8D; opacity: 0.4; cursor: pointer;"
+                    wire:click.prevent="createButton({{ json_encode(['id' => $painel->id]) }})">
+                    <div class="circulo" style="background: #833B8D;"></div> 
+                    Criar botão
+                </button>
+            @endif
         </div>
     </div>
 
