@@ -1,7 +1,7 @@
 /* =============================
    ESTILOS GERAIS
    ============================= */
-   body {
+body {
     overflow: hidden !important;
 }
 
@@ -765,4 +765,5 @@ i#addButton.bi.bi-plus-circle-dotted.h1 {
     position: absolute;
     z-index: 1000;
 }
+
 
