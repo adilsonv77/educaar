@@ -766,4 +766,10 @@ i#addButton.bi.bi-plus-circle-dotted.h1 {
     z-index: 1000;
 }
 
+.disabled-look {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: auto; /* ainda permite clique */
+}
+
 
