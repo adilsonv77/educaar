@@ -16,8 +16,8 @@ use App\DAO\ContentDAO;
 use App\DAO\StudentAppDAO;
 use App\Models\Painei;
 use App\DAO\PainelDAO;
-use App\Dao\SceneDAO;
-use App\Dao\QuestionDAO;
+use App\DAO\SceneDAO;
+use App\DAO\QuestionDAO;
 
 class StudentController extends Controller
 {
