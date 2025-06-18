@@ -347,15 +347,32 @@ function alterarFormatoBotoes(formato) {
         return;
     }
 
-    let qtdBotoes = painelSelecionado.querySelector("#layout").children.length;
+    let layoutPainel = painelSelecionado.querySelector("#layout");
+    let botoes = Array.from(layoutPainel.children);
+    let qtdBotoes = layoutPainel.children.length;
+    let botaoCriar = layoutPainel.querySelector(".placeholder.disabled-look");
+    botoes.forEach((botao, i) =>{
+        if(botao == botaoCriar){
+            qtdBotoes = qtdBotoes - 1;
+        }
+    });
 
-    if (formato == "linhas" && qtdBotoes > 3) {
-        enviarMsg("Você não pode trocar formatos, o formato de linhas suporta até 3 botões. Exclua alguns botões e tente novamente.")
-        return;
-    } else if (formato == "alternativas" && qtdBotoes > 4) {
-        enviarMsg("Você não pode trocar formatos, o formato de círculos suporta até 4 botões. Exclua alguns botões e tente novamente")
-        return;
-    }
+
+    if (formato == "linhas" && qtdBotoes >= 3) {
+        if(formato == "linhas" && qtdBotoes > 3){
+            enviarMsg("Você não pode trocar formatos, o formato de linhas suporta até 3 botões. Exclua alguns botões e tente novamente.")
+            return;
+        } else{
+            botaoCriar.style.display = "none";
+        }
+    } else if (formato == "alternativas" && qtdBotoes >= 4) {
+        if(formato == "alternativas" && qtdBotoes > 4){
+            enviarMsg("Você não pode trocar formatos, o formato de círculos suporta até 4 botões. Exclua alguns botões e tente novamente")
+            return;
+        } else{
+            botaoCriar.style.display = "none";
+        }
+    } 
 
     let layout = painelSelecionado.querySelector("#layout");
     let txtBtn = document.getElementById("btnTxt");
