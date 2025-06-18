@@ -1,12 +1,8 @@
 <div>
     <div class="AddPainel">
-        <button id="addPanel" wire:click="create" class="button">Add painel</button>
-        <!-- <button id="addPanel" wire:click="create" class="button" style="width: 50px; height: 50px; border-radius: 50%;">
-                            <i class="bi bi-plus-circle-dotted h1"
-                                style="color: #ffffff; border: none !important; align-items: center;" ></i>
-                        </button> -->
-
-                        <!-- minheeuuuu -->
+        <button id="addPanel" wire:click="create" class="button" style="width: 50px; height: 50px; border-radius: 50%;">
+            <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff; border: none !important;"></i>
+        </button>
     </div>
     <!-- MENU LATERAL -->
     <div class="menu-lateral">
