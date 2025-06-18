@@ -159,7 +159,7 @@ Route::post('/receivemind', 'App\Http\Controllers\ReceiveMindController@receive'
 Route::get('/students/novas', [App\Http\Controllers\StudentController::class, 'novasAtividades']);
 Route::get('/students/realizadas', [App\Http\Controllers\StudentController::class, 'atividadesRealizadas']);
 
-
+/*
 
 
 Route::get('/alunoteste', function () {
@@ -447,3 +447,4 @@ Route::get('/arteste', function () {
     };
     return redirect('/home');
 });
+*/
