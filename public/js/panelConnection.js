@@ -802,12 +802,12 @@ function conectarBotoes(startElem, idOrigem, idPainel) {
             const offset = 20 * (1 / scale);
             const linha = new LeaderLine(startElem, endElem, {
                 color: '#833B8D',
-                size: 4 * scale,
+                size: 4,
                 path: 'fluid',
                 startPlug: 'disc',
                 endPlug: 'arrow3',
-                startPlugSize: 4 * scale,
-                endPlugSize: 4 * scale,
+                startPlugSize: 2,
+                endPlugSize: 2,
                 startSocket: ['left', offset],
             });
         
