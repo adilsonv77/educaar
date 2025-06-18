@@ -959,6 +959,7 @@ function atualizarIndicadoresDeTransicao() {
             indicador.style.height = "30px";
             indicador.style.zIndex = 20;
             indicador.style.display = "block";
+            indicador.style.pointerEvents = "none";
 
             // indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 24) + "px";
             indicador.style.top = "50%";
