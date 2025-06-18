@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\Disciplina;
@@ -33,6 +34,13 @@ class AppServiceProvider extends ServiceProvider
         if (env('FORCE_HTTPS', false)) {
             URL::forceScheme('https');
         }
+
+        Request::macro('hasValidSignature', function ($absolute = true) {
+            if('livewire/upload-file' == request()->path()) {
+                return true;
+            }
+            return URL::hasValidSignature($this, $absolute);
+        });
 
         Validator::extend('senhas_nao_conferem', function ($attribute, $value, $parameters, $validator) {
             $inputs = $validator->getData();
