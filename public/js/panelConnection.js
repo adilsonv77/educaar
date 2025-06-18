@@ -347,6 +347,17 @@ function alterarFormatoBotoes(formato) {
         return;
     }
 
+    document.querySelectorAll(".linhas, .blocos, .alternativas").forEach(formato => {
+        formato.classList.remove("selecionado");
+    });
+
+    let formatoSelecionado = document.querySelector(`.${formato}`);
+    formatoSelecionado.classList.add("selecionado");
+
+    setTimeout(() => {
+        formatoSelecionado.classList.remove("selecionado");
+    }, 3000);
+
     let layoutPainel = painelSelecionado.querySelector("#layout");
     let botoes = Array.from(layoutPainel.children);
     let qtdBotoes = layoutPainel.children.length;
@@ -356,7 +367,6 @@ function alterarFormatoBotoes(formato) {
             qtdBotoes = qtdBotoes - 1;
         }
     });
-
 
     if (formato == "linhas" && qtdBotoes >= 3) {
         if(formato == "linhas" && qtdBotoes > 3){
