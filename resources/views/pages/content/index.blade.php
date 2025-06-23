@@ -145,7 +145,11 @@
                                             <form action="{{ route('content.atividades.pdf', ['id' => $item->id]) }}" method="GET" target="_blank" style="display: inline;">
                                                 <button type="submit" 
                                                         class="btn btn-warning" 
-                                                        title="Visualizar PDF" 
+
+                                                        @if ($item->qtasQuestoes == 0) title="Sem questões" 
+                                                        @elseif (!$item->fechado) title="Não fechado" 
+                                                        @else title="Visualizar PDF" @endif
+                                                        
                                                         {{ $isPdfDisabled ? 'disabled' : '' }}>
                                                     <i class="bi bi-filetype-pdf h2" style="color: #ffffff;"></i>
                                                 </button>
