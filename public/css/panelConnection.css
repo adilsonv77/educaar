@@ -19,10 +19,10 @@ body {
    BOTÃO ADICIONAR PAINEL
    ============================= */
 #addPanel {
-    margin: 17px;
     width: 116px;
     position: fixed;
-    right: 346px;
+    right: 360px;
+    bottom: 10px;
 }
 
 .AddPainel {

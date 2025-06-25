@@ -1005,14 +1005,14 @@ function atualizarIndicadoresDeFinal() {
 
             const indicador = document.createElement("img");
             indicador.classList.add("indicadorFinal");
-            indicador.src = "/images/endConnection.svg";
+            indicador.src = "/images/end.png";
             indicador.style.position = "absolute";
-            indicador.style.width = "40px";
-            indicador.style.height = "40px";
+            indicador.style.width = "30px";
+            indicador.style.height = "30px";
             indicador.style.zIndex = 20;
             indicador.style.display = "block";
 
-            indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 120) + "px";
+            //indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 120) + "px";
             indicador.style.top = "50%";
             indicador.style.transform = "translateY(-50%)";
 
