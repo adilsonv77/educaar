@@ -182,6 +182,12 @@ class BackupController extends Controller{
 
     public function createZip(){
 
+        File::deleteDirectory(base_path('backup/marcadores'));
+        File::deleteDirectory(base_path('backup/mind'));
+        File::deleteDirectory(base_path('backup/modelos3d'));
+        File::deleteDirectory(base_path('backup/midiasPainel'));
+        File::delete(base_path("backup/databaseBackup.sql"));
+
         $this->copyFolder(public_path('marcadores'),base_path('backup/marcadores'));
         $this->copyFolder(public_path('mind'),base_path('backup/mind'));
         $this->copyFolder(public_path('modelos3d'),base_path('backup/modelos3d'));
