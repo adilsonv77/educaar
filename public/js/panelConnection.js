@@ -366,6 +366,9 @@ function alterarFormatoBotoes(formato) {
         if(botao == botaoCriar){
             qtdBotoes = qtdBotoes - 1;
         }
+        if(formato !== "alternativas"){
+            botao.style.backgroundColor = "";
+        }
     });
 
     if (formato == "linhas" && qtdBotoes >= 3) {
@@ -943,6 +946,7 @@ function atualizarIndicadoresDeTransicao() {
         // Remove indicadores antigos
         botao.querySelector(".indicadorTransicao")?.remove();
         botao.querySelector(".indicadorNenhuma")?.remove();
+        botao.style.backgroundColor = "";
 
         if (transicao === "" || transicao === "nenhuma") {
             const layoutContainer = botao.closest(".painel")?.querySelector("#layout");
@@ -963,13 +967,17 @@ function atualizarIndicadoresDeTransicao() {
 
             const indicador = document.createElement("img");
             indicador.classList.add("indicadorNenhuma");
-            indicador.src = "/images/semConexoes.svg";
+            indicador.src = "/images/pergunta.png";
             indicador.style.position = "absolute";
             indicador.style.width = "30px";
             indicador.style.height = "30px";
             indicador.style.zIndex = 20;
             indicador.style.display = "block";
             indicador.style.pointerEvents = "none";
+
+            if(layout === "layout-alternativas"){
+                    botao.style.backgroundColor = botao.querySelector("#buttonInfo")?.getAttribute("color");
+                }
 
             // indicador.style.left = (lado === "esquerda" ? -offset : botao.offsetWidth + offset - 24) + "px";
             indicador.style.top = "50%";
@@ -999,6 +1007,9 @@ function atualizarIndicadoresDeFinal() {
                 const index = botoes.indexOf(botao);
 
                 lado = (index % 2 === 0) ? "esquerda" : "direita";
+                if(layout === "layout-alternativas"){
+                    botao.style.backgroundColor = botao.querySelector("#buttonInfo")?.getAttribute("color");
+                }
             }
 
             const offset = 100;
