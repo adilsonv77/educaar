@@ -257,7 +257,6 @@ class BackupController extends Controller{
         File::makeDirectory($destination, 0755, true);
 
         $files = File::files($source);
-
         foreach ($files as $file) {
             File::copy($file, $destination . '/' . $file->getFilename());
         }
