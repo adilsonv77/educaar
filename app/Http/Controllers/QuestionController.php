@@ -252,6 +252,8 @@ class QuestionController extends Controller
             ])
             ->distinct();
 
+       // dd($where->toSql(), Auth::user()->id, $anoletivo->id, $activity_id);
+
 
         $turmas = $where->get();
 
@@ -277,8 +279,10 @@ class QuestionController extends Controller
         $questions = ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);
         $respostasSelecionadas = ResultActivityDAO::respostasDosAlunos($activity->id, $turma->id);
 
-        //dd($result['alunos_fizeram_completo'], $result['alunos_fizeram_incompleto'], $result['alunos_nao_fizeram']);
-
+        foreach ($questions as $question) {
+            $question->quntRespondCerto = (int)$question->quntRespondCerto;
+        }
+ 
         return view('pages.activity.results', compact('result', 'questions', 'turmas', 'turma', 'activity', 'respostasSelecionadas'));
     }
 

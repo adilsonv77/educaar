@@ -71,7 +71,7 @@ class ResultActivityDAO
     {
 
         $sql = DB::table('questions as q')
-        ->select('q.question as questao', 'q.id', DB::raw('COUNT(sta.id) as qntRespondida'))
+        ->select('q.question as questao', 'q.id', DB::raw('COUNT(sta.id) as qntRespondida'), DB::raw('sum(case when sta.correct = 1 then 1 else 0 end) as quntRespondCerto'))
         ->join('student_answers as sta', 'sta.question_id', '=', 'q.id')
             ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'sta.user_id')
             ->where([
@@ -79,18 +79,19 @@ class ResultActivityDAO
                 ['q.activity_id', '=', $activityID]
             ])
             ->groupBy('q.id');
+/*
+        $where= $sql  ->addSelect([
+            'quntRespondCerto' => DB::table('student_answers as sta')->selectRaw('COUNT(sta.id)')
+                ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'sta.user_id')
+                ->whereColumn('sta.question_id', '=', 'q.id')
+                ->where('sta.correct', '=', 1)
+        ]);
+        */
+       // dd($turma_id, $activityID, $sql->toSql());        
 
-            $where= $sql  ->addSelect([
-                'quntRespondCerto' => DB::table('student_answers as sta')->selectRaw('COUNT(sta.id)')
-                    ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'sta.user_id')
-                    ->whereColumn('sta.question_id', '=', 'q.id')
-                    ->where('sta.correct', '=', 1)
-            ]);
-            
+        $result_questions= $sql->get();
 
-            $result_questions= $where->get();
-
-            return $result_questions;
+        return $result_questions;
     }
 
     public static function getStudentDidNotQuestions($turma_id, $questao){
