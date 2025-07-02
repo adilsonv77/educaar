@@ -44,7 +44,7 @@ class ResultContentDAO
         return $sql;
     }
 
-    public static function getCountRespostas($questionid) {
+    public static function getCountRespostas($turmaid, $questionid) {
         /*
         select sa.alternative_answered, COUNT(sa.id) as respostas_count, q.answer from student_answers sa
             join questions q on q.id = sa.question_id
@@ -53,12 +53,15 @@ class ResultContentDAO
         */
         return DB::table('student_answers as sa')
                 ->join('questions as q', 'sa.question_id', '=', 'q.id')
+                ->join("alunos_turmas as atu", "atu.aluno_id", "=", "sa.user_id")
+                ->join("turmas as t", "t.id", "=", "atu.turma_id")
                 ->select(
                     'sa.alternative_answered',
                     DB::raw('COUNT(sa.id) as respostas_count'),
                     'q.answer'
                 )
                 ->where('q.id', $questionid) // Filtra pela questão atual
+                ->where('t.id', $turmaid)
                 ->groupBy('sa.alternative_answered', 'q.answer')
                 ->get();
     }

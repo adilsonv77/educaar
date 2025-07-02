@@ -18,12 +18,12 @@
         <div class="form-inline">
             <label for="">Informe o conteúdo :</label>
             <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}"
-                list="historico" />
+                list="historicoX" />
             <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
 
         </div>
 
-        <datalist id="historico">
+        <datalist id="historicoX">
             @foreach ($contents as $content)
                 <option value="{{ $content->pesq_name }}">{{ $content->pesq_name }}</option>
             @endforeach

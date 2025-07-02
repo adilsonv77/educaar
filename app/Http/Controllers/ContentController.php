@@ -372,8 +372,8 @@ class ContentController extends Controller
                         'D' => 0
                     ];
 
-                    $respostas_count = ResultContentDAO::getCountRespostas($question->id);
-
+                    $respostas_count = ResultContentDAO::getCountRespostas($turma_id, $question->id);
+                    
                     $correct_alternative = null;
 
                     foreach ($respostas_count as $response) {
