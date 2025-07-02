@@ -47,14 +47,18 @@
 @section('content')
 
 <div id="formTurma">
-    <form action="{{ route('turmas.listarTurmasAlunosProf') }}" method="GET ">
+    <form action="{{ route('turma.resultados') }}" method="GET ">
         @csrf
 
         <div class="form-inline">
             <label for="">Informe a turma:</label>
+
             <select class="form-control" name="turma_id">
+                <option value="0"  @if ($turma_id === 0) selected="selected" @endif>
+                    Todas as turmas
+                </option> 
                 @foreach ($turmas as $item)
-                    <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
+                    <option value="{{ $item->id }}" @if ($item->id === $turma_id) selected="selected" @endif>
                         {{ $item->nome }}
                     </option>
                 @endforeach

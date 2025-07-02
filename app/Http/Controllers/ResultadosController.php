@@ -23,15 +23,19 @@ class ResultadosController extends Controller
         // Busca as turmas do professor
         $turmas = TurmaDAO::buscarTurmasProf($prof_id, $anoletivo->id)->get();
 
-        // Se não foi passado um turma_id, seleciona a primeira turma disponível
-        if ($turma_id) {
+        // Se não foi passado um turma_id, seleciona todas as turmas 
+        if ($turma_id && $turma_id > 0) {
             $turma = Turma::find($turma_id);
+            $turma_modelo_id = $turma->turma_modelo_id;
         } else {
+            /*
             $turma = $turmas->first();
             $turma_id = $turma->id;
+            */
+            $turma_id = 0;
+            $turma_modelo_id = 0;
         }
        
-        $turma_modelo_id = $turma->turma_modelo_id;
 
         // Buscar conteúdos do professor para a turma selecionada
         $contentsprof = ContentDAO::buscarContentsDoProf($prof_id, $anoletivo->id)
@@ -41,7 +45,7 @@ class ResultadosController extends Controller
         $contents = [];
         $contents_id = [];
         foreach ($contentsprof as $linha) {
-            if ($linha->turma_modelo_id == $turma_modelo_id) {
+            if ($turma_modelo_id == 0 || $linha->turma_modelo_id == $turma_modelo_id) {
                 $contents[$linha->id] = [
                     'id' => $linha->id,
                     'name' => $linha->name,
@@ -85,50 +89,54 @@ class ResultadosController extends Controller
 
         // Organizar as respostas dos alunos
         $studentsResponses = [];
-        $students = TurmaDAO::buscarAlunosTurma($turma_id)->get();
-        
+        $students = TurmaDAO::buscarAlunosTurma($turma_id, $anoletivo->id)->get();
+
         //  adiciona todos os alunos da turma
         foreach($students as $student) {
             $studentsResponses[$student->name] = array();
         }
 
-        //dd($studentsResponses);
-
         $activity_questions = StudentAnswer::whereIn('activity_id', $activities->pluck('id'))
             ->with(['activity.contents', 'student'])
             ->get();
 
+        //dd($activity_questions);
+
         foreach ($activity_questions as $student_answer) {
-            $username = $student_answer->student->name ?? 'Desconhecido';
+            
+            if (array_key_exists($student_answer->student->name, $studentsResponses)) {
 
-            // Verifica se a atividade e o conteúdo existem
-            if (isset($student_answer->activity) && isset($student_answer->activity->content_id)) {
-                $content_id = $student_answer->activity->content_id;
-                $activity_id = $student_answer->activity_id;
-                $question_id = $student_answer->question_id;
+                $username = $student_answer->student->name ?? 'Desconhecido';
 
-                // Preencher o array com as respostas
-                $studentsResponses[$username][$content_id][$activity_id][$question_id] = [
-                    'is_correct' => $student_answer->correct,
-                    'status' => $student_answer->correct ? '✅' : '❌',
-                    'answer' => $student_answer->alternative_answered,
-                ];
-
-                // Adiciona a resposta (pergunta + status) no array de conteúdos
-                if (isset($contents[$content_id]['activities'][$activity_id]['questions'][$question_id])) {
-                    $contents[$content_id]['activities'][$activity_id]['questions'][$question_id]['responses'][$username] = [
+                // Verifica se a atividade e o conteúdo existem
+                if (isset($student_answer->activity) && isset($student_answer->activity->content_id)) {
+                    $content_id = $student_answer->activity->content_id;
+                    $activity_id = $student_answer->activity_id;
+                    $question_id = $student_answer->question_id;
+    
+                    // Preencher o array com as respostas
+                    $studentsResponses[$username][$content_id][$activity_id][$question_id] = [
                         'is_correct' => $student_answer->correct,
                         'status' => $student_answer->correct ? '✅' : '❌',
                         'answer' => $student_answer->alternative_answered,
                     ];
+    
+                    // Adiciona a resposta (pergunta + status) no array de conteúdos
+                    if (isset($contents[$content_id]['activities'][$activity_id]['questions'][$question_id])) {
+                        $contents[$content_id]['activities'][$activity_id]['questions'][$question_id]['responses'][$username] = [
+                            'is_correct' => $student_answer->correct,
+                            'status' => $student_answer->correct ? '✅' : '❌',
+                            'answer' => $student_answer->alternative_answered,
+                        ];
+                    }
                 }
-            }
+                }
         }
        
         // ordenar lista
         ksort($studentsResponses);
         
-        return view('pages.turma.resultados', compact('turmas', 'turma', 'contents', 'studentsResponses'));
+        return view('pages.turma.resultados', compact('turmas', 'turma_id', 'contents', 'studentsResponses'));
     }
 
 
