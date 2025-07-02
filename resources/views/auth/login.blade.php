@@ -89,7 +89,7 @@
             </div>
                     
             <div class="data">
-                20250625
+                20250702
             </div>
         </div>   
         
