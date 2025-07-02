@@ -58,7 +58,7 @@
                     Todas as turmas
                 </option> 
                 @foreach ($turmas as $item)
-                    <option value="{{ $item->id }}" @if ($item->id === $turma_id) selected="selected" @endif>
+                    <option value="{{ $item->id }}" @if ($item->id == $turma_id) selected="selected" @endif>
                         {{ $item->nome }}
                     </option>
                 @endforeach
