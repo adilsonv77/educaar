@@ -325,22 +325,7 @@ class TurmaController extends Controller
 
         $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
                     ->where('bool_atual', 1)->first();
-        /*
-        $where = DB::table('turmas as t')
-            ->select('t.id as id','t.nome as nome', 't.school_id')
-            ->join('turmas_disciplinas as td','td.turma_id', '=', 't.id')
-            ->join('turmas_modelos as tm', 't.turma_modelo_id','=','tm.id')
-            ->join('contents as c', 'c.turma_id', '=', 'tm.id')
-            ->join('activities as a', 'a.content_id', '=', 'c.id')
-            ->where([
-                ['td.professor_id','=', Auth::user()->id],
-                ['t.ano_id','=', $anoletivo->id],
-                ['t.school_id','=', Auth::user()->school_id]
-            ])
-            ->distinct();
-            Ana... podes excluir esse comentário.. troquei o where acima pela chamada da DAO
-        */
-
+        
         $where = TurmaDAO::buscarTurmasProf($prof_id, $anoletivo->id);
         $turmas= $where->get();
 
@@ -352,9 +337,9 @@ class TurmaController extends Controller
             $turma_id = $turma->id;
         }
 
-            $where2 = TurmaDAO::buscarAlunosTurma($turma_id);
-            
-            $where2 = $where2->get();  // paginate(20) as turmas não são tão grandes, e a paginação vai exigir uma alteração fudida nos filtros
+        $where2 = TurmaDAO::buscarAlunosTurma($turma_id, $anoletivo->id);
+        
+        $where2 = $where2->get();  // paginate(20) as turmas não são tão grandes, e a paginação vai exigir uma alteração fudida nos filtros
         
         $alunos = array();
         $newd = null;

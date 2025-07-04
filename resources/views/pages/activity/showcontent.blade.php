@@ -58,7 +58,7 @@
         model-viewer {
             width: 100%;
             height: 550px;
-            background-color: #70BCD1;
+            background-color: #F4F5F9;
             --poster-color: #ffffff00;
         }
 

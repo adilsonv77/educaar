@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         desbloquear.style.display = "block";
 
         mindarThree.stop();
-        scene.background = new THREE.Color(0x00ced1);
+        scene.background = new THREE.Color(0xF4F5F9); //0x00ced1
 
         //Se a cena ativa é um painel
         if (activeScene.children.length == 0) {
