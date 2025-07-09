@@ -101,7 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         anchor.onTargetFound = () => {
           // console.log("chegou no targetfound")
-          buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
+          //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
+
+          buttonAR.activityid = anchor.activityid;
           buttonAR.disabled = (anchor.clazz == "#000000"); // criancas.. nao façam isso em casa... tenho que melhorar isso
 
           var bq = document.getElementById("button-ar");
@@ -143,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           /*
           Esse código ta comentado a um tempo ele é necessário? -05/05/25
+          // serve para simular o zoom com a roda do mouse
 
           // Adiciona um listener para o evento de rolagem do mouse
           window.addEventListener('wheel', (event) => {
@@ -389,8 +392,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     buttonAR.onclick = () => {
-      location.href = buttonAR.href;
+    //  location.href = buttonAR.href;
+       Livewire.emit('openQuestions', buttonAR.activityid);
     };
+
   };
 
   //Inicia o projeto

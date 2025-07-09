@@ -166,12 +166,12 @@
 
                 @if ($showOthers)
 
-                
+                <!--
                         <button id="button-ar" class="btn btn-warning" data-href="{{ route('student.questoes') }}" style="display: none;">
                             <span><i style="color:#ffffff;" class="bi bi-book"></i></span>
                          </button>
 
-                         <!-- <button type="button" class="btn btn-warning" id="b_rotate_x">
+                          <button type="button" class="btn btn-warning" id="b_rotate_x">
                             <span><i  style = "color:#ffffff;"class="bi bi-arrow-90deg-up" ></i></span>
                         </button>
                    

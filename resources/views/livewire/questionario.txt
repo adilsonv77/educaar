@@ -1,0 +1,43 @@
+
+                        <!--
+                        <form wire:submit.prevent="salvar" name="questoesform">
+                            @foreach ($questions as $item)
+                                @csrf
+                                <div class="">
+                                    <div class="card-body">
+                                        <div>
+                                            <input name="id" type="hidden" value="{{ $item->id }}" />
+                                            <h2 style="font-size: 25px" class="text">
+                                                {{ $loop->iteration }}.{{ $item->question }}
+                                            </h2>
+                                        </div>
+
+                                        <div class="card-body">
+                                            @foreach ($item->options as $option)
+                                                <div class="form-check">
+                                                    <input class="form-check-input question-radio" type="radio" 
+                                                        name="questao{{ $item->id }}"
+                                                        id="flexRadioDefault{{ $loop->index }}{{ $item->id }}" 
+                                                        value="{{ $loop->index }}"
+                                                        @if ($item->alternative_answered != NULL) 
+                                                            disabled 
+                                                            @if ($option == $item->alternative_answered) checked @endif
+                                                        @endif>
+                                                    <label for="flexRadioDefault{{ $loop->index }}{{ $item->id }}"
+                                                        class="form-check-label" style="font-size: 17px">
+                                                        {{ $option }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                            @endforeach
+                            <div><br/></div>
+                            <div id="salvarquestao">
+                                @if (!session('tipotrocado'))
+                                    <button id="salvibutton" @if ($respondida == 1) hidden="hidden" @endif
+                                            class="btn btn-success">Salvar</button>
+                                @endif
+                            </div>
+                        </form>
+                        -->

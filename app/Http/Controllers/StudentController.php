@@ -195,7 +195,7 @@ class StudentController extends Controller
 
         $rota = route("student.showActivity");
 
-        return view('student.atividadeAr', compact('questions', 'respondida', 'rota'));
+        return view('student.questionario', compact('questions', 'respondida', 'rota', 'activity_id')); // view('student.atividadeAr', compact('questions', 'respondida', 'rota'));
     }
 
     /**

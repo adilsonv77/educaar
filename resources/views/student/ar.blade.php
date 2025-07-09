@@ -264,10 +264,13 @@
 <div id="painelContainer" style="display: none;">
 
 </div>
-
 <div id="my-ar-container">
     
 </div>
+
+<livewire:questionario-aluno-form/>
+
+
 @endsection
 
 @section('script')	
