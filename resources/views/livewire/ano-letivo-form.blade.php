@@ -146,12 +146,12 @@
                         </div>               
                         
                         <div class="modal-footer">
-                                <button type="button"  data-dismiss="modal" class="btn btn-primary">
-                                    Cancelar
-                                </button>
-
                                 <button class="btn btn-primary">
                                     Salvar
+                                </button>
+
+                                <button type="button"  data-dismiss="modal" class="btn btn-primary">
+                                    Cancelar
                                 </button>
 
                         </div>
