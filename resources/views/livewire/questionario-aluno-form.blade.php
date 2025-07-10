@@ -26,10 +26,17 @@
 <!-- precisa dar um jeito de colocar esse botão de outra forma sobre a tela -->
     <script>
         window.addEventListener('openQuestionsModal', event => {
+            //inicia com o botao desligado
+            document.getElementById('salvibutton').disabled = true;
+            console.log("openQuestionsModal");
+            
             $("#questionarioModal").modal('show');
         });
         
-        
+        window.addEventListener('closeQuestionsModal', event => {
+            $("#questionarioModal").modal('hide');
+        });
+
         document.addEventListener("DOMContentLoaded", function() {   
            
             
@@ -47,7 +54,7 @@
         });
     </script>
 
-    <!-- wire:ignote foi necessario porque ele escondia o botão assim que mostrava a janela de diálogo -->
+    <!-- wire:ignote foi necessario porque livewire escondia o botão assim que mostrava a janela de diálogo -->
 
     <div wire:ignore>
         <button id="button-ar" class="btn btn-warning" style="display: none;">
@@ -66,13 +73,12 @@
                 <div class="modal-body">
                     <div class="scroll">
                         @if (!empty($questions))    
-                        <form name="questoesform" >
+                        <form wire:submit.prevent="salvar" name="questoesform" >
                             @foreach ($questions as $item)
                                 @csrf
                                 <div class="">
                                     <div class="card-body">
                                         <div>
-                                            <input name="id" type="hidden" value="{{ $item->id }}" />
                                             <h2 style="font-size: 25px" class="text">
                                                 {{ $loop->iteration }}.{{ $item->question }}
                                             </h2>
@@ -81,7 +87,11 @@
                                         <div class="card-body">
                                             @foreach ($item->options as $option)
                                                 <div class="form-check">
-                                                    <input class="form-check-input question-radio" type="radio" 
+                                                    <!-- wire.model.defer para avisar que nao é preciso atualizar a tela a cada mudança -->
+                                                    
+                                                    <input 
+                                                        wire:model.defer="alternativas.{{ $item->id }}"
+                                                        class="form-check-input question-radio" type="radio" 
                                                         name="questao{{ $item->id }}"
                                                         id="flexRadioDefault{{ $loop->index }}{{ $item->id }}" 
                                                         value="{{ $loop->index }}"
@@ -103,11 +113,11 @@
                                 <div id="salvarquestao">
                                     @if (!session('tipotrocado'))
                                         <button id="salvibutton" @if ($respondida == 1) hidden="hidden" @endif
-                                                class="btn btn-success" onclick="submitForm()">Salvar</button>
+                                                class="btn btn-success">Salvar</button>
                                     @endif
                                 </div>
                                 <button type="button"  data-dismiss="modal" class="btn btn-primary">
-                                        Cancelar
+                                @if ($respondida == 1) Fechar @else Cancelar @endif
                                 </button>
                             </div>
                         </form>
@@ -119,10 +129,6 @@
     </div>
 
     <script>
-
-
-        //inicia com o botao desligado
-       // document.getElementById('salvibutton').disabled = true;
 
         function checkIfAllAnswered() {
             // Seleciona todas as questoes

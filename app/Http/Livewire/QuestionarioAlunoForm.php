@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use App\Models\StudentAnswer;
 
 class QuestionarioAlunoForm extends Component
 {
@@ -20,45 +21,40 @@ class QuestionarioAlunoForm extends Component
     public function openQuestions($value)
     {
         $this->activity_id = $value;
-    }
 
-    // esse método sempre será executado ao final da chamada da execução dos outros métodos
-    public function render()
-    {
-      
-        if ($this->activity_id  != null) {
+        // buscar da tabela student_answers uma questao respondida da activity_id, question_id, user_id
 
-            // buscar da tabela student_answers uma questao respondida da activity_id, question_id, user_id
+        $where = DB::table('questions')
+        ->where("activity_id", $this->activity_id)->addSelect([
+                'alternative_answered' => DB::table('student_answers')
+                    ->select('student_answers.alternative_answered')
+                    ->whereColumn('student_answers.question_id', '=', 'questions.id')
+                    ->whereColumn('student_answers.activity_id', '=', 'questions.activity_id')
+                    ->where('student_answers.user_id', '=', Auth::user()->id)
+            ]);
 
-            $where = DB::table('questions')
-                ->where("activity_id", $this->activity_id)->addSelect([
-                        'alternative_answered' => DB::table('student_answers')
-                            ->select('student_answers.alternative_answered')
-                            ->whereColumn('student_answers.question_id', '=', 'questions.id')
-                            ->whereColumn('student_answers.activity_id', '=', 'questions.activity_id')
-                            ->where('student_answers.user_id', '=', Auth::user()->id)
-                    ]);
-            $questions = $where->get();
-            $questions = $questions->shuffle();
+        $questions = $where->get();
+        $questions = $questions->shuffle();
 
-            foreach ($questions as $item) {
-                $options = [$item->a, $item->b, $item->c, $item->d];
-                shuffle($options);
-                $item->options = $options;
-            }
-            session()->put('questoes', $questions);
-
-            $this->respondida = $this->questionarioRespondido();
-            $this->questions = $questions;
-
-            $this->dispatchBrowserEvent('openQuestionsModal');
-
+        foreach ($questions as $item) {
+            $options = [$item->a, $item->b, $item->c, $item->d];
+            shuffle($options);
+            $item->options = $options;
         }
+        session()->put('questoes', $questions);
 
-        return view('livewire.questionario-aluno-form');
+        $this->respondida = $this->questionarioRespondido();
+        $this->questions = $questions;
+
+        $this->alternativas = array();
+
+        //dd($questions, $this->alternativas);
+
+        $this->dispatchBrowserEvent('openQuestionsModal');
+
+   
     }
 
- 
     private function questionarioRespondido()
     {
         $questions = session()->get('questoes');
@@ -91,6 +87,15 @@ class QuestionarioAlunoForm extends Component
 
     }
 
+    // esse método sempre será executado ao final da chamada da execução dos outros métodos
+    public function render()
+    {
+          return view('livewire.questionario-aluno-form');
+    }
+
+ 
+    public $alternativas;
+
     public function salvar() {
 
         DB::beginTransaction();
@@ -101,8 +106,7 @@ class QuestionarioAlunoForm extends Component
         foreach ($questions as $q) {
             array_push($questoes, $q->id);
         }
-      
-
+ 
         $respondida = DB::table('student_answers')
             ->whereIn('question_id', $questoes)
             ->where('user_id', Auth::user()->id)
@@ -110,12 +114,13 @@ class QuestionarioAlunoForm extends Component
 
         if (!$respondida) {
 
-            $datareq = $request->all();
+            //$datareq = $request->all();
             foreach ($questions as $questao) {
                 $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
 
                 try {
-                    $respop = $datareq["questao" . $questao->id];
+                    //$respop = $datareq["questao" . $questao->id];
+                    $respop = $this->alternativas[$questao->id];
                     $data['question_id'] = $questao->id;
                     $data['user_id'] = Auth::user()->id;
                     $data['activity_id'] = $questao->activity_id;
@@ -141,6 +146,11 @@ class QuestionarioAlunoForm extends Component
             }
 
             DB::commit();
+
+            unset($_SESSION['questoes']);
+            $this->questions = null;
+            
+            $this->dispatchBrowserEvent('closeQuestionsModal');
         } else {
             DB::commit();
 
