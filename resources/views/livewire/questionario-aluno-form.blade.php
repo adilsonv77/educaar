@@ -1,13 +1,13 @@
 <div>
     <style>
     .scroll {
-                margin: 4px, 4px;
-                padding: 4px;
+        margin: 4px, 4px;
+        padding: 4px;
 
-                height: 80%;
-                overflow-x: hidden;
-                overflow-y: auto;
-                text-align: justify;
+        height: 80%;
+        overflow-x: hidden;
+        overflow-y: auto;
+
             }
     input[type="radio"] {
         border: 0px;
@@ -30,6 +30,16 @@
         height: 50px;
         z-index: 10;
     }
+    @media (max-width: 100%) {
+    .overflow-y-auto {
+        -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
+        overscroll-behavior-y: contain; /* Evita que o scroll "vaze" para o body */
+    }
+    
+    .max-h-[70vh] {
+        max-height: 70vh !important;
+    }
+}
     </style>
 <!-- precisa dar um jeito de colocar esse botão de outra forma sobre a tela -->
     
@@ -96,7 +106,7 @@
         </div>
     </div>
 
-    <div wire:ignore.self class="modal fade modal-dialog-scrollable" id="questionarioModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="questionarioModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
