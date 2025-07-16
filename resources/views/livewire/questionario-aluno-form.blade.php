@@ -30,18 +30,20 @@
         height: 50px;
         z-index: 10;
     }
+   /*
     @media (max-width: 640px    ) {
     .overflow-y-auto {
-        -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
-        overscroll-behavior-y: contain; /* Evita que o scroll "vaze" para o body */
-    }
+        -webkit-overflow-scrolling: touch; /* Scroll suave no iOS 
+        overscroll-behavior-y: contain; /* Evita que o scroll "vaze" para o body 
+        }
     
-    .max-h-[70vh] {
-        max-height: 70vh !important;
+        .max-h-[70vh] {
+            max-height: 70vh !important;
+        }
     }
-}
+   */
+    
     </style>
-<!-- precisa dar um jeito de colocar esse botão de outra forma sobre a tela -->
     
     <script>
         window.addEventListener('openQuestionsModal', event => {
@@ -106,13 +108,11 @@
         </div>
     </div>
 
-    <!-- modal fade -->
+    <div wire:ignore.self class="modal fade" id="questionarioModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     
-    <div wire:ignore.self class="fixed inset-0 z-50 overflow-y-auto" id="questionarioModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0" role="document"> <!-- modal-dialog modal-dialog-scrollable -->
+        <div class="modal-dialog modal-dialog-scrollable" role="document"> <!--  -->
             
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">  <!-- modal-content -->
+            <div class="modal-content">  <!--  -->
                 <div class="modal-header">
                     <h5 class="modal-title">
                         Questões
