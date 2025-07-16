@@ -22,6 +22,14 @@
     .modal-dialog {
         max-width: 100%;
     }
+    #button-ar {
+        position: fixed;
+        bottom: 70px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        z-index: 10;
+    }
     </style>
 <!-- precisa dar um jeito de colocar esse botão de outra forma sobre a tela -->
     
