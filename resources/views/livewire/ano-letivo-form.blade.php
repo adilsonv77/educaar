@@ -33,16 +33,16 @@
                 </div>
 
                 <style>
-    .form-inline{
-        display: flex;
-        justify-content: flex-start; 
-    }
+                    .form-inline{
+                        display: flex;
+                        justify-content: flex-start; 
+                    }
 
-    .form-inline label {
-      
-      margin-right: 10px;
-    }
-</style>
+                    .form-inline label {
+                    
+                    margin-right: 10px;
+                    }
+                </style>
                 <datalist id="historico">
                     @foreach ($anosletivos as $anoLetivo)
                         <option value="{{ $anoLetivo->name }}">{{ $anoLetivo->name }}</option>

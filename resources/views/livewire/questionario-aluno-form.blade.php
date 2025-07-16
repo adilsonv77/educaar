@@ -24,15 +24,20 @@
     }
     </style>
 <!-- precisa dar um jeito de colocar esse botão de outra forma sobre a tela -->
+    
     <script>
         window.addEventListener('openQuestionsModal', event => {
             //inicia com o botao desligado
             document.getElementById('salvibutton').disabled = true;
-            console.log("openQuestionsModal");
-            
+                        
             $("#questionarioModal").modal('show');
         });
         
+        window.addEventListener('showError', event => {
+            $("#questionarioModal").modal('hide');
+            $("#alertaModal").modal('show');
+        });
+
         window.addEventListener('closeQuestionsModal', event => {
             $("#questionarioModal").modal('hide');
         });
@@ -54,12 +59,33 @@
         });
     </script>
 
-    <!-- wire:ignote foi necessario porque livewire escondia o botão assim que mostrava a janela de diálogo -->
+    <!-- wire:ignore foi necessario porque livewire escondia o botão assim que mostrava a janela de diálogo -->
 
     <div wire:ignore>
         <button id="button-ar" class="btn btn-warning" style="display: none;">
             <span><i style="color:#ffffff;" class="bi bi-book"></i></span>
         </button>
+    </div>
+
+    <div wire:ignore.self class="modal fade" id="alertaModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5>
+                        Erro ao salvar
+                    </h5>
+                    <h3>
+                        Questionário já respondido por outro login. Você somente consegue retornar.
+                    </h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div wire:ignore.self class="modal fade" id="questionarioModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -116,7 +142,7 @@
                                                 class="btn btn-success">Salvar</button>
                                     @endif
                                 </div>
-                                <button type="button"  data-dismiss="modal" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">
                                 @if ($respondida == 1) Fechar @else Cancelar @endif
                                 </button>
                             </div>
@@ -128,9 +154,11 @@
         </div>
     </div>
 
+
     <script>
 
         function checkIfAllAnswered() {
+    // data-dismiss="modal"
             // Seleciona todas as questoes
             const questions = document.querySelectorAll('.question-radio[name^="questao"]');
             const totalQuestions = new Set(Array.from(questions).map(input => input.name)).size;

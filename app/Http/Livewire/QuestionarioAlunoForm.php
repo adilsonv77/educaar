@@ -59,7 +59,7 @@ class QuestionarioAlunoForm extends Component
     {
         $questions = session()->get('questoes');
 
-        $reposta = 0;
+        $resposta = 0;
         // vou fazer o sistema de resposta assim: 
         // 1- retorna que o questionário foi respondido completo
         // -1 -retorna que o questionário não foi respondido completo
@@ -87,16 +87,21 @@ class QuestionarioAlunoForm extends Component
 
     }
 
-    // esse método sempre será executado ao final da chamada da execução dos outros métodos
+     // esse método sempre será executado ao final da chamada da execução dos outros métodos
     public function render()
     {
-          return view('livewire.questionario-aluno-form');
+        return view('livewire.questionario-aluno-form');
     }
 
  
     public $alternativas;
 
     public function salvar() {
+
+        $this->questions = null;
+        $this->dispatchBrowserEvent('showError');
+
+        return;
 
         DB::beginTransaction();
 
@@ -151,16 +156,13 @@ class QuestionarioAlunoForm extends Component
             $this->questions = null;
             
             $this->dispatchBrowserEvent('closeQuestionsModal');
+            
         } else {
-            DB::commit();
+            DB::rollback();
 
-            return redirect()->back()
-                ->withInput()
-                ->withErrors([
-                        'respondida' => 'Questionário já respondido por outro login. Você somente consegue retornar.'
-                    ]);
-
+            $this->dispactchBrowserEvent('showError');
         }
 
     }
+
 }
