@@ -118,7 +118,7 @@
                         Questões
                     </h5>
                 </div>
-                <div class="modal-body" style="max-height: 400px; overflow-y: scroll">
+                <div class="modal-body scroll" >
                     <div> <!--  class="scroll" -->
                         @if (!empty($questions))    
                         <form wire:submit.prevent="salvar" name="questoesform" >
