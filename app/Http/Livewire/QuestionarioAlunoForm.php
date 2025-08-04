@@ -21,50 +21,58 @@ class QuestionarioAlunoForm extends Component
 
     public $nrquestao;
     public $qtasquestoes;
-    
+
+    public $alternativas;
+
     public function openQuestions($value)
     {
         $this->activity_id = $value;
 
-        // buscar da tabela student_answers uma questao respondida da activity_id, question_id, user_id
+        if (session()->has('livewire_nrquestao') && session()->get('livewire_activity_id') == $value) {
+            // pull jah busca e exclui
+            $this->nrquestao = session()->pull('livewire_nrquestao');
+            $this->alternativas = session()->pull('livewire_alternativas');
+            $questions = session()->get('livewire_questoes');
 
-        $where = DB::table('questions')
-        ->where("activity_id", $this->activity_id)->addSelect([
-                'alternative_answered' => DB::table('student_answers')
-                    ->select('student_answers.alternative_answered')
-                    ->whereColumn('student_answers.question_id', '=', 'questions.id')
-                    ->whereColumn('student_answers.activity_id', '=', 'questions.activity_id')
-                    ->where('student_answers.user_id', '=', Auth::user()->id)
-            ]);
+        } else {
 
-        $questions = $where->get();
-        $questions = $questions->shuffle();
+            session()->put('livewire_activity_id', $this->activity_id);
+            // buscar da tabela student_answers uma questao respondida da activity_id, question_id, user_id
 
-        foreach ($questions as $item) {
-            $options = [$item->a, $item->b, $item->c, $item->d];
-            shuffle($options);
-            $item->options = $options;
+            $where = DB::table('questions')
+            ->where("activity_id", $this->activity_id)->addSelect([
+                    'alternative_answered' => DB::table('student_answers')
+                        ->select('student_answers.alternative_answered')
+                        ->whereColumn('student_answers.question_id', '=', 'questions.id')
+                        ->whereColumn('student_answers.activity_id', '=', 'questions.activity_id')
+                        ->where('student_answers.user_id', '=', Auth::user()->id)
+                ]);
+
+            $questions = $where->get();
+            $questions = $questions->shuffle();
+
+            foreach ($questions as $item) {
+                $options = [$item->a, $item->b, $item->c, $item->d];
+                shuffle($options);
+                $item->options = $options;
+            }
+            session()->put('livewire_questoes', $questions);
+
+            $this->nrquestao = 0;
+            $this->alternativas = array();
         }
-        session()->put('questoes', $questions);
 
         $this->respondida = $this->questionarioRespondido();
         $this->questions = $questions;
 
         $this->qtasquestoes = count($questions);
-        $this->nrquestao = 0;
-
-        $this->alternativas = array();
-
-        //dd($questions, $this->alternativas);
 
         $this->dispatchBrowserEvent('openQuestionsModal');
-
-   
     }
 
     private function questionarioRespondido()
     {
-        $questions = session()->get('questoes');
+        $questions = session()->get('livewire_questoes');
 
         $resposta = 0;
         // vou fazer o sistema de resposta assim: 
@@ -97,21 +105,17 @@ class QuestionarioAlunoForm extends Component
      // esse método sempre será executado ao final da chamada da execução dos outros métodos
     public function render()
     {
-        /*
-        if ($this->nrquestao > 0)
-            dd($this->questions); */
-            /*
-        if ($this->questions == null)
-            $this->activequestion = null;
-        else
-            $this->activequestion = $this->questions[$this->nrquestao];
-        */
         $this->dispatchBrowserEvent('checkAllPost');
         return view('livewire.questionario-aluno-form');
     }
 
- 
-    public $alternativas;
+    public function cancel() {
+        // as alternativas escolhidas salvar na sessão, assim como o numero da questao que estava observando
+        session()->put("livewire_alternativas", $this->alternativas);
+        session()->put("livewire_nrquestao", $this->nrquestao);
+    }
+
+
 
     public function anterior() {
         if ($this->nrquestao > 0) {
@@ -134,7 +138,7 @@ class QuestionarioAlunoForm extends Component
 
         DB::beginTransaction();
 
-        $questions = session()->get('questoes');
+        $questions = session()->get('livewire_questoes');
         $questoes = [];
 
         foreach ($questions as $q) {
@@ -181,7 +185,10 @@ class QuestionarioAlunoForm extends Component
 
             DB::commit();
 
-            unset($_SESSION['questoes']);
+            unset($_SESSION['livewire_questoes']);
+            unset($_SESSION['livewire_alternativas']);
+            unset($_SESSION['livewire_nrquestao']);
+
             $this->questions = null;
             
             $this->dispatchBrowserEvent('closeQuestionsModal');

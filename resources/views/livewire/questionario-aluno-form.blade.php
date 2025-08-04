@@ -197,7 +197,7 @@
                                     @endif
 
                                     <div id="salvarquestao">
-                                        <!-- @ if (!session('tipotrocado')) -->
+                                        <!-- @ if (!session('tipotrocado'))  -->
                                          <!-- @ if ($respondida == 1) hidden="hidden" @ endif -->
                                             <button id="salvibutton" 
                                                     class="btn btn-success" title="@if ($nrquestao == $qtasquestoes-1 && $respondida != 1) Salvar @else Próximo @endif">
@@ -206,7 +206,7 @@
                                         <!-- @ endif -->
                                     </div>
 
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal" title="@if ($respondida == 1) Fechar @else Cancelar @endif">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal"  wire:click="cancel()" title="@if ($respondida == 1) Fechar @else Cancelar @endif">
                                         <span><i  style = "color:#ffffff;"class="bi bi-x-square"></i></span>
                                     </button>
 
