@@ -31,6 +31,7 @@
     @include('sweetalert::alert')
     @livewireStyles
     @yield('script-head')
+    @livewireScripts
 
 </head>
 
@@ -134,7 +135,7 @@
    
 
     </div>
-    @livewireScripts
+    
     <script src="/vendor/global/global.min.js"></script>
     <script src="/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
     <script src="/vendor/deznav/deznav.min.js"></script>
@@ -166,46 +167,13 @@
 
                 @if ($showOthers)
 
-                <!--
-                        <button id="button-ar" class="btn btn-warning" data-href="{{ route('student.questoes') }}" style="display: none;">
-                            <span><i style="color:#ffffff;" class="bi bi-book"></i></span>
-                         </button>
 
-                          <button type="button" class="btn btn-warning" id="b_rotate_x">
-                            <span><i  style = "color:#ffffff;"class="bi bi-arrow-90deg-up" ></i></span>
-                        </button>
-                   
-                  
-                        <button type="button" class="btn btn-warning" id="b_rotate_x_">
-                            <span><i  style = "color:#ffffff;"class="bi bi-arrow-90deg-down" ></i></span>
-                        </button>
-
-                   
-                        <button type="button" class="btn btn-warning" id="b_rotate_y_">
-                            <span><i  style = "color:#ffffff;"class="bi bi-arrow-return-left" ></i></span>
-                        </button>
-
-                    
-                        <button type="button" class="btn btn-warning" id="b_rotate_y">
-                            <span><i  style = "color:#ffffff;"class="bi bi-arrow-return-right" ></i></span>
-                        </button>
-
-                   
-                        <button type="button" class="btn btn-warning" id="zoom_mais">
-                            <span><i  style = "color:#ffffff;"class="bi bi-zoom-in "></i></span>
-                        </button>
-
-                   
-                        <button type="button" class="btn btn-warning" id="zoom_menos">
-                            <span><i  style = "color:#ffffff;"class="bi bi-zoom-out "></i></span>
-                        </button> 
-                   -->
                         <button type="button" class="btn btn-warning" id="showObject" style="display: none;">
-                            <span><i  style = "color:#ffffff;"class="bi bi-lock-fill"></i></span>
+                            <span><i  style = "color:#ffffff;"class="bi bi-unlock-fill"></i></span>
                         </button> 
 
                         <button type="button" class="btn btn-warning" id="removeObject" style="display: none;">
-                            <span><i  style = "color:#ffffff;"class="bi bi-unlock-fill"></i></span>
+                            <span><i  style = "color:#ffffff;"class="bi bi-lock-fill"></i></span>
                         </button> 
             </div>
             @endif
@@ -214,7 +182,5 @@
 </footer>
 
 
-
-<!-- lembrar de voltar ate os comentarios aparecerem -->
 
 </html>

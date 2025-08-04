@@ -54,7 +54,7 @@
                <button class="btn btn-sm btn-primary " id="novo" wire:click="novo()" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
             </div>
         </div>
-     </div>
+    </div>
 
     <div class="card">
         <div class="card-body">

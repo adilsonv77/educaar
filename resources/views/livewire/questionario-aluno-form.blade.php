@@ -63,7 +63,6 @@
         });
 
         document.addEventListener("DOMContentLoaded", function() {   
-           
             
             /*
             var buttonsfooter = document.getElementById("buttons_footer");
@@ -77,7 +76,32 @@
             */
     
         });
-    </script>
+
+        function checkIfAllAnswered() {
+            // Seleciona todas as questoes
+            const questions = document.querySelectorAll('.question-radio[name^="questao"]');
+            //const totalQuestions = new Set(Array.from(questions).map(input => input.name)).size;
+            const totalQuestions = 1;
+            
+            // Conta quantas questões foram respondidas
+            const answeredQuestions = new Set(Array.from(questions).filter(input => input.checked).map(input => input.name)).size;
+            
+            // Habilita o botão "Salvar" se todas as questões foram respondidas
+            document.getElementById('salvibutton').disabled = answeredQuestions !== totalQuestions;
+
+            return  answeredQuestions !== totalQuestions;
+        }
+
+
+        window.addEventListener('checkAllPost', event => {
+            document.querySelectorAll('.question-radio').forEach(input => {
+                input.addEventListener('change', checkIfAllAnswered);
+            });
+
+            checkIfAllAnswered();
+        });
+
+</script>
 
     <!-- wire:ignore foi necessario porque livewire escondia o botão assim que mostrava a janela de diálogo -->
 
@@ -122,52 +146,72 @@
                     <div> <!--  class="scroll" -->
                         @if (!empty($questions))    
                         <form wire:submit.prevent="salvar" name="questoesform" >
-                            @foreach ($questions as $item)
+                               <!-- tive que usar essa técnica porque não conseguia mais acessar questions a partir da segunda tela -->
+                                @php $jsonDecodeValue = json_decode($questions,true); @endphp
                                 @csrf
                                 <div class="">
                                     <div class="card-body">
                                         <div>
                                             <h2 style="font-size: 25px" class="text">
-                                                {{ $loop->iteration }}.{{ $item->question }}
+                                                {{ ($nrquestao+1) }}.{{ $jsonDecodeValue[$nrquestao]['question'] }}
                                             </h2>
                                         </div>
 
-                                        <div class="card-body">
-                                            @foreach ($item->options as $option)
-                                                <div class="form-check">
-                                                    <!-- wire.model.defer para avisar que nao é preciso atualizar a tela a cada mudança -->
-                                                    
-                                                    <input 
-                                                        wire:model.defer="alternativas.{{ $item->id }}"
-                                                        class="form-check-input question-radio" type="radio" 
-                                                        name="questao{{ $item->id }}"
-                                                        id="flexRadioDefault{{ $loop->index }}{{ $item->id }}" 
-                                                        value="{{ $loop->index }}"
-                                                        @if ($item->alternative_answered != NULL) 
-                                                            disabled 
-                                                            @if ($option == $item->alternative_answered) checked @endif
-                                                        @endif>
-                                                    <label for="flexRadioDefault{{ $loop->index }}{{ $item->id }}"
-                                                        class="form-check-label" style="font-size: 17px">
-                                                        {{ $option }}
-                                                    </label>
-                                                </div>
-                                            @endforeach
-                                        </div>
                                     </div>
-                            @endforeach
-                            <div><br/></div>
-                            <div class="modal-footer">
-                                <div id="salvarquestao">
-                                    @if (!session('tipotrocado'))
-                                        <button id="salvibutton" @if ($respondida == 1) hidden="hidden" @endif
-                                                class="btn btn-success">Salvar</button>
-                                    @endif
                                 </div>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                                @if ($respondida == 1) Fechar @else Cancelar @endif
-                                </button>
-                            </div>
+                                <div>
+                                    @foreach ($jsonDecodeValue[$nrquestao]['options'] as $option)
+                                    
+                                        <div class="form-check">
+
+                                        <!-- wire.model.defer para avisar que nao é preciso atualizar a tela a cada mudança  -->
+
+                                            <input 
+                                                wire:model.defer="alternativas.{{ $jsonDecodeValue[$nrquestao]['id'] }}"
+                                                class="form-check-input question-radio" type="radio" 
+                                                name="questao{{ $jsonDecodeValue[$nrquestao]['id'] }}"
+                                                id="flexRadioDefault{{ $loop->index }}{{ $jsonDecodeValue[$nrquestao]['id'] }}" 
+                                                value="{{ $loop->index }}"
+                                                @if ($jsonDecodeValue[$nrquestao]['alternative_answered'] != NULL) 
+                                                    disabled 
+                                                    @if ($option == $jsonDecodeValue[$nrquestao]['alternative_answered']) checked @endif
+                                                @endif>
+                                                <label for="flexRadioDefault{{ $loop->index }}{{ $jsonDecodeValue[$nrquestao]['id'] }}"
+                                                    class="form-check-label" style="font-size: 17px">
+                                                    {{ $option }}
+                                                </label>
+                                            </input>
+                                        </div>
+
+        
+                                    @endforeach
+                                    <br/>
+                                </div>
+
+                                <div class="modal-footer">
+
+                                    @if ($nrquestao > 0)
+                                    <button type="button" class="btn btn-primary" wire:click="anterior()" title="Anterior"> 
+                                        <span><i  style = "color:#ffffff;"class="bi bi-box-arrow-in-left" ></i></span>
+                                    </button>
+                                    @endif
+
+                                    <div id="salvarquestao">
+                                        <!-- @ if (!session('tipotrocado')) -->
+                                         <!-- @ if ($respondida == 1) hidden="hidden" @ endif -->
+                                            <button id="salvibutton" 
+                                                    class="btn btn-success" title="@if ($nrquestao == $qtasquestoes-1 && $respondida != 1) Salvar @else Próximo @endif">
+                                                    @if ($nrquestao == $qtasquestoes-1 && $respondida != 1) <span><i  style = "color:#ffffff;"class="bi bi-save" ></i></span> @else <span><i  style = "color:#ffffff;"class="bi bi-box-arrow-in-right" ></i></span> @endif
+                                            </button>
+                                        <!-- @ endif -->
+                                    </div>
+
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" title="@if ($respondida == 1) Fechar @else Cancelar @endif">
+                                        <span><i  style = "color:#ffffff;"class="bi bi-x-square"></i></span>
+                                    </button>
+
+                                </div>
+                                
                         </form>
                         @endif
                     </div>
@@ -177,22 +221,5 @@
     </div>
 
 
-    <script>
 
-        function checkIfAllAnswered() {
-    // data-dismiss="modal"
-            // Seleciona todas as questoes
-            const questions = document.querySelectorAll('.question-radio[name^="questao"]');
-            const totalQuestions = new Set(Array.from(questions).map(input => input.name)).size;
-            
-            // Conta quantas questões foram respondidas
-            const answeredQuestions = new Set(Array.from(questions).filter(input => input.checked).map(input => input.name)).size;
-            
-            // Habilita o botão "Salvar" se todas as questões foram respondidas
-            document.getElementById('salvibutton').disabled = answeredQuestions !== totalQuestions;
-        }
-        document.querySelectorAll('.question-radio').forEach(input => {
-            input.addEventListener('change', checkIfAllAnswered);
-        });
-    </script>
 </div>

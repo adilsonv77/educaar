@@ -17,6 +17,10 @@ class QuestionarioAlunoForm extends Component
 
     public $questions;
     public $respondida;
+    public $activequestion;
+
+    public $nrquestao;
+    public $qtasquestoes;
     
     public function openQuestions($value)
     {
@@ -45,6 +49,9 @@ class QuestionarioAlunoForm extends Component
 
         $this->respondida = $this->questionarioRespondido();
         $this->questions = $questions;
+
+        $this->qtasquestoes = count($questions);
+        $this->nrquestao = 0;
 
         $this->alternativas = array();
 
@@ -90,18 +97,40 @@ class QuestionarioAlunoForm extends Component
      // esse método sempre será executado ao final da chamada da execução dos outros métodos
     public function render()
     {
+        /*
+        if ($this->nrquestao > 0)
+            dd($this->questions); */
+            /*
+        if ($this->questions == null)
+            $this->activequestion = null;
+        else
+            $this->activequestion = $this->questions[$this->nrquestao];
+        */
+        $this->dispatchBrowserEvent('checkAllPost');
         return view('livewire.questionario-aluno-form');
     }
 
  
     public $alternativas;
 
+    public function anterior() {
+        if ($this->nrquestao > 0) {
+            $this->nrquestao = $this->nrquestao - 1;
+        } 
+    }
+
+
     public function salvar() {
 
-        $this->questions = null;
-        $this->dispatchBrowserEvent('showError');
+        if ($this->nrquestao < $this->qtasquestoes-1) {
+            $this->nrquestao = $this->nrquestao + 1;
+        } else {
 
-        return;
+            $this->questions = null;
+            $this->dispatchBrowserEvent('showError');
+        }
+
+       return;
 
         DB::beginTransaction();
 
