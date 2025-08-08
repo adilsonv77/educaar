@@ -78,18 +78,25 @@
         });
 
         function checkIfAllAnswered() {
-            // Seleciona todas as questoes
-            const questions = document.querySelectorAll('.question-radio[name^="questao"]');
-            //const totalQuestions = new Set(Array.from(questions).map(input => input.name)).size;
-            const totalQuestions = 1;
-            
-            // Conta quantas questões foram respondidas
-            const answeredQuestions = new Set(Array.from(questions).filter(input => input.checked).map(input => input.name)).size;
-            
-            // Habilita o botão "Salvar" se todas as questões foram respondidas
-            document.getElementById('salvibutton').disabled = answeredQuestions !== totalQuestions;
 
-            return  answeredQuestions !== totalQuestions;
+            if (document.getElementById('salvibutton').getAttribute("respondida_ultima") == "1") {
+
+                document.getElementById('salvibutton').disabled = true;
+
+            } else {
+
+                // Seleciona todas as questoes
+                const questions = document.querySelectorAll('.question-radio[name^="questao"]');
+                //const totalQuestions = new Set(Array.from(questions).map(input => input.name)).size;
+                const totalQuestions = 1;
+                
+                // Conta quantas questões foram respondidas
+                const answeredQuestions = new Set(Array.from(questions).filter(input => input.checked).map(input => input.name)).size;
+                
+                // Habilita o botão "Salvar" se todas as questões foram respondidas
+                document.getElementById('salvibutton').disabled = answeredQuestions !== totalQuestions;
+
+            }
         }
 
 
@@ -139,7 +146,7 @@
             <div class="modal-content">  <!--  -->
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        Questões
+                        Questão  {{ ($nrquestao+1) }} de {{ $qtasquestoes }}
                     </h5>
                 </div>
                 <div class="modal-body scroll" >
@@ -200,7 +207,7 @@
                                         <!-- @ if (!session('tipotrocado'))  -->
                                          <!-- @ if ($respondida == 1) hidden="hidden" @ endif -->
                                             <button id="salvibutton" 
-                                                    class="btn btn-success" title="@if ($nrquestao == $qtasquestoes-1 && $respondida != 1) Salvar @else Próximo @endif">
+                                                    class="btn btn-success" @if ($nrquestao == $qtasquestoes-1 && $respondida == 1) respondida_ultima="1" @else respondida_ultima="0" @endif>
                                                     @if ($nrquestao == $qtasquestoes-1 && $respondida != 1) <span><i  style = "color:#ffffff;"class="bi bi-save" ></i></span> @else <span><i  style = "color:#ffffff;"class="bi bi-box-arrow-in-right" ></i></span> @endif
                                             </button>
                                         <!-- @ endif -->

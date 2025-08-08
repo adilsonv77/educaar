@@ -92,6 +92,11 @@ class StudentController extends Controller
         // dd($respondido);
 
         $rota = route("home");
+
+        // limpar a sessao a ser usada nos questionarios
+        session()->forget(['livewire_nrquestao', 'livewire_alternativas', 'livewire_questoes', 'livewire_activity_id']);
+
+
         return view('student.indexContentStudent', compact('conteudos', 'rota', 'conteudosRespondidos'));
     }
 
@@ -128,7 +133,6 @@ class StudentController extends Controller
 
             $activity->bloquearPorData = $bloquearPorData;
             if ($bloquearPorData == 0) {
-                //$questions = QuestionDAO::getByActivityId($activity->id); remover se n houver erros 30/04
                 // uma questao respondida ou nao jah diz tudo da atividade
                 $respondida = StudentAppDAO::verificaAtividadeRespondida($activity->id, Auth::user()->id);
                 $activity->respondido = $respondida ? 1 : 0;

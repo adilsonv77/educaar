@@ -24,15 +24,20 @@ class QuestionarioAlunoForm extends Component
 
     public $alternativas;
 
+    /*
+- PRECISO TESTAR COMO FUNCIONA COM FORMULÁRIOS JÁ RESPONDIDOS
+*/
     public function openQuestions($value)
     {
         $this->activity_id = $value;
+
 
         if (session()->has('livewire_nrquestao') && session()->get('livewire_activity_id') == $value) {
             // pull jah busca e exclui
             $this->nrquestao = session()->pull('livewire_nrquestao');
             $this->alternativas = session()->pull('livewire_alternativas');
             $questions = session()->get('livewire_questoes');
+            $this->activity_id = session()->get('livewire_activity_id');
 
         } else {
 
@@ -51,15 +56,20 @@ class QuestionarioAlunoForm extends Component
             $questions = $where->get();
             $questions = $questions->shuffle();
 
+            $this->alternativas = array();
             foreach ($questions as $item) {
+
                 $options = [$item->a, $item->b, $item->c, $item->d];
                 shuffle($options);
                 $item->options = $options;
+                if ($item->alternative_answered != null) {
+                    $key = array_search($item->alternative_answered, $options);
+                    $this->alternativas[$item->id] = $key;
+                }
             }
             session()->put('livewire_questoes', $questions);
 
             $this->nrquestao = 0;
-            $this->alternativas = array();
         }
 
         $this->respondida = $this->questionarioRespondido();
