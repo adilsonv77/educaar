@@ -236,10 +236,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById("showObject").addEventListener('click', () => {
         bloquear.style.display = "none";
         desbloquear.style.display = "block";
-
+      
         mindarThree.stop();
         scene.background = new THREE.Color(0xF4F5F9); //0x00ced1
-
+      
         //Se a cena ativa é um painel
         if (activeScene.children.length == 0) {
           //Por algum motivo a tela só desaparece se esperar 1 milésimo de 1 segundo.
@@ -251,15 +251,16 @@ document.addEventListener('DOMContentLoaded', () => {
               activeScene.element.getElementsByTagName("video")[0].pause()
             } catch (e) { }
           }, 1);
-
+      
           document.getElementById("my-ar-container").style.display = "none";
           document.getElementById("painelContainer").style.display = "flex";
-
+      
           let scene_id = activeScene.element.id;
           scene_id = scene_id.substring(14)
-
+      
           createScene(scene_id, true)
         }
+      
       });
 
       //Bloquear atividade sendo mostrada

@@ -77,7 +77,12 @@
     
         });
 
+
+
         function checkIfAllAnswered() {
+
+            if (document.getElementById('salvibutton') == null)
+               return;
 
             if (document.getElementById('salvibutton').getAttribute("respondida_ultima") == "1") {
 
@@ -98,7 +103,6 @@
 
             }
         }
-
 
         window.addEventListener('checkAllPost', event => {
             document.querySelectorAll('.question-radio').forEach(input => {

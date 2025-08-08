@@ -68,7 +68,7 @@ class QuestionarioAlunoForm extends Component
                 }
             }
             session()->put('livewire_questoes', $questions);
-
+            //dd($questions);
             $this->nrquestao = 0;
         }
 
@@ -140,75 +140,72 @@ class QuestionarioAlunoForm extends Component
             $this->nrquestao = $this->nrquestao + 1;
         } else {
 
-            $this->questions = null;
-            $this->dispatchBrowserEvent('showError');
-        }
+       
+            DB::beginTransaction();
 
-       return;
+            $questions = session()->get('livewire_questoes');
+            $questoes = [];
 
-        DB::beginTransaction();
-
-        $questions = session()->get('livewire_questoes');
-        $questoes = [];
-
-        foreach ($questions as $q) {
-            array_push($questoes, $q->id);
-        }
- 
-        $respondida = DB::table('student_answers')
-            ->whereIn('question_id', $questoes)
-            ->where('user_id', Auth::user()->id)
-            ->exists();
-
-        if (!$respondida) {
-
-            //$datareq = $request->all();
-            foreach ($questions as $questao) {
-                $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
-
-                try {
-                    //$respop = $datareq["questao" . $questao->id];
-                    $respop = $this->alternativas[$questao->id];
-                    $data['question_id'] = $questao->id;
-                    $data['user_id'] = Auth::user()->id;
-                    $data['activity_id'] = $questao->activity_id;
-                    $opcao = $questao->options[$respop];
-                    //dd($respop . " - " . $opcao . " - " . $questao->a . " - " . implode(" ; ", $questao->options));
-
-                    $data['alternative_answered'] = $opcao; // havia um erro na estrutura do banco que esse campo era de somente 1!!!
-                    // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
-
-                    if ($opcao == $questao->a) {
-                        $data['correct'] = true;
-                    } else {
-                        $data['correct'] = false;
-                    }
-
-                    //dd($data);
-                    // gravar no banco uma linha da resposta
-                    StudentAnswer::create($data);
-
-                } catch (Exception $e) {
-                    continue;
-                }
+            foreach ($questions as $q) {
+                array_push($questoes, $q->id);
             }
+    
+            $respondida = DB::table('student_answers')
+                ->whereIn('question_id', $questoes)
+                ->where('user_id', Auth::user()->id)
+                ->exists();
 
-            DB::commit();
+            if (!$respondida) {
 
-            unset($_SESSION['livewire_questoes']);
-            unset($_SESSION['livewire_alternativas']);
-            unset($_SESSION['livewire_nrquestao']);
+                //$datareq = $request->all();
+                foreach ($questions as $questao) {
+                    $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
 
-            $this->questions = null;
-            
-            $this->dispatchBrowserEvent('closeQuestionsModal');
-            
-        } else {
-            DB::rollback();
+                    try {
+                        //$respop = $datareq["questao" . $questao->id];
+                        $respop = $this->alternativas[$questao->id];
+                        $data['question_id'] = $questao->id;
+                        $data['user_id'] = Auth::user()->id;
+                        $data['activity_id'] = $questao->activity_id;
+                        $opcao = $questao->options[$respop];
+                        //dd($respop . " - " . $opcao . " - " . $questao->a . " - " . implode(" ; ", $questao->options));
 
-            $this->dispactchBrowserEvent('showError');
+                        $data['alternative_answered'] = $opcao; // havia um erro na estrutura do banco que esse campo era de somente 1!!!
+                        // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
+
+                        if ($opcao == $questao->a) {
+                            $data['correct'] = true;
+                        } else {
+                            $data['correct'] = false;
+                        }
+
+                        //dd($data);
+                        // gravar no banco uma linha da resposta
+                        StudentAnswer::create($data);
+
+                    } catch (Exception $e) {
+                        continue;
+                    }
+                }
+
+                DB::commit();
+
+                unset($_SESSION['livewire_questoes']);
+                unset($_SESSION['livewire_alternativas']);
+                unset($_SESSION['livewire_nrquestao']);
+
+                $this->questions = null;
+                
+                $this->dispatchBrowserEvent('closeQuestionsModal');
+
+                return $this->redirectRoute('student.showActivity', ['id' => session()->get("content_id")]);
+                
+            } else {
+                DB::rollback();
+
+                $this->dispactchBrowserEvent('showError');
+            }
         }
-
     }
 
 }
