@@ -212,6 +212,7 @@ class ContentController extends Controller
 
     public function baixarAtividadesPDF($id)
     {
+        ini_set('memory_limit', '256M');
         $profId = Auth::id(); // ID do professor logado
 
         $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
