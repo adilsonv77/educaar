@@ -30,14 +30,18 @@ class TurmaDAO
         return $sql;
     }
 
-    public static function buscarAlunosTurma($turmaid, $anoletivoid) {
+    public static function buscarAlunosTurma($profid, $turmaid, $anoletivoid) {
         if ($turmaid == 0) {
 
             $sql = DB::table('alunos_turmas as ta')
             ->join("users as u", "u.id", "=", "ta.aluno_id")
             ->join("turmas as t", "t.id", "=", "ta.turma_id")
+            ->join("turmas_disciplinas as td", "t.id", "=", "td.turma_id")
 
-            ->where("t.ano_id" , "=", $anoletivoid);
+            ->where([
+                ["td.professor_id" , "=", $profid],
+                ["t.ano_id" , "=", $anoletivoid]   
+            ]);
 
         } else {
 

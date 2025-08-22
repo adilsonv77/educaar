@@ -318,6 +318,7 @@ class TurmaController extends Controller
         return redirect('/turmas');
     }
 
+    // tela do professor > Alunos
     public function listarTurmasAlunosProf(Request $request){
         $turma_id = $request->input('turma_id');
 
@@ -337,7 +338,7 @@ class TurmaController extends Controller
             $turma_id = $turma->id;
         }
 
-        $where2 = TurmaDAO::buscarAlunosTurma($turma_id, $anoletivo->id);
+        $where2 = TurmaDAO::buscarAlunosTurma($prof_id, $turma_id, $anoletivo->id);
         
         $where2 = $where2->get();  // paginate(20) as turmas não são tão grandes, e a paginação vai exigir uma alteração fudida nos filtros
         

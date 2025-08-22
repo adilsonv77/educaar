@@ -89,7 +89,7 @@ class ResultadosController extends Controller
 
         // Organizar as respostas dos alunos
         $studentsResponses = [];
-        $students = TurmaDAO::buscarAlunosTurma($turma_id, $anoletivo->id)->get();
+        $students = TurmaDAO::buscarAlunosTurma($prof_id, $turma_id, $anoletivo->id)->get();
 
         //  adiciona todos os alunos da turma
         foreach($students as $student) {
