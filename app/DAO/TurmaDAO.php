@@ -250,11 +250,13 @@ AND u.id = 8
         return $sql;        
     }
 
+    // Tela Professores > Alunos > Geral Questoes nao respondidas
     public static function buscarQuestoesNaoRespondidasTodosAlunos($turmaid) {
         /*
         select user_name, a.name as activity_name, c.name as content_name FROM 
         (select u.name as user_name, aluno_id, turma_id from alunos_turmas join users u on u.id = aluno_id where turma_id = 16) at
-        join contents c on c.turma_modelo_id = at.turma_id
+        join turmas tu on tu.id = at.turma_id
+        join contents c on c.turma_modelo_id = tu.turma_modelo_id
         join activities a on a.content_id = c.id
         left outer join student_answers sa on sa.activity_id = a.id and sa.user_id = aluno_id
         where sa.id is null
@@ -266,9 +268,11 @@ AND u.id = 8
             ->join("users as u", "u.id", "=", "aluno_id")
             ->where("turma_id", "=",  $turmaid);
 
-        $sql = DB::table("contents as c")
+           
+        $sql = DB::table("turmas as tu")
             ->select("user_name", "a.name as activity_name", "c.name as content_name")
-            ->joinSub($sql_at, "at", "c.turma_modelo_id", "=", "at.turma_id")
+            ->joinSub($sql_at, "at", "tu.id", "=", "at.turma_id")
+            ->join("contents as c", "c.turma_modelo_id", "=", "tu.turma_modelo_id")
             ->join("activities as a", "a.content_id", "=", "c.id")
             ->leftJoin("student_answers as sa", function ($join) {
                 $join->on('sa.activity_id', '=', 'a.id')
@@ -279,7 +283,7 @@ AND u.id = 8
             ->orderBy("a.id")
             ->orderBy("user_name");
 
-      // dd($sql->toSql());
+//       dd($sql->toSql());
  
        return $sql;   
     }
