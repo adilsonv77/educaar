@@ -61,7 +61,8 @@ class DeveloperController extends Controller
             'id' => 0,
             'contents' => $contents,
             'content' => $content,
-            'scenes' => $scenes
+            'scenes' => $scenes,
+            'scene_id' => "modelo3D"
         ];
 
         return view('pages.activity.register', $params);

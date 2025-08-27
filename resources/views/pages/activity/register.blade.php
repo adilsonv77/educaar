@@ -172,6 +172,7 @@
                 </div>
                 <!-------SELECIONAR TIPO DE ATIVIDADE-------->
                 
+                @if (session('type') == 'teacher')
                 <div class="form-group">
                     <label for="">Selecione o tipo de atividade*</label>
                     <select class="form-control" id="selectSceneType" name="sceneType" aria-label="">             
@@ -179,6 +180,11 @@
                         <option value="Cena" @if($scene_id != 'modelo3D') selected @endif>Cena</option>
                     </select>
                 </div>
+                @endif
+
+                @if (session('type') == 'developer')
+                <input type="hidden" id="selectSceneType" name="sceneType" value="Modelo3D"/>
+                @endif
 
                 <!-------------ENVIAR MODELO3D--------------->
                 <div class="form-group" id="3DmodelOption"  @if($scene_id != 'modelo3D')  style="display: none" @endif >
