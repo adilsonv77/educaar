@@ -8,6 +8,11 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use App\Models\School;
+use App\Models\AlunoTurma;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -69,5 +74,55 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    /**
+     * Redirecionamento para formulário de registro de usuário público
+     * 
+     */
+    public function goTo() {
+        //$pubSchools = School::where('publico', 1) -> pluck('id');
+
+        $publicSchools = School::where('publico', 1)
+                                -> pluck('name');
+                                        
+        return view('auth.register', ['escolas' => $publicSchools]);
+    }
+
+    /**
+     * Cria um novo usuário público, com uma senha aleatória de 8 dígitos,
+     * associa o usuário com a primeira turma do projeto escolhido
+     *
+     */
+    public function createPublic(Request $request) {
+        $validated = $request -> validate([
+            'name' => ['required', 'string', 'max:100', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'projeto' => ['required'],
+        ]);
+
+        $password = Str::random(8); //email -> with:
+        User::create([
+            'name' => $validated['name'],
+            //'username' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($password),
+            'school_id' => DB::table('schools')
+                -> where('name', $request['projeto'])
+                -> value('id'),
+        ]);
+
+        AlunoTurma::create([
+            'aluno_id' => DB::table('users')
+                ->where('email', $request['email'])
+                ->value('id'),
+            'turma_id' => DB::table('turmas')
+                -> where('school_id', DB::table('schools')
+                    -> where('name', $request['projeto'])
+                    -> value('id'))
+                ->value('id'),
+        ]);
+
+        return redirect('/login');
     }
 }

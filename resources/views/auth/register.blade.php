@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('createPublicUser') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -40,6 +40,23 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="projeto" class="col-md-4 col-form-label text-md-right">Projeto</label>
+
+                            <div class="col-md-6">
+                                @if (isset($escolas))
+                                    <select name="projeto" id="projeto" class="form-control dropdown-personalizado">
+
+                                        @foreach($escolas as $escola)
+                                            <option value="{{ $escola }}"> {{ $escola }}</option>
+                                        @endforeach
+                                    
+                                    </select>
+                                @endif
+                            </div>
+                        </div>                        
+
+<!-- input para senha
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
@@ -61,6 +78,8 @@
                             </div>
                         </div>
 
+-->
+                        
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">

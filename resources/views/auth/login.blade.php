@@ -85,6 +85,10 @@
                             {{ __('Login') }}
                         </button>
                 </div>
+                
+                <a href="{{ route('publicRegister') }}">
+                    {{ __('Register') }}
+                </a>    
                     
             </div>
                     

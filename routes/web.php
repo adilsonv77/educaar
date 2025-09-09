@@ -9,6 +9,8 @@ use App\Http\Controllers\PainelController;
 use App\Http\Controllers\SceneController;
 use App\Http\Controllers\ButtonController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\Auth\RegisterController;
+
 
 //Painéis - Renan
 //Talvez alguns possam ser substituidos por o tal do resource
@@ -27,6 +29,10 @@ Route::prefix('paineis')->group(function () {
 
 // use Hash;
 Route::get('/', function () { return redirect('/home');});
+
+//registro público
+Route::get('/Register', [RegisterController::class, 'goTo']) -> name('publicRegister');
+Route::post('/createPublicUser', [RegisterController::class, 'createPublic']) -> name('createPublicUser');
 
 Auth::routes();
 
