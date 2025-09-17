@@ -35,9 +35,9 @@ class PostmarkApiTransport extends AbstractApiTransport
 
     private string $key;
 
-    private $messageStream;
+    private ?string $messageStream = null;
 
-    public function __construct(string $key, HttpClientInterface $client = null, EventDispatcherInterface $dispatcher = null, LoggerInterface $logger = null)
+    public function __construct(string $key, ?HttpClientInterface $client = null, ?EventDispatcherInterface $dispatcher = null, ?LoggerInterface $logger = null)
     {
         $this->key = $key;
 
@@ -46,7 +46,7 @@ class PostmarkApiTransport extends AbstractApiTransport
 
     public function __toString(): string
     {
-        return sprintf('postmark+api://%s', $this->getEndpoint()).($this->messageStream ? '?message_stream='.$this->messageStream : '');
+        return \sprintf('postmark+api://%s', $this->getEndpoint()).($this->messageStream ? '?message_stream='.$this->messageStream : '');
     }
 
     protected function doSendApi(SentMessage $sentMessage, Email $email, Envelope $envelope): ResponseInterface
@@ -63,13 +63,13 @@ class PostmarkApiTransport extends AbstractApiTransport
             $statusCode = $response->getStatusCode();
             $result = $response->toArray(false);
         } catch (DecodingExceptionInterface) {
-            throw new HttpTransportException('Unable to send an email: '.$response->getContent(false).sprintf(' (code %d).', $statusCode), $response);
+            throw new HttpTransportException('Unable to send an email: '.$response->getContent(false).\sprintf(' (code %d).', $statusCode), $response);
         } catch (TransportExceptionInterface $e) {
             throw new HttpTransportException('Could not reach the remote Postmark server.', $response, 0, $e);
         }
 
         if (200 !== $statusCode) {
-            throw new HttpTransportException('Unable to send an email: '.$result['Message'].sprintf(' (code %d).', $result['ErrorCode']), $response);
+            throw new HttpTransportException('Unable to send an email: '.$result['Message'].\sprintf(' (code %d).', $result['ErrorCode']), $response);
         }
 
         $sentMessage->setMessageId($result['MessageID']);
@@ -91,7 +91,7 @@ class PostmarkApiTransport extends AbstractApiTransport
             'Attachments' => $this->getAttachments($email),
         ];
 
-        $headersToBypass = ['from', 'to', 'cc', 'bcc', 'subject', 'content-type', 'sender', 'reply-to'];
+        $headersToBypass = ['from', 'to', 'cc', 'bcc', 'subject', 'content-type', 'sender', 'reply-to', 'date'];
         foreach ($email->getHeaders()->all() as $name => $header) {
             if (\in_array($name, $headersToBypass, true)) {
                 continue;
@@ -147,7 +147,7 @@ class PostmarkApiTransport extends AbstractApiTransport
             ];
 
             if ('inline' === $disposition) {
-                $att['ContentID'] = 'cid:'.$filename;
+                $att['ContentID'] = 'cid:'.($attachment->hasContentId() ? $attachment->getContentId() : $filename);
             }
 
             $attachments[] = $att;

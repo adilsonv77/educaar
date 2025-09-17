@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_ChaCha20_IetfCtx', false)) {
     return;
@@ -22,12 +21,8 @@ class ParagonIE_Sodium_Core_ChaCha20_IetfCtx extends ParagonIE_Sodium_Core_ChaCh
      * @throws InvalidArgumentException
      * @throws TypeError
      */
-    public function __construct(
-        #[SensitiveParameter]
-        string $key = '',
-        string $iv = '',
-        string $counter = ''
-    ) {
+    public function __construct($key = '', $iv = '', $counter = '')
+    {
         if (self::strlen($iv) !== 12) {
             throw new InvalidArgumentException('ChaCha20 expects a 96-bit nonce in IETF mode.');
         }
