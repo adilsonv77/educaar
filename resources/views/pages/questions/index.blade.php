@@ -28,7 +28,7 @@ foreach($questions as $q) {
 
 <div class="card">
     <div class="card-header">
-        <h4 class="card-title">Atividade: {{ $activity->name }} </h4>
+        <h4 class="card-title" style="color: #f5f5f5">Atividade: {{ $activity->name }} </h4>
         <form action="{{ route('questions.create') }}" style="display:block;width:100px">
             @csrf
             <button type="submit" class="btn btn-success" 
