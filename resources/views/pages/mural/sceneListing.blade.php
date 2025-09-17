@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', "Listagem de Cenas")
+@section('page-name', "Listagem de Murais")
 
 @section('script-head')
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -30,7 +30,7 @@
     <!-- Barra de pesquisa -->
     <form action="{{ route('scenes.index') }}" method="GET">
         <div class="form-inline">
-            <label for="titulo">Informe o nome da cena :</label>
+            <label for="titulo">Informe o nome do mural:</label>
             <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo"
                 value="{{ request('titulo') }}" list="historico" />
             <section class="itens-group">
@@ -55,10 +55,8 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr style="text-align: center;">
-                                <th>ID Cena</th>
                                 <th>Nome</th>
                                 <th>Disciplina</th>
-                                <th>ID Painel Inicial</th>
                                 <th>Abrir</th>
                                 <th>Editar</th>
                                 <th>Excluir</th>
@@ -67,15 +65,11 @@
                         <tbody>
                             @foreach ($data as $scene)
                                 <tr style="text-align: center;">
-                                    <!-- ID CENA -->
-                                    <td>{{ $scene->id }}</td>
-                                    <!-- NOME CENA -->
+                                    <!-- NOME MURAL -->
                                     <td>{{ $scene->name }}</td>
-                                    <!-- DISCIPLINA CENA (VER) -->
+                                    <!-- DISCIPLINA DO MURAL (VER) -->
                                     <td>{{ $scene->disciplina->name ?? 'Sem disciplina' }}</td>
-                                    <!-- PAINEL INICIAL -->
-                                    <td>{{ $scene->start_panel_id ?? 'N/A'}}</td>
-                                    <!-- VISUALIZAR CENA -->
+                                    <!-- VISUALIZAR MURAL  -->
                                     <td>
                                         <form action="{{ route('paineis.conexoes', [$scene->id]) }}" method="GET">
                                             @csrf
@@ -85,7 +79,7 @@
                                         </form>
                                     </td>
                                     <!-- <td>{{ json_decode($scene->panel)->midiaExtension ?? 'N/A' }}</td> -->
-                                    <!-- EDITAR CENA -->
+                                    <!-- EDITAR MURAL -->
                                     <td>
                                         <form action="{{ route('scenes.edit', [$scene->id]) }}" method="GET">
                                             <form action="{{ route('scenes.edit', [$scene->id]) }}" method="GET">
@@ -96,7 +90,7 @@
                                             </form>
                                     </td>
 
-                                    <!-- EXCLUIR CENA -->
+                                    <!-- EXCLUIR MURAL -->
                                     <td>
                                         <button type="button" class="btn btn-danger @if($scene->sendoUsado) disabled @endif"
                                             data-toggle="modal" data-target="#modal{{ $scene->id }}" title="Excluir">
@@ -110,7 +104,7 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-body">
-                                                <h3>Você tem certeza que deseja excluir a cena
+                                                <h3>Você tem certeza que deseja excluir o mural
                                                     {{ json_decode($scene->name) }}
                                                 </h3>
                                             </div>
@@ -133,7 +127,7 @@
                 </div>
             @else
                 <div>
-                    <h2>Nenhuma cena cadastrada</h2>
+                    <h2>Nenhum mural cadastrado</h2>
                 </div>
             @endif
         </div>

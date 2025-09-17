@@ -40,7 +40,7 @@ class PainelController extends Controller
             $data['action'] = 'edit';
             $data['id'] = $id;
 
-            return view('pages.painel.criacaoPaineis', $data);
+            return view('pages.mural.criacaoPaineis', $data);
         }
     }
 
@@ -113,8 +113,9 @@ class PainelController extends Controller
     public function conexoes()
     {
         $paineis = $this->painelDAO->getAll();
+        $nameScene = "Teste";
         //dd($paineis); 
-        return view('pages.painel.conexoes', compact('paineis'));
+        return view('pages.mural.conexoes', compact('paineis', 'nameScene'));
     }
 
 

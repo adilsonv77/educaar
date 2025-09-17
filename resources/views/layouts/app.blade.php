@@ -181,7 +181,7 @@
                             </li>
                             <li><a class="ai-icon" href="{{ route('scenes.index') }}" aria-expanded="false">
                                     <i class="bi-bricks"></i>
-                                    <span class="nav-text">Cenas</span>
+                                    <span class="nav-text">Murais</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('turmas.listarTurmasAlunosProf') }}" aria-expanded="false">

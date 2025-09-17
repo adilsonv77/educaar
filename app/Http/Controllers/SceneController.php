@@ -31,7 +31,7 @@ class SceneController extends Controller
             $data = $this->sceneDAO->getAll();
         }
 
-        return view('pages.painel.sceneListing', compact('data'));
+        return view('pages.mural.sceneListing', compact('data'));
     }
 
     public function edit($id)
@@ -41,7 +41,7 @@ class SceneController extends Controller
             $painel->panel = json_decode($painel->panel,true);
         }
         $scene_name = SceneDao::getById($id)->name;
-        return view('pages.painel.conexoes',["paineis"=>$paineis,"scene_id"=>$id,"nameScene"=>$scene_name]);
+        return view('pages.mural.conexoes',["paineis"=>$paineis,"scene_id"=>$id,"nameScene"=>$scene_name]);
     }
 
     public function store(Request $request)
@@ -77,6 +77,6 @@ class SceneController extends Controller
     public function destroy($id)
     {
         $this->sceneDAO->deleteById($id);
-        return redirect()->route('scenes.index');
+        return redirect()->route('mural.index');
     }
 }
