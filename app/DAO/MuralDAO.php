@@ -1,0 +1,28 @@
+<?php
+
+namespace App\DAO;
+
+use App\Models\Mural;
+use App\Models\MuralPainel;
+
+class MuralDAO
+{
+    public static function getAll()
+    {
+        return Mural::all();
+    }
+
+    public static function create($data) {
+        
+        $mural = Mural::create($data);
+        
+        $datapainel = [
+            'mural_id' => $mural->id,
+            'panelnome' => 1,
+            'panel' => ''
+        ];
+        MuralPainel::create($datapainel);
+
+        return $mural;
+    }
+}

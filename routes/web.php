@@ -12,6 +12,9 @@ use App\Http\Controllers\BackupController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Mail\MyEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\MuralController;
+
+// TUDO QUE ESTÁ FORA DO AUTH PODE SER ACESSADO SEM O USUÁRIO AUTENTICAR !!!!
 
 //Painéis - Renan
 //Talvez alguns possam ser substituidos por o tal do resource
@@ -152,6 +155,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/create-zip', [BackupController::class, 'createZip'])->name('create.zip');
 
+    Route::get('/mural', function () {
+        return view('pages.mural2.index');
+    })->name('mural.index');
+
+    Route::get('/mural/view/{id}', [MuralController::class, 'view']) -> name("mural2.view");
+    Route::get('/mural/edit/{id}', [MuralController::class, 'edit']) -> name("mural2.edit");
 
 });
 

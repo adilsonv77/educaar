@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Disciplina;
 use App\Models\AnoLetivo;
+use App\Models\Mural;
 use Auth;
 
 class AppServiceProvider extends ServiceProvider
@@ -130,6 +131,21 @@ class AppServiceProvider extends ServiceProvider
             }
             return false;
         }, 'Extensão inválida  (:custom_message). Selecione outro arquivo.');
+
+        Validator::extend('mural_ja_existe', function($attribute, $value, $parameters, $validator) {
+            $inputs = $validator->getData();
+            $name = $inputs['name'];
+            $muralId = isset($inputs['muralId']) ? $inputs['muralId'] : null;
+        
+            $existingMural = Mural::where('name', $name)
+                ->first();
+        
+            if ($existingMural && $existingMural->id != $muralId) {
+                return false;
+            }
+        
+            return true;
+        }, 'O mural já existe. Por favor, escolha outro nome.');
     }
 }
 
