@@ -6,6 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Content;
 
 class MyEmail extends Mailable
 {
@@ -16,18 +18,22 @@ class MyEmail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(private $password)
     {
         //
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function build()
-    {
-        return $this->view('mail.testmail');
+    public function envelope() {
+        return new Envelope(
+            subject: 'Assunto Teste',
+            from: 'endereço@teste',
+        );
+    }
+
+    public function content() {
+        return new Content(
+            view: 'mail.testmail',
+            with: ['password' => $this->password]
+        );
     }
 }

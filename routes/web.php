@@ -38,11 +38,6 @@ Route::get('/', function () { return redirect('/home');});
 Route::get('/Register', [RegisterController::class, 'goTo']) -> name('publicRegister');
 Route::post('/createPublicUser', [RegisterController::class, 'createPublic']) -> name('createPublicUser');
 
-//teste route (trocar o email para teste)
-Route::get('/testmail', function() {
-    Mail::to('thiagobrazpinheiro@gmail.com') -> send(new MyEmail);
-});
-
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

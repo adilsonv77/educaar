@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\School;
+use App\Models\Turma;
 use App\Models\AlunoTurma;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Mail\MyEmail;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -81,8 +84,6 @@ class RegisterController extends Controller
      * 
      */
     public function goTo() {
-        //$pubSchools = School::where('publico', 1) -> pluck('id');
-
         $publicSchools = School::where('publico', 1)
                                 -> pluck('name');
                                         
@@ -90,39 +91,56 @@ class RegisterController extends Controller
     }
 
     /**
-     * Cria um novo usuário público, com uma senha aleatória de 8 dígitos,
-     * associa o usuário com a primeira turma do projeto escolhido
+     * Cadastra um novo usuário, associa-o com uma senha aleatória de 8 dígitos,
+     * envia a senha ao email associado ao usuário, cadastra uma nova coluna na
+     * tabela "aluno_turmas" associado ao usuário e turma
      *
      */
     public function createPublic(Request $request) {
-        $validated = $request -> validate([
-            'name' => ['required', 'string', 'max:100', 'unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'projeto' => ['required'],
-        ]);
+      $validated = $request -> validate([
+          'name' => ['required', 'string', 'max:100', 'unique:users'],
+          'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+          'projeto' => ['required', 'string', 'exists:schools,name'],
+      ]);   
 
-        $password = Str::random(8); //email -> with:
+      try {
+        DB::beginTransaction();
+
+        $school = School::where('name', $validated['projeto']);
+        $turma = Turma::where('school_id', $school->value('id'));
+
+        $password = Str::random(8);
         User::create([
             'name' => $validated['name'],
-            //'username' => $validated['name'],
+            'username' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($password),
-            'school_id' => DB::table('schools')
-                -> where('name', $request['projeto'])
-                -> value('id'),
+            'school_id' => $school -> value('id'),
         ]);
 
+        $user = User::where('email', $validated['email']);
         AlunoTurma::create([
-            'aluno_id' => DB::table('users')
-                ->where('email', $request['email'])
-                ->value('id'),
-            'turma_id' => DB::table('turmas')
-                -> where('school_id', DB::table('schools')
-                    -> where('name', $request['projeto'])
-                    -> value('id'))
-                ->value('id'),
+            'aluno_id' => $user -> value('id'),
+            'turma_id' => $turma -> value('id'),
         ]);
 
-        return redirect('/login');
+        try {
+            Mail::to($validated['email'], 'MyMail') -> send(new MyEmail($password));
+
+        } catch (\Exception) {
+            return redirect('/Register') -> with ('error', 'Erro ao criar conta');
+        }
+        DB::commit();
+
+        return redirect('/login') -> with('sucess', 'Contra criada');
+
+      } catch (\Exception) {
+        DB::rollback();
+
+        return redirect('/login') -> with ('error', 'Erro ao criar conta');
+
+      }
+
     }
+
 }
