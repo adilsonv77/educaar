@@ -3,9 +3,15 @@
 namespace App\DAO;
 
 use Illuminate\Support\Facades\DB;
+use App\Models\Disciplina;
 
 class DisciplinaDAO
 {
+
+     public static function find($id){
+        return Disciplina::find($id);
+     }
+
     public static function buscarDisciplinasAluno($alunoid, $anoletivoid)
     {
         $sql = DB::table('disciplinas as d')

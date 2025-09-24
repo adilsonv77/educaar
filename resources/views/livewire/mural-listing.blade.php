@@ -15,44 +15,44 @@
         window.addEventListener('closeConfirmarExcluirModal', event => {
             $("#confirmarExcluirModal").modal('hide');
         });
-   </script>
+    </script>
 
     <!-- Barra de pesquisa -->
     <div class="py-4 space-y-4">
         <div class="flex justify-between">
             <div class="w-1/4">
                 <div class="form-inline">
-                <label for="disciplinaFiltro">Informe o mural : </label>
-                    <input class="form-control" type="text" wire:model.defer="filtroTemp" list="disciplinas" id="disciplinaFiltro"/>
+                    <label for="disciplinaFiltro">Informe o mural : </label>
+                    <input class="form-control" type="text" wire:model.defer="filtroTemp" list="disciplinas"
+                        id="disciplinaFiltro" />
                     <section class="itens-group">
                         <button class="btn btn-primary btn-lg" type="button" wire:click="aplicarFiltro">Filtrar</button>
                     </section>
                 </div>
 
                 <style>
-                .form-inline{
-                    display: flex;
-                    justify-content: flex-start; 
-                }
+                    .form-inline {
+                        display: flex;
+                        justify-content: flex-start;
+                    }
 
-                .form-inline label {
-                    margin-right: 10px;
-                }
-                
+                    .form-inline label {
+                        margin-right: 10px;
+                    }
                 </style>
                 <datalist id="historico">
                     @foreach ($murais as $mural)
                         <option value="{{ $mural->name }}">{{ $mural->name }}</option>
                     @endforeach
-                </datalist>           
+                </datalist>
             </div>
 
             @if (session('type') !== 'developer')
-            <div>
-               <button class="btn btn-sm btn-primary" id="novo" wire:click="novo()" title="Novo mural">
-                   <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff;"></i>
-               </button>
-            </div>
+                <div>
+                    <button class="btn btn-sm btn-primary" id="novo" wire:click="novo()" title="Novo mural">
+                        <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff;"></i>
+                    </button>
+                </div>
             @endif
 
         </div>
@@ -94,7 +94,7 @@
                                     </td>
                                     <!-- EDITAR MURAL -->
                                     <td>
-                                        
+
                                         <form action="{{ route('mural2.edit', [$mural->id]) }}" method="GET">
                                             @csrf
                                             <button type="submit" class="btn btn-warning" title="Editar">
@@ -105,7 +105,8 @@
 
                                     <!-- EXCLUIR MURAL -->
                                     <td>
-                                    <button type="button" class="btn btn-danger" wire:click="confirmarExcluir({{ $mural->id }})" title="Excluir">
+                                        <button type="button" class="btn btn-danger"
+                                            wire:click="confirmarExcluir({{ $mural->id }})" title="Excluir">
                                             <i class="bi bi-trash3 h2" style="color: #ffffff;"></i>
                                         </button>
                                     </td>
@@ -123,8 +124,8 @@
     </div>
 
 
-    <div wire:ignore.self class="modal fade" id="muralModal" tabindex="-1" data-backdrop="static" data-keyboard="false" 
-                        role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="muralModal" tabindex="-1" data-backdrop="static" data-keyboard="false"
+        role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -148,7 +149,8 @@
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Nome:</label>
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" wire:model="nome" required autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
+                                    wire:model="nome" required autofocus>
                                 @error('name')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -156,15 +158,16 @@
                         </div>
                         <div class="form-group row">
                             <label for="disciplina_id" class="col-md-4 col-form-label text-md-right">Disciplina:</label>
-                            <div class="col-md-6">
-                            <select class="form-control" name="disciplina_id" aria-label="" wire:model="disciplina_id" id="disciplina_id" required>
-                                <option value="">Selecione uma disciplina</option>
-                                @foreach ($disciplinas as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                            <div class="col-md-6 select">
+                                <select class="form-control" name="disciplina_id" aria-label=""
+                                    wire:model="disciplina_id" id="disciplina_id" required>
+                                    <option value="">Selecione uma disciplina</option>
+                                    @foreach ($disciplinas as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        </div>       
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Salvar</button>
@@ -175,7 +178,8 @@
         </div>
     </div>
 
-    <div wire:ignore.self class="modal fade" id="confirmarExcluirModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="confirmarExcluirModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">

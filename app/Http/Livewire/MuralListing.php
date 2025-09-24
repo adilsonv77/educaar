@@ -3,13 +3,15 @@
 namespace App\Http\Livewire;
 
 use App\Models\Mural;
-use App\Models\MuralPainel;
+
 use App\DAO\MuralDAO;
 use App\DAO\DisciplinaDAO;
-use Illuminate\Support\Facades\Auth;
+
 use Livewire\Component;
 use Livewire\WithPagination;
+
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class MuralListing extends Component
 {
@@ -17,12 +19,13 @@ class MuralListing extends Component
 
     public $nome;
     public $disciplina_id;
-
+        
     public $muralId;
     public $muralExcluir;
 
     public $filtro = '';
     public $filtroTemp = ''; 
+
     public function aplicarFiltro()
     {
         $this->filtro = $this->filtroTemp; 
@@ -30,11 +33,13 @@ class MuralListing extends Component
 
     public function render()
     {
+
         // TODO: na verdade nao vai mostrar todos, pois isso tem que mostrar de um professor ou do autor, ou algo assim
         $murais = MuralDAO::getAll();
         $disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);
 
         return view('livewire.mural-listing', ['murais' => $murais, 'disciplinas' => $disciplinas]);
+
     }
 
     public function novo()
@@ -58,9 +63,10 @@ class MuralListing extends Component
             'name' => 'mural_ja_existe', 
         ])->validate();
 
-        MuralDAO::create($data);
-
-        $this->dispatchBrowserEvent('closeMuralModal');
+        $mural = MuralDAO::create($data);
+       
+        return $this->redirectRoute('mural2.edit', [$mural->id]);
+        //$this->dispatchBrowserEvent('closeMuralModal');
 
     }
 

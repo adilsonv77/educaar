@@ -21,8 +21,15 @@ class MuralDAO
             'panelnome' => 1,
             'panel' => ''
         ];
-        MuralPainel::create($datapainel);
+        $muralpainel = MuralPainel::create($datapainel);
+
+        $mural->update(['start_painel_id'=> $muralpainel->id] );
 
         return $mural;
+    }
+
+    public static function find($id) {
+
+        return Mural::find($id);
     }
 }
