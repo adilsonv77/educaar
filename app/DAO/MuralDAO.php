@@ -19,7 +19,7 @@ class MuralDAO
         $datapainel = [
             'mural_id' => $mural->id,
             'panelnome' => 1,
-            'panel' => ''
+            'panel' => '{"id":"1","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}'
         ];
         $muralpainel = MuralPainel::create($datapainel);
 
