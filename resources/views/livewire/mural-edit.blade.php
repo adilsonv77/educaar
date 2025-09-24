@@ -115,9 +115,12 @@
                         <img class="tapSelect" src="{{ asset('images/singletap.svg') }}" alt="Ícone"
                             style="cursor: pointer;">
                     </h3>
-                    <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)"
-                        class="select-native">
+                    <select wire:model="startPainelId"  class="select-native">
                         <option disabled selected>Selecione um painel</option>
+                        @foreach ($paineis as $painel)
+                            <option value="{{ $painel->id }}"  @if($painel->id == $startPainelId) selected="selected"  @endif>Painel {{ $painel->panelnome }}</option>
+                        @endforeach
+
 
                     </select>
                 </div>
@@ -131,7 +134,7 @@
                             name="disciplina_id" class="select-native">
                             <option class="default_option" value="">Selecione uma disciplina</option>
                             @foreach ($disciplinas as $item)
-                                    <option value="{{ $item->id }}"  @if($item->id == $disciplinaSelecionada) selected @endif>{{ $item->name }}</option>
+                                <option value="{{ $item->id }}"  @if($item->id == $disciplinaSelecionada) selected="selected"  @endif>{{ $item->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -147,6 +150,9 @@
             <button id="resizeZoom" hidden class="button">Redefinir zoom</button>
         </div>
         <div id="canvas" class="canvas">
+            @foreach ($paineis as $painel)
+                <livewire:mural-painel :painel="$painel"/>
+            @endforeach
             <img id="indicadorInicio" src="{{ asset('images/inicioConexoes.svg') }}" alt="">
             <img id="indicadorFinal" src="{{ asset('images/endConnection.svg') }}" alt="">
         </div>

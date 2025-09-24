@@ -66,7 +66,6 @@ class MuralListing extends Component
         $mural = MuralDAO::create($data);
        
         return $this->redirectRoute('mural2.edit', [$mural->id]);
-        //$this->dispatchBrowserEvent('closeMuralModal');
 
     }
 

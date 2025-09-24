@@ -154,7 +154,7 @@ let container = document.getElementById("canvas");
 let painelSelecionado = null;
 let botaoSelecionado = null;
 let zIndexAtual = 0;
-let addBtn = document.getElementById("addPanel");
+//let addBtn = document.getElementById("addPanel");
 
 class Painel {
     constructor(painel) {

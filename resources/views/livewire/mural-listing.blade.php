@@ -4,10 +4,6 @@
             $("#muralModal").modal('show');
         });
 
-        window.addEventListener('closeMuralModal', event => {
-            $("#muralModal").modal('hide');
-        });
-
         window.addEventListener('openConfirmarExcluirModal', event => {
             $("#confirmarExcluirModal").modal('show');
         });
