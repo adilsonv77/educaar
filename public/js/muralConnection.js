@@ -892,7 +892,7 @@ function tentarConectarOuRemover() {
         window.livewire.emit('updatePainelDestino', { id: idBotaoOrigem, destination_id: null });
     }
 }
-
+*/
 //----DESENHAR CONEXÃO - PAINEL INICIAL------------------------------------------------------------------------------------------------
 function atualizarIndicadorInicio() {
     const canvas = document.getElementById("canvas");
@@ -914,7 +914,7 @@ function atualizarIndicadorInicio() {
     indicador.style.top = `${top}px`;
     indicador.style.display = "block";
 }
-
+/*/
 //----DESENHAR CONEXÃO - NENHUMA ------------------------------------------------------------------------------------------------
 function atualizarIndicadoresDeTransicao() {
     document.querySelectorAll(".button_Panel").forEach(botao => {

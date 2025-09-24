@@ -40,5 +40,9 @@ ALTER TABLE `murais_paineis`
 --
 ALTER TABLE `murais_paineis`
   ADD CONSTRAINT `mural_id_foreing` FOREIGN KEY (`mural_id`) REFERENCES `murais` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `murais`
+  ADD CONSTRAINT `mural_start_painel_id_foreign` FOREIGN KEY (`start_painel_id`) REFERENCES `murais_paineis` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
+
+
 

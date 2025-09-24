@@ -149,7 +149,7 @@
             <button id="zoom-in" class="button">+</button>
             <button id="resizeZoom" hidden class="button">Redefinir zoom</button>
         </div>
-        <div id="canvas" class="canvas">
+        <div id="canvas" class="canvas"  data-start-id="{{ $startPainelId }}">
             @foreach ($paineis as $painel)
                 <livewire:mural-painel :painel="$painel"/>
             @endforeach
@@ -160,6 +160,8 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            atualizarIndicadorInicio(); // muralconnection.js
+
             selecionarCanvas(); // muralconnection.js
         });
     </script>

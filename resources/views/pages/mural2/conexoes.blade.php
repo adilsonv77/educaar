@@ -46,7 +46,7 @@
             transition: transform 25s linear;
         }
 
-        .ponto{
+        .ponto {
             height: 10px;
             width: 10px;
             background-color: white;
@@ -63,9 +63,39 @@
     <script src="{{ asset('js/muralConnection.js?v=' . filemtime(public_path('js/muralConnection.js'))) }}"></script>
     <!-- LINHAS DE CONEXÕES -->
     <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
+
+    <script>
+        // ---------------------------------------------CARREGAR CANVAS---------------------------------------------
+        let preloader = document.getElementById("preloader");
+        let mainWrapper = document.getElementById("main-wrapper");
+
+        // ---------------------------------------------APLICAR LISTENERS AOS PAINÉIS EXISTENTES E NOVOS---------------------------------------------
+        window.livewire.on("painelCriado", (id) => {
+            let panel = document.getElementById(id);
+            if (!panel) return;
+
+            try {
+                const painelData = JSON.parse(panel.dataset.panel);
+                if (painelData.x != null && painelData.y != null) {
+                    panel.style.left = painelData.x + "px";
+                    panel.style.top = painelData.y + "px";
+                  //  atualizarTodasConexoes();
+                }
+            } catch (e) {
+                console.warn("Falha ao aplicar posição inicial ao novo painel:", e);
+            }
+
+            /*
+            atribuirListeners(panel, id);
+            habilitarArrastoPersonalizado(panel);
+            mostrarMenu("painel");
+            */
+        });
+    </script>
+
 @endsection
 
 @section('content')
-    <livewire:mural-edit :muralId="$muralId"/>
+    <livewire:mural-edit :muralId="$muralId" />
 
 @endsection

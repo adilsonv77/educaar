@@ -13,7 +13,7 @@ class Mural extends Model
     protected $fillable = [
         'id',
         'name',
-        'start_panel_id',
+        'start_painel_id',
         'author_id',
         'disciplina_id',
         'canvasTop',
