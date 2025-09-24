@@ -18,7 +18,7 @@ class MyEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(private $password)
+    public function __construct(private $password, private $user)
     {
         //
     }
@@ -26,14 +26,14 @@ class MyEmail extends Mailable
     public function envelope() {
         return new Envelope(
             subject: 'Assunto Teste',
-            from: 'endereço@teste',
+            from: env('MAIL_FROM_ADDRESS'),
         );
     }
 
     public function content() {
         return new Content(
-            view: 'mail.testmail',
-            with: ['password' => $this->password]
+            view: 'mail.passwordregister',
+            with: ['password' => $this->password, 'user' => $this->user]
         );
     }
 }

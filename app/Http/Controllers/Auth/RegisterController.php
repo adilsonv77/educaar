@@ -125,10 +125,10 @@ class RegisterController extends Controller
         ]);
 
         try {
-            Mail::to($validated['email'], 'MyMail') -> send(new MyEmail($password));
+            Mail::to($validated['email'], 'MyMail') -> send(new MyEmail($password, $validated['name']));
 
         } catch (\Exception) {
-            return redirect('/Register') -> with ('error', 'Erro ao criar conta');
+            return redirect('/login') -> with ('error', 'Erro ao criar conta');
         }
         DB::commit();
 
