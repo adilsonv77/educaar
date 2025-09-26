@@ -18,8 +18,7 @@ use App\Http\Controllers\MuralController;
 
 //Painéis - Renan
 //Talvez alguns possam ser substituidos por o tal do resource
-Route::resource('scenes',SceneController::class);
-Route::resource('buttons',ButtonController::class);
+
 
 Route::prefix('paineis')->group(function () {
     Route::get('/', [PainelController::class, 'index'])->name('paineis.index');
@@ -151,11 +150,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/create-zip', [BackupController::class, 'createZip'])->name('create.zip');
 
     Route::get('/mural', function () {
-        return view('pages.mural2.index');
+        return view('pages.mural.index');
     })->name('mural.index');
 
     Route::get('/mural/view/{id}', [MuralController::class, 'view']) -> name("mural2.view");
-    Route::get('/mural/edit/{id}', [MuralController::class, 'edit']) -> name("mural2.edit");
+    Route::get('/mural/edit/{id}', [MuralController::class, 'edit']) -> name("mural.edit");
+
+    Route::resource('scenes',SceneController::class);
+Route::resource('buttons',ButtonController::class);
 
 });
 

@@ -3,33 +3,53 @@
 namespace App\DAO;
 
 use App\Models\Mural;
-use App\Models\MuralPainel;
+use App\Models\Painei;
 
 class MuralDAO
 {
+    public static function getById($id)
+    {
+        return Mural::where('id', $id)->first();
+    }
+
     public static function getAll()
     {
         return Mural::all();
     }
-
-    public static function create($data) {
-        
+    
+    public static function create(array $data)
+    {
         $mural = Mural::create($data);
         
         $datapainel = [
-            'mural_id' => $mural->id,
-            'panelnome' => 1,
-            'panel' => '{"id":"1","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none","buttons":[]}'
+            'scene_id' => $mural->id,
+            'panel' => '{"id":"1","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}'
         ];
-        $muralpainel = MuralPainel::create($datapainel);
+        $muralpainel = Painei::create($datapainel);
 
         $mural->update(['start_painel_id'=> $muralpainel->id] );
 
         return $mural;
+
     }
 
-    public static function find($id) {
+    public static function updateById($id, array $data)
+    {
+        return Mural::where('id', $id)->update($data);
+    }
 
-        return Mural::find($id);
+    public static function deleteById($id)
+    {
+        Mural::where('id', $id)->delete();
+    }
+
+    public static function getByName($name)
+    {
+        return Mural::where('name', 'like', '%' . $name . '%')->get();
+    }
+
+    public static function getByDisciplinaId($id)
+    {
+        return Mural::where('disciplina_id', $id)->get();
     }
 }

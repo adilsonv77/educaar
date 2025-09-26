@@ -91,7 +91,7 @@
                                     <!-- EDITAR MURAL -->
                                     <td>
 
-                                        <form action="{{ route('mural2.edit', [$mural->id]) }}" method="GET">
+                                        <form action="{{ route('mural.edit', [$mural->id]) }}" method="GET">
                                             @csrf
                                             <button type="submit" class="btn btn-warning" title="Editar">
                                                 <i class="bi bi-pencil-square h2" style="color: #ffffff;"></i>

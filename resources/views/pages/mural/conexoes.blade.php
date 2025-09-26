@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', $nameScene)
+@section('page-name', 'Mural')
 
 @section('script-head')
     <!-- CSS PAINEL CONEXÕES -->
@@ -99,8 +99,8 @@
         </div>
     </div>
 
-    @livewire('scene', ['paineis' => $paineis, "scene_id" => $scene_id, "nameScene" => $nameScene])
-    @livewireScripts
+    <livewire:mural-edit :muralId="$muralId"/>
+    
 @endsection
 
 @section('script')

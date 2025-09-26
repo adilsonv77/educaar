@@ -8,12 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Mural extends Model
 {
     use HasFactory;
-    protected $table = 'murais';
-    
     protected $fillable = [
-        'id',
         'name',
-        'start_painel_id',
+        'start_panel_id',
         'author_id',
         'disciplina_id',
         'canvasTop',
@@ -22,6 +19,7 @@ class Mural extends Model
         'centroLeft',
         'scale',
     ];
+    protected $table = 'scenes';
 
     public function disciplina()
     {

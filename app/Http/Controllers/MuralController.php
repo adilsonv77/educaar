@@ -9,7 +9,7 @@ class MuralController extends Controller
     public function edit($id)
     {
         $muralId = $id;
-        return view('pages.mural2.conexoes', ['muralId' => $id]);
+        return view('pages.mural.conexoes', ['muralId' => $id]);
     }
 
     

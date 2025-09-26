@@ -94,6 +94,9 @@
                     </h3>
                     <select class="selectPainelDestino select-native">
                         <option value="" disabled selected>Selecione um painel</option>
+                        @foreach ($paineisRenderizados as $painel)
+                            <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -115,13 +118,12 @@
                         <img class="tapSelect" src="{{ asset('images/singletap.svg') }}" alt="Ícone"
                             style="cursor: pointer;">
                     </h3>
-                    <select wire:model="startPainelId"  class="select-native">
+                    <select wire:model="startPainelId" wire:change="updateStartPanel($event.target.value)"
+                        class="select-native">
                         <option disabled selected>Selecione um painel</option>
-                        @foreach ($paineis as $painel)
-                            <option value="{{ $painel->id }}"  @if($painel->id == $startPainelId) selected="selected"  @endif>Painel {{ $painel->panelnome }}</option>
+                        @foreach ($paineisRenderizados as $painel)
+                            <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
                         @endforeach
-
-
                     </select>
                 </div>
                 <!-- SELECIONAR DISCIPLINA -->
@@ -132,9 +134,11 @@
                     <div class="select" data-default="Selecione uma disciplina">
                         <select wire:model="disciplinaSelecionada" wire:change="updateDisciplinaScene"
                             name="disciplina_id" class="select-native">
-                            <option class="default_option" value="">Selecione uma disciplina</option>
-                            @foreach ($disciplinas as $item)
-                                <option value="{{ $item->id }}"  @if($item->id == $disciplinaSelecionada) selected="selected"  @endif>{{ $item->name }}</option>
+                            <option selected class="default_option" value="">Selecione uma disciplina</option>
+                            @foreach($disciplinas as $disciplina)
+                                <option value="{{ is_object($disciplina) ? $disciplina->id : $disciplina['id'] }}">
+                                    {{ is_object($disciplina) ? $disciplina->name : $disciplina['name'] }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -143,27 +147,21 @@
         </div>
     </div>
 
-    <div class="canvas-container">
-        <div class="menu-zoom">
-            <button id="zoom-out" class="button">-</button>
-            <button id="zoom-in" class="button">+</button>
-            <button id="resizeZoom" hidden class="button">Redefinir zoom</button>
-        </div>
-        <div id="canvas" class="canvas"  data-start-id="{{ $startPainelId }}">
-            @foreach ($paineis as $painel)
-                <livewire:mural-painel :painel="$painel"/>
-            @endforeach
-            <img id="indicadorInicio" src="{{ asset('images/inicioConexoes.svg') }}" alt="">
-            <img id="indicadorFinal" src="{{ asset('images/endConnection.svg') }}" alt="">
+    <!-- CANVAS SPACE -->
+    <div class="container-paineis">
+        <div class="canvas-container">
+            <div class="menu-zoom">
+                <button id="zoom-out" class="button">-</button>
+                <button id="zoom-in" class="button">+</button>
+                <button id="resizeZoom" hidden class="button">Redefinir zoom</button>
+            </div>
+            <div id="canvas" class="canvas" data-start-id="{{ $startPainelId }}">
+                @foreach ($paineisRenderizados as $painel)
+                    @livewire('panel', ['painel' => $painel], key($painel->id))
+                @endforeach
+                <img id="indicadorInicio" src="{{ asset('images/inicioConexoes.svg') }}" alt="">
+                <img id="indicadorFinal" src="{{ asset('images/endConnection.svg') }}" alt="">
+            </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            atualizarIndicadorInicio(); // muralconnection.js
-
-            selecionarCanvas(); // muralconnection.js
-        });
-    </script>
-
 </div>

@@ -16,7 +16,7 @@ use App\DAO\ContentDAO;
 use App\DAO\StudentAppDAO;
 use App\Models\Painei;
 use App\DAO\PainelDAO;
-use App\DAO\SceneDAO;
+use App\DAO\MuralDAO;
 use App\DAO\QuestionDAO;
 
 class StudentController extends Controller
@@ -142,9 +142,9 @@ class StudentController extends Controller
             $scene_id = $activity->scene_id;
             if ($scene_id != null) {
                 //Pegar paineis e botões e atribui para uma array de paineis
-                $idPainelInicial = SceneDAO::getById($scene_id)->start_panel_id;
+                $idPainelInicial = MuralDAO::getById($scene_id)->start_panel_id;
                 $activity->json = PainelDAO::getById($idPainelInicial)->panel;
-                $scenes[] = SceneDAO::getById($scene_id);
+                $scenes[] = MuralDAO::getById($scene_id);
                 $scenePanels = PainelDAO::getBySceneId($scene_id);
                 foreach ($scenePanels as $panel) {
                     $panels[] = $panel;

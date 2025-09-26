@@ -3,37 +3,135 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-
-use App\DAO\MuralDAO;
-use App\DAO\MuralPainelDAO;
-use App\DAO\DisciplinaDAO;
-
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\DAO\PainelDAO;
+use App\DAO\DisciplinaDAO;
+use App\DAO\MuralDAO;
 
 class MuralEdit extends Component
 {
+    protected $listeners = ['deletePainel', 'updateStartPanel', 'updateCoordinate','updateCanvasPosition','buscarDadosIniciais'];
+
+    public $paineisRenderizados = [];
+    public $scene_id;
+    public $disciplinas;
+    public $disciplinaSelecionada;
+    public $startPainelId;
+    public $nameScene;
+    public $isSelectingInitialPanel = false;
+
+    
     public $muralId;
     public $mural;
 
-    public $paineis;
 
-    public $startPainelId;
 
     public function mount()
     {
-        $this->mural = MuralDAO::find($this->muralId);
-        $this->nameScene = $this->mural->name;
-
-        $this->disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);        
-        $this->disciplinaSelecionada = $this->mural->disciplina_id;
-
-        $this->startPainelId = $this->mural->start_painel_id;
-
-        $this->paineis = MuralPainelDAO::getByMuralId($this->muralId);
-        foreach ($this->paineis as $painel) {
+        $this->paineisRenderizados = PainelDAO::getByMuralId($this->muralId);
+        foreach ($this->paineisRenderizados as $painel) {
             $painel->panel = json_decode($painel->panel,true);
         }
 
-    
+        $this->disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);     
+
+        $this->mural = MuralDAO::getById($this->muralId);
+
+        $this->startPainelId = $this->mural->start_painel_id;;
+        $this->disciplinaSelecionada = $this->mural->disciplina_id;
     }
+
+    public function create()
+    {
+        $painelDAO = new PainelDAO();
+
+        // Define posição inicial próxima do centro da cena com leve deslocamento
+        $xInicial = 40000 - round(291 / 2) + 40;
+        $yInicial = 40000 - round(462 / 2) + 40;
+
+        $json = ["txt" => "", "link" => "", "arquivoMidia" => "", "midiaExtension" => "", "midiaType" => "none", "btnFormat" => "linhas", "x" => $xInicial, "y" => $yInicial];
+
+        $novo = $painelDAO->create(['panel' => json_encode($json), 'scene_id' => $this->scene_id]);
+
+        $json['id'] = $novo->id;
+
+        $painelDAO->updateById($novo->id, ['panel' => json_encode($json),]);
+
+        $novo->panel = $json;
+        $this->paineisRenderizados[] = $novo;
+
+        $this->emit("painelCriado", $novo->id);
+    }
+
+
+    public function deletePainel($id)
+    {
+        $id = (int) $id;
+        $painelDAO = new PainelDAO();
+
+        // Filtra usando Collection
+        $this->paineisRenderizados = $this->paineisRenderizados->reject(function ($painel) use ($id) {
+            return $painel->id == $id;
+        })->values(); // Reindexa os itens da Collection
+
+        // Remove do banco
+        $painelDAO->deleteById($id);
+
+        // (Opcional) Emitir um evento se quiser avisar algo pro front
+        $this->emit('painelDeletado', $id);
+    }
+
+    public function updateCanvasPosition($data){
+        MuralDAO::updateById($this->scene_id,["canvasTop"=>$data[0],"canvasLeft"=>$data[1],"scale"=>$data[2],"centroTop"=>$data[3],"centroLeft"=>$data[4]]);
+    }
+
+    public function updateDisciplinaScene()
+    {
+        $disciplinaDAO = new DisciplinaDAO();
+        $disciplinaDAO->updateDisciplinaScene($this->scene_id, $this->disciplinaSelecionada);
+        $this->emit("updateHtmlDiscipline");
+    }
+
+    public function updateStartPanel($painelId)
+    {
+        $this->startPainelId = $painelId;
+
+        MuralDAO::updateById($this->scene_id, ['start_panel_id' => $painelId]);
+
+        $this->emit('startPanelUpdated', $painelId);
+    }
+
+    public function updatedNameScene()
+    {
+        MuralDAO::updateById($this->scene_id, ['name' => $this->nameScene]);
+        $this->emit('updateHtmlSceneName', $this->nameScene);
+    }
+
+    public function updateCoordinate($painelId, $x, $y)
+    {
+        $painelDAO = new PainelDAO();
+        $painelRaw = DB::table('paineis')->where('id', $painelId)->value('panel');
+
+        if ($painelRaw) {
+            $panelData = json_decode($painelRaw, true);
+            $panelData['x'] = $x;
+            $panelData['y'] = $y;
+
+            $painelDAO->updateById($painelId, [
+                'panel' => json_encode($panelData)
+            ]);
+        }
+    }
+
+    public function buscarDadosIniciais(){
+        $centroTop = $this->mural["centroTop"];
+        $centroLeft = $this->mural["centroLeft"];
+        $scale = $this->mural["scale"];
+        $canvasTop = $this->mural["canvasTop"];
+        $canvasLeft = $this->mural["canvasLeft"];
+
+        $this->emit("carregarCanvas",[$centroTop, $centroLeft, $scale, $canvasTop, $canvasLeft]);
+    }
+
 }

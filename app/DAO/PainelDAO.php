@@ -6,6 +6,12 @@ use App\Models\Painei;
 
 class PainelDAO
 {
+
+    
+    public static function getByMuralId($id)
+    {
+        return Painei::where('scene_id', $id)->get();
+    }
     public static function getById($id)
     {
         return Painei::where('id', $id)->first();

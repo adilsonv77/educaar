@@ -20,7 +20,7 @@ use Illuminate\Validation\Rule;
 use App\DAO\ContentDAO;
 use App\DAO\ActivityDAO;
 use App\DAO\DisciplinaDAO;
-use App\DAO\SceneDAO;
+use App\DAO\MuralDAO;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -119,7 +119,7 @@ class ActivityController extends Controller
         $scenes = collect();
 
         foreach ($disciplinas as $disciplina) {
-            $scenes = $scenes->merge(SceneDAO::getByDisciplinaId($disciplina->id));
+            $scenes = $scenes->merge(items: MuralDAO::getByDisciplinaId($disciplina->id));
         }
 
         $content = 0;
@@ -378,7 +378,7 @@ class ActivityController extends Controller
         $scenes = collect();
 
         foreach ($disciplinas as $disciplina) {
-            $scenes = $scenes->merge(SceneDAO::getByDisciplinaId($disciplina->id));
+            $scenes = $scenes->merge(MuralDAO::getByDisciplinaId($disciplina->id));
         }
 
         $params = [

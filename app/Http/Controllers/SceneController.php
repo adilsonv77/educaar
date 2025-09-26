@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DAO\ButtonDAO;
-use App\DAO\SceneDAO;
+use App\DAO\MuralDAO;
 use App\DAO\ActivityDAO;
 use App\DAO\PainelDAO;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class SceneController extends Controller
     protected $activityDAO;
     protected $painelDAO;
     protected $sceneDAO;
-
+/*
     public function __construct(ButtonDAO $ButtonDAO, ActivityDAO $activityDAO, PainelDAO $painelDAO, SceneDAO $sceneDAO)
     {
         $this->painelDAO = $painelDAO;
@@ -22,13 +22,13 @@ class SceneController extends Controller
         $this->ButtonDAO = $ButtonDAO;
         $this->sceneDAO = $sceneDAO;
     }
-
+*/
     public function index(Request $request)
     {
         if ($request->has('titulo') && !empty($request->titulo)) {
-            $data = $this->sceneDAO->getByName($request->titulo);
+            $data = MuralDAO::getByName($request->titulo);
         } else {
-            $data = $this->sceneDAO->getAll();
+            $data = MuralDAO::getAll();
         }
 
         return view('pages.mural.sceneListing', compact('data'));
@@ -40,7 +40,7 @@ class SceneController extends Controller
         foreach ($paineis as $painel) {
             $painel->panel = json_decode($painel->panel,true);
         }
-        $scene_name = SceneDao::getById($id)->name;
+        $scene_name = MuralDAO::getById($id)->name;
         return view('pages.mural.conexoes',["paineis"=>$paineis,"scene_id"=>$id,"nameScene"=>$scene_name]);
     }
 
