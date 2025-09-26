@@ -2,7 +2,7 @@
 
 namespace App\DAO;
 
-use App\Models\Painei;
+use App\Models\Painel;
 
 class PainelDAO
 {
@@ -10,34 +10,34 @@ class PainelDAO
     
     public static function getByMuralId($id)
     {
-        return Painei::where('scene_id', $id)->get();
+        return Painel::where('scene_id', $id)->get();
     }
     public static function getById($id)
     {
-        return Painei::where('id', $id)->first();
+        return Painel::where('id', $id)->first();
     }
 
     public static function getBySceneId($id)
     {
-        return Painei::where('scene_id', $id)->get();
+        return Painel::where('scene_id', $id)->get();
     }
 
-    public function getAll()
+    public static function getAll()
     {
-        return Painei::all();
+        return Painel::all();
     }
 
-    public function create(array $data)
+    public static function create(array $data)
     {
-        return Painei::create($data);
+        return Painel::create($data);
     }
 
-    public function updateById($id, array $data)
+    public static function updateById($id, array $data)
     {
-        return Painei::where('id', $id)->update($data);
+        return Painel::where('id', $id)->update($data);
     }
 
-    public function deleteById($id){
-        Painei::where('id',$id)->delete();
+    public static function deleteById($id){
+        Painel::where('id',$id)->delete();
     }
 }

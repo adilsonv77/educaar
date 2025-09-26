@@ -14,7 +14,6 @@ class MuralEdit extends Component
     protected $listeners = ['deletePainel', 'updateStartPanel', 'updateCoordinate','updateCanvasPosition','buscarDadosIniciais'];
 
     public $paineisRenderizados = [];
-    public $scene_id;
     public $disciplinas;
     public $disciplinaSelecionada;
     public $startPainelId;
@@ -32,31 +31,31 @@ class MuralEdit extends Component
         $this->paineisRenderizados = PainelDAO::getByMuralId($this->muralId);
         foreach ($this->paineisRenderizados as $painel) {
             $painel->panel = json_decode($painel->panel,true);
+            $painel->panelId = (int)$painel->panel["id"];
         }
 
         $this->disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);     
 
         $this->mural = MuralDAO::getById($this->muralId);
 
-        $this->startPainelId = $this->mural->start_painel_id;;
+        $this->startPainelId = $this->mural->start_panel_id;;
         $this->disciplinaSelecionada = $this->mural->disciplina_id;
     }
 
     public function create()
     {
-        $painelDAO = new PainelDAO();
-
         // Define posição inicial próxima do centro da cena com leve deslocamento
         $xInicial = 40000 - round(291 / 2) + 40;
         $yInicial = 40000 - round(462 / 2) + 40;
 
         $json = ["txt" => "", "link" => "", "arquivoMidia" => "", "midiaExtension" => "", "midiaType" => "none", "btnFormat" => "linhas", "x" => $xInicial, "y" => $yInicial];
 
-        $novo = $painelDAO->create(['panel' => json_encode($json), 'scene_id' => $this->scene_id]);
+        $novo = PainelDAO::create(['panel' => json_encode($json), 'scene_id' => $this->muralId]);
 
-        $json['id'] = $novo->id;
+        //$json['id'] = $novo->id;
+        $json['id'] = count( $this->paineisRenderizados) + 1;
 
-        $painelDAO->updateById($novo->id, ['panel' => json_encode($json),]);
+        PainelDAO::updateById($novo->id, ['panel' => json_encode($json)]);
 
         $novo->panel = $json;
         $this->paineisRenderizados[] = $novo;
@@ -68,7 +67,6 @@ class MuralEdit extends Component
     public function deletePainel($id)
     {
         $id = (int) $id;
-        $painelDAO = new PainelDAO();
 
         // Filtra usando Collection
         $this->paineisRenderizados = $this->paineisRenderizados->reject(function ($painel) use ($id) {
@@ -76,14 +74,14 @@ class MuralEdit extends Component
         })->values(); // Reindexa os itens da Collection
 
         // Remove do banco
-        $painelDAO->deleteById($id);
+        PainelDAO::deleteById($id);
 
         // (Opcional) Emitir um evento se quiser avisar algo pro front
         $this->emit('painelDeletado', $id);
     }
 
     public function updateCanvasPosition($data){
-        MuralDAO::updateById($this->scene_id,["canvasTop"=>$data[0],"canvasLeft"=>$data[1],"scale"=>$data[2],"centroTop"=>$data[3],"centroLeft"=>$data[4]]);
+        MuralDAO::updateById($this->muralId,["canvasTop"=>$data[0],"canvasLeft"=>$data[1],"scale"=>$data[2],"centroTop"=>$data[3],"centroLeft"=>$data[4]]);
     }
 
     public function updateDisciplinaScene()
@@ -110,15 +108,15 @@ class MuralEdit extends Component
 
     public function updateCoordinate($painelId, $x, $y)
     {
-        $painelDAO = new PainelDAO();
-        $painelRaw = DB::table('paineis')->where('id', $painelId)->value('panel');
+        $painelRaw = PainelDAO::getById($painelId)->panel;
+        //$painelRaw = DB::table('paineis')->where('id', $painelId)->value('panel');
 
         if ($painelRaw) {
             $panelData = json_decode($painelRaw, true);
             $panelData['x'] = $x;
             $panelData['y'] = $y;
 
-            $painelDAO->updateById($painelId, [
+            PainelDAO::updateById($painelId, [
                 'panel' => json_encode($panelData)
             ]);
         }

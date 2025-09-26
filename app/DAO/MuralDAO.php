@@ -3,7 +3,7 @@
 namespace App\DAO;
 
 use App\Models\Mural;
-use App\Models\Painei;
+use App\Models\Painel;
 
 class MuralDAO
 {
@@ -25,9 +25,9 @@ class MuralDAO
             'scene_id' => $mural->id,
             'panel' => '{"id":"1","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}'
         ];
-        $muralpainel = Painei::create($datapainel);
+        $muralpainel = Painel::create($datapainel);
 
-        $mural->update(['start_painel_id'=> $muralpainel->id] );
+        $mural->update(['start_panel_id'=> $muralpainel->id] );
 
         return $mural;
 

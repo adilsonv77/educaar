@@ -95,7 +95,8 @@
                     <select class="selectPainelDestino select-native">
                         <option value="" disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
-                            <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
+                        <script>console.log("{{ $painel }}");</script>
+                            <option value="{{ $painel->id }}">Painel {{ $painel->panelId }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -122,7 +123,7 @@
                         class="select-native">
                         <option disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
-                            <option value="{{ $painel->id }}">Painel {{ $painel->id }}</option>
+                            <option value="{{ $painel->id }}">Painel {{ $painel->panelId }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -157,7 +158,8 @@
             </div>
             <div id="canvas" class="canvas" data-start-id="{{ $startPainelId }}">
                 @foreach ($paineisRenderizados as $painel)
-                    @livewire('panel', ['painel' => $painel], key($painel->id))
+                   <!-- eu não entendo esse terceiro parâmetro... se eu retiro trava tudo -->    
+                   @livewire('mural-painel', ['painel' => $painel], key($painel->id))
                 @endforeach
                 <img id="indicadorInicio" src="{{ asset('images/inicioConexoes.svg') }}" alt="">
                 <img id="indicadorFinal" src="{{ asset('images/endConnection.svg') }}" alt="">

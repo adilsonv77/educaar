@@ -14,7 +14,6 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use App\DAO\ContentDAO;
 use App\DAO\StudentAppDAO;
-use App\Models\Painei;
 use App\DAO\PainelDAO;
 use App\DAO\MuralDAO;
 use App\DAO\QuestionDAO;

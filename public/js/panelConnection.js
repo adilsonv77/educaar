@@ -477,15 +477,15 @@ function habilitarArrastoPersonalizado(painelElement) {
 
         const x = parseFloat(painelElement.style.left);
         const y = parseFloat(painelElement.style.top);
-        const id = parseInt(painelElement.querySelector('.idPainel').id);
+        const id = parseInt(painelElement.getAttribute("data-painel-id"));
 
         if (!isNaN(id)) {
             window.livewire.emit("updateCoordinate", id, x, y);
         }
 
-        const painelId = painelElement.querySelector('.idPainel')?.id;
+        //const painelId = painelElement.querySelector('.idPainel')?.id;
         const startId = document.getElementById("canvas").getAttribute("data-start-id");
-        if (painelId === startId) {
+        if (id === startId) {
             atualizarIndicadorInicio();
         }
     });
