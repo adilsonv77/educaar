@@ -10,9 +10,8 @@ use App\Http\Controllers\SceneController;
 use App\Http\Controllers\ButtonController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Mail\MyEmail;
-use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\MuralController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 // TUDO QUE ESTÁ FORA DO AUTH PODE SER ACESSADO SEM O USUÁRIO AUTENTICAR !!!!
 
@@ -36,6 +35,9 @@ Route::get('/', function () { return redirect('/home');});
 //registro público
 Route::get('/Register', [RegisterController::class, 'goTo']) -> name('publicRegister');
 Route::post('/createPublicUser', [RegisterController::class, 'createPublic']) -> name('createPublicUser');
+
+Route::get('/goto', [ResetPasswordController::class, 'goTo']) -> name('gotoresetPassword');
+Route::post('/resetpassword', [ResetPasswordController::class, 'resetPassword']) -> name('resetPassword');
 
 Auth::routes();
 

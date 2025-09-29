@@ -3,13 +3,12 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Content;
 
-class MyEmail extends Mailable
+class ContaCriadaEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -25,7 +24,7 @@ class MyEmail extends Mailable
 
     public function envelope() {
         return new Envelope(
-            subject: 'Assunto Teste',
+            subject: 'Conta criada no EducaAR',
             from: env('MAIL_FROM_ADDRESS'),
         );
     }

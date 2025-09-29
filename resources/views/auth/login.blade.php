@@ -41,10 +41,18 @@
         @if ($errors->any())
             <div class="alert alert-danger" id="alerta">
                 <ul>
-                    <h3>Problema ao logar</h3>
+                    <h3>Erro!</h3>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
+                </ul>
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success" id="alerta-sucesso">
+                <ul>
+                    <h3>Sucesso!</h3>
+                    <p>{{ session('success') }}</p>
                 </ul>
             </div>
         @endif
@@ -88,7 +96,10 @@
                 
                 <a href="{{ route('publicRegister') }}">
                     {{ __('Register') }}
-                </a>    
+                </a>
+                <a href="{{ route('gotoresetPassword') }}">
+                    Esqueceu a senha?
+                </a>
                     
             </div>
                     

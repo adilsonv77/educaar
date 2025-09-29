@@ -4,7 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Login;
+use App\Mail\ResetPasswordEmail;
+use Illuminate\Support\Facades\Mail;
 
 class ResetPasswordController extends Controller
 {
@@ -27,4 +35,50 @@ class ResetPasswordController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+
+    /**
+     * Redirecionamento para formulário para modificar senha
+     * 
+     */
+    public function goTo() {
+        return view('auth.passwords.reset');
+    }
+
+    /**
+     * Verifica se o email existe, caso existe cria uma nova senha
+     * de 8 dígitos, associa ao email e envia a senha ao email,
+     * excluí o 'login' com a senha antiga
+     * 
+     */
+    public function resetPassword(Request $request) {
+        $validated = $request -> validate([
+            'email' => 'required | string  | max:255'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $password = Str::random(8);
+            $user = User::where('email', $validated['email']) -> value('name');
+            User::where('email', $validated['email']) -> update(['password' => Hash::make($password)]);
+
+            $userId = User::where('email', $validated['email']) -> value('id');
+            Login::where('user_id', $userId) -> delete();
+
+            try {
+                Mail::to($validated['email'], 'ResetPasswordEmail') -> send(new ResetPasswordEmail($password, $user));
+            } catch (\Exception) {
+                return redirect('/login') -> with('error', 'Não foi possível encontrar o email');
+            }
+            DB::commit();
+
+            return redirect('/login') -> with('success', 'Senha alterada');
+        } catch (\Exception) {
+            DB::rollback();
+
+            return redirect('/Register') -> with('error', 'Falha ao alterar senha');
+        }
+
+    }
+
 }

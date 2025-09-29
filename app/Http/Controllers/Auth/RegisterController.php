@@ -14,7 +14,7 @@ use App\Models\Turma;
 use App\Models\AlunoTurma;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-use App\Mail\MyEmail;
+use App\Mail\ContaCriadaEmail;
 use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
@@ -125,15 +125,15 @@ class RegisterController extends Controller
         ]);
 
         try {
-            Mail::to($validated['email'], 'MyMail') -> send(new MyEmail($password, $validated['name']));
+            Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['name']));
 
         } catch (\Exception) {
             return redirect('/login') -> with ('error', 'Erro ao criar conta');
         }
         DB::commit();
 
-        return redirect('/login') -> with('sucess', 'Contra criada');
-
+        return redirect('/login') -> with ('success', 'Conta criada');
+        
       } catch (\Exception) {
         DB::rollback();
 
