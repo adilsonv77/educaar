@@ -10,6 +10,8 @@
   width: 100vw;
   height: 100vh; 
   overflow: hidden; 
+  position: relative;
+  min-height: 100vh;
 }
 .prision .img-fundo {
   position: absolute;
@@ -122,33 +124,36 @@ color: black;
  
   }
 
-  #alerta {
-    position: absolute; /* ou fixed, se quiser que ele fique fixo na tela */
-    top: 20px; /* Distância do topo */
-    right: 20px; /* Distância da direita */
-   
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    background-color: #ff9999;
-    color: black;
-    border: 1px solid #cc0000;
-    padding: 10px; /* Espaçamento interno */
+#alerta,
+#alerta-sucesso {
+  position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    max-width: 500px;
+    min-width: 300px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.4s ease-out;
+}
+
+#alerta {
+  background-color: #fff3f1;
+  color: black;
+  border: 1px solid #ff8a75;
+
 }
 
 #alerta-sucesso {
-  position: absolute; /* ou fixed, se quiser que ele fique fixo na tela */
-    top: 20px; /* Distância do topo */
-    right: 20px; /* Distância da direita */
-   
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    background-color: #5cf12f;
-    color: black;
-    border: 1px solid #227402;
-    padding: 10px; /* Espaçamento interno */
+  background-color: #f5fff1;
+  color: black;
+  border: 1px solid #75ff97;
 }
+
+
+
 
   
  

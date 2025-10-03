@@ -57,7 +57,7 @@ class ResetPasswordController extends Controller
 
         $user = User::where('email', $validated['email']) -> first();
         if (!$user) {
-            return redirect('/password/reset') -> with('error', 'Email não encontrado');
+            return redirect('/password/reset') -> with('error', 'Email não encontrado.');
         }
 
         try {
@@ -73,15 +73,15 @@ class ResetPasswordController extends Controller
             try {
                 Mail::to($validated['email'], 'ResetPasswordEmail') -> send(new ResetPasswordEmail($password, $user));
             } catch (\Exception) {
-                return redirect('/password/reset') -> with('error', 'Não foi possível encontrar o email');
+                return redirect('/password/reset') -> with('error', 'Não foi possível encontrar o email.');
             }
             DB::commit();
 
-            return redirect('/login') -> with('success', 'Senha alterada. Uma nova senha foi enviada ao seu');
+            return redirect('/login') -> with('success', 'Senha alterada. Uma nova senha foi enviada ao seu email.');
         } catch (\Exception) {
             DB::rollback();
 
-            return redirect('/password/reset') -> with('error', 'Falha ao alterar senha');
+            return redirect('/password/reset') -> with('error', 'Falha ao alterar senha.');
         }
 
     }
