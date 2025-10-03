@@ -8,10 +8,8 @@
                 <div class="card-header">{{ __('Reset Password') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('resetPassword') }}">
+                    <form method="POST" action="{{ route('password.change') }}">
                         @csrf
-
-                        <input type="hidden" name="token" value="">
 
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>

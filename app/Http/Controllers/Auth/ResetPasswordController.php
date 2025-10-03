@@ -40,7 +40,7 @@ class ResetPasswordController extends Controller
      * Redirecionamento para formulário para modificar senha
      * 
      */
-    public function goTo() {
+    public function create() {
         return view('auth.passwords.reset');
     }
 
@@ -50,10 +50,15 @@ class ResetPasswordController extends Controller
      * excluí o 'login' com a senha antiga
      * 
      */
-    public function resetPassword(Request $request) {
+    public function update(Request $request) {
         $validated = $request -> validate([
-            'email' => 'required | string  | max:255'
+            'email' => ['required', 'email', 'max:255']
         ]);
+
+        $user = User::where('email', $validated['email']) -> first();
+        if (!$user) {
+            return redirect('/password/reset') -> with('error', 'Email não encontrado');
+        }
 
         try {
             DB::beginTransaction();
@@ -68,15 +73,15 @@ class ResetPasswordController extends Controller
             try {
                 Mail::to($validated['email'], 'ResetPasswordEmail') -> send(new ResetPasswordEmail($password, $user));
             } catch (\Exception) {
-                return redirect('/login') -> with('error', 'Não foi possível encontrar o email');
+                return redirect('/password/reset') -> with('error', 'Não foi possível encontrar o email');
             }
             DB::commit();
 
-            return redirect('/login') -> with('success', 'Senha alterada');
+            return redirect('/login') -> with('success', 'Senha alterada. Uma nova senha foi enviada ao seu');
         } catch (\Exception) {
             DB::rollback();
 
-            return redirect('/Register') -> with('error', 'Falha ao alterar senha');
+            return redirect('/password/reset') -> with('error', 'Falha ao alterar senha');
         }
 
     }

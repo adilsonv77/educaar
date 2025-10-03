@@ -56,14 +56,12 @@
                 </ul>
             </div>
         @endif
+        
 
-        <div class="main-container">
-                    
-                        
+        <div class="main-container">           
                             
             @csrf
             <div class="elements">
-
             
                 <div class="logo">
                         <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}"  alt="Imagem" class="img-fluid">
@@ -94,10 +92,10 @@
                         </button>
                 </div>
                 
-                <a href="{{ route('publicRegister') }}">
+                <a href="{{ route('register.create') }}">
                     {{ __('Register') }}
                 </a>
-                <a href="{{ route('gotoresetPassword') }}">
+                <a href="{{ route('password.create') }}">
                     Esqueceu a senha?
                 </a>
                     

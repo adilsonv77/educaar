@@ -69,7 +69,7 @@ class RegisterController extends Controller
      *
      * @param  array  $data
      * @return \App\Models\User
-     */
+     
     protected function create(array $data)
     {
         return User::create([
@@ -78,12 +78,13 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+    */
 
     /**
      * Redirecionamento para formulário de registro de usuário público
      * 
      */
-    public function goTo() {
+    public function create() {
         $publicSchools = School::where('publico', 1)
                                 -> pluck('name');
                                         
@@ -96,7 +97,7 @@ class RegisterController extends Controller
      * tabela "aluno_turmas" associado ao usuário e turma
      *
      */
-    public function createPublic(Request $request) {
+    public function store(Request $request) {
       $validated = $request -> validate([
           'name' => ['required', 'string', 'max:100', 'unique:users'],
           'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -128,7 +129,7 @@ class RegisterController extends Controller
             Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['name']));
 
         } catch (\Exception) {
-            return redirect('/login') -> with ('error', 'Erro ao criar conta');
+            return redirect('/register') -> with ('error', 'Erro ao criar conta');
         }
         DB::commit();
 
@@ -137,7 +138,7 @@ class RegisterController extends Controller
       } catch (\Exception) {
         DB::rollback();
 
-        return redirect('/login') -> with ('error', 'Erro ao criar conta');
+        return redirect('/register') -> with ('error', 'Erro ao criar conta');
 
       }
 

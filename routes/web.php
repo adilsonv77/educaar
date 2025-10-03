@@ -32,14 +32,18 @@ Route::prefix('paineis')->group(function () {
 // use Hash;
 Route::get('/', function () { return redirect('/home');});
 
-//registro público
-Route::get('/Register', [RegisterController::class, 'goTo']) -> name('publicRegister');
-Route::post('/createPublicUser', [RegisterController::class, 'createPublic']) -> name('createPublicUser');
+Route::controller(RegisterController::class) -> group(function () {
+    Route::get('/register', 'create') -> name('register.create');
+    Route::post('/register', 'store') -> name('register.store');
+});
 
-Route::get('/goto', [ResetPasswordController::class, 'goTo']) -> name('gotoresetPassword');
-Route::post('/resetpassword', [ResetPasswordController::class, 'resetPassword']) -> name('resetPassword');
+Route::controller(ResetPasswordController::class) -> group(function () {
+    Route::get('/password/reset', 'create') -> name('password.create');
+    Route::post('/password/reset', 'update') -> name('password.change');
+});
 
-Auth::routes();
+
+Auth::routes(['register' => false, 'reset' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
