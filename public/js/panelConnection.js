@@ -1,6 +1,6 @@
 //----UPDATE NOME DA CENA AO ALTERAR------------------------------------------------------
-window.livewire.on("updateHtmlSceneName", (sceneName) => {
-    document.getElementsByClassName("dashboard_bar")[0].innerText = sceneName;
+window.livewire.on("updateHtmlMuralName", (muralName) => {
+    document.getElementsByClassName("dashboard_bar")[0].innerText = muralName;
 })
 
 //----UPDATE DISCIPLINA AO ALTERAR------------------------------------------------------

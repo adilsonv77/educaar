@@ -95,8 +95,8 @@
                     <select class="selectPainelDestino select-native">
                         <option value="" disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
-                        <script>console.log("{{ $painel }}");</script>
-                            <option value="{{ $painel->id }}">Painel {{ $painel->panelId }}</option>
+                            <script>console.log("{{ $painel->id }} {{  $painel->panelId }} {{ $painel->panelnome }}");</script>
+                            <option value="{{ $painel->id }}">Painel {{ $painel->id }} {{ $painel->panelId }} {{ $painel->panelnome }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -109,8 +109,8 @@
             <div class="menu-opcoes canvas-opcoes">
                 <!-- NOME DA CENA -->
                 <div class="mb-6">
-                    <h3 class="mb-2">NOME DA CENA</h3>
-                    <input type="text" wire:model="nameScene" class="form-input" placeholder="Insira o nome da cena" />
+                    <h3 class="mb-2">NOME DO MURAL</h3>
+                    <input type="text" wire:model="nameMural" class="form-input" placeholder="Insira o nome do mural" />
                 </div>
                 <!-- SELECIONAR O PAINEL INICIAL-->
                 <div class="mb-6">
@@ -123,7 +123,7 @@
                         class="select-native">
                         <option disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
-                            <option value="{{ $painel->id }}">Painel {{ $painel->panelId }}</option>
+                            <option value="{{ $painel->id }}">Painel {{ $painel->panelnome }}</option>
                         @endforeach
                     </select>
                 </div>

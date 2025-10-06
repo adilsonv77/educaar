@@ -22,12 +22,13 @@ class MuralDAO
         $mural = Mural::create($data);
         
         $datapainel = [
-            'scene_id' => $mural->id,
-            'panel' => '{"id":"1","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}'
+            'mural_id' => $mural->id,
+            'panel' => '{"id":"1","txt":"","link":"","arquivoMidia":"","midiaExtension":"","midiaType":"none"}',
+            'panelnome' => 1
         ];
         $muralpainel = Painel::create($datapainel);
 
-        $mural->update(['start_panel_id'=> $muralpainel->id] );
+        $mural->update(['start_painel_id'=> $muralpainel->id] );
 
         return $mural;
 

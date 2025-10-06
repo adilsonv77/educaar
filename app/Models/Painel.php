@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Painel extends Model
 {
     use HasFactory;
-    protected $table = 'paineis';
+    protected $table = 'murais_paineis';
     protected $fillable = [
         'panel',
-        'scene_id'
+        'panelnome',
+        'mural_id'
     ];
 }

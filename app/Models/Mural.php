@@ -10,7 +10,7 @@ class Mural extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'start_panel_id',
+        'start_painel_id',
         'author_id',
         'disciplina_id',
         'canvasTop',
@@ -19,7 +19,7 @@ class Mural extends Model
         'centroLeft',
         'scale',
     ];
-    protected $table = 'scenes';
+    protected $table = 'murais';
 
     public function disciplina()
     {

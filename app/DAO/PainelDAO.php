@@ -10,16 +10,11 @@ class PainelDAO
     
     public static function getByMuralId($id)
     {
-        return Painel::where('scene_id', $id)->get();
+        return Painel::where('mural_id', $id)->get();
     }
     public static function getById($id)
     {
         return Painel::where('id', $id)->first();
-    }
-
-    public static function getBySceneId($id)
-    {
-        return Painel::where('scene_id', $id)->get();
     }
 
     public static function getAll()

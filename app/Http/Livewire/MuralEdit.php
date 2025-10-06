@@ -17,47 +17,54 @@ class MuralEdit extends Component
     public $disciplinas;
     public $disciplinaSelecionada;
     public $startPainelId;
-    public $nameScene;
+    public $nameMural;
     public $isSelectingInitialPanel = false;
 
     
     public $muralId;
     public $mural;
 
+    public $panelNomeMax;
 
 
-    public function mount()
+    public function mount() // ok
     {
         $this->paineisRenderizados = PainelDAO::getByMuralId($this->muralId);
         foreach ($this->paineisRenderizados as $painel) {
+            if ($painel->panelnome > $this->panelNomeMax) {
+                $this->panelNomeMax = $painel->panelnome;
+            }
             $painel->panel = json_decode($painel->panel,true);
-            $painel->panelId = (int)$painel->panel["id"];
+            $painel->panelId = $painel->panel["id"];
         }
 
         $this->disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);     
 
         $this->mural = MuralDAO::getById($this->muralId);
 
+        $this->nameMural = $this->mural->name;
         $this->startPainelId = $this->mural->start_panel_id;;
         $this->disciplinaSelecionada = $this->mural->disciplina_id;
     }
 
-    public function create()
+    public function create() // ok
     {
         // Define posição inicial próxima do centro da cena com leve deslocamento
         $xInicial = 40000 - round(291 / 2) + 40;
         $yInicial = 40000 - round(462 / 2) + 40;
 
-        $json = ["txt" => "", "link" => "", "arquivoMidia" => "", "midiaExtension" => "", "midiaType" => "none", "btnFormat" => "linhas", "x" => $xInicial, "y" => $yInicial];
+        $this->panelNomeMax += 1;
 
-        $novo = PainelDAO::create(['panel' => json_encode($json), 'scene_id' => $this->muralId]);
+        $json = ["id" => $this->panelNomeMax, "txt" => "", "link" => "", "arquivoMidia" => "", "midiaExtension" => "", "midiaType" => "none", "btnFormat" => "linhas", "x" => $xInicial, "y" => $yInicial];
+        
+        $novo = PainelDAO::create(['panel' => json_encode($json), 'mural_id' => $this->muralId, 'panelnome' => $this->panelNomeMax]);
 
         //$json['id'] = $novo->id;
-        $json['id'] = count( $this->paineisRenderizados) + 1;
+        //$json['id'] = count( $this->paineisRenderizados) + 1;
 
-        PainelDAO::updateById($novo->id, ['panel' => json_encode($json)]);
+        //PainelDAO::updateById($novo->id, ['panel' => json_encode($json)]);
 
-        $novo->panel = $json;
+       // $novo->panel = $json;
         $this->paineisRenderizados[] = $novo;
 
         $this->emit("painelCriado", $novo->id);
@@ -95,15 +102,15 @@ class MuralEdit extends Component
     {
         $this->startPainelId = $painelId;
 
-        MuralDAO::updateById($this->scene_id, ['start_panel_id' => $painelId]);
+        MuralDAO::updateById($this->muralId, ['start_panel_id' => $painelId]);
 
         $this->emit('startPanelUpdated', $painelId);
     }
 
-    public function updatedNameScene()
+    public function updatedNameMural()
     {
-        MuralDAO::updateById($this->scene_id, ['name' => $this->nameScene]);
-        $this->emit('updateHtmlSceneName', $this->nameScene);
+        MuralDAO::updateById($this->muralId, ['name' => $this->nameMural]);
+        $this->emit('updateHtmlSceneName', $this->nameMural);
     }
 
     public function updateCoordinate($painelId, $x, $y)
