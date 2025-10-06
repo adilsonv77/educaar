@@ -95,7 +95,6 @@
                     <select class="selectPainelDestino select-native">
                         <option value="" disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
-                            <script>console.log("{{ $painel->id }} {{  $painel->panelId }} {{ $painel->panelnome }}");</script>
                             <option value="{{ $painel->id }}">Painel {{ $painel->id }} {{ $painel->panelId }} {{ $painel->panelnome }}</option>
                         @endforeach
                     </select>
