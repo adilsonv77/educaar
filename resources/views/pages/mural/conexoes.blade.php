@@ -5,7 +5,7 @@
 @section('script-head')
     <!-- CSS PAINEL CONEXÕES -->
     <link rel="stylesheet"
-        href="{{ asset('css/panelConnection.css?v=' . filemtime(public_path('css/panelConnection.css'))) }}">
+        href="{{ asset('css/muralConnection.css?v=' . filemtime(public_path('css/muralConnection.css'))) }}">
 
     <!-- SELETOR DE CORES -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />

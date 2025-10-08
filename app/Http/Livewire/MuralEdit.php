@@ -17,6 +17,7 @@ class MuralEdit extends Component
     public $disciplinas;
     public $disciplinaSelecionada;
     public $startPainelId;
+    public $startPainelConta;
     public $nameMural;
     public $isSelectingInitialPanel = false;
 
@@ -29,22 +30,26 @@ class MuralEdit extends Component
 
     public function mount() // ok
     {
+        $this->mural = MuralDAO::getById($this->muralId);
+        $this->startPainelId = 1;
+
         $this->paineisRenderizados = PainelDAO::getByMuralId($this->muralId);
         foreach ($this->paineisRenderizados as $painel) {
             if ($painel->panelnome > $this->panelNomeMax) {
                 $this->panelNomeMax = $painel->panelnome;
+            }
+            if ($painel->id == $this->mural->start_painel_id) {
+                $this->startPainelId = $this->mural->start_painel_id;
+                $this->startPainelConta = $painel->panelnome;
             }
             $painel->panel = json_decode($painel->panel,true);
             $painel->panelId = $painel->panel["id"];
         }
 
         $this->disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);     
-
-        $this->mural = MuralDAO::getById($this->muralId);
+        $this->disciplinaSelecionada = $this->mural->disciplina_id;
 
         $this->nameMural = $this->mural->name;
-        $this->startPainelId = $this->mural->start_panel_id;;
-        $this->disciplinaSelecionada = $this->mural->disciplina_id;
     }
 
     public function create() // ok
@@ -59,22 +64,16 @@ class MuralEdit extends Component
         
         $novo = PainelDAO::create(['panel' => json_encode($json), 'mural_id' => $this->muralId, 'panelnome' => $this->panelNomeMax]);
 
-        //$json['id'] = $novo->id;
-        //$json['id'] = count( $this->paineisRenderizados) + 1;
-
-        //PainelDAO::updateById($novo->id, ['panel' => json_encode($json)]);
-
-       // $novo->panel = $json;
         $this->paineisRenderizados[] = $novo;
 
         $this->emit("painelCriado", $novo->id);
     }
 
 
-    public function deletePainel($id)
+    public function deletePainel($id)  // ok
     {
         $id = (int) $id;
-
+        
         // Filtra usando Collection
         $this->paineisRenderizados = $this->paineisRenderizados->reject(function ($painel) use ($id) {
             return $painel->id == $id;
@@ -98,13 +97,22 @@ class MuralEdit extends Component
         $this->emit("updateHtmlDiscipline");
     }
 
-    public function updateStartPanel($painelId)
+    public function updateStartPanel($painelId) // ok
     {
+        $startPainelConta = 0;
+        foreach ($this->paineisRenderizados as $painel) {
+            if ($painel->id == $painelId) {
+                $startPainelConta = $painel->panelnome;
+                break;
+            }
+        }
+       
         $this->startPainelId = $painelId;
+        $this->startPainelConta = $startPainelConta;
 
-        MuralDAO::updateById($this->muralId, ['start_panel_id' => $painelId]);
+        MuralDAO::updateById($this->muralId, ['start_painel_id' => $painelId]);
 
-        $this->emit('startPanelUpdated', $painelId);
+        $this->emit('startPanelUpdated', $startPainelConta);
     }
 
     public function updatedNameMural()

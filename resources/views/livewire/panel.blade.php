@@ -8,7 +8,7 @@
     $style = ($x !== null && $y !== null) ? "left: {$x}px; top: {$y}px;" : "";
 @endphp
 
-<div class="painel" id="{{ $panelData['id'] }}" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" data-panel='@json($panelData)' style="{{ $style }}"> 
+<div class="painel {{ $classes }}" id="{{ $panelData['id'] }}" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" data-panel='@json($panelData)' style="{{ $style }}"> 
 
     <p class="idPainel" id="{{ $panelData["id"] }}">Painel ({{ $panelData["id"] }})</p>    
 
@@ -23,22 +23,24 @@
                 <img class="fileMidia" src="{{ asset('images/FileMidia.svg') }}" draggable="false">
             </div>
 
-            <img class="imgMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}?v={{ random_int(0,10000) }}" 
-                @if($panelData["midiaType"]!="image")style="display: none"@endif draggable="false">
+            @if($panelData["midiaType"] != "none")
+                <img class="imgMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}?v={{ random_int(0,10000) }}" 
+                    @if($panelData["midiaType"]!="image")style="display: none"@endif draggable="false">
 
-            <video class="vidMidia" controls @if($panelData["midiaType"]!="video")style="display: none"@endif draggable="false">
-                <source id="srcVidMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}" type="video/mp4" draggable="false">
-            </video>
+                <video class="vidMidia" controls @if($panelData["midiaType"]!="video")style="display: none"@endif draggable="false">
+                    <source id="srcVidMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}" type="video/mp4" draggable="false">
+                </video>
 
-            <div class="videoContainer youtubeMidia" @if($panelData["midiaType"]!="youtube")style="display: none"@endif>
-                <iframe
-                    id="srcYoutube"
-                    src="https://www.youtube.com/embed/{{$panelData["link"]}}?autoplay=0"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-                </iframe>
-            </div>
+                <div class="videoContainer youtubeMidia" @if($panelData["midiaType"]!="youtube")style="display: none"@endif>
+                    <iframe
+                        id="srcYoutube"
+                        src="https://www.youtube.com/embed/{{$panelData["link"]}}?autoplay=0"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            @endif
         </div>
         <div class="loading" style="display: none">
             <img src="{{ asset("images/circle.png") }}" alt="Carregando midia...">

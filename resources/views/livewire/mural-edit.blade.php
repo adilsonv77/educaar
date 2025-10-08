@@ -155,7 +155,7 @@
                 <button id="zoom-in" class="button">+</button>
                 <button id="resizeZoom" hidden class="button">Redefinir zoom</button>
             </div>
-            <div id="canvas" class="canvas" data-start-id="{{ $startPainelId }}">
+            <div id="canvas" class="canvas" data-start-id="{{ $startPainelConta }}">
                 @foreach ($paineisRenderizados as $painel)
                    <!-- eu não entendo esse terceiro parâmetro... se eu retiro trava tudo -->    
                    @livewire('mural-painel', ['painel' => $painel], key($painel->id))

@@ -222,13 +222,17 @@ function selecionarPainel(painel, e) {
     if (e != null && e.target.closest(".button_Panel")) return;
 
     // limpa seleção anterior
-    if (painelSelecionado) painelSelecionado.classList.remove("selecionado");
+    if (painelSelecionado) {
+        painelSelecionado.classList.remove("selecionadoP");
+        window.livewire.emit('removeSelecionado');
+    }
     if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
 
     painelSelecionado = painel;
     botaoSelecionado = null;
 
-    painel.classList.add("selecionado");
+    painel.classList.add("selecionadoP");
+    window.livewire.emit('addSelecionado');
     mostrarMenu("painel");
 
     const editor = $('#trumbowyg-editor');
@@ -278,7 +282,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //----FUNÇÃO DE SELECIONAR CANVAS------------------------------------------------------------------------------------------------
 function selecionarCanvas() {
-    if (painelSelecionado) painelSelecionado.classList.remove("selecionado");
+    if (painelSelecionado) {
+       painelSelecionado.classList.remove("selecionadoP");
+       window.livewire.emit('removeSelecionado');
+    }
     if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
 
     painelSelecionado = null;
@@ -614,40 +621,14 @@ window.livewire.on("stopLoading", () => {
 })
 
 let painelPopup = null;
-//ISSO AQUI É O CODIGO ANTIGO, SÓ RESTIRAR ISO SE PASSAR EM TODOS OS TESTES, SE N TIVER DADO PAU POR PELOEMNOS UMA SEMANA DE USO CONTIUO, VC TIRA, SEANO EU N VOU LEMBRAR COMO FUNCIONA
-// function abrirPopUp(id) {
-//     painelPopup = id;
-
-//     // Define o input file correspondente a este painel
-//     inputAtivo = document.querySelector("#file-" + id);
-
-//     // Atualiza o atributo "for" da label para apontar pro input atual
-//     const dropLabel = document.getElementById("upload-area");
-//     dropLabel.setAttribute("for", "#file-" + id);
-
-//     // Abre o pop-up
-//     document.getElementById("flex-container").style.display = "flex";
-
-//     // ✅ Limpa o campo do YouTube
-//     const inputYoutube = document.getElementById("linkYoutube");
-//     if (inputYoutube) inputYoutube.value = "";
-
-//     let painel = document.getElementById(id);
-
-//     if (painel.querySelector("video").style.display != 'none') {
-//         setTimeout(() => {
-//             painel.querySelector("video").pause()
-//         }, 500);
-//     }
-
-//     inputAtivo.addEventListener("change", fecharPopUp);
-
-//     // Salvar as coordenadas por precaução
-//     window.livewire.emit('updateCanvasPosition', [canvasTop, canvasLeft, scale, centroCordenadas.style.top, centroCordenadas.style.left]);
-// }
 
 function abrirPopUp(id) {
     painelPopup = id;
+    let painel = document.getElementById(id);
+
+    selecionarPainel(painel, null);
+
+    let j = JSON.parse(painel.getAttribute("data-panel"))
 
     inputAtivo = document.querySelector("#file-" + id);
     const dropLabel = document.getElementById("upload-area");
@@ -655,10 +636,10 @@ function abrirPopUp(id) {
 
     document.getElementById("flex-container").style.display = "flex";
 
-    let painel = document.getElementById(id);
-    if (painel.querySelector("video").style.display != 'none') {
-        setTimeout(() => painel.querySelector("video").pause(), 500);
-    }
+    if (j.midiaType !== 'none')
+        if (painel.querySelector("video").style.display != 'none') {
+            setTimeout(() => painel.querySelector("video").pause(), 500);
+        }
 
     inputAtivo.addEventListener("change", fecharPopUp);
 
@@ -690,10 +671,11 @@ let excluirPainelBtn = document.getElementById("excluirPainel")
 excluirPainelBtn.onclick = () => {
     let id = painelSelecionado.querySelector(".idPainel").id;
     if (id == canvas.getAttribute("data-start-id")) {
-        enviarMsg("Você não pode deletar o painel inicial da cena!")
+        enviarMsg("Você não pode excluir o painel inicial do mural!")
         return;
     }
-
+    
+    id = painelSelecionado.getAttribute("data-painel-id");
     window.livewire.emit('deletePainel', id);
 }
 

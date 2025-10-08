@@ -14,7 +14,8 @@ use App\Models\Test;
 
 class MuralPainel extends Component
 {
-    protected $listeners = ['updateLink', 'updateBtnFormat', 'createButton', 'updatedMidia', 'deleteBtn', 'salvarTexto', 'teste','resetYoutubeLink' => 'resetarLinkYoutube'];
+    protected $listeners = ['updateLink', 'updateBtnFormat', 'createButton', 'updatedMidia', 'deleteBtn', 'salvarTexto', 'teste','resetYoutubeLink' => 'resetarLinkYoutube',
+                            'addSelecionado', 'removeSelecionado'];
 
     use WithFileUploads;
 
@@ -25,6 +26,8 @@ class MuralPainel extends Component
     public $link;
     public $btnFormat;
     public $num;
+
+    public $classes = "";
     
    
     public function resetarLinkYoutube()
@@ -45,6 +48,18 @@ class MuralPainel extends Component
         $this->link = $json['link'] ?? '';
         $this->btnFormat = $json['btnFormat'] ?? '';
         $this->num = 0;
+    }
+
+    public function addSelecionado(): void
+    {
+        // preciso descobrir como passar parametros.... pois dai troco o '1' por parâmetro
+        if ($this->painel->panelnome == '1')
+            $this->classes = "selecionadoP";
+    }
+    
+    public function removeSelecionado(): void
+    {
+        $this->classes = "";
     }
 
     public function salvarTexto($painelId, $novoTexto)
