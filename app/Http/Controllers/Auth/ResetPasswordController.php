@@ -67,13 +67,10 @@ class ResetPasswordController extends Controller
             $user = User::where('email', $validated['email']) -> value('name');
             User::where('email', $validated['email']) -> update(['password' => Hash::make($password)]);
 
-            $userId = User::where('email', $validated['email']) -> value('id');
-            Login::where('user_id', $userId) -> delete();
-
             try {
                 Mail::to($validated['email'], 'ResetPasswordEmail') -> send(new ResetPasswordEmail($password, $user));
             } catch (\Exception) {
-                return redirect('/password/reset') -> with('error', 'Não foi possível encontrar o email.');
+                return redirect('/password/reset') -> with('error', 'Email não encontrado.');
             }
             DB::commit();
 
