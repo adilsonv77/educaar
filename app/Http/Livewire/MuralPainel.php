@@ -50,10 +50,9 @@ class MuralPainel extends Component
         $this->num = 0;
     }
 
-    public function addSelecionado(): void
+    public function addSelecionado($id): void
     {
-        // preciso descobrir como passar parametros.... pois dai troco o '1' por parâmetro
-        if ($this->painel->panelnome == '1')
+        if ($this->painel->panelnome == $id)
             $this->classes = "selecionadoP";
     }
     

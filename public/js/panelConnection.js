@@ -223,7 +223,6 @@ function selecionarPainel(painel, e) {
 
     // limpa seleção anterior
     if (painelSelecionado) {
-        painelSelecionado.classList.remove("selecionadoP");
         window.livewire.emit('removeSelecionado');
     }
     if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
@@ -231,8 +230,7 @@ function selecionarPainel(painel, e) {
     painelSelecionado = painel;
     botaoSelecionado = null;
 
-    painel.classList.add("selecionadoP");
-    window.livewire.emit('addSelecionado');
+    window.livewire.emit('addSelecionado', painel.id);
     mostrarMenu("painel");
 
     const editor = $('#trumbowyg-editor');
