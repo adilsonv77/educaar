@@ -13,7 +13,7 @@ class ButtonDAO
 
     public static function getByOriginId($id)
     {
-        return Button::where('origin_id', $id)->get();
+        return Button::where('painel_origin_id', $id)->get();
     }
 
 

@@ -157,8 +157,7 @@
             </div>
             <div id="canvas" class="canvas" data-start-id="{{ $startPainelConta }}">
                 @foreach ($paineisRenderizados as $painel)
-                   <!-- eu não entendo esse terceiro parâmetro... se eu retiro trava tudo -->    
-                   @livewire('mural-painel', ['painel' => $painel], key($painel->id))
+                  @livewire('mural-painel', ['painel' => $painel], key($painel->id))
                 @endforeach
                 <img id="indicadorInicio" src="{{ asset('images/inicioConexoes.svg') }}" alt="">
                 <img id="indicadorFinal" src="{{ asset('images/endConnection.svg') }}" alt="">

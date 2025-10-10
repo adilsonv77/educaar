@@ -1,0 +1,76 @@
+START TRANSACTION;
+CREATE TABLE `murais` (
+  `id` int UNSIGNED NOT NULL,
+  `name` varchar(300) NOT NULL,
+  `author_id` bigint UNSIGNED NOT NULL,
+  `disciplina_id` bigint UNSIGNED DEFAULT NULL,
+  `start_painel_id` int DEFAULT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL,
+  `canvasTop` double NOT NULL DEFAULT '448',
+  `canvasLeft` double NOT NULL DEFAULT '588',
+  `scale` double NOT NULL DEFAULT '0.7',
+  `centroTop` varchar(255) NOT NULL DEFAULT '39984px',
+  `centroLeft` varchar(255) NOT NULL DEFAULT '39984px'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+ALTER TABLE `murais`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `mural_author_id_foreign` (`author_id`),
+  ADD KEY `mural_disciplina_id_foreign` (`disciplina_id`),
+  ADD KEY `mural_start_painel_id_foreign` (`start_painel_id`);
+
+ALTER TABLE `murais`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+CREATE TABLE `murais_paineis` (
+  `id` int NOT NULL,
+  `panelnome` int NOT NULL,
+  `panel` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `mural_id` int UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+ALTER TABLE `murais_paineis`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `mural_id_foreing` (`mural_id`);
+
+ALTER TABLE `murais_paineis`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `murais_paineis`
+  ADD CONSTRAINT `mural_id_foreing` FOREIGN KEY (`mural_id`) REFERENCES `murais` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `murais`
+  ADD CONSTRAINT `mural_author_id_foreign` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `mural_disciplina_id_foreign` FOREIGN KEY (`disciplina_id`) REFERENCES `disciplinas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `mural_start_painel_id_foreign` FOREIGN KEY (`start_painel_id`) REFERENCES `murais_paineis` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+CREATE TABLE `murais_buttons` (
+  `id` int NOT NULL,
+  `painel_origin_id` int NOT NULL,
+  `painel_destination_id` int DEFAULT NULL,
+  `configurations` varchar(1000) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+ALTER TABLE `murais_buttons`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `origin_painel_id_foreign` (`painel_origin_id`) USING BTREE,
+  ADD KEY `destination_painel_id_foreign` (`painel_destination_id`) USING BTREE;
+  
+ALTER TABLE `murais_buttons`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `murais_buttons`
+  ADD CONSTRAINT `destination_painel_id_foreign` FOREIGN KEY (`painel_destination_id`) REFERENCES `murais_paineis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `origin_painel_id_foreign` FOREIGN KEY (`painel_origin_id`) REFERENCES `murais_paineis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+ALTER TABLE `activities` CHANGE `scene_id` `mural_id` INT UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `activities` DROP INDEX `scene_id_foreign`, ADD INDEX `mural_id_foreign` (`mural_id`) USING BTREE;
+ALTER TABLE `activities` ADD CONSTRAINT `mural_id_foreign` FOREIGN KEY (`mural_id`) REFERENCES `buttons`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+COMMIT;

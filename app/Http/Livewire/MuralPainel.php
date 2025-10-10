@@ -36,7 +36,7 @@ class MuralPainel extends Component
     }
     
 
-    public function mount()
+    public function mount() // ok
     {
         $painel = $this->painel;
         $this->buttonRenderizados = ButtonDAO::getByOriginId($painel->id);
@@ -50,13 +50,14 @@ class MuralPainel extends Component
         $this->num = 0;
     }
 
-    public function addSelecionado($id): void
+    public function addSelecionado($id): void // ok
     {
+        $id = substr($id, 1);
         if ($this->painel->panelnome == $id)
             $this->classes = "selecionadoP";
     }
     
-    public function removeSelecionado(): void
+    public function removeSelecionado(): void // ok
     {
         $this->classes = "";
     }
@@ -82,8 +83,6 @@ class MuralPainel extends Component
 
     }
    
-
-
     public function updatedMidia($recebeuLink = null)
     {
         $painelDAO = new PainelDAO();
@@ -150,8 +149,6 @@ class MuralPainel extends Component
         $this->updatedMidia(true);
     }
 
-   
-
     public function createButton($payload)
     {
         if ($payload['id'] != $this->painel->id)
@@ -160,8 +157,8 @@ class MuralPainel extends Component
         $buttonDAO = new ButtonDAO();
 
         $novo = $buttonDAO->create([
-            'origin_id' => $this->painel->id,
-            'destination_id' => null,
+            'painel_origin_id' => $this->painel->id,
+            'painel_destination_id' => null,
             'configurations' => '{"color":"#833B8D","text":"","type":"linhas","transition":"","linhaX":"","linhaY":""}'
         ]);
 

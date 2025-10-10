@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Button extends Model
 {
     use HasFactory;
+
+    protected $table = 'murais_buttons';
     protected $fillable = [
-        'origin_id',
-        'destination_id',
+        'painel_origin_id',
+        'painel_destination_id',
         'configurations'
     ];
 }

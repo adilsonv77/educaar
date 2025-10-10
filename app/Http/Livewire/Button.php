@@ -30,8 +30,8 @@ class Button extends Component
 
         $this->texto = $json['text'] ?? '';
         $this->cor = $json['color'] ?? '';
-        $this->painelOrigem = $button->origin_id;
-        $this->painelDestino = $button->destination_id;
+        $this->painelOrigem = $button->painel_origin_id;
+        $this->painelDestino = $button->painel_destination_id;
         $this->transicao = $json['transition'] ?? '';
         $this->linhaX = $json['linhaX'];
         $this->linhaY = $json['linhaY'];
@@ -94,10 +94,10 @@ class Button extends Component
 
         $buttonDAO = new ButtonDAO();
 
-        $this->painelDestino = $payload['destination_id'];
+        $this->painelDestino = $payload['painel_destination_id'];
 
         $buttonDAO->updateById($this->button->id, [
-            'destination_id' => $payload['destination_id']
+            'painel_destination_id' => $payload['painel_destination_id']
         ]);
 
         $this->emitSelf('$refresh');

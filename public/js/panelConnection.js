@@ -200,7 +200,7 @@ function mostrarMenu(tipo) {
 document.addEventListener("click", (e) => {
     if (e.target.closest(".menu-opcoes") || e.target.closest(".menu-lateral") || e.target.closest("#confirmModal")) return;
 
-    if (e.target.classList.contains("button_Panel")) {
+    if (e.target.classList.contains("button_Panel") && !e.target.classList.contains("criadorButton")) {
         e.stopPropagation();
         selecionarBotao(e.target);
         return;
@@ -621,8 +621,8 @@ window.livewire.on("stopLoading", () => {
 let painelPopup = null;
 
 function abrirPopUp(id) {
-    painelPopup = id;
-    let painel = document.getElementById(id);
+    painelPopup = "p" + id;
+    let painel = document.getElementById(painelPopup);
 
     selecionarPainel(painel, null);
 
@@ -652,7 +652,7 @@ let urlYoutubeInformado = false;
 let inputAtivo = null;
 
 function adicionarInteracaoPopup(id) {
-    let painel = document.getElementById(id);
+    let painel = document.getElementById("p"+id);
     let fileBtn = painel.querySelector("#file-" + id);
     let midiaArea = painel.querySelector(".midia");
 
@@ -901,7 +901,7 @@ function atualizarIndicadorInicio() {
 
     if (!startId || !indicador) return;
 
-    const painel = document.getElementById(startId);
+    const painel = document.getElementById("p"+startId);
     if (!painel) return;
 
     const painelRect = painel.getBoundingClientRect();
