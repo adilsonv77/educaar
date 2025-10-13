@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use App\Models\StudentAnswer;
+use Exception;
 
 class QuestionarioAlunoForm extends Component
 {
@@ -150,10 +151,13 @@ class QuestionarioAlunoForm extends Component
                 array_push($questoes, $q->id);
             }
     
+            /*
             $respondida = DB::table('student_answers')
                 ->whereIn('question_id', $questoes)
                 ->where('user_id', Auth::user()->id)
                 ->exists();
+            */
+            $respondida = false;
 
             if (!$respondida) {
 
@@ -162,6 +166,15 @@ class QuestionarioAlunoForm extends Component
                     $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
 
                     try {
+
+                        $jaRespondeu = StudentAnswer::where('question_id', $questao->id)
+                            ->where('user_id', Auth::id())
+                            ->exists();
+                        
+                        if ($jaRespondeu) {
+                            continue;
+                        }
+
                         //$respop = $datareq["questao" . $questao->id];
                         $respop = $this->alternativas[$questao->id];
                         $data['question_id'] = $questao->id;
@@ -203,7 +216,7 @@ class QuestionarioAlunoForm extends Component
             } else {
                 DB::rollback();
 
-                $this->dispactchBrowserEvent('showError');
+                $this->dispatchBrowserEvent('showError');
             }
         }
     }

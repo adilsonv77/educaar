@@ -8,12 +8,16 @@ use Illuminate\Support\Facades\DB;
 class StudentAppDAO
 {
     public static function verificaAtividadeRespondida($activity_id,$user_id){
-        return DB::table('student_answers as st')
-        ->join('questions as q', 'st.question_id', '=', 'q.id')
-        ->where([
-            ['st.activity_id', '=', $activity_id],
-            ['st.user_id', '=', $user_id]
-        ])->exists();
+        $resultado = DB::table('questions as q')
+            ->leftJoin('student_answers as sa', function($join) use($user_id) {
+                $join->on('q.id', '=', 'sa.question_id')
+                    ->where('sa.user_id', '=', $user_id);
+            })
+            ->where('q.activity_id', $activity_id)
+            ->selectRaw('COUNT(q.id) as total, COUNT(sa.id) as respondidas')
+            ->first();
+
+        return $resultado -> total > 0 && $resultado -> total == $resultado -> respondidas;
     }
 
     public static function buscarDataCorte($activity_id, $aluno_id, $ano_id) {
