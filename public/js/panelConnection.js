@@ -336,7 +336,7 @@ document.addEventListener("click", function (e) {
         document.querySelectorAll('.tapSelect')[0].classList.remove('selected');
     } else {
         // Envia pro Livewire
-        window.livewire.emit('updateStartPanel', idPainel);
+        window.livewire.emit('updateStartPanel', painel.getAttribute("data-painel-id"));
 
         document.querySelectorAll('.tapSelect')[1].classList.remove('selected');
     }
