@@ -276,13 +276,14 @@ class QuestionController extends Controller
         session()->put('question_base', $result['question_base']);
 
 
-        $questions = ResultActivityDAO::questoesQntAcertos($activity->id, $turma->id);
+        $questions = ResultActivityDAO::questoesQntAcertosComNaoRespondidas($activity->id, $turma->id);
         $respostasSelecionadas = ResultActivityDAO::respostasDosAlunos($activity->id, $turma->id);
 
         foreach ($questions as $question) {
             $question->quntRespondCerto = (int)$question->quntRespondCerto;
         }
- 
+
+        //dd($respostasSelecionadas, $questions);
         return view('pages.activity.results', compact('result', 'questions', 'turmas', 'turma', 'activity', 'respostasSelecionadas'));
     }
 

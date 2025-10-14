@@ -94,6 +94,25 @@ class ResultActivityDAO
         return $result_questions;
     }
 
+    public static function questoesQntAcertosComNaoRespondidas($activityID, $turma_id) {
+        $sql = DB::table('questions as q')
+        ->select('q.question as questao', 'q.id', DB::raw('COUNT(sta.id) as qntRespondida'), DB::raw('sum(case when sta.correct = 1 then 1 else 0 end) as quntRespondCerto')) //Select de campos
+        ->leftJoin('student_answers as sta', function($join) use ($turma_id) { 
+            $join->on('sta.question_id', '=', 'q.id') //Join para todas questões
+            ->join('alunos_turmas as alunt', function($j) use ($turma_id) { //Filtro de turma
+                $j->on('alunt.aluno_id', '=', 'sta.user_id')
+                ->where('alunt.turma_id', '=', $turma_id);
+            });
+        })
+        -> where('q.activity_id', '=', $activityID) //Filtro de atividade
+        -> groupBy('q.id', 'q.question');
+
+        $result_questions= $sql->get();
+
+        //dd($result_questions);
+        return $result_questions;
+    }
+
     public static function getStudentDidNotQuestions($turma_id, $questao){
                     //alunos que não fizeram
 

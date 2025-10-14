@@ -85,19 +85,24 @@
       </thead>
       <tbody>
 
-            @foreach($respostasSelecionadas as $item)
+            @foreach($respostasSelecionadas as $item) <!-- Itera sobre alunos -->
                   <tr class="table-light">
                     <td>{{$item['name']}}</td>
-                    @foreach($questions as $question)
-                      @if(isset($item['q'.$question->id]))
-                        <td data-bs-toggle="tooltip" title="{{ $item['q'.$question->id] }}"
-                        @if($item['q'.$question->id.'correta']==1)class="table-success"
-                        @elseif($item['q'.$question->id.'correta']==0) class="table-danger"@endif >
-                        @if($item['q'.$question->id.'correta']==1) &#9989; @elseif($item['q'.$question->id.'correta']==0) &#10060; @endif</td>
+                    @foreach($questions as $question) <!-- Itera sobre questões -->
+
+                      @if(isset($item['q'.$question->id])) <!-- Aluno respondeu? -->
+
+                        @if($item['q'.$question->id.'correta']==1) <!-- Resposta correta? -->
+                          <td data-bs-toggle="tooltip" title="{{ $item['q'.$question->id] }}" class="table-success"> &#9989 </td>
+                        @else
+                          <td data-bs-toggle="tooltip" title="{{ $item['q'.$question->id] }}" class="table-danger"> &#10060 </td>
+                        @endif
+
                       @else
-                      <td class="table-warning">&#128993;</td>
+                        <td class="table-warning">&#128993;</td>
                       @endif
-                      @endforeach
+
+                    @endforeach
                   </tr>
             @endforeach
       </tbody>
