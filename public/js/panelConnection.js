@@ -136,20 +136,6 @@ function iniciarPickr() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    /*
-    document.querySelector(".linhas").addEventListener("click", (e) => {
-        selecionarFormato(e.currentTarget); // Chama a função ao clicar na div "linhas"
-    });
-    document.querySelector(".blocos").addEventListener("click", (e) => {
-        selecionarFormato(e.currentTarget); // Chama a função ao clicar na div "blocos"
-    });
-    document.querySelector(".alternativas").addEventListener("click", (e) => {
-        selecionarFormato(e.currentTarget); // Chama a função ao clicar na div "alternativas"
-    });
-    */
-});
-
 //----ADICIONAR PAINEL--------------------------------------------------------------------------------------------------------
 let container = document.getElementById("canvas");
 let painelSelecionado = null;
@@ -242,7 +228,15 @@ function selecionarPainel(painel, e) {
         editor.trumbowyg('html', textoPainel);
     }
 
-    qtdBotoes = painelSelecionado.querySelector("#layout").children.length
+    let layoutPainel = painelSelecionado.querySelector("#layout");
+    let botoes = Array.from(layoutPainel.children);
+    let botaoCriar = layoutPainel.querySelector(".placeholder.disabled-look");
+    qtdBotoes = layoutPainel.children.length
+    botoes.forEach((botao, i) =>{
+        if(botao == botaoCriar){
+            qtdBotoes = qtdBotoes - 1;
+        }
+    });
 }
 
 //----FUNÇÃO DE SELECIONAR BOTÃO------------------------------------------------------------------------------------------------
@@ -1019,13 +1013,12 @@ let addBtnBtn = document.getElementById("addButton")
 
 // 1. Criar novo botão
 addBtnBtn.onclick = () => {
-    let id = painelSelecionado.querySelector(".idPainel").id;
-    let tipoFormato = painelSelecionado.querySelector("#layout").classList[0];
-
-    criarBotao(id, tipoFormato);
+    criarBotao();
 }
 
-function criarBotao(id, tipoFormato) {
+function criarBotao() {
+
+    let tipoFormato = painelSelecionado.querySelector("#layout").classList[0];
 
     if (tipoFormato == "layout-blocos" && qtdBotoes >= 6) {
         enviarMsg("Você não pode adicionar mais botões, o formato de blocos suporta até 6 botões")
@@ -1039,16 +1032,10 @@ function criarBotao(id, tipoFormato) {
     }
     qtdBotoes++;
     botoesCriando++;
+    let id = painelSelecionado.getAttribute("data-painel-id");
     window.livewire.emit('createButton', { id: id });
-    loadingBtn(id)
-}
 
-function clicarAddButton(idPainel) {
-
-   let painel = document.getElementById("p" + idPainel);
-   let tipoFormato = painel.querySelector("#layout").classList[0];
-
-   criarBotao(idPainel, tipoFormato);
+    loadingBtn(painelSelecionado.id);
 }
 
 function enviarMsg(mensagem) {
@@ -1092,7 +1079,7 @@ let carregarBtn;
 function loadingBtn(idPainel) {
     let painel = null;
     if (painelSelecionado == null)
-        painel = document.getElementById("p" + idPainel);
+        painel = document.getElementById(idPainel);
     else
         painel = painelSelecionado;
 

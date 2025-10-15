@@ -171,7 +171,7 @@ class MuralPainel extends Component
         $this->emit("stopLoadingBtn", $this->painel->panelnome);
     }
 
-    public function updateBtnFormat($payload)
+    public function updateBtnFormat($payload)// ok
     {
         if ($payload['id'] != $this->painel->id)
             return;
