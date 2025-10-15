@@ -14,6 +14,7 @@ class Button extends Component
 
     public $listeners = ["updateTexto","updateCor","updateTransicao","updatePainelDestino","updateCoordinateButton"];
     public $button;
+    public $style;
     public $texto;
     public $cor;
     public $painelOrigem;
@@ -28,11 +29,11 @@ class Button extends Component
 
         $json = is_string($button->configurations) ? json_decode($button->configurations, true) : $button->configurations;
 
-        $this->texto = $json['text'] ?? '';
+        $this->texto = $this->texto??$json['text'] ?? '';
         $this->cor = $json['color'] ?? '';
         $this->painelOrigem = $button->painel_origin_id;
         $this->painelDestino = $button->painel_destination_id;
-        $this->transicao = $json['transition'] ?? '';
+        $this->transicao = $this->transicao??$json['transition'] ?? '';
         $this->linhaX = $json['linhaX'];
         $this->linhaY = $json['linhaY'];
     }

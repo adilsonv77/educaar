@@ -151,6 +151,7 @@ class MuralPainel extends Component
 
     public function createButton($payload)
     {
+
         if ($payload['id'] != $this->painel->id)
             return;
 
@@ -167,7 +168,7 @@ class MuralPainel extends Component
         $this->buttonRenderizados = ButtonDAO::getByOriginId($this->painel->id);
 
         $this->emit("buttonCriado");
-        $this->emit("stopLoadingBtn");
+        $this->emit("stopLoadingBtn", $this->painel->panelnome);
     }
 
     public function updateBtnFormat($payload)
@@ -201,7 +202,7 @@ class MuralPainel extends Component
             return $button->id == $id;
         })->values();
         
-        $this->emit("stopLoadingBtn");
+        $this->emit("stopLoadingBtn", $this->painel->panelnome);
     }
 
     public function teste($payload)

@@ -225,6 +225,7 @@ function selecionarPainel(painel, e) {
     if (painelSelecionado) {
         window.livewire.emit('removeSelecionado');
     }
+    
     if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
 
     painelSelecionado = painel;
@@ -281,7 +282,6 @@ document.addEventListener("DOMContentLoaded", () => {
 //----FUNÇÃO DE SELECIONAR CANVAS------------------------------------------------------------------------------------------------
 function selecionarCanvas() {
     if (painelSelecionado) {
-       painelSelecionado.classList.remove("selecionadoP");
        window.livewire.emit('removeSelecionado');
     }
     if (botaoSelecionado) botaoSelecionado.classList.remove("selecionado");
@@ -1020,6 +1020,11 @@ addBtnBtn.onclick = () => {
     let id = painelSelecionado.querySelector(".idPainel").id;
     let tipoFormato = painelSelecionado.querySelector("#layout").classList[0];
 
+    criarBotao(id, tipoFormato);
+}
+
+function criarBotao(id, tipoFormato) {
+
     if (tipoFormato == "layout-blocos" && qtdBotoes >= 6) {
         enviarMsg("Você não pode adicionar mais botões, o formato de blocos suporta até 6 botões")
         return;
@@ -1033,7 +1038,15 @@ addBtnBtn.onclick = () => {
     qtdBotoes++;
     botoesCriando++;
     window.livewire.emit('createButton', { id: id });
-    loadingBtn()
+    loadingBtn(id)
+}
+
+function clicarAddButton(idPainel) {
+
+   let painel = document.getElementById("p" + idPainel);
+   let tipoFormato = painel.querySelector("#layout").classList[0];
+
+   criarBotao(idPainel, tipoFormato);
 }
 
 function enviarMsg(mensagem) {
@@ -1074,10 +1087,16 @@ deleteBtn.onclick = () => {
 
 // 6. Carregar botões função
 let carregarBtn;
-function loadingBtn() {
-    painelSelecionado.querySelector(".areaBtns .loading").style.display = "flex"
+function loadingBtn(idPainel) {
+    let painel = null;
+    if (painelSelecionado == null)
+        painel = document.getElementById("p" + idPainel);
+    else
+        painel = painelSelecionado;
 
-    let roda = painelSelecionado.querySelector(".areaBtns .loading *")
+    painel.querySelector(".areaBtns .loading").style.display = "flex"
+
+    let roda = painel.querySelector(".areaBtns .loading *")
     clearInterval(carregarBtn)
     carregarBtn = setInterval(() => {
         if (!roda.style.transform) {
@@ -1087,13 +1106,17 @@ function loadingBtn() {
         }
 
         if (roda.style.display != "block") {
-            loadingBtn();
+            loadingBtn(idPainel);
         }
     }, 1);
 }
 
 let botoesCriando = 0;
-window.livewire.on("stopLoadingBtn", () => {
+window.livewire.on("stopLoadingBtn", (idPainel) => {
+   
+    let painel = document.getElementById("p" + idPainel);
+    selecionarPainel(painel, null);
+
     botoesCriando--;
     if(botoesCriando < 0) botoesCriando = 0;
 
