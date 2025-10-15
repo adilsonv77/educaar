@@ -137,6 +137,7 @@ function iniciarPickr() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    /*
     document.querySelector(".linhas").addEventListener("click", (e) => {
         selecionarFormato(e.currentTarget); // Chama a função ao clicar na div "linhas"
     });
@@ -146,6 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".alternativas").addEventListener("click", (e) => {
         selecionarFormato(e.currentTarget); // Chama a função ao clicar na div "alternativas"
     });
+    */
 });
 
 //----ADICIONAR PAINEL--------------------------------------------------------------------------------------------------------
@@ -415,7 +417,7 @@ function alterarFormatoBotoes(formato) {
         atualizarTodasConexoes();
     });
 
-    window.livewire.emit("updateBtnFormat", { id: painelSelecionado.querySelector(".idPainel").id, btnFormat: formato });
+    window.livewire.emit("updateBtnFormat", { id: painelSelecionado.getAttribute("data-painel-id"), btnFormat: formato });
 }
 
 document
@@ -1081,7 +1083,7 @@ let deleteBtn = document.getElementById("deleteBtn")
 
 deleteBtn.onclick = () => {
     let painel = botaoSelecionado.querySelector(".circulo").parentElement.parentElement.parentElement.parentElement;
-    window.livewire.emit('deleteBtn', { id: botaoSelecionado.querySelector(".circulo").id, id_painel: painel.querySelector(".idPainel").id })
+    window.livewire.emit('deleteBtn', { id: botaoSelecionado.querySelector(".circulo").id, id_painel: painel.getAttribute("data-painel-id") });
     loadingBtn();
 }
 
