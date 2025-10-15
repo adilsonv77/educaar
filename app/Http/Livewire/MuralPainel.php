@@ -46,7 +46,7 @@ class MuralPainel extends Component
 
         $this->texto = $json['txt'] ?? '';
         $this->link = $json['link'] ?? '';
-        $this->btnFormat = $json['btnFormat'] ?? '';
+        $this->btnFormat = $json['btnFormat'] ?? 'linhas';
         $this->num = 0;
     }
 
@@ -224,7 +224,7 @@ class MuralPainel extends Component
 
     public function render()
     {
-        return view('livewire.panel', [
+        return view('livewire.mural-painel', [
             'texto' => $this->texto,
             'maxButtons' => $this->maxButtons,
             'btnFormat' => $this->btnFormat,

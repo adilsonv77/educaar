@@ -829,7 +829,9 @@ function recriarConexoes() {
         if (botaoId && destinoId && transicao === "proximo") {
             const destinoElem = document.getElementById(destinoId);
             if (destinoElem) {
-                const linha = conectarBotoes(botao, botaoId, destinoId);
+                const painel = document.querySelector('.painel[data-painel-id="'+destinoId+'"]');
+
+                const linha = conectarBotoes(botao, botaoId, painel.id);
 
                 // 🟡 Aplica a cor salva (se houver)
                 const corSalva = infoDiv?.getAttribute("color");
@@ -867,7 +869,8 @@ function tentarConectarOuRemover() {
     if (transicao === "proximo") {
         if (destinoId) {
             infoDiv.setAttribute("destination_id", destinoId);
-            conectarBotoes(botaoSelecionado, idBotaoOrigem, destinoId);
+            const painel = document.querySelector('.painel[data-painel-id="'+destinoId+'"]');
+            conectarBotoes(botaoSelecionado, idBotaoOrigem, painel.id);
         } else {
             // Se ainda não foi escolhido nenhum painel, não conecta ainda
             infoDiv.removeAttribute("destination_id");
@@ -1062,7 +1065,7 @@ selectTransicao.onchange = () => {
 // 4. Altera o painel de destino
 selectPainel.onchange = () => { mudarPainelDestino(botaoSelecionado.querySelector(".circulo").id) };
 function mudarPainelDestino(id) {
-    window.livewire.emit('updatePainelDestino', { id: id, destination_id: selectPainel.value })
+    window.livewire.emit('updatePainelDestino', { id: id, destination_id: selectPainel.value});
 }
 
 // 5. Deletar botão

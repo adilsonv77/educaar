@@ -81,7 +81,7 @@
                     <select id="selectTransicao" class="select-native">
                         <option value="" disabled selected>Selecione uma transição</option>
                         <option value="nenhuma">Nenhuma</option>
-                        <option value="proximo">Próximo Painél</option>
+                        <option value="proximo">Próximo Painel</option>
                         <option value="final">Final da Experiência</option>
                     </select>
                 </div>
@@ -95,7 +95,7 @@
                     <select class="selectPainelDestino select-native">
                         <option value="" disabled selected>Selecione um painel</option>
                         @foreach ($paineisRenderizados as $painel)
-                            <option value="{{ $painel->id }}">Painel {{ $painel->id }} {{ $painel->panelId }} {{ $painel->panelnome }}</option>
+                            <option value="{{ $painel->id }}">Painel {{ $painel->panelnome }} </option>
                         @endforeach
                     </select>
                 </div>

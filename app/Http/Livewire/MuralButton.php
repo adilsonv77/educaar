@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\DAO\ButtonDAO;
 
-class Button extends Component
+class MuralButton extends Component
 {
     use WithFileUploads;
 
@@ -95,10 +95,10 @@ class Button extends Component
 
         $buttonDAO = new ButtonDAO();
 
-        $this->painelDestino = $payload['painel_destination_id'];
+        $this->painelDestino = $payload['destination_id'];
 
         $buttonDAO->updateById($this->button->id, [
-            'painel_destination_id' => $payload['painel_destination_id']
+            'painel_destination_id' => $payload['destination_id']
         ]);
 
         $this->emitSelf('$refresh');
@@ -120,6 +120,6 @@ class Button extends Component
 
     public function render()
     {
-        return view('livewire.button');
+        return view('livewire.mural-button');
     }
 }
