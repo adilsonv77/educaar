@@ -764,52 +764,47 @@ function atualizarTodasConexoes() {
 }
 
 function conectarBotoes(startElem, idOrigem, idPainel) {
-    document.querySelectorAll(".painel").forEach(endElem => {
 
-        if (endElem.id == idPainel) {
+    let endElem = document.getElementById(idPainel);
 
-    //        if (!startElem || !endElem) return;
+    if (linhasPorBotao.has(idOrigem)) {
+        linhasPorBotao.get(idOrigem).remove();
+        linhasPorBotao.delete(idOrigem);
+    }
 
-            if (linhasPorBotao.has(idOrigem)) {
-                linhasPorBotao.get(idOrigem).remove();
-                linhasPorBotao.delete(idOrigem);
-            }
-        
-            const layoutContainer = startElem.closest(".painel")?.querySelector("#layout");
-            const layout = layoutContainer?.classList[0];
-        
-            let startSocket = "left";
-        
-            if (layout === "layout-blocos" || layout === "layout-alternativas") {
-                const botoes = Array.from(startElem.parentElement.querySelectorAll(".button_Panel"));
-                const index = botoes.indexOf(startElem);
-                startSocket = (index % 2 === 0) ? "left" : "right";
-            } else if (layout === "layout-linhas") {
-                startSocket = "left";
-            }
-        
-            const offset = 20 * (1 / scale);
-            const linha = new LeaderLine(startElem, endElem, {
-                color: '#833B8D',
-                size: 4,
-                path: 'fluid',
-                startPlug: 'disc',
-                endPlug: 'arrow3',
-                startPlugSize: 2,
-                endPlugSize: 2,
-                startSocket: ['left', offset],
-            });
-        
-            linhasPorBotao.set(idOrigem, linha);
-        
-            const infoDiv = startElem.querySelector('#buttonInfo');
-            if (infoDiv) {
-                infoDiv.setAttribute('destination_id', idPainel);
-            }
-        
-            return linha;
-        }
+    const layoutContainer = startElem.closest(".painel")?.querySelector("#layout");
+    const layout = layoutContainer?.classList[0];
+
+    let startSocket = "left";
+
+    if (layout === "layout-blocos" || layout === "layout-alternativas") {
+        const botoes = Array.from(startElem.parentElement.querySelectorAll(".button_Panel"));
+        const index = botoes.indexOf(startElem);
+        startSocket = (index % 2 === 0) ? "left" : "right";
+    } else if (layout === "layout-linhas") {
+        startSocket = "left";
+    }
+
+    const offset = 20 * (1 / scale);
+    const linha = new LeaderLine(startElem, endElem, {
+        color: '#833B8D',
+        size: 4,
+        path: 'fluid',
+        startPlug: 'disc',
+        endPlug: 'arrow3',
+        startPlugSize: 2,
+        endPlugSize: 2,
+        startSocket: ['left', offset],
     });
+
+    linhasPorBotao.set(idOrigem, linha);
+/*
+    const infoDiv = startElem.querySelector('#buttonInfo');
+    if (infoDiv) {
+        infoDiv.setAttribute('destination_id', idPainel);
+    }
+*/
+    return linha;
 
 }
 
@@ -827,11 +822,10 @@ function recriarConexoes() {
         const transicao = infoDiv?.getAttribute("transition");
 
         if (botaoId && destinoId && transicao === "proximo") {
-            const destinoElem = document.getElementById(destinoId);
+            const destinoElem = document.querySelector('.painel[data-painel-id="'+destinoId+'"]');
             if (destinoElem) {
-                const painel = document.querySelector('.painel[data-painel-id="'+destinoId+'"]');
 
-                const linha = conectarBotoes(botao, botaoId, painel.id);
+                const linha = conectarBotoes(botao, botaoId, destinoElem.id);
 
                 // 🟡 Aplica a cor salva (se houver)
                 const corSalva = infoDiv?.getAttribute("color");
