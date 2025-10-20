@@ -110,7 +110,7 @@
     <script src="{{ asset('editor/dist/plugins/colors/trumbowyg.colors.min.js') }}"></script>
     <script src="{{ asset('js/panelConnection.js?v=' . filemtime(public_path('js/panelConnection.js'))) }}"></script>
     <!-- LINHAS DE CONEXÕES -->
-    <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.8/leader-line.min.js"></script>
     <script>
         // ---------------------------------------------CARREGAR CANVAS---------------------------------------------
         let preloader = document.getElementById("preloader");
