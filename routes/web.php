@@ -159,7 +159,7 @@ Route::middleware(['auth'])->group(function () {
         return view('pages.mural.index');
     })->name('mural.index');
 
-    Route::get('/mural/view/{id}', [MuralController::class, 'view']) -> name("mural2.view");
+    Route::get('/mural/view/{id}', [MuralController::class, 'view']) -> name("mural.view");
     Route::get('/mural/edit/{id}', [MuralController::class, 'edit']) -> name("mural.edit");
 
     Route::resource('scenes',SceneController::class);

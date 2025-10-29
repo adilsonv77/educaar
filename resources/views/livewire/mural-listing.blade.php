@@ -81,7 +81,7 @@
                                     <td>{{ $mural->disciplina->name  }}</td>
                                     <!-- VISUALIZAR MURAL  -->
                                     <td>
-                                        <form action="{{ route('mural2.view', [$mural->id]) }}" method="GET">
+                                        <form action="{{ route('mural.view', [$mural->id]) }}" method="GET">
                                             @csrf
                                             <button type="submit" class="btn btn-primary" title="Editar">
                                                 <i class="bi bi-eye-fill h2" style="color: #ffffff; font-size: 30px;"></i>

@@ -728,8 +728,9 @@ document.getElementById("linkYoutube").oninput = () => {
     const prefix2 = "https://youtu.be/";
     url = document.getElementById("linkYoutube").value;
 
-    const inputHidden = document.getElementById("link-" + painelPopup);
     if (!painelPopup) return;
+    let idPainelPopup = painelPopup.slice(1);
+    const inputHidden = document.getElementById("link-" + idPainelPopup);
 
     if (url.startsWith(prefix) && url.slice(prefix.length).length == 11) {
         urlYoutubeInformado = true;
@@ -748,7 +749,8 @@ document.getElementById("linkYoutube").oninput = () => {
 };
 
 function sendValueLivewire(id, link) {
-    window.livewire.emit('updateLink', { id: id, link: link });
+    let iddata = document.getElementById(id).getAttribute("data-painel-id");
+    window.livewire.emit('updateLink', { id: iddata, link: link });
 }
 
 //----DESENHAR CONEXÃO - ENTRE PAINEIS---------------------------------------------------------------------------
