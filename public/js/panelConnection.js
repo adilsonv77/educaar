@@ -846,7 +846,6 @@ function tentarConectarOuRemover() {
 
     const botaoSelecionado = document.querySelector(".button_Panel.selecionado");
     if (!botaoSelecionado) {
-        console.warn("Nenhum botão selecionado.");
         return;
     }
 
