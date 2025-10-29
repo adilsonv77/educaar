@@ -511,7 +511,7 @@ centroCordenadas.style.left = centroCamera[0] + "px"
 // centroCordenadas.style.width = "50px"; centroCordenadas.style.height = "50px";
 
 div.addEventListener("mousedown", (e) => {
-    if (e.target.closest(".painel") || e.button != 1) return;
+    if (e.target.closest(".painel") || e.button != 2) return;
 
     setTimeout(() => {
         isDragging = true;
@@ -558,10 +558,10 @@ document.addEventListener("mousemove", (e) => {
 });
 
 document.addEventListener("mouseup", (e) => {
-    if (e.button != 1) return;
+    if (e.button != 2) return;
 
     isDragging = false;
-    div.style.cursor = "grab";
+    div.style.cursor = "";
 
     canvasLeft = div.offsetLeft;
     canvasTop = div.offsetTop;
