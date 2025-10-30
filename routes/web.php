@@ -32,11 +32,13 @@ Route::prefix('paineis')->group(function () {
 // use Hash;
 Route::get('/', function () { return redirect('/home');});
 
+//Registro de usuário público
 Route::controller(RegisterController::class) -> group(function () {
     Route::get('/register', 'create') -> name('register.create');
     Route::post('/register', 'store') -> name('register.store');
 });
 
+//Reset de senha
 Route::controller(ResetPasswordController::class) -> group(function () {
     Route::get('/password/reset', 'create') -> name('password.create');
     Route::post('/password/reset', 'update') -> name('password.change');
@@ -159,7 +161,7 @@ Route::middleware(['auth'])->group(function () {
         return view('pages.mural.index');
     })->name('mural.index');
 
-    Route::get('/mural/view/{id}', [MuralController::class, 'view']) -> name("mural.view");
+    Route::get('/mural/view/{id}', [MuralController::class, 'view']) -> name("mural2.view");
     Route::get('/mural/edit/{id}', [MuralController::class, 'edit']) -> name("mural.edit");
 
     Route::resource('scenes',SceneController::class);

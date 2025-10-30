@@ -10,6 +10,36 @@
 
     <div class="card">
         <div class="card-body">
+
+            <!-- Pesquisar Developers -->
+            <style>
+                .form-inline {
+                    display: flex;
+                    justify-content: flex-start;
+                }
+            
+                .form-inline label {
+                
+                    margin-right: 10px;
+                }
+            </style>
+            
+            <!-- Campo de Pesquisa -->
+            <form action="{{ route('dev.listDevs') }}" method="GET">
+                <div class="form-inline">
+                    <label for="">Developers :</label>
+                    <input maxlength="100" class="form-control" type="text" name="nomeDev" id="nomeDev"
+                    value="" list="historicoX"/>
+                    <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+                </div>
+                <datalist id="historicoX">
+                    
+                        <option value="">  </option>
+                    
+                </datalist>
+            </form>
+            <br>
+
             @if (!empty($devs))
                 <div class="table-responsive">
                     <table class="table table-hover table-responsive-sm">

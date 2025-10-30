@@ -78,21 +78,26 @@ class DeveloperController extends Controller
     // public function show(){
 
     // }
-    
-    public function listDevs(Request $request){
 
+    public function listDevs(Request $request) { 
         $data = $request->input('content');
+        $nomeDev = $request->input('nomeDev');
 
         session()->put('content_id', $data);
 
-        $devs= DB::table('users')->where('type', 'developer')
-                    ->select('users.*')
-                    ->addSelect(['selected_dev'=> DB::Raw('exists (select * from content_developer 
-                    where content_developer.developer_id = users.id
-                    and content_developer.content_id = '.$data.') as selected_dev')])
-                    ->get();
-
+        $sql = DB::table('users')
+                ->where('type', 'developer')
+                ->select('users.*')
+                ->selectRaw('exists (select 1 from content_developer where content_developer.developer_id = users.id and content_developer.content_id = ?) as selected_dev', [$data]);
         
+        if($nomeDev == null) {
+            $devs = $sql->get();
+        } else {
+            $devs = $sql
+                ->where('name', $nomeDev)
+                ->get();
+        }
+
         return view('pages.developer.selectDevelopers', compact('devs'));
     }
 

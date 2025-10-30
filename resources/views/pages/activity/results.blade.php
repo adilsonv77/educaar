@@ -61,7 +61,7 @@
 
   <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 
-  <div class="alert alert-primary">
+  <div class="alert alert-primary" style="border-top-left-radius: 0!important; border-top-right-radius: 0!important;">
       <b>Veja mais detalhes ao passar o mouse sobre o título da questão ou a resposta do aluno.</b>
       <ul>
           <li style="list-style:square"> &#9989; : O aluno acertou a questão</li>
@@ -164,7 +164,7 @@
                   title: 'Respostas Corretas e Incorretas'
                 },
                 isStacked: true,
-                colors: ['#5A2D66','#9C6FA8'] 
+                colors: ['#5A2D66','#9C6FA8'], 
                 // tooltip: {isHtml: true},
                 // legend: 'none'            
               };
