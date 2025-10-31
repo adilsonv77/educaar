@@ -24,22 +24,29 @@
             </div>
 
             @if($panelData["midiaType"] != "none")
-                <img class="imgMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}?v={{ random_int(0,10000) }}" 
-                    @if($panelData["midiaType"]!="image")style="display: none"@endif draggable="false">
+                @if($panelData["midiaType"] === "image")
+                    <img class="imgMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}?v={{ random_int(0,10000) }}" 
+                        draggable="false"/>
+                @endif
 
-                <video class="vidMidia" controls @if($panelData["midiaType"]!="video")style="display: none"@endif draggable="false">
-                    <source id="srcVidMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}" type="video/mp4" draggable="false">
-                </video>
+                
+                @if($panelData["midiaType"] === "video")
+                    <video class="vidMidia" controls draggable="false">
+                        <source id="srcVidMidia" src="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}" type="video/mp4" draggable="false">
+                    </video>
+                @endif
 
-                <div class="videoContainer youtubeMidia" @if($panelData["midiaType"]!="youtube")style="display: none"@endif>
-                    <iframe
-                        id="srcYoutube"
-                        src="https://www.youtube.com/embed/{{$panelData["link"]}}?autoplay=0"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                    </iframe>
-                </div>
+                @if($panelData["midiaType"] === "youtube")
+                    <div class="videoContainer youtubeMidia" >
+                        <iframe
+                            id="srcYoutube"
+                            src="https://www.youtube.com/embed/{{$panelData["link"]}}?autoplay=0"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                @endif
             @endif
         </div>
         <div class="loading" style="display: none">
