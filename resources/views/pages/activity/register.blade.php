@@ -230,9 +230,14 @@
 
                 <!----------------REFEITA----------------->
                 @if($acao != 'edit') 
-                <div class="form-group">
-                    <input type="checkbox" id="refeita" name="refeitaMarcador" value="S"/>
-                    <label for="refeita"> Poderá ser refeita? </label>
+                <div class="form-group" id="refeita">
+                    <input type="hidden" name="refeitaMarcador" value="0">
+                    <input type="checkbox" name="refeitaMarcador" value="1"/>
+                    <label for="refeita" class="mb-0"> Poderá ser refeita? </label>
+                    <br>
+                    <div class="form-text alert-danger d-inline-block small ml-3 p-0" role="alert">
+                        Se esta opção estiver marcada, os alunos poderão refazer a questão caso não a tenham acertado toda.
+                    </div>
                 </div>
                 @endif
 

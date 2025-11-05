@@ -183,7 +183,8 @@ class ActivityController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:100',
             'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:40960000'],
-            'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg']
+            'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg'],
+            'refeitarMarcador' => 'boolean'
         ]);
 
         if ($validator->fails()) {
@@ -257,6 +258,7 @@ class ActivityController extends Controller
             //Insere
             $data['professor_id'] = Auth::user()->id;
             $data['scene_id'] = $data['scene'];
+            $data['refeita'] = $request->refeitaMarcador;
             $activity = Activity::create($data);
 
             $data['marcador'] = $activity->id . '.' . $request->marcador->getClientOriginalExtension();
