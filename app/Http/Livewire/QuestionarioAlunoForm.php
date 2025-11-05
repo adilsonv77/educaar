@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use App\Models\StudentAnswer;
+use App\DAO\QuestionDAO;
 use Exception;
 
 class QuestionarioAlunoForm extends Component
@@ -15,6 +16,9 @@ class QuestionarioAlunoForm extends Component
     protected $listeners = ['openQuestions'];
     
     private $activity_id;
+
+    private $refeita;
+    private $jaRespondeu;
 
     public $questions;
     public $respondida;
@@ -30,8 +34,10 @@ class QuestionarioAlunoForm extends Component
 */
     public function openQuestions($value)
     {
-        $this->activity_id = $value;
+        $this->activity_id = (int)$value;
 
+        $this->refeita = QuestionDAO::refeita($this->activity_id);
+        $this->jaRespondeu = QuestionDAO::jaRespondeu($this->activity_id);
 
         if (session()->has('livewire_nrquestao') && session()->get('livewire_activity_id') == $value) {
             // pull jah busca e exclui
@@ -46,13 +52,21 @@ class QuestionarioAlunoForm extends Component
             // buscar da tabela student_answers uma questao respondida da activity_id, question_id, user_id
 
             $where = DB::table('questions')
-            ->where("activity_id", $this->activity_id)->addSelect([
-                    'alternative_answered' => DB::table('student_answers')
-                        ->select('student_answers.alternative_answered')
-                        ->whereColumn('student_answers.question_id', '=', 'questions.id')
-                        ->whereColumn('student_answers.activity_id', '=', 'questions.activity_id')
-                        ->where('student_answers.user_id', '=', Auth::user()->id)
-                ]);
+                ->where('activity_id', $this->activity_id);
+            
+            /* when() usado para caso a atividade possa ser refeita, então só irá ser pego as questões que o usuário autenticado acertou */
+            $subwhere = DB::table('student_answers as sa')
+                ->select('sa.alternative_answered')
+                ->whereColumn('sa.question_id', '=', 'questions.id')
+                ->whereColumn('sa.activity_id', '=', 'questions.activity_id')
+                ->where('sa.user_id', '=', Auth::id())
+                ->orderBy('sa.created_at', 'desc')
+                ->limit(1)
+                ->when($this->refeita && $this->jaRespondeu, function($subwhen) {
+                    $subwhen->where('sa.correct', 1);
+                });
+
+            $where->addSelect(['alternative_answered' => $subwhere]);
 
             $questions = $where->get();
             $questions = $questions->shuffle();
@@ -167,11 +181,7 @@ class QuestionarioAlunoForm extends Component
 
                     try {
 
-                        $jaRespondeu = StudentAnswer::where('question_id', $questao->id)
-                            ->where('user_id', Auth::id())
-                            ->exists();
-                        
-                        if ($jaRespondeu) {
+                        if ($this->jaRespondeu) {
                             continue;
                         }
 

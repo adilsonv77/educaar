@@ -228,6 +228,14 @@
                
                 <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$scene_id}}" @endif>
 
+                <!----------------REFEITA----------------->
+                @if($acao != 'edit') 
+                <div class="form-group">
+                    <input type="checkbox" id="refeita" name="refeitaMarcador" value="S"/>
+                    <label for="refeita"> Poderá ser refeita? </label>
+                </div>
+                @endif
+
                 <!-----------------SUBMIT------------------>
                 <div class="form-group mt-4" onsubmit="desativarBotao(this)">
                     <button type="submit" id="btnSalvar" class="btn btn-success">

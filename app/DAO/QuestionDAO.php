@@ -77,5 +77,25 @@ class QuestionDAO
         return $respondidas === $totalQuestoes;
     }
 
+    /**
+     * Retorna se o aluno autenticado já respondeu alguma questão da atividade correspondente
+    */
+    public static function jaRespondeu($activity_id) {
+        $user_id = Auth::id();
+
+        return DB::table('student_answers')
+            ->where('user_id', $user_id)
+            ->where('activity_id', $activity_id)
+            ->exists();
+    }
+
+    /**
+     * Retorna se a atividade pode ser refeita ou não 
+    */
+    public static function refeita($activity_id) {
+        return DB::table('activities')
+            ->where('id', $activity_id)
+            ->value('refeita');
+    }
 
 }
