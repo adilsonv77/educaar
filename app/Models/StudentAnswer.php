@@ -15,7 +15,8 @@ class StudentAnswer extends Model
         'activity_id',
         'alternative_answered',
         'answer',
-        'correct'
+        'correct',
+        'tentativas'
     ];
 
     public function student()

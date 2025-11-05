@@ -151,6 +151,19 @@ class QuestionarioAlunoForm extends Component
 
     public function salvar() {
 
+        $tentativa = 0;
+        if(QuestionDAO::jaRespondeu((int)session()->get('livewire_activity_id'))) {
+            $tentativa = DB::table('student_answers as sa')
+                ->select('sa.tentativas')
+                ->where('sa.activity_id', (int)session()->get('livewire_activity_id'))
+                ->where('sa.user_id', Auth::id())
+                ->orderBy('sa.created_at', 'desc')
+                ->value('tentativas');
+        }
+        $tentativa++;
+       
+        //dd($tentativa);
+
         if ($this->nrquestao < $this->qtasquestoes-1) {
             $this->nrquestao = $this->nrquestao + 1;
         } else {
@@ -177,7 +190,7 @@ class QuestionarioAlunoForm extends Component
 
                 //$datareq = $request->all();
                 foreach ($questions as $questao) {
-                    $data = ['question_id', 'user_id', 'alternative_answered', 'correct'];
+                    $data = ['question_id', 'user_id', 'alternative_answered', 'correct', 'tentativas'];
 
                     try {
 
@@ -201,6 +214,8 @@ class QuestionarioAlunoForm extends Component
                         } else {
                             $data['correct'] = false;
                         }
+
+                        $data['tentativas'] = $tentativa;
 
                         //dd($data);
                         // gravar no banco uma linha da resposta
