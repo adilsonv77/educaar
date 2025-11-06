@@ -15,10 +15,10 @@ class QuestionarioAlunoForm extends Component
 
     protected $listeners = ['openQuestions'];
     
-    private $activity_id;
+    public $activity_id;
 
-    private $refeita;
-    private $jaRespondeu;
+    public $refeita;
+    public $jaRespondeu;
 
     public $questions;
     public $respondida;
@@ -194,7 +194,7 @@ class QuestionarioAlunoForm extends Component
 
                     try {
 
-                        if ($this->jaRespondeu) {
+                        if (!$this->refeita && $this->jaRespondeu) {
                             continue;
                         }
 
