@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use App\Models\StudentAnswer;
@@ -148,9 +148,55 @@ class QuestionarioAlunoForm extends Component
         } 
     }
 
-
     public function salvar() {
+        if ($this->nrquestao < $this->qtasquestoes-1) {
+            $this->nrquestao = $this->nrquestao + 1;
+        } else {
+            DB::beginTransaction();
 
+            $questions = session()->get('livewire_questoes');
+            $tentativa = $this->getTentativa();
+
+            try {
+                foreach ($questions as $questao) {
+                    $data = [];
+
+                    if(!$this->refeita && $this->jaRespondeu) {
+                        continue;
+                    }
+
+                    $respop = $this->alternativas[$questao->id];
+                    $opcao = $questao->options[$respop];
+
+                    $data = [
+                        'question_id' => $questao->id,
+                        'user_id' => Auth::user()->id,
+                        'alternative_answered' => $opcao,
+                        'correct' => ($opcao == $questao->a),
+                        'activity_id' => $questao->activity_id,
+                        'tentativas' => $tentativa,
+                    ];
+
+                    StudentAnswer::create($data);
+                }
+
+                DB::commit();
+
+                session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao']);
+                $this->questions = null;
+
+                $this->dispatchBrowserEvent('closeQuestionsModal');
+            } catch (Exception $e) {
+                DB::rollback();
+                $this->dispatchBrowserEvent('showError');
+            }
+        }
+    }
+
+    /**
+     * Retorna a tentativa atual do usuário autenticado (Última tentativa + 1).
+    */
+    public function getTentativa() {
         $tentativa = 0;
         if(QuestionDAO::jaRespondeu((int)session()->get('livewire_activity_id'))) {
             $tentativa = DB::table('student_answers as sa')
@@ -160,90 +206,7 @@ class QuestionarioAlunoForm extends Component
                 ->orderBy('sa.created_at', 'desc')
                 ->value('tentativas');
         }
-        $tentativa++;
-       
-        //dd($tentativa);
-
-        if ($this->nrquestao < $this->qtasquestoes-1) {
-            $this->nrquestao = $this->nrquestao + 1;
-        } else {
-
-       
-            DB::beginTransaction();
-
-            $questions = session()->get('livewire_questoes');
-            $questoes = [];
-
-            foreach ($questions as $q) {
-                array_push($questoes, $q->id);
-            }
-    
-            /*
-            $respondida = DB::table('student_answers')
-                ->whereIn('question_id', $questoes)
-                ->where('user_id', Auth::user()->id)
-                ->exists();
-            */
-            $respondida = false;
-
-            if (!$respondida) {
-
-                //$datareq = $request->all();
-                foreach ($questions as $questao) {
-                    $data = ['question_id', 'user_id', 'alternative_answered', 'correct', 'tentativas'];
-
-                    try {
-
-                        if (!$this->refeita && $this->jaRespondeu) {
-                            continue;
-                        }
-
-                        //$respop = $datareq["questao" . $questao->id];
-                        $respop = $this->alternativas[$questao->id];
-                        $data['question_id'] = $questao->id;
-                        $data['user_id'] = Auth::user()->id;
-                        $data['activity_id'] = $questao->activity_id;
-                        $opcao = $questao->options[$respop];
-                        //dd($respop . " - " . $opcao . " - " . $questao->a . " - " . implode(" ; ", $questao->options));
-
-                        $data['alternative_answered'] = $opcao; // havia um erro na estrutura do banco que esse campo era de somente 1!!!
-                        // $s = $s . " " . $opcao . "-" .  $questao->a . " <br/> ";
-
-                        if ($opcao == $questao->a) {
-                            $data['correct'] = true;
-                        } else {
-                            $data['correct'] = false;
-                        }
-
-                        $data['tentativas'] = $tentativa;
-
-                        //dd($data);
-                        // gravar no banco uma linha da resposta
-                        StudentAnswer::create($data);
-
-                    } catch (Exception $e) {
-                        continue;
-                    }
-                }
-
-                DB::commit();
-
-                unset($_SESSION['livewire_questoes']);
-                unset($_SESSION['livewire_alternativas']);
-                unset($_SESSION['livewire_nrquestao']);
-
-                $this->questions = null;
-                
-                $this->dispatchBrowserEvent('closeQuestionsModal');
-
-                return $this->redirectRoute('student.showActivity', ['id' => session()->get("content_id")]);
-                
-            } else {
-                DB::rollback();
-
-                $this->dispatchBrowserEvent('showError');
-            }
-        }
+        return ++$tentativa;
     }
 
 }
