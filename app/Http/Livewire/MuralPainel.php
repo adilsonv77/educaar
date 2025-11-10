@@ -14,8 +14,8 @@ use App\Models\Test;
 
 class MuralPainel extends Component
 {
-    protected $listeners = ['updateLink', 'updateBtnFormat', 'createButton', 'updatedMidia', 'deleteBtn', 'salvarTexto', 'teste','resetYoutubeLink' => 'resetarLinkYoutube',
-                            'addSelecionado', 'removeSelecionado'];
+    protected $listeners = ['updateBtnFormat', 'createButton', 'deleteBtn', 'salvarTexto', 
+                            'addSelecionado', 'removeSelecionado', 'salvarMidia'];
 
     use WithFileUploads;
 
@@ -29,12 +29,6 @@ class MuralPainel extends Component
 
     public $classes = "";
     
-   
-    public function resetarLinkYoutube()
-    {
-        $this->link = '';
-    }
-    
 
     public function mount() // ok
     {
@@ -45,7 +39,7 @@ class MuralPainel extends Component
         $json = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
 
         $this->texto = $json['txt'] ?? '';
-        $this->link = $json['link'] ?? '';
+        $this->link = "https://www.youtube.com/watch?v=" . $json['link'] ?? '';
         $this->btnFormat = $json['btnFormat'] ?? 'linhas';
         $this->num = 0;
     }
@@ -82,9 +76,27 @@ class MuralPainel extends Component
         ]);
 
     }
-   
-    public function updatedMidia($recebeuLink = null)
+
+    private function tratarLink (): string 
     {
+
+       $prefix = "https://www.youtube.com/watch?v=";
+       $prefix2 = "https://youtu.be/";
+       $url = $this->link;
+   
+       if (str_starts_with($url, $prefix) && 
+                        (strlen(substr($url, strlen($prefix))) == 11)) {
+            $url = substr($url, strlen($prefix));
+       } else if (str_starts_with($url, $prefix2) && (strlen(substr($url, strlen($prefix2))) == 11)) {
+            $url = substr($url, strlen($prefix2));
+       }
+
+       return $url;
+    }
+    public function salvarMidia()
+    {
+        $panelData = json_decode($this->painel->panel, true);
+
         $painelDAO = new PainelDAO();
         $id = $this->painel->id;
 
@@ -96,7 +108,7 @@ class MuralPainel extends Component
 
         $arquivoRecebido = !empty($this->midia);
 
-        if ($arquivoRecebido && $recebeuLink !== true) {
+        if ($arquivoRecebido) {
             $midiaExtension = $this->midia->getClientOriginalExtension();
             $nomeTemporario = $baseFileName . '.' . $midiaExtension;
             $nomeReal = $id . '.' . $midiaExtension;
@@ -120,33 +132,27 @@ class MuralPainel extends Component
             } else {
                 $json['midiaType'] = 'image'; // Detecta dinamicamente com base na extensão, se preferir
             }
-        } elseif ($recebeuLink) {
+        } else {
             if (!empty($json['midiaExtension'])) {
                 @unlink($publicPath . '/' . $id . '.' . $json['midiaExtension']);
             }
 
-            $json['link'] = $this->link;
+            $json['link'] = $this->tratarLink();
             $json['midiaType'] = 'youtube';
             $json['arquivoMidia'] = '';
             $json['midiaExtension'] = '';
         }
+
         $painelDAO->updateById($id, ['panel' => json_encode($json)]);
         $this->painel->panel = $json; // Atualiza o painel renderizado também
 
-        $this->emit("stopLoading");
-
+        //$this->emit("stopLoading");
+        
         if ($json['midiaType'] == 'video') {
             $this->emit("carregarVideo", $id);
         }
-    }
 
-    public function updateLink($payload)
-    {
-        if ($payload['id'] != $this->painel->id)
-            return;
-        // só roda se for o painel certo
-        $this->link = $payload['link'];
-        $this->updatedMidia(true);
+        $this->emit("fecharCarregarMidia", $panelData["id"]);
     }
 
     public function createButton($payload)
@@ -203,13 +209,6 @@ class MuralPainel extends Component
         })->values();
         
         $this->emit("stopLoadingBtn", $this->painel->panelnome);
-    }
-
-    public function teste($payload)
-    {
-        if ($payload['id_painel'] != $this->painel->id)
-            return;
-        Button::destroy($payload['id']);
     }
 
     public function getMaxButtonsProperty()

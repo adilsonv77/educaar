@@ -574,6 +574,7 @@ window.addEventListener('beforeunload', function (e) {
 });
 
 //----MOSTRAR POPUP QUANDO SELECIONAR------------------------------------------------------------------------------------------------
+/*
 let carregar;
 
 function fecharPopUp(naoCarregarMidia) {
@@ -603,8 +604,14 @@ function fecharPopUp(naoCarregarMidia) {
         }, 1);
     }
 
-    document.getElementById("flex-container").style.display = "none";
+    $("#flex-container").modal('hide');
+    //document.getElementById("flex-container").style.display = "none";
 }
+    */
+
+window.livewire.on("fecharCarregarMidia", (id) => {
+    $("#flex-container-" + id + " .close").click();
+})
 
 window.livewire.on("stopLoading", () => {
     clearInterval(carregar);
@@ -628,28 +635,33 @@ function abrirPopUp(id) {
     const dropLabel = document.getElementById("upload-area");
     dropLabel.setAttribute("for", "#file-" + id);
 
+    $("#flex-container-" + id).appendTo("body");
+    $("#flex-container-" + id).modal('show');
+    /*
+    // flex-container é a janela
     document.getElementById("flex-container").style.display = "flex";
-
+    */
+    /*
     if (j.midiaType !== 'none')
         if (painel.querySelector("video").style.display != 'none') {
             setTimeout(() => painel.querySelector("video").pause(), 500);
         }
-
-    inputAtivo.addEventListener("change", fecharPopUp);
+    */
+    //inputAtivo.addEventListener("change", fecharPopUp);
 
     // 🧽 LIMPA o campo visualmente no HTML
-    const inputYoutube = document.getElementById("linkYoutube");
-    if (inputYoutube) inputYoutube.value = "";
+    //const inputYoutube = document.getElementById("linkYoutube");
+    //if (inputYoutube) inputYoutube.value = "";
 
     // 🔁 Solicita que o Livewire limpe o valor interno também
-    window.livewire.emit('resetYoutubeLink');
+    //window.livewire.emit('resetYoutubeLink');
 }
 let urlYoutubeInformado = false;
 let inputAtivo = null;
 
 function adicionarInteracaoPopup(id) {
     let painel = document.getElementById("p"+id);
-    let fileBtn = painel.querySelector("#file-" + id);
+    //let fileBtn = painel.querySelector("#file-" + id);
     let midiaArea = painel.querySelector(".midia");
 
     // clique no painel abre popup
@@ -658,8 +670,10 @@ function adicionarInteracaoPopup(id) {
     });
 }
 
-let editarMidiaBtn = document.getElementById("editarMidia")
-editarMidiaBtn.onclick = () => abrirPopUp(painelSelecionado.querySelector(".idPainel").id)
+let editarMidiaBtn = document.getElementById("editarMidia");
+editarMidiaBtn.onclick = () => {
+    abrirPopUp(painelSelecionado.querySelector(".idPainel").id)
+}
 
 let excluirPainelBtn = document.getElementById("excluirPainel")
 excluirPainelBtn.onclick = () => {
@@ -722,6 +736,7 @@ dropArea.addEventListener("drop", (e) => {
     }
 });
 
+/*
 // 3.3 Um link do youtube foi inserido
 document.getElementById("linkYoutube").oninput = () => {
     const prefix = "https://www.youtube.com/watch?v=";
@@ -752,6 +767,7 @@ function sendValueLivewire(id, link) {
     let iddata = document.getElementById(id).getAttribute("data-painel-id");
     window.livewire.emit('updateLink', { id: iddata, link: link });
 }
+*/
 
 //----DESENHAR CONEXÃO - ENTRE PAINEIS---------------------------------------------------------------------------
 const todasAsLinhas = [];

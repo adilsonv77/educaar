@@ -568,23 +568,15 @@ img[data-id-origem] {
     left: -25000px;
 }
 
-#flex-container {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-#popup {
+#popupx {
     background-color: white;
     width: 600px;
     z-index: 1501;
     border-radius: 19px;
     padding: 40px 40px;
     position: relative;
+    box-shadow: -10px 12px 17px 0px rgba(0, 0, 0, 0.185);
+
 }
 
 #midiaInput {
@@ -631,30 +623,6 @@ img[data-id-origem] {
     font-size: 13px;
     margin-bottom: 30px;
     float: left;
-}
-
-#popup {
-    box-shadow: -10px 12px 17px 0px rgba(0, 0, 0, 0.185);
-}
-
-#popup button {
-    width: 30px;
-    height: 30px;
-    font-size: 15px;
-    font-weight: 600;
-    background: none;
-    color: black;
-    border: none;
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    cursor: pointer;
-}
-
-
-#popup button:focus {
-    outline: none;
-    box-shadow: none;
 }
 
 #popup p:nth-child(1) {

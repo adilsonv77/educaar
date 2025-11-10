@@ -17,7 +17,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 
 //Painéis - Renan
 //Talvez alguns possam ser substituidos por o tal do resource
-
+/*
 
 Route::prefix('paineis')->group(function () {
     Route::get('/', [PainelController::class, 'index'])->name('paineis.index');
@@ -28,6 +28,7 @@ Route::prefix('paineis')->group(function () {
     Route::delete('/{id}', [PainelController::class, 'destroy'])->name('paineis.destroy');
     Route::get('/conexoes', [PainelController::class, 'conexoes'])->name('paineis.conexoes');
 });
+*/
 
 // use Hash;
 Route::get('/', function () { return redirect('/home');});
