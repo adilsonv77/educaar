@@ -11,6 +11,7 @@ use App\DAO\ButtonDAO;
 use App\DAO\TestDAO;
 use App\Models\Button;
 use App\Models\Test;
+use Monolog\Formatter\ElasticaFormatter;
 
 class MuralPainel extends Component
 {
@@ -39,7 +40,10 @@ class MuralPainel extends Component
         $json = is_string($painel->panel) ? json_decode($painel->panel, true) : $painel->panel;
 
         $this->texto = $json['txt'] ?? '';
-        $this->link = "https://www.youtube.com/watch?v=" . $json['link'] ?? '';
+        if ($json['link'] != '')
+            $this->link = "https://www.youtube.com/watch?v=" . $json['link'] ?? '';
+        else
+            $this->link = '';
         $this->btnFormat = $json['btnFormat'] ?? 'linhas';
         $this->num = 0;
     }
