@@ -62,6 +62,15 @@
             $("#questionarioModal").modal('hide');
         });
 
+        window.addEventListener('openFeedbackModal', event => {
+            $('#questionarioModal').modal('hide');
+            $('#feedbackModal').modal('show');
+        });
+
+        window.addEventListener('closeFeedbackModal', event => {
+            $('#feedbackModal').modal('hide');
+        })
+
         document.addEventListener("DOMContentLoaded", function() {   
             
             /*
@@ -226,6 +235,41 @@
                         </form>
                         @endif
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div wire:ignore.self class="modal fade" id="feedbackModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h1>Respostas salvas!</h1>
+                    <p>Acompanhe seus resultados abaixo:</p>
+                </div>
+                <div class="container my-4 max" style="max-height: 60vh; overflow-y: auto;">
+                    @foreach($feedback as $questao)
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-body">
+                                <p class="card-text mb-3">{{ $questao['question'] }}</p>
+
+                                <div class="alert @if($questao['correct']) alert-success @else alert-danger @endif mb-0 d-flex align-items-center" role="alert">
+                                    @if($questao['correct'])
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+                                    @else
+                                        <i class="bi bi-x-circle-fill me-2"></i>
+                                    @endif
+                                    <div><strong>Sua resposta:</strong> {{ $questao['alternative_answered'] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="modal-footer">
+                    <button wire:click="close()" type="button" class="btn btn-primary" data-dismiss="modal">
+                        Fechar
+                    </button>
                 </div>
             </div>
         </div>

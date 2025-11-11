@@ -98,4 +98,26 @@ class QuestionDAO
             ->value('refeita');
     }
 
+    /**
+     * Retorna a tentativa atual do usuário autenticado (Última tentativa + 1).
+    */
+    public static function getTentativa() {
+        $tentativa = 0;
+        if(QuestionDAO::jaRespondeu((int)session()->get('livewire_activity_id'))) {
+            $tentativa = DB::table('student_answers as sa')
+                ->select('sa.tentativas')
+                ->where('sa.activity_id', (int)session()->get('livewire_activity_id'))
+                ->where('sa.user_id', Auth::id())
+                ->orderBy('sa.created_at', 'desc')
+                ->value('tentativas');
+        }
+        return ++$tentativa;
+    }
+
+    public static function getTextoQuestao($question_id) {
+        return DB::table('questions')
+            ->where('id', $question_id)
+            ->value('question');
+    }
+
 }

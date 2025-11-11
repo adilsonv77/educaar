@@ -20,6 +20,8 @@ class QuestionarioAlunoForm extends Component
     public $refeita;
     public $jaRespondeu;
 
+    public $feedback = [];
+
     public $questions;
     public $respondida;
     public $activequestion;
@@ -155,7 +157,7 @@ class QuestionarioAlunoForm extends Component
             DB::beginTransaction();
 
             $questions = session()->get('livewire_questoes');
-            $tentativa = $this->getTentativa();
+            $tentativa = QuestionDAO::getTentativa();
 
             try {
                 foreach ($questions as $questao) {
@@ -172,9 +174,15 @@ class QuestionarioAlunoForm extends Component
                         'question_id' => $questao->id,
                         'user_id' => Auth::user()->id,
                         'alternative_answered' => $opcao,
-                        'correct' => ($opcao == $questao->a),
+                        'correct' => ($opcao === $questao->a),
                         'activity_id' => $questao->activity_id,
                         'tentativas' => $tentativa,
+                    ];
+
+                    $this->feedback[] = [
+                        'question' => QuestionDAO::getTextoQuestao($questao->id),
+                        'alternative_answered' => $opcao,
+                        'correct' => ($opcao === $questao->a),
                     ];
 
                     StudentAnswer::create($data);
@@ -185,7 +193,7 @@ class QuestionarioAlunoForm extends Component
                 session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao']);
                 $this->questions = null;
 
-                $this->dispatchBrowserEvent('closeQuestionsModal');
+                $this->dispatchBrowserEvent('openFeedbackModal');
             } catch (Exception $e) {
                 DB::rollback();
                 $this->dispatchBrowserEvent('showError');
@@ -193,20 +201,10 @@ class QuestionarioAlunoForm extends Component
         }
     }
 
-    /**
-     * Retorna a tentativa atual do usuário autenticado (Última tentativa + 1).
-    */
-    public function getTentativa() {
-        $tentativa = 0;
-        if(QuestionDAO::jaRespondeu((int)session()->get('livewire_activity_id'))) {
-            $tentativa = DB::table('student_answers as sa')
-                ->select('sa.tentativas')
-                ->where('sa.activity_id', (int)session()->get('livewire_activity_id'))
-                ->where('sa.user_id', Auth::id())
-                ->orderBy('sa.created_at', 'desc')
-                ->value('tentativas');
-        }
-        return ++$tentativa;
+    public function close() {
+        $this->dispatchBrowserEvent('closeFeedbackModal');
+        $this->feedback = [];
+        return $this->redirectRoute('student.showActivity', ['id' => session()->get('content_id')]);
     }
 
 }
