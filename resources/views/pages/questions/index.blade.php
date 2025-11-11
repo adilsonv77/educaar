@@ -45,6 +45,7 @@ foreach($questions as $q) {
                 <thead>
                     <tr style="text-align: center;">
                         <th style="text-align: left;">Nome</th>
+                        <th>Respostas</th>
                         <th>Editar</th>
                         <th>Ação</th>
                     </tr>
@@ -62,6 +63,9 @@ foreach($questions as $q) {
                         </td> --}}
 
                         <td style="text-align: left;">{{ $item->question }}</td>
+                        <td>
+                            {{ $alunosPorQuestao[$item->id] ?? 0}}
+                        </td>
                         <td>
                             <form action="{{ route('questions.edit', $item->id) }}">
                                 @csrf
@@ -103,6 +107,8 @@ foreach($questions as $q) {
                                 </div>
                             </div>
                         </td>
+
+                        
                     </tr>
                     @endforeach
 

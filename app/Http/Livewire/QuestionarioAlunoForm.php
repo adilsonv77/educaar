@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -26,9 +27,13 @@ class QuestionarioAlunoForm extends Component
     public $respondida;
     public $activequestion;
 
+    public $activity;
+
     public $nrquestao;
     public $qtasquestoes;
 
+
+    public $questionarioRespondido;
     public $alternativas;
 
     /*

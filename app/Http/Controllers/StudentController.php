@@ -12,6 +12,7 @@ use App\Models\AnoLetivo;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Content;
 use App\DAO\ContentDAO;
 use App\DAO\StudentAppDAO;
 use App\DAO\PainelDAO;
@@ -107,7 +108,25 @@ class StudentController extends Controller
     {
         $data = $request->all();
         $content_id = $request->id == null ? session()->get("content_id") : $request->id;
-        $activities = ActivityDAO::buscarActivitiesPorConteudo($content_id);
+        $content = Content::find($content_id);
+
+        if($request->activity == null){
+
+            $previousActivity = 0;
+
+        } else{
+            
+            $previousActivity = $request->activity;
+            
+        }
+
+        //esse if tá verificando se o conteúdo possui atividades ordenadas
+        if($content->sort_activities){
+            $activities = ActivityDAO::buscarOrderedActivitiesPorConteudo($content_id);
+        } else{
+            $activities = ActivityDAO::buscarActivitiesPorConteudo($content_id);
+        }
+        
         $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
         $dataCorte = null;
@@ -156,9 +175,19 @@ class StudentController extends Controller
         }
         
         session(["content_id" => $content_id]);
+        if($content->is_sort){
+            session()->put('atividade_concluida', [
+                'position' => 0
+            ]);
+        } else{
+            session()->put('atividade_concluida', [
+                'position' => 1
+            ]);
+        }
+        
         $disciplina = session()->get("disciplina");
         $rota = route("student.conteudos") . "?id=" . $disciplina;
-        return view('student.ar', compact('activities', 'rota','scenes','panels','buttons'));
+        return view('student.ar', compact('activities', 'rota','scenes','panels','buttons', 'content', 'previousActivity'));
     }
 
 

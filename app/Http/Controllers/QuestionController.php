@@ -217,6 +217,10 @@ class QuestionController extends Controller
         return redirect(route('questions.index', ["activity" => $activity_id]));
     }
 
+    public function updateQuestionAndDestroyAnswers($id){
+        
+    }
+
     public function destroyAnswers($id)
     {
         // Exclui apenas as respostas da questão, sem remover a questão

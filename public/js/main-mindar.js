@@ -16,6 +16,7 @@ var isSetup = false;
 var bloquear = null;
 var desbloquear = null;
 var cenas = [];
+var proximaAtividadeLiberada = 1;
 
 // Função para mostrar progresso
 function mostrarAvanco(percent) {
@@ -38,11 +39,60 @@ function loadGLTF(path) {
   });
 }
 
+
+// novo: handler reutilizável para o evento
+function handleAtividadeConcluida(detail){
+  try {
+    if (!detail) return;
+    const position = detail.position;
+    const content_id = detail.content_id;
+    if (position === null) {
+      console.log('atividade-concluida: detalhe sem position', detail);
+      return;
+    }
+    proximaAtividadeLiberada = position + 1;
+    
+    console.log("Atividade concluída do id: ", content_id ," (handler): ", position);
+
+    console.log("Próxima atividade liberada para o id: ",content_id," (handler): ", proximaAtividadeLiberada);
+
+    // se precisar armazenar para uso posterior:
+    window.__atividade_concluida = { position: position, next: proximaAtividadeLiberada };
+    window.__content_id = content_id;
+  } catch (err) {
+    console.error('Erro em handleAtividadeConcluida', err);
+  }
+}
+
+// listener normal
+window.addEventListener('atividade-concluida', (e) => {
+  
+  handleAtividadeConcluida(e.detail);
+});
+
+// fallback: se Blade já colocou a sessão numa variável global antes do módulo carregar
+if (window.__session_atividade_concluida) {
+  const sess = window.__session_atividade_concluida;
+  const sessPos = (typeof sess === 'object' && sess.position !== undefined) ? sess.position : sess; 
+  const combined = {
+    position: sessPos,
+    content_id: window.__session_content_id
+  }
+  console.log('fallback: processando __session_atividade_concluida');
+  handleAtividadeConcluida(combined);
+}
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
   function setup() {
 
   }
+
+
 
   //-------INICIA O AR---------------------------------------------------------------------------------------------------------
   const start = async (carregarAtividades) => {
@@ -67,9 +117,18 @@ document.addEventListener('DOMContentLoaded', () => {
     scene.add(helper);
 
     const glbs = document.getElementById("glbs");
+
+    //puxa o atributo que verifica se o conteúdo possui atividades ordenadas
+    const is_sort_attr = glbs.getAttribute("is_sort");
+    const is_sort = (is_sort_attr === "1" || is_sort_attr === "true" || is_sort_attr === "on");
+
+
     var mixer = null;
     var action = null;
 
+
+
+    
     for (var i = 0; i < glbs.childElementCount; i++) {
       var li = glbs.children[i];
 
@@ -78,7 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (usarModelo) {
         //------ CARREGAR ATIVIDADE DE MODELO 3D ---------------------------------------------------------------------
+
         const glb = await loadGLTF(li.textContent);
+
+        let posicaoAtual = parseInt(li.getAttribute("orderPosition"), 10);
+        if (isNaN(posicaoAtual) || !is_sort) {
+          posicaoAtual = i + 1;
+        }
+
 
         const glbScene = glb.scene;
         const box = new THREE.Box3().setFromObject(glbScene);
@@ -92,16 +158,32 @@ document.addEventListener('DOMContentLoaded', () => {
         box.getCenter(sceneCenter);
         box.getSize(sceneSize);
         glbScene.position.copy(sceneCenter).multiplyScalar(-1);
+        
 
-        const anchor = mindarThree.addAnchor(i);
+        const anchor = mindarThree.addAnchor(posicaoAtual - 1); 
+        anchor.orderPosition = posicaoAtual; 
+        
+        
         anchor.glb = glb;
         anchor.activityid = li.id.split("_")[1];
         anchor.clazz = li.getAttribute("usar_class");
         anchor.group.add(glbScene);
 
+
+
+
         anchor.onTargetFound = () => {
           // console.log("chegou no targetfound")
-          //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;
+          //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;  
+          
+          if (is_sort) {
+            if (anchor.orderPosition > proximaAtividadeLiberada) {
+              console.log("Atividade fora de ordem (bloqueada): ", anchor.orderPosition, " > ", proximaAtividadeLiberada);
+              return;
+            }
+          }
+
+
 
           buttonAR.activityid = anchor.activityid;
           buttonAR.disabled = (anchor.clazz == "#000000"); // criancas.. nao façam isso em casa... tenho que melhorar isso
@@ -141,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           // Torna o objeto visível
 
-          activeScene.visible = true;;
+          activeScene.visible = true;
 
           /*
           Esse código ta comentado a um tempo ele é necessário? -05/05/25
@@ -179,6 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
             mixer = null;
           }
         };
+
+
+
       } else {
         //-------CARREGAR ATIVIDADE DE CENA ---------------------------------------------------------------------
         let scene_id = li.getAttribute("scene_id");
@@ -229,6 +314,8 @@ document.addEventListener('DOMContentLoaded', () => {
       buttonAR = document.getElementById("button-ar");
       bloquear = document.getElementById("showObject");
       desbloquear = document.getElementById("removeObject");
+
+
     }
 
     if (isSetup) {
@@ -236,10 +323,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById("showObject").addEventListener('click', () => {
         bloquear.style.display = "none";
         desbloquear.style.display = "block";
-      
+
         mindarThree.stop();
         scene.background = new THREE.Color(0xF4F5F9); //0x00ced1
-      
+
         //Se a cena ativa é um painel
         if (activeScene.children.length == 0) {
           //Por algum motivo a tela só desaparece se esperar 1 milésimo de 1 segundo.
@@ -251,16 +338,16 @@ document.addEventListener('DOMContentLoaded', () => {
               activeScene.element.getElementsByTagName("video")[0].pause()
             } catch (e) { }
           }, 1);
-      
+
           document.getElementById("my-ar-container").style.display = "none";
           document.getElementById("painelContainer").style.display = "flex";
-      
+
           let scene_id = activeScene.element.id;
           scene_id = scene_id.substring(14)
-      
+
           createScene(scene_id, true)
         }
-      
+
       });
 
       //Bloquear atividade sendo mostrada
@@ -393,8 +480,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     buttonAR.onclick = () => {
-    //  location.href = buttonAR.href;
-       Livewire.emit('openQuestions', buttonAR.activityid);
+      //  location.href = buttonAR.href;
+      Livewire.emit('openQuestions', buttonAR.activityid);
     };
 
   };

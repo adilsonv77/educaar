@@ -23,7 +23,7 @@ class FecharController extends Controller
             ->first();
 
         $activities = Activity::where('content_id', '=', $request['content'])
-        ->orderBy('scene_id', 'desc')
+        ->orderBy('position', 'asc')
         ->get();
    
         $titulo = "Fechar conteúdo";

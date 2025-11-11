@@ -125,7 +125,8 @@ class ContentController extends Controller
             'titulo' => $titulo,
             'acao' => $acao,
             'name' => '',
-            'id' => 0
+            'id' => 0,
+            'sort_activities' => false
         ];
         if (session('type') == 'teacher') {
             $disciplinas = ContentDAO::buscarDisciplinas($anoLetivo->id, $idprof);
@@ -142,6 +143,9 @@ class ContentController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
+        $data['sort_activities'] = $request->has('sort_activities') ? 1 : 0;
+
 
         if (session('type') == 'teacher') {
             $turma_disc = explode("_", $data['disciplina_id']);
@@ -179,6 +183,7 @@ class ContentController extends Controller
     {
 
         $content = Content::find($id);
+        $activities = Activity::where('content_id', $content->id)->orderBy('position', 'asc')->get();
         $titulo = 'Editar Conteúdo';
         $acao = 'edit';
         $idprof = Auth::user()->id;
@@ -191,7 +196,10 @@ class ContentController extends Controller
             'acao' => $acao,
             'id' => $content->id,
             'name' => $content->name,
-            'user_id' => $content->user_id
+            'user_id' => $content->user_id,
+            'content' => $content,
+            'activities' => $activities,
+            'sort_activities' => $content->sort_activities
         ];
 
         if (session('type') == 'teacher') {

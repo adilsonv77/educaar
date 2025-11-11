@@ -228,9 +228,12 @@
     @endforeach
 </div>
 
-<span id="glbs" style="display: none;">
+<span id="glbs" style="display: none;" is_sort="{{ $content->sort_activities }}">
     @foreach ($activities as $item)
         <li id="act_{{$item->id}}"
+            previousActivity = {{ $previousActivity }}
+            orderPosition="{{ $item->position }}"
+
             usar_class=
             @if($item->bloquearPorData == 1)
                 "#000000" 
@@ -286,5 +289,26 @@
     </script>
 
 <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
+
+@if (session('atividade_concluida') && session("content_id"))
+    <script>
+        // expõe a sessão para o script de módulo ler (fallback)
+    window.__session_atividade_concluida = @json(session('atividade_concluida'));
+    window.__session_content_id = @json(session('content_id'));
+    console.log('blade: __session_atividade_concluida set', window.__session_atividade_concluida, ', id do conteúdo: ', window.__session_content_id);
+
+    // dispatch assíncrono para aumentar chance do listener já estar registrado
+    setTimeout(() => {
+        const payload = {
+            position: window.__session_atividade_concluida,
+            content_id: window.__session_content_id
+        };
+        window.dispatchEvent(new CustomEvent('atividade-concluida', {
+            detail: payload
+        }));
+        console.log('blade: dispatched atividade-concluida');
+    }, 50);
+    </script>
+@endif
 
 @endsection

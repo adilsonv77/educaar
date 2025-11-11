@@ -220,8 +220,18 @@
                                         <!-- @ if (!session('tipotrocado'))  -->
                                          <!-- @ if ($respondida == 1) hidden="hidden" @ endif -->
                                             <button id="salvibutton" 
-                                                    class="btn btn-success" @if ($nrquestao == $qtasquestoes-1 && $respondida == 1) respondida_ultima="1" @else respondida_ultima="0" @endif>
-                                                    @if ($nrquestao == $qtasquestoes-1 && $respondida != 1) <span><i  style = "color:#ffffff;"class="bi bi-save" ></i></span> @else <span><i  style = "color:#ffffff;"class="bi bi-box-arrow-in-right" ></i></span> @endif
+                                                    class="btn btn-success" 
+                                                    @if ($nrquestao == $qtasquestoes-1 && $respondida == 1) 
+                                                        respondida_ultima="1" 
+                                                    @else
+                                                        respondida_ultima="0"
+                                                    @endif
+                                            >
+                                                    @if ($nrquestao == $qtasquestoes-1 && $respondida != 1) 
+                                                        <span><i  style = "color:#ffffff;"class="bi bi-save" ></i></span> 
+                                                    @else 
+                                                        <span><i  style = "color:#ffffff;"class="bi bi-box-arrow-in-right" ></i></span> 
+                                                    @endif
                                             </button>
                                         <!-- @ endif -->
                                     </div>

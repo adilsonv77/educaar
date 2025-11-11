@@ -30,8 +30,23 @@
                                     {{ $item->tnome }} - {{ $item->dnome }}</option>
                             @endforeach
                         </select>
-
                     </div>
+
+                    <div class="form-group row">
+                        <label for="sort_activities">Ordenar atividades deste conteúdo</label>
+                        <div class="col-md-6">
+                            <input type="checkbox" name="sort_activities" id="sort_activities" value="1" @if (old('sort_activities', $sort_activities ?? false)) checked @endif>
+                        </div>
+                    </div>
+
+                    @endif
+                
+                    @if(Route::CurrentRouteName() == 'content.edit')
+                        @if(isset($id) && $content->sort_activities)
+                            <div class="mt-4">
+                                @livewire('content-activities-order', ['contentId' => $content->id])
+                            </div>
+                        @endif
                     @endif
 
                     @if (session('type') == 'admin')
@@ -41,6 +56,8 @@
                     <div class="form-group row mt-4">
                         <input type="submit" value="Salvar" class="btn btn-success">
                     </div>
+
+
 
 
                 </form>

@@ -86,16 +86,16 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <h3>Você tem certeza que deseja salvar as mudaças?</h3>
+                <h3>Você tem certeza que deseja salvar as mudanças?</h3>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <!-- isso n ta prnto ainda, ele ta excluidno as resposntas mas n ta salvando -->
-                <!-- <form action="{{ route('answers.destroy', $id) }}" method="POST">
+                 <form action="{{ route('answers.destroy', $id) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-success" onclick="document.getElementById('questionForm').submit();">Excluir Respostas e Salvar</button>
-                </form> -->
+                </form> 
                 <button type="submit" class="btn btn-success" onclick="document.getElementById('questionForm').submit();">Salvar</button>
             </div>
         </div>

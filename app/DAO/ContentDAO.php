@@ -46,6 +46,7 @@ class ContentDAO
         return $sql;
     }
 
+
     public static function buscarQuestoesDosConteudos($contents)
     {
         /*
