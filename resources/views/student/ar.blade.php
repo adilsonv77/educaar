@@ -1,5 +1,7 @@
 @extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => true])
 
+<meta name = "csrf-token" content="{{ csrf_token() }}">
+
 @section('style')
     <!--Nao dar erro do ngrok:-->
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
@@ -289,25 +291,32 @@
     </script>
 
 <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
+@php
+
+    $content_id = $content->id;
+    $sessionKey = 'progresso_conteudos.' . $content_id;
+    $proxima_posicao = session($sessionKey, 1);
+
+@endphp
+
+<script>
+    window.__proximaAtividadeLiberada = {{ $proxima_posicao }};
+    console.log('blade: proximaAtividadeLiberada =', window.__proximaAtividadeLiberada);
+    window.__content_id = {{ $content_id }};
+</script>
 
 @if (session('atividade_concluida') && session("content_id"))
     <script>
-        // expõe a sessão para o script de módulo ler (fallback)
-    window.__session_atividade_concluida = @json(session('atividade_concluida'));
-    window.__session_content_id = @json(session('content_id'));
-    console.log('blade: __session_atividade_concluida set', window.__session_atividade_concluida, ', id do conteúdo: ', window.__session_content_id);
-
-    // dispatch assíncrono para aumentar chance do listener já estar registrado
-    setTimeout(() => {
-        const payload = {
-            position: window.__session_atividade_concluida,
-            content_id: window.__session_content_id
-        };
-        window.dispatchEvent(new CustomEvent('atividade-concluida', {
-            detail: payload
-        }));
-        console.log('blade: dispatched atividade-concluida');
-    }, 50);
+        window.__session_atividade_concluida = @json(session('atividade_concluida'));
+        window.__session_content_id = @json(session('content_id'));
+        setTimeout(() => {
+            const payload = {
+                position: window.__session_atividade_concluida,
+                content_id: window.__session_content_id
+            };
+            window.dispatchEvent(new CustomEvent('atividade-concluida', { detail: payload }));
+            console.log('blade: dispatched atividade-concluida (session fallback)');
+        }, 50);
     </script>
 @endif
 

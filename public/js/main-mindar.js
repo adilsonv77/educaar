@@ -16,7 +16,7 @@ var isSetup = false;
 var bloquear = null;
 var desbloquear = null;
 var cenas = [];
-var proximaAtividadeLiberada = 1;
+var proximaAtividadeLiberada = null; // iniciar como null para evitar sobrescrita posterior
 
 // Função para mostrar progresso
 function mostrarAvanco(percent) {
@@ -39,26 +39,62 @@ function loadGLTF(path) {
   });
 }
 
+async function atualizarProgressoConteudoOrdenado(content_id, newPosition) {
+  try{
+    console.log(`Enviando para o servidor: ContentID: ${content_id}, próxima posição: ${newPosition}`);
+    
+    const response = await fetch('/students/atualizar-progresso', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({
+        content_id: content_id,
+        new_position: newPosition
+      })
+    });
+
+    const resultado = await response.json();
+
+    if(response.ok){
+      console.log('Progresso do conteúdo salvo com sucesso:', resultado.message);
+    } else{
+      console.error('Erro ao salvar progresso do conteúdo:', resultado.message);
+    }
+
+  } catch (err) {
+    console.error('Erro ao atualizar progresso do conteúdo ordenado:', err);
+  }
+}
 
 // novo: handler reutilizável para o evento
-function handleAtividadeConcluida(detail){
+async function handleAtividadeConcluida(detail){
   try {
     if (!detail) return;
-    const position = detail.position;
-    const content_id = detail.content_id;
-    if (position === null) {
-      console.log('atividade-concluida: detalhe sem position', detail);
+
+    // aceita detail sendo número, ou objeto com position/posicao
+    const rawPos = (typeof detail === 'number') ? detail : (detail.position ?? detail.posicao ?? null);
+    const positionConcluida = Number(rawPos);
+    const content_id = window.__content_id;
+
+    if (Number.isNaN(positionConcluida)) {
+      console.log('handleAtividadeConcluida: Posição ou ContentID inválido.', detail);
       return;
     }
-    proximaAtividadeLiberada = position + 1;
+
+    const proximaPosicao = positionConcluida + 1;
+    proximaAtividadeLiberada = proximaPosicao;
     
-    console.log("Atividade concluída do id: ", content_id ," (handler): ", position);
+    
 
-    console.log("Próxima atividade liberada para o id: ",content_id," (handler): ", proximaAtividadeLiberada);
+    console.log(`Atividade: ${positionConcluida}  concluída positionConcluida`);
+    console.log(`Próxima atividade liberada (local): ${proximaAtividadeLiberada}`);
 
-    // se precisar armazenar para uso posterior:
-    window.__atividade_concluida = { position: position, next: proximaAtividadeLiberada };
-    window.__content_id = content_id;
+    await atualizarProgressoConteudoOrdenado(content_id, proximaPosicao);
+
+    // guarda para inspeção/fallback
+    window.__atividade_concluida = { position: positionConcluida, next: proximaAtividadeLiberada, content_id: content_id };
   } catch (err) {
     console.error('Erro em handleAtividadeConcluida', err);
   }
@@ -66,7 +102,6 @@ function handleAtividadeConcluida(detail){
 
 // listener normal
 window.addEventListener('atividade-concluida', (e) => {
-  
   handleAtividadeConcluida(e.detail);
 });
 
@@ -82,9 +117,14 @@ if (window.__session_atividade_concluida) {
   handleAtividadeConcluida(combined);
 }
 
-
-
-
+// fallback: se o blade expôs a próxima atividade liberada, use-a como valor inicial
+if (window.__proximaAtividadeLiberada != null && proximaAtividadeLiberada == null) {
+  const n = Number(window.__proximaAtividadeLiberada);
+  if (!Number.isNaN(n)) {
+    proximaAtividadeLiberada = n;
+    console.log('main-mindar: inicializando proximaAtividadeLiberada a partir do blade:', proximaAtividadeLiberada);
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 

@@ -174,20 +174,46 @@ class StudentController extends Controller
             }
         }
         
+        // guarda content_id na sessão
         session(["content_id" => $content_id]);
-        if($content->is_sort){
-            session()->put('atividade_concluida', [
-                'position' => 0
-            ]);
-        } else{
-            session()->put('atividade_concluida', [
-                'position' => 1
-            ]);
+
+        // calcula a próxima atividade liberada para este conteúdo (apenas quando houver ordenação)
+        $proximaAtividadeLiberada = null;
+        if ($content->sort_activities) {
+            $maxPos = 0;
+            foreach ($activities as $a) {
+                if (!empty($a->respondido) && intval($a->respondido) === 1) {
+                    $pos = intval($a->position ?? 0);
+                    if ($pos > $maxPos) $maxPos = $pos;
+                }
+            }
+            $proximaAtividadeLiberada = $maxPos + 1;
         }
-        
+    
         $disciplina = session()->get("disciplina");
         $rota = route("student.conteudos") . "?id=" . $disciplina;
-        return view('student.ar', compact('activities', 'rota','scenes','panels','buttons', 'content', 'previousActivity'));
+        return view('student.ar', compact('activities', 'rota','scenes','panels','buttons', 'content', 'previousActivity', 'proximaAtividadeLiberada'));
+    }
+
+    public function atualizarProgressoConteudoOrdenado(Request $request){
+
+        $content_id = $request->content_id;
+        $newPosition = $request->newPosition;
+
+        $sessionKey = 'progresso_conteudos.' . $content_id;
+
+        $currentPositionInSession = session($sessionKey, 1);
+
+        if($newPosition > $currentPositionInSession){
+            session([$sessionKey => $newPosition]);
+            return response()->json(['message' => "Progesso salvo", 'new_position' => $newPosition], 200);
+        }
+
+        return response()->json([
+            'message' => 'Progresso já está atualizado',
+            'current_position' => $currentPositionInSession
+        ], 200);
+
     }
 
 

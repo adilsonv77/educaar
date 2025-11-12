@@ -209,7 +209,21 @@ class QuestionarioAlunoForm extends Component
     public function close() {
         $this->dispatchBrowserEvent('closeFeedbackModal');
         $this->feedback = [];
-        return $this->redirectRoute('student.showActivity', ['id' => session()->get('content_id')]);
+        $activity = Activity::find($this->activity_id);
+
+        session()->put('activity', $activity);
+        session()->put('position', $activity->position);
+
+        // sinaliza atividade concluída (payload que main-mindar espera)
+        session()->put('atividade_concluida', [
+            'position' => $activity->position,
+            'content_id' => session()->get('content_id'),
+        ]);
+
+        return $this->redirectRoute('student.showActivity', [
+            'id' => session()->get('content_id'),
+        ]);
+
     }
 
 }
