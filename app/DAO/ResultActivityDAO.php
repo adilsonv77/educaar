@@ -102,7 +102,13 @@ class ResultActivityDAO
             ->join('alunos_turmas as alunt', function($j) use ($turma_id) { //Filtro de turma
                 $j->on('alunt.aluno_id', '=', 'sta.user_id')
                 ->where('alunt.turma_id', '=', $turma_id);
-            });
+            })
+            ->where('sta.created_at', '=', function ($subquery) { 
+                $subquery->selectRaw('MAX(sta2.created_at)')
+                    ->from('student_answers as sta2')
+                    ->whereColumn('sta2.question_id', 'sta.question_id')
+                    ->whereColumn('sta2.user_id', 'sta.user_id');
+            }); /* where para pegar somente a úlitma tentativa de cada aluno */
         })
         -> where('q.activity_id', '=', $activityID) //Filtro de atividade
         -> groupBy('q.id', 'q.question');

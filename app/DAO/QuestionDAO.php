@@ -78,19 +78,33 @@ class QuestionDAO
     }
 
     /**
-     * Retorna se o aluno autenticado já respondeu alguma questão da atividade correspondente
+     * Retorna se o aluno autenticado já respondeu alguma questão da atividade correspondente.
     */
-    public static function jaRespondeu($activity_id) {
-        $user_id = Auth::id();
-
+    public static function jaRespondeuAlguma($activity_id) {
         return DB::table('student_answers')
-            ->where('user_id', $user_id)
+            ->where('user_id', Auth::id())
             ->where('activity_id', $activity_id)
             ->exists();
     }
 
     /**
-     * Retorna se a atividade pode ser refeita ou não 
+     * Retorna se o aluno autenticado já respondeu todas as questões da atividade correspondente.
+    */
+    public static function jaRespondeuTodas($activity_id) {
+        $quantidadeQuestoes = DB::table('questions')
+            ->where('activity_id', $activity_id)
+            ->count();
+        
+        $quantidadeRespondidas = DB::table('student_answers')
+            ->where('id', Auth::id())
+            ->where('tentativas', QuestionDAO::getTentativa($activity_id, Auth::id()))
+            ->count();
+
+        return ($quantidadeQuestoes === $quantidadeRespondidas);
+    }
+
+    /**
+     * Retorna se a atividade pode ser refeita ou não.
     */
     public static function refeita($activity_id) {
         return DB::table('activities')
@@ -99,21 +113,22 @@ class QuestionDAO
     }
 
     /**
-     * Retorna a tentativa atual do usuário autenticado (Última tentativa + 1).
+     * Retorna a tentativa atual do usuário (Última tentativa + 1).
     */
-    public static function getTentativa() {
-        $tentativa = 0;
-        if(QuestionDAO::jaRespondeu((int)session()->get('livewire_activity_id'))) {
-            $tentativa = DB::table('student_answers as sa')
-                ->select('sa.tentativas')
-                ->where('sa.activity_id', (int)session()->get('livewire_activity_id'))
-                ->where('sa.user_id', Auth::id())
-                ->orderBy('sa.created_at', 'desc')
-                ->value('tentativas');
-        }
+    public static function getTentativa($id_activity, $id_user) {
+        $tentativa = DB::table('student_answers as sa')
+            ->select('sa.tentativas')
+            ->where('sa.activity_id', $id_activity)
+            ->where('sa.user_id', $id_user)
+            ->orderBy('sa.created_at', 'desc')
+            ->value('tentativas') ?? 0;
+
         return ++$tentativa;
     }
 
+    /**
+     * Retorna o texto, ou pergunta, da questão. No DB a coluna "question".
+    */
     public static function getTextoQuestao($question_id) {
         return DB::table('questions')
             ->where('id', $question_id)

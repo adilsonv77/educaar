@@ -147,6 +147,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/students/activity', [App\Http\Controllers\StudentController::class, 'showActivity'])->name('student.showActivity');
     Route::get('/students/store', [App\Http\Controllers\StudentController::class, 'store'])->name('student.store');
     Route::get('/students/questoes', [App\Http\Controllers\StudentController::class, 'questoes'])->name('student.questoes');
+    Route::post('/students/atualizar-progresso', [App\Http\Controllers\StudentController::class, 'atualizarProgressoConteudoOrdenado'])->name('student.atualizarProgressoConteudoOrdenado');
+
+    //criei essa rota para resetar o progresso do conteudo ordenado na sessão
+    Route::get('/reset-progresso/{content-id}', function($contentId){
+        $sessionKey = 'progresso_conteudos.' . $contentId;
+        session()->forget($sessionKey);
+        return redirect()->back();
+    });
 
     //teacher
     Route::get('/frequencia', [App\Http\Controllers\FrequenciaController::class, 'index'])->name('teacher.frequencia');

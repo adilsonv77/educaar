@@ -44,7 +44,7 @@ class QuestionarioAlunoForm extends Component
         $this->activity_id = (int)$value;
 
         $this->refeita = QuestionDAO::refeita($this->activity_id);
-        $this->jaRespondeu = QuestionDAO::jaRespondeu($this->activity_id);
+        $this->jaRespondeu = QuestionDAO::jaRespondeuAlguma($this->activity_id);
 
         if (session()->has('livewire_nrquestao') && session()->get('livewire_activity_id') == $value) {
             // pull jah busca e exclui
@@ -162,7 +162,13 @@ class QuestionarioAlunoForm extends Component
             DB::beginTransaction();
 
             $questions = session()->get('livewire_questoes');
-            $tentativa = QuestionDAO::getTentativa();
+            $tentativa = QuestionDAO::getTentativa((int)session()->get('livewire_activity_id'), Auth::id());
+
+            if(DB::table('activities')
+                ->where('id', (int)session()->get('livewire_activity_id'))
+                ->value('refeita') == 0) {
+                $this->jaRespondeu = QuestionDAO::jaRespondeuTodas((int)session()->get('livewire_activity_id'));
+            }
 
             try {
                 foreach ($questions as $questao) {
@@ -209,7 +215,21 @@ class QuestionarioAlunoForm extends Component
     public function close() {
         $this->dispatchBrowserEvent('closeFeedbackModal');
         $this->feedback = [];
-        return $this->redirectRoute('student.showActivity', ['id' => session()->get('content_id')]);
+        $activity = Activity::find($this->activity_id);
+
+        session()->put('activity', $activity);
+        session()->put('position', $activity->position);
+
+        // sinaliza atividade concluída (payload que main-mindar espera)
+        session()->put('atividade_concluida', [
+            'position' => $activity->position,
+            'content_id' => session()->get('content_id'),
+        ]);
+
+        return $this->redirectRoute('student.showActivity', [
+            'id' => session()->get('content_id'),
+        ]);
+
     }
 
 }

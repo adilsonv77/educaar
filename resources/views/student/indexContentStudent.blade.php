@@ -16,6 +16,7 @@
                                         <!-- Campo oculto com o ID do conteúdo -->
                                         <input name="id" type="hidden" value="{{ $item->id }}" />
 
+
                                         <!-- Botão com a cor baseada no status de conclusão -->
                                         <button type="submit" class="btn 
                                             {{ isset($conteudosRespondidos[$item->id]) && $conteudosRespondidos[$item->id] ? 'btn-success' : 'btn-warning' }}">
