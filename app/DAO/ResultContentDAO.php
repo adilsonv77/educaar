@@ -51,10 +51,21 @@ class ResultContentDAO
             where q.id = 94
             group by sa.alternative_answered, q.answer
         */
+
+        /* Subquery para pegar somente as últimas tentativas */
+        $ultimaTentativa = DB::table('student_answers')
+            ->select('user_id', DB::raw('MAX(tentativas) as ult'))
+            ->where('question_id', $questionid)
+            ->groupBy('user_id');
+
         return DB::table('student_answers as sa')
                 ->join('questions as q', 'sa.question_id', '=', 'q.id')
                 ->join("alunos_turmas as atu", "atu.aluno_id", "=", "sa.user_id")
                 ->join("turmas as t", "t.id", "=", "atu.turma_id")
+                ->joinSub($ultimaTentativa, 'ult_sa', function($join) {
+                    $join->on('ult_sa.user_id', '=', 'sa.user_id')
+                        ->on('ult_sa.ult', '=', 'sa.tentativas');
+                })
                 ->select(
                     'sa.alternative_answered',
                     DB::raw('COUNT(sa.id) as respostas_count'),
