@@ -20,6 +20,16 @@ class ResultActivityDAO
             ->join('student_answers as sta', 'sta.question_id', '=', 'q.id')
             ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'sta.user_id')
             ->join('users as u', 'u.id', '=', 'alunt.aluno_id')
+            ->joinSub( /* Subquery para consultar somente a última tentativa de cada usuário */
+                DB::table('student_answers as sta2')
+                    ->join('questions as q2', 'q2.id', '=', 'sta2.question_id')
+                    ->select('sta2.user_id', DB::raw('MAX(sta2.tentativas) as ult'))
+                    ->where('q2.activity_id', '=', $activityID)
+                    ->groupBy('sta2.user_id'), 'ult2', function($join) {
+                        $join->on('ult2.user_id', '=', 'sta.user_id')
+                                ->on('ult2.ult', '=', 'sta.tentativas');
+                    }
+            ) /* Tá difícil de entender mas é de coração */
             ->where([
                 ['alunt.turma_id', '=', $turma_id],
                 ['q.activity_id', '=', $activityID]

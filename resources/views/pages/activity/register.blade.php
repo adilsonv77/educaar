@@ -21,6 +21,28 @@
             background-image: none;
             border: 1px solid #319dd7;
         }
+
+        .custom-switch .custom-control-label::before {
+            border-width: 1.2px;
+        }
+
+        .custom-switch .custom-control-label::after {
+            border-width: 1.2px;
+            top: 50%;
+            transform: translateX(0.03rem) translateY(-50%);
+        }
+
+        .custom-switch.switch .custom-control-label::after {
+            top: 50%;
+            transform: translateX(0.03rem) translateY(-50%);
+            
+        }
+
+        .custom-switch.switch .custom-control-input:checked ~ .custom-control-label::after {
+            top: 50%;
+            transform: translateX(0.735rem) translateY(-50%); 
+        }
+
     </style>
 @endsection
 
@@ -229,16 +251,16 @@
                 <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$scene_id}}" @endif>
 
                 <!----------------REFEITA----------------->
-                @if($acao != 'edit') 
-                <div class="form-group" id="refeita">
-                    <input type="hidden" name="refeitaMarcador" value="0">
-                    <input type="checkbox" name="refeitaMarcador" value="1"/>
-                    <label for="refeita" class="mb-0"> Poderá ser refeita? </label>
-                    <br>
+
+                @if($acao != 'edit')
+                    <div class="custom-control custom-switch switch">
+                        <input type="hidden" name="refeitaMarcador" value="0">
+                        <input type="checkbox" class="custom-control-input" id="switch" name="refeitaMarcador" value="1">
+                        <label class="custom-control-label" for="switch">Refeita</label>
+                    </div>
                     <div class="form-text alert-danger d-inline-block small ml-3 p-0" role="alert">
                         Se esta opção estiver marcada, os alunos poderão refazer a questão caso não a tenham acertado toda.
                     </div>
-                </div>
                 @endif
 
                 <!-----------------SUBMIT------------------>
