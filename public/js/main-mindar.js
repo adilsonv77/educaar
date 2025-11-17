@@ -39,92 +39,6 @@ function loadGLTF(path) {
   });
 }
 
-async function atualizarProgressoConteudoOrdenado(content_id, newPosition) {
-  try{
-    console.log(`Enviando para o servidor: ContentID: ${content_id}, próxima posição: ${newPosition}`);
-    
-    const response = await fetch('/students/atualizar-progresso', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      },
-      body: JSON.stringify({
-        content_id: content_id,
-        new_position: newPosition
-      })
-    });
-
-    const resultado = await response.json();
-
-    if(response.ok){
-      console.log('Progresso do conteúdo salvo com sucesso:', resultado.message);
-    } else{
-      console.error('Erro ao salvar progresso do conteúdo:', resultado.message);
-    }
-
-  } catch (err) {
-    console.error('Erro ao atualizar progresso do conteúdo ordenado:', err);
-  }
-}
-
-// novo: handler reutilizável para o evento
-async function handleAtividadeConcluida(detail){
-  try {
-    if (!detail) return;
-
-    // aceita detail sendo número, ou objeto com position/posicao
-    const rawPos = (typeof detail === 'number') ? detail : (detail.position ?? detail.posicao ?? null);
-    const positionConcluida = Number(rawPos);
-    const content_id = window.__content_id;
-
-    if (Number.isNaN(positionConcluida)) {
-      console.log('handleAtividadeConcluida: Posição ou ContentID inválido.', detail);
-      return;
-    }
-
-    const proximaPosicao = positionConcluida + 1;
-    proximaAtividadeLiberada = proximaPosicao;
-    
-    
-
-    console.log(`Atividade: ${positionConcluida}  concluída positionConcluida`);
-    console.log(`Próxima atividade liberada (local): ${proximaAtividadeLiberada}`);
-
-    await atualizarProgressoConteudoOrdenado(content_id, proximaPosicao);
-
-    // guarda para inspeção/fallback
-    window.__atividade_concluida = { position: positionConcluida, next: proximaAtividadeLiberada, content_id: content_id };
-  } catch (err) {
-    console.error('Erro em handleAtividadeConcluida', err);
-  }
-}
-
-// listener normal
-window.addEventListener('atividade-concluida', (e) => {
-  handleAtividadeConcluida(e.detail);
-});
-
-// fallback: se Blade já colocou a sessão numa variável global antes do módulo carregar
-if (window.__session_atividade_concluida) {
-  const sess = window.__session_atividade_concluida;
-  const sessPos = (typeof sess === 'object' && sess.position !== undefined) ? sess.position : sess; 
-  const combined = {
-    position: sessPos,
-    content_id: window.__session_content_id
-  }
-  console.log('fallback: processando __session_atividade_concluida');
-  handleAtividadeConcluida(combined);
-}
-
-// fallback: se o blade expôs a próxima atividade liberada, use-a como valor inicial
-if (window.__proximaAtividadeLiberada != null && proximaAtividadeLiberada == null) {
-  const n = Number(window.__proximaAtividadeLiberada);
-  if (!Number.isNaN(n)) {
-    proximaAtividadeLiberada = n;
-    console.log('main-mindar: inicializando proximaAtividadeLiberada a partir do blade:', proximaAtividadeLiberada);
-  }
-}
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -159,12 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const glbs = document.getElementById("glbs");
 
     //puxa o atributo que verifica se o conteúdo possui atividades ordenadas
-    const is_sort_attr = glbs.getAttribute("is_sort");
-    const is_sort = (is_sort_attr === "1" || is_sort_attr === "true" || is_sort_attr === "on");
+    const is_sort = glbs.getAttribute("is_sort");
+    
 
 
     var mixer = null;
     var action = null;
+
 
 
 
@@ -180,10 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const glb = await loadGLTF(li.textContent);
 
-        let posicaoAtual = parseInt(li.getAttribute("orderPosition"), 10);
-        if (isNaN(posicaoAtual) || !is_sort) {
-          posicaoAtual = i + 1;
-        }
+        
 
 
         const glbScene = glb.scene;
@@ -198,10 +110,19 @@ document.addEventListener('DOMContentLoaded', () => {
         box.getCenter(sceneCenter);
         box.getSize(sceneSize);
         glbScene.position.copy(sceneCenter).multiplyScalar(-1);
+
+        let posPermitida = parseInt(li.getAttribute("allowedPosition"));
+
+        let posAncora = i;
+
+        if(is_sort){
+          posAncora = li.getAttribute("activityPosition") - 1;
+        }
         
 
-        const anchor = mindarThree.addAnchor(posicaoAtual - 1); 
-        anchor.orderPosition = posicaoAtual; 
+        const anchor = mindarThree.addAnchor(posAncora);
+        console.log("Posição da âncora: " + posAncora);
+         
         
         
         anchor.glb = glb;
@@ -216,11 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
           // console.log("chegou no targetfound")
           //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;  
           
-          if (is_sort) {
-            if (anchor.orderPosition > proximaAtividadeLiberada) {
-              console.log("Atividade fora de ordem (bloqueada): ", anchor.orderPosition, " > ", proximaAtividadeLiberada);
-              return;
-            }
+          if(posPermitida < posAncora + 1){
+            console.log("Posição não permitida");
+            return;
           }
 
 

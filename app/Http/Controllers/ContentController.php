@@ -17,6 +17,7 @@ use App\DAO\ContentDAO;
 use App\DAO\ResultContentDAO;
 use App\DAO\UserDAO;
 use App\DAO\TurmaDAO;
+use App\Models\ArProgress;
 
 class ContentController extends Controller
 {
@@ -145,6 +146,10 @@ class ContentController extends Controller
         $data = $request->all();
 
         $data['sort_activities'] = $request->has('sort_activities') ? 1 : 0;
+
+        if($data['sort_activities']){
+            
+        }
 
 
         if (session('type') == 'teacher') {

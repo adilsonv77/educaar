@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use App\Models\StudentAnswer;
 use App\DAO\QuestionDAO;
+use App\Models\ArProgress;
 use Exception;
 
 class QuestionarioAlunoForm extends Component
@@ -226,8 +227,16 @@ class QuestionarioAlunoForm extends Component
             'content_id' => session()->get('content_id'),
         ]);
 
+        $progress = ArProgress::where('student_id', Auth::id())
+            ->where('content_id', session()->get('content_id'))
+            ->first();
+        
+        $progress->next_position ++;
+
+        $progress->save();
+
         return $this->redirectRoute('student.showActivity', [
-            'id' => session()->get('content_id'),
+            'id' => session()->get('content_id'), 'progress' => $progress
         ]);
 
     }

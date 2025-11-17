@@ -233,8 +233,13 @@
 <span id="glbs" style="display: none;" is_sort="{{ $content->sort_activities }}">
     @foreach ($activities as $item)
         <li id="act_{{$item->id}}"
-            previousActivity = {{ $previousActivity }}
-            orderPosition="{{ $item->position }}"
+            activityPosition = "{{$item->position}}"
+
+            @if ($content->sort_activities)
+                allowedPosition = "{{ $progress->next_position }}"
+            @else
+                allowedPosition = "0"
+            @endif
 
             usar_class=
             @if($item->bloquearPorData == 1)
@@ -291,33 +296,6 @@
     </script>
 
 <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
-@php
 
-    $content_id = $content->id;
-    $sessionKey = 'progresso_conteudos.' . $content_id;
-    $proxima_posicao = session($sessionKey, 1);
-
-@endphp
-
-<script>
-    window.__proximaAtividadeLiberada = {{ $proxima_posicao }};
-    console.log('blade: proximaAtividadeLiberada =', window.__proximaAtividadeLiberada);
-    window.__content_id = {{ $content_id }};
-</script>
-
-@if (session('atividade_concluida') && session("content_id"))
-    <script>
-        window.__session_atividade_concluida = @json(session('atividade_concluida'));
-        window.__session_content_id = @json(session('content_id'));
-        setTimeout(() => {
-            const payload = {
-                position: window.__session_atividade_concluida,
-                content_id: window.__session_content_id
-            };
-            window.dispatchEvent(new CustomEvent('atividade-concluida', { detail: payload }));
-            console.log('blade: dispatched atividade-concluida (session fallback)');
-        }, 50);
-    </script>
-@endif
 
 @endsection

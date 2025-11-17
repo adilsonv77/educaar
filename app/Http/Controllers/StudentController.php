@@ -18,6 +18,7 @@ use App\DAO\StudentAppDAO;
 use App\DAO\PainelDAO;
 use App\DAO\MuralDAO;
 use App\DAO\QuestionDAO;
+use App\Models\ArProgress;
 
 class StudentController extends Controller
 {
@@ -110,15 +111,7 @@ class StudentController extends Controller
         $content_id = $request->id == null ? session()->get("content_id") : $request->id;
         $content = Content::find($content_id);
 
-        if($request->activity == null){
-
-            $previousActivity = 0;
-
-        } else{
-            
-            $previousActivity = $request->activity;
-            
-        }
+       
 
         //esse if tá verificando se o conteúdo possui atividades ordenadas
         if($content->sort_activities){
@@ -177,22 +170,23 @@ class StudentController extends Controller
         // guarda content_id na sessão
         session(["content_id" => $content_id]);
 
-        // calcula a próxima atividade liberada para este conteúdo (apenas quando houver ordenação)
-        $proximaAtividadeLiberada = null;
-        if ($content->sort_activities) {
-            $maxPos = 0;
-            foreach ($activities as $a) {
-                if (!empty($a->respondido) && intval($a->respondido) === 1) {
-                    $pos = intval($a->position ?? 0);
-                    if ($pos > $maxPos) $maxPos = $pos;
-                }
-            }
-            $proximaAtividadeLiberada = $maxPos + 1;
+        if($content->sort_activities){
+            $progress = ArProgress::firstOrCreate(
+                [
+                    'student_id' => Auth::user()->id,
+                    'content_id' => $content_id,
+                ],
+                [
+                    'next_position' => 1,
+                ]
+            );
         }
+        
+        
     
         $disciplina = session()->get("disciplina");
         $rota = route("student.conteudos") . "?id=" . $disciplina;
-        return view('student.ar', compact('activities', 'rota','scenes','panels','buttons', 'content', 'previousActivity', 'proximaAtividadeLiberada'));
+        return view('student.ar', compact('activities', 'rota','scenes','panels','buttons', 'content', 'progress'));
     }
 
     public function atualizarProgressoConteudoOrdenado(Request $request){
