@@ -170,6 +170,10 @@ class StudentController extends Controller
         // guarda content_id na sessão
         session(["content_id" => $content_id]);
 
+        $progress  = [
+            'next_position' => 1,
+        ];
+
         if($content->sort_activities){
             $progress = ArProgress::firstOrCreate(
                 [

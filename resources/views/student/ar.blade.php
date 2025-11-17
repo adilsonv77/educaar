@@ -230,6 +230,7 @@
     @endforeach
 </div>
 
+
 <span id="glbs" style="display: none;" is_sort="{{ $content->sort_activities }}">
     @foreach ($activities as $item)
         <li id="act_{{$item->id}}"

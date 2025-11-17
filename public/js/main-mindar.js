@@ -115,8 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let posAncora = i;
 
-        if(is_sort){
+        console.log("is_sort: " + is_sort);
+
+        if(is_sort == "1"){
           posAncora = li.getAttribute("activityPosition") - 1;
+        } else{
+          posAncora = i;
         }
         
 
@@ -137,10 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
           // console.log("chegou no targetfound")
           //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;  
           
-          if(posPermitida < posAncora + 1){
+          if(is_sort == "1" && posPermitida < posAncora + 1){
             console.log("Posição não permitida");
             return;
-          }
+          } 
 
 
 
