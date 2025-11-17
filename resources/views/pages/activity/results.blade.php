@@ -2,6 +2,7 @@
 
 @php
     $pageName =  $activity->name;
+    $refeita = \App\DAO\QuestionDAO::refeita($activity['id']);
     $qntCompletas= $result['alunos_fizeram_completo'];
     $qntIncompletas= $result['alunos_fizeram_incompleto'];
     $qntNaoFizeram= $result['alunos_nao_fizeram'];
@@ -81,6 +82,11 @@
           @foreach ($questions as $question)
             <th id="Q{{ $count }}" data-bs-toggle="tooltip" title="Q{{ $count }}" scope="col">{{ "Q".$count++ }}</th>
           @endforeach
+
+          @if($refeita)
+            <th scope="col1" style="width: 15%;">Tentativas</th>
+          @endif
+
         </tr>
       </thead>
       <tbody>
@@ -103,6 +109,11 @@
                       @endif
 
                     @endforeach
+
+                    @if($refeita)
+                      <td>{{$item['tentativa']}}</tr>
+                    @endif
+                    
                   </tr>
             @endforeach
       </tbody>

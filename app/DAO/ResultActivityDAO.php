@@ -184,6 +184,7 @@ ORDER BY name
                     }
                     $newd = [
                         'name' => $linha->name,
+                        'tentativa' => (QuestionDAO::getTentativa($activity_id, $linha->aluno_id)-1)
                     ];
                     $nomealuno = $linha->name;
             } 
