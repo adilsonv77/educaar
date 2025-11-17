@@ -10,6 +10,7 @@ use Livewire\Component;
 use App\Models\StudentAnswer;
 use App\DAO\QuestionDAO;
 use App\Models\ArProgress;
+use App\Models\Content;
 use Exception;
 
 class QuestionarioAlunoForm extends Component
@@ -216,6 +217,7 @@ class QuestionarioAlunoForm extends Component
     public function close() {
         $this->dispatchBrowserEvent('closeFeedbackModal');
         $this->feedback = [];
+        $content = Content::find(session()->get('content_id'));
         $activity = Activity::find($this->activity_id);
 
         session()->put('activity', $activity);
@@ -231,14 +233,17 @@ class QuestionarioAlunoForm extends Component
             'next_position' => 1
         ];
 
-
-        $progress = ArProgress::where('student_id', Auth::id())
+        if($content->is_sort){
+            $progress = ArProgress::where('student_id', Auth::id())
             ->where('content_id', session()->get('content_id'))
             ->first();
-        
-        $progress->next_position ++;
+        }
 
-        $progress->save();
+        if($content->is_sort){
+            $progress->next_position ++;
+            $progress->save();
+        }
+        
 
         return $this->redirectRoute('student.showActivity', [
             'id' => session()->get('content_id'), 'progress' => $progress
