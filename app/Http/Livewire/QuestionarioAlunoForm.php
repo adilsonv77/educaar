@@ -227,6 +227,11 @@ class QuestionarioAlunoForm extends Component
             'content_id' => session()->get('content_id'),
         ]);
 
+        $progress = [
+            'next_position' => 1
+        ];
+
+
         $progress = ArProgress::where('student_id', Auth::id())
             ->where('content_id', session()->get('content_id'))
             ->first();
