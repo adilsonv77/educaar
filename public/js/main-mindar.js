@@ -112,20 +112,25 @@ document.addEventListener('DOMContentLoaded', () => {
         glbScene.position.copy(sceneCenter).multiplyScalar(-1);
 
         let posPermitida = parseInt(li.getAttribute("allowedPosition"));
+        //console.log("Posição permitida: " + posPermitida);
+        
 
         let posAncora = i;
 
-        console.log("is_sort: " + is_sort);
+        //console.log("is_sort: " + is_sort);
 
+        //console.log("Posição da atividade: " + li.getAttribute("activityPosition"));
+        
+        //se for um conteúdo com atividades ordenadas, pega a posição da atividade
         if(is_sort == "1"){
           posAncora = li.getAttribute("activityPosition") - 1;
         } else{
           posAncora = i;
         }
         
-
+        //o anchor é criado com a posição correta
         const anchor = mindarThree.addAnchor(posAncora);
-        console.log("Posição da âncora: " + posAncora);
+        //console.log("Posição da âncora: " + posAncora);
          
         
         
@@ -141,8 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
           // console.log("chegou no targetfound")
           //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;  
           
+          //caso a atividade seja ordenada e o aluno tenta acessar uma atividade fora da ordem, o modal aparece avisando que a atividade anterior deve ser concluída. Esse modal está em questionario-aluno-form.blade.php
           if(is_sort == "1" && posPermitida < posAncora + 1){
-            console.log("Posição não permitida");
+            //console.log("Posição não permitida");
+            dispatchEvent(new CustomEvent('openNotAllowedModal'));
             return;
           } 
 

@@ -71,6 +71,14 @@
             $('#feedbackModal').modal('hide');
         })
 
+        window.addEventListener('openNotAllowedModal', event => {
+            $('#notAllowedModal').modal('show');
+        })
+
+        window.addEventListener('closeNotAllowedModal', event => {
+            $('#notAllowedModal').modal('hide');
+        })
+
         document.addEventListener("DOMContentLoaded", function() {   
             
             /*
@@ -278,6 +286,23 @@
                 </div>
                 <div class="modal-footer">
                     <button wire:click="close()" type="button" class="btn btn-primary" data-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div wire:ignore.self class="modal fade" id="notAllowedModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h1>ATENÇÃO</h1>
+                    <p>Você precisa concluir a atividade anterior para acessar as questões dessa atividade!</p>
+                </div>
+                <div class="modal-footer">
+                    <button wire:click="closeNotAllowedModal" type="button" class="btn btn-primary" data-dismiss="modal">
                         Fechar
                     </button>
                 </div>

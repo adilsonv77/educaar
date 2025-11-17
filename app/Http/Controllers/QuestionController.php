@@ -9,6 +9,7 @@ use App\Models\Question;
 use App\Models\StudentAnswer;
 use App\Models\StudentTimeActivity;
 use App\Models\AnoLetivo;
+use App\Models\ArProgress;
 use Illuminate\Http\Request;
 use App\Models\School;
 use Illuminate\Support\Facades\Validator;
@@ -225,7 +226,9 @@ class QuestionController extends Controller
     {
         // Exclui apenas as respostas da questão, sem remover a questão
         StudentAnswer::where('question_id', $id)->delete();
-
+        $question = Question::find($id);
+        ArProgress::where('content_id', $question->activity->content_id)->delete();
+        
         return redirect()->back()->with('success', 'Respostas excluídas com sucesso.');
     }
 

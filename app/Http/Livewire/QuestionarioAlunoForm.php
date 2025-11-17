@@ -223,32 +223,32 @@ class QuestionarioAlunoForm extends Component
         session()->put('activity', $activity);
         session()->put('position', $activity->position);
 
-        // sinaliza atividade concluída (payload que main-mindar espera)
-        session()->put('atividade_concluida', [
-            'position' => $activity->position,
-            'content_id' => session()->get('content_id'),
-        ]);
+        
 
+        //padronizei a posição do progresso em 1 para atividades não ordenadas
         $progress = [
             'next_position' => 1
         ];
 
+        //caso o conteúdo seja de atividades ordenadas, atualiza a posição permitida para o aluno realizar a atividade
         if($content->is_sort){
             $progress = ArProgress::where('student_id', Auth::id())
             ->where('content_id', session()->get('content_id'))
             ->first();
-        }
-
-        if($content->is_sort){
             $progress->next_position ++;
             $progress->save();
         }
+
         
 
         return $this->redirectRoute('student.showActivity', [
             'id' => session()->get('content_id'), 'progress' => $progress
         ]);
 
+    }
+
+    public function closeNotAllowedModal() {
+        $this->dispatchBrowserEvent('closeNotAllowedModal');
     }
 
 }
