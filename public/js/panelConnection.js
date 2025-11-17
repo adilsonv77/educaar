@@ -610,9 +610,12 @@ function fecharPopUp(naoCarregarMidia) {
     */
 
 window.livewire.on("fecharCarregarMidia", (id) => {
-    $("#flex-container-" + id + " .close").click();
+    const backdrop = document.getElementsByClassName("modal-backdrop");
+    backdrop[0].remove();
+    janelaModal.remove();
 })
 
+/*
 window.livewire.on("stopLoading", () => {
     clearInterval(carregar);
 
@@ -620,8 +623,11 @@ window.livewire.on("stopLoading", () => {
     painel.querySelector(".loading").style.display = "none";
     painel.querySelector(".loadedMidia").style.display = "block";
 })
+    */
 
 let painelPopup = null;
+let janelaModal = null;
+let paiJanelaModal = null;
 
 function abrirPopUp(id) {
     painelPopup = "p" + id;
@@ -632,12 +638,25 @@ function abrirPopUp(id) {
     let j = JSON.parse(painel.getAttribute("data-panel"))
 
     inputAtivo = document.querySelector("#file-" + id);
-    const dropLabel = document.getElementById("upload-area");
+    const dropLabel = document.getElementById("upload-area-" + id);
     dropLabel.setAttribute("for", "#file-" + id);
 
-    $("#flex-container-" + id).appendTo("body");
+    // esse trabalho todo antes do show acontece porque a janela deveria ficar dentro de body
+    // ... do jeito que está ele não fica na frente de todos
+    
+    janelaModal = document.getElementById("flex-container-" + id)
+    paiJanelaModal = janelaModal.parentElement;
+    janelaModal.remove();
+    document.body.appendChild(janelaModal);
+    //janelaModal.id = janelaModal.id + "-copia";
+    const imgmidia = document.getElementById("img-midia-" + id)
+    imgmidia.id = imgmidia.id + "-copia";
+
     $("#flex-container-" + id).modal('show');
+    
     /*
+    $("#flex-container-" + id).detach().appendTo(document.body);
+
     // flex-container é a janela
     document.getElementById("flex-container").style.display = "flex";
     */
@@ -675,6 +694,11 @@ editarMidiaBtn.onclick = () => {
     abrirPopUp(painelSelecionado.querySelector(".idPainel").id)
 }
 
+// definido em mural-painel.blade.php
+function removerDialog() {
+    janelaModal.remove();
+}
+
 let excluirPainelBtn = document.getElementById("excluirPainel")
 excluirPainelBtn.onclick = () => {
     let id = painelSelecionado.querySelector(".idPainel").id;
@@ -690,7 +714,7 @@ excluirPainelBtn.onclick = () => {
 window.livewire.on("carregarVideo", (id) => {
     document.getElementById(id).querySelector("video").load()
 })
-
+/*
 const dropArea = document.getElementById("upload-area");
 
 // Clique para abrir o seletor de arquivos
@@ -735,7 +759,7 @@ dropArea.addEventListener("drop", (e) => {
         wire.upload('midia', file);
     }
 });
-
+*/
 /*
 // 3.3 Um link do youtube foi inserido
 document.getElementById("linkYoutube").oninput = () => {

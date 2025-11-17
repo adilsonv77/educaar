@@ -16,7 +16,8 @@ use Monolog\Formatter\ElasticaFormatter;
 class MuralPainel extends Component
 {
     protected $listeners = ['updateBtnFormat', 'createButton', 'deleteBtn', 'salvarTexto', 
-                            'addSelecionado', 'removeSelecionado', 'salvarMidia'];
+                            'addSelecionado', 'removeSelecionado', 'salvarMidia',
+                            'upload:finished' => 'finishedUploadMidia'];
 
     use WithFileUploads;
 
@@ -27,6 +28,7 @@ class MuralPainel extends Component
     public $link;
     public $btnFormat;
     public $num;
+    public $uploadArea;
 
     public $classes = "";
     
@@ -46,6 +48,7 @@ class MuralPainel extends Component
             $this->link = '';
         $this->btnFormat = $json['btnFormat'] ?? 'linhas';
         $this->num = 0;
+        $this->uploadArea = "icons/paineis/upload.svg";
     }
 
     public function addSelecionado($id): void // ok
@@ -97,8 +100,26 @@ class MuralPainel extends Component
 
        return $url;
     }
+
+    // nome padrao do livewire
+    public function updatedMidia() {
+        $this->validate([
+            'midia' => 'image|max:51200', // 50 MB Max
+        ]);
+    }
+
+    public function finishedUploadMidia() {
+        $this->uploadArea = $this->midia->temporaryUrl();
+        $panelData = json_decode($this->painel->panel, true);
+        $this->dispatchBrowserEvent('atualizarImgMidia', [
+            'painelId' => $panelData['id'],
+            'uploadedArea' => $this->uploadArea
+        ]);
+    }
+
     public function salvarMidia()
     {
+
         $panelData = json_decode($this->painel->panel, true);
 
         $painelDAO = new PainelDAO();

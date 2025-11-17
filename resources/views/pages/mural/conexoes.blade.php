@@ -120,8 +120,9 @@
             document.querySelectorAll(".painel").forEach(panel => {
                 let id = panel.querySelector('.idPainel')?.id;
                 if (id) {
-                    atribuirListeners(panel, id);
+                    atribuirListeners(panel);
                     habilitarArrastoPersonalizado(panel);
+                    habilitarArrastarMidia(id);
                 }
             });
 
@@ -154,6 +155,52 @@
             panel.addEventListener("click", (e) => selecionarPainel(panel, e));
             
             adicionarInteracaoPopup(panel.id.substr(1));
+        }
+
+        function habilitarArrastarMidia(id) {
+            //inputAtivo eh inicializado no abrirpopup
+            const dropArea = document.getElementById("upload-area-" + id);
+            dropArea.addEventListener("click", () => {
+                if (inputAtivo) {
+                    inputAtivo.setAttribute("accept", "image/*");
+                    inputAtivo.click();
+                }
+            });
+
+            ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+                dropArea.addEventListener(eventName, (e) => e.preventDefault());
+            });
+
+            // Destaque visual
+            dropArea.addEventListener("dragover", () => dropArea.classList.add("dragover"));
+            dropArea.addEventListener("dragleave", () =>
+                dropArea.classList.remove("dragover")
+            );
+
+            // Droppou um arquivo no drop área
+            dropArea.addEventListener("drop", (e) => {
+                if (!inputAtivo) return;
+
+                const files = e.dataTransfer.files;
+
+                const dataTransfer = new DataTransfer();
+                for (const file of files) {
+                    dataTransfer.items.add(file);
+                }
+                inputAtivo.files = dataTransfer.files;
+
+                dropArea.classList.remove("dragover");
+
+                //fecharPopUp();
+
+                let file = dataTransfer.files[0]
+                let painel = inputAtivo.parentElement.parentElement;
+                let wire = window.livewire.find(painel.getAttribute('wire:id'));
+                if (file) {
+                    wire.upload('midia', file);
+                }
+
+             });
         }
 
         //---------------------------------------------EDITOR DE TEXTO---------------------------------------------
@@ -229,6 +276,13 @@
             if (painel) {
                 painel.setAttribute('data-texto', novoTexto);
             }
+        });
+
+        window.addEventListener('atualizarImgMidia', (event) => {
+            
+            const { painelId, uploadedArea } = event.detail;
+            const imgmidia = document.getElementById("img-midia-"+painelId+"-copia");
+            imgmidia.src = uploadedArea;
         });
 
         document.addEventListener('DOMContentLoaded', function () {

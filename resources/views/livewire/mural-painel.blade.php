@@ -12,23 +12,27 @@
     <div wire:ignore.self class="modal fade" id="flex-container-{{ $panelData['id'] }}" tabindex="-1" data-backdrop="static" data-keyboard="false"
         role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Mídia</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     <div id="popup">
                         <form wire:submit.prevent="salvarMidia">
                             <p>Upload file</p>
-                            <label id="upload-area" class="picture" tabIndex="0">
-                                <img src="{{ asset('icons/paineis/upload.svg') }}" alt="">
+                            <label id="upload-area-{{ $panelData['id'] }}" class="picture" tabIndex="0">
+                                <div wire:loading.class="d-none" wire:target="midia">
+                                    <img class="imgMidiaModal" id="img-midia-{{ $panelData['id'] }}" src="{{ asset($uploadArea) }}" alt="">
+                                </div>
+
+                                <div wire:loading wire:target="midia" >
+                                    <img style="width: 50%" src="{{ asset("images/loading.gif") }}" alt="Carregando midia...">
+                                </div>
+
                                 <span class="picture__image"></span>
                             </label>
-
+                            
                             <p class="pInfo">Formatos suportados: MP4, JPG, JPEG, PNG</p>
                             <p class="pInfo" style="float: right">Tamanho máximo: 50MB</p>
                             <div style="clear: both;"></div>
@@ -37,7 +41,7 @@
                             <input id="linkYoutube" type="text" wire:model="link">
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="removerDialog()">Cancelar</button>
                                 <button type="submit" class="btn btn-primary">Salvar</button>
                             </div>
                         </form>
@@ -46,8 +50,7 @@
             </div>
         </div>
     </div>
-
-
+ 
     <div class="painel {{ $classes }}" id="p{{ $panelData['id'] }}" data-painel-id="{{ $painel->id }}" data-texto="{{ $texto }}" data-panel='@json($panelData)' style="{{ $style }}"> 
 
 
@@ -90,7 +93,7 @@
                     @endif
                 @endif
             </div>
-            <div class="loading" style="display: none">
+            <div class="loading" style="display: none" >
                 <img src="{{ asset("images/circle.png") }}" alt="Carregando midia...">
             </div>
         </div>
@@ -115,7 +118,7 @@
             </div>
         </div>
 
-        <input type="file" name="midia" wire:model="midia" style="display: none" id="file-{{ $panelData["id"] }}"> <!--Arquivo enviado-->
+        <input type="file" name="midia" wire:model="midia" style="display: none" id="file-{{ $panelData["id"] }}" accept="image/*"> <!--Arquivo enviado-->
         <input type="hidden" name="arquivoMidia" value="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}"> <!--Nome arquivo-->
         <input type="hidden" name="midiaExtension" value="{{ asset("midiasPainel/".$panelData["midiaExtension"]) }}"> <!--Extenção arquivo-->   
     </div>
