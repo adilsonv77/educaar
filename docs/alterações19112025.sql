@@ -1,0 +1,37 @@
+CREATE TABLE IF NOT EXISTS ar_progress (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  student_id BIGINT UNSIGNED NOT NULL,
+  content_id BIGINT UNSIGNED NOT NULL,
+  next_position INT DEFAULT 1,
+  created_at TIMESTAMP NULL,
+  updated_at TIMESTAMP NULL,
+
+  FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (content_id) REFERENCES contents(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS pontuacoes (
+    user_id BIGINT UNSIGNED NOT NULL,
+    activity_id BIGINT UNSIGNED NOT NULL,
+    pontuacao BIGINT NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL, 
+
+    PRIMARY KEY(user_id, activity_id),
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(activity_id) REFERENCES activities(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+ALTER TABLE schools
+ADD COLUMN `public` TINYINT NOT NULL DEFAULT 0;
+
+ALTER TABLE contents
+ADD COLUMN sort_activities TINYINT DEFAULT 0;
+
+ALTER TABLE activities 
+ADD COLUMN refeita TINYINT NOT NULL DEFAULT 0,
+ADD COLUMN position INT NOT NULL DEFAULT 0,
+ADD COLUMN duration BIGINT DEFAULT NULL;
+
+ALTER TABLE student_answers 
+ADD COLUMN tentativas INT NOT NULL DEFAULT 1;
