@@ -26,21 +26,13 @@
             border-width: 1.2px;
         }
 
-        .custom-switch .custom-control-label::after {
-            border-width: 1.2px;
-            top: 50%;
-            transform: translateX(0.03rem) translateY(-50%);
-        }
-
         .custom-switch.switch .custom-control-label::after {
-            top: 50%;
-            transform: translateX(0.03rem) translateY(-50%);
-            
+            border-width: 1.2px;
+            top: 25%!important;
         }
 
-        .custom-switch.switch .custom-control-input:checked ~ .custom-control-label::after {
-            top: 50%;
-            transform: translateX(0.735rem) translateY(-50%); 
+        .custom-control {
+            line-height: 1.5em!important;
         }
 
     </style>
@@ -251,18 +243,45 @@
                 <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$scene_id}}" @endif>
 
                 <!----------------REFEITA----------------->
-
                 @if($acao != 'edit')
+                <div class="mb-4">
                     <div class="custom-control custom-switch switch">
                         <input type="hidden" name="refeitaMarcador" value="0">
-                        <input type="checkbox" class="custom-control-input" id="switch" name="refeitaMarcador" value="1">
-                        <label class="custom-control-label" for="switch">Refeita</label>
+                        <input type="checkbox" class="custom-control-input" id="refeitaMarcador" name="refeitaMarcador" value="1">
+                        <label class="custom-control-label" for="refeitaMarcador">Refeita</label>
+                        <div class="form-text alert-danger d-inline-block small ml-1 p-0" role="alert">
+                            Se esta opção estiver marcada, os alunos poderão refazer a questão caso não a tenham acertado toda.
+                        </div>
                     </div>
-                    <div class="form-text alert-danger d-inline-block small ml-3 p-0" role="alert">
-                        Se esta opção estiver marcada, os alunos poderão refazer a questão caso não a tenham acertado toda.
-                    </div>
+                </div>
                 @endif
 
+                <!----------------PONTUADA----------------->
+                @if($acao != 'edit')
+                    <div class="custom-control custom-switch switch pontuada mb-2 mt-3">
+                        <input type="hidden" name="pontuadaMarcador" value="0">
+                        <input type="checkbox" class="custom-control-input" id="switchPontuada" name="pontuadaMarcador" value="1">
+                        <label class="custom-control-label" for="switchPontuada">Pontuada</label>
+                    </div>
+                
+                    <div class="extras collapse" id="extras">
+                        <div class="nota">
+                            <label for="nota">Nota da Atividade</label>
+                            <div class="form-text alert-danger d-inline-block small ml-1 p-0" role="alert">
+                                A nota máxima de uma atividade.
+                            </div>
+                            <input type="number" class="form-control mb-2" name="nota" id="nota" value="100">
+                        </div>
+                        <div class="tempo">
+                            <label for="tempo">Tempo por Questão</label>
+                            <div class="form-text alert-danger d-inline-block small ml-1 p-0" role="alert">
+                                Tempo limite para realizar uma questão (em segundos).
+                            </div>
+                            <input type="number" name="tempo" id="tempo" class="form-control" value="30">
+                        </div>
+                    </div>
+                @endif
+                    
                 <!-----------------SUBMIT------------------>
                 <div class="form-group mt-4" onsubmit="desativarBotao(this)">
                     <button type="submit" id="btnSalvar" class="btn btn-success">
@@ -279,9 +298,15 @@
             if (valor == "Modelo3D") {
                 document.getElementById("3DmodelOption").style.display = "block"
                 document.getElementById("panelOption").style.display = "none"
+                document.getElementById('refeitaMarcador').disabled = false;
+                switchPontuada.disabled = false;
             }else{
                 document.getElementById("panelOption").style.display = "block"
                 document.getElementById("3DmodelOption").style.display = "none"
+                document.getElementById('refeitaMarcador').checked = false;
+                document.getElementById('refeitaMarcador').disabled = true;
+                switchPontuada.checked = false;
+                switchPontuada.disabled = true;
             }
 
             HabilitarDesabilitar3D();
@@ -291,6 +316,27 @@
             let botao = form.querySelector("#btnSalvar");
             botao.disabled = true; 
         }
+
+        /* Campos Extras caso a atividade seja pontuada */
+        const switchPontuada = document.getElementById('switchPontuada');
+        const camposExtras = document.getElementById('extras');
+        const nota = document.getElementById('nota');
+        const tempo = document.getElementById('tempo');
+
+        switchPontuada.addEventListener('change', function () {
+            if(this.checked) {
+                $(camposExtras).collapse('show');
+                nota.required = true;
+                tempo.required = true;
+            } else {
+                $(camposExtras).collapse('hide');
+                nota.required = false;
+                tempo.required = false;
+            }
+        });
+
+        /* Inicialização do switchPontuada no false para caso seja recarregado com valor true */
+        document.getElementById('switchPontuada').checked = false;
+
     </script>
 @endsection
- 
