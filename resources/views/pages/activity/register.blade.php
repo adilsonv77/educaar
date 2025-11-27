@@ -186,7 +186,8 @@
                 </div>
                 <!-------SELECIONAR TIPO DE ATIVIDADE-------->
                 
-                @if (session('type') == 'teacher')
+                <input type="hidden" name="sceneType" value=@if($scene_id == 'modelo3D') 'Modelo3D' @else 'Cena' @endif>
+                @if (session('type') == 'teacher' && $naoRefeita)
                 <div class="form-group">
                     <label for="">Selecione o tipo de atividade*</label>
                     <select class="form-control" id="selectSceneType" name="sceneType" aria-label="">             
@@ -270,14 +271,14 @@
                             <div class="form-text alert-danger d-inline-block small ml-1 p-0" role="alert">
                                 A nota máxima de uma atividade.
                             </div>
-                            <input type="number" class="form-control mb-2" name="nota" id="nota" value="100">
+                            <input type="number" class="form-control mb-2" name="nota" id="nota" value=100>
                         </div>
                         <div class="tempo">
                             <label for="tempo">Tempo por Questão</label>
                             <div class="form-text alert-danger d-inline-block small ml-1 p-0" role="alert">
                                 Tempo limite para realizar uma questão (em segundos).
                             </div>
-                            <input type="number" name="tempo" id="tempo" class="form-control" value="30">
+                            <input type="number" name="tempo" id="tempo" class="form-control" value=30>
                         </div>
                     </div>
                 @endif

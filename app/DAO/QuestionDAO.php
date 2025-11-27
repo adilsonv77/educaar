@@ -134,5 +134,15 @@ class QuestionDAO
             ->where('id', $question_id)
             ->value('question');
     }
+    
+    /**
+     * Retorna a duração de uma atividade (INT caso seja uma atividade pontuada,
+     * NULL caso seja uma atividade não pontuada).
+    */
+    public static function getDuration($activity_id) {
+        return DB::table('activities')
+            ->where('id', $activity_id)
+            ->value('duration');
+    }
 
 }

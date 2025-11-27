@@ -21,6 +21,7 @@ use App\DAO\ContentDAO;
 use App\DAO\ActivityDAO;
 use App\DAO\DisciplinaDAO;
 use App\DAO\MuralDAO;
+use App\DAO\QuestionDAO;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -131,7 +132,8 @@ class ActivityController extends Controller
             'contents' => $contents,
             'content' => $content,
             'scenes' => $scenes,
-            'scene_id' => "modelo3D"
+            'scene_id' => "modelo3D",
+            'naoRefeita' => true,
         ];
 
         return view('pages.activity.register', $params);
@@ -165,6 +167,7 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        //dd($data);
         $tipoAtividade = $data['sceneType'];
         unset($data['panelId']);
         unset($data['scene_id']);
@@ -184,7 +187,8 @@ class ActivityController extends Controller
             'name' => 'required|max:100',
             'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:40960000'],
             'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg'],
-            'refeitarMarcador' => 'boolean'
+            'refeitarMarcador' => 'boolean',
+            'pontuadaMarcador' => 'boolean'
         ]);
 
         if ($validator->fails()) {
@@ -259,6 +263,16 @@ class ActivityController extends Controller
             $data['professor_id'] = Auth::user()->id;
             $data['scene_id'] = $data['scene'];
             $data['refeita'] = $request->refeitaMarcador;
+            if($request->pontuadaMarcador) {
+                $request -> validate([
+                    'tempo' => 'int|min:10|max:300',
+                    'nota' => 'int|min:10|max:1000'
+                ]);
+                $data += [
+                    'duration' => $request->tempo, 
+                    'score' => $request->nota
+                ];
+            }
             $activity = Activity::create($data);
 
             $data['marcador'] = $activity->id . '.' . $request->marcador->getClientOriginalExtension();
@@ -383,6 +397,11 @@ class ActivityController extends Controller
             $scenes = $scenes->merge(MuralDAO::getByDisciplinaId($disciplina->id));
         }
 
+        $naoRefeita = !QuestionDAO::refeita($activity->id);
+        if(QuestionDAO::getDuration($activity->id) !=  null) {
+            $naoRefeita = false;
+        }
+
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,
@@ -391,7 +410,8 @@ class ActivityController extends Controller
             'contents' => $contents,
             'content' => $activity->content_id,
             'scene_id' => $activity->scene_id,
-            'scenes' => $scenes
+            'scenes' => $scenes,
+            'naoRefeita' => $naoRefeita
         ];
 
         return view('pages.activity.register', $params);

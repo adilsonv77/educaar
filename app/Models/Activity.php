@@ -9,7 +9,7 @@ class Activity extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'content_id', 'glb', 'marcador', 'disciplina_id', 'professor_id', 'turma_id', 'scene_id', 'position', 'refeita'];
+    protected $fillable = ['name', 'content_id', 'glb', 'marcador', 'disciplina_id', 'professor_id', 'turma_id', 'scene_id', 'position', 'refeita', 'duration', 'score'];
 
     public function questions()
     {
