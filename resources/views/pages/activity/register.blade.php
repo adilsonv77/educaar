@@ -90,7 +90,6 @@
             }
 
 /*
-
             var alt = document.getElementById("alterar3D");
             var alt2 = document.getElementById("alterarPainel")
             let cenaSelecionada = document.getElementById("selectSceneType").value;

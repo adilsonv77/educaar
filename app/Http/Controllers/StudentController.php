@@ -12,6 +12,7 @@ use App\Models\AnoLetivo;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\Content;
 use App\DAO\ContentDAO;
 use App\DAO\StudentAppDAO;
@@ -185,8 +186,6 @@ class StudentController extends Controller
                 ]
             );
         }
-        
-        
     
         $disciplina = session()->get("disciplina");
         $rota = route("student.conteudos") . "?id=" . $disciplina;
@@ -194,26 +193,38 @@ class StudentController extends Controller
     }
 
     public function atualizarProgressoConteudoOrdenado(Request $request){
+        $request->validate([
+            'content_id' => 'required|integer|exists:contents,id',
+            'new_position' => 'required|integer|min:1',
+        ]);
 
-        $content_id = $request->content_id;
-        $newPosition = $request->newPosition;
+        $contentId = $request->input('content_id');
+        $newPosition = $request->input('new_position');
+        $studentId = Auth::id();
 
-        $sessionKey = 'progresso_conteudos.' . $content_id;
+        try {
 
-        $currentPositionInSession = session($sessionKey, 1);
+            $progress = ArProgress::updateOrCreate(
+                ['student_id' => $studentId, 'content_id' => $contentId],
+                ['next_position' => $newPosition]
+            );
 
-        if($newPosition > $currentPositionInSession){
-            session([$sessionKey => $newPosition]);
-            return response()->json(['message' => "Progesso salvo", 'new_position' => $newPosition], 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Progresso atualizado no banco de dados com sucesso.',
+                'new_position' => $progress->next_position
+            ], 200);
+
+        } catch (Exception $e) {
+            Log::error('Erro ao atualizar progresso AR: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno ao salvar progresso.',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'message' => 'Progresso já está atualizado',
-            'current_position' => $currentPositionInSession
-        ], 200);
-
     }
-
 
 }
 

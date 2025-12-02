@@ -167,7 +167,6 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        //dd($data);
         $tipoAtividade = $data['sceneType'];
         unset($data['panelId']);
         unset($data['scene_id']);
@@ -262,7 +261,12 @@ class ActivityController extends Controller
             //Insere
             $data['professor_id'] = Auth::user()->id;
             $data['scene_id'] = $data['scene'];
+            
             $data['refeita'] = $request->refeitaMarcador;
+            $content = Content::find($data['content_id']);
+            if($content->sort_activities){
+                $data['refeita'] = 1;
+            }
             if($request->pontuadaMarcador) {
                 $request -> validate([
                     'tempo' => 'int|min:10|max:300',

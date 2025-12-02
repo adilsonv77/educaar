@@ -96,7 +96,8 @@ class QuestionDAO
             ->count();
         
         $quantidadeRespondidas = DB::table('student_answers')
-            ->where('id', Auth::id())
+            ->where('user_id', Auth::id())
+            ->where('activity_id', $activity_id)
             ->where('tentativas', QuestionDAO::getTentativa($activity_id, Auth::id()))
             ->count();
 

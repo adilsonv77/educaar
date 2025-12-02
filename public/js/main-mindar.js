@@ -16,7 +16,7 @@ var isSetup = false;
 var bloquear = null;
 var desbloquear = null;
 var cenas = [];
-var proximaAtividadeLiberada = null; // iniciar como null para evitar sobrescrita posterior
+var proximaAtividadeLiberada = 1;
 
 // Função para mostrar progresso
 function mostrarAvanco(percent) {
@@ -39,11 +39,87 @@ function loadGLTF(path) {
   });
 }
 
+async function atualizarProgressoConteudoOrdenado(content_id, newPosition){
+  try{
+    //console.log(`Enviando para o servidor: ContentID: ${content_id}, próxima posição: ${newPosition}`);
+    const response = await fetch('/students/atualizar-progresso', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'applications/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({
+        content_id: content_id,
+        new_position: newPosition
+      })
+    });
+
+    const resultado = await response.json();
+
+    if(response.ok){
+      //console.log('Progresso do conteúdo salvo com sucesso: ', resultado.message);
+    } else{
+      console.error('Erro ao salvar progresso do conteúdo: ', resultado.message, resultado.error);
+    }
+  } catch(err){
+    console.error('Erro ao atualizar progresso do conteúdo ordenado: ', err);
+    
+  }
+}
+
+async function handleAtividadeConcluida(detail) {
+  try{
+    if(!detail) return;
+
+    const positionConcluida = Number(detail.position);
+    const content_id = window.__content_id;
+
+    if(Number.isNaN(positionConcluida) || !content_id){
+      console.error('handleAtividadeConcluida: Posição ou ContentID inválido.', detail);
+      return;
+    }
+
+    const proximaPosicao = positionConcluida + 1;
+
+    proximaAtividadeLiberada = proximaPosicao;
+
+    //console.log(`Atividade: ${positionConcluida} concluída. Próxima permitida: ${proximaAtividadeLiberada}`);
+
+    await atualizarProgressoConteudoOrdenado(content_id, proximaPosicao);
+    
+  } catch (err) {
+    console.error('Erro em handleAtividadeConcluida (Gatilho principal)', err);
+  }
+}
+
+window.addEventListener('atividade-concluida', (e) => {
+  handleAtividadeConcluida(e.detail);
+});
+
+window.addEventListener('progressUpdated', event => {
+  const newPosition = event.detail.position;
+  const contentId = event.detail.contentId;
+
+  proximaAtividadeLiberada = newPosition;
+
+  //console.log(`[Livewire] Nova posição permitida (DB): ${proximaAtividadeLiberada} para o conteúdo ${contentId}`);
+  
+})
 
 document.addEventListener('DOMContentLoaded', () => {
 
   function setup() {
 
+  }
+
+
+  if (window.__proximaAtividadeLiberada != null) {
+    const n = Number(window.__proximaAtividadeLiberada);
+    if (!Number.isNaN(n) && n > 0) {
+      proximaAtividadeLiberada = n;
+      //console.log('main-mindar: Inicializando proximaAtividadeLiberada (DB):', proximaAtividadeLiberada);
+    }
   }
 
 
@@ -94,11 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
         //------ CARREGAR ATIVIDADE DE MODELO 3D ---------------------------------------------------------------------
 
         const glb = await loadGLTF(li.textContent);
-
-        
-
-
         const glbScene = glb.scene;
+
         const box = new THREE.Box3().setFromObject(glbScene);
         const sceneSize = box.getSize(new THREE.Vector3());
         const sceneCenter = box.getCenter(new THREE.Vector3());
@@ -139,6 +212,36 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.clazz = li.getAttribute("usar_class");
         anchor.group.add(glbScene);
 
+        //Tudo o que estiver daqui para baixo, até a adição ao anchor.group, diz respeito ao símbolo de bloqueado
+        
+        //Cria o mesh do símbolo de bloqueado 
+        const blockedMesh = new THREE.Group(); 
+
+        // Cria a geometria e material para os dois barras do "X"
+        const xBarGeometry = new THREE.BoxGeometry(0.8, 0.15, 0.1);
+        const xMaterial = new THREE.MeshBasicMaterial({
+            color: 0xFF0000, 
+            opacity: 0.9, 
+            transparent: true
+        });
+
+        //Cria as duas barras do "X"
+        const bar1 = new THREE.Mesh(xBarGeometry, xMaterial);
+        bar1.rotation.z = -Math.PI / 4;
+        const bar2 = new THREE.Mesh(xBarGeometry, xMaterial);
+        bar2.rotation.z = Math.PI / 4; 
+
+        //Adiciona as barras ao grupo do símbolo de bloqueado
+        blockedMesh.add(bar1);
+        blockedMesh.add(bar2);
+        
+        // Define a posição e visibilidade inicial (a qual deve ser falsa, pois o modelo 3D da imagem deve ter prioridade) do símbolo de bloqueado
+        blockedMesh.position.set(0, 0, 0); 
+        blockedMesh.visible = false; 
+        
+        
+        anchor.group.add(blockedMesh);
+
 
 
 
@@ -147,11 +250,21 @@ document.addEventListener('DOMContentLoaded', () => {
           //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;  
           
           //caso a atividade seja ordenada e o aluno tenta acessar uma atividade fora da ordem, o modal aparece avisando que a atividade anterior deve ser concluída. Esse modal está em questionario-aluno-form.blade.php
-          if(is_sort == "1" && posPermitida < posAncora + 1){
+          if(is_sort == "1" && proximaAtividadeLiberada < posAncora + 1){
             //console.log("Posição não permitida");
-            dispatchEvent(new CustomEvent('openNotAllowedModal'));
+
+            glbScene.visible = false;
+
+            blockedMesh.visible = true;
+
+
+            
             return;
           } 
+
+
+          glbScene.visible = true;
+          blockedMesh.visible = false;
 
 
 
@@ -287,6 +400,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     }
+
+
 
     if (isSetup) {
       //Desbloquear atividade sendo mostrada

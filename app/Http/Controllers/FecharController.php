@@ -28,9 +28,11 @@ class FecharController extends Controller
    
         $titulo = "Fechar conteúdo";
 
+        $id = $content->id;
+
         session()->put("content.id", $request['content']);
 
-        return view('pages.fechar.register', compact('titulo', 'content', 'activities'));
+        return view('pages.fechar.register', compact('titulo', 'content', 'activities', 'id'));
     }
 
 

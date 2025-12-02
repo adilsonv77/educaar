@@ -230,17 +230,18 @@
     @endforeach
 </div>
 
+    @if($content->sort_activities)
+        @livewire('ar-progress-state', [
+            'nextPosition' => $progress->next_position,
+            'contentId' => $content->id
+        ], key($content->id))
+    @endif
 
 <span id="glbs" style="display: none;" is_sort="{{ $content->sort_activities }}">
     @foreach ($activities as $item)
         <li id="act_{{$item->id}}"
             activityPosition = "{{$item->position}}"
 
-            @if ($content->sort_activities)
-                allowedPosition = "{{ $progress->next_position }}"
-            @else
-                allowedPosition = "0"
-            @endif
 
             usar_class=
             @if($item->bloquearPorData == 1)
@@ -249,7 +250,7 @@
                     @if($item->respondido == 1)
                     "#efbecc" 
                     @else 
-                    "" 
+                    "#" 
                 @endif 
             @endif
             
@@ -295,6 +296,11 @@
         "mindar-image-three":"https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"      }
     }
     </script>
+
+<script>
+    window.__proximaAtividadeLiberada = {{ $progress->next_position ?? 1 }};
+    window.__content_id = {{ $content->id }};
+</script>
 
 <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>
 

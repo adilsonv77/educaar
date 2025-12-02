@@ -71,13 +71,7 @@
             $('#feedbackModal').modal('hide');
         })
 
-        window.addEventListener('openNotAllowedModal', event => {
-            $('#notAllowedModal').modal('show');
-        })
-
-        window.addEventListener('closeNotAllowedModal', event => {
-            $('#notAllowedModal').modal('hide');
-        })
+        
 
         document.addEventListener("DOMContentLoaded", function() {   
             
@@ -104,6 +98,7 @@
             if (document.getElementById('salvibutton').getAttribute("respondida_ultima") == "1") {
 
                 document.getElementById('salvibutton').disabled = true;
+
 
             } else {
 
@@ -172,13 +167,14 @@
                 </div>
                 <div class="modal-body scroll" >
                     <div> <!--  class="scroll" -->
-                        @if (!empty($questions))    
+                        @if (!empty($questions))  
                         <form wire:submit.prevent="salvar" name="questoesform" >
                                <!-- tive que usar essa técnica porque não conseguia mais acessar questions a partir da segunda tela -->
                                 @php $jsonDecodeValue = json_decode($questions,true); @endphp
                                 @csrf
                                 <div class="">
                                     <div class="card-body">
+                                        
                                         <div>
                                             <h2 style="font-size: 25px" class="text">
                                                 {{ ($nrquestao+1) }}.{{ $jsonDecodeValue[$nrquestao]['question'] }}
@@ -292,7 +288,7 @@
             </div>
         </div>
     </div>
-
+<!-- Esse modal não está mais sendo usado
     <div wire:ignore.self class="modal fade" id="notAllowedModal" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -309,7 +305,7 @@
             </div>
         </div>
     </div>
-
+-->
 
 
 </div>

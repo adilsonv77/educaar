@@ -29,12 +29,14 @@ class QuestionarioAlunoForm extends Component
     public $respondida;
     public $activequestion;
 
+    public $incorreta;
+
     public $activity;
 
     public $nrquestao;
     public $qtasquestoes;
 
-
+    public $proximaPosicaoCalculada;
     public $questionarioRespondido;
     public $alternativas;
 
@@ -108,6 +110,8 @@ class QuestionarioAlunoForm extends Component
     {
         $questions = session()->get('livewire_questoes');
 
+        
+
         $resposta = 0;
         // vou fazer o sistema de resposta assim: 
         // 1- retorna que o questionário foi respondido completo
@@ -158,12 +162,40 @@ class QuestionarioAlunoForm extends Component
     }
 
     public function salvar() {
+
+        $this->incorreta = false;
+
         if ($this->nrquestao < $this->qtasquestoes-1) {
+
             $this->nrquestao = $this->nrquestao + 1;
+
         } else {
+
             DB::beginTransaction();
 
             $questions = session()->get('livewire_questoes');
+
+            foreach($questions as $questao) {
+
+                $questionId = $questao->id;
+
+                if(isset($this->alternativas[$questionId])) {
+
+                    $selectedIndex = $this->alternativas[$questionId];
+
+                    if(isset($questao->options[$selectedIndex])) {
+
+                        $selectedOption = $questao->options[$selectedIndex];
+
+                        $questao->alternative_answered = $selectedOption;
+                    }
+
+                }
+
+            }
+
+            
+            
             $tentativa = QuestionDAO::getTentativa((int)session()->get('livewire_activity_id'), Auth::id());
 
             if(DB::table('activities')
@@ -175,14 +207,14 @@ class QuestionarioAlunoForm extends Component
             try {
                 foreach ($questions as $questao) {
                     $data = [];
+                    
 
                     if(!$this->refeita && $this->jaRespondeu) {
                         continue;
                     }
-
-                    $respop = $this->alternativas[$questao->id];
-                    $opcao = $questao->options[$respop];
-
+                    
+                    $opcao = $questao->alternative_answered;
+                    
                     $data = [
                         'question_id' => $questao->id,
                         'user_id' => Auth::user()->id,
@@ -191,6 +223,8 @@ class QuestionarioAlunoForm extends Component
                         'activity_id' => $questao->activity_id,
                         'tentativas' => $tentativa,
                     ];
+
+                    
 
                     $this->feedback[] = [
                         'question' => QuestionDAO::getTextoQuestao($questao->id),
@@ -201,54 +235,91 @@ class QuestionarioAlunoForm extends Component
                     StudentAnswer::create($data);
                 }
 
+                
+
+                
+                
+                foreach($this->feedback as $item) {
+                    
+                    if(!$item['correct']) {
+                        $this->incorreta = true;
+                        break;
+                    }
+                }
+
+                
+                if(!$this->incorreta){
+                    $progress = ArProgress::updateOrCreate(
+                        ['student_id' => Auth::id(), 'content_id' => session()->get('content_id')],
+                        ['next_position' => $this->proximaPosicaoCalculada ?? 1]
+                    );
+                
+                    $this->proximaPosicaoCalculada = $progress->next_position + 1;
+                }
+                
+
                 DB::commit();
 
                 session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao']);
                 $this->questions = null;
 
+
+                if(!$this->incorreta){
+                    $this->dispatchBrowserEvent('atividade-concluida', [
+                    'position' => $progress->next_position,
+                    'activity_id' => $this->activity_id
+                ]);
+                }
+                
+
                 $this->dispatchBrowserEvent('openFeedbackModal');
+
             } catch (Exception $e) {
                 DB::rollback();
+                dd($e);
                 $this->dispatchBrowserEvent('showError');
             }
         }
     }
 
     public function close() {
+
         $this->dispatchBrowserEvent('closeFeedbackModal');
-        $this->feedback = [];
-        $content = Content::find(session()->get('content_id'));
+        $content_id = session()->get('content_id');
+        $content = Content::find($content_id);
+        
         $activity = Activity::find($this->activity_id);
 
         session()->put('activity', $activity);
         session()->put('position', $activity->position);
 
-        
-
-        //padronizei a posição do progresso em 1 para atividades não ordenadas
+        //padronizei a posição do progresso em 1 para que atividades não ordenadas não sejam afetadas pelo sistema de ordenação
         $progress = [
             'next_position' => 1
         ];
 
         //caso o conteúdo seja de atividades ordenadas, atualiza a posição permitida para o aluno realizar a atividade
-        if($content->is_sort){
+        if($content->sort_activities && $this->incorreta == false){
             $progress = ArProgress::where('student_id', Auth::id())
             ->where('content_id', session()->get('content_id'))
             ->first();
-            $progress->next_position ++;
+            $progress->next_position = $activity->position + 1;
             $progress->save();
+            $this->emitTo('ar-progress-state', 'updatePosition', $progress->next_position, $progress->content_id);
         }
 
+        $this->feedback = [];
         
-
-        return $this->redirectRoute('student.showActivity', [
-            'id' => session()->get('content_id'), 'progress' => $progress
+        session()->put([
+            'id' => session()->get('content_id'),
         ]);
 
     }
 
+    /* Essa função não está sendo mais utilizada
     public function closeNotAllowedModal() {
         $this->dispatchBrowserEvent('closeNotAllowedModal');
     }
+     */   
 
 }

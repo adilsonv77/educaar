@@ -13,7 +13,7 @@ class ContentActivitiesOrder extends Component
 
     public function mount($contentId){
         $this->contentId = $contentId;
-        $this->activities = Activity::where('content_id', $contentId)->orderBy('position')->get();
+        $this->activities = Activity::where('content_id', $contentId)->orderBy('position', 'asc')->get();
     }
 
     public function updateOrder($orderedIds){
@@ -21,7 +21,7 @@ class ContentActivitiesOrder extends Component
             Activity::where('id', $id)->update(['position' =>$index + 1]);
         }
 
-        $this->activities = Activity::where('content_id', $this->contentId)->orderBy('position')->get();
+        $this->activities = Activity::where('content_id', $this->contentId)->orderBy('position', 'asc')->get();
         
     }
 

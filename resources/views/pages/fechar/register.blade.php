@@ -23,23 +23,34 @@
 
                     </tbody>
                 </table>
- 
               
                 <h3>Atividades</h3>
                 
                 <table class="table">
                     <tbody>
-                        
-                    @foreach ($activities as $item)
+                        @if(isset($id) && $content->sort_activities)
                         <tr>
-                            <td>{{ $item->name }}</td>
                             <td>
-                                <img src="/marcadores/{{ $item->marcador }}" alt=""width="200"
-                                        height="200">
-                                <li style="display:none" class="imagens_compilar">/marcadores/{{ $item->marcador }}</li>
+                                <div class="mt-4">
+                                    @livewire('content-activities-order', ['contentId' => $content->id])
+                                </div>
                             </td>
-                        </tr>
-                    @endforeach
+                        </tr>    
+                        @else    
+                            @foreach ($activities as $item)
+                                <tr>
+                                    <td>{{ $item->name }}</td>
+                                    <td>
+                                        <img src="/marcadores/{{ $item->marcador }}" alt=""width="200"
+                                                height="200">
+                                        <li style="display:none" class="imagens_compilar">/marcadores/{{ $item->marcador }}</li>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+
+                        
+                        
 
                     </tbody>
                 </table>
@@ -67,6 +78,7 @@
         </div>
     </div>
 @endsection
+
 @section('script')
 
     <script>
