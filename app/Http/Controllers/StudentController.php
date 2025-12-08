@@ -41,7 +41,8 @@ class StudentController extends Controller
         if (Auth::user()->type != session('type')) {
             $conteudos = ContentDAO::buscarConteudosDeveloper(Auth::user()->id)
                 ->where('disciplinas.id', '=', $id)
-                ->select('contents.name', 'contents.id')
+                ->where('contents.fechado', '=', 1)
+                ->select('contents.name', 'contents.id', 'contents.fechado')
                 ->get();
         } else {
             $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)

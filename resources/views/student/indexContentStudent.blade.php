@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="">
-        @if (session('type') == 'student')
+        @if (session('type') == 'student' || session('type') == 'developer')
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">

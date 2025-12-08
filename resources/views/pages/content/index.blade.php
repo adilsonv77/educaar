@@ -78,6 +78,8 @@
                         <tbody>
 
                             @foreach ($contents as $item)
+                                
+                                
                                 <tr style="text-align: center;">
 
                                     <td style="text-align: left;">{{ $item->content_name }}</td>

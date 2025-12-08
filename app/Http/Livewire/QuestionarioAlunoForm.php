@@ -264,14 +264,17 @@ class QuestionarioAlunoForm extends Component
                         break;
                     }
                 }
+
+                $content = Content::find(session()->get('content_id'));
                 
-                if(!$this->incorreta){
+                if(!$this->incorreta && $content->sort_activities){
                     $progress = ArProgress::updateOrCreate(
                         ['student_id' => Auth::id(), 'content_id' => session()->get('content_id')],
                         ['next_position' => $this->proximaPosicaoCalculada ?? 1]
                     );
-                
                     $this->proximaPosicaoCalculada = $progress->next_position + 1;
+                } else{
+                    $progress = ['next_position' => $this->proximaPosicaoCalculada ?? 1 ];
                 }
                 
 
@@ -280,12 +283,11 @@ class QuestionarioAlunoForm extends Component
                 session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao']);
                 $this->questions = null;
 
-
-                if(!$this->incorreta){
+                if(!$this->incorreta && $content->sort_activities){
                     $this->dispatchBrowserEvent('atividade-concluida', [
-                    'position' => $progress->next_position,
-                    'activity_id' => $this->activity_id
-                ]);
+                        'position' => $progress->next_position,
+                        'activity_id' => $this->activity_id
+                    ]);
                 }
                 
 
