@@ -71,9 +71,14 @@
             $('#feedbackModal').modal('hide');
         })
 
-        
-
+        window.addEventListener('stopTimer', event => {
+            $('#questionarioModal').modal('hide');
+            $('#stopTimer').modal('show');
+        });
+    
         document.addEventListener("DOMContentLoaded", function() {   
+
+            const timerSpan = document.getElementById('timerSpan');
             
             /*
             var buttonsfooter = document.getElementById("buttons_footer");
@@ -124,6 +129,74 @@
             checkIfAllAnswered();
         });
 
+        /* Eventos Timer */
+        let intervalo = null;
+        let restanteSegundos;
+        let tempoMaximoMs;
+        let inicio;
+
+        window.addEventListener('startTimer', event => {
+            if(event.detail?.tempoMaximo) {
+                tempoMaximoMs = Number(event.detail?.tempoMaximo) * 1000;
+            }
+            const inicio = performance.now();
+
+            if(intervalo === null) {
+                intervalo = setInterval(() => {
+                    const agora = performance.now();
+                    const decorrido = agora - inicio;
+                    const restanteMs = tempoMaximoMs - decorrido;
+                    
+                    restanteSegundos = Number(restanteMs/1000).toFixed(2);
+                     
+                    if(restanteMs <= 0) {
+                        limparIntervalo();
+                        dispatchEvent(new CustomEvent('timesOver'));
+                        return;
+                    }
+                    atualizarTimer(); 
+                }, 250);
+            }
+        });
+
+        window.addEventListener('timesOver', event => {
+            if(intervalo) {
+                limparIntervalo();
+            }
+            limparIntervalo();
+        });
+
+        function handleSubmit() {
+            if(event.target.matches('#salvibutton') || event.target.closest('#salvibutton')) {
+                const teste = event.target.closest('[wire\\:id]').__livewire;
+                teste.call('addTempo', ((tempoMaximoMs/1000) - restanteSegundos));
+                setTimeout(() => {
+                    teste.call('salvar');
+                    limparIntervalo();
+                    dispatchEvent(new CustomEvent('startTimer'));
+                }, 100);
+            }
+        }
+
+        function atualizarTimer() {
+            if(restanteSegundos <= 0) {
+                timerSpan.textContent = "00:00";
+                return;
+            } 
+
+            const restanteInteiros = Math.floor(restanteSegundos);
+            const minutos = Math.floor(restanteInteiros/60);
+            const segundos = restanteInteiros % 60;
+            const minutosF = String(minutos).padStart(2, '0');
+            const segundosF = String(segundos).padStart(2, '0');
+
+            timerSpan.textContent = `${minutosF}:${segundosF}`;
+        }
+
+        function limparIntervalo() {
+            clearInterval(intervalo);
+            intervalo = null;
+        }
 </script>
 
     <!-- wire:ignore foi necessario porque livewire escondia o botão assim que mostrava a janela de diálogo -->
@@ -164,6 +237,11 @@
                     <h5 class="modal-title">
                         Questão  {{ ($nrquestao+1) }} de {{ $qtasquestoes }}
                     </h5>
+                    @if($tempoMaximo != null)
+                        <span id="timerSpan">
+                            {{ gmdate('i:s', $tempoMaximo) }}
+                        </span>
+                    @endif
                 </div>
                 <div class="modal-body scroll" >
                     <div> <!--  class="scroll" -->
@@ -225,6 +303,8 @@
                                          <!-- @ if ($respondida == 1) hidden="hidden" @ endif -->
                                             <button id="salvibutton" 
                                                     class="btn btn-success" 
+                                                    type="button"
+                                                    onclick="handleSubmit()"
                                                     @if ($nrquestao == $qtasquestoes-1 && $respondida == 1) 
                                                         respondida_ultima="1" 
                                                     @else
@@ -307,5 +387,22 @@
     </div>
 -->
 
+    <div wire:ignore.self class="modal fade" id="stopTimer" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5>
+                        O tempo acabou!
+                    </h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>

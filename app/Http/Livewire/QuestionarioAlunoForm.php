@@ -11,17 +11,22 @@ use App\Models\StudentAnswer;
 use App\DAO\QuestionDAO;
 use App\Models\ArProgress;
 use App\Models\Content;
+use App\Models\Pontuacao;
 use Exception;
 
 class QuestionarioAlunoForm extends Component
 {
 
-    protected $listeners = ['openQuestions'];
+    protected $listeners = ['openQuestions', 'addTempo' => 'addTempo', 'passarQuestao'];
     
     public $activity_id;
 
     public $refeita;
     public $jaRespondeu;
+
+    public $tempoMaximo;
+    public $pontuacaoMaxima;
+    public $tempoResposta = [];
 
     public $feedback = [];
 
@@ -49,6 +54,8 @@ class QuestionarioAlunoForm extends Component
 
         $this->refeita = QuestionDAO::refeita($this->activity_id);
         $this->jaRespondeu = QuestionDAO::jaRespondeuAlguma($this->activity_id);
+        $this->tempoMaximo = QuestionDAO::getDuration($this->activity_id);
+        $this->pontuacaoMaxima = QuestionDAO::getPontuacao($this->activity_id);
 
         if (session()->has('livewire_nrquestao') && session()->get('livewire_activity_id') == $value) {
             // pull jah busca e exclui
@@ -104,6 +111,9 @@ class QuestionarioAlunoForm extends Component
         $this->qtasquestoes = count($questions);
 
         $this->dispatchBrowserEvent('openQuestionsModal');
+        if($this->tempoMaximo != null && !QuestionDAO::jaRespondeuTodas($this->activity_id)) {
+            $this->dispatchBrowserEvent('startTimer', ['tempoMaximo' => $this->tempoMaximo]);
+        }
     }
 
     private function questionarioRespondido()
@@ -235,9 +245,17 @@ class QuestionarioAlunoForm extends Component
                     StudentAnswer::create($data);
                 }
 
-                
 
-                
+                $pontos = [];
+                foreach($this->tempoResposta as $tempoResposta) {
+                    $pontos[] = round((1-($tempoResposta/$this->tempoMaximo)/2) * ($this->pontuacaoMaxima/$this->qtasquestoes));
+                }
+                    
+                Pontuacao::create([
+                    'user_id' => Auth::id(),
+                    'activity_id' => (int)$this->activity_id,
+                    'pontuacao' => array_sum($pontos)
+                ]);
                 
                 foreach($this->feedback as $item) {
                     
@@ -246,7 +264,6 @@ class QuestionarioAlunoForm extends Component
                         break;
                     }
                 }
-
                 
                 if(!$this->incorreta){
                     $progress = ArProgress::updateOrCreate(
@@ -322,4 +339,8 @@ class QuestionarioAlunoForm extends Component
     }
      */   
 
+    public function addTempo($tempo) {
+        $valor = is_numeric($tempo) ? floatval($tempo) : 0.0;
+        $this->tempoResposta[] = $valor;
+    }
 }

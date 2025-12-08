@@ -98,7 +98,7 @@ class QuestionDAO
         $quantidadeRespondidas = DB::table('student_answers')
             ->where('user_id', Auth::id())
             ->where('activity_id', $activity_id)
-            ->where('tentativas', QuestionDAO::getTentativa($activity_id, Auth::id()))
+            ->where('tentativas', QuestionDAO::getTentativa($activity_id, Auth::id())-1)
             ->count();
 
         return ($quantidadeQuestoes === $quantidadeRespondidas);
@@ -146,4 +146,12 @@ class QuestionDAO
             ->value('duration');
     }
 
+    /**
+     * Retorna a pontuação máxima de uma atividade.
+    */
+    public static function getPontuacao($activity_id) {
+        return DB::table('activities')
+            ->where('id', $activity_id)
+            ->value('score');
+    }
 }
