@@ -37,6 +37,10 @@
                             <p class="pInfo" style="float: right">Tamanho máximo: 50MB</p>
                             <div style="clear: both;"></div>
 
+                            @error('midia')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror('midia')
+
                             <p id="pYoutube">URL YouTube</p>
                             <input id="linkYoutube" type="text" wire:model="link">
 
@@ -118,7 +122,8 @@
             </div>
         </div>
 
-        <input type="file" name="midia" wire:model="midia" style="display: none" id="file-{{ $panelData["id"] }}" accept="image/*"> <!--Arquivo enviado-->
+        <input type="file" name="midia" wire:model="midia" style="display: none" id="file-{{ $panelData["id"] }}" accept="image/png, image/jpeg, image/jpg"> <!--Arquivo enviado-->
+
         <input type="hidden" name="arquivoMidia" value="{{ asset("midiasPainel/".$panelData["arquivoMidia"]) }}"> <!--Nome arquivo-->
         <input type="hidden" name="midiaExtension" value="{{ asset("midiasPainel/".$panelData["midiaExtension"]) }}"> <!--Extenção arquivo-->   
     </div>

@@ -19,6 +19,10 @@ class MuralPainel extends Component
                             'addSelecionado', 'removeSelecionado', 'salvarMidia',
                             'upload:finished' => 'finishedUploadMidia'];
 
+    protected $rules = [
+        'midia' => 'mimes:jpeg,png,jpg|max:51200', // 50 MB Max
+    ];
+
     use WithFileUploads;
 
     public $buttonRenderizados = [];
@@ -103,12 +107,15 @@ class MuralPainel extends Component
 
     // nome padrao do livewire
     public function updatedMidia() {
-        $this->validate([
-            'midia' => 'image|max:51200', // 50 MB Max
-        ]);
+        
+        $this->validateOnly('midia');
+        
     }
 
     public function finishedUploadMidia() {
+        $errorBag = $this->getErrorBag();
+        if (count($errorBag) > 0) return;
+
         $this->uploadArea = $this->midia->temporaryUrl();
         $panelData = json_decode($this->painel->panel, true);
         $this->dispatchBrowserEvent('atualizarImgMidia', [
