@@ -25,6 +25,7 @@ database/modelos/modelo01.mwb.bak
 !/public/midiasPainel/.gitkeep
 .env
 .env.secrets
+.env_oficial
 /public/backup/*
 /public/backup
 /public/backupEducaar/*
