@@ -8,7 +8,8 @@ services:
       context: ./
       dockerfile: Dockerfile
     env_file:
-    - .env_oficial  
+    - .env
+    - .env_secrets  
     image: educaar
     container_name: educaar-app
     depends_on:
