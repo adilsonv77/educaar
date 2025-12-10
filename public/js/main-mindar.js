@@ -15,7 +15,7 @@ var mindarThree = null;
 var isSetup = false;
 var bloquear = null;
 var desbloquear = null;
-var cenas = [];
+var murais = [];
 var proximaAtividadeLiberada = 1;
 
 // Função para mostrar progresso
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
       var li = glbs.children[i];
 
       //Verifica se é um painel ou um modelo3d
-      const usarModelo = li.getAttribute("scene_id") == 0;
+      const usarModelo = li.getAttribute("mural_id") == 0;
 
       if (usarModelo) {
         //------ CARREGAR ATIVIDADE DE MODELO 3D ---------------------------------------------------------------------
@@ -348,9 +348,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
       } else {
-        //-------CARREGAR ATIVIDADE DE CENA ---------------------------------------------------------------------
-        let scene_id = li.getAttribute("scene_id");
-        let sceneHtml = createScene(scene_id, false)
+        //-------CARREGAR ATIVIDADE DE MURAL ---------------------------------------------------------------------
+        let mural_id = li.getAttribute("mural_id");
+        let sceneHtml = createScene(mural_id, false)
 
         //Pega aquele elemento HTML criado e liga com o mindAR
         const obj = new CSS3DObject(sceneHtml)
@@ -381,8 +381,8 @@ document.addEventListener('DOMContentLoaded', () => {
           desbloquear.style.display = "none";
 
           // Pausar vídeo tocando.
-          let activePanel = sceneHtml.querySelector("#panel-display-" + cenas[scene_id]);
-          let activeLockPanel = sceneHtml.querySelector("#panel-display-" + cenas[scene_id] + "-lock");
+          let activePanel = sceneHtml.querySelector("#panel-display-" + murais[mural_id]);
+          let activeLockPanel = sceneHtml.querySelector("#panel-display-" + murais[mural_id] + "-lock");
           if (!activeLockPanel) activeLockPanel = activePanel; //Previne erros caso não houver painel bloqueado      
 
           if (activePanel.classList.contains("video")) {
@@ -427,10 +427,10 @@ document.addEventListener('DOMContentLoaded', () => {
           document.getElementById("my-ar-container").style.display = "none";
           document.getElementById("painelContainer").style.display = "flex";
 
-          let scene_id = activeScene.element.id;
-          scene_id = scene_id.substring(14)
+          let mural_id = activeScene.element.id;
+          mural_id = mural_id.substring(14)
 
-          createScene(scene_id, true)
+          createScene(mural_id, true)
         }
 
       });
@@ -591,8 +591,8 @@ function createScene(id, bloquearPainel) {
   scene.classList = "scene";
 
   //Guarda o painel inicial como o painel ativo, caso for a primeira vez carregando.
-  if (!cenas[id])
-    cenas[id] = document.getElementById("scene-" + id).getAttribute("start_panel_id");
+  if (!murais[id])
+    murais[id] = document.getElementById("scene-" + id).getAttribute("start_panel_id");
 
   //Define se é painel bloqueado ou do MINDAR
   if (!bloquearPainel) {
@@ -603,7 +603,7 @@ function createScene(id, bloquearPainel) {
     //Bloqueado
     scene.style.zIndex = "1";
     scene.id = "scene-display-" + id + "-lock";
-    let activePanel = document.getElementById("panel-display-" + cenas[id]);
+    let activePanel = document.getElementById("panel-display-" + murais[id]);
     activePanel.querySelector(".vidMidia") ? activePanel.querySelector(".vidMidia").pause() : console.log("Painel sem video");
   }
 
@@ -618,8 +618,8 @@ function createScene(id, bloquearPainel) {
   return scene;
 }
 
-function createPanel(panel_info, scene_id) {
-  let panelAtivoId = cenas[scene_id];
+function createPanel(panel_info, mural_id) {
+  let panelAtivoId = murais[mural_id];
   let panel = JSON.parse(panel_info.getAttribute("json"))
 
   //Cria elemento HTML
@@ -677,14 +677,14 @@ function createPanel(panel_info, scene_id) {
 
   let buttons = panel_info.children;
   Array.from(buttons).forEach(button => {
-    let newButton = createButton(button, panel.id, scene_id)
+    let newButton = createButton(button, panel.id, mural_id)
     panel_html.querySelector("#layout").appendChild(newButton)
   });
 
   return panel_html;
 }
 
-function createButton(button_info, panel_id, scene_id) {
+function createButton(button_info, panel_id, mural_id) {
   let button = JSON.parse(button_info.getAttribute("json"))
 
   const button_html = document.createElement('div');
@@ -704,7 +704,7 @@ function createButton(button_info, panel_id, scene_id) {
   }
 
   function trocarPainel() {
-    cenas[scene_id] = button_info.getAttribute("destination_id");
+    murais[mural_id] = button_info.getAttribute("destination_id");
 
     let panel_loaded = document.getElementById("panel-display-" + panel_id);
     let panel = document.getElementById("panel-display-" + button_info.getAttribute("destination_id"))

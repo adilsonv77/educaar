@@ -93,7 +93,7 @@ class MuralEdit extends Component
     public function updateDisciplinaScene()
     {
         $disciplinaDAO = new DisciplinaDAO();
-        $disciplinaDAO->updateDisciplinaScene($this->scene_id, $this->disciplinaSelecionada);
+        $disciplinaDAO->updateDisciplinaScene($this->mural_id, $this->disciplinaSelecionada);
         $this->emit("updateHtmlDiscipline");
     }
 

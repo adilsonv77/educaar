@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
     env_file:
     - .env
-    - .env_secrets  
+    - .env.secrets  
     image: educaar
     container_name: educaar-app
     depends_on:

@@ -6,7 +6,7 @@ use App\DAO\ButtonDAO;
 use App\DAO\ActivityDAO;
 use Illuminate\Http\Request;
 
-class ButtonController extends Controller
+class xButtonController extends Controller
 {
     protected $ButtonDAO;
     protected $activityDAO;

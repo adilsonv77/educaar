@@ -52,7 +52,7 @@ class DeveloperController extends Controller
             ->get();
         $content = 0;
 
-        $scenes = collect();
+        $murais = collect();
 
         $params = [
             'titulo' => $titulo,
@@ -61,8 +61,8 @@ class DeveloperController extends Controller
             'id' => 0,
             'contents' => $contents,
             'content' => $content,
-            'scenes' => $scenes,
-            'scene_id' => "modelo3D"
+            'murais' => $murais,
+            'mural_id' => "modelo3D"
         ];
 
         return view('pages.activity.register', $params);
@@ -159,9 +159,9 @@ class DeveloperController extends Controller
                     )
             ->get();
 
-        if (empty($activity->scene_id))
-            $activity->scene_id = "modelo3D";
-        $scenes = collect();
+        if (empty($activity->mural_id))
+            $activity->mural_id = "modelo3D";
+        $murais = collect();
 
         $params = [
             'titulo' => $titulo,
@@ -170,8 +170,8 @@ class DeveloperController extends Controller
             'name' => $activity->name,
             'contents' => $contents,
             'content' => $activity->content_id,
-            'scene_id' => $activity->scene_id,
-            'scenes' => $scenes
+            'mural_id' => $activity->mural_id,
+            'murais' => $murais
         ];
         return view('pages.activity.register', $params);
     }

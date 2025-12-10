@@ -152,13 +152,13 @@ class StudentController extends Controller
             }
 
             //Possui um painel inicial
-            $scene_id = $activity->scene_id;
-            if ($scene_id != null) {
+            $mural_id = $activity->mural_id;
+            if ($mural_id != null) {
                 //Pegar paineis e botões e atribui para uma array de paineis
-                $idPainelInicial = MuralDAO::getById($scene_id)->start_panel_id;
-                $activity->json = PainelDAO::getById($idPainelInicial)->panel;
-                $scenes[] = MuralDAO::getById($scene_id);
-                $scenePanels = PainelDAO::getBySceneId($scene_id);
+                $idPainelInicial = MuralDAO::getById($mural_id)->start_panel_id;
+                $activity->json = PainelDAO::getById($mural_id)->panel;
+                $scenes[] = MuralDAO::getById($mural_id);
+                $scenePanels = PainelDAO::getByMuralId($mural_id);
                 foreach ($scenePanels as $panel) {
                     $panels[] = $panel;
                     $panelButtons = ButtonDAO::getByOriginId($panel->id);

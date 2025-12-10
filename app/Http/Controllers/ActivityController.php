@@ -117,10 +117,10 @@ class ActivityController extends Controller
 
         $disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);
 
-        $scenes = collect();
+        $murais = collect();
 
         foreach ($disciplinas as $disciplina) {
-            $scenes = $scenes->merge(items: MuralDAO::getByDisciplinaId($disciplina->id));
+            $murais = $murais->merge(items: MuralDAO::getByDisciplinaId($disciplina->id));
         }
 
         $content = 0;
@@ -131,8 +131,8 @@ class ActivityController extends Controller
             'id' => 0,
             'contents' => $contents,
             'content' => $content,
-            'scenes' => $scenes,
-            'scene_id' => "modelo3D",
+            'murais' => $murais,
+            'mural_id' => "modelo3D",
             'naoRefeita' => true,
         ];
 
@@ -167,9 +167,9 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $tipoAtividade = $data['sceneType'];
+        $tipoAtividade = $data['activityType'];
         unset($data['panelId']);
-        unset($data['scene_id']);
+        unset($data['mural_id']);
 
         //Verifica se é cadastro de glb ou de painel para poder tratar cada cadastro de forma diferente 
         $usarPainel = false;
@@ -177,7 +177,6 @@ class ActivityController extends Controller
         if ($tipoAtividade == "Cena") {
             unset($data['glb']);
             $usarPainel = true;
-        //    $idScene = $data['scene']; // $data["scene_id"] == null ? $data['scene'] : $data["scene_id"];
         } else {
             $data['scene'] = null;
         }
@@ -260,7 +259,7 @@ class ActivityController extends Controller
         if ($data['acao'] == 'insert') {
             //Insere
             $data['professor_id'] = Auth::user()->id;
-            $data['scene_id'] = $data['scene'];
+            $data['mural_id'] = $data['scene'];
             
             $data['refeita'] = $request->refeitaMarcador;
             $content = Content::find($data['content_id']);
@@ -295,7 +294,7 @@ class ActivityController extends Controller
                 rename($public_path . '/' . $zipdir, $public_path . '/' . $activity->id);
             } else {
                 //Se não for para usar um glb, e usar um painel
-                $data['scene_id'] = $data['scene'];
+                $data['mural_id'] = $data['scene'];
             }
             $activity->update($data);
         } else if (!$usarPainel) {
@@ -313,13 +312,13 @@ class ActivityController extends Controller
 
             $content = Content::find($activity->content_id);
             $content->update(['fechado' => 0]);
-            $data['scene_id'] = null;
+            $data['mural_id'] = null;
             $activity->update($data);
         } else {
             //Editar
             $activity = Activity::find($data['id']);
             if (array_key_exists('scene', $data))
-                $data['scene_id'] = $data['scene'];
+                $data['mural_id'] = $data['scene'];
 
             //Deleta o arquivo GLB
             if (!empty($activity->glb)) {
@@ -391,14 +390,14 @@ class ActivityController extends Controller
             ->get();
 
 
-        if (empty($activity->scene_id))
-            $activity->scene_id = "modelo3D";
+        if (empty($activity->mural_id))
+            $activity->mural_id = "modelo3D";
 
         $disciplinas = DisciplinaDAO::getDisciplinasDoProfessor(Auth::user()->id);
-        $scenes = collect();
+        $murais = collect();
 
         foreach ($disciplinas as $disciplina) {
-            $scenes = $scenes->merge(MuralDAO::getByDisciplinaId($disciplina->id));
+            $murais = $murais->merge(MuralDAO::getByDisciplinaId($disciplina->id));
         }
 
         $naoRefeita = !QuestionDAO::refeita($activity->id);
@@ -413,8 +412,8 @@ class ActivityController extends Controller
             'name' => $activity->name,
             'contents' => $contents,
             'content' => $activity->content_id,
-            'scene_id' => $activity->scene_id,
-            'scenes' => $scenes,
+            'mural_id' => $activity->mural_id,
+            'murais' => $murais,
             'naoRefeita' => $naoRefeita
         ];
 

@@ -207,12 +207,12 @@
     mind.textContent = mind.textContent + "?" + Math.floor(Math.random() * 100000);
 </script>
 
-<!--Carrega os dados de cenas,painéis e botões recebidos pelo controller no html, para o JS pegar depois.-->
-<div id="scenes">
-    @foreach ($scenes as $scene)
-        <div id="scene-{{ $scene->id }}" start_panel_id="{{ $scene->start_panel_id }}">
+<!--Carrega os dados de murais, painéis e botões recebidos pelo controller no html, para o JS pegar depois.-->
+<div id="murais">
+    @foreach ($murais as $mural)
+        <div id="mural-{{ $mural->id }}" start_panel_id="{{ $mural->start_panel_id }}">
             @foreach ($panels as $panel)
-                @if($panel->scene_id == $scene->id)
+                @if($panel->mural_id == $mural->id)
                     <div id="panel-{{ $panel->id }}" json="{{ $panel->panel }}">
                         @foreach ($buttons as $button)
                             @if($button->origin_id == $panel->id)
@@ -254,10 +254,10 @@
                 @endif 
             @endif
             
-            @if(!empty($item->scene_id)) 
-                scene_id="{{$item->scene_id}}"
+            @if(!empty($item->mural_id)) 
+                mural_id="{{$item->mural_id}}"
             @else
-                scene_id="0"
+                mural_id="0"
             @endif
         >/modelos3d/{{$item->glb}}
         </li>

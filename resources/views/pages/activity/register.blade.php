@@ -71,7 +71,7 @@
         };
 
         function HabilitarDesabilitar3D() {
-            let tipoAtividade = document.getElementById("selectSceneType").value;
+            let tipoAtividade = document.getElementById("selectMuralType").value;
 
             let alt1 = document.getElementById("alterar3D");
             let alt2 = document.getElementById("alterarPainel")
@@ -82,49 +82,13 @@
             if (tipoAtividade === "Modelo3D") {
                 document.getElementById("glb").disabled = !alt1checked;
                 document.getElementById("glb").required = alt1checked;
-                document.getElementById("selectScene").required = false;
+                document.getElementById("selectMural").required = false;
             } else {
-                document.getElementById("selectScene").disabled = !alt2checked;
-                document.getElementById("selectScene").required = alt2checked;
+                document.getElementById("selectMural").disabled = !alt2checked;
+                document.getElementById("selectMural").required = alt2checked;
                 document.getElementById("glb").required = false;
             }
 
-/*
-            var alt = document.getElementById("alterar3D");
-            var alt2 = document.getElementById("alterarPainel")
-            let cenaSelecionada = document.getElementById("selectSceneType").value;
-            let cenaAtual = document.getElementById("scene_id").value;
-            //Cena atualmente seleciona = "", significa que é o cadastro, e não há cena atual.
-            if(cenaAtual != "" && cenaAtual != "modelo3D")
-                cenaAtual= "Painel";
-
-            //Só usa o input se for habilitado a opção e se o modelo3d for selecionado para a atividade.
-            if(cenaAtual!=""){
-                try {
-                    document.getElementById("glb").disabled = (!alt.checked || cenaSelecionada== "Painel")
-                    document.getElementById("glb").required = (alt.checked && cenaSelecionada== "Modelo3D")
-                    if (!alt.checked) {
-                        var upl = document.getElementById("glb");
-                        upl.value = "";
-                    }
-                } catch (error) {
-                    document.getElementById("glb").disabled = !(cenaSelecionada == "Modelo3D" && cenaAtual == "Painel");
-                    document.getElementById("glb").required = (cenaSelecionada == "Modelo3D" && cenaAtual == "Painel"); 
-                    var upl = document.getElementById("glb");
-                    upl.value = "";
-                } 
-                //Só usa o input se for habilitado a opção e se o painel for selecionado para a atividade.
-                try {
-                    document.getElementById("selectScene").disabled = (!alt2.checked || cenaSelecionada== "Modelo3D")
-                    document.getElementById("panelId").required = (alt2.checked && cenaSelecionada == "Painel")
-                } catch (error) {
-                    document.getElementById("selectScene").disabled = !(cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
-                    document.getElementById("panelId").required = (cenaSelecionada == "Painel" && cenaAtual == "modelo3D");
-                }  
-            }else{
-
-            }
- */ 
         }
 
          function HabilitarDesabilitarImagemMarcador() {
@@ -165,7 +129,7 @@
                 @csrf
                 <input name="id" type="hidden" value="{{$id}}"/>
                 <input name="acao" type="hidden" value="{{$acao}}"/>
-                <input name="scene_id" type="hidden" value="{{ $scene_id ?? ''}}" id="scene_id"/>
+                <input name="mural_id" type="hidden" value="{{ $mural_id ?? ''}}" id="mural_id"/>
 
                 <!------------NOME DA ATIVIDADE-------------->
                 <div class="form-group">
@@ -185,44 +149,44 @@
                 </div>
                 <!-------SELECIONAR TIPO DE ATIVIDADE-------->
                 
-                <input type="hidden" name="sceneType" value=@if($scene_id == 'modelo3D') 'Modelo3D' @else 'Cena' @endif>
+                <input type="hidden" name="activityType" value=@if($mural_id == 'modelo3D') 'Modelo3D' @else 'Cena' @endif>
                 @if (session('type') == 'teacher' && $naoRefeita)
                 <div class="form-group">
                     <label for="">Selecione o tipo de atividade*</label>
-                    <select class="form-control" id="selectSceneType" name="sceneType" aria-label="">             
-                        <option value="Modelo3D" @if($scene_id === 'modelo3D') selected @endif>Modelo 3D</option>
-                        <option value="Cena" @if($scene_id != 'modelo3D') selected @endif>Cena</option>
+                    <select class="form-control" id="selectActivityType" name="activityType" aria-label="">             
+                        <option value="Modelo3D" @if($mural_id === 'modelo3D') selected @endif>Modelo 3D</option>
+                        <option value="Cena" @if($mural_id != 'modelo3D') selected @endif>Cena</option>
                     </select>
                 </div>
                 @endif
 
                 @if (session('type') == 'developer')
-                <input type="hidden" id="selectSceneType" name="sceneType" value="Modelo3D"/>
+                <input type="hidden" id="selectActivityType" name="activityType" value="Modelo3D"/>
                 @endif
 
                 <!-------------ENVIAR MODELO3D--------------->
-                <div class="form-group" id="3DmodelOption"  @if($scene_id != 'modelo3D')  style="display: none" @endif >
-                        @if ($acao == 'edit'  && $scene_id === 'modelo3D' ) 
+                <div class="form-group" id="3DmodelOption"  @if($mural_id != 'modelo3D')  style="display: none" @endif >
+                        @if ($acao == 'edit'  && $mural_id === 'modelo3D' ) 
                             <input type="checkbox" id="alterar3D" name="alterar3D" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
                         
                         <label for="alterar3D">Modelo 3D (GLB ou GLTF->ZIP)*</label>
                         <span class="alert-danger">Tamanho máximo: 40MB</span>
                         <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="glb"
-                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit' && $scene_id == "modelo3D") disabled  @endif/>
+                            id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit' && $mural_id == "modelo3D") disabled  @endif/>
                 </div>
 
-                <!------------SELECIONAR CENA--------------->
-                <div class="form-group" id="panelOption"  @if($scene_id === 'modelo3D')  style="display: none" @endif>
-                        @if ($acao == 'edit' && $scene_id != 'modelo3D' ) 
+                <!------------SELECIONAR MURAL--------------->
+                <div class="form-group" id="panelOption"  @if($mural_id === 'modelo3D')  style="display: none" @endif>
+                        @if ($acao == 'edit' && $mural_id != 'modelo3D' ) 
                             <input type="checkbox" id="alterarPainel" name="alterarPainel" value="S" onclick="HabilitarDesabilitar3D()"/>
                         @endif
 
-                        <label for="alterarPainel">Cena*</label><br>
-                        <select class="form-control" id="selectScene" name="scene" aria-label="" @if($acao === 'edit') disabled @endif
-                            @if ($acao === 'edit' && $scene_id != "modelo3D") value = {{ $scene_id }} @endif>
-                            @foreach ($scenes as $scene)
-                                <option value="{{$scene->id}}" @if ($acao == "edit" && $scene->id == $scene_id) selected @endif>{{$scene->name}}</option>
+                        <label for="alterarPainel">Mural*</label><br>
+                        <select class="form-control" id="selectMural" name="mural" aria-label="" @if($acao === 'edit') disabled @endif
+                            @if ($acao === 'edit' && $mural_id != "modelo3D") value = {{ $mural_id }} @endif>
+                            @foreach ($murais as $mural)
+                                <option value="{{$mural->id}}" @if ($acao == "edit" && $mural->id == $mural_id) selected @endif>{{$mural->name}}</option>
                             @endforeach             
                         </select>
                 </div>
@@ -240,7 +204,7 @@
 
 
                
-                <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$scene_id}}" @endif>
+                <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$mural_id}}" @endif>
 
                 <!----------------REFEITA----------------->
                 @if($acao != 'edit')
@@ -293,8 +257,8 @@
     </div>
 
     <script>
-        document.getElementById("selectSceneType").onchange = ()=>{
-            let valor = document.getElementById("selectSceneType").value;
+        document.getElementById("selectMuralType").onchange = ()=>{
+            let valor = document.getElementById("selectMuralType").value;
             if (valor == "Modelo3D") {
                 document.getElementById("3DmodelOption").style.display = "block"
                 document.getElementById("panelOption").style.display = "none"

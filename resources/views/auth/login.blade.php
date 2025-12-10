@@ -92,14 +92,6 @@
                         </button>
                 </div>
 
-                <div>
-                    Password : {{  env("DB_PASSWORD") }}
-                <br/>
-                    Database : {{  env("DB_DATABASE") }}
-                <br/>
-                    FORCE : {{ env('FORCE_HTTPS')==true }}
-                </div>
-                
                 <a href="{{ route('register.create') }}">
                     {{ __('Register') }}
                 </a>

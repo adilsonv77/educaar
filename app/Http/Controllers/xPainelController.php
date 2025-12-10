@@ -6,7 +6,7 @@ use App\DAO\PainelDAO;
 use App\DAO\ActivityDAO;
 use Illuminate\Http\Request;
 
-class PainelController extends Controller
+class xPainelController extends Controller
 {
     protected $painelDAO;
     protected $activityDAO;

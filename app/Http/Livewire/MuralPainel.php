@@ -4,14 +4,8 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\DAO\PainelDAO;
 use App\DAO\ButtonDAO;
-use App\DAO\TestDAO;
-use App\Models\Button;
-use App\Models\Test;
-use Monolog\Formatter\ElasticaFormatter;
 
 class MuralPainel extends Component
 {

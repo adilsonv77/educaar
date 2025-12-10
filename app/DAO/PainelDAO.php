@@ -22,10 +22,6 @@ class PainelDAO
         return Painel::all();
     }
 
-    public static function getBySceneId($id){
-        return Painel::where('scene_id', $id);
-    }
-
     public static function create(array $data)
     {
         return Painel::create($data);

@@ -8,7 +8,7 @@ use App\DAO\ActivityDAO;
 use App\DAO\PainelDAO;
 use Illuminate\Http\Request;
 
-class SceneController extends Controller
+class xSceneController extends Controller
 {
     protected $ButtonDAO;
     protected $activityDAO;
@@ -36,12 +36,12 @@ class SceneController extends Controller
 
     public function edit($id)
     {
-        $paineis = $this->painelDAO->getBySceneId($id);
+        $paineis = $this->painelDAO->getByMuralId($id);
         foreach ($paineis as $painel) {
             $painel->panel = json_decode($painel->panel,true);
         }
         $scene_name = MuralDAO::getById($id)->name;
-        return view('pages.mural.conexoes',["paineis"=>$paineis,"scene_id"=>$id,"nameScene"=>$scene_name]);
+        return view('pages.mural.conexoes',["paineis"=>$paineis,"mural_id"=>$id,"nameScene"=>$scene_name]);
     }
 
     public function store(Request $request)
@@ -58,7 +58,7 @@ class SceneController extends Controller
 
         $painelCriado = $this->painelDAO->create([
             'panel' => '',
-            'scene_id' => $cenaCriada->id
+            'mural_id' => $cenaCriada->id
         ]);
 
         $this->sceneDAO->updateById($cenaCriada->id, [

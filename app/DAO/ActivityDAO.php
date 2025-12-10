@@ -11,7 +11,7 @@ class ActivityDAO
 {
 
     public static function buscarPorPainel($id){
-        return Activity::where('scene_id',$id);
+        return Activity::where('mural_id',$id);
     }
 
     public static function buscarActivitiesDoProf($profid, $anoletivoid)
@@ -76,7 +76,7 @@ class ActivityDAO
     public static function buscarActivitiesPorConteudo($content_id){
         return DB::table('activities')
             ->where("content_id", $content_id)
-            ->orderBy('scene_id', 'desc')
+            ->orderBy('mural_id', 'desc')
             ->get();
     }
 
