@@ -128,15 +128,17 @@ class RegisterController extends Controller
         try {
             Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['name']));
 
-        } catch (\Exception) {
+        } catch (\Exception $e) {
+            dd($e);
             return redirect('/register') -> with ('error', 'Erro ao enviar email. Tente novamente.');
         }
         DB::commit();
 
         return redirect('/login') -> with ('success', 'Conta criada. Suas credenciais foram enviadas para seu email.');
         
-      } catch (\Exception) {
+      } catch (\Exception $e) {
         DB::rollback();
+        dd($e);
 
         return redirect('/register') -> with ('error', 'Erro ao criar conta.');
 
