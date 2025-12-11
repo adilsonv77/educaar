@@ -126,7 +126,7 @@ class StudentController extends Controller
             ->where('bool_atual', 1)->first();
         $dataCorte = null;
         $bloquearPorData = 0;
-        $scenes = [];
+        $murais = [];
         $panels = [];
         $buttons = [];
 
@@ -157,7 +157,7 @@ class StudentController extends Controller
                 //Pegar paineis e botões e atribui para uma array de paineis
                 $idPainelInicial = MuralDAO::getById($mural_id)->start_panel_id;
                 $activity->json = PainelDAO::getById($mural_id)->panel;
-                $scenes[] = MuralDAO::getById($mural_id);
+                $murais[] = MuralDAO::getById($mural_id);
                 $scenePanels = PainelDAO::getByMuralId($mural_id);
                 foreach ($scenePanels as $panel) {
                     $panels[] = $panel;
@@ -190,7 +190,7 @@ class StudentController extends Controller
     
         $disciplina = session()->get("disciplina");
         $rota = route("student.conteudos") . "?id=" . $disciplina;
-        return view('student.ar', compact('activities', 'rota','scenes','panels','buttons', 'content', 'progress'));
+        return view('student.ar', compact('activities', 'rota','murais','panels','buttons', 'content', 'progress'));
     }
 
     public function atualizarProgressoConteudoOrdenado(Request $request){

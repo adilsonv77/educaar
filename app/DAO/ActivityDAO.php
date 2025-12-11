@@ -87,5 +87,57 @@ class ActivityDAO
             ->get();
     }
 
+    /**
+     * Retorna o tempo restante que o usuário tem para responder a atividade em questão
+    */
+    public static function getTempoRestante($user_id, $activity_id) {
+        return DB::table('pontuacoes')
+            ->where('user_id', $user_id)
+            ->where('activity_id', $activity_id)
+            ->value('tempo_restante');
+    }
+
+    /**
+     * Retorna se a atividade pode ser refeita ou não.
+    */
+    public static function refeita($activity_id) {
+        return DB::table('activities')
+            ->where('id', $activity_id)
+            ->value('refeita');
+    }
+
+    /**
+     * Retorna a tentativa atual do usuário (Última tentativa + 1).
+    */
+    public static function getTentativa($id_activity, $id_user) {
+        $tentativa = DB::table('student_answers as sa')
+            ->select('sa.tentativas')
+            ->where('sa.activity_id', $id_activity)
+            ->where('sa.user_id', $id_user)
+            ->orderBy('sa.created_at', 'desc')
+            ->value('tentativas') ?? 0;
+
+        return ++$tentativa;
+    }
+
+    /**
+     * Retorna a pontuação máxima de uma atividade.
+    */
+    public static function getPontuacao($activity_id) {
+        return DB::table('activities')
+            ->where('id', $activity_id)
+            ->value('score');
+    }
+
+    /**
+     * Retorna a pontuacao de um aluno em certa atividade.
+    */
+    public static function getPontuacaoAluno($activity_id, $aluno_id) {
+        return DB::table('pontuacoes')
+            ->where('activity_id', $activity_id)
+            ->where('user_id', $aluno_id)
+            ->value('pontuacao');
+    }
+
 }
 
