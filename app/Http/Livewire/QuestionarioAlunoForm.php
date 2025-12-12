@@ -9,15 +9,17 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use App\Models\StudentAnswer;
 use App\DAO\QuestionDAO;
+use App\DAO\ActivityDAO;
 use App\Models\ArProgress;
 use App\Models\Content;
 use App\Models\Pontuacao;
 use Exception;
+use Illuminate\Notifications\Action;
 
 class QuestionarioAlunoForm extends Component
 {
 
-    protected $listeners = ['openQuestions', 'addTempo' => 'addTempo', 'passarQuestao'];
+    protected $listeners = ['openQuestions', 'addTempo' => 'addTempo'];
     
     public $activity_id;
 
@@ -26,7 +28,9 @@ class QuestionarioAlunoForm extends Component
 
     public $tempoMaximo;
     public $pontuacaoMaxima;
+    public $pontuacaoAtual;
     public $tempoResposta = [];
+    public $tempoRestante;
 
     public $feedback = [];
 
@@ -52,10 +56,13 @@ class QuestionarioAlunoForm extends Component
     {
         $this->activity_id = (int)$value;
 
-        $this->refeita = QuestionDAO::refeita($this->activity_id);
+        $this->refeita = ActivityDAO::refeita($this->activity_id);
         $this->jaRespondeu = QuestionDAO::jaRespondeuAlguma($this->activity_id);
         $this->tempoMaximo = QuestionDAO::getDuration($this->activity_id);
-        $this->pontuacaoMaxima = QuestionDAO::getPontuacao($this->activity_id);
+        $this->tempoRestante = ActivityDAO::getTempoRestante(Auth::id(), $this->activity_id);
+        $this->pontuacaoMaxima = ActivityDAO::getPontuacao($this->activity_id);
+
+        $this->feedback = [];
 
         if (session()->has('livewire_nrquestao') && session()->get('livewire_activity_id') == $value) {
             // pull jah busca e exclui
@@ -111,8 +118,18 @@ class QuestionarioAlunoForm extends Component
         $this->qtasquestoes = count($questions);
 
         $this->dispatchBrowserEvent('openQuestionsModal');
-        if($this->tempoMaximo != null && !QuestionDAO::jaRespondeuTodas($this->activity_id)) {
-            $this->dispatchBrowserEvent('startTimer', ['tempoMaximo' => $this->tempoMaximo]);
+
+        if($this->tempoMaximo !== null) {
+            $tempo = ($this->tempoRestante !== 0 && $this->tempoRestante !== null)
+                ? Pontuacao::where('user_id', Auth::id())
+                    ->where('activity_id', $this->activity_id)
+                    ->value('tempo_restante')
+                : $this->tempoMaximo;
+            
+            $this->dispatchBrowserEvent('startTimer', [
+                'tempoMaximo' => $tempo,
+                'qtaQuestoes' => $this->qtasquestoes
+            ]);
         }
     }
 
@@ -171,133 +188,120 @@ class QuestionarioAlunoForm extends Component
         } 
     }
 
-    public function salvar() {
-
+    public function salvar($timeout, $tempoRestante) {
         $this->incorreta = false;
 
-        if ($this->nrquestao < $this->qtasquestoes-1) {
-
-            $this->nrquestao = $this->nrquestao + 1;
-
+        if($timeout == true) {
+            $this->salvarRespostas(true, $tempoRestante);
         } else {
-
-            DB::beginTransaction();
-
-            $questions = session()->get('livewire_questoes');
-
-            foreach($questions as $questao) {
-
-                $questionId = $questao->id;
-
-                if(isset($this->alternativas[$questionId])) {
-
-                    $selectedIndex = $this->alternativas[$questionId];
-
-                    if(isset($questao->options[$selectedIndex])) {
-
-                        $selectedOption = $questao->options[$selectedIndex];
-
-                        $questao->alternative_answered = $selectedOption;
-                    }
-
-                }
-
+            if($this->nrquestao < $this->qtasquestoes-1) {
+                $this->nrquestao = $this->nrquestao + 1;
+            } else {
+                $this->salvarRespostas(false, $tempoRestante);
             }
+        }
+    }
 
-            
-            
-            $tentativa = QuestionDAO::getTentativa((int)session()->get('livewire_activity_id'), Auth::id());
-
-            if(DB::table('activities')
-                ->where('id', (int)session()->get('livewire_activity_id'))
-                ->value('refeita') == 0) {
-                $this->jaRespondeu = QuestionDAO::jaRespondeuTodas((int)session()->get('livewire_activity_id'));
+    public function salvarRespostas($timeout, $tempoRestante) {
+        DB::beginTransaction();
+        $questions = session()->get('livewire_questoes');
+        foreach($questions as $questao) {
+            $questionId = $questao->id;
+            if(isset($this->alternativas[$questionId])) {
+                $selectedIndex = $this->alternativas[$questionId];
+                if(isset($questao->options[$selectedIndex])) {
+                    $selectedOption = $questao->options[$selectedIndex];
+                    $questao->alternative_answered = $selectedOption;
+                }
             }
-
-            try {
-                foreach ($questions as $questao) {
-                    $data = [];
-                    
-
-                    if(!$this->refeita && $this->jaRespondeu) {
-                        continue;
-                    }
-                    
-                    $opcao = $questao->alternative_answered;
-                    
-                    $data = [
-                        'question_id' => $questao->id,
-                        'user_id' => Auth::user()->id,
-                        'alternative_answered' => $opcao,
-                        'correct' => ($opcao === $questao->a),
-                        'activity_id' => $questao->activity_id,
-                        'tentativas' => $tentativa,
-                    ];
-
-                    
-
-                    $this->feedback[] = [
-                        'question' => QuestionDAO::getTextoQuestao($questao->id),
-                        'alternative_answered' => $opcao,
-                        'correct' => ($opcao === $questao->a),
-                    ];
-
-                    StudentAnswer::create($data);
+        }
+    
+        $tentativa = ActivityDAO::getTentativa((int)session()->get('livewire_activity_id'), Auth::id());
+        if(DB::table('activities')
+            ->where('id', (int)session()->get('livewire_activity_id'))
+            ->value('refeita') == 0) {
+            $this->jaRespondeu = QuestionDAO::jaRespondeuTodas((int)session()->get('livewire_activity_id'));
+        }
+        try {
+            $corretas = [];
+            foreach ($questions as $questao) {
+                $data = [];
+                
+                if(!$this->refeita && $this->jaRespondeu) {
+                    continue;
                 }
+                
+                $opcao = $questao->alternative_answered;
+                $corretas[] = $opcao === $questao->a ? 1 : 0;
+                
+                $data = [
+                    'question_id' => $questao->id,
+                    'user_id' => Auth::user()->id,
+                    'alternative_answered' => $opcao,
+                    'correct' => ($opcao === $questao->a),
+                    'activity_id' => $questao->activity_id,
+                    'tentativas' => $tentativa,
+                ];
+                
+                $this->feedback[] = [
+                    'question' => QuestionDAO::getTextoQuestao($questao->id),
+                    'alternative_answered' => $opcao,
+                    'correct' => ($opcao === $questao->a),
+                ];
+                StudentAnswer::create($data);
+            }
+            
+            $tempoRestanteAtual = ActivityDAO::getTempoRestante(Auth::id(), $this->activity_id);
 
-
-                $pontos = [];
-                foreach($this->tempoResposta as $tempoResposta) {
-                    $pontos[] = round((1-($tempoResposta/$this->tempoMaximo)/2) * ($this->pontuacaoMaxima/$this->qtasquestoes));
-                }
-                    
+            if($tempoRestanteAtual === null && $this->tempoMaximo !== null) {
+                $this->pontuacaoAtual = $this->calcularPontuacao($corretas);
                 Pontuacao::create([
                     'user_id' => Auth::id(),
-                    'activity_id' => (int)$this->activity_id,
-                    'pontuacao' => array_sum($pontos)
+                    'activity_id' => $this->activity_id,
+                    'pontuacao' => $this->pontuacaoAtual,
+                    'tempo_restante' => $timeout ? 0 : $tempoRestante
                 ]);
-                
-                foreach($this->feedback as $item) {
-                    
-                    if(!$item['correct']) {
-                        $this->incorreta = true;
-                        break;
-                    }
-                }
-
-                $content = Content::find(session()->get('content_id'));
-                
-                if(!$this->incorreta && $content->sort_activities){
-                    $progress = ArProgress::updateOrCreate(
-                        ['student_id' => Auth::id(), 'content_id' => session()->get('content_id')],
-                        ['next_position' => $this->proximaPosicaoCalculada ?? 1]
-                    );
-                    $this->proximaPosicaoCalculada = $progress->next_position + 1;
-                } else{
-                    $progress = ['next_position' => $this->proximaPosicaoCalculada ?? 1 ];
-                }
-                
-
-                DB::commit();
-
-                session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao']);
-                $this->questions = null;
-
-                if(!$this->incorreta && $content->sort_activities){
-                    $this->dispatchBrowserEvent('atividade-concluida', [
-                        'position' => $progress->next_position,
-                        'activity_id' => $this->activity_id
-                    ]);
-                }
-                
-
-                $this->dispatchBrowserEvent('openFeedbackModal');
-
-            } catch (Exception $e) {
-                DB::rollback();
-                dd($e);
-                $this->dispatchBrowserEvent('showError');
+            } else if($tempoRestanteAtual > 0) {
+                Pontuacao::where('user_id', Auth::id())->where('activity_id', $this->activity_id)
+                    ->update(['tempo_restante' => $tempoRestante]);
             }
+
+            foreach($this->feedback as $item) {
+                
+                if(!$item['correct']) {
+                    $this->incorreta = true;
+                    break;
+                }
+            }
+            $content = Content::find(session()->get('content_id'));
+            
+            if(!$this->incorreta && $content->sort_activities){
+                $progress = ArProgress::updateOrCreate(
+                    ['student_id' => Auth::id(), 'content_id' => session()->get('content_id')],
+                    ['next_position' => $this->proximaPosicaoCalculada ?? 1]
+                );
+                $this->proximaPosicaoCalculada = $progress->next_position + 1;
+            } else{
+                $progress = ['next_position' => $this->proximaPosicaoCalculada ?? 1 ];
+            }
+            
+            DB::commit();
+            session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao']);
+            $this->questions = null;
+            if(!$this->incorreta && $content->sort_activities){
+                $this->dispatchBrowserEvent('atividade-concluida', [
+                    'position' => $progress->next_position,
+                    'activity_id' => $this->activity_id
+                ]);
+            }
+            
+            if($timeout == false) {
+                $this->dispatchBrowserEvent('openFeedbackModal');
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+            dd($e);
+            $this->dispatchBrowserEvent('showError');
         }
     }
 
@@ -344,5 +348,29 @@ class QuestionarioAlunoForm extends Component
     public function addTempo($tempo) {
         $valor = is_numeric($tempo) ? floatval($tempo) : 0.0;
         $this->tempoResposta[] = $valor;
+    }
+
+    public function calcularPontuacao($corretas) {
+        $pontos = [];
+
+        $pontos = collect($corretas)->map(function ($correta, $i) {
+            if($correta !== 1) return 0;
+
+            $tempoGasto = $i === 0
+                ? $this->tempoResposta[0]
+                : $this->tempoResposta[$i] - $this->tempoResposta[$i-1];
+
+            return round((1-($tempoGasto/$this->tempoMaximo)/2) * ($this->pontuacaoMaxima/$this->qtasquestoes));
+        })->filter()->values()->toArray();
+
+        return array_sum($pontos);
+    }
+
+    public function timeOut() {
+        Pontuacao::create([
+            'user_id' => Auth::id(),
+            'activity_id' => $this->activity_id,
+            'pontuacao' => 0
+        ]);
     }
 }

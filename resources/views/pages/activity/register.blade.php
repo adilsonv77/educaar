@@ -237,9 +237,9 @@
                             <input type="number" class="form-control mb-2" name="nota" id="nota" value=100>
                         </div>
                         <div class="tempo">
-                            <label for="tempo">Tempo por Questão</label>
+                            <label for="tempo">Tempo Limite</label>
                             <div class="form-text alert-danger d-inline-block small ml-1 p-0" role="alert">
-                                Tempo limite para realizar uma questão (em segundos).
+                                Tempo limite para realizar uma atividade completa.
                             </div>
                             <input type="number" name="tempo" id="tempo" class="form-control" value=30>
                         </div>
@@ -282,6 +282,7 @@
         }
 
         /* Campos Extras caso a atividade seja pontuada */
+        const switchRefeita = document.getElementById('refeitaMarcador');
         const switchPontuada = document.getElementById('switchPontuada');
         const camposExtras = document.getElementById('extras');
         const nota = document.getElementById('nota');
@@ -292,10 +293,26 @@
                 $(camposExtras).collapse('show');
                 nota.required = true;
                 tempo.required = true;
+
+                switchRefeita.disabled = true;
+                switchRefeita.parentElement.style.display = 'block';
             } else {
                 $(camposExtras).collapse('hide');
                 nota.required = false;
                 tempo.required = false;
+
+                switchRefeita.disabled = false;
+                switchRefeita.parentElement.style.display = '';
+            }
+        });
+
+        switchRefeita.addEventListener('change', function () {
+            if(this.checked) {
+                switchPontuada.disabled = true;
+                switchPontuada.parentElement.style.display = 'block';
+            } else {
+                switchPontuada.disabled = false;
+                switchPontuada.parentElement.style.display = '';
             }
         });
 

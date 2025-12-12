@@ -273,8 +273,9 @@ class ActivityController extends Controller
                 ]);
                 $data += [
                     'duration' => $request->tempo, 
-                    'score' => $request->nota
+                    'score' => $request->nota,
                 ];
+                $data['refeita'] = 1;
             }
             $activity = Activity::create($data);
 
@@ -400,7 +401,7 @@ class ActivityController extends Controller
             $murais = $murais->merge(MuralDAO::getByDisciplinaId($disciplina->id));
         }
 
-        $naoRefeita = !QuestionDAO::refeita($activity->id);
+        $naoRefeita = !ActivityDAO::refeita($activity->id);
         if(QuestionDAO::getDuration($activity->id) !=  null) {
             $naoRefeita = false;
         }

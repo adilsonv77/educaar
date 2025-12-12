@@ -13,7 +13,8 @@ class Pontuacao extends Model
     protected $fillable = [
         'user_id',
         'activity_id',
-        'pontuacao'
+        'pontuacao',
+        'tempo_restante'
     ];
 
     public function user() {

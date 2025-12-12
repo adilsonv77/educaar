@@ -129,74 +129,95 @@
             checkIfAllAnswered();
         });
 
-        /* Eventos Timer */
+        /* Eventos do Timer */
         let intervalo = null;
-        let restanteSegundos;
-        let tempoMaximoMs;
-        let inicio;
+        let tempoMaximo = 0;
+        let questaoAtual = 1;
+        let qtaQuestoes = 0;
+        let restanteSeg = 0;
 
         window.addEventListener('startTimer', event => {
-            if(event.detail?.tempoMaximo) {
-                tempoMaximoMs = Number(event.detail?.tempoMaximo) * 1000;
-            }
-            const inicio = performance.now();
+            tempoMaximo = event.detail?.tempoMaximo ? (Number(event.detail.tempoMaximo) * 1000) + 1000 : tempoMaximo;
+            qtaQuestoes = event.detail?.qtaQuestoes ? Number(event.detail.qtaQuestoes) : qtaQuestoes;
+
+            inicio = performance.now();
+            console.log(tempoMaximo);
+            console.log(qtaQuestoes);
 
             if(intervalo === null) {
                 intervalo = setInterval(() => {
-                    const agora = performance.now();
-                    const decorrido = agora - inicio;
-                    const restanteMs = tempoMaximoMs - decorrido;
-                    
-                    restanteSegundos = Number(restanteMs/1000).toFixed(2);
-                     
+                    const decorrido = performance.now() - inicio;
+                    restanteMs = tempoMaximo - decorrido;
+
                     if(restanteMs <= 0) {
-                        limparIntervalo();
-                        dispatchEvent(new CustomEvent('timesOver'));
+                        timesOver();
                         return;
                     }
-                    atualizarTimer(); 
+
+                    restanteSeg = (restanteMs / 1000).toFixed(2);
+                    updateTimer(restanteSeg);
                 }, 250);
             }
         });
 
-        window.addEventListener('timesOver', event => {
+        function timesOver() {
+            const livewireEvent = document.querySelector('[wire\\:id]')?.__livewire;
+
             if(intervalo) {
-                limparIntervalo();
+                clearIntervalo();
             }
-            limparIntervalo();
-        });
+            dispatchEvent(new CustomEvent('stopTimer'));
+            livewireEvent.call('salvar', true, 0);
+        }
 
         function handleSubmit() {
-            if(event.target.matches('#salvibutton') || event.target.closest('#salvibutton')) {
-                const teste = event.target.closest('[wire\\:id]').__livewire;
-                teste.call('addTempo', ((tempoMaximoMs/1000) - restanteSegundos));
+            const button = event.target.closest('#salvibutton');
+            const livewireEvent = button?.closest('[wire\\:id]')?.__livewire;
+
+            if(tempoMaximo > 0) {
+                if(livewireEvent) {
+                    livewireEvent.call('addTempo', ((tempoMaximo / 1000) - restanteSeg));
+                    
+                    setTimeout(() => {
+                        livewireEvent.call('salvar', false, restanteSeg);
+                    }, 50);
+                }
+                if(qtaQuestoes === questaoAtual) {
+                    clearIntervalo();
+                }
+                questaoAtual++;
+            } else {
                 setTimeout(() => {
-                    teste.call('salvar');
-                    limparIntervalo();
-                    dispatchEvent(new CustomEvent('startTimer'));
-                }, 100);
+                    livewireEvent.call('salvar', false, 0);
+                });
             }
         }
 
-        function atualizarTimer() {
-            if(restanteSegundos <= 0) {
+        /**
+         * Operador Bitwise ( | 0 ) descarta a parte decimal
+         * .slice(-2) impede a string de ter mais de dois caracteres
+        */
+        function updateTimer(restanteSeg) {
+            if(restanteSeg <= 0) {
                 timerSpan.textContent = "00:00";
                 return;
-            } 
+            }
 
-            const restanteInteiros = Math.floor(restanteSegundos);
-            const minutos = Math.floor(restanteInteiros/60);
-            const segundos = restanteInteiros % 60;
-            const minutosF = String(minutos).padStart(2, '0');
-            const segundosF = String(segundos).padStart(2, '0');
+            const total = restanteSeg > 0 ? restanteSeg | 0 : 0;
 
-            timerSpan.textContent = `${minutosF}:${segundosF}`;
+            const min = ('0' + ((total / 60) | 0)).slice(-2);
+            const seg = ('0' + (total % 60)).slice(-2);
+            const texto = `${min}:${seg}`;
+
+            if(timerSpan.textContent !== texto) {
+                timerSpan.textContent = texto;
+            }
         }
 
-        function limparIntervalo() {
+        function clearIntervalo() {
             clearInterval(intervalo);
             intervalo = null;
-        }
+        } 
 </script>
 
     <!-- wire:ignore foi necessario porque livewire escondia o botão assim que mostrava a janela de diálogo -->
@@ -238,9 +259,15 @@
                         Questão  {{ ($nrquestao+1) }} de {{ $qtasquestoes }}
                     </h5>
                     @if($tempoMaximo != null)
-                        <span id="timerSpan">
-                            {{ gmdate('i:s', $tempoMaximo) }}
-                        </span>
+                        @if($tempoMaximo != 0)
+                            <span id="timerSpan" wire:ignore>
+                                {{ gmdate('i:s', $tempoMaximo) }}
+                            </span>
+                        @else
+                            <span wire:ignore">
+                                O tempo acabou!
+                            </span>
+                        @endif
                     @endif
                 </div>
                 <div class="modal-body scroll" >
@@ -334,7 +361,7 @@
         </div>
     </div>
 
-    <div wire:ignore.self class="modal fade" id="feedbackModal" tabindex="-1" role="dialog"
+    <div wire:ignore.self class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" data-backdrop="static"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -343,6 +370,15 @@
                     <p>Acompanhe seus resultados abaixo:</p>
                 </div>
                 <div class="container my-4 max" style="max-height: 60vh; overflow-y: auto;">
+                    @if($pontuacaoAtual != null)
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <strong>Pontuação:</strong> {{$pontuacaoAtual}} Pontos
+                                </p>
+                            </div>
+                        </div>
+                    @endif
                     @foreach($feedback as $questao)
                         <div class="card mb-3 shadow-sm">
                             <div class="card-body">

@@ -78,6 +78,25 @@ class QuestionDAO
     }
 
     /**
+     * Retorna o texto, ou pergunta, da questão. No DB a coluna "question".
+    */
+    public static function getTextoQuestao($question_id) {
+        return DB::table('questions')
+            ->where('id', $question_id)
+            ->value('question');
+    }
+    
+    /**
+     * Retorna a duração de uma atividade (INT caso seja uma atividade pontuada,
+     * NULL caso seja uma atividade não pontuada).
+    */
+    public static function getDuration($activity_id) {
+        return DB::table('activities')
+            ->where('id', $activity_id)
+            ->value('duration');
+    }
+
+    /**
      * Retorna se o aluno autenticado já respondeu alguma questão da atividade correspondente.
     */
     public static function jaRespondeuAlguma($activity_id) {
@@ -98,60 +117,10 @@ class QuestionDAO
         $quantidadeRespondidas = DB::table('student_answers')
             ->where('user_id', Auth::id())
             ->where('activity_id', $activity_id)
-            ->where('tentativas', QuestionDAO::getTentativa($activity_id, Auth::id())-1)
+            ->where('tentativas', ActivityDAO::getTentativa($activity_id, Auth::id())-1)
             ->count();
 
         return ($quantidadeQuestoes === $quantidadeRespondidas);
     }
 
-    /**
-     * Retorna se a atividade pode ser refeita ou não.
-    */
-    public static function refeita($activity_id) {
-        return DB::table('activities')
-            ->where('id', $activity_id)
-            ->value('refeita');
-    }
-
-    /**
-     * Retorna a tentativa atual do usuário (Última tentativa + 1).
-    */
-    public static function getTentativa($id_activity, $id_user) {
-        $tentativa = DB::table('student_answers as sa')
-            ->select('sa.tentativas')
-            ->where('sa.activity_id', $id_activity)
-            ->where('sa.user_id', $id_user)
-            ->orderBy('sa.created_at', 'desc')
-            ->value('tentativas') ?? 0;
-
-        return ++$tentativa;
-    }
-
-    /**
-     * Retorna o texto, ou pergunta, da questão. No DB a coluna "question".
-    */
-    public static function getTextoQuestao($question_id) {
-        return DB::table('questions')
-            ->where('id', $question_id)
-            ->value('question');
-    }
-    
-    /**
-     * Retorna a duração de uma atividade (INT caso seja uma atividade pontuada,
-     * NULL caso seja uma atividade não pontuada).
-    */
-    public static function getDuration($activity_id) {
-        return DB::table('activities')
-            ->where('id', $activity_id)
-            ->value('duration');
-    }
-
-    /**
-     * Retorna a pontuação máxima de uma atividade.
-    */
-    public static function getPontuacao($activity_id) {
-        return DB::table('activities')
-            ->where('id', $activity_id)
-            ->value('score');
-    }
 }

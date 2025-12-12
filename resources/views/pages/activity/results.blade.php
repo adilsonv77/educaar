@@ -2,7 +2,8 @@
 
 @php
     $pageName =  $activity->name;
-    $refeita = \App\DAO\QuestionDAO::refeita($activity['id']);
+    $refeita = \App\DAO\ActivityDAO::refeita($activity['id']);
+    $pontuada = \App\DAO\ActivityDAO::getPontuacao($activity['id']);
     $qntCompletas= $result['alunos_fizeram_completo'];
     $qntIncompletas= $result['alunos_fizeram_incompleto'];
     $qntNaoFizeram= $result['alunos_nao_fizeram'];
@@ -85,8 +86,12 @@
 
           @if($refeita)
             <th scope="col1" style="width: 15%;">Tentativas</th>
-          @endif
 
+            @if($pontuada != null)
+              <th scope="col1" style="width: 15%;">Pontuação</th>
+            @endif
+
+          @endif
         </tr>
       </thead>
       <tbody>
@@ -111,7 +116,11 @@
                     @endforeach
 
                     @if($refeita)
-                      <td>{{$item['tentativa']}}</tr>
+                      <td>{{$item['tentativa']}}</td>
+                    @endif
+
+                    @if($pontuada)
+                      <td>{{$item['pontuacao']}}</td>
                     @endif
                     
                   </tr>
