@@ -58,8 +58,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'name' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'e-mail', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -99,7 +99,7 @@ class RegisterController extends Controller
      */
     public function store(Request $request) {
       $validated = $request -> validate([
-          'name' => ['required', 'string', 'max:100', 'unique:users'],
+          'username' => ['required', 'string', 'max:100', 'unique:users'],
           'email' => ['required', 'string', 'e-mail', 'max:255', 'unique:users'],
           'projeto' => ['required', 'string', 'exists:schools,name'],
       ]);   
@@ -112,8 +112,8 @@ class RegisterController extends Controller
 
         $password = Str::random(8);
         User::create([
-            'name' => $validated['name'],
-            'username' => $validated['name'],
+            'name' => $validated['username'],
+            'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($password),
             'school_id' => $school -> value('id'),
@@ -126,7 +126,7 @@ class RegisterController extends Controller
         ]);
 
         try {
-            Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['name']));
+            Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['username']));
 
         } catch (\Exception $e) {
             dd($e);
