@@ -49,6 +49,14 @@
                 </ul>
             </div>
         @endif
+        @if (session('error'))
+            <div class="alert alert-danger" id="alerta">
+                <ul>
+                    <h3>Erro!</h3>
+                    <p>{{ session('error') }}</p>
+                </ul>
+            </div>
+        @endif
         @if (session('success'))
             <div class="alert alert-success" id="alerta-sucesso">
                 <ul>

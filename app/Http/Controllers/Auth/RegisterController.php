@@ -129,7 +129,7 @@ class RegisterController extends Controller
             Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['username']));
 
         } catch (\Exception $e) {
-            dd($e);
+           // dd($e);
             return redirect('/register') -> with ('error', 'Erro ao enviar e-mail. Tente novamente.');
         }
         DB::commit();
