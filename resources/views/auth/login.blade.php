@@ -26,7 +26,7 @@
 
     @include('sweetalert::alert')
     @livewireStyles
-    <form method="POST" action="{{ route('login') }}">
+    
 </head>
 
 
@@ -34,7 +34,7 @@
 <body>       
     <div class="prision">
 
-    <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo">
+        <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo"/>
 
 
     
@@ -59,52 +59,53 @@
         
 
         <div class="main-container">           
-                            
-            @csrf
-            <div class="elements">
-            
-                <div class="logo">
-                        <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}"  alt="Imagem" class="img-fluid">
-                </div>
-                    
-                <input id="login" type="text"
-                    class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
-                    name="login" value="{{ old('username') ?: old('email') }}" required autofocus
-                    placeholder="Login">
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror                
-            
-                <input id="password" type="password"
-                    class="form-control @error('password') is-invalid @enderror" name="password" required
-                    autocomplete="current-password" placeholder="Senha">
-                @error('password')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
+            <form method="POST" action="{{ route('login') }}">     
+                @csrf
+                <div class="elements">
                 
-                <div class="mial">
-                        <button type="submit" class="btn btn-primary">
-                            {{ __('Login') }}
-                        </button>
-                </div>
+                    <div class="logo">
+                            <img src="{{ asset('images/LOGO_HORIZONTAL.png') }}"  alt="Imagem" class="img-fluid">
+                    </div>
+                        
+                    <input id="login" type="text"
+                        class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
+                        name="login" value="{{ old('username') ?: old('email') }}" required autofocus
+                        placeholder="Login">
+                    @error('email')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror                
+                
+                    <input id="password" type="password"
+                        class="form-control @error('password') is-invalid @enderror" name="password" required
+                        autocomplete="current-password" placeholder="Senha">
+                    @error('password')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                    
+                    <div class="mial">
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Login') }}
+                            </button>
+                    </div>
 
-                <a href="{{ route('register.create') }}">
-                    {{ __('Register') }}
-                </a>
-                <a href="{{ route('password.create') }}">
-                    Esqueceu a senha?
-                </a>
-                    
-            </div>
-                    
-            <div class="data">
-                20251208
-            </div>
-        </div>   
+                    <a href="{{ route('register.create') }}">
+                        {{ __('Register') }}
+                    </a>
+                    <a href="{{ route('password.create') }}">
+                        Esqueceu a senha?
+                    </a>
+                        
+                </div>
+                        
+                <div class="data">
+                    20251208
+                </div>
+            </div>   
+        </form>
         
                     
         <footer>   

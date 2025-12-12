@@ -100,7 +100,7 @@ class RegisterController extends Controller
     public function store(Request $request) {
       $validated = $request -> validate([
           'name' => ['required', 'string', 'max:100', 'unique:users'],
-          'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+          'email' => ['required', 'string', 'e-mail', 'max:255', 'unique:users'],
           'projeto' => ['required', 'string', 'exists:schools,name'],
       ]);   
 
@@ -130,11 +130,11 @@ class RegisterController extends Controller
 
         } catch (\Exception $e) {
             dd($e);
-            return redirect('/register') -> with ('error', 'Erro ao enviar email. Tente novamente.');
+            return redirect('/register') -> with ('error', 'Erro ao enviar e-mail. Tente novamente.');
         }
         DB::commit();
 
-        return redirect('/login') -> with ('success', 'Conta criada. Suas credenciais foram enviadas para seu email.');
+        return redirect('/login') -> with ('success', 'Conta criada. Suas credenciais foram enviadas para seu e-mail.');
         
       } catch (\Exception $e) {
         DB::rollback();

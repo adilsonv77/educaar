@@ -2,6 +2,8 @@
 
 @section('content')
 <div class="container">
+    <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo"/>
+
     <div class=" justify-content-center">
         <div class="col-md-8">
 
