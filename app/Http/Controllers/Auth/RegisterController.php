@@ -134,7 +134,7 @@ class RegisterController extends Controller
         }
         DB::commit();
 
-        return redirect('/login') -> with ('success', 'Conta criada. Suas credenciais foram enviadas para seu e-mail.');
+        return redirect('/login') -> with ('success', 'Conta criada. Suas credenciais foram enviadas para seu e-mail. Também verifique sua caixa de spam.');
         
       } catch (\Exception $e) {
         DB::rollback();
