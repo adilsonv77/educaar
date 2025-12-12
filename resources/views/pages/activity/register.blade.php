@@ -71,7 +71,7 @@
         };
 
         function HabilitarDesabilitar3D() {
-            let tipoAtividade = document.getElementById("selectMuralType").value;
+            let tipoAtividade = document.getElementById("selectActivityType").value;
 
             let alt1 = document.getElementById("alterar3D");
             let alt2 = document.getElementById("alterarPainel")
@@ -257,8 +257,8 @@
     </div>
 
     <script>
-        document.getElementById("selectMuralType").onchange = ()=>{
-            let valor = document.getElementById("selectMuralType").value;
+        document.getElementById("selectActivityType").onchange = ()=>{
+            let valor = document.getElementById("selectActivityType").value;
             if (valor == "Modelo3D") {
                 document.getElementById("3DmodelOption").style.display = "block"
                 document.getElementById("panelOption").style.display = "none"
