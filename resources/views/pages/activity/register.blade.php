@@ -71,7 +71,9 @@
         };
 
         function HabilitarDesabilitar3D() {
-            let tipoAtividade = document.getElementById("selectActivityType").value;
+            
+            let campoAtividade = document.querySelector('[name="activityType"]');
+            let tipoAtividade = campoAtividade ? campoAtividade.value : null;
 
             let alt1 = document.getElementById("alterar3D");
             let alt2 = document.getElementById("alterarPainel")
@@ -149,10 +151,12 @@
                 </div>
                 <!-------SELECIONAR TIPO DE ATIVIDADE-------->
                 
-                <input type="hidden" name="activityType" value=@if($mural_id == 'modelo3D') 'Modelo3D' @else 'Cena' @endif>
-                @if (session('type') == 'teacher' && $naoRefeita)
+                
+                
+
                 <div class="form-group">
-                    <label for="">Selecione o tipo de atividade*</label>
+                    @if (session('type') == 'teacher')
+                    <label for="selectActivityType">Selecione o tipo de atividade*</label>
                     <select class="form-control" id="selectActivityType" name="activityType" aria-label="">             
                         <option value="Modelo3D" @if($mural_id === 'modelo3D') selected @endif>Modelo 3D</option>
                         <option value="Cena" @if($mural_id != 'modelo3D') selected @endif>Cena</option>

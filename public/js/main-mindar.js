@@ -1,7 +1,11 @@
 import * as THREE from 'three';
+
 import { MindARThree } from 'mindar-image-three';
 
+import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js';
+
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 import { CSS3DObject } from "three/examples/jsm/renderers/CSS3DRenderer.js"
@@ -17,6 +21,8 @@ var bloquear = null;
 var desbloquear = null;
 var murais = [];
 var proximaAtividadeLiberada = 1;
+
+
 
 // Função para mostrar progresso
 function mostrarAvanco(percent) {
@@ -39,9 +45,10 @@ function loadGLTF(path) {
   });
 }
 
+
+
 async function atualizarProgressoConteudoOrdenado(content_id, newPosition){
   try{
-    //console.log(`Enviando para o servidor: ContentID: ${content_id}, próxima posição: ${newPosition}`);
     const response = await fetch('/students/atualizar-progresso', {
       method: 'POST',
       headers: {
@@ -58,7 +65,6 @@ async function atualizarProgressoConteudoOrdenado(content_id, newPosition){
     const resultado = await response.json();
 
     if(response.ok){
-      //console.log('Progresso do conteúdo salvo com sucesso: ', resultado.message);
     } else{
       console.error('Erro ao salvar progresso do conteúdo: ', resultado.message, resultado.error);
     }
@@ -138,7 +144,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     var { renderer, scene, camera, cssRenderer, cssScene } = mindarThree;
+
+    //Esse RGBELoader carrega um ambiente para gerar detalhes no modelo 3D. Esse caminho na função load é o caminho do arquivo .hdr que contém esse ambiente. É possível escolher diversos ambientes no site PolyHaven. OBS: Escolher ambientes de até 2K conferem baixa perda de desempenho
+    new RGBELoader().load('/assets/textures/bryanston_park_sunrise_2k.hdr' , function(texture){
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+      scene.environment = texture;
+    });
+
     cameraVar = camera;
+
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.6;
 
     const light = new THREE.HemisphereLight(0xffffff, 0xffffff, Math.PI);
     scene.add(light);
@@ -269,13 +286,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
           buttonAR.activityid = anchor.activityid;
+
           buttonAR.disabled = (anchor.clazz == "#000000"); // criancas.. nao façam isso em casa... tenho que melhorar isso
 
           var bq = document.getElementById("button-ar");
+
           bq.style.backgroundColor = anchor.clazz;
 
           // Para aparecer o buttonAR (das perguntas) quando o target aparecer
           buttonAR.style.display = "block";
+          
           bloquear.style.display = "block";
 
           if (anchor.glb.animations.length > 0) {
@@ -305,7 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
           anchor.group.add(container);
 
           // Torna o objeto visível
-
           activeScene.visible = true;
 
           /*
@@ -704,9 +723,11 @@ function createButton(button_info, panel_id, mural_id) {
   }
 
   function trocarPainel() {
+
     murais[mural_id] = button_info.getAttribute("destination_id");
 
     let panel_loaded = document.getElementById("panel-display-" + panel_id);
+
     let panel = document.getElementById("panel-display-" + button_info.getAttribute("destination_id"))
 
     panel_loaded.style.display = "none";
