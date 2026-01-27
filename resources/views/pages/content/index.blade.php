@@ -173,7 +173,7 @@
                                         <td>
                                             <!-- Excluir -->
                                             <button type="button"
-                                                class="btn btn-danger  @if ($item->qtasatividades > 0) disabled @endif"
+                                                class="btn btn-danger"  @if ($item->qtasatividades > 0) disabled @endif
                                                 data-toggle="modal" data-target="#modal{{ $item->id }}"
                                                 title="Excluir">
                                                 <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
