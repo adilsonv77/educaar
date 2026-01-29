@@ -74,6 +74,8 @@ async function atualizarProgressoConteudoOrdenado(content_id, newPosition){
   }
 }
 
+
+
 async function handleAtividadeConcluida(detail) {
   try{
     if(!detail) return;
@@ -145,12 +147,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var { renderer, scene, camera, cssRenderer, cssScene } = mindarThree;
 
-    //Esse RGBELoader carrega um ambiente para gerar detalhes no modelo 3D. Esse caminho na função load é o caminho do arquivo .hdr que contém esse ambiente. É possível escolher diversos ambientes no site PolyHaven. OBS: Escolher ambientes de até 2K conferem baixa perda de desempenho
-    new RGBELoader().load('/assets/textures/bryanston_park_sunrise_2k.hdr' , function(texture){
+
+    //Fiz essa função aqui pra poder dar uma variada nos ambientes que podem refletir no modelo 3D (isso aqui basicamente cuida da parte de deixar o modelo 3D um pouco mais bonito). A cada vez que a página é recarregada, o sorteio do ambiente de reflexão é feito de novo, ou seja, se o aluno fizer a detecção do marcador e, logo depois, recarregar a página, pode ser que a aparência do objeto 3D mude levemente (apenas reflexão da iluminação do ambiente sorteado). Isso aqui tá ligado a uma rota de API no web.php. A rota é a /api/textures
+    async function inciarSorteio() {
+      const response = await fetch('/api/textures');
+      const arquivos = await response.json();
+
+      const sorteado = arquivos[Math.floor(Math.random() * arquivos.length)];
+      return sorteado;
+    }
+    
+
+
+    new RGBELoader().load('/assets/textures/' + await inciarSorteio() , function(texture){
       texture.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = texture;
     });
-
+    
     cameraVar = camera;
 
     renderer.outputColorSpace = THREE.SRGBColorSpace;

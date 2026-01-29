@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\School;
+use Illuminate\Support\Facades\File;
 use App\Http\Controllers\PainelController;
 use App\Http\Controllers\SceneController;
 use App\Http\Controllers\ButtonController;
@@ -129,7 +130,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/activity/edit/{id}', [App\Http\Controllers\ActivityController::class, 'edit'])->name('pages.activity.edit');
 
 
+    //rota de API para pegar as texturas a passar pro main-mind-ar
+    Route::get('/api/textures', function() {
+        $caminho = public_path('assets/textures');
 
+        $arquivos = collect(File::files($caminho))
+            ->map(fn($file) => $file->getFilename())
+            ->filter(fn($name) => str_ends_with($name, '.hdr'))
+            ->values();
+
+        return response()->json($arquivos);
+    });
 
     //fechar
     Route::resource('fechar', App\Http\Controllers\FecharController::class);
@@ -174,7 +185,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mural/edit/{id}', [MuralController::class, 'edit']) -> name("mural.edit");
 
     Route::resource('scenes',SceneController::class);
-Route::resource('buttons',ButtonController::class);
+    Route::resource('buttons',ButtonController::class);
 
 });
 
