@@ -86,6 +86,7 @@
                                                 @if (session('type') == 'admin')
                                                     Administrator
                                                 @endif
+                                                
                                                 @if (session('type') == 'developer')
                                                     Desenvolvedor
                                                 @endif
