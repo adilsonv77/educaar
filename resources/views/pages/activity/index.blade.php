@@ -86,9 +86,11 @@ $pageName = 'Atividades';
 
                         <img src="{{ asset('/marcadores/'.$item->marcador.'?v=' . random_int(0,10000)) }}" width="200" height="200">
                     </td>
-                    <td style="width: 10%;"><a href="/activity/{{ $item->id }}" class="btn btn-primary" title="Visualizar">
+                    <td style="width: 10%;">
+                        <a href="/activity/{{ $item->id }}" class="btn btn-primary" title="Visualizar">
                             <i class="bi bi-eye-fill h2" style="color : #ffffff;"></i>
-                        </a></td>
+                        </a>
+                    </td>
 
                     <td style="width: 10%;">
                         <form action="{{ route('activity.results', $item->id) }}">

@@ -13,8 +13,7 @@ class ConfigController extends Controller
 
     public function index(Request $request)
     {
-
-        if (session('type') != 'admin' || session('type') != 'adminMaster') {
+        if (session('type') != 'admin' && session('type') != 'adminMaster') {
             return redirect('/');
         }
 
