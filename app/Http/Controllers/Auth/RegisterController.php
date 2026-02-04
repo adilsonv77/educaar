@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Mail\ContaCriadaEmail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -129,8 +130,9 @@ class RegisterController extends Controller
             Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['username']));
 
         } catch (\Exception $e) {
-           // dd($e);
-            return redirect('/register') -> with ('error', 'Erro ao enviar e-mail. Tente novamente.');
+            //dd($e);
+            return redirect('/register') -> with ('error', 
+            'Erro ao enviar e-mail: ' . $e->getMessage() . '. Tente novamente.');
         }
         DB::commit();
 
