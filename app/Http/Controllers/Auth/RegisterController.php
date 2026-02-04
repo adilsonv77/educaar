@@ -15,6 +15,7 @@ use App\Models\AlunoTurma;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Mail\ContaCriadaEmail;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -128,12 +129,10 @@ class RegisterController extends Controller
 
         try {
             Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['username']));
-
-            $mailer = Mail::getFacadeRoot();
-            dd(config('mail.mailers.smtp')); 
-
         } catch (\Exception $e) {
             //dd($e);
+            $mailer = Mail::getFacadeRoot();
+            dd(config('mail.mailers.smtp'), $e->getMessage()); 
             return redirect('/register') -> with ('error', 
             'Erro ao enviar e-mail: ' . $e->getMessage() . '. Tente novamente.');
         }
