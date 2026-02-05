@@ -101,7 +101,7 @@ class RegisterController extends Controller
      */
     public function store(Request $request) {
       $validated = $request -> validate([
-          'username' => ['required', 'string', 'max:100', 'unique:users'],
+          'username' => ['required', 'string', 'max:20', 'unique:users'],
           'email' => ['required', 'string', 'e-mail', 'max:255', 'unique:users'],
           'projeto' => ['required', 'string', 'exists:schools,name'],
       ]);   
@@ -114,7 +114,7 @@ class RegisterController extends Controller
 
         $password = Str::random(8);
         User::create([
-            'name' => $validated['username'],
+            'name' => $validated['username'], 
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($password),
@@ -130,9 +130,12 @@ class RegisterController extends Controller
         try {
             Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['username']));
         } catch (\Exception $e) {
-            //dd($e);
+
+            /*
             $mailer = Mail::getFacadeRoot();
             dd(config('mail.mailers.smtp'), $e->getMessage()); 
+            */
+
             return redirect('/register') -> with ('error', 
             'Erro ao enviar e-mail: ' . $e->getMessage() . '. Tente novamente.');
         }
@@ -142,7 +145,6 @@ class RegisterController extends Controller
         
       } catch (\Exception $e) {
         DB::rollback();
-        dd($e);
 
         return redirect('/register') -> with ('error', 'Erro ao criar conta.');
 
