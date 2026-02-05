@@ -22,8 +22,6 @@ var desbloquear = null;
 var murais = [];
 var proximaAtividadeLiberada = 1;
 
-
-
 // Função para mostrar progresso
 function mostrarAvanco(percent) {
   var pb = document.getElementById("progressbar");
@@ -44,8 +42,6 @@ function loadGLTF(path) {
     });
   });
 }
-
-
 
 async function atualizarProgressoConteudoOrdenado(content_id, newPosition){
   try{
@@ -73,8 +69,6 @@ async function atualizarProgressoConteudoOrdenado(content_id, newPosition){
     
   }
 }
-
-
 
 async function handleAtividadeConcluida(detail) {
   try{
@@ -121,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
-
   if (window.__proximaAtividadeLiberada != null) {
     const n = Number(window.__proximaAtividadeLiberada);
     if (!Number.isNaN(n) && n > 0) {
@@ -129,8 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
       //console.log('main-mindar: Inicializando proximaAtividadeLiberada (DB):', proximaAtividadeLiberada);
     }
   }
-
-
 
   //-------INICIA O AR---------------------------------------------------------------------------------------------------------
   const start = async (carregarAtividades) => {
@@ -147,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var { renderer, scene, camera, cssRenderer, cssScene } = mindarThree;
 
-
     //Fiz essa função aqui pra poder dar uma variada nos ambientes que podem refletir no modelo 3D (isso aqui basicamente cuida da parte de deixar o modelo 3D um pouco mais bonito). A cada vez que a página é recarregada, o sorteio do ambiente de reflexão é feito de novo, ou seja, se o aluno fizer a detecção do marcador e, logo depois, recarregar a página, pode ser que a aparência do objeto 3D mude levemente (apenas reflexão da iluminação do ambiente sorteado). Isso aqui tá ligado a uma rota de API no web.php. A rota é a /api/textures
     async function inciarSorteio() {
       const response = await fetch('/api/textures');
@@ -156,8 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const sorteado = arquivos[Math.floor(Math.random() * arquivos.length)];
       return sorteado;
     }
-    
-
 
     new RGBELoader().load('/assets/textures/' + await inciarSorteio() , function(texture){
       texture.mapping = THREE.EquirectangularReflectionMapping;
@@ -181,15 +169,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //puxa o atributo que verifica se o conteúdo possui atividades ordenadas
     const is_sort = glbs.getAttribute("is_sort");
     
-
-
     var mixer = null;
     var action = null;
 
-
-
-
-    
     for (var i = 0; i < glbs.childElementCount; i++) {
       var li = glbs.children[i];
 
@@ -294,9 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
           glbScene.visible = true;
+          
           blockedMesh.visible = false;
-
-
 
           buttonAR.activityid = anchor.activityid;
 
@@ -430,10 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
       bloquear = document.getElementById("showObject");
       desbloquear = document.getElementById("removeObject");
 
-
     }
-
-
 
     if (isSetup) {
       //Desbloquear atividade sendo mostrada

@@ -10374,6 +10374,11 @@ readers do not read off random characters that represent icons */
   background-color: #079ad9;
 }
 
+#btnHelpMarcador{
+  margin-left: 20px;
+  border-color: #eee;
+}
+
 /* @media (max-width: 767.98px) {
   .questoes label {
     font-size: 25px;

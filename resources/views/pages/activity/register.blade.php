@@ -197,18 +197,38 @@
 
                 <!----------------MARCADOR----------------->
                 <div class="form-group">
-                        @if ($acao == 'edit') 
-                            <input type="checkbox" id="alterarMarcador" name="alterarMarcador" value="S" onclick="HabilitarDesabilitarImagemMarcador()"/>
-                        @endif
-                        <label for="alterarMarcador">Marcador (PNG ou JPEG ou JPG)*</label>
-                        <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="marcador"
+                        <div class="grupo-marcador">
+                            @if ($acao == 'edit') 
+                                <input type="checkbox" id="alterarMarcador" name="alterarMarcador" value="S" onclick="HabilitarDesabilitarImagemMarcador()"/>
+                            @endif
+                            <label for="alterarMarcador">Marcador (PNG ou JPEG ou JPG)*</label>
+                            <button type="button" id="btnHelpMarcador" data-toggle="modal" data-target="#confirmModal" class="btn btn-link p-0 m-0 align-baseline">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-lg" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4.475 5.458c-.284 0-.514-.237-.47-.517C4.28 3.24 5.576 2 7.825 2c2.25 0 3.767 1.36 3.767 3.215 0 1.344-.665 2.288-1.79 2.973-1.1.659-1.414 1.118-1.414 2.01v.03a.5.5 0 0 1-.5.5h-.77a.5.5 0 0 1-.5-.495l-.003-.2c-.043-1.221.477-2.001 1.645-2.712 1.03-.632 1.397-1.135 1.397-2.028 0-.979-.758-1.698-1.926-1.698-1.009 0-1.71.529-1.938 1.402-.066.254-.278.461-.54.461h-.777ZM7.496 14c.622 0 1.095-.474 1.095-1.09 0-.618-.473-1.092-1.095-1.092-.606 0-1.087.474-1.087 1.091S6.89 14 7.496 14"/>
+                                </svg>
+                            </button>
+                            <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="marcador"
                             id="marcador" accept=".png, .jpeg, .jpg"  @if($acao === 'edit') disabled @endif/>
+                        </div>
                 </div>
-
-
-
-               
                 <input id="panelId" name="panelId" type="hidden" @if($acao === 'edit') value="{{$mural_id}}" @endif>
+
+                <!---modal que aparece quando clica na interrogação---->
+                <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" >
+                            <div class="modal-body">
+                                <h3>Orientações sobre os marcadores</h3>
+                                <p>Para uma melhor detecção por parte do sistema, recomenda-se o uso de imagens/fotos que contenham detalhes, e que não possuam elementos simétricos, pois esses fatores dificultam a identificação correta dos marcadores. Caso seja necessário utilizar marcadores que contenham formas geométricas, por exemplo, recomenda-se capturar mais detalhes da página do livro, como no exemplo abaixo:</p> 
+                                <img src="/images/marcador_editado.png" alt="" style="max-width: 100%">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
 
                 <!----------------REFEITA----------------->
                 @if($acao != 'edit')
