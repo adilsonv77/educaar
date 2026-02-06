@@ -109,6 +109,8 @@ class StudentController extends Controller
      */
     public function showActivity(Request $request)
     {
+        session()->put('primeira_entrada', 1);
+
         $data = $request->all();
         $content_id = $request->id == null ? session()->get("content_id") : $request->id;
         $content = Content::find($content_id);

@@ -119,11 +119,10 @@ class QuestionarioAlunoForm extends Component
 
         $this->dispatchBrowserEvent('openQuestionsModal');
 
-        if($this->tempoMaximo !== null) {
+        $pontuacao = Pontuacao::where('user_id', Auth::id())->where('activity_id', $this->activity_id);
+        if($this->tempoMaximo !== null && $pontuacao->doesntExist() && session('primeira_entrada') === 1) {
             $tempo = ($this->tempoRestante !== 0 && $this->tempoRestante !== null)
-                ? Pontuacao::where('user_id', Auth::id())
-                    ->where('activity_id', $this->activity_id)
-                    ->value('tempo_restante')
+                ? $pontuacao->value('tempo_restante')
                 : $this->tempoMaximo;
             
             $this->dispatchBrowserEvent('startTimer', [
@@ -178,6 +177,7 @@ class QuestionarioAlunoForm extends Component
         // as alternativas escolhidas salvar na sessão, assim como o numero da questao que estava observando
         session()->put("livewire_alternativas", $this->alternativas);
         session()->put("livewire_nrquestao", $this->nrquestao);
+        session()->put('primeira_entrada', 0);
     }
 
 
@@ -352,6 +352,10 @@ class QuestionarioAlunoForm extends Component
 
     public function calcularPontuacao($corretas) {
         $pontos = [];
+
+        if (empty($this->tempoResposta)) {
+            return 0;
+        }
 
         $pontos = collect($corretas)->map(function ($correta, $i) {
             if($correta !== 1) return 0;
