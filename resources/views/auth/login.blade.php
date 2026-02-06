@@ -59,7 +59,7 @@
         
 
         <div class="main-container">           
-            <form method="POST" action="{{ route('login') }}">     
+            <form method="POST" action="{{ route('login') }}" autocomplete="off">     
                 @csrf
                 <div class="elements">
                 

@@ -27,7 +27,7 @@
             <button class="btn text-white btn-danger " wire:click.prevent="removeQuestion({{ $key }})">Deletar questão</button>
     @endif --}}
 </div>
-<form id="questionForm"  method="POST" action="{{ route('questions.store') }}" enctype="multipart/form-data" files="true">
+<form id="questionForm"  method="POST" action="{{ route('questions.store') }}" enctype="multipart/form-data" files="true"  autocomplete="off">
     <h3>Questão</h3>
     @csrf
     <input name="id" type="hidden" value="{{ $id }}" />
@@ -38,7 +38,7 @@
     <div class="col-md-9 col-sm-12">
         <div class="form-group">
             <label for="">Enunciado</label>
-            <textarea rows="2" cols="150" type="text" name="question" maxlength="98" class="form-control @error('question') is-invalid @enderror" id="question" required autocomplete="question" autofocus>{{ old('question', $question) }}</textarea>
+            <textarea rows="2" cols="150" type="text" name="question" maxlength="98" class="form-control @error('question') is-invalid @enderror" id="question" required autofocus>{{ old('question', $question) }}</textarea>
         </div>
     </div>
 
@@ -47,25 +47,25 @@
     <div class="col-md-3 col-sm-12">
         <div class="form-group">
             <label for="">Resposta Correta</label>
-            <input type="text" name="A" maxlength="50" class="form-control @error('A') is-invalid @enderror" id="A" style="border-width: 2px;border-color: #77dd77;" value="{{ old('A', $A) }}" required autocomplete="A" autofocus />
+            <input type="text" name="A" maxlength="50" class="form-control @error('A') is-invalid @enderror" id="A" style="border-width: 2px;border-color: #77dd77;" value="{{ old('A', $A) }}" required autofocus />
         </div>
     </div>
     <div class="col-md-3 col-sm-12">
         <div class="form-group">
             <label for="">Resposta Errada</label>
-            <input type="text" name="B" maxlength="50" class="form-control @error('B') is-invalid @enderror" id="B" style="border-width: 2px;border-color: #ff6961; color: black;" value="{{ old('B', $B) }}" required autocomplete="B" autofocus />
+            <input type="text" name="B" maxlength="50" class="form-control @error('B') is-invalid @enderror" id="B" style="border-width: 2px;border-color: #ff6961; color: black;" value="{{ old('B', $B) }}" required autofocus />
         </div>
     </div>
     <div class="col-md-3 col-sm-12">
         <div class="form-group">
             <label for="">Resposta Errada</label>
-            <input type="text" name="C" maxlength="50" class="form-control @error('C') is-invalid @enderror" id="C" style="border-width: 2px;border-color: #ff6961; color: black;" value="{{ old('C', $C) }}" required autocomplete="C" autofocus />
+            <input type="text" name="C" maxlength="50" class="form-control @error('C') is-invalid @enderror" id="C" style="border-width: 2px;border-color: #ff6961; color: black;" value="{{ old('C', $C) }}" required  autofocus />
         </div>
     </div>
     <div class="col-md-3 col-sm-12">
         <div class="form-group">
             <label for="">Resposta Errada</label>
-            <input type="text" name="D" maxlength="50" class="form-control @error('D') is-invalid @enderror" id="D" style="border-width: 2px;border-color: #ff6961; color: black;" value="{{ old('D', $D) }}" required autocomplete="D" autofocus />
+            <input type="text" name="D" maxlength="50" class="form-control @error('D') is-invalid @enderror" id="D" style="border-width: 2px;border-color: #ff6961; color: black;" value="{{ old('D', $D) }}" required autofocus />
         </div>
     </div>
     <div class="form-group mt-4 text-center justfy-content-center">

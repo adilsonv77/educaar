@@ -14,7 +14,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         wire:click="closeModal">Cancelar</button>
-                    <form action="{{ route('turmas.novoAlunoTurmaStore', $aluno_id) }}" method="POST">
+                    <form action="{{ route('turmas.novoAlunoTurmaStore', $aluno_id) }}" method="POST"  autocomplete="off">
                         @csrf
                         <input name="turma_id" type="hidden" value="{{ $turma_id }}" wire:model="turma_id" />
                         <button type="submit" class="btn btn-danger">Alterar</button>

@@ -122,7 +122,7 @@
                     </ul>
                 </div>
             @endif
-            <form method="POST" action="{{ route('activity.store') }}" enctype="multipart/form-data" files="true" onsubmit="desativarBotao(this)">
+            <form method="POST" action="{{ route('activity.store') }}" enctype="multipart/form-data" files="true" onsubmit="desativarBotao(this)" autocomplete="off">
 
            
 
@@ -137,7 +137,7 @@
                 <div class="form-group">
                     <label for="">Nome da Atividade*</label>
                     <input id="name" type="text" maxlength="100"class="form-control @error('name') is-invalid @enderror" name="name"
-                            value="{{ old('name', $name) }}" required autocomplete="name" autofocus/>
+                            value="{{ old('name', $name) }}" required autofocus/>
                 </div>
 
                 <!-----------SELECIONAR CONTEÚDO------------->

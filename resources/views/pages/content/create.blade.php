@@ -6,7 +6,7 @@
     <div class="">
         <div class="card">
             <div class="card-body">
-                <form method="POST" action="{{ route('content.store') }}">
+                <form method="POST" action="{{ route('content.store') }}"  autocomplete="off">
                     @csrf
                     <input name="id" type="hidden" value="{{ $id }}" />
                     <input name="acao" type="hidden" value="{{ $acao }}" />
@@ -16,7 +16,7 @@
                     
                         <div class="col-md-6">
                             <input id="name" type="text" maxlength="100" class="form-control @error('name') is-invalid @enderror"
-                                name="name" value="{{ old('name', $name) }}" required autocomplete="name"
+                                name="name" value="{{ old('name', $name) }}" required
                                 placeholder="Digite aqui o nome do conteúdo" autofocus />
                         </div>
                     </div>

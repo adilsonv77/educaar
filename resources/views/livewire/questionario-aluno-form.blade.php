@@ -296,6 +296,7 @@
                                         <!-- wire.model.defer para avisar que nao é preciso atualizar a tela a cada mudança  -->
 
                                             <input 
+                                                autocomplete="off"                                           
                                                 wire:model.defer="alternativas.{{ $jsonDecodeValue[$nrquestao]['id'] }}"
                                                 class="form-check-input question-radio" type="radio" 
                                                 name="questao{{ $jsonDecodeValue[$nrquestao]['id'] }}"

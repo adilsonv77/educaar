@@ -16,7 +16,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('config.store') }}">
+            <form method="POST" action="{{ route('config.store') }}"  autocomplete="off">
                 @csrf
 
                 <input type="hidden" name="beforeId" value="{{ $beforeId }}" />
@@ -27,7 +27,7 @@
                     <div class="col-md-6">
                         <input id="schoolName" type="text" class="form-control @error('name') is-invalid @enderror"
                             name="schoolName" value="{{ old('schoolName', $school->name) }}" required
-                            autocomplete="schoolName" autofocus>
+                            autofocus>
 
                     </div>
                 </div>

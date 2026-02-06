@@ -34,7 +34,7 @@
 
                     <div class="col-md-6">
                         <input id="serie" type="text" class="form-control @error('serie') is-invalid @enderror"
-                            name="serie" value="{{ old('serie', $serie) }}" required autocomplete="serie" autofocus>
+                            name="serie" value="{{ old('serie', $serie) }}" required  autofocus>
                     </div>
                 </div>
 
