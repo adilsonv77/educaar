@@ -79,7 +79,7 @@
                 
                     <input id="password" type="password"
                         class="form-control @error('password') is-invalid @enderror" name="password" required
-                        autocomplete="current-password" placeholder="Senha">
+                        placeholder="Senha">
                     @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -102,7 +102,7 @@
                 </div>
                         
                 <div class="data">
-                    20260204
+                    20260209
                 </div>
             </div>   
         </form>
