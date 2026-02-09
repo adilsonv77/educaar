@@ -13,6 +13,7 @@ use App\Http\Controllers\BackupController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MuralController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\RankingController;
 
 // TUDO QUE ESTÁ FORA DO AUTH PODE SER ACESSADO SEM O USUÁRIO AUTENTICAR !!!!
 
@@ -187,6 +188,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('scenes',SceneController::class);
     Route::resource('buttons',ButtonController::class);
 
+    //Ranking
+    Route::get('/ranking', [RankingController::class, 'create']) -> name('ranking.create');
 });
 
 //backup
