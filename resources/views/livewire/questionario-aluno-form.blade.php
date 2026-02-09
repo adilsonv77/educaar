@@ -141,8 +141,6 @@
             qtaQuestoes = event.detail?.qtaQuestoes ? Number(event.detail.qtaQuestoes) : qtaQuestoes;
 
             inicio = performance.now();
-            console.log(tempoMaximo);
-            console.log(qtaQuestoes);
 
             if(intervalo === null) {
                 intervalo = setInterval(() => {
