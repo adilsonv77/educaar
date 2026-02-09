@@ -139,5 +139,19 @@ class ActivityDAO
             ->value('pontuacao');
     }
 
+    /**
+     * Retorna as atividades pontuadas de um professor
+    */
+    public static function getAtividadesPontuadasPorProf($profId) {
+        return DB::table('activities')
+            ->where('professor_id', $profId)
+            ->where('duration', '>', 0)
+            ->select([
+                'id',
+                'name'
+            ])
+            ->get();
+    }
+
 }
 
