@@ -14,7 +14,7 @@ use App\DAO\ActivityDAO;
 class RankingController extends Controller
 {
     public function create(Request $request) {
-        $atividades = ActivityDAO::getAtividadesPontuadas(Auth::id());
+        $atividades = ActivityDAO::getAtividadesPontuadasPorProf(Auth::id());
 
         $activityId = request('activity_id'); 
 
