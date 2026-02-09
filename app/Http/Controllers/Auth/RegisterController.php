@@ -130,10 +130,10 @@ class RegisterController extends Controller
         try {
             Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['username']));
         } catch (\Exception $e) {
-
+/*
             $mailer = Mail::getFacadeRoot();
             dd(config('mail.mailers.smtp'), $e->getMessage()); 
-
+*/
             return redirect('/register') -> with ('error', 
             'Erro ao enviar e-mail: ' . $e->getMessage() . '. Tente novamente.');
         }
