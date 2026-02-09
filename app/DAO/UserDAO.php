@@ -5,6 +5,7 @@ namespace App\DAO;
 use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class UserDAO
 {
@@ -33,6 +34,13 @@ class UserDAO
             ->get();
 
         return $sql;
+    }
+
+    /**
+     * Retorna um usuário
+    */
+    public static function buscarUsuarioPorId($id) {
+        return User::where('id', $id)->get();
     }
 }
 
