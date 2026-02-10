@@ -287,7 +287,6 @@ class QuestionarioAlunoForm extends Component
             
             DB::commit();
             session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao', 'primeira_entrada']);
-            dd(session()->all());
             $this->questions = null;
             if(!$this->incorreta && $content->sort_activities){
                 $this->dispatchBrowserEvent('atividade-concluida', [

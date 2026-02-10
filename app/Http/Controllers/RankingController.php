@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\AnoLetivo;
-use App\Models\Activity;
-use App\DAO\TurmaDAO;
 use App\DAO\RankingDAO;
 use App\DAO\ActivityDAO;
+use Illuminate\Support\Facades\DB;
 
 class RankingController extends Controller
 {
@@ -18,11 +16,13 @@ class RankingController extends Controller
 
         $activityId = request('activity_id'); 
 
-        $ranking = $activityId == 0
+        $hasAnswer = DB::table('pontuacoes')->where('activity_id', $activityId)->exists();
+
+        $ranking = $activityId == 0 || !$hasAnswer
             ? null
             : RankingDAO::buscarRankingPorAtividade($activityId);
 
-        return view('pages.activity.ranking', compact('atividades' ,'ranking'));
+        return view('pages.activity.ranking', compact('atividades', 'ranking'));
     }
 
 }
