@@ -34,12 +34,19 @@
     <script>
         document.addEventListener('livewire:load', () => {
             const el = document.getElementById('activities');
+
+            function saveActivityOrder() {
+                let orderedIds = [...el.children].map(li => li.dataset.id);
+                Livewire.emit('updateOrder', orderedIds);
+            }
+
+            saveActivityOrder()
+
             new Sortable(el, {
                 animation: 150,
                 dragClass: "sortable-drag",
                 onEnd: (evt) => {
-                    let orderedIds = [...el.children].map(li => li.dataset.id);
-                    Livewire.emit('updateOrder', orderedIds);
+                    saveActivityOrder()
                 }
             });
         });
