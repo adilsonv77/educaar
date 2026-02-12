@@ -285,7 +285,9 @@
             if (valor == "Modelo3D") {
                 document.getElementById("3DmodelOption").style.display = "block"
                 document.getElementById("panelOption").style.display = "none"
-                document.getElementById('refeitaMarcador').disabled = false;
+                if(getContentType() != 1) {
+                    document.getElementById('refeitaMarcador').disabled = false;
+                }
                 switchPontuada.disabled = false;
             }else{
                 document.getElementById("panelOption").style.display = "block"
