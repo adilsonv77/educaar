@@ -387,6 +387,7 @@ class ActivityController extends Controller
         $contents = $contents
             ->select(
                 'contents.id as id',
+                'contents.sort_activities as sort',
                 DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
             )
             ->get();
