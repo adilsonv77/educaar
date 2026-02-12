@@ -145,7 +145,8 @@
                     <label for="">Conteúdo*</label>
                     <select class="form-control" name="content_id" aria-label="">
                         @foreach ($contents as $item)
-                            <option value="{{ $item->id }}" @if ($item->id === $content) selected="selected" @endif>{{ $item->total_name }}</option>
+                            <option value="{{ $item->id }}" data-check="{{ $item->sort }}" 
+                            @if ($item->id === ($content ?? $content->first()->id)) selected="selected" @endif>{{ $item->total_name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -237,9 +238,7 @@
                         <input type="hidden" name="refeitaMarcador" value="0">
                         <input type="checkbox" class="custom-control-input" id="refeitaMarcador" name="refeitaMarcador" value="1">
                         <label class="custom-control-label" for="refeitaMarcador">Refeita</label>
-                        <div class="form-text alert-danger d-inline-block small ml-1 p-0" role="alert">
-                            Se esta opção estiver marcada, os alunos poderão refazer a questão caso não a tenham acertado toda.
-                        </div>
+                        <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="alerta_refeita" role="alert"></div>
                     </div>
                 </div>
                 @endif
@@ -325,8 +324,10 @@
                 nota.required = false;
                 tempo.required = false;
 
-                switchRefeita.disabled = false;
-                switchRefeita.parentElement.style.display = '';
+                if(getContentType() != 1) {
+                    switchRefeita.disabled = false;
+                    switchRefeita.parentElement.style.display = '';
+                }
             }
         });
 
@@ -343,5 +344,33 @@
         /* Inicialização do switchPontuada no false para caso seja recarregado com valor true */
         document.getElementById('switchPontuada').checked = false;
 
+        const select = document.querySelector('select[name="content_id"]');
+
+        function verificarConteudo() {
+            const refAle = document.getElementById('alerta_refeita');
+        
+            if(getContentType() == 1) {
+                switchRefeita.disabled = true;
+                switchRefeita.parentElement.style.display = "block";
+                switchRefeita.checked = false;
+                switchPontuada.disabled = false;
+                refAle.textContent = 'Atividades de um conteúdo ordenado são refeitas por padrão.';
+            } else {
+                switchRefeita.disabled = false;
+                switchRefeita.parentElement.style.display = "";
+                switchPontuada.disabled = false;
+                refAle.textContent = 'Se esta opção estiver marcada os alunos poderão refazer a questão caso não a tenham acertado toda.';
+            }
+        }
+
+        function getContentType() {
+            const selectedOption = select.options[select.selectedIndex];
+            const contentType = selectedOption.dataset.check;
+
+            return contentType;
+        }
+
+        select.addEventListener('change', verificarConteudo);
+        verificarConteudo();
     </script>
 @endsection
