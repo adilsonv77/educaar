@@ -10374,7 +10374,7 @@ readers do not read off random characters that represent icons */
   background-color: #079ad9;
 }
 
-#btnHelpMarcador{
+#btnHelpMarcador, #btnPontuadaMarcador{
   margin-left: 20px;
   border-color: #eee;
 }
