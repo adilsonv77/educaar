@@ -238,7 +238,7 @@
                         <input type="hidden" name="refeitaMarcador" value="0">
                         <input type="checkbox" class="custom-control-input" id="refeitaMarcador" name="refeitaMarcador" value="1">
                         <label class="custom-control-label" for="refeitaMarcador">Refeita</label>
-                        <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="alerta_refeita" role="alert"></div>
+                        <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="refeitaAlerta" role="alert"><!-- Texto controlado pelo JS --></div>
                     </div>
                 </div>
                 @endif
@@ -249,6 +249,7 @@
                         <input type="hidden" name="pontuadaMarcador" value="0">
                         <input type="checkbox" class="custom-control-input" id="switchPontuada" name="pontuadaMarcador" value="1">
                         <label class="custom-control-label" for="switchPontuada">Pontuada</label>
+                        <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="pontuadaAlerta" role="alert"><!-- Texto controlado pelo JS --></div>
                     </div>
                 
                     <div class="extras collapse" id="extras">
@@ -280,99 +281,86 @@
     </div>
 
     <script>
-        document.getElementById("selectActivityType").onchange = ()=>{
-            let valor = document.getElementById("selectActivityType").value;
-            if (valor == "Modelo3D") {
-                document.getElementById("3DmodelOption").style.display = "block"
-                document.getElementById("panelOption").style.display = "none"
-                if(getContentType() != 1) {
-                    document.getElementById('refeitaMarcador').disabled = false;
-                }
-                switchPontuada.disabled = false;
-            }else{
-                document.getElementById("panelOption").style.display = "block"
-                document.getElementById("3DmodelOption").style.display = "none"
-                document.getElementById('refeitaMarcador').checked = false;
-                document.getElementById('refeitaMarcador').disabled = true;
-                switchPontuada.checked = false;
-                switchPontuada.disabled = true;
-            }
+        const el = {
+            selectActivity: document.getElementById("selectActivityType"),
+            selectContent: document.querySelector('select[name="content_id"]'),
+            model3D: document.getElementById("3DmodelOption"),
+            panelOption: document.getElementById("panelOption"),
+            switchRefeita: document.getElementById('refeitaMarcador'),
+            switchPontuada: document.getElementById('switchPontuada'),
+            camposExtras: document.getElementById('extras'),
+            refAle: document.getElementById('refeitaAlerta'),
+            ponAle: document.getElementById('pontuadaAlerta'),
+            nota: document.getElementById('nota'),
+            tempo: document.getElementById('tempo')
+        };
 
-            HabilitarDesabilitar3D();
+        const getContentType = () => {
+          return el.selectContent.options[el.selectContent.selectedIndex]?.dataset.check;
         }
-        
+
+        const atualizarInterface = () => {
+            const isModelo3D = el.selectActivity.value === "Modelo3D";
+            const contentType = getContentType();
+
+            el.model3D.style.display = isModelo3D ? "block" : "none";
+            el.panelOption.style.display = isModelo3D ? "none" : "block";
+
+            if (isModelo3D) {
+                el.switchPontuada.disabled = false;
+                el.ponAle.textContent = "";
+
+                if (contentType == "1") {
+                    el.switchRefeita.disabled = true;
+                    el.switchRefeita.checked = false;
+                    el.refAle.textContent = "Atividades de um conteúdo ordenado são refeitas por padrão.";
+                    
+                } else {
+                    el.switchRefeita.disabled = false;
+                    el.refAle.textContent = "Se esta opção estiver marcada os alunos poderão refazer a questão caso não a tenham acertada completamente.";
+                }
+            } else {
+                el.switchRefeita.checked = false;
+                el.switchRefeita.disabled = true;
+                el.switchPontuada.checked = false;
+                el.switchPontuada.disabled = true;
+                el.refAle.textContent = "Opção indisponível para cenas.";
+                el.ponAle.textContent = "Opção indisponível para cenas.";
+                $(el.camposExtras).collapse('hide');
+            }
+        };
+
+        el.selectActivity.addEventListener('change', atualizarInterface);
+        el.selectContent.addEventListener('change', atualizarInterface);
+
+        el.switchPontuada.addEventListener('change', function() {
+            const isChecked = this.checked;
+            $(el.camposExtras).collapse(isChecked ? 'show' : 'hide');
+            el.nota.required = isChecked;
+            el.tempo.required = isChecked;
+
+            if (isChecked) {
+                el.switchRefeita.disabled = true;
+                el.switchRefeita.parentElement.style.display = 'block';
+            } else if (getContentType() != "1") {
+                el.switchRefeita.disabled = false;
+                el.switchRefeita.parentElement.style.display = '';
+            }
+        });
+
+        el.switchRefeita.addEventListener('change', function() {
+            el.switchPontuada.disabled = this.checked;
+            el.switchPontuada.parentElement.style.display = this.checked ? 'block' : '';
+        });
+
         function desativarBotao(form) {
-            let botao = form.querySelector("#btnSalvar");
-            botao.disabled = true; 
+            const botao = form.querySelector("#btnSalvar");
+            botao.disabled = true;
         }
 
-        /* Campos Extras caso a atividade seja pontuada */
-        const switchRefeita = document.getElementById('refeitaMarcador');
-        const switchPontuada = document.getElementById('switchPontuada');
-        const camposExtras = document.getElementById('extras');
-        const nota = document.getElementById('nota');
-        const tempo = document.getElementById('tempo');
-
-        switchPontuada.addEventListener('change', function () {
-            if(this.checked) {
-                $(camposExtras).collapse('show');
-                nota.required = true;
-                tempo.required = true;
-
-                switchRefeita.disabled = true;
-                switchRefeita.parentElement.style.display = 'block';
-            } else {
-                $(camposExtras).collapse('hide');
-                nota.required = false;
-                tempo.required = false;
-
-                if(getContentType() != 1) {
-                    switchRefeita.disabled = false;
-                    switchRefeita.parentElement.style.display = '';
-                }
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            el.switchPontuada.checked = false;
+            atualizarInterface();
         });
-
-        switchRefeita.addEventListener('change', function () {
-            if(this.checked) {
-                switchPontuada.disabled = true;
-                switchPontuada.parentElement.style.display = 'block';
-            } else {
-                switchPontuada.disabled = false;
-                switchPontuada.parentElement.style.display = '';
-            }
-        });
-
-        /* Inicialização do switchPontuada no false para caso seja recarregado com valor true */
-        document.getElementById('switchPontuada').checked = false;
-
-        const select = document.querySelector('select[name="content_id"]');
-
-        function verificarConteudo() {
-            const refAle = document.getElementById('alerta_refeita');
-        
-            if(getContentType() == 1) {
-                switchRefeita.disabled = true;
-                switchRefeita.parentElement.style.display = "block";
-                switchRefeita.checked = false;
-                switchPontuada.disabled = false;
-                refAle.textContent = 'Atividades de um conteúdo ordenado são refeitas por padrão.';
-            } else {
-                switchRefeita.disabled = false;
-                switchRefeita.parentElement.style.display = "";
-                switchPontuada.disabled = false;
-                refAle.textContent = 'Se esta opção estiver marcada os alunos poderão refazer a questão caso não a tenham acertado toda.';
-            }
-        }
-
-        function getContentType() {
-            const selectedOption = select.options[select.selectedIndex];
-            const contentType = selectedOption.dataset.check;
-
-            return contentType;
-        }
-
-        select.addEventListener('change', verificarConteudo);
-        verificarConteudo();
     </script>
 @endsection
