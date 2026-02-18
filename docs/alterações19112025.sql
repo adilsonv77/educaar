@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS pontuacoes (
     activity_id BIGINT UNSIGNED NOT NULL,
     pontuacao BIGINT NOT NULL,
     created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL, 
+    updated_at TIMESTAMP NULL,
+    tempo_restante INT 0,
 
     PRIMARY KEY(user_id, activity_id),
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
