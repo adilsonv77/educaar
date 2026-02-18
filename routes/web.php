@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MuralController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\RankingController;
+use App\Http\Controllers\UserController;
 
 // TUDO QUE ESTÁ FORA DO AUTH PODE SER ACESSADO SEM O USUÁRIO AUTENTICAR !!!!
 
@@ -190,6 +191,9 @@ Route::middleware(['auth'])->group(function () {
 
     //Ranking
     Route::get('/ranking', [RankingController::class, 'create']) -> name('ranking.create');
+
+    //Locale
+    Route::get('/locale', [UserController::class, 'localeChange'])->name('locale.update');
 });
 
 //backup
