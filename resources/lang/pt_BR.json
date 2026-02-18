@@ -1,16 +1,10 @@
 {
-    "Name": "Nome",
-    "E-Mail Address": "E-mail",
-    "Password": "Senha",
     "Confirm": "Confirmar",
     "Confirm Password": "Confirmação de senha",
     "Remember Me": "Manter conectado",
     "Remember me": "Manter conectado",
-    "Forgot Your Password?": "Esqueceu sua senha?",
     "Forgot your password?": "Esqueceu sua senha?",
     "Already registered?": "Já registrado?",
-    "Login": "Entrar",
-    "Register": "Registre-se",
     "Home": "Principal",
     "Logout": "Sair",
     "Toggle navigation": "Alternar navegação",
@@ -28,7 +22,6 @@
     "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.": "Esqueceu sua senha? Sem problemas. Apenas informe seu endereço de e-mail que enviaremos um link que permitirá definir uma nova senha.",
     "Send Password Reset Link": "Enviar link para redefinir senha",
     "Email Password Reset Link": "Enviar link para redefinir senha por e-mail",
-    "Reset Password": "Modificar Senha",
     "This is a secure area of the application. Please confirm your password before continuing.": "Essa é uma área segura da aplicação. Por favor confirme sua senha antes de continuar.",
     "You are receiving this email because we received a password reset request for your account.": "Você está recebendo este e-mail porque recebemos uma solicitação de redefinição de senha para sua conta.",
     "If you did not request a password reset, no further action is required.": "Se você não solicitou a redefinição de senha, nenhuma ação adicional será necessária.",
@@ -52,5 +45,16 @@
     "Accept Invitation": "Aceitar Convite",
     "If you did not expect to receive an invitation to this team, you may discard this email.": "Se você não sabe porque está recebendo um convite para esse time, pode descartar esse e-mail",
     "You are logged in!": "Você está logado!",
-    "Dashboard": "Painel de controle"
+    "Dashboard": "Painel de controle",
+
+    "Save" : "Salvar",
+    "Name" : "Nome",
+    "User" : "Usuário",
+    "Password" : "Senha",
+    "Forgot Your Password?": "Esqueceu sua senha?",
+    "Login": "Entrar",
+    "Register": "Registre-se",
+    "Project" : "Projeto",
+    "If you have a registered email, it will be sent a new message to you." : "Se houver um email cadastrado será enviado uma nova senha à ele.",
+    "Reset Password" : "Modificar Senha"
 }

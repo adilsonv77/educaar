@@ -1,0 +1,13 @@
+{
+    "Save" : "Guardar",
+    "User" : "Usuario",
+    "Name" : "Nombre",
+    "E-Mail Address" : "Email",
+    "Password" : "Contraseña",
+    "Forgot Your Password?" : "¿Olvidó su contraseña?",
+    "Login" : "Iniciar sesión",
+    "Register" : "Registrarse",
+    "Project" : "Proyecto",
+    "If you have a registered email, it will be sent a new message to you." : "Si tienes un correo electrónico registrado, se te enviará un nuevo mensaje.",
+    "Reset Password" : "Restablecer Contraseña"
+}

@@ -88,7 +88,7 @@
                                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autofocus>
 
                                         <div id="passwordHelpBlock" class="form-text">
-                                        Se houver um email cadastrado será enviado uma nova senha à ele.
+                                        {{ __('If you have a registered email, it will be sent a new message to you.') }}
                                         </div>
                                     </div>
                                 </div>

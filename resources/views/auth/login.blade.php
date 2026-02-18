@@ -70,7 +70,7 @@
                     <input id="login" type="text"
                         class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
                         name="login" value="{{ old('username') ?: old('email') }}" required autofocus
-                        placeholder="Login">
+                        placeholder="{{ __('User') }}">
                     @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -79,7 +79,7 @@
                 
                     <input id="password" type="password"
                         class="form-control @error('password') is-invalid @enderror" name="password" required
-                        placeholder="Senha">
+                        placeholder="{{ __('Password') }}">
                     @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -96,7 +96,7 @@
                         {{ __('Register') }}
                     </a>
                     <a href="{{ route('password.create') }}">
-                        Esqueceu a senha?
+                        {{ __('Forgot Your Password?') }}
                     </a>
                         
                 </div>

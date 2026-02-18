@@ -95,7 +95,7 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="projeto" class="col-md-4 col-form-label text-md-right">Projeto</label>
+                                    <label for="projeto" class="col-md-4 col-form-label text-md-right">{{ __('Project') }}</label>
 
                                     <div class="col-md-6">
                                         @if (isset($escolas))
