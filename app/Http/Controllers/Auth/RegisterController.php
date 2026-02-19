@@ -135,16 +135,16 @@ class RegisterController extends Controller
             dd(config('mail.mailers.smtp'), $e->getMessage()); 
 */
             return redirect('/register') -> with ('error', 
-            'Erro ao enviar e-mail: ' . $e->getMessage() . '. Tente novamente.');
+            __('Error on send email') . ": " . $e->getMessage() . " " . __('Try again later.'));
         }
         DB::commit();
 
-        return redirect('/login') -> with ('success', 'Conta criada. Suas credenciais foram enviadas para seu e-mail. Também verifique sua caixa de spam.');
+        return redirect('/login') -> with ('success', __('Account created. Your credentials have been sent to your email. Please also check your spam folder.'));
         
       } catch (\Exception $e) {
         DB::rollback();
 
-        return redirect('/register') -> with ('error', 'Erro ao criar conta.');
+        return redirect('/register') -> with ('error', __('Error on create account.'));
 
       }
 

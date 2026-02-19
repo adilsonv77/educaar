@@ -39,11 +39,11 @@
 
         <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo"/>
 
-        {{ $errors }}
+        
         @if ($errors->any())
             <div class="alert alert-danger" id="alerta">
                 <ul>
-                    <h3>Erro!</h3>
+                    <h3>{{ __('Error') }}!</h3>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -54,7 +54,7 @@
         @if (session('error'))
             <div class="alert alert-danger" id="alerta">
                 <ul>
-                    <h3>Erro!</h3>
+                    <h3>{{ __('Error') }}!</h3>
                     <p>{{ session('error') }}</p>
                 </ul>
             </div>
@@ -63,7 +63,7 @@
         @if (session('success'))
             <div class="alert alert-success" id="alerta-sucesso">
                 <ul>
-                    <h3>Sucesso!</h3>
+                    <h3>{{ __('Success') }}!</h3>
                     <p>{{ session('success') }}</p>
                 </ul>
             </div>

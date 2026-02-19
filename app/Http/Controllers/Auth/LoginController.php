@@ -124,7 +124,7 @@ class LoginController extends Controller
         return redirect()->back()
             ->withInput()
             ->withErrors([
-                'login' => 'Usuário ou senha inválidos'
+                'login' => __('Invalid username or password')
             ]);
     }
 
