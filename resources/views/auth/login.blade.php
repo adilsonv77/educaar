@@ -31,17 +31,14 @@
 
 
 
-<body>       
+<body> 
     <div class="prision">
-
-        <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo"/>
-
-
+    <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo"/>     
     
         @if ($errors->any())
             <div class="alert alert-danger" id="alerta">
                 <ul>
-                    <h3>{{ __('Error') }}!</h3>
+                    <h3>{{ __('return.error') }}!</h3>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -51,7 +48,7 @@
         @if (session('success'))
             <div class="alert alert-success" id="alerta-sucesso">
                 <ul>
-                    <h3>{{ __('Success') }}!</h3>
+                    <h3>{{ __('return.success') }}!</h3>
                     <p>{{ session('success') }}</p>
                 </ul>
             </div>
@@ -70,7 +67,7 @@
                     <input id="login" type="text"
                         class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
                         name="login" value="{{ old('username') ?: old('email') }}" required autofocus
-                        placeholder="{{ __('User') }}">
+                        placeholder="{{ __('auth.user') }}">
                     @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -79,7 +76,7 @@
                 
                     <input id="password" type="password"
                         class="form-control @error('password') is-invalid @enderror" name="password" required
-                        placeholder="{{ __('Password') }}">
+                        placeholder="{{ __('auth.password') }}">
                     @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -88,15 +85,15 @@
                     
                     <div class="mial">
                             <button type="submit" class="btn btn-primary">
-                                {{ __('Login') }}
+                                {{ __('auth.login') }}
                             </button>
                     </div>
 
                     <a href="{{ route('register.create') }}">
-                        {{ __('Register') }}
+                        {{ __('auth.register') }}
                     </a>
                     <a href="{{ route('password.create') }}">
-                        {{ __('Forgot Your Password?') }}
+                        {{ __('auth.forgot_password') }}
                     </a>
                         
                 </div>
@@ -110,14 +107,8 @@
                     
         <footer>   
                 <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
-                <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">   
+                <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid"> 
         </footer>
-
-                     
-
-         
-
-                                   
 
     </div>                    
 </body>

@@ -13,8 +13,14 @@ return [
     |
     */
 
-    'failed' => 'Essas credenciais não foram encontradas em nossos registros.',
-    'password' => 'A senha informada está incorreta.',
-    'throttle' => 'Muitas tentativas de login. Tente novamente em :seconds segundos.',
+    'user' => 'Usuário',
+    'email' => "Email",
+    'password' => "Senha",
+    'login' => "Iniciar sessão",
+    'register' => "Registre-se",
+    'forgot_password' => "Esqueceu sua senha?",
+    'project' => "Projeto",
+    'reset_message' => "Se houver um e-mail cadastrado, uma nova mensagem será enviada para você.",
+    'reset_password' => "Redefinir senha"
 
 ];

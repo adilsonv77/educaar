@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Login;
 use App\Mail\ResetPasswordEmail;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 
 class ResetPasswordController extends Controller
@@ -70,15 +71,15 @@ class ResetPasswordController extends Controller
             try {
                 Mail::to($validated['email'], 'ResetPasswordEmail') -> send(new ResetPasswordEmail($password, $user));
             } catch (\Exception) {
-                return redirect('/password/reset') -> with('error', __('Email not found.'));
+                return redirect('/password/reset') -> with('error', __('return.reset.email_not_found'));
             }
             DB::commit();
 
-            return redirect('/login') -> with('success', __('Password changed. A new password was send to your email address.'));
+            return redirect('/login') -> with('success', __('return.reset.reset_success'));
         } catch (\Exception) {
             DB::rollback();
 
-            return redirect('/password/reset') -> with('error', __('Attempt of change password failed.'));
+            return redirect('/password/reset') -> with('error', __('return.reset.fail'));
         }
 
     }

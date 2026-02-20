@@ -124,7 +124,7 @@ class LoginController extends Controller
         return redirect()->back()
             ->withInput()
             ->withErrors([
-                'login' => __('Invalid username or password')
+                'login' => __('return.login.invalid_credentials')
             ]);
     }
 

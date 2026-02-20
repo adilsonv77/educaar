@@ -13,8 +13,14 @@ return [
     |
     */
 
-    'failed' => 'Usuário ou senha inválidos',
-    'password' => 'The provided password is incorrect.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'user' => 'User',
+    'email' => "E-mail",
+    'password' => "Password",
+    'login' => "Login",
+    'register' => "Register",
+    'forgot_password' => "Forgot your password?",
+    'project' => "Project",
+    'reset_message' => "If there is an email address registered, a new message will be sent to you.",
+    'reset_password' => "Reset Password"
 
 ];

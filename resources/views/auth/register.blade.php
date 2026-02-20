@@ -42,7 +42,7 @@
         @if ($errors->any())
             <div class="alert alert-danger" id="alerta">
                 <ul>
-                    <h3>{{ __('Error') }}!</h3>
+                    <h3>{{ __('return.error') }}!</h3>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -52,7 +52,7 @@
         @if (session('error'))
             <div class="alert alert-danger" id="alerta">
                 <ul>
-                    <h3>{{ __('Error') }}!</h3>
+                    <h3>{{ __('return.error') }}!</h3>
                     <p>{{ session('error') }}</p>
                 </ul>
             </div>
@@ -60,7 +60,7 @@
         @if (session('success'))
             <div class="alert alert-success" id="alerta-sucesso">
                 <ul>
-                    <h3>{{ __('Success') }}!</h3>
+                    <h3>{{ __('return.success') }}!</h3>
                     <p>{{ session('success') }}</p>
                 </ul>
             </div>
@@ -72,14 +72,14 @@
                 <div class="col-md-8">
 
                     <div class="card">
-                        <div class="card-header">{{ __('Register') }}</div>
+                        <div class="card-header">{{ __('auth.register') }}</div>
 
                         <div class="card-body">
                             <form method="POST" action="{{ route('register.store') }}" autocomplete="off">
                                 @csrf
 
                                 <div class="form-group row">
-                                    <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                                    <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('auth.user') }}</label>
 
                                     <div class="col-md-6">
                                         <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autofocus>
@@ -87,7 +87,7 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                                    <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('auth.email') }}</label>
 
                                     <div class="col-md-6">
                                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required >
@@ -95,7 +95,7 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="projeto" class="col-md-4 col-form-label text-md-right">{{ __('Project') }}</label>
+                                    <label for="projeto" class="col-md-4 col-form-label text-md-right">{{ __('auth.project') }}</label>
 
                                     <div class="col-md-6">
                                         @if (isset($escolas))
@@ -114,7 +114,7 @@
                                 <div class="form-group row mb-0">
                                     <div class="mial">
                                         <button type="submit" class="btn btn-primary" style="width: unset">
-                                            {{ __('Register') }}
+                                            {{ __('auth.register') }}
                                         </button>
                                     </div>
                                 </div>

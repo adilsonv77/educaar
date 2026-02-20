@@ -126,7 +126,6 @@ class RegisterController extends Controller
             'aluno_id' => $user -> value('id'),
             'turma_id' => $turma -> value('id'),
         ]);
-
         try {
             Mail::to($validated['email'], 'MyMail') -> send(new ContaCriadaEmail($password, $validated['username']));
         } catch (\Exception $e) {
@@ -135,16 +134,16 @@ class RegisterController extends Controller
             dd(config('mail.mailers.smtp'), $e->getMessage()); 
 */
             return redirect('/register') -> with ('error', 
-            __('Error on send email') . ": " . $e->getMessage() . " " . __('Try again later.'));
+            __('return.register.send_email') . ": " . $e->getMessage() . ". " . __('return.try_again'));
         }
         DB::commit();
 
-        return redirect('/login') -> with ('success', __('Account created. Your credentials have been sent to your email. Please also check your spam folder.'));
+        return redirect('/login') -> with ('success', __('return.register.account_created'));
         
       } catch (\Exception $e) {
         DB::rollback();
 
-        return redirect('/register') -> with ('error', __('Error on create account.'));
+        return redirect('/register') -> with ('error', __('return.register.error'));
 
       }
 
