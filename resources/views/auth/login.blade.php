@@ -88,6 +88,8 @@
                                 {{ __('auth.login') }}
                             </button>
                     </div>
+                    
+                    <!--
 
                     <a href="{{ route('register.create') }}">
                         {{ __('auth.register') }}
@@ -95,6 +97,8 @@
                     <a href="{{ route('password.create') }}">
                         {{ __('auth.forgot_password') }}
                     </a>
+
+                    -->
                         
                 </div>
                         
