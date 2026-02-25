@@ -76,42 +76,42 @@
                                             <p class="fs-12 mb-0">
 
                                                 @if (session('type') == 'student')
-                                                    Estudante
+                                                    {{ trans_choice('global.user.student', 1) }}
                                                 @endif
 
                                                 @if (session('type') == 'teacher')
-                                                    Professor
+                                                    {{ trans_choice('global.user.teacher', 1) }}
                                                 @endif
 
                                                 @if (session('type') == 'admin')
-                                                    Administrator
+                                                    {{ trans_choice('global.user.admin', 1) }}
                                                 @endif
                                                 
                                                 @if (session('type') == 'developer')
-                                                    Desenvolvedor
+                                                    {{ trans_choice('global.user.dev', 1) }}
                                                 @endif
                                                 @if (session('type') == 'adminMaster')
-                                                    Administrador Master
+                                                    {{ trans_choice('global.user.admin_master', 1) }}
                                                 @endif
                                             </p>
 
                                         </div>
                                         @if (session('type') == 'admin')
-                                            <a href="{{ route('config.index') }}" title="Configurar" ;
+                                            <a href="{{ route('config.index') }}" title="{{ __('global.title.config') }}" ;
                                                 class="dropdown-item ai-icon">
                                                 <img src="/gear.png" width="10" alt="" />
                                             </a>
                                         @endif
 
                                         @if (session('type') == 'teacher')
-                                            <a href="{{ route('profconfig.index') }}" title="Configurar" ;
+                                            <a href="{{ route('profconfig.index') }}" title="{{ __('global.title.config') }}" ;
                                                 class="dropdown-item ai-icon">
                                                 <img src="/gear.png" width="10" alt="" />
                                             </a>
                                         @endif
 
                                         <div class="saida">
-                                            <a href="{{ route('logout') }}" title="Sair" ;
+                                            <a href="{{ route('logout') }}" title="{{ __('global.title.exit') }}" ;
                                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                                 class="dropdown-item ai-icon">
 
@@ -145,12 +145,12 @@
                         @if (session('type') == 'student')
                             <li><a class="ai-icon" href="/students/novas">
                                     <i class="fa fa-external-link-square" aria-hidden="true"></i>
-                                    <span class="nav-text">Novas</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.new'), 3}}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="/students/realizadas">
                                     <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                    <span class="nav-text">Realizadas</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.completed', 2)}}</span>
                                 </a>
                             </li>
                         @endif
@@ -158,12 +158,12 @@
                         @if (session('type') == 'developer')
                             <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-smartphone-5"></i>
-                                    <span class="nav-text">Conteúdos</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.content', 2)}}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('developer.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-notepad"></i>
-                                    <span class="nav-text">Atividades</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.activity', 2)}}</span>
                                 </a>
                             </li>
                         @endif
@@ -171,13 +171,13 @@
                         @if (session('type') == 'teacher')
                             <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-smartphone-5"></i>
-                                    <span class="nav-text">Conteúdos</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.content', 2)}}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('activity.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-notepad"></i>
-                                    <span class="nav-text">Atividades</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.activity', 2)}}</span>
                                 </a>
                             </li>
                             <!--
@@ -189,23 +189,23 @@
 -->
                             <li><a class="ai-icon" href="{{ route('mural.index') }}" aria-expanded="false">
                                     <i class="bi-bricks"></i>
-                                    <span class="nav-text">Murais</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.mural', 2)}}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('turmas.listarTurmasAlunosProf') }}" aria-expanded="false">
                                     <i class="flaticon-381-user-9"></i>
-                                    <span class="nav-text">Alunos</span>
+                                    <span class="nav-text">{{ trans_choice('global.user.student', 2)}}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
                                     <i class="bi-table"></i>
-                                    <span class="nav-text">Resultados</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.result', 2)}}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('teacher.frequencia') }}" aria-expanded="false">
                                     <i class="bi-graph-up"></i>
-                                    <span class="nav-text">Acessos</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.access', 2)}}</span>
                                 </a>
                             </li>
                             
@@ -220,57 +220,57 @@
 
                             <li><a class="ai-icon" href="{{ route('user.indexAluno') }}" aria-expanded="false">
                                     <i class="flaticon-381-user-9"></i>
-                                    <span class="nav-text">Alunos</span>
+                                    <span class="nav-text">{{ trans_choice('global.user.student', 2)}}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('user.indexProf') }}" aria-expanded="false">
                                     <i class="bi-person-hearts"></i>
-                                    <span class="nav-text">Professores</span>
+                                    <span class="nav-text">{{ trans_choice('global.user.teacher', 2)}}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('user.indexDev') }}" aria-expanded="false">
                                     <i class="bi-person-fill-gear"></i>
-                                    <span class="nav-text">Desenvolvedores</span>
+                                    <span class="nav-text">{{ trans_choice('global.user.dev', 2)}}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('class.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-book"></i>
-                                    <span class="nav-text">Disciplinas</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.discipline', 2) }}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('anoletivo') }}" aria-expanded="false">
                                     <i class="flaticon-381-calendar-2"></i>
-                                    <span class="nav-text">Anos Letivos</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.school_years', 2)}}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('turmasmodelos.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-notebook-4"></i>
-                                    <span class="nav-text">Turmas Modelos</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.model_class', 2)}}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('turmas.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-notebook-3"></i>
-                                    <span class="nav-text">Turmas</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.class', 2)}}</span>
                                 </a>
                             </li>
 
                             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                                     <i class="flaticon-381-id-card-1"></i>
-                                    <span class="nav-text">Matrículas</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.registration', 2)}}</span>
                                 </a>
                                 <ul aria-expanded="false">
-                                    <li><a href="{{ route('user.matricula') }}">Importar arquivo</a></li>
-                                    <li><a href="{{ route('turmas.indexmatricula') }}">Listar</a></li>
+                                    <li><a href="{{ route('user.matricula') }}">{{ __('global.views.import_file') }}</a></li>
+                                    <li><a href="{{ route('turmas.indexmatricula') }}">{{ __('global.views.list') }}</a></li>
                                 </ul>
                             </li>
                             <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-smartphone-5"></i>
-                                    <span class="nav-text">Conteúdos</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.content', 2) }}</span>
                                 </a>
                             </li>
                         @endif

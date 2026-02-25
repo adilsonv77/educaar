@@ -344,7 +344,7 @@ class UserController extends Controller
         return redirect()->route('turmas.turmasAlunosIndex', $data);
     }
 
-    public function localeChange(Request $request) {
+    public function localeUpdate(Request $request) {
         $locale = $request->input('locale');
         if(! in_array($locale, ['en', 'pt_BR', 'es'])) {
             return redirect()->back()->with('errors', 'Idioma não disponível');

@@ -69,29 +69,29 @@
                                             <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
                                             <p class="fs-12 mb-0">
                                                 @if (session('type') == 'student')
-                                                    Estudante
+                                                    {{ trans_choice('global.user.student', 1) }}
                                                 @endif
 
                                                 @if (session('type') == 'teacher')
-                                                    Professor
+                                                    {{ trans_choice('global.user.teacher', 1) }}
                                                 @endif
 
                                                 @if (session('type') == 'admin')
-                                                    Administrator
+                                                    {{ trans_choice('global.user.admin', 1) }}
                                                 @endif
                                             </p>
 
                                         </div>
                                         @if (session('type') == 'admin')
 
-                                            <a href="{{ route('config.index') }}" title="Configurar";
+                                            <a href="{{ route('config.index') }}" title="{{ __('global.title.config') }}";
                                                 class="dropdown-item ai-icon">
                                                 <img src="/gear.png" width="10" alt="" />
                                             </a>
                                         @endif
                             </div>
                             <div class="saida">
-                                <a href="{{ route('logout') }}" title="Sair";
+                                <a href="{{ route('logout') }}" title="{{ __('global.title.exit') }}";
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                     class="dropdown-item ai-icon">
 
