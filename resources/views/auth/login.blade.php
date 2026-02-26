@@ -111,7 +111,20 @@
                     
         <footer>   
                 <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
-                <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid"> 
+                <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">
+
+                <div>
+                    <form action="{{ route('locale.update') }}" method="GET"> @csrf
+                        <select name="locale" id="locale">
+                            <option value="pt_BR">Português</option>
+                            <option value="en">Inglês</option>
+                        </select>
+
+                        <button type="submit">
+                            {{ __('global.button.save') }}
+                        </button>
+                    </form>
+                </div>
         </footer>
 
     </div>                    

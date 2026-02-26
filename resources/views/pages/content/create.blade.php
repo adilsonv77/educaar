@@ -12,17 +12,17 @@
                     <input name="acao" type="hidden" value="{{ $acao }}" />
 
                     <div class="form-group row">
-                        <label for="name">Nome* </label>
+                        <label for="name">{{ __('global.name') }}* </label>
                     
                         <div class="col-md-6">
                             <input id="name" type="text" maxlength="100" class="form-control @error('name') is-invalid @enderror"
                                 name="name" value="{{ old('name', $name) }}" required
-                                placeholder="Digite aqui o nome do conteúdo" autofocus />
+                                placeholder="{{ __('global.placeholder.content_name') }}" autofocus />
                         </div>
                     </div>
                     @if (session('type') == 'teacher')
                     <div class="form-group row">
-                        <label for="">Escolha a Disciplina*</label>
+                        <label for="">{{ __('global.label.choose_discipline') }}*</label>
                         <select class="form-control" name="disciplina_id">
                             @foreach ($disciplinas as $item)
                                 <option value="{{ $item->tid }}_{{ $item->did }}"
@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="sort_activities">Ordenar atividades deste conteúdo</label>
+                        <label for="sort_activities">{{ __('global.label.sort_activities') }}</label>
                         <div class="col-md-6">
                             <input type="checkbox" name="sort_activities" id="sort_activities" value="1" @if (old('sort_activities', $sort_activities ?? false)) checked @endif>
                         </div>
@@ -55,7 +55,7 @@
                     @endif
 
                     <div class="form-group row mt-4">
-                        <input type="submit" value="Salvar" class="btn btn-success">
+                        <input type="submit" value="{{ __('global.button.save') }}" class="btn btn-success">
                     </div>
 
 

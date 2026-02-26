@@ -119,7 +119,7 @@ class ContentController extends Controller
             ->first();
 
         //var_dump($anoLetivo->id);
-        $titulo = 'Adicionar Conteúdo';
+        $titulo = __('global.pageName.add_content');
         $acao = 'insert';
 
         $params = [

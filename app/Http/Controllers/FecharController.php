@@ -26,7 +26,7 @@ class FecharController extends Controller
         ->orderBy('position', 'asc')
         ->get();
    
-        $titulo = "Fechar conteúdo";
+        $titulo = __('global.pageName.close_content');
 
         $id = $content->id;
 

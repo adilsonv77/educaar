@@ -8,23 +8,23 @@
         <div class="card-body">
             
              
-                <h3>Conteúdo</h3>
+                <h3>{{ trans_choice('global.views.content', 1) }}</h3>
                 <body>
                 <div id="content_id" style="display:none">{{$content->id}}</div>
                 <div id="receivemind" style="display:none">/receivemind</div>
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td>Nome : <b>{{ $content->name }}</b></td>
+                            <td>{{ __('global.name') }} : <b>{{ $content->name }}</b></td>
                         </tr>
                         <tr>
-                            <td>Disciplina (Série) : <b> {{ $content->dname }} ( {{ $content->tserie }} )</b></td>
+                            <td>{{ trans_choice('global.views.discipline', 1) }} ({{ trans_choice('global.views.model_class', 1) }}) : <b> {{ $content->dname }} ( {{ $content->tserie }} )</b></td>
                         </tr>
 
                     </tbody>
                 </table>
               
-                <h3>Atividades</h3>
+                <h3>{{ trans_choice('global.views.activity', 2) }}</h3>
                 
                 <table class="table">
                     <tbody>
@@ -58,18 +58,18 @@
 
                 <div class="form-group mt-4" style="width: 100%">
 
-                    <p style="text-align: center; font-size: 70%; margin: 0px 0px 5px; visibility: hidden" id="aguarde" >Aguarde...</p>
+                    <p style="text-align: center; font-size: 70%; margin: 0px 0px 5px; visibility: hidden" id="aguarde" >{{ __('global.wait') }}...</p>
                     <div style="width: 50%; display: block;  margin-left: auto; margin-right: auto;">
                         <div class="progress" style="height: 20px">
                             <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                            Compilando</div>
+                            {{ __('global.compile') }}</div>
                         </div>
                         <br/>
-                        <input type="button" value="Fechar" class="btn btn-success button_pre_compiler" style="width: 30%; display: block;  margin-left: auto; margin-right: auto;" id="fechar">
+                        <input type="button" value="{{ __('global.table.close') }}" class="btn btn-success button_pre_compiler" style="width: 30%; display: block;  margin-left: auto; margin-right: auto;" id="fechar">
                     </div>
-                    <div class="click_compilar" style="display:none">Clique-me</div>
+                    <div class="click_compilar" style="display:none">{{ __('global.click') }}</div>
 
-                    <div class="button_compiler" style="display:none">Clique-me</div>
+                    <div class="button_compiler" style="display:none">{{ __('global.click') }}</div>
 
                 </div>
 

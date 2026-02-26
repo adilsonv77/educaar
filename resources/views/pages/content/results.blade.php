@@ -1,7 +1,18 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Resultados de ' . $content->name;
+    $pageName = __('global.pageName.results_of') . ' ' . $content->name;
+
+    /* Variáveis de tradução para o JS */
+    $titleChart1 = __('global.statistics.answered_activities');
+    $activity = trans_choice('global.views.activity', 1);
+    $activities = trans_choice('global.views.activity', 2);
+    $column2 =__('global.statistics.has_answered');
+    $column3 =__('global.statistics.hasnt_answered');
+    $titleChart2 = __('global.statistics.titleChart2');
+    $complete = __('global.statistics.complete');
+    $incomplete = __('global.statistics.incomplete');
+    $noRespond = __('global.statistics.no_respond')
 @endphp
 
 @section('page-name', $pageName)
@@ -21,6 +32,17 @@
         }
     </style>
     <script>
+        /* Variáveis de tradução pegas do PHP */
+        var titleChar1 = "<?php print $titleChart1; ?>";
+        var titleChart2 = "<?php print $titleChart2; ?>";
+        var activity = "<?php print $activity; ?>";
+        var activities = "<?php print $activities; ?>";
+        var column2 = "<?php print $column2; ?>";
+        var column3 = "<?php print $column3; ?>";
+        var complete = "<?php print $complete ?>"
+        var incomplete = "<?php print $incomplete ?>"
+        var noRespond = "<?php print $noRespond ?>"
+
         var qntCompletas = {{$totais['qtos_fizeram']}};
         var qntIncompletas = {{$totais['qtos_incompletos']}};
         var qntNaoFizeram = {{$totais['qtos_nao_fizeram']}};
@@ -38,9 +60,9 @@
             const map1 = new Map();
 
             var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Atividades');
-            data.addColumn('number', 'Responderam');
-            data.addColumn('number', 'Não respond.');
+            data.addColumn('string', activity);
+            data.addColumn('number', column2);
+            data.addColumn('number', column3);
             data.addColumn({ type: 'string', role: 'tooltip' });
             var value;
 
@@ -56,7 +78,7 @@
 
             var options = {
                 chart: {
-                    title: 'Atividades respondidas',
+                    title: titleChar1,
                 },
                 isStacked: true,
                 colors: ['#5A2D66', '#9C6FA8'],
@@ -74,14 +96,14 @@
 
         function drawPieChart() {
             var data = google.visualization.arrayToDataTable([
-                ['Atividades', 'Alunos'],
-                ['Completo', qntCompletas],
-                ['Incompleto', qntIncompletas],
-                ['Não fizeram', qntNaoFizeram]
+                [activities, 'Alunos'],
+                [complete, qntCompletas],
+                [incomplete, qntIncompletas],
+                [noRespond, qntNaoFizeram]
             ]);
 
             var options = {
-                title: 'Como está o conteúdo por aluno?',
+                title: titleChart2,
                 pieHole: 0.4,
             };
 
@@ -120,7 +142,7 @@
         <form action="{{ route('content.resultsContents') }}" method="GET ">
             @csrf
             <div class="form-inline">
-                <label for="">Informe a turma:</label>
+                <label for="">{{ __('global.label.enter_class') }}:</label>
                 <select class="form-control" name="turma_id">
                     @foreach ($turmas as $item)
                         <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
@@ -128,7 +150,7 @@
                         </option>
                     @endforeach
                 </select>
-                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+                <button class="btn btn-primary btn-lg" type="submit">{{ __('global.button.save') }}</button>
             </div>
         </form>
         <br>
@@ -161,7 +183,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (['Alternativas', 'Correto', 'Incorreto', 'Não Respondeu'] as $rowLabel)
+                    @foreach ([ __('global.statistics.options') , __('global.statistics.correct'), __('global.statistics.incorrect'), __('global.statistics.not_answered')] as $rowLabel)
                         <tr>
                             <td>{{ $rowLabel }}</td>
                             @foreach ($results as $result) 
@@ -173,15 +195,15 @@
                                     @else
                                         @foreach (['A', 'B', 'C', 'D'] as $alt)
                                             <td data-toggle="tooltip" title="{{ $questao['alternatives'][$alt] ?? 'Descrição não disponível' }}">
-                                                @if ($rowLabel === 'Alternativas')
+                                                @if ($rowLabel ===  __('global.statistics.options'))
                                                     {{ $alt }}
-                                                @elseif ($rowLabel === 'Correto')
+                                                @elseif ($rowLabel === __('global.statistics.correct'))
                                                     @if ($alt === $questao['correct_alternative'])
                                                         {{ $questao['alternatives_count'][$alt] }}
                                                     @else
                                                         -
                                                     @endif
-                                                @elseif ($rowLabel === 'Incorreto')
+                                                @elseif ($rowLabel === __('global.statistics.incorrect'))
                                                     @if ($alt !== $questao['correct_alternative'])
                                                         {{ $questao['alternatives_count'][$alt] > 0 ? $questao['alternatives_count'][$alt] : '-' }}
                                                     @else
@@ -200,7 +222,7 @@
         </div>
     @else
         <div style="background-color: white; padding: 20px; border-radius: 20px;">
-            <h2>Não há resultados disponíveis</h2>
+            <h2>{{ __('global.statistics.no_results') }}</h2>
         </div>
     @endif
 

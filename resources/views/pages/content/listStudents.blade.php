@@ -14,7 +14,7 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Nome</th>
+                                <th>{{ __('global.name') }}</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -150,7 +150,7 @@
                             </li>
                             <li><a class="ai-icon" href="/students/realizadas">
                                     <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                    <span class="nav-text">{{ trans_choice('global.views.completed', 2)}}</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.complete', 2)}}</span>
                                 </a>
                             </li>
                         @endif
