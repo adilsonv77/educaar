@@ -20,6 +20,7 @@ use App\DAO\PainelDAO;
 use App\DAO\MuralDAO;
 use App\DAO\QuestionDAO;
 use App\Models\ArProgress;
+use App\Models\RandomSort;
 
 class StudentController extends Controller
 {
@@ -115,15 +116,16 @@ class StudentController extends Controller
         $content_id = $request->id == null ? session()->get("content_id") : $request->id;
         $content = Content::find($content_id);
 
-       
-
-        //esse if tá verificando se o conteúdo possui atividades ordenadas
-        if($content->sort_activities){
-            $activities = ActivityDAO::buscarOrderedActivitiesPorConteudo($content_id);
-        } else{
-            $activities = ActivityDAO::buscarActivitiesPorConteudo($content_id);
+        if($content->sort_activities == 2) {
+            $this->createRandomSort($content_id);
         }
-        
+
+        $activities = match($content->sort_activities) {
+            1 => ActivityDAO::buscarOrderedActivitiesPorConteudo($content_id),
+            2 => ActivityDAO::buscarRandomOrderedActivitiesPorConteudo($content_id),
+            default => ActivityDAO::buscarActivitiesPorConteudo($content_id)
+        };
+
         $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
         $dataCorte = null;
@@ -226,6 +228,35 @@ class StudentController extends Controller
                 'message' => 'Erro interno ao salvar progresso.',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    /**
+     * Cria uma ordem aleatória em um conteúdo para o aluno autenticado.
+     * 
+     * @param int $content_id
+    */
+    private function createRandomSort($content_id) {
+        $activities = Activity::where('content_id', $content_id)->count();
+        $oldSort = count(explode(',', RandomSort::where('content_id', $content_id)->where('user_id', Auth::id())->value('sort')));
+
+        $sort = range(1, $activities);
+        shuffle($sort);
+        
+        if ($oldSort == $activities) {
+            RandomSort::firstOrCreate([
+                'user_id' => Auth::id(),
+                'content_id' => $content_id,
+            ],[
+                'sort' => implode(',', $sort)
+            ]);
+        } else {
+            RandomSort::updateOrInsert([
+                'user_id' => Auth::id(),
+                'content_id' => $content_id,
+            ], [
+                'sort' => implode(',', $sort)
+            ]);
         }
     }
 

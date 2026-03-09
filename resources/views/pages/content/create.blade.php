@@ -2,6 +2,34 @@
  <!-- #region-->
 @section('page-name', $titulo)
 
+<style>
+    #selectPanel{
+        border: 1px solid #b3b3b3;
+        font-size: 14px;
+        width: 130px;
+        padding: 2px;
+        height: fit-content;
+        margin: 6px 12px;
+        margin-bottom: 23px;
+        background-image: linear-gradient(#e9e9e9,#d9d9d9);
+    }
+    #selectPanel:hover{
+        background-color: #a7f2fe;
+        background-image: none;
+        border: 1px solid #319dd7;
+    }
+    .custom-switch .custom-control-label::before {
+        border-width: 1.2px;
+    }
+    .custom-switch.switch .custom-control-label::after {
+        border-width: 1.2px;
+        top: 25%!important;
+    }
+    .custom-control {
+        line-height: 1.5em!important;
+    }
+</style>
+
 @section('content')
     <div class="">
         <div class="card">
@@ -32,10 +60,22 @@
                         </select>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="sort_activities">{{ __('global.label.sort_activities') }}</label>
-                        <div class="col-md-6">
-                            <input type="checkbox" name="sort_activities" id="sort_activities" value="1" @if (old('sort_activities', $sort_activities ?? false)) checked @endif>
+                    <div class="mb-4">
+                        <div class="custom-control custom-switch switch">
+                            <input type="hidden" name="ordered" value="0">
+                            <input type="checkbox" name="ordered" id="ordered" class="custom-control-input" value="1">
+                            <label for="ordered" class="custom-control-label">Conteúdo ordenado</label>
+                        </div>
+                    </div>
+
+                    <div class="extras collapse" id="extras">
+                        <div class="mb-4">
+                            <div class="custom-control custom-switch switch">
+                                <input type="hidden" name="random" value="0">
+                                <input type="checkbox" class="custom-control-input" name="random" id="random" value="1">
+                                <label for="random" class="custom-control-label">Conteúdo ordenado aleatoriamente</label>
+                                <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="randomAlert" role="alert">Com essa opção cada aluno terá uma ordem diferente para responder as atividades</div>
+                            </div>
                         </div>
                     </div>
 
@@ -65,4 +105,25 @@
             </div>
         </div>
     </div>
+
+    <script>
+        
+        const el = {
+            ordered: document.getElementById('ordered'),
+            random: document.getElementById('random'),
+            camposExtras: document.getElementById('extras'),
+            rndAlert: document.getElementById('randomAlert')
+        }
+
+        el.ordered.addEventListener('change', () => {
+            if(el.ordered.checked) {
+                el.random.disabled = false;
+                $(el.camposExtras).collapse('show');
+            } else {
+                el.random.disabled = true;
+                $(el.camposExtras).collapse('hide');
+            }
+        })
+
+    </script>
 @endsection

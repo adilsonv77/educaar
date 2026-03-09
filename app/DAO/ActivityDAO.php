@@ -88,6 +88,36 @@ class ActivityDAO
     }
 
     /**
+     * Retorna a ordem de um conteúdo baseado na sequência particular de um aluno
+     * @param int $content_id
+     * @return array
+    */
+    public static function buscarRandomOrderedActivitiesPorConteudo($content_id) {
+        $activities = self::buscarActivitiesPorConteudo($content_id);
+
+        $studentSort = DB::table('random_sorts')
+            ->where('content_id', $content_id)
+            ->where('user_id', Auth::id())
+            ->value('sort');
+
+        $activityDic = collect($activities)->keyBy('position');
+
+        $i = 1;
+        foreach(explode(',', $studentSort) as $position) {
+            /**
+            * $activityDic é indexado por 'position' das activities do $content_id.
+            * $studentSort contém exatamente essas posições (gerado pelo sistema).
+            * O null da assinatura TValue|null de ->get() é impossível neste contexto.
+            * @var Activity $activityDic
+            */
+            $activity = $activityDic->get((int)$position);
+            $activity->position = $i++;
+        }
+
+        return $activityDic;
+    }
+
+    /**
      * Retorna o tempo restante que o usuário tem para responder a atividade em questão
     */
     public static function getTempoRestante($user_id, $activity_id) {

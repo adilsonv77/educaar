@@ -172,8 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
     var mixer = null;
     var action = null;
 
-    for (var i = 0; i < glbs.childElementCount; i++) {
-      var li = glbs.children[i];
+    for (let i = 0; i < glbs.childElementCount; i++) {
+      const li = glbs.children[i];
 
       //Verifica se é um painel ou um modelo3d
       const usarModelo = li.getAttribute("mural_id") == 0;
@@ -254,15 +254,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         anchor.group.add(blockedMesh);
 
-
-
-
         anchor.onTargetFound = () => {
+          const actualPosition = parseInt(li.getAttribute('activityPosition'));
           // console.log("chegou no targetfound")
           //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;  
           
           //caso a atividade seja ordenada e o aluno tenta acessar uma atividade fora da ordem, o modal aparece avisando que a atividade anterior deve ser concluída. Esse modal está em questionario-aluno-form.blade.php
-          if(is_sort == "1" && proximaAtividadeLiberada < posAncora + 1){
+          if((is_sort == "1" && proximaAtividadeLiberada < posAncora + 1) || (is_sort == "2" && proximaAtividadeLiberada < actualPosition)) {
             //console.log("Posição não permitida");
 
             glbScene.visible = false;
