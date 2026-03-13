@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class RankingController extends Controller
 {
-    public function create(Request $request) {
+    public function create(Request $request) : \Illuminate\View\View {
         $atividades = ActivityDAO::getAtividadesPontuadasPorProf(Auth::id());
 
         $activityId = request('activity_id'); 

@@ -11,23 +11,33 @@ use Illuminate\Support\Facades\DB;
 
 class RankingDAO {
     /**
-     * Retorna o ranking ordernado de forma decrescente de uma atividade
+     * @return array<int, array{nome: string, pontuacao: int, tentativas: int}
     */
-    public static function buscarRankingPorAtividade($activityId) {
+    public static function buscarRankingPorAtividade(int $activityId) : \Illuminate\Support\Collection {
+        $ultimaTentativa = DB::table('student_answers')
+            ->select([
+                'user_id',
+                'activity_id',
+                DB::raw('MAX(tentativas) as tentativas')
+            ])
+            ->groupBy('user_id', 'activity_id');
+
         $dados = DB::table('activities')
             ->where('activities.id', $activityId)
             ->join('pontuacoes', 'pontuacoes.activity_id', '=', 'activities.id')
             ->join('users', 'pontuacoes.user_id', '=', 'users.id')
+            ->joinSub($ultimaTentativa, 'student_answers', function($join) {
+                $join->on('student_answers.activity_id', '=', 'activities.id')
+                    ->on('student_answers.user_id', '=', 'users.id');
+            })
             ->select([
                 'users.name',
-                'pontuacoes.pontuacao'
+                'pontuacoes.pontuacao',
+                'student_answers.tentativas'
             ])
-            ->orderBy('pontuacoes.pontuacao', 'DESC')
+            ->orderBy('pontuacao', 'DESC')
             ->get();
 
-        return([
-            'nome' => $dados->pluck('name')->toArray(),
-            'pontuacao'=> $dados->pluck('pontuacao')->toArray()
-        ]);
+        return($dados);
     }
 }
