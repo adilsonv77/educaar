@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-<head>
-    <script src="{{ asset('js/sorttable.js') }}" ></script>
-</head>
-
 @section('page-name', "Ranking de uma turma")
 
 @section('content')
@@ -83,7 +79,7 @@
                         <tr class="item">
                             <td>{{ $i + 1 }}º</th>
                             <td>{{ $aluno->name }}</th>
-                            <td>{{ $aluno->pontuacao ?? 0}} pontos</th>
+                            <td>{{ $aluno->pontuacao ?? 0 }} pontos</th>
                             <td>{{ $aluno->tentativas ?? 0 }}</th>
                         </tr>
                     @endforeach
