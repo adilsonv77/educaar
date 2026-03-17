@@ -25,7 +25,7 @@
                                             <form action="{{ route('ranking.create') }}" class="d-flex">
                                                 <input name="id" type="hidden" value="{{ $conteudo_id }}"/>
                                                 <input name="type" type="hidden" value="aluno"/>
-                                                <button type="submit" class="btn btn-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                                <button type="submit" class="btn btn-warning d-flex align-items-center justify-content-center flex-shrink-0 mr-2" style="width: 42px; height: 42px;">
                                                     <i class="bi-trophy"></i>
                                                 </button>
                                             </form>
