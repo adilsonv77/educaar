@@ -69,6 +69,7 @@ class StudentController extends Controller
         }
         // Aqui você pode calcular o valor de 'conteudoRespondido' com base nas respostas do aluno
         $conteudosRespondidos = [];
+        $conteudosComAtividadesPontuadas = [];
         foreach ($conteudos as $conteudo) {
             // Conta questões respondidas dentro do conteúdo
             $respondidas = DB::table('student_answers as sa')
@@ -87,6 +88,8 @@ class StudentController extends Controller
 
             // Se todas as questões foram respondidas, marca como concluído
             $conteudosRespondidos[$conteudo->id] = ($respondidas === $totalQuestoes);
+
+            $conteudosComAtividadesPontuadas[] = ContentDAO::conteudoTemAtividadePontuada($conteudo->id);
         }
 
         // dd($totalQuestoes, $respondidas);
@@ -100,8 +103,7 @@ class StudentController extends Controller
         // limpar a sessao a ser usada nos questionarios
         session()->forget(['livewire_nrquestao', 'livewire_alternativas', 'livewire_questoes', 'livewire_activity_id']);
 
-
-        return view('student.indexContentStudent', compact('conteudos', 'rota', 'conteudosRespondidos'));
+        return view('student.indexContentStudent', compact('conteudos', 'rota', 'conteudosRespondidos', 'conteudosComAtividadesPontuadas'));
     }
 
 

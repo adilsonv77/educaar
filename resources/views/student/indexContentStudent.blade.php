@@ -8,25 +8,32 @@
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <tbody>
-                        @foreach ($conteudos as $item)
+                        @for($i = 0; $i < count($conteudos); $i++)
+                        @php $conteudo_id = $conteudos[$i]->id @endphp
                             <tr>
                                 <td>
-                                    <form action="{{ route('student.showActivity') }}" method="get">
-                                        @csrf
-                                        <!-- Campo oculto com o ID do conteúdo -->
-                                        <input name="id" type="hidden" value="{{ $item->id }}" />
-
-
-                                        <!-- Botão com a cor baseada no status de conclusão -->
-                                        <button type="submit" class="btn 
-                                            {{ isset($conteudosRespondidos[$item->id]) && $conteudosRespondidos[$item->id] ? 'btn-success' : 'btn-warning' }}">
-                                            {{ $item->name }}
-                                        </button>
+                                    <div class="d-flex gap-2 text-center">
+                                        <form action="{{ route('student.showActivity') }}" method="get" class="flex-grow-1 mr-2"> @csrf
+                                            <input name="id" type="hidden" value="{{ $conteudo_id }}"/>
+                                            <input name="type" type="hidden" value="aluno"/>
+                                            <button type="submit" class="btn btn-warning flex-grow-1">
+                                                {{ $conteudos[$i]->name }}
+                                            </button>
+                                        </form>
                                         
-                                    </form>
+                                        @if($conteudosComAtividadesPontuadas[$i])
+                                            <form action="{{ route('ranking.create') }}" class="d-flex">
+                                                <input name="id" type="hidden" value="{{ $conteudo_id }}"/>
+                                                <input name="type" type="hidden" value="aluno"/>
+                                                <button type="submit" class="btn btn-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                                    <i class="bi-trophy"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @endfor
                         <tr><td><br/></td></tr> <!-- para deixar um espaço após o último elemento -->
                         </tbody>
                     </table>

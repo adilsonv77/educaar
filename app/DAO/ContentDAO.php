@@ -136,5 +136,14 @@ class ContentDAO
         return $disciplinas;
     }
 
+    /**
+     * Retorna se um conteúdo tem uma atividade pontuada(true ou false)
+    */
+    public static function conteudoTemAtividadePontuada($content_id) {
+        return DB::table('activities')
+            ->where('content_id', $content_id)
+            ->whereNotNull('score')
+            ->exists();
+    }
 
 }

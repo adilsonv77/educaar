@@ -12,7 +12,14 @@ use Illuminate\Support\Facades\DB;
 class RankingController extends Controller
 {
     public function create(Request $request) : \Illuminate\View\View {
-        $atividades = ActivityDAO::getAtividadesPontuadasPorProf(Auth::id());
+        $type = $request->type;
+        if($type) {
+            $content_id = $request->id;
+            $atividades = ActivityDAO::getAtividadesPontuadasPorConteudo($content_id);
+        } else {
+            $content_id = 0;
+            $atividades = ActivityDAO::getAtividadesPontuadasPorProf(Auth::id());
+        }
 
         $activityId = request('activity_id'); 
 
@@ -22,7 +29,7 @@ class RankingController extends Controller
             ? null
             : RankingDAO::buscarRankingPorAtividade($activityId);
 
-        return view('pages.activity.ranking', compact('atividades', 'ranking'));
+        return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type'));
     }
 
 }

@@ -172,9 +172,23 @@ class ActivityDAO
     /**
      * Retorna as atividades pontuadas de um professor
     */
-    public static function getAtividadesPontuadasPorProf($profId) {
+    public static function getAtividadesPontuadasPorProf($prof_id) {
         return DB::table('activities')
-            ->where('professor_id', $profId)
+            ->where('professor_id'  , $prof_id)
+            ->where('duration', '>', 0)
+            ->select([
+                'id',
+                'name'
+            ])
+            ->get();
+    }
+
+    /**
+     * Retorna as atividades pontuadas de um conteúdo
+    */
+    public static function getAtividadesPontuadasPorConteudo($content_id) {
+        return DB::table('activities')
+            ->where('content_id', $content_id)
             ->where('duration', '>', 0)
             ->select([
                 'id',

@@ -33,6 +33,8 @@
 
     <div class="container mr-0 ml-0">
         <form action="{{ route('ranking.create') }}" method="GET"> @csrf
+            <input type="hidden" name="id" value="{{ $content_id }}">
+            <input type="hidden" name="type" value="{{ $type }}">
             <div class="form-inline d-flex gap-2 justify-content-start">
                 <label>Informe a atividade:</label>
                 <select class="form-control ml-2 w-60" name="activity_id">
