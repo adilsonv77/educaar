@@ -15,7 +15,7 @@ return [
         'dev' => '{1} Desenvolvedor |[2,*] Desenvolvedores'
     ],
     'views' => [
-        'new' => '{1} Novo |{2} Nova |{3} Novos |{4} Novas',
+        'new' => '{1} Novo |{2} Nova |{3} Novos |[4,*] Novas',
         'complete' => '{1} Realizada |[2,*] Realizadas',
         'content' => '{1} Conteúdo |[2,*] Conteúdos',
         'activity' => '{1} Atividade |[2,*] Atividades',

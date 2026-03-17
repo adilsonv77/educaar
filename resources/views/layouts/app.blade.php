@@ -145,7 +145,7 @@
                         @if (session('type') == 'student')
                             <li><a class="ai-icon" href="/students/novas">
                                     <i class="fa fa-external-link-square" aria-hidden="true"></i>
-                                    <span class="nav-text">{{ trans_choice('global.views.new'), 3}}</span>
+                                    <span class="nav-text">{{ trans_choice('global.views.new', 3)}}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="/students/realizadas">
