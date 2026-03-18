@@ -29,25 +29,54 @@
         table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
             content: " \25B4\25BE" 
         }
+
+        @media (max-width: 767.98px) {
+            .btn-rounded-search {
+                border-radius: 1.250rem;
+                margin-top: 10px;
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 767.98px) {
+            .btn-rounded-search {
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;
+                width: auto;
+            }
+            
+            .btn-rounded-select {
+                border-top-right-radius: 0px;
+                border-bottom-right-radius: 0px;
+            }
+
+            .label-search {
+                white-space: nowrap;
+                margin-right: 5px;
+            }
+        }
     </style>
 
-    <div class="container mr-0 ml-0">
+    <div class="container px-0">
         <form action="{{ route('ranking.create') }}" method="GET"> @csrf
             <input type="hidden" name="id" value="{{ $content_id }}">
             <input type="hidden" name="type" value="{{ $type }}">
-            <div class="form-inline d-flex gap-2 justify-content-start">
-                <label>Informe a atividade:</label>
-                <select class="form-control ml-2 w-60" name="activity_id">
-                    <option value="" selected disabled > Selecione uma atividade </option>
+
+            <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
+                <label class="mb-0 label-search">Informe a atividade:</label>
+
+                <select class="form-control w-100 w-md-auto flex-md-grow-1 btn-rounded-select" name="activity_id">
+                    <option value="" selected disabled>Selecione uma atividade</option>
                     @foreach($atividades as $atividade)
                         <option value="{{ $atividade->id }}" @selected(request('activity_id') == $atividade->id)>
                             {{ $atividade->name }}
                         </option>
                     @endforeach
                 </select>
-                <section class="itens-group" >
-                    <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
-                </section>
+
+                <button class="btn btn-primary btn-lg btn-rounded-search" type="submit">
+                    Pesquisar
+                </button>
             </div>
         </form>
     </div>

@@ -262,7 +262,9 @@ class ActivityController extends Controller
             $data['professor_id'] = Auth::user()->id;
             $data['mural_id'] = $data['scene'];
             
-            $data['refeita'] = $request->refeitaMarcador;
+            $data['refeita'] = $request->refeitaMarcador == null
+                ? 0
+                : ($request->refeitaMarcador);
             $content = Content::find($data['content_id']);
             if($content->sort_activities){
                 $data['refeita'] = 1;
