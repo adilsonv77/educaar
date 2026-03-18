@@ -142,19 +142,6 @@
                 <div class="deznav-scroll">
                     <ul class="metismenu" id="menu">
 
-                        @if (session('type') == 'student')
-                            <li><a class="ai-icon" href="/students/novas">
-                                    <i class="fa fa-external-link-square" aria-hidden="true"></i>
-                                    <span class="nav-text">{{ trans_choice('global.views.new', 3)}}</span>
-                                </a>
-                            </li>
-                            <li><a class="ai-icon" href="/students/realizadas">
-                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                    <span class="nav-text">{{ trans_choice('global.views.complete', 2)}}</span>
-                                </a>
-                            </li>
-                        @endif
-
                         @if (session('type') == 'developer')
                             <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-smartphone-5"></i>
