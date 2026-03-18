@@ -37,3 +37,8 @@ ADD COLUMN score INT DEFAULT NULL;
 
 ALTER TABLE student_answers 
 ADD COLUMN tentativas INT NOT NULL DEFAULT 1;
+
+ALTER TABLE content_developer
+ADD CONSTRAINT fk_content_developer_content
+FOREIGN KEY (content_id) REFERENCES contents(id)
+ON DELETE CASCADE;
