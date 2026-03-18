@@ -1,4 +1,5 @@
-@extends('layouts.app')
+
+@extends('layouts.'.$layout)
 
 @section('page-name', "Ranking de uma turma")
 

@@ -156,7 +156,7 @@
     <div class='nav_bar'>
         <div class='buttons_ar' id="buttons_footer">
 
-        @if ($showBack)
+        @if ($showBack ?? false)
 
             
                         <button id="button-back" type="button" class="btn btn-warning" onclick="location.href='{{ $back }}'">
@@ -165,7 +165,7 @@
                 
         @endif
 
-                @if ($showOthers)
+                @if ($showOthers ?? false)
 
 
                         <button type="button" class="btn btn-warning" id="showObject" style="display: none;">

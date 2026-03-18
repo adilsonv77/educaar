@@ -16,9 +16,11 @@ class RankingController extends Controller
         if($type) {
             $content_id = $request->id;
             $atividades = ActivityDAO::getAtividadesPontuadasPorConteudo($content_id);
+            $layout = 'mobile';
         } else {
             $content_id = 0;
             $atividades = ActivityDAO::getAtividadesPontuadasPorProf(Auth::id());
+            $layout = 'app';
         }
 
         $activityId = request('activity_id'); 
@@ -29,7 +31,7 @@ class RankingController extends Controller
             ? null
             : RankingDAO::buscarRankingPorAtividade($activityId);
 
-        return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type'));
+        return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type', 'layout'));
     }
 
 }
