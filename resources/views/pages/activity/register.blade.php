@@ -124,9 +124,7 @@
             @endif
             <form method="POST" action="{{ route('activity.store') }}" enctype="multipart/form-data" files="true" onsubmit="desativarBotao(this)" autocomplete="off">
 
-           
-
-
+                
                 <h3>Atividade</h3>
                 @csrf
                 <input name="id" type="hidden" value="{{$id}}"/>
@@ -144,7 +142,6 @@
                 <div class="form-group">
                     <label for="">Conteúdo*</label>
                     <select class="form-control" name="content_id" aria-label="">
-                        
                         @foreach ($contents as $item)
                             <option value="{{ $item->id }}" data-check="{{ $item->sort }}" 
                             @if ($item->id === ($content ?? $content->first()->id)) selected="selected" @endif>{{ $item->total_name }}</option>
