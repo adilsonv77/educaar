@@ -3,6 +3,10 @@
 
 @section('page-name', "Ranking de uma turma")
 
+@php
+    $position = ['🥇', '🥈', '🥉'];
+@endphp
+
 @section('content')
 
     <style> 
@@ -30,39 +34,41 @@
         table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
             content: " \25B4\25BE" 
         }
+
+        
     </style>
 
     <div class="container mr-0 ml-0">
         <form action="{{ route('ranking.create') }}" method="GET"> @csrf
             <input type="hidden" name="id" value="{{ $content_id }}">
             <input type="hidden" name="type" value="{{ $type }}">
+
             <div class="form-inline d-flex gap-2 justify-content-start">
-                <label>Informe a atividade:</label>
-                <select class="form-control ml-2 w-60" name="activity_id">
-                    <option value="" selected disabled > Selecione uma atividade </option>
-                    @foreach($atividades as $atividade)
-                        <option value="{{ $atividade->id }}" @selected(request('activity_id') == $atividade->id)>
-                            {{ $atividade->name }}
-                        </option>
-                    @endforeach
+                <label for="activityinput" class="mr-2">Informe a atividade:</label>
+
+                <select name="activity_id" class="form-control" style="height: 55px;">
+                    <option selected disabled>Selecione uma atividade</option>
+                        @foreach($atividades as $atividade)
+                            <option value="{{ $atividade->id  }}" @selected(request('activity_id') == $atividade->id)>
+                                {{ $atividade->name }}
+                            </option>        
+                        @endforeach
                 </select>
-                <section class="itens-group" >
-                    <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
-                </section>
+
+                <button type="submit" class="btn btn-primary btn-lg @if($layout == "mobile") btn-block mt-2 mb-4 @endif ">Pesquisar</button>
             </div>
         </form>
     </div>
-    <br>
 
     @if($ranking === null)
         <hr>
         <div class="mt-4"">
             <h1>Não há respostas</h1>
         </div>
-    @else
+    @elseif($layout == 'app')
+        <!-- Usando sorttable.js para a ordenação da tabelas --> 
         <div class="overflow-hidden" style="border-radius: 10px;"> 
-            <!-- Usando sorttable.js para a ordenação da tabela -->
-            <table class="table table-bordered sortable table-layout-fixed" id="table">
+            <table class="table table-bordered sortable table-layout-fixed mt-4" id="table">
                 <thead class="thead-info">
                     <tr>
                         <th class="sorttable_nosort">Posição</th>
@@ -84,6 +90,27 @@
                             <td>{{ $aluno->name }}</th>
                             <td>{{ $aluno->pontuacao ?? 0 }} pontos</th>
                             <td>{{ $aluno->tentativas ?? 0 }}</th>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div> 
+    @else
+        <div class="overflow-hidden" style="border-radius: 10px">
+            <table class="table sortable table-layout-fixed" id="table">
+                <tbody>
+                    @foreach($ranking as $i => $aluno)
+                        <tr class="item">
+                            <td style="width: 20%;">
+                                @if($i <= 2) {{ $position[$i] }}
+                                @else {{ $i + 1 }}º
+                                @endif
+                            </td>
+                            <!-- <td style="width: 20%;">avatar</td> -->
+                            <td style="width: 60%;">
+                                {{ $aluno->name }} <br> {{ $aluno->pontuacao ?? 0 }}
+                                @if($aluno->pontuacao > 1) pontos @else ponto @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
