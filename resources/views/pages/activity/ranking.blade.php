@@ -35,7 +35,37 @@
             content: " \25B4\25BE" 
         }
 
-        
+        /* ANIMAÇÃO DE BRILHO NO PÓDIO */
+        @media only screen and (max-width: 767px) {
+            tbody tr:nth-child(1) { --base: #fff8e1; --shine: rgba(255, 215, 0, 0.55); }
+            tbody tr:nth-child(2) { --base: #f0f0f0; --shine: rgba(200, 200, 200, 0.55); }
+            tbody tr:nth-child(3) { --base: #fdecea; --shine: rgba(205, 127, 50, 0.45); }
+
+            tbody tr:nth-child(1),
+            tbody tr:nth-child(2),
+            tbody tr:nth-child(3) {
+                background: linear-gradient(
+                    90deg,
+                    var(--base) 30%,
+                    var(--shine) 50%,
+                    var(--base) 70%
+                );
+                background-size: 200% 100%;
+                background-position: 200% center;
+                animation: row-shimmer 1.8s infinite alternate ease-in-out;
+            }
+
+            tbody tr:nth-child(1) td,
+            tbody tr:nth-child(2) td,
+            tbody tr:nth-child(3) td {
+                background: transparent !important;
+            }
+
+            @keyframes row-shimmer {
+                0%   { background-position: -50% center; }
+                100% { background-position: 150% center; }
+            }
+        }
     </style>
 
     <div class="container mr-0 ml-0">
