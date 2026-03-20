@@ -4,7 +4,7 @@ return [
     'title' => 'Relatório da Atividade',
     'teacher_id' => 'Professor ID',
     'created_at' => 'Criada em',
-    'image_related' => 'Imagem relacioanda',
+    'image_related' => 'Imagem relacionada',
     'no_image' => 'Sem imagem relacionada.',
     'question' => 'Questão',
     'no_text' => 'Sem texto',
