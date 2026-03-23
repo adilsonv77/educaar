@@ -146,4 +146,10 @@ class ContentDAO
             ->exists();
     }
 
+    public static function getNameById($content_id) {
+        return DB::table('contents')
+            ->where('id', $content_id)
+            ->value('name');
+    }
+
 }
