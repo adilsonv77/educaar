@@ -7,31 +7,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\DAO\RankingDAO;
 use App\DAO\ActivityDAO;
+use App\DAO\ContentDAO;
 use Illuminate\Support\Facades\DB;
 
 class RankingController extends Controller
 {
-    public function create(Request $request) : \Illuminate\View\View {
+    public function create(Request $request): \Illuminate\View\View {
         $type = $request->type;
+        $content_id = $request->id;
+        $activity_id = request('activity_id');
+
         if($type) {
-            $content_id = $request->id;
-            $atividades = ActivityDAO::getAtividadesPontuadasPorConteudo($content_id);
             $layout = 'mobile';
+            $atividades = null;
+
+            $ranking = RankingDAO::somaDasPontuacoesDeUmConteudo($content_id);
+            $content_name = ContentDAO::getNameById($content_id);
         } else {
-            $content_id = 0;
-            $atividades = ActivityDAO::getAtividadesPontuadasPorProf(Auth::id());
             $layout = 'app';
+            $atividades = ActivityDAO::getAtividadesPontuadasPorProf(Auth::id());
+            $content_name = ContentDAO::getNameById($content_id);
+
+            $ranking = $activity_id == 0 || !ActivityDAO::hasAnswers($activity_id)
+                ? null
+                : RankingDAO::buscarRankingPorAtividade($activity_id);
+
         }
 
-        $activityId = request('activity_id'); 
-
-        $hasAnswer = DB::table('pontuacoes')->where('activity_id', $activityId)->exists();
-
-        $ranking = $activityId == 0 || !$hasAnswer
-            ? null
-            : RankingDAO::buscarRankingPorAtividade($activityId);
-
-        return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type', 'layout'));
+        return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type', 'layout', 'content_name'));
     }
 
 }
