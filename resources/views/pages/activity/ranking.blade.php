@@ -132,7 +132,7 @@
 
             <div class="d-flex align-items-center justify-content-between mb-3 px-1">
                 <div>
-                    <h3 class="mb-0 font-weight-bold">🏆 Ranking</h5>
+                    <h3 class="mb-0 font-weight-bold">🏆 Ranking de {{$content_name}}</h5>
                     <small class="text-muted">{{ $ranking->count() }} participantes</small>
                 </div>
             </div>
