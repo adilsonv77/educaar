@@ -197,5 +197,11 @@ class ActivityDAO
             ->get();
     }
 
+    public static function hasAnswers(int $activity_id): bool {
+        return DB::table('pontuacoes')
+            ->where('activity_id', $activity_id)
+            ->exists();
+    }
+
 }
 
