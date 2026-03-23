@@ -40,4 +40,23 @@ class RankingDAO {
 
         return($dados);
     }
+
+    public static function somaDasPontuacoesDeUmConteudo(int $content_id) {
+        $data = DB::table('contents')
+            ->join('activities', 'activities.content_id', '=', 'contents.id')
+            ->join('pontuacoes', 'pontuacoes.activity_id', '=', 'activities.id')
+            ->join('users', 'users.id', '=', 'pontuacoes.user_id')
+            ->where('contents.id', $content_id)
+            ->select(
+                'users.name',
+                'pontuacoes.user_id',
+                DB::raw('SUM(pontuacoes.pontuacao) as pontuacao'),
+            )
+            ->groupBy('pontuacoes.user_id')
+            ->orderBy('pontuacao', 'DESC')
+            ->get();
+
+        return $data;
+    }
 }
+
