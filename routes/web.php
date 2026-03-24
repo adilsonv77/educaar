@@ -208,9 +208,6 @@ Route::get('/create-zip', [BackupController::class, 'createZip'])->name('create.
 //webservice para receber o arquivo mind
 Route::post('/receivemind', 'App\Http\Controllers\ReceiveMindController@receive');
 
-// nao sao mais usadas.... provavelmente excluir !!!
-Route::get('/students/novas', [App\Http\Controllers\StudentController::class, 'novasAtividades']);
-Route::get('/students/realizadas', [App\Http\Controllers\StudentController::class, 'atividadesRealizadas']);
 
 /*
 
