@@ -146,7 +146,7 @@
                             <tr class="item" >
                                 <td style="width: 20%;">
                                     @if($i <= 2) {{ $position[$i] }}
-                                    @else {{ $i + 1 }}º
+                                    @else {{ $aluno->posicao++ }}º
                                     @endif
                                 </td>
                                 <!-- <td style="width: 20%;">avatar</td> -->

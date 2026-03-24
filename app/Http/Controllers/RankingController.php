@@ -31,7 +31,6 @@ class RankingController extends Controller
             $ranking = $activity_id == 0 || !ActivityDAO::hasAnswers($activity_id)
                 ? null
                 : RankingDAO::buscarRankingPorAtividade($activity_id);
-
         }
 
         return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type', 'layout', 'content_name'));
