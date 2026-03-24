@@ -15,6 +15,7 @@ class RankingController extends Controller
     public function create(Request $request): \Illuminate\View\View {
         $type = $request->type;
         $content_id = $request->id;
+        $content_name = ContentDAO::getNameById($content_id);
         $activity_id = request('activity_id');
 
         if($type) {
@@ -22,11 +23,9 @@ class RankingController extends Controller
             $atividades = null;
 
             $ranking = RankingDAO::somaDasPontuacoesDeUmConteudo($content_id);
-            $content_name = ContentDAO::getNameById($content_id);
         } else {
             $layout = 'app';
             $atividades = ActivityDAO::getAtividadesPontuadasPorProf(Auth::id());
-            $content_name = ContentDAO::getNameById($content_id);
 
             $ranking = $activity_id == 0 || !ActivityDAO::hasAnswers($activity_id)
                 ? null

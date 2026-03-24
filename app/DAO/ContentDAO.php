@@ -147,6 +147,10 @@ class ContentDAO
     }
 
     public static function getNameById($content_id): string {
+        if($content_id === null || $content_id === 0) {
+            return '';
+        }
+
         return DB::table('contents')
             ->where('id', $content_id)
             ->value('name');
