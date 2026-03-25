@@ -82,21 +82,18 @@
 <!-- Modal de Confirmação de Exclusão -->
 @if(Route::currentRouteName() == 'questions.edit')
 
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmModal"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 600px">
             <div class="modal-body">
                 <h3>Você tem certeza que deseja salvar as mudanças?</h3>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" justify-content-center>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <!-- isso n ta prnto ainda, ele ta excluidno as resposntas mas n ta salvando -->
-                 <form action="{{ route('answers.destroy', $id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-success" onclick="document.getElementById('questionForm').submit();">Excluir Respostas e Salvar</button>
-                </form> 
-                <button type="submit" class="btn btn-success" onclick="document.getElementById('questionForm').submit();">Salvar</button>
+
+                <button type="button" class="btn btn-danger" onclick="excluirESalvar()">Excluir Respostas e Salvar</button>
+                 
+                <button type="button" class="btn btn-success" onclick="document.getElementById('questionForm').submit();">Salvar</button>
             </div>
         </div>
     </div>
@@ -108,4 +105,19 @@
 <hr>
 </div>
 </div>
+
+<script>
+    function excluirESalvar() {
+        let form = document.getElementById('questionForm');
+
+        let input = document.createElement('input');
+
+        input.type = 'hidden';
+        input.name = 'delete_answers';
+
+        input.value = '1';
+        form.appendChild(input);
+        form.submit();
+    }
+</script>
 @endsection

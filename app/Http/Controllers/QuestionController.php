@@ -138,7 +138,7 @@ class QuestionController extends Controller
 
         $data = $request->all();
         $id = session()->get('activity_id');
-        # dd($activity);
+    
         $validator = Validator::make($request->all(), [
             'question' => 'required',
             'A' => 'required',
@@ -146,21 +146,24 @@ class QuestionController extends Controller
             'C' => 'required',
             'D' => 'required',
         ]);
+
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
+
         if ($data['acao'] == 'insert') {
             Question::create($data);
         } else {
             $question = Question::find($data['id']);
-            // return var_dump($question);
             $question->update($data);
         }
 
+        if($request->has('delete_answers') && $request->delete_answers == '1'){
+            StudentAnswer::where('question_id', $question->id)->delete();
+            ArProgress::where('content_id', $question->activity->content_id)->delete();
+        }
 
 
-
-        #return view('pages.questions.index', $id);
         return redirect(route('questions.index', 'activity=' . $id));
     }
 
@@ -218,8 +221,11 @@ class QuestionController extends Controller
         return redirect(route('questions.index', ["activity" => $activity_id]));
     }
 
-    public function updateQuestionAndDestroyAnswers($id){
-        
+    public function updateQuestionAndDestroyAnswers(Request $request, $id){
+        StudentAnswer::where('question_id', $id)->delete();
+        $question = Question::find($id);
+        ArProgress::where('content_id', $question->activity->content_id)->delete();
+        return redirect(route('questions.store', ["request" => $request]));
     }
 
     public function destroyAnswers($id)

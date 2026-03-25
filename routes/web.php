@@ -120,6 +120,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('results', [App\Http\Controllers\QuestionController::class, 'results'])->name('activity.results');
     Route::get('/listStudents/{type}', [App\Http\Controllers\QuestionController::class, 'resultsListStudents'])->name('activity.listStudents');
     Route::delete('/answers/{id}', [App\Http\Controllers\QuestionController::class, 'destroyAnswers'])->name('answers.destroy');
+    Route::post('/answers/{id}', [App\Http\Controllers\QuestionController::class, 'updateAndDestroyAnswers'])->name('answers.updateAndDestroy');
 
 
     // Route::get('/question/index', [App\Http\Controllers\QuestionController::class, 'index'])->name('question.index');

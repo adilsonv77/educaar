@@ -94,6 +94,7 @@ foreach($questions as $q) {
                                             <h3>Você tem certeza que deseja excluir a questão {{ $item->question }}?
                                             </h3>
                                         </div>
+                                        
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                             <form action="{{ route('questions.destroy', $item->id) }}" method="POST">
