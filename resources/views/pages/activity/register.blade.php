@@ -229,21 +229,20 @@
                 </div>
                 
 
-                @if(!session('type') == 'developer')
+                @if(session('type') != 'developer' && $acao != 'edit')
                     <!----------------REFEITA----------------->
-                    @if($acao != 'edit')
-                    <div class="mb-4">
-                        <div class="custom-control custom-switch switch">
-                            <input type="hidden" name="refeitaMarcador" value="0">
-                            <input type="checkbox" class="custom-control-input" id="refeitaMarcador" name="refeitaMarcador" value="1">
-                            <label class="custom-control-label" for="refeitaMarcador">Refeita</label>
-                            <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="refeitaAlerta" role="alert"><!-- Texto controlado pelo JS --></div>
+    
+                        <div class="mb-4">
+                            <div class="custom-control custom-switch switch">
+                                <input type="hidden" name="refeitaMarcador" value="0">
+                                <input type="checkbox" class="custom-control-input" id="refeitaMarcador" name="refeitaMarcador" value="1">
+                                <label class="custom-control-label" for="refeitaMarcador">Refeita</label>
+                                <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="refeitaAlerta" role="alert"><!-- Texto controlado pelo JS --></div>
+                            </div>
                         </div>
-                    </div>
-                    @endif
-
-                    <!----------------PONTUADA----------------->
-                    @if($acao != 'edit')
+    
+                        <!----------------PONTUADA----------------->
+                    
                         <div class="custom-control custom-switch switch pontuada mb-2 mt-3">
                             <input type="hidden" name="pontuadaMarcador" value="0">
                             <input type="checkbox" class="custom-control-input" id="switchPontuada" name="pontuadaMarcador" value="1">
