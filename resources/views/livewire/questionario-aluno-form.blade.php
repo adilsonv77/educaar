@@ -382,13 +382,7 @@
                         <div class="card mb-3 shadow-sm">
                             <div class="card-body">
                                 <p class="card-text mb-3">{{ $questao['question'] }}</p>
-
-                                <div class="alert @if($questao['correct']) alert-success @else alert-danger @endif mb-0 d-flex align-items-center" role="alert">
-                                    @if($questao['correct'])
-                                        <i class="bi bi-check-circle-fill me-2"></i>
-                                    @else
-                                        <i class="bi bi-x-circle-fill me-2"></i>
-                                    @endif
+                                <div class="alert alert-primary mb-0 d-flex align-items-center" role="alert">
                                     <div><strong>Sua resposta:</strong> {{ $questao['alternative_answered'] }}</div>
                                 </div>
                             </div>
