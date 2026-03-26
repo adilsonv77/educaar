@@ -397,41 +397,33 @@
             </div>
         </div>
     </div>
-<!-- Esse modal não está mais sendo usado
-    <div wire:ignore.self class="modal fade" id="notAllowedModal" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h1>ATENÇÃO</h1>
-                    <p>Você precisa concluir a atividade anterior para acessar as questões dessa atividade!</p>
-                </div>
-                <div class="modal-footer">
-                    <button wire:click="closeNotAllowedModal" type="button" class="btn btn-primary" data-dismiss="modal">
-                        Fechar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
--->
 
     <div wire:ignore.self class="modal fade" id="stopTimer" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h5>
-                        O tempo acabou!
-                    </h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">
-                        Fechar
-                    </button>
-                </div>
+     aria-labelledby="stopTimerLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 rounded-4 overflow-hidden" style="box-shadow: 0 20px 60px rgba(0,0,0,0.18);">
+    
+          <div class="modal-body text-center pt-4 pb-2 px-4">
+    
+            <div class="position-relative mx-auto mb-3" style="width: 64px; height: 64px;">
+              <i class="bi bi-clock" style="font-size: 2rem"></i>
             </div>
+    
+            <h5 class="fw-medium mb-1" style="font-size: 1.2rem;">O tempo acabou!</h5>
+            <p class="text-muted mb-4" style="font-size: 0.875rem;">
+              As pontuações de próximas tentativas não serão contabilizadas.
+            </p>
+          </div>
+    
+          <div class="modal-footer border-0 pt-0 px-4 pb-4">
+            <button type="button" class="btn w-100 fw-medium btn-primary" data-dismiss="modal"
+                    style="color:#fff; border:none; padding: 11px; border-radius: 8px;">
+              Entendido
+            </button>
+          </div>
+          
         </div>
+      </div>
     </div>
 
 </div>
