@@ -75,6 +75,15 @@
             $('#questionarioModal').modal('hide');
             $('#stopTimer').modal('show');
         });
+
+        window.addEventListener('openHintModal', event => {
+            $('#feedbackModal').modal('hide');
+            $('#hintModal').modal('show');
+        });
+
+        window.addEventListener('closeHintModal', event => {
+            $('#hintModal').modal('hide');
+        });
     
         document.addEventListener("DOMContentLoaded", function() {   
 
@@ -388,6 +397,35 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+                <div class="modal-footer">
+                    @if($teste)
+                        <button type="button" wire:click="hint()" class="btn btn-primary">Pista</button>
+                    @else
+                        <button wire:click="close()" type="button" class="btn btn-primary" data-dismiss="modal">
+                            Fechar
+                        </button>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div wire:ignore.self class="modal fade" id="hintModal" tabindex="-1" role="dialog" data-backdrop="static"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Pista para a seguinte atividade:</p>
+                </div>
+                <div class="container my-4 max" style="max-height: 60vh; overflow-y: auto;">
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <p class="card-text">
+                                {{ $teste }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button wire:click="close()" type="button" class="btn btn-primary" data-dismiss="modal">
