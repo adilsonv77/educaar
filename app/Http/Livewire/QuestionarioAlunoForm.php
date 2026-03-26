@@ -286,7 +286,7 @@ class QuestionarioAlunoForm extends Component
             }
             
             DB::commit();
-            session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao', 'primeira_entrada']);
+            session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao']);
             $this->questions = null;
             if(!$this->incorreta && $content->sort_activities){
                 $this->dispatchBrowserEvent('atividade-concluida', [
@@ -298,6 +298,8 @@ class QuestionarioAlunoForm extends Component
             if($timeout == false) {
                 $this->dispatchBrowserEvent('openFeedbackModal');
             }
+
+            session()->put('primeira_entrada', 1);
         } catch (Exception $e) {
             DB::rollback();
             dd($e);
