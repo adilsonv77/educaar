@@ -84,6 +84,14 @@
         window.addEventListener('closeHintModal', event => {
             $('#hintModal').modal('hide');
         });
+
+        window.addEventListener('openCameraAlert', event => {
+            $('#alertaCameraModal').modal('show');
+        })
+
+        window.addEventListener('closeCameraAlert', event => {
+            $('#alertaCameraModal').modal('hide');
+        })
     
         document.addEventListener("DOMContentLoaded", function() {   
 
@@ -233,6 +241,23 @@
         <button id="button-ar" class="btn btn-warning" style="display: none;">
             <span><i style="color:#ffffff;" class="bi bi-book"></i></span>
         </button>
+    </div>
+
+    <div wire:ignore.self class="modal fade" id="alertaCameraModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3>Erro ao acessar a câmera. Por favor, recarregue a página e verifique as permissões de câmera do seu dispositivo e/ou navegador.
+                    </h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div wire:ignore.self class="modal fade" id="alertaModal" tabindex="-1" role="dialog"
@@ -398,7 +423,7 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="modal-footer">
+                {{-- <div class="modal-footer">
                     @if($teste)
                         <button type="button" wire:click="hint()" class="btn btn-primary">Pista</button>
                     @else
@@ -406,7 +431,7 @@
                             Fechar
                         </button>
                     @endif
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -422,7 +447,7 @@
                     <div class="card mb-3 shadow-sm">
                         <div class="card-body">
                             <p class="card-text">
-                                {{ $teste }}
+                                {{-- $teste --}}
                             </p>
                         </div>
                     </div>

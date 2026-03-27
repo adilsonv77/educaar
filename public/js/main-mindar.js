@@ -541,7 +541,20 @@ document.addEventListener('DOMContentLoaded', () => {
     myarcontainer.style.display = "";
 
     const clock = new THREE.Clock();
-    await mindarThree.start();
+
+    try{
+      await mindarThree.start();
+    } catch (error){
+
+      myarcontainer.style.display = "none";
+
+      if(barradeprogresso) barradeprogresso.style.display = "none";
+
+      dispatchEvent(new CustomEvent('openCameraAlert'));
+
+      return;
+    }
+    
 
     var mindarscanning = document.getElementsByClassName("mindar-ui-scanning");
     mindarscanning[0].style.bottom = "120px";
