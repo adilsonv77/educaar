@@ -295,13 +295,22 @@
                         </div>
                         
                 @endif
-                <!-----------------SUBMIT------------------>
-                <div class="form-group mt-4" onsubmit="desativarBotao(this)">
-                    <button type="submit" id="btnSalvar" class="btn btn-success">
-                       Salvar
-                    </button>
-                </div>
-            </form>
+
+                    <!-----------------PISTA------------------>
+                    <div class="extras collapse" id="hint">
+                        <div class="hint mt-5">
+                            <label for="hintLabel" >Pista customizada</label>
+                            <input type="text" name="hintText" id="tempo" class="form-control" placeholder="Deixe vazio para não adicionar uma pista customizada">
+                        </div>
+                    </div>
+                    
+                    <!-----------------SUBMIT------------------>
+                    <div class="form-group mt-4" onsubmit="desativarBotao(this)">
+                        <button type="submit" id="btnSalvar" class="btn btn-success">
+                            Salvar
+                        </button>
+                    </div>
+                </form>
         </div>
     </div>
 
@@ -318,7 +327,8 @@
             ponAle: document.getElementById('pontuadaAlerta'),
             btnPontuada: document.getElementById('btnPontuadaMarcador'),
             nota: document.getElementById('nota'),
-            tempo: document.getElementById('tempo')
+            tempo: document.getElementById('tempo'),
+            hint: document.getElementById('hint')
         };
 
         const getContentType = () => {
@@ -341,10 +351,12 @@
                     el.switchRefeita.disabled = true;
                     el.switchRefeita.checked = false;
                     el.refAle.textContent = "Atividades de um conteúdo ordenado são refeitas por padrão.";
+                    $(el.hint).collapse('show');
                     
                 } else {
                     el.switchRefeita.disabled = false;
                     el.refAle.textContent = "Se esta opção estiver marcada os alunos poderão refazer a questão caso não a tenham acertada completamente.";
+                    $(el.hint).collapse('hide');
                 }
             } else {
                 el.switchRefeita.checked = false;

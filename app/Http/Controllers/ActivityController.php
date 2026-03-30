@@ -240,6 +240,7 @@ class ActivityController extends Controller
                     $data['glb'] = $filename . "/" . $achou;
 
                 } else {
+                    
                     return redirect()->back()->withErrors(['msg' => 'Problemas ao descompactar o ZIP.']);
                 }
             } else {
@@ -280,6 +281,8 @@ class ActivityController extends Controller
                 ];
                 $data['refeita'] = 1;
             }
+            
+            $data['hint'] = $request->hintText;
             $activity = Activity::create($data);
 
             $data['marcador'] = $activity->id . '.' . $request->marcador->getClientOriginalExtension();
