@@ -56,9 +56,11 @@ class RankingDAO {
                 DB::raw('SUM(pontuacoes.pontuacao) as pontuacao'),
                 DB::raw('ROW_NUMBER() OVER (ORDER BY SUM(pontuacoes.pontuacao) DESC) as posicao'),
             )
-            ->groupBy('pontuacoes.user_id');
+            ->groupBy('pontuacoes.user_id', 'users.name');
 
-        if(count($simple->get()) > 10) {
+        $results = $simple->get();
+
+        if(count($results) > 10) {
             $userId = Auth::id();
 
             $top10 = DB::table(DB::raw("({$simple->toSql()}) as ranking"))
@@ -72,7 +74,16 @@ class RankingDAO {
             return $top10->get();
         }
 
-        return $simple->get();
+        return $results;
+    }
+
+    public static function somaDosParticipantes(int $contentId) : int {
+        return DB::table('contents')
+            ->join('activities', 'activities.content_id', '=', 'contents.id')
+            ->join('pontuacoes', 'pontuacoes.activity_id', '=', 'activities.id')
+            ->where('contents.id', $contentId)
+            ->distinct()
+            ->count('pontuacoes.user_id');
     }
 
 }

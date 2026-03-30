@@ -21,6 +21,7 @@ class RankingController extends Controller
         if($type) {
             $layout = 'mobile';
             $atividades = null;
+            $studentCount = RankingDAO::somaDosParticipantes($content_id);
 
             $ranking = RankingDAO::somaDasPontuacoesDeUmConteudo($content_id);
         } else {
@@ -32,7 +33,7 @@ class RankingController extends Controller
                 : RankingDAO::buscarRankingPorAtividade($activity_id);
         }
 
-        return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type', 'layout', 'content_name'));
+        return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type', 'layout', 'content_name', 'studentCount'));
     }
 
 }
