@@ -300,7 +300,7 @@
                     <div class="extras collapse" id="hint">
                         <div class="hint mt-5">
                             <label for="hintLabel" >Pista customizada</label>
-                            <input type="text" name="hintText" id="tempo" class="form-control" placeholder="Deixe vazio para não adicionar uma pista customizada">
+                            <input type="text" name="pista_customizada" id="pista_customizada" class="form-control" placeholder="Deixe vazio para não adicionar uma pista customizada">
                         </div>
                     </div>
                     

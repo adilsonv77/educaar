@@ -187,7 +187,8 @@ class ActivityController extends Controller
             'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:40960000'],
             'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg'],
             'refeitarMarcador' => 'boolean',
-            'pontuadaMarcador' => 'boolean'
+            'pontuadaMarcador' => 'boolean',
+            'pista_customizada' => 'max:255'
         ]);
 
         if ($validator->fails()) {
@@ -282,7 +283,7 @@ class ActivityController extends Controller
                 $data['refeita'] = 1;
             }
             
-            $data['hint'] = $request->hintText;
+            $data['hint'] = $request->pista_customizada;
             $activity = Activity::create($data);
 
             $data['marcador'] = $activity->id . '.' . $request->marcador->getClientOriginalExtension();
