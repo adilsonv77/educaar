@@ -352,7 +352,7 @@ class QuestionarioAlunoForm extends Component
         $this->tempoResposta[] = $valor;
     }
 
-    public function calcularPontuacao($corretas) {
+    private function calcularPontuacao($corretas) {
         $pontos = [];
 
         if (empty($this->tempoResposta)) {
