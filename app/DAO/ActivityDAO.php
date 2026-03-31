@@ -203,5 +203,13 @@ class ActivityDAO
             ->exists();
     }
 
+    /**
+     * Retorna '' caso hint, no banco de dados, seja null.
+    */
+    public static function getHint(int $activityId) : string {
+        return DB::table('activities')
+                    ->where('id', $activityId)
+                    ->value('hint') ?? '';
+    }
 }
 
