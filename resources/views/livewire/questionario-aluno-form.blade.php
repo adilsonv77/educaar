@@ -423,15 +423,15 @@
                         </div>
                     @endforeach
                 </div>
-                {{-- <div class="modal-footer">
-                    @if($teste)
+                <div class="modal-footer">
+                    @if($hint !== '')
                         <button type="button" wire:click="hint()" class="btn btn-primary">Pista</button>
                     @else
                         <button wire:click="close()" type="button" class="btn btn-primary" data-dismiss="modal">
                             Fechar
                         </button>
                     @endif
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>
@@ -441,18 +441,21 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>Pista para a seguinte atividade:</p>
+                    <h5>Pista para a atividade seguinte:</h5>
                 </div>
-                <div class="container my-4 max" style="max-height: 60vh; overflow-y: auto;">
-                    <div class="card mb-3 shadow-sm">
+                <div class="container my-2 max" style="max-height: 60vh; overflow-y: auto;">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <p class="card-text">
-                                {{-- $teste --}}
+                                {{ $hint }}
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button wire:click="voltar()" type="button" class="btn btn-primary" data-dismiss="modal">
+                        Voltar
+                    </button>
                     <button wire:click="close()" type="button" class="btn btn-primary" data-dismiss="modal">
                         Fechar
                     </button>

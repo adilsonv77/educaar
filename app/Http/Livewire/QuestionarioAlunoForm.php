@@ -49,6 +49,7 @@ class QuestionarioAlunoForm extends Component
     public $questionarioRespondido;
     public $alternativas;
 
+    public $hint;
     /*
 - PRECISO TESTAR COMO FUNCIONA COM FORMULÁRIOS JÁ RESPONDIDOS
 */
@@ -61,6 +62,7 @@ class QuestionarioAlunoForm extends Component
         $this->tempoMaximo = QuestionDAO::getDuration($this->activity_id);
         $this->tempoRestante = ActivityDAO::getTempoRestante(Auth::id(), $this->activity_id);
         $this->pontuacaoMaxima = ActivityDAO::getPontuacao($this->activity_id);
+        $this->hint = ActivityDAO::getHint($this->activity_id);
 
         $this->feedback = [];
 
@@ -310,6 +312,7 @@ class QuestionarioAlunoForm extends Component
     public function close() {
 
         $this->dispatchBrowserEvent('closeFeedbackModal');
+        $this->dispatchBrowserEvent('closeHintModal');
         $content_id = session()->get('content_id');
         $content = Content::find($content_id);
         
@@ -372,11 +375,12 @@ class QuestionarioAlunoForm extends Component
         return array_sum($pontos);
     }
 
-    public function timeOut() {
-        Pontuacao::create([
-            'user_id' => Auth::id(),
-            'activity_id' => $this->activity_id,
-            'pontuacao' => 0
-        ]);
+    public function hint() {
+        $this->dispatchBrowserEvent('openHintModal');
+    }
+
+    public function voltar() {
+        $this->dispatchBrowserEvent('closeFeedbackModal');
+        $this->dispatchBrowserEvent('openFeedbackModal');
     }
 }
