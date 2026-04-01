@@ -62,7 +62,7 @@ class QuestionarioAlunoForm extends Component
         $this->tempoMaximo = QuestionDAO::getDuration($this->activity_id);
         $this->tempoRestante = ActivityDAO::getTempoRestante(Auth::id(), $this->activity_id);
         $this->pontuacaoMaxima = ActivityDAO::getPontuacao($this->activity_id);
-        $this->hint = ActivityDAO::getHint($this->activity_id);
+        $this->hint = ActivityDAO::getNextHint(session()->get('content_id'), $this->activity_id);
 
         $this->feedback = [];
 
