@@ -175,8 +175,14 @@
             }
         });
 
+        function getComponent() {
+            const id = document.getElementById('questionarioModal')
+                               ?.getAttribute('data-livewire-id');
+            return id ? window.Livewire.find(id) : null;
+        }
+
         function timesOver() {
-            const livewireEvent = document.querySelector('[wire\\:id]')?.__livewire;
+            const livewireEvent = getComponent();
 
             if(intervalo) {
                 clearIntervalo();
@@ -186,8 +192,9 @@
         }
 
         function handleSubmit() {
-            const button = event.target.closest('#salvibutton');
-            const livewireEvent = button?.closest('[wire\\:id]')?.__livewire;
+            /*  const button = event.target.closest('#salvibutton');
+            const livewireEvent = button?.closest('[wire\\:id]')?.__livewire; */
+            const livewireEvent = getComponent();
 
             if(tempoMaximo > 0) {
                 if(livewireEvent) {
@@ -281,7 +288,7 @@
         </div>
     </div>
 
-    <div wire:ignore.self class="modal fade" id="questionarioModal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="questionarioModal" data-livewire-id="{{ $this->id }}" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     
         <div class="modal-dialog modal-dialog-scrollable" role="document"> <!--  -->
             
