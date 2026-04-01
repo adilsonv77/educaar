@@ -271,6 +271,7 @@ class QuestionarioAlunoForm extends Component
             foreach($this->feedback as $item) {
                 
                 if(!$item['correct']) {
+                    $this->hint = '';
                     $this->incorreta = true;
                     break;
                 }
@@ -296,6 +297,9 @@ class QuestionarioAlunoForm extends Component
                     'activity_id' => $this->activity_id
                 ]);
             }
+
+            $this->incorreta = in_array(0, $corretas);
+            $this->hint = $this->incorreta ? '' : $this->hint;
             
             if($timeout == false) {
                 $this->dispatchBrowserEvent('openFeedbackModal');
