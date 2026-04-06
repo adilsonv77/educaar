@@ -37,46 +37,59 @@ class ResultActivityDAO
             ->groupBy('id','nome');
             // trocar para u.id
             // $alunos_fizeram= $subQuery->selectRaw('COUNT(u.name) as completo')->get();
-            $alunos_fizeram= $sql->get();
+            $alunos_fizeram = $sql->get();
 
             //separando os alunos que fizeram todas as questões
-            $alunos_fizeram_completo= array();
+            $alunos_fizeram_completo = array();
+
             //separando os alunos que não fizeram todas as questões
-            $alunos_fizeram_incompleto= array();
+            $alunos_fizeram_incompleto = array();
+
             foreach($alunos_fizeram as $aluno){
                 if( $aluno->qntRespondida == $totalQuestions){
                     array_push($alunos_fizeram_completo,  $aluno);
                 }else{
                     array_push($alunos_fizeram_incompleto,  $aluno);
                 }
-            }
+            }  
 
             $question_base= $where->first()->id;
+
+            $ids_alunos_fizeram = $alunos_fizeram->pluck('id')->toArray();
+
             //alunos que não fizeram
             $sql2= DB::table('users as u')
-                    ->selectRaw('COUNT(u.name) as qntsNaofizeram')
+                    ->selectRaw('u.id, u.name as nome')
                     ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'u.id')
-                    ->where('alunt.turma_id', '=', $turma_id)
-                    ->whereNotExists(function($query) use ($question_base)
-                    {
-                        $query->select(DB::raw(1))
-                                ->from('student_answers as sta')
-                                ->whereRaw('sta.user_id = u.id')
-                                ->whereRaw('sta.question_id = '. $question_base);
-                    });
-            $alunos_nao_fizeram= $sql2->first();
+                    ->where('alunt.turma_id', '=', $turma_id);
             
+            if(!empty($ids_alunos_fizeram)){
+                $sql2->whereNotIn('u.id', $ids_alunos_fizeram);
+
+            }
+
+            $alunos_nao_fizeram_banco = $sql2->get();
+
+            $alunos_nao_fizeram = array();
+
+            foreach ($alunos_nao_fizeram_banco as $aluno) {
+                 array_push($alunos_nao_fizeram,  $aluno);
+            }
+
             $result= [
                 'totalQuestions' => $totalQuestions,
-                'alunos_fizeram_completo' => count($alunos_fizeram_completo),
-                'alunos_fizeram_incompleto' => count($alunos_fizeram_incompleto),
-                'alunos_nao_fizeram' => $alunos_nao_fizeram->qntsNaofizeram,
+                'alunos_fizeram_incompleto' => $alunos_fizeram_incompleto,
+                'alunos_fizeram_completo' => $alunos_fizeram_completo,
+                'alunos_nao_fizeram' => $alunos_nao_fizeram,
+                'qtd_alunos_fizeram_completo' => count($alunos_fizeram_completo),
+                'qtd_alunos_fizeram_incompleto' => count($alunos_fizeram_incompleto),
+                'qtd_alunos_nao_fizeram' => count($alunos_nao_fizeram),
                 'question_base' => $question_base
             ];
             
-
         return $result;
     }
+
     public static function questoesQntAcertos($activityID, $turma_id)
     {
 
@@ -123,30 +136,30 @@ class ResultActivityDAO
         -> where('q.activity_id', '=', $activityID) //Filtro de atividade
         -> groupBy('q.id', 'q.question');
 
-        $result_questions= $sql->get();
+        $result_questions = $sql->get();
 
         //dd($result_questions);
         return $result_questions;
     }
 
-    public static function getStudentDidNotQuestions($turma_id, $questao){
-                    //alunos que não fizeram
-
-
-            $sql2= DB::table('users as u')
-                ->select('u.id as id','u.name as nome')
-                ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'u.id')
-                ->where('alunt.turma_id', '=', $turma_id)
-                ->whereNotExists(function($query) use ($questao)
-                {
-                    $query->select(DB::raw(1))
-                            ->from('student_answers as sta')
-                            ->whereRaw('sta.user_id = u.id')
-                            ->whereRaw('sta.question_id = '. $questao);
-                });
-            $alunos_nao_fizeram= $sql2->get();
-            return $alunos_nao_fizeram;
+    public static function getStudentDidAllQuestions($turma_id, $questao){
+        //alunos que fizeram
+        $sql = DB::table('users as u')
+            ->select('u.id as id','u.name as nome')
+            ->join('alunos_turmas as alunt', 'alunt.aluno_id', '=', 'u.id')
+            ->where('alunt.turma_id', '=', $turma_id)
+            ->whereExists(function($query) use ($questao)
+            {
+                $query->select(DB::raw(1))
+                        ->from('student_answers as sta')
+                        ->whereRaw('sta.user_id = u.id')
+                        ->whereRaw('sta.question_id = '. $questao);
+            });
+        $alunos_fizeram= $sql->get();
+        
+        return $alunos_fizeram;
     }
+
     public static function respostasDosAlunos($activity_id, $turma_id){
         /*SELECT u.id as aluno_id, u.name as name, q.id as question_id, sta.alternative_answered as alternativa, sta.correct as Correto from student_answers as sta 
 		Join users as u

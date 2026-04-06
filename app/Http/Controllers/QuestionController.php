@@ -238,9 +238,8 @@ class QuestionController extends Controller
         return redirect()->back()->with('success', 'Respostas excluídas com sucesso.');
     }
 
+    public function results(Request $request){
 
-    public function results(Request $request)
-    {
         $activity = $request->input('activity_id');
 
         if ($activity) {
@@ -284,8 +283,12 @@ class QuestionController extends Controller
 
         $result = ResultActivityDAO::buscarQntFizeramATarefas($activity->id, $turma->id);
 
-        session()->put('alunos_fizeram_completo', $result['alunos_fizeram_completo']);
-        session()->put('alunos_fizeram_incompleto', $result['alunos_fizeram_incompleto']);
+        session()->put('alunos_fizeram_completo', $result['qtd_alunos_fizeram_completo']);
+        session()->put('alunos_fizeram_incompleto', $result['qtd_alunos_fizeram_incompleto']);
+        session()->put('alunos_nao_fizeram', $result['qtd_alunos_nao_fizeram']);
+        session()->put('alunos_fizeram_completo1', $result['alunos_fizeram_completo']);
+        session()->put('alunos_fizeram_incompleto1', $result['alunos_fizeram_incompleto']);
+        session()->put('alunos_nao_fizeram1', $result['alunos_nao_fizeram']);
         session()->put('question_base', $result['question_base']);
 
 
@@ -300,23 +303,18 @@ class QuestionController extends Controller
         return view('pages.activity.results', compact('result', 'questions', 'turmas', 'turma', 'activity', 'respostasSelecionadas'));
     }
 
-    function resultsListStudents($type)
-    {
+    function resultsListStudents($type){
 
         $activity_id = session()->get('activity');
 
         $activity = Activity::find($activity_id);
 
         if ($type == 'Completo') {
-            $results = session()->get('alunos_fizeram_completo');
+            $results = session()->get('alunos_fizeram_completo1');
         } elseif ($type == 'Incompleto') {
-            $results = session()->get('alunos_fizeram_incompleto');
+            $results = session()->get('alunos_fizeram_incompleto1');
         } elseif ($type == 'Não fizeram') {
-
-            $turma_id = session()->get('turma_id');
-            $questao =  session()->get('question_base');
-
-            $results = ResultActivityDAO::getStudentDidNotQuestions($turma_id, $questao);
+            $results = session()->get('alunos_nao_fizeram1');
         }
 
         return view('pages.activity.listStudents', compact('results', 'activity', 'type'));

@@ -4,9 +4,9 @@
     $pageName =  $activity->name;
     $refeita = \App\DAO\ActivityDAO::refeita($activity['id']);
     $pontuada = \App\DAO\ActivityDAO::getPontuacao($activity['id']);
-    $qntCompletas= $result['alunos_fizeram_completo'];
-    $qntIncompletas= $result['alunos_fizeram_incompleto'];
-    $qntNaoFizeram= $result['alunos_nao_fizeram'];
+    $qntCompletas= $result['qtd_alunos_fizeram_completo'];
+    $qntIncompletas= $result['qtd_alunos_fizeram_incompleto'];
+    $qntNaoFizeram= $result['qtd_alunos_nao_fizeram'];
     $questions_results= $questions; 
 @endphp
 
@@ -140,10 +140,11 @@
 
     <script type="text/javascript">
 
-        var qntCompletas= <?php echo $qntCompletas; ?>;
-        var qntIncompletas= <?php echo $qntIncompletas; ?>;
-        var qntNaoFizeram= <?php echo $qntNaoFizeram; ?>;
-        var questoes_resultados= <?php echo $questions_results; ?>;
+        var qntCompletas = {{ $qntCompletas }};
+        var qntIncompletas = {{ $qntIncompletas }};
+        var qntNaoFizeram = {{ $qntNaoFizeram }};
+        
+        var questoes_resultados = @json($questions_results);
 
         google.charts.load('current', {'packages':['bar', 'corechart']});
         google.charts.setOnLoadCallback(drawStuff);
@@ -153,6 +154,7 @@
             drawPieChart();
             
         }
+        
         const map1 = new Map();
 
         function drawBarChart() {
