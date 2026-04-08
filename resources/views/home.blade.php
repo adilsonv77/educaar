@@ -20,6 +20,10 @@
                                                 <h3 class="text-warning">{{ $fechadoCount }}</h3>
                                                 <span class="position">Fechados</span>
                                             </div>
+                                            <div class="align-self-center pl-2">
+                                                <h3 class="text-warning">{{ $readyContentCount }}</h3>
+                                                <span class="position">Pronto</span>
+                                            </div>
                                         @endif
                                         <span class="cd-icon bgl-secondary">
                                             <i class="flaticon-381-smartphone-5"></i>
