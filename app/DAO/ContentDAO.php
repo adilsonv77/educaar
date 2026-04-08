@@ -156,4 +156,18 @@ class ContentDAO
             ->value('name');
     }
 
+    public static function getReadyContentCount($profId) : int {
+        return DB::table('contents')
+            ->join('activities', function ($join) {
+                $join->on('activities.content_id', '=', 'contents.id')
+                    ->on('activities.professor_id', '=', 'contents.user_id');
+            })
+            ->join('questions', 'questions.activity_id', '=', 'activities.id')
+            ->where('contents.user_id', $profId)
+            ->select('contents.*')
+            ->groupBy('contents.id')
+            ->get()
+            ->count();
+    }
+
 }
