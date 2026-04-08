@@ -357,7 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
 
-
       } else {
         //-------CARREGAR ATIVIDADE DE MURAL ---------------------------------------------------------------------
         let mural_id = li.getAttribute("mural_id");

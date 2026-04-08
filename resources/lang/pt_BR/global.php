@@ -72,7 +72,7 @@ return [
         'hasnt_answered' => 'Não Responderam',
         'titleChart2' => 'Como está o conteúdo por aluno?',
         'complete' => 'Completo',
-        'incomplete' => 'Incomplete',
+        'incomplete' => 'Incompleto',
         'no_respond' => 'Não fizeram'
     ],
     'modal' => [

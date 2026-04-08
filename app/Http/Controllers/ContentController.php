@@ -497,10 +497,6 @@ class ContentController extends Controller
         return view('pages.content.results', compact('results', 'totais', 'turmas', 'turma', 'content', 'activities'));
     }
 
-
-
-
-
     function resultsListStudents($type)
     {
 
@@ -513,7 +509,7 @@ class ContentController extends Controller
                 if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
             } elseif ($type == 'Incompleto') {
-                if ($a['incompleto'] === 1 || ($a['nao_fez'] === 1 && $a['fez'] === 1))
+                if (($a['incompleto'] === 1 && $a['nao_fez'] === 0 && $a['fez'] === 0) || ($a['nao_fez'] === 1 && $a['incompleto'] === 1 && $a['fez'] === 0))
                     array_push($tipoalunos, $a['id']);
             } elseif ($type == 'Não fizeram') {
                 if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0)

@@ -128,6 +128,9 @@
                 var type = " ";
                 if (selectedItem) {
                     type = data.getValue(selectedItem.row, 0);
+                    /*if(type === 'Incomplete'){
+                        type = 'Incompleto';
+                    }*/
                     var url = "{{ route('content.listStudents', ['type' => 'type_selection']) }}".replace('type_selection', type);
                     window.location.href = url;
                 }
