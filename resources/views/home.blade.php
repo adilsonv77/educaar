@@ -17,11 +17,11 @@
                                         </div>
                                         @if($contentCount>0)
                                             <div class="align-self-center pl-2">
-                                                <h3 class="text-warning">{{ $fechadoCount }}</h3>
+                                                <h4 class="text-warning">{{ $fechadoCount }}</h4>
                                                 <span class="position">Fechados</span>
                                             </div>
                                             <div class="align-self-center pl-2">
-                                                <h3 class="text-warning">{{ $readyContentCount }}</h3>
+                                                <h4 class="text-warning">{{ $readyContentCount }}</h4>
                                                 <span class="position">Pronto</span>
                                             </div>
                                         @endif
