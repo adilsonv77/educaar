@@ -17,6 +17,7 @@ class RankingController extends Controller
         $content_id = $request->id;
         $content_name = ContentDAO::getNameById($content_id);
         $activity_id = request('activity_id');
+        $studentCount = 0;
 
         if($type) {
             $layout = 'mobile';
