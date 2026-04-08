@@ -128,8 +128,9 @@ class HomeController extends Controller
             $activitiesCount = $activities[0]->quantos;
             $usersCount = $alunosProf[0]->quantos;
             $contentCount = $contents[0]->quantos;
+            $readyContentCount = ContentDAO::getReadyContentCount(Auth::id());
 
-            return view('home', compact('activitiesCount', 'usersCount', 'contentCount', 'activitiesCount', 'schools', 'fechadoCount'));
+            return view('home', compact('activitiesCount', 'usersCount', 'contentCount', 'activitiesCount', 'schools', 'fechadoCount', 'readyContentCount'));
         }
 
         // return view('home')->withErrors('Login ou senha inválidos. Por favor, tente novamente.');
