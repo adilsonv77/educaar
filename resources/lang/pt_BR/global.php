@@ -83,4 +83,4 @@ return [
         'no_content' => 'Nenhum conteúdo cadastrado',
         'no_dev' => 'Nenhum desenvolvedor',
     ]
-];
+]; 

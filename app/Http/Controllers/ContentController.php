@@ -505,13 +505,13 @@ class ContentController extends Controller
         $tipoalunos = [];
 
         foreach ($listaalunos as $a) {
-            if ($type == 'Completo') {
+            if ($type == __('global.statistics.complete')) {
                 if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
-            } elseif ($type == 'Incompleto') {
-                if (($a['incompleto'] === 1 && $a['nao_fez'] === 0 && $a['fez'] === 0) || ($a['nao_fez'] === 1 && $a['incompleto'] === 1 && $a['fez'] === 0))
+            } elseif ($type == __('global.statistics.incomplete')) {
+                if (($a['incompleto'] === 1 || $a['nao_fez'] === 1 && $a['fez'] === 0) || ($a['nao_fez'] === 1 && $a['incompleto'] === 1 && $a['fez'] === 0))
                     array_push($tipoalunos, $a['id']);
-            } elseif ($type == 'Não fizeram') {
+            } elseif ($type == __('global.statistics.no_respond')) {
                 if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
             }
