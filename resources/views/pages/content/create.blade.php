@@ -64,7 +64,7 @@
                         <div class="custom-control custom-switch switch">
                             <input type="hidden" name="ordered" value="0">
                             <input type="checkbox" name="ordered" id="ordered" class="custom-control-input" value="1">
-                            <label for="ordered" class="custom-control-label">Conteúdo ordenado</label>
+                            <label for="ordered" class="custom-control-label">{{ __('global.label.ordered_content') }}</label>
                         </div>
                     </div>
 
@@ -73,8 +73,8 @@
                             <div class="custom-control custom-switch switch">
                                 <input type="hidden" name="random" value="0">
                                 <input type="checkbox" class="custom-control-input" name="random" id="random" value="1">
-                                <label for="random" class="custom-control-label">Conteúdo ordenado aleatoriamente</label>
-                                <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="randomAlert" role="alert">Com essa opção cada aluno terá uma ordem diferente para responder as atividades</div>
+                                <label for="random" class="custom-control-label">{{ __('global.label.sorted_ordered_content') }}</label>
+                                <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="randomAlert" role="alert">{{ __('global.message.warning_sorted_ordered_content') }}</div>
                             </div>
                         </div>
                     </div>

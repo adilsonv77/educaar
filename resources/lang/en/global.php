@@ -47,7 +47,9 @@ return [
         'enter_content' => 'Enter the content',
         'choose_discipline' => 'Choose the discipline',
         'sort_activities' => 'Content with ordered activities',
-        'enter_class' => 'Enter the class'
+        'enter_class' => 'Enter the class',
+        'ordered_content' => 'Ordered Content',
+        'sorted_ordered_content' => 'Sorted Ordered Content'
     ],
     'table' => [
         'close' => 'Close',
@@ -82,5 +84,6 @@ return [
     'message' => [
         'no_content' => 'No content registered',
         'no_dev' => 'No developer',
+        'warning_sorted_ordered_content' => 'With this option, each student will have a different order to answer the activities.'
     ]
 ];

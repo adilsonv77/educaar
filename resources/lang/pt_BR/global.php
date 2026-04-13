@@ -47,7 +47,9 @@ return [
         'enter_content' => 'Informe o conteúdo',
         'choose_discipline' => 'Escolha a disciplina',
         'sort_activities' => 'Conteúdo com atividades ordenadas',
-        'enter_class' => 'Informe a turma'
+        'enter_class' => 'Informe a turma',
+        'ordered_content' => ' Conteúdo Ordenado',
+        'sorted_ordered_content' => 'Conteúdo Ordenado Aleatoriamente'
     ],
     'table' => [
         'close' => 'Fechar',
@@ -82,5 +84,6 @@ return [
     'message' => [
         'no_content' => 'Nenhum conteúdo cadastrado',
         'no_dev' => 'Nenhum desenvolvedor',
+        'warning_sorted_ordered_content' => 'Com essa opção cada aluno terá uma ordem diferente para responder as atividades'
     ]
 ]; 
