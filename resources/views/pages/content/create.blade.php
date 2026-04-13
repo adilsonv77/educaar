@@ -45,7 +45,11 @@
                         <div class="col-md-6">
                             <input id="name" type="text" maxlength="100" class="form-control @error('name') is-invalid @enderror"
                                 name="name" value="{{ old('name', $name) }}" required
-                                placeholder="{{ __('global.placeholder.content_name') }}" autofocus />
+                                placeholder=
+                                @if($name !== "") $name 
+                                @else "{{ __('global.placeholder.content_name') }}"
+                                @endif
+                                autofocus />
                         </div>
                     </div>
                     @if (session('type') == 'teacher')
@@ -63,7 +67,7 @@
                     <div class="mb-4">
                         <div class="custom-control custom-switch switch">
                             <input type="hidden" name="ordered" value="0">
-                            <input type="checkbox" name="ordered" id="ordered" class="custom-control-input" value="1">
+                            <input type="checkbox" name="ordered" id="ordered" class="custom-control-input" value="1" @if($sort_activities >= 1) checked @endif>
                             <label for="ordered" class="custom-control-label">{{ __('global.label.ordered_content') }}</label>
                         </div>
                     </div>
@@ -72,7 +76,7 @@
                         <div class="mb-4">
                             <div class="custom-control custom-switch switch">
                                 <input type="hidden" name="random" value="0">
-                                <input type="checkbox" class="custom-control-input" name="random" id="random" value="1">
+                                <input type="checkbox" class="custom-control-input" name="random" id="random" value="1" @if($sort_activities == 2) checked @endif>
                                 <label for="random" class="custom-control-label">{{ __('global.label.sorted_ordered_content') }}</label>
                                 <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="randomAlert" role="alert">{{ __('global.message.warning_sorted_ordered_content') }}</div>
                             </div>
@@ -107,23 +111,26 @@
     </div>
 
     <script>
-        
-        const el = {
-            ordered: document.getElementById('ordered'),
-            random: document.getElementById('random'),
-            camposExtras: document.getElementById('extras'),
-            rndAlert: document.getElementById('randomAlert')
-        }
-
-        el.ordered.addEventListener('change', () => {
-            if(el.ordered.checked) {
-                el.random.disabled = false;
-                $(el.camposExtras).collapse('show');
-            } else {
-                el.random.disabled = true;
-                $(el.camposExtras).collapse('hide');
+        document.addEventListener('DOMContentLoaded', function() {
+            const el = {
+                ordered: document.getElementById('ordered'),
+                random: document.getElementById('random'),
+                camposExtras: document.getElementById('extras'),
+                rndAlert: document.getElementById('randomAlert')
             }
-        })
-
+            
+            function updateUI() {
+                if(el.ordered.checked) {
+                    el.random.disabled = false;
+                    $(el.camposExtras).collapse('show');
+                } else {
+                    el.random.disabled = true;
+                    $(el.camposExtras).collapse('hide');
+                }
+            }
+            
+            el.ordered.addEventListener('change', updateUI);
+            updateUI();
+        });
     </script>
 @endsection
