@@ -2,33 +2,35 @@
  <!-- #region-->
 @section('page-name', $titulo)
 
-<style>
-    #selectPanel{
-        border: 1px solid #b3b3b3;
-        font-size: 14px;
-        width: 130px;
-        padding: 2px;
-        height: fit-content;
-        margin: 6px 12px;
-        margin-bottom: 23px;
-        background-image: linear-gradient(#e9e9e9,#d9d9d9);
-    }
-    #selectPanel:hover{
-        background-color: #a7f2fe;
-        background-image: none;
-        border: 1px solid #319dd7;
-    }
-    .custom-switch .custom-control-label::before {
-        border-width: 1.2px;
-    }
-    .custom-switch.switch .custom-control-label::after {
-        border-width: 1.2px;
-        top: 25%!important;
-    }
-    .custom-control {
-        line-height: 1.5em!important;
-    }
-</style>
+@section('style')
+    <style>
+        #selectPanel{
+            border: 1px solid #b3b3b3;
+            font-size: 14px;
+            width: 130px;
+            padding: 2px;
+            height: fit-content;
+            margin: 6px 12px;
+            margin-bottom: 23px;
+            background-image: linear-gradient(#e9e9e9,#d9d9d9);
+        }
+        #selectPanel:hover{
+            background-color: #a7f2fe;
+            background-image: none;
+            border: 1px solid #319dd7;
+        }
+        .custom-switch .custom-control-label::before {
+            border-width: 1.2px;
+        }
+        .custom-switch.switch .custom-control-label::after {
+            border-width: 1.2px;
+            top: 25%!important;
+        }
+        .custom-control {
+            line-height: 1.5em!important;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="">
