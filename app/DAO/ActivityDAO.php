@@ -206,16 +206,41 @@ class ActivityDAO
     /**
      * Retorna '' caso hint, no banco de dados, seja null.
     */
-    public static function getNextHint(int $contentId, int $activityId) : string {
-        $position = DB::table('activities')
-            ->where('id', $activityId)
-            ->value('position');
+    public static function getNextHint(int $contentId, int $activityId, int $contentType) : string {
+        if($contentType === 2) {
+            $sort = explode(',', DB::table('random_sorts')
+                ->where('user_id', Auth::id())
+                ->where('content_id', $contentId)
+                ->value('sort'));
 
-        return DB::table('contents')
-            ->join('activities', 'activities.content_id', '=', 'contents.id')
-            ->where('contents.id', $contentId)
-            ->where('activities.position', $position + 1)
-            ->value('hint') ?? '';
+            $positionBase = DB::table('activities')
+                ->where('id', $activityId)
+                ->value('position');
+
+            $positionSorted = 0;
+            for($x = 0; $x < count($sort); $x++) {
+                if($sort[$x] == $positionBase) {
+                    $positionSorted = $x;
+                }
+            }
+
+            return DB::table('contents')
+                ->join('activities', 'activities.content_id', '=', 'contents.id')
+                ->where('contents.id', $contentId)
+                ->where('activities.position', $sort[$positionSorted + 1])
+                ->value('hint') ?? '';
+        } else {
+            $position = DB::table('activities')
+                ->where('id', $activityId)
+                ->value('position');
+
+            return DB::table('contents')
+                ->join('activities', 'activities.content_id', '=', 'contents.id')
+                ->where('contents.id', $contentId)
+                ->where('activities.position', $position + 1)
+                ->value('hint') ?? '';
+        }
     }
+        
 }
 
