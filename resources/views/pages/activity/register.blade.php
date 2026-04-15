@@ -347,7 +347,7 @@
                 el.ponAle.textContent = "";
                 el.btnPontuada.hidden = false;
 
-                if (contentType == "1") {
+                if (contentType >= "1") {
                     el.switchRefeita.disabled = true;
                     el.switchRefeita.checked = false;
                     el.refAle.textContent = "Atividades de um conteúdo ordenado são refeitas por padrão.";
