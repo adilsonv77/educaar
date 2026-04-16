@@ -67,7 +67,7 @@
                     <input id="login" type="text"
                         class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
                         name="login" value="{{ old('username') ?: old('email') }}" required autofocus
-                        placeholder="{{ __('auth.user') }}">
+                        placeholder="{{ __('ui.input.user') }}">
                     @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -76,7 +76,7 @@
                 
                     <input id="password" type="password"
                         class="form-control @error('password') is-invalid @enderror" name="password" required
-                        placeholder="{{ __('auth.password') }}">
+                        placeholder="{{ __('ui.input.password') }}">
                     @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -85,7 +85,7 @@
                     
                     <div class="mial">
                             <button type="submit" class="btn btn-primary">
-                                {{ __('auth.login') }}
+                                {{ __('ui.action.login') }}
                             </button>
                     </div>
                     
@@ -113,7 +113,6 @@
                 <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
                 <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">
 
-                <!-- 
                 <div>
                     <form action="{{ route('locale.update') }}" method="GET"> @csrf
                         <select name="locale" id="locale">
@@ -122,11 +121,10 @@
                         </select>
 
                         <button type="submit">
-                            {{ __('global.button.save') }}
+                            {{ __('ui.action.save') }}
                         </button>
                     </form>
                 </div>
-                 -->
         </footer>
 
     </div>                    

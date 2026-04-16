@@ -36,11 +36,11 @@
 
     <h2>{{ __('toPdf.title') }}</h2>
     <p><strong>{{ __('toPdf.teacher_id') }}:</strong> {{ Auth::id() }}</p>
-    <p><strong>{{ trans_choice('global.views.content', 1) }}:</strong> {{ $conteudo->name }}</p>
+    <p><strong>{{ trans_choice('entities.content', 1) }}:</strong> {{ $conteudo->name }}</p>
 
     @foreach($atividades as $index => $atividade)
     <div class="atividade">
-        <h3>{{ trans_choice('global.views.activity', 1) }} {{ $index + 1 }}: {{ $atividade->name }}</h3>
+        <h3>{{ trans_choice('entities.activity', 1) }} {{ $index + 1 }}: {{ $atividade->name }}</h3>
         <p><strong>{{ __('toPdf.created_at') }}:</strong> {{ \Carbon\Carbon::parse($atividade->created_at)->format('d/m/Y') }}</p>
 
         {{-- Imagem da atividade, se existir --}}

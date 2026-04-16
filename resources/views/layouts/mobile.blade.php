@@ -69,29 +69,29 @@
                                             <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
                                             <p class="fs-12 mb-0">
                                                 @if (session('type') == 'student')
-                                                    {{ trans_choice('global.user.student', 1) }}
+                                                    {{ trans_choice('entities.user.student', 1) }}
                                                 @endif
 
                                                 @if (session('type') == 'teacher')
-                                                    {{ trans_choice('global.user.teacher', 1) }}
+                                                    {{ trans_choice('entities.user.teacher', 1) }}
                                                 @endif
 
                                                 @if (session('type') == 'admin')
-                                                    {{ trans_choice('global.user.admin', 1) }}
+                                                    {{ trans_choice('entities.user.admin', 1) }}
                                                 @endif
                                             </p>
 
                                         </div>
                                         @if (session('type') == 'admin')
 
-                                            <a href="{{ route('config.index') }}" title="{{ __('global.title.config') }}";
+                                            <a href="{{ route('config.index') }}" title="{{ __('ui.action.config') }}";
                                                 class="dropdown-item ai-icon">
                                                 <img src="/gear.png" width="10" alt="" />
                                             </a>
                                         @endif
                             </div>
                             <div class="saida">
-                                <a href="{{ route('logout') }}" title="{{ __('global.title.exit') }}";
+                                <a href="{{ route('logout') }}" title="{{ __('ui.action.exit') }}";
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                     class="dropdown-item ai-icon">
 

@@ -119,7 +119,7 @@ class ContentController extends Controller
             ->first();
 
         //var_dump($anoLetivo->id);
-        $titulo = __('global.pageName.add_content');
+        $titulo = __('ui.page.add_content');
         $acao = 'insert';
 
         $params = [
@@ -505,13 +505,13 @@ class ContentController extends Controller
         $tipoalunos = [];
 
         foreach ($listaalunos as $a) {
-            if ($type == __('global.statistics.complete')) {
+            if ($type == __('statistics.complete')) {
                 if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
-            } elseif ($type == __('global.statistics.incomplete')) {
+            } elseif ($type == __('statistics.incomplete')) {
                 if (($a['incompleto'] === 1 || $a['nao_fez'] === 1 && $a['fez'] === 0) || ($a['nao_fez'] === 1 && $a['incompleto'] === 1 && $a['fez'] === 0))
                     array_push($tipoalunos, $a['id']);
-            } elseif ($type == __('global.statistics.no_respond')) {
+            } elseif ($type == __('statistics.no_respond')) {
                 if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
             }
