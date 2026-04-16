@@ -204,43 +204,46 @@ class ActivityDAO
     }
 
     /**
-     * Retorna '' caso hint, no banco de dados, seja null.
+     * Retorna '' caso hint, no banco de dados, for nulo.
     */
-    public static function getNextHint(int $contentId, int $activityId, int $contentType) : string {
-        if($contentType === 2) {
-            $sort = explode(',', DB::table('random_sorts')
-                ->where('user_id', Auth::id())
-                ->where('content_id', $contentId)
-                ->value('sort'));
+    public static function getNextHint(int $contentId, int $activityId) : string {
+        $position = DB::table('activities')
+            ->where('id', $activityId)
+            ->value('position');
 
-            $positionBase = DB::table('activities')
-                ->where('id', $activityId)
-                ->value('position');
-
-            $positionSorted = 0;
-            for($x = 0; $x < count($sort); $x++) {
-                if($sort[$x] == $positionBase) {
-                    $positionSorted = $x;
-                }
-            }
-
-            return DB::table('contents')
-                ->join('activities', 'activities.content_id', '=', 'contents.id')
-                ->where('contents.id', $contentId)
-                ->where('activities.position', $sort[$positionSorted + 1])
-                ->value('hint') ?? '';
-        } else {
-            $position = DB::table('activities')
-                ->where('id', $activityId)
-                ->value('position');
-
-            return DB::table('contents')
-                ->join('activities', 'activities.content_id', '=', 'contents.id')
-                ->where('contents.id', $contentId)
-                ->where('activities.position', $position + 1)
-                ->value('hint') ?? '';
-        }
+         return DB::table('contents')
+            ->join('activities', 'activities.content_id', '=', 'contents.id')
+            ->where('contents.id', $contentId)
+            ->where('activities.position', $position + 1)
+            ->value('hint') ?? '';
     }
-        
+
+    /**
+     * Retorna '' caso hint, no banco de dados, for nulo.
+    */
+    public static function getNextHintRandom(int $contentId, int $activityId) : string {
+        $sort = explode(',', DB::table('random_sorts')
+            ->where('user_id', Auth::id())
+            ->where('content_id', $contentId)
+            ->value('sort'));
+            
+        $positionBase = DB::table('activities')
+            ->where('id', $activityId)
+            ->value('position');
+
+        $positionSorted = 0;
+        for($x = 0; $x < count($sort); $x++) {
+            if($sort[$x] == $positionBase) {
+                $positionSorted = $x;
+                break;
+            }
+        }
+
+        return DB::table('contents')
+            ->join('activities', 'activities.content_id', '=', 'contents.id')
+            ->where('contents.id', $contentId)
+            ->where('activities.position', $sort[$positionSorted + 1])
+            ->value('hint') ?? '';
+    }
 }
 
