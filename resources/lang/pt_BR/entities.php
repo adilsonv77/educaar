@@ -11,6 +11,7 @@ return [
     'access' => '{1} Acesso |[2,*] Acessos',
     'school_year' => '{1} Ano Letivo |[2,*] Anos Letivos',
     'registration' => '{1} Matrícula |[2,*] Matrículas',
+    'question' => '{1} Questão |[2,*] Questões',
 
     'user' => [
         'student' => '{1} Aluno |[2,*] Alunos',

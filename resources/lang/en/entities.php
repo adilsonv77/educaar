@@ -11,6 +11,7 @@ return [
     'access' => '{1} Access |[2,*] Accesses',
     'school_year' => '{1} School Year |[2,*] School Years',
     'registration' => '{1} Registraion |[2,*] Registrations',
+    'question' => '{1} Question |[2,*] Questions',
 
     'user' => [
         'student' => '{1} Student |[2,*] Students',

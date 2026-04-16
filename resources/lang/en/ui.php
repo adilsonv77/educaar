@@ -18,7 +18,8 @@ return [
         'config' => 'Configure',
         'exit' => 'Exit',
         'import_file' => 'Import file',
-        'list' => 'List'
+        'list' => 'List',
+        'view' => 'View'
     ],
     /* User Responses */
     'prompt' => [
@@ -28,7 +29,11 @@ return [
         'no_content' => 'No contents',
         'click' => 'Click here',
         'no_dev' => 'No developers',
-        'sorted_warning' => 'With this option each student will have a different order to answer the activities.'
+        'sorted_warning' => 'With this option each student will have a different order to answer the activities.',
+        'confirm_del_activity' => 'Are you sure you want to delete the activity',
+        'no_activities' => 'No activites',
+        'download_model' => 'Download 3D Model',
+        'file_not_found' => 'File not found'
     ],
     /* Data Inputs and Labels */
     'input' => [
@@ -38,7 +43,9 @@ return [
         'name' => 'Name',
         'enter_class' => 'Enter the class',
         'content_name' => 'Enter the name of the content here',
-        'choose_discipline' => 'Choose the discipline'
+        'choose_discipline' => 'Choose the discipline',
+        'enter_activity' => 'Enter the activity',
+        'marker' => 'Marker',
     ],
     /* States of an entity */
     'adjective' => [
@@ -55,6 +62,7 @@ return [
         'close_content' => 'Close content',
         'results_of' => 'Results of',
         'add_content' => 'Add content',
+        'add_activity' => 'Add activity'
     ]
 ]
 

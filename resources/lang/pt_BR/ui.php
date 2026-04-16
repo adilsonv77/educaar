@@ -18,7 +18,8 @@ return [
         'config' => 'Configurar',
         'exit' => 'Sair',
         'import_file' => 'Importa arquivo',
-        'list' => 'Listar'
+        'list' => 'Listar',
+        'view' => 'Visualizar'
     ],
     /* Respostas ao usuário */
     'prompt' => [
@@ -28,7 +29,11 @@ return [
         'no_content' => 'Sem conteúdos',
         'click' => 'Click aqui',
         'no_dev' => 'Sem desenvolvedores',
-        'sorted_warning' => 'Com esta opção cada aluno tera uma ordem diferentes para responder as atividades.'
+        'sorted_warning' => 'Com esta opção cada aluno tera uma ordem diferentes para responder as atividades.',
+        'confirm_del_activity' => 'Você tem certeza que deseja excluir a atividade',
+        'no_activities' => 'Sem atividades',
+        'download_model' => 'Baixar modelo 3D',
+        'file_not_found' => 'Arquivo não encontrado'
     ],
     /* Entrada de dados e Labels */
     'input' => [
@@ -39,6 +44,8 @@ return [
         'enter_class' => 'Informe a classe',
         'content_name' => 'Digite o nomo do conteúdo aqui',
         'choose_discipline' => 'Escolha a disciplina',
+        'enter_activity' => 'Informe a atividade',
+        'marker' => 'Marcador',
     ],
     /* Estados de uma entidade */
     'adjective' => [
@@ -55,6 +62,7 @@ return [
         'close_content' => 'Fechar conteúdo',
         'results_of' => 'Resultados de',
         'add_content' => 'Adicionar conteúdo',
+        'add_activity' => 'Adicionar atividade'
     ]
 ]
 
