@@ -58,6 +58,7 @@
                     <div class="col-xl-4 col-xxl-12 col-lg-12 col-md-12">
                         <div class="card border-card">
                             <div class="card-body">
+                                <a href="{{ route('turmas.listarTurmasAlunosProf') }}">
                                 <div class="media">
                                     <div class="media-body mr-3">
                                         <h2 class="text-warning">{{ $usersCount }}</h2>
