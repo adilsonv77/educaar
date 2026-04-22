@@ -8,6 +8,16 @@
     $qntIncompletas= $result['qtd_alunos_fizeram_incompleto'];
     $qntNaoFizeram= $result['qtd_alunos_nao_fizeram'];
     $questions_results= $questions; 
+
+    /* Variáveis de tradução para o JS */
+    $titleChart1 = __('statistics.questions_answereds');
+    $corretAnswer = __('statistics.correct_answer');
+    $incorretAnswer = __('statistics.incorrect_answer');
+    $questionsChart = trans_choice('entities.question', 2);
+    $titleChart2 = __(('statistics.titleChart2_activity'));
+    $complete = __('ui.adjective.complete');
+    $incomplete = __('ui.adjective.incomplete');
+    $notAnswered = __('ui.adjective.not_answered');
 @endphp
 
 @section('script-head')
@@ -24,7 +34,7 @@
   <div id="formTurma">
     <form action="{{ route('activity.results') }}" method="GET ">
             @csrf
-            <label for="" >Informe a turma: </label>
+            <label for="" >{{ __('ui.input.enter_class') }}</label>
             <div class="form-inline" >
                 <select class="form-control" name="turma_id">
                     @foreach ($turmas as $item)
@@ -33,7 +43,7 @@
                     @endforeach
                 </select>
                 <section class="itens-group" >
-                    <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+                    <button class="btn btn-primary btn-lg" type="submit">{{ __('ui.action.search') }}</button>
                 </section>
             </div>
     </form>
@@ -53,7 +63,7 @@
 </style>
   
   @if ($qntCompletas + $qntIncompletas == 0)
-       <b>Nenhum aluno ainda acessou.</b>
+       <b>{{ __('statistics.no_results')}}</b>
   @else
 
   <div style="background-color: white">
@@ -64,11 +74,11 @@
   <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 
   <div class="alert alert-primary" style="border-top-left-radius: 0!important; border-top-right-radius: 0!important;">
-      <b>Veja mais detalhes ao passar o mouse sobre o título da questão ou a resposta do aluno.</b>
+      <b>{{ __('statistics.see_more') }}</b>
       <ul>
-          <li style="list-style:square"> &#9989; : O aluno acertou a questão</li>
-          <li style="list-style:square"> &#10060; : O aluno errou a questão</li>
-          <li style="list-style:square">&#128993; : O aluno não fez a questão</li>
+          <li style="list-style:square"> &#9989; : {{ __('statistics.stu_correct') }}</li>
+          <li style="list-style:square"> &#10060; : {{ __('statistics.stu_wrong') }}</li>
+          <li style="list-style:square">&#128993; : {{ __('statistics.stu_not_respond') }}</li>
       </ul>
     </div>
 
@@ -76,7 +86,7 @@
     <table id="table" class="table table-bordered">
       <thead class="thead-info">
         <tr>
-        <th scope="col">Nome</th>
+        <th scope="col">{{ __('ui.input.name') }}</th>
           @php
               $count=1;
           @endphp
@@ -85,10 +95,10 @@
           @endforeach
 
           @if($refeita)
-            <th scope="col1" style="width: 15%;">Tentativas</th>
+            <th scope="col1" style="width: 15%;">{{ trans_choice('entities.attempt', 2) }}</th>
 
             @if($pontuada != null)
-              <th scope="col1" style="width: 15%;">Pontuação</th>
+              <th scope="col1" style="width: 15%;">{{ trans_choice('entities.score', 1) }}</th>
             @endif
 
           @endif
@@ -143,6 +153,16 @@
         var qntCompletas = {{ $qntCompletas }};
         var qntIncompletas = {{ $qntIncompletas }};
         var qntNaoFizeram = {{ $qntNaoFizeram }};
+
+        /* Variáveis de traduçãos pegas do PHP */
+        var titleChart1 = "<?php print $titleChart1; ?>";
+        var correctAnswer = "<?php print $corretAnswer ?>"
+        var incorrectAnswer = "<?php print $incorretAnswer ?>"
+        var questionsChart = "<?php print $questionsChart ?>"
+        var titleChart2 = "<?php print $titleChart2 ?>";
+        var complete = "<?php print $complete ?>"
+        var incomplete = "<?php print $incomplete ?>"
+        var notAnswered = "<?php print $notAnswered ?>"
         
         var questoes_resultados = @json($questions_results);
 
@@ -160,9 +180,9 @@
         function drawBarChart() {
 
               var data = new google.visualization.DataTable();
-              data.addColumn('string','Questões');
-              data.addColumn('number', 'Respostas Incorretas');
-              data.addColumn('number', 'Respostas Corretas '); 
+              data.addColumn('string', questionsChart);
+              data.addColumn('number', incorrectAnswer);
+              data.addColumn('number', correctAnswer); 
               //data.addColumn({type: 'string', role: 'tooltip'}); 
 
 
@@ -183,7 +203,7 @@
 
               var options = {
                 chart: {
-                  title: 'Respostas Corretas e Incorretas'
+                  title: titleChart1
                 },
                 isStacked: true,
                 colors: ['#5A2D66','#9C6FA8'], 
@@ -200,13 +220,13 @@
         function drawPieChart() {
             var data = google.visualization.arrayToDataTable([
               ['Questionário', 'Alunos'],
-              ['Completo',   qntCompletas],
-              ['Incompleto',  qntIncompletas],
-              ['Não fizeram', qntNaoFizeram]
+              [complete,   qntCompletas],
+              [incomplete,  qntIncompletas],
+              [notAnswered, qntNaoFizeram]
             ]);
 
             var options = {
-              title: 'Questionário completo/incompleto',
+              title: titleChart2,
               pieHole: 0.4,
             };
 
