@@ -12,6 +12,8 @@ return [
     'school_year' => '{1} School Year |[2,*] School Years',
     'registration' => '{1} Registraion |[2,*] Registrations',
     'question' => '{1} Question |[2,*] Questions',
+    'attempt' => '{1} Attempt |[2,*] Attempts',
+    'score' => '{1} Score |[2,*] Scores',
 
     'user' => [
         'student' => '{1} Student |[2,*] Students',

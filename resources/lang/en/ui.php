@@ -33,7 +33,8 @@ return [
         'confirm_del_activity' => 'Are you sure you want to delete the activity',
         'no_activities' => 'No activites',
         'download_model' => 'Download 3D Model',
-        'file_not_found' => 'File not found'
+        'file_not_found' => 'File not found',
+        'no_student_acess' => 'No student accessed this question'
     ],
     /* Data Inputs and Labels */
     'input' => [
@@ -55,7 +56,10 @@ return [
         'new' => '{*} New',
         'no_questions' => 'No Questions',
         'ordered_content' => 'Ordered Content',
-        'sorted_random_content' => 'Sorted Ordered Content'
+        'sorted_random_content' => 'Sorted Ordered Content',
+        'complete' => 'Complete',
+        'incomplete' => 'Incomplete',
+        'not_answered' => 'Not answered'
     ],
     /* Page names */
     'page' => [

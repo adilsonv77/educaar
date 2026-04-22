@@ -33,7 +33,7 @@ return [
         'confirm_del_activity' => 'Você tem certeza que deseja excluir a atividade',
         'no_activities' => 'Sem atividades',
         'download_model' => 'Baixar modelo 3D',
-        'file_not_found' => 'Arquivo não encontrado'
+        'file_not_found' => 'Arquivo não encontrado',
     ],
     /* Entrada de dados e Labels */
     'input' => [
@@ -55,7 +55,10 @@ return [
         'new' => '{1} Novo |{2} Nova',
         'no_questions' => 'Sem questões',
         'ordered_content' => 'Conteúdo ordenado',
-        'sorted_random_content' => 'Conteúdo ordenado aleatoriamente'
+        'sorted_random_content' => 'Conteúdo ordenado aleatoriamente',
+        'complete' => 'Completo',
+        'incomplete' => 'Incompleto',
+        'not_answered' => 'Não respondido'
     ],
     /* Nomes de páginas */
     'page' => [

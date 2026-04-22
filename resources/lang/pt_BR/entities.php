@@ -12,6 +12,8 @@ return [
     'school_year' => '{1} Ano Letivo |[2,*] Anos Letivos',
     'registration' => '{1} Matrícula |[2,*] Matrículas',
     'question' => '{1} Questão |[2,*] Questões',
+    'attempt' => '{1} Tentativa |[2,*] Tentativas',
+    'score' => '{1} Pontuação |[2,*] Pontuações',
 
     'user' => [
         'student' => '{1} Aluno |[2,*] Alunos',
