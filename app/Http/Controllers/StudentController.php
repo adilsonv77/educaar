@@ -238,8 +238,13 @@ class StudentController extends Controller
      * 
      * @param int $content_id
     */
-    private function createRandomSort($content_id) {
+    private function createRandomSort(int $content_id) : void {
         $activities = Activity::where('content_id', $content_id)->count();
+
+        if($activities <= 1) {
+            return;
+        }
+
         $oldSort = count(explode(',', RandomSort::where('content_id', $content_id)->where('user_id', Auth::id())->value('sort')));
 
         $sort = range(1, $activities);
