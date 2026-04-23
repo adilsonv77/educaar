@@ -184,11 +184,15 @@ class ActivityController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:100',
-            'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:40960000'],
-            'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg'],
+            'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:40960000', 'mimetypes:model/gltf-binary,application/zip,application/x-zip-compressed,application/octet-stream',],
+            'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg', 'mimetypes:image/png,image/jpeg'],
             'refeitarMarcador' => 'boolean',
             'pontuadaMarcador' => 'boolean',
-            'pista_customizada' => 'max:255'
+            'pista_customizada' => 'max:255' 
+        ],
+        [
+            'glb.mimetypes'      => 'O arquivo deve ser um .glb ou .zip válido.',
+            'marcador.mimetypes' => 'O marcador deve ser uma imagem PNG ou JPEG válida.',
         ]);
 
         if ($validator->fails()) {
