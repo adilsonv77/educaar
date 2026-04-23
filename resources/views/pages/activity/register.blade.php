@@ -357,6 +357,7 @@
                     el.switchRefeita.disabled = false;
                     el.refAle.textContent = "Se esta opção estiver marcada os alunos poderão refazer a questão caso não a tenham acertada completamente.";
                     $(el.hint).collapse('hide');
+                    el.switchPontuada.checked = false;
                 }
             } else {
                 el.switchRefeita.checked = false;
