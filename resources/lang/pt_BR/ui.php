@@ -45,7 +45,11 @@ return [
         'content_name' => 'Digite o nome do conteúdo aqui',
         'choose_discipline' => 'Escolha a disciplina',
         'enter_activity' => 'Informe a atividade',
+        'select_activity' => 'Selecione uma atividade',
         'marker' => 'Marcador',
+        'position' => 'Posição',
+        'point' => '{1} Ponto |[2,*] Pontos',
+        'participant' => '{1} Participante |[2,*] Participantes'
     ],
     /* Estados de uma entidade */
     'adjective' => [
@@ -65,7 +69,9 @@ return [
         'close_content' => 'Fechar conteúdo',
         'results_of' => 'Resultados de',
         'add_content' => 'Adicionar conteúdo',
-        'add_activity' => 'Adicionar atividade'
+        'add_activity' => 'Adicionar atividade',
+        'class_ranking' => 'Ranking de uma turma',
+        'ranking_of' => 'Rankig de'
     ]
 ]
 

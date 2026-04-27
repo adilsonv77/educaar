@@ -46,7 +46,11 @@ return [
         'content_name' => 'Enter the name of the content here',
         'choose_discipline' => 'Choose the discipline',
         'enter_activity' => 'Enter the activity',
+        'select_activity' => 'Select an activity',
         'marker' => 'Marker',
+        'position' => 'Position',
+        'point' => '{1} Point |[2,*] Points',
+        'participant' => '{1} Participant |[2,*] Participants'
     ],
     /* States of an entity */
     'adjective' => [
@@ -66,7 +70,9 @@ return [
         'close_content' => 'Close content',
         'results_of' => 'Results of',
         'add_content' => 'Add content',
-        'add_activity' => 'Add activity'
+        'add_activity' => 'Add activity',
+        'class_ranking' => 'Class Ranking',
+        'ranking_of' => 'Ranking of'
     ]
 ]
 
