@@ -152,9 +152,10 @@
   "Edit Question": "Editar Questão",
   "Correct Questions": "Questões Acertadas",
   "Incorrect Questions": "Questões Erradas",
-  "Unfinished Questions": "Questões não feitas",
+  "Unanswered Questions": "Questões não feitas",
   "Report of unanswered questions" : "Geral de questões não respondidas",
   "No Students": "Sem Alunos",
+  "No students with unanswered questions": "Sem alunos com questões não respondidas",
 
   "===== MARKERS (AR) =====": "===== MARCADORES (AR) =====",
   "Marker guidelines": "Orientações sobre os marcadores",

@@ -56,7 +56,7 @@
                  </div>
             @else
                 <div>
-                    <h2>Não existem alunos com questões não respondidas.</h2>
+                    <h2>{{ __('No students with unanswered questions') }}</h2>
                 </div>
             @endif
         </div>
