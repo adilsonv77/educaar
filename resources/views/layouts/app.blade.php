@@ -192,7 +192,7 @@
 
                             <li><a class="ai-icon" href="{{ route('teacher.frequencia') }}" aria-expanded="false">
                                     <i class="bi-graph-up"></i>
-                                    <span class="nav-text">{{ __('Access') }}</span>
+                                    <span class="nav-text">{{ __('Accesses') }}</span>
                                 </a>
                             </li>
                             
