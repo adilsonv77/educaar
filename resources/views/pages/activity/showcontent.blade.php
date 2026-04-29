@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', __('Activities') . $name)
+@section('page-name', __('Activity') . " " . $name)
 
 @section('content')
 
