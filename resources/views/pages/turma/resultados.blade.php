@@ -51,7 +51,7 @@
         @csrf
 
         <div class="form-inline">
-            <label for="">__('Enter the class'):</label>
+            <label for="">{{ __('Enter the class') }}</label>
 
             <select class="form-control" name="turma_id">
                 <option value="0"  @if ($turma_id === 0) selected="selected" @endif>
