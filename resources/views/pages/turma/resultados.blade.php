@@ -139,11 +139,11 @@
                                                 $answer = $response['answer'];
                                             @endphp
                                             <td data-toggle="tooltip"
-                                                title="Pergunta: {{ $question['question_text'] ?? 'Pergunta não encontrada' }} | Resposta: {{ $answer }}">
+                                                title="{{ __('Question') }}: {{ $question['question_text'] ?? 'Pergunta não encontrada' }} | {{ __('Answer') }}: {{ $answer }}">
                                                 {{ $status }} <!-- Exibe o ícone de status -->
                                             </td>
                                         @else
-                                            <td data-toggle="tooltip" title="Aluno não respondeu">
+                                            <td data-toggle="tooltip" title="{{ __("Student didn't respond") }}">
                                                 🟡
                                             </td>
                                         @endif
