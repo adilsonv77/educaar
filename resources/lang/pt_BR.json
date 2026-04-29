@@ -199,5 +199,9 @@
   "Error creating account": "Erro ao criar conta",
   "Email not found": "Email não encontrado",
   "Password reset. A new password has been sent to your email": "Senha redefinida. Uma nova senha foi enviada ao seu e-mail",
-  "Reset attempt failed": "A tentativa de redefinição falhou"
+  "Reset attempt failed": "A tentativa de redefinição falhou",
+
+  "===== USER SETTINGS": "CONFIGURAÇÕES DE USUÁRIO",
+  "Teacher Settings": "Configurações do Professor",
+  "Deadline to answer": "Data limite para responder"
 }
