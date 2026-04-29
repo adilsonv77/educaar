@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', 'Configurações do professor')
+@section('page-name', __('Teacher Settings'))
 
 @section('content')
 
@@ -24,9 +24,9 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Disciplina</th>
-                                <th>Turma</th>
-                                <th>Data limite para responder</th>
+                                <th>{{ __('Discipline') }}</th>
+                                <th>{{ __('Class') }}</th>
+                                <th>{{ __('Deadline to answer') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,7 +51,7 @@
                     
                         <div class="col-md-6 offset-md-4" >
                             <button type="submit" style="width: 50%; display: inline;" class="btn btn-primary">
-                                Salvar
+                                {{ __('Save') }}
                             </button>
                         </div>
                     
