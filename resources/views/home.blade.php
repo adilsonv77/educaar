@@ -13,16 +13,16 @@
                                    
                                         <div class="media-body p-0 ">
                                             <h2 class="text-secondary">{{ $contentCount }}</h2>
-                                            <span class="position">{{ trans_choice('entities.content', 2) }}</span>
+                                            <span class="position">{{ __('Content') }}</span>
                                         </div>
                                         @if($contentCount>0)
                                             <div class="align-self-center pl-2">
                                                 <h4 class="text-warning">{{ $fechadoCount }}</h4>
-                                                <span class="position">{{ trans_choice('ui.adjective.closed', 2) }}</span>
+                                                <span class="position">{{ __('Closed') }}</span>
                                             </div>
                                             <div class="align-self-center pl-2">
                                                 <h4 class="text-warning">{{ $readyContentCount }}</h4>
-                                                <span class="position">{{ trans_choice('ui.adjective.ready', 2) }}</span>
+                                                <span class="position">{{ __('Ready') }}</span>
                                             </div>
                                         @endif
                                         <span class="cd-icon bgl-secondary">
@@ -42,7 +42,7 @@
                                     
                                         <div class="media-body mr-3">
                                             <h2 class="text-success">{{ $activitiesCount }}</h2>
-                                            <span class="position">{{ trans_choice('entities.activity', 2) }}</span>
+                                            <span class="position">{{ __('Activities') }}</span>
                                         </div>
                                         <span class="cd-icon bgl-success">
                                             <i class="flaticon-381-notepad"></i>
@@ -62,7 +62,7 @@
                                 <div class="media">
                                     <div class="media-body mr-3">
                                         <h2 class="text-warning">{{ $usersCount }}</h2>
-                                        <span class="position">{{ trans_choice('entities.user.student', 2) }}</span>
+                                        <span class="position">{{ __('Students') }}</span>
                                     </div>
                                     <span class="cd-icon bgl-warning">
                                         <i class="flaticon-381-user-9"></i>

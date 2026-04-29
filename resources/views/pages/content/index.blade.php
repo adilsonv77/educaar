@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = trans_choice('entities.content', 2);
+    $pageName = __('Contents');
 @endphp
 
 @section('style')
@@ -16,10 +16,10 @@
 @section('content')
     <form action="{{ route('content.index') }}" method="GET">
         <div class="form-inline">
-            <label for="">{{ __('ui.input.enter_content') }}:</label>
+            <label for="">{{ __('Enter the content') }}:</label>
             <input maxlength="100" class="form-control" type="text" name="titulo" id="titulo" value="{{ $content }}"
                 list="historicoX" />
-            <button class="btn btn-primary btn-lg" type="submit">{{ __('ui.action.search') }}</button>
+            <button class="btn btn-primary btn-lg" type="submit">{{ __('Search') }}</button>
 
         </div>
 
@@ -47,7 +47,7 @@
         <div>
             <form action="{{ route('content.create') }}">
                 @csrf
-                <button class="btn btn-smaller, btn-primary " id="novo" title="{{ trans_choice('ui.adjective.new', 1) }}"><i
+                <button class="btn btn-smaller, btn-primary " id="novo" title="{{ __('New') }}"><i
                         class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
             </form>
         </div>
@@ -60,18 +60,18 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr style="text-align: center;">
-                                <th style="text-align: left;">{{ __('ui.input.name') }}</th>
-                                <th>{{ trans_choice('entities.discipline', 1) }}</th>
-                                <th>{{ trans_choice('entities.model_class', 1) }}</th>
-                                <th>{{ __('ui.action.close') }}</th>
+                                <th style="text-align: left;">{{ __('Name') }}</th>
+                                <th>{{ __('Discipline') }}</th>
+                                <th>{{ __('Model Class') }}</th>
+                                <th>{{ __('Close') }}</th>
                                 @if (session('type') == 'teacher')
-                                    <th>{{ trans_choice('ui.action.result', 2) }}</th>
+                                    <th>{{ __('Results') }}</th>
                                 @endif
                                 @if (session('type') !== 'developer')
-                                    <th>{{ __('ui.action.select_devs') }}</th>
+                                    <th>{{ __('Select Devs') }}</th>
                                     <th>PDF</th>
-                                    <th>{{ __('ui.action.edit') }}</th>
-                                    <th>{{ __('ui.action.delete') }}</th>
+                                    <th>{{ __('Edit') }}</th>
+                                    <th>{{ __('Delete') }}</th>
                                 @endif
                             </tr>
                         </thead>
@@ -102,9 +102,9 @@
                                         <input type="hidden" name="content" value="{{ $item->id }}">
                                         <button type="submit" id="FecharConteudo" class="btn btn-info"
                                             {{ !$isFecharEnabled ? 'disabled' : '' }}
-                                            @if ($item->qtasQuestoes == 0) title="{{ __('ui.adjective.no_questions') }}" 
-                                            @elseif ($item->fechado) title="{{ trans_choice('ui.adjective.closed', 1) }}" 
-                                            @else title="{{ __('ui.action.close') }}" @endif>
+                                            @if ($item->qtasQuestoes == 0) title="{{ __('No Answers') }}" 
+                                            @elseif ($item->fechado) title="{{ __('Closed') }}" 
+                                            @else title="{{ __('Close') }}" @endif>
                                             <i class="bi bi-lock-fill h2" style="color: #ffffff;"></i>
                                             ({{ $item->qtasatividades }})
                                         </button>
@@ -119,7 +119,7 @@
                                                 @csrf
                                                 <input type="hidden" name="content_id" value="{{ $item->id }}">
                                                 <button type="submit" class="btn btn-warning"
-                                                    @if ($item->qtasQuestoes == 0) title="{{ __('ui.adjective.no_questions') }}" @else title="{{ trans_choice('ui.action.result', 2) }}" @endif
+                                                    @if ($item->qtasQuestoes == 0) title="{{ __('No Answers') }}" @else title="{{ __('Results') }}" @endif
                                                     @if ($item->qtasatividades == 0 or $item->qtasQuestoes == 0) disabled @endif>
                                                     <i class="bi bi-journal-bookmark h2" style = "color : #ffffff;"></i>
                                                 </button>
@@ -132,7 +132,7 @@
                                             <form action="{{ route('dev.listDevs') }}">
                                                 @csrf
                                                 <input type="hidden" name="content" value="{{ $item->id }}">
-                                                <button type="submit" class="btn btn-warning" title="{{ __('ui.action.select_devs') }}">
+                                                <button type="submit" class="btn btn-warning" title="{{ __('Select Devs') }}">
                                                     <i class="bi bi-person-fill-gear h2" style = "color : #ffffff;"></i>
                                                 </button>
                                             </form>
@@ -148,9 +148,9 @@
                                                 <button type="submit" 
                                                         class="btn btn-warning" 
 
-                                                        @if ($item->qtasQuestoes == 0) title="{{ __('ui.adjective.no_questions') }}" 
-                                                        @elseif (!$item->fechado) title="{{ __('ui.adjective.not_closed') }}" 
-                                                        @else title="{{ __('ui.action.view_pdf') }}" @endif
+                                                        @if ($item->qtasQuestoes == 0) title="{{ __("No Questions") }}" 
+                                                        @elseif (!$item->fechado) title="{{ __('Not Closed') }}" 
+                                                        @else title="{{ __('View PDF') }}" @endif
                                                         
                                                         {{ $isPdfDisabled ? 'disabled' : '' }}>
                                                     <i class="bi bi-filetype-pdf h2" style="color: #ffffff;"></i>
@@ -165,7 +165,7 @@
                                             <!-- Editar -->
                                             <form action="{{ route('content.edit', $item->id) }}">
                                                 @csrf
-                                                <button type="submit" class="btn btn-warning" title="{{ __('ui.action.edit') }}">
+                                                <button type="submit" class="btn btn-warning" title="{{ __('Edit') }}">
                                                     <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i>
                                                 </button>
                                             </form>
@@ -175,7 +175,7 @@
                                             <button type="button"
                                                 class="btn btn-danger"  @if ($item->qtasatividades > 0) disabled @endif
                                                 data-toggle="modal" data-target="#modal{{ $item->id }}"
-                                                title="{{ __('ui.action.delete') }}">
+                                                title="{{ __('Delete') }}">
                                                 <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
                                             </button>
                                         </td>
@@ -186,16 +186,16 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-body">
-                                                <h3>{{ __('ui.action.delete') }}
+                                                <h3>{{ __('Delete') }}
                                                     {{ $item->content_name }}?</h3>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">{{ __('ui.action.cancel') }}</button>
+                                                    data-dismiss="modal">{{ __('Cancel') }}</button>
                                                 <form action="{{ route('content.destroy', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">{{ __('ui.action.delete') }}</button>
+                                                    <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -210,7 +210,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-body">
-                                    <h3>{{ __('ui.prompt.no_answers') }}</h3>
+                                    <h3>{{ __('No Answers') }}</h3>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
@@ -227,7 +227,7 @@
                 </div>
             @else
                 <div>
-                    <h2>{{ __('ui.prompt.no_content') }}</h2>
+                    <h2>{{ __('No Content') }}</h2>
                 </div>
             @endif
         </div>

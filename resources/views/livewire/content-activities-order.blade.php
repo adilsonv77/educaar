@@ -9,8 +9,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th style="width: 50%">Atividade</th>
-                <th style="width: 50%">Marcador</th>
+                <th style="width: 50%">{{ __('Activities') }}</th>
+                <th style="width: 50%">{{ __('Markers') }}</th>
             </tr>
         </thead>
         <tbody id="activities">

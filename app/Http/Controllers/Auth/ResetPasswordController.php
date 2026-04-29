@@ -71,15 +71,15 @@ class ResetPasswordController extends Controller
             try {
                 Mail::to($validated['email'], 'ResetPasswordEmail') -> send(new ResetPasswordEmail($password, $user));
             } catch (\Exception) {
-                return redirect('/password/reset') -> with('error', __('return.reset.email_not_found'));
+                return redirect('/password/reset') -> with('error', __('Email not found'));
             }
             DB::commit();
 
-            return redirect('/login') -> with('success', __('return.reset.reset_success'));
+            return redirect('/login') -> with('success', __('Password reset. A new password has been sent to your email'));
         } catch (\Exception) {
             DB::rollback();
 
-            return redirect('/password/reset') -> with('error', __('return.reset.fail'));
+            return redirect('/password/reset') -> with('error', __('Reset attempt failed'));
         }
 
     }

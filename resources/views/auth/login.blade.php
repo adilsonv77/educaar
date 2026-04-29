@@ -38,7 +38,7 @@
         @if ($errors->any())
             <div class="alert alert-danger" id="alerta">
                 <ul>
-                    <h3>{{ __('return.error') }}!</h3>
+                    <h3>{{ __('Error') }}!</h3>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -48,7 +48,7 @@
         @if (session('success'))
             <div class="alert alert-success" id="alerta-sucesso">
                 <ul>
-                    <h3>{{ __('return.success') }}!</h3>
+                    <h3>{{ __('Sucess') }}!</h3>
                     <p>{{ session('success') }}</p>
                 </ul>
             </div>
@@ -67,7 +67,7 @@
                     <input id="login" type="text"
                         class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
                         name="login" value="{{ old('username') ?: old('email') }}" required autofocus
-                        placeholder="{{ __('ui.input.user') }}">
+                        placeholder="{{ __('User') }}">
                     @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -76,7 +76,7 @@
                 
                     <input id="password" type="password"
                         class="form-control @error('password') is-invalid @enderror" name="password" required
-                        placeholder="{{ __('ui.input.password') }}">
+                        placeholder="{{ __('Password') }}">
                     @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -85,17 +85,17 @@
                     
                     <div class="mial">
                             <button type="submit" class="btn btn-primary">
-                                {{ __('ui.action.login') }}
+                                {{ __('Login') }}
                             </button>
                     </div>
                     
                     <!--
 
                     <a href="{{ route('register.create') }}">
-                        {{ __('auth.register') }}
+                        {{ __('Register') }}
                     </a>
                     <a href="{{ route('password.create') }}">
-                        {{ __('auth.forgot_password') }}
+                        {{ __('Forgot Password?') }}
                     </a>
 
                     -->
@@ -116,12 +116,12 @@
                 <div>
                     <form action="{{ route('locale.update') }}" method="GET"> @csrf
                         <select name="locale" id="locale">
-                            <option value="pt_BR">Português</option>
-                            <option value="en">Inglês</option>
+                            <option value="pt_BR">{{ __('Portuguese') }}</option>
+                            <option value="en">{{ __('English') }}</option>
                         </select>
 
                         <button type="submit">
-                            {{ __('ui.action.save') }}
+                            {{ __('Save') }}
                         </button>
                     </form>
                 </div>

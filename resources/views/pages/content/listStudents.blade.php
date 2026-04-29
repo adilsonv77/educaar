@@ -14,7 +14,7 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>{{ __('ui.input.name') }}</th>
+                                <th>{{ __('Name') }}</th>
                             </tr>
                         </thead>
                         <tbody>

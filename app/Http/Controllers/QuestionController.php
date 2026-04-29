@@ -178,7 +178,7 @@ class QuestionController extends Controller
     {
 
         $question = Question::find($id);
-        $titulo = 'Editar Questoes';
+        $titulo = __('Edit Question');
         $acao = 'edit';
         # retornar atividades do professor atual
         //  $activities = DB::table("activities")

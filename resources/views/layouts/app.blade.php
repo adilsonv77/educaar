@@ -76,42 +76,42 @@
                                             <p class="fs-12 mb-0">
 
                                                 @if (session('type') == 'student')
-                                                    {{ trans_choice('entities.user.student', 1) }}
+                                                    {{ __('Student') }}
                                                 @endif
 
                                                 @if (session('type') == 'teacher')
-                                                    {{ trans_choice('entities.user.teacher', 1) }}
+                                                    {{ __('Teacher') }}
                                                 @endif
 
                                                 @if (session('type') == 'admin')
-                                                    {{ trans_choice('entities.user.admin', 1) }}
+                                                    {{ __('Administrator') }}
                                                 @endif
                                                 
                                                 @if (session('type') == 'developer')
-                                                    {{ trans_choice('entities.user.dev', 1) }}
+                                                    {{ __('Developer') }}
                                                 @endif
                                                 @if (session('type') == 'adminMaster')
-                                                    {{ trans_choice('entities.user.admin_master', 1) }}
+                                                    {{ __('Master Administrator') }}
                                                 @endif
                                             </p>
 
                                         </div>
                                         @if (session('type') == 'admin')
-                                            <a href="{{ route('config.index') }}" title="{{ __('ui.action.config') }}" ;
+                                            <a href="{{ route('config.index') }}" title="{{ __('Config') }}" ;
                                                 class="dropdown-item ai-icon">
                                                 <img src="/gear.png" width="10" alt="" />
                                             </a>
                                         @endif
 
                                         @if (session('type') == 'teacher')
-                                            <a href="{{ route('profconfig.index') }}" title="{{ __('ui.action.config') }}" ;
+                                            <a href="{{ route('profconfig.index') }}" title="{{ __('Config') }}" ;
                                                 class="dropdown-item ai-icon">
                                                 <img src="/gear.png" width="10" alt="" />
                                             </a>
                                         @endif
 
                                         <div class="saida">
-                                            <a href="{{ route('logout') }}" title="{{ __('ui.action.exit') }}" ;
+                                            <a href="{{ route('logout') }}" title="{{ __('Exit') }}" ;
                                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                                 class="dropdown-item ai-icon">
 
@@ -145,12 +145,12 @@
                         @if (session('type') == 'developer')
                             <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-smartphone-5"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.content', 2)}}</span>
+                                    <span class="nav-text">{{ __('Contents') }}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('developer.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-notepad"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.activity', 2)}}</span>
+                                    <span class="nav-text">{{ __('Activities') }}</span>
                                 </a>
                             </li>
                         @endif
@@ -158,13 +158,13 @@
                         @if (session('type') == 'teacher')
                             <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-smartphone-5"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.content', 2)}}</span>
+                                    <span class="nav-text">{{ __('Contents') }}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('activity.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-notepad"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.activity', 2)}}</span>
+                                    <span class="nav-text">{{ __('Activities') }}</span>
                                 </a>
                             </li>
                             <!--
@@ -176,23 +176,23 @@
 -->
                             <li><a class="ai-icon" href="{{ route('mural.index') }}" aria-expanded="false">
                                     <i class="bi-bricks"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.mural', 2)}}</span>
+                                    <span class="nav-text">{{ __('Murals') }}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('turmas.listarTurmasAlunosProf') }}" aria-expanded="false">
                                     <i class="flaticon-381-user-9"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.user.student', 2)}}</span>
+                                    <span class="nav-text">{{ __('Students') }}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
                                     <i class="bi-table"></i>
-                                    <span class="nav-text">{{ trans_choice('ui.action.result', 2)}}</span>
+                                    <span class="nav-text">{{ __('Results') }}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('teacher.frequencia') }}" aria-expanded="false">
                                     <i class="bi-graph-up"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.access', 2)}}</span>
+                                    <span class="nav-text">{{ __('Access') }}</span>
                                 </a>
                             </li>
                             
@@ -207,57 +207,57 @@
 
                             <li><a class="ai-icon" href="{{ route('user.indexAluno') }}" aria-expanded="false">
                                     <i class="flaticon-381-user-9"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.user.student', 2)}}</span>
+                                    <span class="nav-text">{{ __('Students') }}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('user.indexProf') }}" aria-expanded="false">
                                     <i class="bi-person-hearts"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.user.teacher', 2)}}</span>
+                                    <span class="nav-text">{{ __('Teachers') }}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('user.indexDev') }}" aria-expanded="false">
                                     <i class="bi-person-fill-gear"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.user.dev', 2)}}</span>
+                                    <span class="nav-text">{{ __('Developers') }}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('class.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-book"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.discipline', 2) }}</span>
+                                    <span class="nav-text">{{ __('Disciplines') }}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('anoletivo') }}" aria-expanded="false">
                                     <i class="flaticon-381-calendar-2"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.school_year', 2)}}</span>
+                                    <span class="nav-text">{{ __('School Years') }}</span>
                                 </a>
                             </li>
 
                             <li><a class="ai-icon" href="{{ route('turmasmodelos.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-notebook-4"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.model_class', 2)}}</span>
+                                    <span class="nav-text">{{ __('Model Classes') }}</span>
                                 </a>
                             </li>
                             <li><a class="ai-icon" href="{{ route('turmas.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-notebook-3"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.class', 2)}}</span>
+                                    <span class="nav-text">{{ __('Classes') }}</span>
                                 </a>
                             </li>
 
                             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                                     <i class="flaticon-381-id-card-1"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.registration', 2)}}</span>
+                                    <span class="nav-text">{{ __('Registrations') }}</span>
                                 </a>
                                 <ul aria-expanded="false">
-                                    <li><a href="{{ route('user.matricula') }}">{{ __('ui.action.import_file') }}</a></li>
-                                    <li><a href="{{ route('turmas.indexmatricula') }}">{{ __('ui.action.list') }}</a></li>
+                                    <li><a href="{{ route('user.matricula') }}">{{ __('Import Files') }}</a></li>
+                                    <li><a href="{{ route('turmas.indexmatricula') }}">{{ __('List') }}</a></li>
                                 </ul>
                             </li>
                             <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-smartphone-5"></i>
-                                    <span class="nav-text">{{ trans_choice('entities.content', 2) }}</span>
+                                    <span class="nav-text">{{ __('Contents') }}</span>
                                 </a>
                             </li>
                         @endif

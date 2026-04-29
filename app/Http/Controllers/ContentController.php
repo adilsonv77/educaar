@@ -119,7 +119,7 @@ class ContentController extends Controller
             ->first();
 
         //var_dump($anoLetivo->id);
-        $titulo = __('ui.page.add_content');
+        $titulo = __('Add Content');
         $acao = 'insert';
 
         $params = [
@@ -186,7 +186,7 @@ class ContentController extends Controller
 
         $content = Content::find($id);
         $activities = Activity::where('content_id', $content->id)->orderBy('position', 'asc')->get();
-        $titulo = 'Editar Conteúdo';
+        $titulo = 'Edit Content';
         $acao = 'edit';
         $idprof = Auth::user()->id;
         $anoLetivo = AnoLetivo::where('bool_atual', 1)
@@ -505,13 +505,13 @@ class ContentController extends Controller
         $tipoalunos = [];
 
         foreach ($listaalunos as $a) {
-            if ($type == __('statistics.complete')) {
+            if ($type == __('Complete')) {
                 if ($a['fez'] === 1 && $a['nao_fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
-            } elseif ($type == __('statistics.incomplete')) {
+            } elseif ($type == __('Incomplete')) {
                 if (($a['incompleto'] === 1 || $a['nao_fez'] === 1 && $a['fez'] === 0) || ($a['nao_fez'] === 1 && $a['incompleto'] === 1 && $a['fez'] === 0))
                     array_push($tipoalunos, $a['id']);
-            } elseif ($type == __('statistics.no_respond')) {
+            } elseif ($type == __("Didn't respond")) {
                 if ($a['nao_fez'] === 1 && $a['fez'] === 0 && $a['incompleto'] === 0)
                     array_push($tipoalunos, $a['id']);
             }

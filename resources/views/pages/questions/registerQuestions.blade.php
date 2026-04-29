@@ -28,7 +28,7 @@
     @endif --}}
 </div>
 <form id="questionForm"  method="POST" action="{{ route('questions.store') }}" enctype="multipart/form-data" files="true"  autocomplete="off">
-    <h3>Questão</h3>
+    <h3>{{ __('Questions') }}</h3>
     @csrf
     <input name="id" type="hidden" value="{{ $id }}" />
     <input name="acao" type="hidden" value="{{ $acao }}" />
@@ -37,7 +37,7 @@
 
     <div class="col-md-9 col-sm-12">
         <div class="form-group">
-            <label for="">Enunciado</label>
+            <label for="">{{ __('Statement') }}</label>
             <textarea rows="2" cols="150" type="text" name="question" maxlength="98" class="form-control @error('question') is-invalid @enderror" id="question" required autofocus>{{ old('question', $question) }}</textarea>
         </div>
     </div>
@@ -46,35 +46,35 @@
 
     <div class="col-md-3 col-sm-12">
         <div class="form-group">
-            <label for="">Resposta Correta</label>
+            <label for="">{{ __('Correct Answer') }}</label>
             <input type="text" name="A" maxlength="50" class="form-control @error('A') is-invalid @enderror" id="A" style="border-width: 2px;border-color: #77dd77;" value="{{ old('A', $A) }}" required autofocus />
         </div>
     </div>
     <div class="col-md-3 col-sm-12">
         <div class="form-group">
-            <label for="">Resposta Errada</label>
+            <label for="">{{ __('Wrong Answer') }}</label>
             <input type="text" name="B" maxlength="50" class="form-control @error('B') is-invalid @enderror" id="B" style="border-width: 2px;border-color: #ff6961; color: black;" value="{{ old('B', $B) }}" required autofocus />
         </div>
     </div>
     <div class="col-md-3 col-sm-12">
         <div class="form-group">
-            <label for="">Resposta Errada</label>
+            <label for="">{{ __('Wrong Answer') }}</label>
             <input type="text" name="C" maxlength="50" class="form-control @error('C') is-invalid @enderror" id="C" style="border-width: 2px;border-color: #ff6961; color: black;" value="{{ old('C', $C) }}" required  autofocus />
         </div>
     </div>
     <div class="col-md-3 col-sm-12">
         <div class="form-group">
-            <label for="">Resposta Errada</label>
+            <label for="">{{ __('Wrong Answer') }}</label>
             <input type="text" name="D" maxlength="50" class="form-control @error('D') is-invalid @enderror" id="D" style="border-width: 2px;border-color: #ff6961; color: black;" value="{{ old('D', $D) }}" required autofocus />
         </div>
     </div>
     <div class="form-group mt-4 text-center justfy-content-center">
         @if(Route::currentRouteName() == 'questions.edit')
         <!-- Se estiver editando, o botão abre o modal -->
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmModal">Salvar</button>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmModal">{{ __('Save') }}</button>
         @else
         <!-- Se estiver criando, o botão salva diretamente -->
-        <button type="submit" class="btn btn-success">Salvar</button>
+        <button type="submit" class="btn btn-success">{{ __('Save') }}</button>
         @endif
     </div>
 </form>
@@ -86,14 +86,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="width: 600px">
             <div class="modal-body">
-                <h3>Você tem certeza que deseja salvar as mudanças?</h3>
+                <h3>{{ __('How do you want to save your changes?') }}?</h3>
             </div>
             <div class="modal-footer" justify-content-center>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
 
-                <button type="button" class="btn btn-danger" onclick="excluirESalvar()">Excluir Respostas e Salvar</button>
+                <button type="button" class="btn btn-danger" onclick="excluirESalvar()">{{ __('Delete answers and save') }}</button>
                  
-                <button type="button" class="btn btn-success" onclick="document.getElementById('questionForm').submit();">Salvar</button>
+                <button type="button" class="btn btn-success" onclick="document.getElementById('questionForm').submit();">{{ __('Save') }}</button>
             </div>
         </div>
     </div>

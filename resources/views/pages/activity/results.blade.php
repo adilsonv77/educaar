@@ -10,14 +10,14 @@
     $questions_results= $questions; 
 
     /* Variáveis de tradução para o JS */
-    $titleChart1 = __('statistics.questions_answereds');
-    $corretAnswer = __('statistics.correct_answer');
-    $incorretAnswer = __('statistics.incorrect_answer');
-    $questionsChart = trans_choice('entities.question', 2);
-    $titleChart2 = __(('statistics.titleChart2_activity'));
-    $complete = __('ui.adjective.complete');
-    $incomplete = __('ui.adjective.incomplete');
-    $notAnswered = __('ui.adjective.not_answered');
+    $titleChart1 = __('Correct and Incorrect Answers');
+    $corretAnswer = __('Correct Answer');
+    $incorretAnswer = __('Incorrect Answer');
+    $questionsChart = __('Questions');
+    $titleChart2 = __('Complete/Incomplete Questionnaire');
+    $complete = __('Complete');
+    $incomplete = __('Incomplete');
+    $notAnswered = __('Not Answered');
 @endphp
 
 @section('script-head')
@@ -34,7 +34,7 @@
   <div id="formTurma">
     <form action="{{ route('activity.results') }}" method="GET ">
             @csrf
-            <label for="" >{{ __('ui.input.enter_class') }}</label>
+            <label for="" >{{ __('Enter the class') }}</label>
             <div class="form-inline" >
                 <select class="form-control" name="turma_id">
                     @foreach ($turmas as $item)
@@ -43,7 +43,7 @@
                     @endforeach
                 </select>
                 <section class="itens-group" >
-                    <button class="btn btn-primary btn-lg" type="submit">{{ __('ui.action.search') }}</button>
+                    <button class="btn btn-primary btn-lg" type="submit">{{ __('Search') }}</button>
                 </section>
             </div>
     </form>
@@ -63,7 +63,7 @@
 </style>
   
   @if ($qntCompletas + $qntIncompletas == 0)
-       <b>{{ __('statistics.no_results')}}</b>
+       <b>{{ __('No results available')}}</b>
   @else
 
   <div style="background-color: white">
@@ -74,11 +74,11 @@
   <div id="tooltip" style="display: none; position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; z-index: 100;"></div>
 
   <div class="alert alert-primary" style="border-top-left-radius: 0!important; border-top-right-radius: 0!important;">
-      <b>{{ __('statistics.see_more') }}</b>
+      <b>{{ __('See more details when you hover over the question title or student answer') }}</b>
       <ul>
-          <li style="list-style:square"> &#9989; : {{ __('statistics.stu_correct') }}</li>
-          <li style="list-style:square"> &#10060; : {{ __('statistics.stu_wrong') }}</li>
-          <li style="list-style:square">&#128993; : {{ __('statistics.stu_not_respond') }}</li>
+          <li style="list-style:square"> &#9989; : {{ __('See more details when you hover over the question title or student answer') }}</li>
+          <li style="list-style:square"> &#10060; : {{ __('The student answered the question wrongly') }}</li>
+          <li style="list-style:square">&#128993; : {{ __('The student did not ask the question') }}</li>
       </ul>
     </div>
 
@@ -86,7 +86,7 @@
     <table id="table" class="table table-bordered">
       <thead class="thead-info">
         <tr>
-        <th scope="col">{{ __('ui.input.name') }}</th>
+        <th scope="col">{{ __('Name') }}</th>
           @php
               $count=1;
           @endphp
@@ -95,10 +95,10 @@
           @endforeach
 
           @if($refeita)
-            <th scope="col1" style="width: 15%;">{{ trans_choice('entities.attempt', 2) }}</th>
+            <th scope="col1" style="width: 15%;">{{ __('Attempts') }}</th>
 
             @if($pontuada != null)
-              <th scope="col1" style="width: 15%;">{{ trans_choice('entities.score', 1) }}</th>
+              <th scope="col1" style="width: 15%;">{{ __('Score') }}</th>
             @endif
 
           @endif

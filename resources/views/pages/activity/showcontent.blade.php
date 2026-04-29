@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', trans_choice('entities.activity', 1) . $name)
+@section('page-name', __('Activities') . $name)
 
 @section('content')
 
@@ -17,11 +17,11 @@
                 <!-- Botão de download -->
                 <div style="text-align: center; margin-top: 10px;">
                     <a href="{{ asset('/modelos3d/'.$activity) }}" download="{{ $activity }}" class="btn btn-primary">
-                        {{ __('ui.prompt.download_model') }}
+                        {{ __('Download 3D model') }}
                     </a>
                 </div>
             @else
-                <div>{{ __('ui.prompt.file_not_found') }}</div>
+                <div>{{ __('File not found') }}</div>
             @endif
         </div>
     </div>

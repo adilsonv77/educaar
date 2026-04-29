@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @php
-    $pageName = __('ui.page.results_of') . ' ' . $content->name;
+    $pageName = __('Results of') . ' ' . $content->name;
 
     /* Variáveis de tradução para o JS */
-    $titleChart1 = __('statistics.answered_activities');
-    $activity = trans_choice('views.activity', 1);
-    $activities = trans_choice('views.activity', 2);
-    $column2 =__('statistics.has_answered');
-    $column3 =__('statistics.hasnt_answered');
-    $titleChart2 = __('statistics.titleChart2');
-    $complete = __('statistics.complete');
-    $incomplete = __('statistics.incomplete');
-    $noRespond = __('statistics.no_respond')
+    $titleChart1 = __('Answered Activities');
+    $activity = __('Activity');
+    $activities = __('Activities');
+    $column2 =__('Responded');
+    $column3 =__("Hasn't Responded");
+    $titleChart2 = __('How is the content per student');
+    $complete = __('Complete');
+    $incomplete = __('Incomplete');
+    $noRespond = __("Didn't respond")
 @endphp
 
 @section('page-name', $pageName)
@@ -145,7 +145,7 @@
         <form action="{{ route('content.resultsContents') }}" method="GET ">
             @csrf
             <div class="form-inline">
-                <label for="">{{ __('ui.input.enter_class') }}:</label>
+                <label for="">{{ __('Enther the class') }}:</label>
                 <select class="form-control" name="turma_id">
                     @foreach ($turmas as $item)
                         <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
@@ -153,7 +153,7 @@
                         </option>
                     @endforeach
                 </select>
-                <button class="btn btn-primary btn-lg" type="submit">{{ __('ui.action.save') }}</button>
+                <button class="btn btn-primary btn-lg" type="submit">{{ __('Save') }}</button>
             </div>
         </form>
         <br>
@@ -186,7 +186,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ([ __('statistics.options') , __('statistics.correct'), __('statistics.incorrect'), __('statistics.not_answered')] as $rowLabel)
+                    @foreach ([ __('Options') , __('Correct'), __('Incorrect'), __("Didn't respond")] as $rowLabel)
                         <tr>
                             <td>{{ $rowLabel }}</td>
                             @foreach ($results as $result) 
@@ -198,15 +198,15 @@
                                     @else
                                         @foreach (['A', 'B', 'C', 'D'] as $alt)
                                             <td data-toggle="tooltip" title="{{ $questao['alternatives'][$alt] ?? 'Descrição não disponível' }}">
-                                                @if ($rowLabel ===  __('statistics.options'))
+                                                @if ($rowLabel ===  __('Options'))
                                                     {{ $alt }}
-                                                @elseif ($rowLabel === __('statistics.correct'))
+                                                @elseif ($rowLabel === __('Correct'))
                                                     @if ($alt === $questao['correct_alternative'])
                                                         {{ $questao['alternatives_count'][$alt] }}
                                                     @else
                                                         -
                                                     @endif
-                                                @elseif ($rowLabel === __('statistics.incorrect'))
+                                                @elseif ($rowLabel === __('Incorrect'))
                                                     @if ($alt !== $questao['correct_alternative'])
                                                         {{ $questao['alternatives_count'][$alt] > 0 ? $questao['alternatives_count'][$alt] : '-' }}
                                                     @else
@@ -225,7 +225,7 @@
         </div>
     @else
         <div style="background-color: white; padding: 20px; border-radius: 20px;">
-            <h2>{{ __('statistics.no_results') }}</h2>
+            <h2>{{ __('No Results') }}</h2>
         </div>
     @endif
 

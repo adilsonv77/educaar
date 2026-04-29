@@ -43,7 +43,7 @@
         @if ($errors->any())
             <div class="alert alert-danger" id="alerta">
                 <ul>
-                    <h3>{{ __('return.error') }}!</h3>
+                    <h3>{{ __('Error') }}!</h3>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -54,7 +54,7 @@
         @if (session('error'))
             <div class="alert alert-danger" id="alerta">
                 <ul>
-                    <h3>{{ __('return.error') }}!</h3>
+                    <h3>{{ __('Error') }}!</h3>
                     <p>{{ session('error') }}</p>
                 </ul>
             </div>
@@ -63,7 +63,7 @@
         @if (session('success'))
             <div class="alert alert-success" id="alerta-sucesso">
                 <ul>
-                    <h3>{{ __('return.success') }}!</h3>
+                    <h3>{{ __('Success') }}!</h3>
                     <p>{{ session('success') }}</p>
                 </ul>
             </div>
@@ -75,20 +75,20 @@
                 <div class="col-md-8">
 
                     <div class="card">
-                        <div class="card-header">{{ __('auth.forgot_password') }}</div>
+                        <div class="card-header">{{ __('Forgot Password?') }}</div>
 
                         <div class="card-body">
                             <form method="POST" action="{{ route('password.change') }}">
                                 @csrf
 
                                 <div class="form-group row">
-                                    <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('auth.email') }}</label>
+                                    <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail') }}</label>
 
                                     <div class="col-md-6">
                                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autofocus>
 
                                         <div id="passwordHelpBlock" class="form-text">
-                                        {{ __('auth.reset_message') }}
+                                        {{ __('If there is an email address registered, a new message will be sent to you.') }}
                                         </div>
                                     </div>
                                 </div>
@@ -96,7 +96,7 @@
                                 <div class="form-group row mb-0">
                                     <div class="mial">
                                         <button type="submit" class="btn btn-primary" style="width: unset">
-                                            {{ __('auth.reset_password') }}
+                                            {{ __('Reset Password') }}
                                         </button>
                                     </div>
                                 </div>

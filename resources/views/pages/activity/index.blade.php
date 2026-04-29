@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-$pageName = trans_choice('entities.activity', 2);
+$pageName = __('Activities');
 @endphp
 
 @section('page-name', $pageName)
@@ -18,10 +18,10 @@ $pageName = trans_choice('entities.activity', 2);
 <form action="{{ route('activity.index') }}" method="GET">
 
     <div class="form-inline ">
-        <label for="">{{ __('ui.input.enter_activity') }} :</label>
+        <label for="">{{ __('Activities') }} :</label>
         <input maxlength="100" class="form-control " type="text" name="titulo" id="titulo" value="{{ $activity }}" list="historico" />
         <section class="itens-group">
-            <button class="btn btn-primary btn-lg" type="submit">{{ __('ui.action.search') }}</button>
+            <button class="btn btn-primary btn-lg" type="submit">{{ __('Search') }}</button>
         </section>
     </div>
     <datalist id="historico">
@@ -32,7 +32,7 @@ $pageName = trans_choice('entities.activity', 2);
 
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ trans_choice('entities.content', 2) }}
+            {{ __('Contents') }}
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         @foreach ($nomesConteudo as $nome)
@@ -67,15 +67,15 @@ $pageName = trans_choice('entities.activity', 2);
         <table class="table table-hover table-responsive-sm">
             <thead>
                 <tr style="text-align: center;">
-                    <th style="text-align: left;">{{ __('ui.input.name') }}</th>
-                    <th>{{ __('ui.input.marker') }}</th>
-                    <th>{{ __('ui.action.view') }}</th>
-                    @if (session('type') == 'teacher')<th>{{ trans_choice('ui.action.result', 2) }}</th>@endif
+                    <th style="text-align: left;">{{ __('Name') }}</th>
+                    <th>{{ __('Marker') }}</th>
+                    <th>{{ __('View') }}</th>
+                    @if (session('type') == 'teacher')<th>{{ __('Results') }}</th>@endif
                    
-                    <th>{{ trans_choice('entities.question', 2) }}</th>
-                    <th>{{ __('ui.action.clone') }}</th>
-                    <th>{{ __('ui.action.edit') }}</th>
-                    <th>{{ __('ui.action.delete') }}</th>
+                    <th>{{ __('Questions') }}</th>
+                    <th>{{ __('Clone') }}</th>
+                    <th>{{ __('Edit') }}</th>
+                    <th>{{ __('Delete') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,7 +87,7 @@ $pageName = trans_choice('entities.activity', 2);
                         <img src="{{ asset('/marcadores/'.$item->marcador.'?v=' . random_int(0,10000)) }}" width="200" height="200">
                     </td>
                     <td style="width: 10%;">
-                        <a href="/activity/{{ $item->id }}" class="btn btn-primary" title="{{ __('ui.action.view') }}">
+                        <a href="/activity/{{ $item->id }}" class="btn btn-primary" title="{{ __('View') }}">
                             <i class="bi bi-eye-fill h2" style="color : #ffffff;"></i>
                         </a>
                     </td>
@@ -96,7 +96,7 @@ $pageName = trans_choice('entities.activity', 2);
                         <form action="{{ route('activity.results', $item->id) }}">
                             @csrf
                             <input type="hidden" name="activity_id" value="{{ $item->id }}">
-                            <button type="submit" class="btn btn-info" title="{{ trans_choice('ui.action.result', 2) }}" @if ($item->qtnQuest == 0) disabled @endif
+                            <button type="submit" class="btn btn-info" title="{{ __('Results') }}" @if ($item->qtnQuest == 0) disabled @endif
                                 text-align:center>
                                 <i class="bi bi-journal-bookmark h2" style="color : #ffffff;"></i>
                             </button>
@@ -113,7 +113,7 @@ $pageName = trans_choice('entities.activity', 2);
                         <form action="{{ route('questions.index', $item->id) }}">
                             @csrf
                             <input type="hidden" name="activity" value="{{ $item->id }}">
-                            <button type="submit" class="btn btn-info" text-align:center title="{{ trans_choice('entities.question', 2) }}">
+                            <button type="submit" class="btn btn-info" text-align:center title="{{ __('Questions) }}">
                                 <i class="bi bi-file-earmark-medical-fill h2" style="color : #ffffff;"></i>
                             </button>
                         </form>
@@ -122,7 +122,7 @@ $pageName = trans_choice('entities.activity', 2);
                     <td style="width: 10%;">
                     <form action="{{ route('activity.clone', $item->id) }}" method="POST" style="display:inline;">
                         @csrf
-                        <button type="submit" class="btn btn-info" title="{{ __('ui.action.clone') }}">
+                        <button type="submit" class="btn btn-info" title="{{ __('Clone') }}">
                             <i class="bi bi-copy h2" style="color: #ffffff;"></i>
                         </button>
                     </form>
@@ -132,7 +132,7 @@ $pageName = trans_choice('entities.activity', 2);
                     <td style="width: 70px;">
                         <form action="{{ route('activity.edit', $item->id) }}">
                             @csrf
-                            <button type="submit" class="btn btn-warning" text-align:center title="{{ __('ui.action.edit') }}">
+                            <button type="submit" class="btn btn-warning" text-align:center title="{{ __('Edit') }}">
                                 <i class="bi bi-pencil-square h2" style="color : #ffffff;"></i>
                             </button>
                         </form>
@@ -140,7 +140,7 @@ $pageName = trans_choice('entities.activity', 2);
                     @if (session('type') == 'teacher')
                     <td style="width: 70px;">
                         <button type="button" class="btn btn-danger" @if ($item->qtnQuest > 0) disabled @endif data-toggle="modal"
-                            data-target="#modal{{ $item->id }}" title="{{ __('ui.action.delete') }}">
+                            data-target="#modal{{ $item->id }}" title="{{ __('Delete') }}">
                             <i class="bi bi-trash3 h2" style="color : #ffffff;"></i>
                         </button>
                     </td>
@@ -150,15 +150,15 @@ $pageName = trans_choice('entities.activity', 2);
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-body">
-                                <h3>{{ __('ui.prompt.confirm_del_activity') }} "{{ $item->name }}"?
+                                <h3>{{ __('Delete activity :attribute?', ['attribute' => $item->name]) }}
                                 </h3>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('ui.action.cancel') }}</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
                                 <form action="{{ route('activity.destroy', $item->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">{{ __('ui.action.delete') }}</button>
+                                    <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
                                 </form>
                             </div>
                         </div>
@@ -175,7 +175,7 @@ $pageName = trans_choice('entities.activity', 2);
     </div>
     @else
     <div>
-        <h2>{{ __('ui.prompt.no_activities') }}</h2>
+        <h2>{{ __('No Activities') }}</h2>
     </div>
     @endif
 </div>

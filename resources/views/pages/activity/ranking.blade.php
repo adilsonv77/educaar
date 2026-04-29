@@ -1,6 +1,6 @@
 @extends('layouts.'.$layout)
 
-@section('page-name', __('ui.page.class_ranking'))
+@section('page-name', __('Ranking of'))
 
 @php
     $position = ['🥇', '🥈', '🥉'];
@@ -16,10 +16,10 @@
                 <input type="hidden" name="type" value="{{ $type }}">
 
                 <div class="form-inline d-flex gap-2 justify-content-start">
-                    <label for="activityinput" class="mr-2">{{ __('ui.input.enter_activity') }}:</label>
+                    <label for="activityinput" class="mr-2">{{ __('Enter the activity') }}:</label>
 
                     <select name="activity_id" class="form-control" style="height: 55px;">
-                        <option selected disabled>{{ __('ui.input.select_activity') }}</option>
+                        <option selected disabled>{{ __('Select the activity') }}</option>
                             @foreach($atividades as $atividade)
                                 <option value="{{ $atividade->id  }}" @selected(request('activity_id') == $atividade->id)>
                                     {{ $atividade->name }}
@@ -27,7 +27,7 @@
                             @endforeach
                     </select>
 
-                    <button type="submit" class="btn btn-primary btn-lg @if($layout == "mobile") btn-block mt-2 mb-4 @endif ">{{ __('ui.action.search') }}</button>
+                    <button type="submit" class="btn btn-primary btn-lg @if($layout == "mobile") btn-block mt-2 mb-4 @endif ">{{ __('Search') }}</button>
                 </div>
             </form>
         </div>
@@ -36,7 +36,7 @@
     @if($ranking === null)
         <hr>
         <div class="mt-4"">
-            <h1>{{ __('statistics.no_results') }}</h1>
+            <h1>{{ __('No Results') }}</h1>
         </div>
     @elseif($layout == 'app')
         <!-- Usando sorttable.js para a ordenação da tabelas --> 
@@ -44,15 +44,15 @@
             <table class="table table-bordered sortable table-layout-fixed mt-4" id="table">
                 <thead class="thead-info">
                     <tr>
-                        <th class="sorttable_nosort">{{ __('ui.input.position') }}</th>
+                        <th class="sorttable_nosort">{{ __('Position') }}</th>
                         <th style="cursor:pointer; user-select:none;">
-                            {{ __('ui.input.name') }}
+                            {{ __('Name') }}
                         </th>
                         <th style="cursor:pointer; user-select:none;">
-                            {{ trans_choice('entities.score', 1) }}
+                            {{ __('Score') }}
                         </th>
                         <th style="cursor:pointer; user-select:none;">
-                            {{ trans_choice('entities.attempt', 2) }}
+                            {{ __('Attempt') }}
                         </th>
                     </tr>
                 </thead>
@@ -61,7 +61,7 @@
                         <tr class="item">
                             <td>{{ $i + 1 }}º</th>
                             <td>{{ $aluno->name }}</th>
-                            <td>{{ $aluno->pontuacao ?? 0 }} {{trans_choice('ui.input.point', 2)}}</th>
+                            <td>{{ $aluno->pontuacao ?? 0 }} @if($aluno->pontuacao <= 0) {{ __('Point') }} @else {{ __('Points') }} @endif</th>
                             <td>{{ $aluno->tentativas ?? 0 }}</th>
                         </tr>
                     @endforeach
@@ -73,8 +73,13 @@
 
             <div class="d-flex align-items-center justify-content-between mb-3 px-1">
                 <div>
-                    <h3 class="mb-0 font-weight-bold">🏆 {{ __('ui.page.ranking_of') }} {{$content_name}}</h5>
-                    <small class="text-muted">{{ $studentCount }} {{ trans_choice('ui.input.participant', 2) }}</small>
+                    <h3 class="mb-0 font-weight-bold">🏆 {{ __('Ranking of') }} {{$content_name}}</h5>
+                    <small class="text-muted">
+                        {{ $studentCount }} 
+                        @if($studentCount === 1)  {{__('Participant')}}
+                        @else {{__('Participants')}}
+                        @endif
+                    </small>
                 </div>
             </div>
 
@@ -95,7 +100,7 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
                                             {{ $aluno->name }} <br> {{ $aluno->pontuacao ?? 0 }}
-                                            {{ ($aluno->pontuacao ?? 0) !== 1 ? trans_choice('ui.input.point', 2) : trans_choice('ui.input.point', 1) }}
+                                            {{ ($aluno->pontuacao ?? 0) !== 1 ? __('Points') : __('Point') }}
                                         </div>
                                         @if($aluno->user_id === auth()->id())
                                             <div>

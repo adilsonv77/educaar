@@ -100,7 +100,7 @@ class ActivityController extends Controller
         if (session('type') !== 'teacher') {
             return redirect('/');
         }
-        $titulo = 'Atividade Nova';
+        $titulo = __('Add Activity');
         $acao = 'insert';
 
         $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
@@ -386,7 +386,7 @@ class ActivityController extends Controller
     public function edit(Request $request, $id)
     {
         $activity = Activity::find($id);
-        $titulo = 'Editar Atividades';
+        $titulo = __('Edit Activity');
         $acao = 'edit';
 
         $anoletivoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)

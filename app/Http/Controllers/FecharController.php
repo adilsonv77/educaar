@@ -26,7 +26,7 @@ class FecharController extends Controller
         ->orderBy('position', 'asc')
         ->get();
    
-        $titulo = __('ui.page.close_content');
+        $titulo = __('Close Content');
 
         $id = $content->id;
 

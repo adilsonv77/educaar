@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = trans_choice('entities.user.dev', 2);
+    $pageName = __('Developers');
 @endphp
 
 @section('page-name', $pageName)
@@ -27,10 +27,10 @@
             <!-- Campo de Pesquisa -->
             <form action="{{ route('dev.listDevs') }}" method="GET">
                 <div class="form-inline">
-                    <label for="">{{ trans_choice('entities.user.dev', 2) }}:</label>
+                    <label for="">{{ __('Developer') }}:</label>
                     <input maxlength="100" class="form-control" type="text" name="nomeDev" id="nomeDev"
                     value="" list="historicoX"/>
-                    <button class="btn btn-primary btn-lg" type="submit">{{ __('ui.action.search') }}</button>
+                    <button class="btn btn-primary btn-lg" type="submit">{{ __('Search') }}</button>
                 </div>
                 <datalist id="historicoX">
                     
@@ -45,7 +45,7 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>{{ __('ui.input.name') }}</th>
+                                <th>{{ __('Name') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,7 +63,7 @@
                                 </tr>
                             @endforeach
 
-                            <button type="submit" class="btn btn-success">{{ __('ui.action.save') }}</button>
+                            <button type="submit" class="btn btn-success">{{ __('Save') }}</button>
                     </form>
             </tbody>
             </table>
@@ -71,7 +71,7 @@
         </div>
     @else
         <div>
-            <h2>{{ __('ui.prompt.no_dev') }}</h2>
+            <h2>{{ __('No Developers') }}</h2>
         </div>
         @endif
     </div>

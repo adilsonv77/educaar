@@ -13,7 +13,7 @@
             margin: 6px 12px;
             margin-bottom: 23px;
             background-image: linear-gradient(#e9e9e9,#d9d9d9);
-        }
+        } 
         #selectPanel:hover{
             background-color: #a7f2fe;
             background-image: none;
@@ -42,21 +42,21 @@
                     <input name="acao" type="hidden" value="{{ $acao }}" />
 
                     <div class="form-group row">
-                        <label for="name">{{ __('ui.input.name') }}* </label>
+                        <label for="name">{{ __('Name') }}* </label>
                     
                         <div class="col-md-6">
                             <input id="name" type="text" maxlength="100" class="form-control @error('name') is-invalid @enderror"
                                 name="name" value="{{ old('name', $name) }}" required
                                 placeholder=
                                 @if($name !== "") $name 
-                                @else "{{ __('ui.input.content_name') }}"
+                                @else "{{ __('Name') }}"
                                 @endif
                                 autofocus />
                         </div>
                     </div>
                     @if (session('type') == 'teacher')
                     <div class="form-group row">
-                        <label for="">{{ __('ui.input.choose_discipline') }}*</label>
+                        <label for="">{{ __('Discipline') }}*</label>
                         <select class="form-control" name="disciplina_id">
                             @foreach ($disciplinas as $item)
                                 <option value="{{ $item->tid }}_{{ $item->did }}"
@@ -70,7 +70,7 @@
                         <div class="custom-control custom-switch switch">
                             <input type="hidden" name="ordered" value="0">
                             <input type="checkbox" name="ordered" id="ordered" class="custom-control-input" value="1" @if($sort_activities >= 1) checked @endif>
-                            <label for="ordered" class="custom-control-label">{{ __('ui.adjective.ordered_content') }}</label>
+                            <label for="ordered" class="custom-control-label">{{ __('Ordered Content') }}</label>
                         </div>
                     </div>
 
@@ -79,8 +79,8 @@
                             <div class="custom-control custom-switch switch">
                                 <input type="hidden" name="random" value="0">
                                 <input type="checkbox" class="custom-control-input" name="random" id="random" value="1" @if($sort_activities == 2) checked @endif>
-                                <label for="random" class="custom-control-label">{{ __('ui.adjective.sorted_random_content') }}</label>
-                                <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="randomAlert" role="alert">{{ __('ui.prompt.sorted_warning') }}</div>
+                                <label for="random" class="custom-control-label">{{ __('Randomly Ordered Content') }}</label>
+                                <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="randomAlert" role="alert">{{ __('With this option, each student will have a different order in which to answer the activities.') }}</div>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                     @endif
 
                     <div class="form-group row mt-4">
-                        <input type="submit" value="{{ __('ui.action.save') }}" class="btn btn-success">
+                        <input type="submit" value="{{ __('Save') }}" class="btn btn-success">
                     </div>
 
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-$pageName = 'Questões';
+$pageName = __('Questions');
 @endphp
 
 @section('style')
@@ -28,11 +28,11 @@ foreach($questions as $q) {
 
 <div class="card">
     <div class="card-header">
-        <h4 class="card-title" style="color: #f5f5f5">Atividade: {{ $activity->name }} </h4>
+        <h4 class="card-title" style="color: #f5f5f5">{{ __('Activity') }}: {{ $activity->name }} </h4>
         <form action="{{ route('questions.create') }}" style="display:block;width:100px">
             @csrf
             <button type="submit" class="btn btn-success" >
-                    Criar questão
+                    {{ __('New Question') }}
                 </button>
 
         </form>
@@ -44,10 +44,10 @@ foreach($questions as $q) {
             <table class="table table-hover table-responsive-sm">
                 <thead>
                     <tr style="text-align: center;">
-                        <th style="text-align: left;">Nome</th>
-                        <th>Respostas</th>
-                        <th>Editar</th>
-                        <th>Ação</th>
+                        <th style="text-align: left;">{{ __('Name') }}</th>
+                        <th>{{ __('Answers') }}</th>
+                        <th>{{ __('Edit') }}</th>
+                        <th>{{ __('Delete') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,10 +55,10 @@ foreach($questions as $q) {
                     @foreach ($questions as $item)
                     <tr style="text-align: center;">
                         {{-- !<td>{{ $item->name }}</td>
-                        <td><a href="/question/create{{ $activity->id }}" class="btn btn-primary1">Editar</a></td>
+                        <td><a href="/question/create{{ $activity->id }}" class="btn btn-primary1">{{ __('Edit') }}</a></td>
                         <td>
                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal{{ $item->id }}">
-                                Deletar
+                                {{ __('Delete') }}
                             </button>
                         </td> --}}
 
@@ -70,7 +70,7 @@ foreach($questions as $q) {
                             <form action="{{ route('questions.edit', $item->id) }}">
                                 @csrf
                                 <button type="submit" class="btn btn-warning">
-                                    <i class="bi bi-pencil-square h2" style="color : #ffffff;" title="Editar"></i>
+                                    <i class="bi bi-pencil-square h2" style="color : #ffffff;" title="{{ __('Edit') }}"></i>
                                 </button>
                             </form>
                         </td>
@@ -82,7 +82,7 @@ foreach($questions as $q) {
 
                             <button type="button" class="btn btn-danger" data-toggle="modal" @if (($alunosPorQuestao[$item->id] ?? 0) > 0) disabled @endif
                                 data-target="#modal{{ $item->id }}"
-                                title="Excluir">
+                                title="{{ __('Delete') }}">
                                 <i class="bi bi-trash3 h2" style="color: #ffffff; margin-right: 8px;"></i>
                                 <span style="color: #ffffff;">{{ $qtdAlunos }}</span>
                             </button>
@@ -91,17 +91,17 @@ foreach($questions as $q) {
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-body">
-                                            <h3>Você tem certeza que deseja excluir a questão {{ $item->question }}?
+                                            <h3>{{ __('Delete question :attribute?', ['attribute' => $item->question]) }}
                                             </h3>
                                         </div>
                                         
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
                                             <form action="{{ route('questions.destroy', $item->id) }}" method="POST">
 
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Excluir</button>
+                                                <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
                                             </form>
                                         </div>
                                     </div>
@@ -123,7 +123,7 @@ foreach($questions as $q) {
         </div>
         @else
         <div></div>
-        <h2>Nenhum conteúdo cadastrado</h2>
+        <h2>{{ __('No Questions') }}</h2>
     </div>
     @endif
 </div>
