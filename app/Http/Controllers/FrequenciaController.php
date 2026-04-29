@@ -64,16 +64,16 @@ class FrequenciaController extends Controller
             }
 
             if ($acesso == "pordia") {
-                $titgrafico = "Acessos por dia";
+                $titgrafico = __('Accesses per day');
             } else {
-                $titgrafico = "Alunos que acessaram por dia";
+                $titgrafico = __('Student who accessed per day');
             }
             $compact = compact('turmas', 'turma', 'freq', 'ticksquantos', 'titgrafico', 'acesso');
         } else {
             $alunos = LoginDAO::listaUltAcessoAlunos($prof_id, $turma_id);
             $alunos = $alunos->get();
             
-            $titgrafico = "Último acesso de cada aluno";
+            $titgrafico = __('Last access for each student');
             $compact = compact('turmas', 'turma', 'alunos', 'titgrafico', 'acesso');
         }
 

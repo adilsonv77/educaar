@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
 @php
-    $pageName= 'Frequência de acesso ao sistema';
+    $pageName= __('System access frequency');
 
+    /* Variáveis de tradução para o JS */
+    $date = __('Date');
+    $access = __('Access');
+    $howMany = __('How many');
 @endphp
 
 @section('page-name', $pageName)
@@ -12,6 +16,11 @@
 
 <script type="text/javascript">
   
+    var labelDate = <?php echo json_encode($date); ?>;
+    var labelAccess = <?php echo json_encode($access); ?>;
+    var labelHowMany = <?php echo json_encode($howMany); ?>;
+
+
     @if($acesso !== 'ultacesso') 
 
     google.charts.load('current', {'packages':['bar', 'corechart']});
@@ -22,8 +31,8 @@
 
     function drawLineChart() {
       var data = new google.visualization.DataTable();
-        data.addColumn('date', 'Data ');
-        data.addColumn('number', 'Acessos');
+        data.addColumn('date', labelDate);
+        data.addColumn('number', labelAccess);
 
         data.addRows([
             @foreach ($freq as $item) 
@@ -34,7 +43,7 @@
         var options = {
             title: '{{ $titgrafico }}',
             hAxis: {
-              title: 'Data',
+              title: labelDate,
               format: 'dd/MM',
               ticks: [
                 @foreach ($freq as $item) 
@@ -44,7 +53,7 @@
 
             },
             vAxis: {
-                title: 'Quantos',
+                title: labelHowMany,
                 ticks: [
                  @foreach ($ticksquantos as $item) 
                   {{$item}}, 
@@ -73,7 +82,7 @@
           @csrf
           
           <div class="col-md-6">
-              <label>Informe a turma : </label>
+              <label>{{ __('Enter the class') }}: </label>
 
                 <select class="form-control" name="turma_id" id="turma_id">
                     @foreach ($turmas as $item)
@@ -87,11 +96,11 @@
           @if($acesso !== 'ultacesso')
           <div class="row pb-3">
             <div class="col-md-3">
-              <label>Data inicial:</label>
+              <label>{{ __('Start date') }}:</label>
               <input type="date" name="start_date" class="form-control"/>
             </div>
             <div class="col-md-3">
-              <label>Data final:</label>
+              <label>{{ __('Final date') }}:</label>
               <input type="date" name="end_date" class="form-control"/>
             </div>
             
@@ -99,22 +108,22 @@
           @endif
           
           <div class="col-md-3">
-              <button class="btn btn-primary" type="submit">Pesquisar</button>
+              <button class="btn btn-primary" type="submit">{{ __('Search') }}</button>
           </div>
  
           <div class="mb-3">
-              <label  class="form-label" for="pordia">Filtro : </label>
+              <label  class="form-label" for="pordia">{{ __('Filter') }}: </label>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="pordia" name="acessos" value="pordia" onchange="this.form.submit();" @if($acesso === 'pordia') checked @endif>
-                <label class="form-check-label" for="pordia">Acessos por dia</label><br>
+                <label class="form-check-label" for="pordia">{{ __('Accesses per day') }}</label><br>
               </div>
               <div class="form-check form-check-inline">  
                 <input class="form-check-input" type="radio" id="poralunos" name="acessos" value="poralunos" onchange="this.form.submit();" @if($acesso === 'poralunos') checked @endif>
-                <label class="form-check-label" for="poralunos">Alunos que acessaram por dia</label><br>
+                <label class="form-check-label" for="poralunos">{{ __('Student who acessed per day') }}</label><br>
               </div>
               <div class="form-check form-check-inline">  
                 <input class="form-check-input" type="radio" id="ultacesso" name="acessos" value="ultacesso" onchange="this.form.submit();" @if($acesso === 'ultacesso') checked @endif>
-                <label class="form-check-label" for="ultacesso">Último acesso de cada aluno</label><br>
+                <label class="form-check-label" for="ultacesso">{{ __('Last acess for each student') }}</label><br>
               </div>
 
           </div>
@@ -126,8 +135,8 @@
                   <table class="table table-hover table-responsive-sm">
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Acesso</th>
+                            <th>{{ __('Name') }}</th>
+                            <th>{{ __('Acess') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -135,7 +144,7 @@
                         @foreach ($alunos as $item)
                             <tr>
                                 <td>{{ $item->name }}</td>
-                                <td>@if(!$item->acesso) Nunca @else {{ $item->acesso }} @endif  </td>
+                                <td>@if(!$item->acesso) {{ __('Never') }} @else {{ $item->acesso }} @endif  </td>
                             </tr>
                         @endforeach
                     </tbody>

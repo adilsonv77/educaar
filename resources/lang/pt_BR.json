@@ -206,5 +206,18 @@
 
   "===== USER SETTINGS": "CONFIGURAÇÕES DE USUÁRIO",
   "Teacher Settings": "Configurações do Professor",
-  "Deadline to answer": "Data limite para responder"
+  "Deadline to answer": "Data limite para responder",
+
+  "===== FREQUENCY =====": "===== FREQUÊNCIA =====",
+  "System access frequency": "Frequência de acesso ao sistema",
+  "Start date": "Data inicial",
+  "Final date": "Data final",
+  "Filter": "Filtro",
+  "Accesses per day": "Acessos por dia",
+  "Student who accessed per day": "Alunos que acessaram por dia",
+  "Last access for each student": "Último acesso de cada aluno",
+  "Never": "Nunca",
+  "How many": "Quantos",
+  "Date": "Data"
+
 }
