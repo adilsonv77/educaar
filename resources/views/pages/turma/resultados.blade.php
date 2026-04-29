@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Resultados de uma turma';
+    $pageName = __('Results of a Class');
 @endphp
 
 @section('page-name', $pageName)
@@ -51,11 +51,11 @@
         @csrf
 
         <div class="form-inline">
-            <label for="">Informe a turma:</label>
+            <label for="">__('Enter the class'):</label>
 
             <select class="form-control" name="turma_id">
                 <option value="0"  @if ($turma_id === 0) selected="selected" @endif>
-                    Todas as turmas
+                    {{ __('All classes') }}
                 </option> 
                 @foreach ($turmas as $item)
                     <option value="{{ $item->id }}" @if ($item->id == $turma_id) selected="selected" @endif>
@@ -63,7 +63,7 @@
                     </option>
                 @endforeach
             </select>
-            <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+            <button class="btn btn-primary btn-lg" type="submit">{{ __('Search') }}</button>
         </div>
     </form>
     <br>
