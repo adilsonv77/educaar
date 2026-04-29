@@ -113,7 +113,7 @@ $pageName = __('Activities');
                         <form action="{{ route('questions.index', $item->id) }}">
                             @csrf
                             <input type="hidden" name="activity" value="{{ $item->id }}">
-                            <button type="submit" class="btn btn-info" text-align:center title="{{ __('Questions) }}">
+                            <button type="submit" class="btn btn-info" text-align:center title="{{ __('Questions') }}">
                                 <i class="bi bi-file-earmark-medical-fill h2" style="color : #ffffff;"></i>
                             </button>
                         </form>
