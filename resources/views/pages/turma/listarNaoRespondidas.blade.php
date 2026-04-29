@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Questões não-respondidas';
+    $pageName = __('Unfinished Questions');
 @endphp
 
 @section('page-name', $pageName)

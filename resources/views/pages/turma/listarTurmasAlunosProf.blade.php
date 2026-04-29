@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Alunos';
+    $pageName = __('Students');
 @endphp
 
 @section('page-name', $pageName)
@@ -13,14 +13,14 @@
           @csrf
           
           <div class="form-inline">
-          <label for="">Informe a turma:</label>
+          <label for="">{{ __('Enter the class') }}</label>
               <select class="form-control" name="turma_id">
                   @foreach ($turmas as $item)
                       <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
                           {{ $item->nome }}</option>
                   @endforeach
               </select>
-              <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+              <button class="btn btn-primary btn-lg" type="submit">{{ __('Search') }}</button>
           </div>
     </form>
     <br>
@@ -31,7 +31,7 @@
         <form  action="{{ route('student.naorespondidas') }}">
             <input type="hidden" name="turma_id" value="{{ $turma->id }}">
             <button type="submit" class="btn btn-success" >
-                Geral de questões não respondidas
+                {{ __('Report of unanswered questions') }}
             </button>
         </form>
     </div>
@@ -64,10 +64,10 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Questões Acertadas</th>
-                                <th>Questões Erradas</th>
-                                <th>Questões Não Feitas</th>
+                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Correct Questions') }}</th>
+                                <th>{{ __('Incorrect Questions') }}</th>
+                                <th>{{ __('Unfinished Questions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -116,7 +116,7 @@
                  </div>
             @else
                 <div>
-                    <h2>Nenhum aluno</h2>
+                    <h2>{{ __('No Students') }}</h2>
                 </div>
             @endif
         </div>
