@@ -20,10 +20,12 @@
                                                 <h4 class="text-warning">{{ $fechadoCount }}</h4>
                                                 <span class="position">{{ __('Closed') }}</span>
                                             </div>
-                                            <div class="align-self-center pl-2">
-                                                <h4 class="text-warning">{{ $readyContentCount }}</h4>
-                                                <span class="position">{{ __('Ready') }}</span>
-                                            </div>
+                                            @if(session('type') !== 'developer')
+                                                <div class="align-self-center pl-2">
+                                                    <h4 class="text-warning">{{ $readyContentCount }}</h4>
+                                                    <span class="position">{{ __('Ready') }}</span>
+                                                </div>
+                                            @endif
                                         @endif
                                         <span class="cd-icon bgl-secondary">
                                             <i class="flaticon-381-smartphone-5"></i>

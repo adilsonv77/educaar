@@ -128,7 +128,9 @@ class HomeController extends Controller
             $activitiesCount = $activities[0]->quantos;
             $usersCount = $alunosProf[0]->quantos;
             $contentCount = $contents[0]->quantos;
-            $readyContentCount = ContentDAO::getReadyContentCount(Auth::id());
+            $readyContentCount = session('type') !== 'developer'
+                ? ContentDAO::getReadyContentCount(Auth::id())
+                : null;
 
             return view('home', compact('activitiesCount', 'usersCount', 'contentCount', 'activitiesCount', 'schools', 'fechadoCount', 'readyContentCount'));
         }
