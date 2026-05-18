@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Atividades';
+    $pageName = __('Activities');
 @endphp
 
 @section('style')

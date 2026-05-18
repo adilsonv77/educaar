@@ -1,6 +1,6 @@
 @extends('layouts.'.$layout)
 
-@section('page-name', __('Ranking of'))
+@section('page-name', "Ranking")
 
 @php
     $position = ['🥇', '🥈', '🥉'];
