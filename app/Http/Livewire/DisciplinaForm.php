@@ -35,7 +35,7 @@ class DisciplinaForm extends Component
     public function novo()
     {
         $this->reset();
-        $this->modalTitle = "Adicionar Disciplina";
+        $this->modalTitle = __('New Subject');
         $this->inserir = true;
         $this->dispatchBrowserEvent('openDisciplinaModal');
     }
@@ -45,7 +45,7 @@ class DisciplinaForm extends Component
         $disciplina = Disciplina::find($id);
         $this->disciplinaId = $disciplina->id; 
         $this->name = $disciplina->name;
-        $this->modalTitle = "Editar Disciplina";
+        $this->modalTitle = __('Edit Subject');
         $this->inserir = false;
         $this->dispatchBrowserEvent('openDisciplinaModal');
     }

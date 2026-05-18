@@ -68,7 +68,7 @@
                 </div>
             @else
                 <div>
-                    <h2>Nenhuma atividade cadastrada</h2>
+                    <h2>{{ __('No activities registered') }}</h2>
                 </div>
             @endif
         </div>

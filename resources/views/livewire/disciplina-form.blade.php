@@ -22,10 +22,10 @@
         <div class="flex justify-between">
             <div class="w-1/4">
                 <div class="form-inline">
-                <label for="">Informe a disciplina : </label>
+                <label for="">{{ __('Enter the subject') }} : </label>
                     <input class="form-control" type="text" wire:model.defer="filtroTemp" list="disciplinas" />
                     <section class="itens-group">
-                        <button class="btn btn-primary btn-lg" type="button" wire:click="aplicarFiltro">Filtrar</button>
+                        <button class="btn btn-primary btn-lg" type="button" wire:click="aplicarFiltro">{{ __('Filter') }}</button>
                     </section>
                 </div>
 
@@ -48,7 +48,7 @@
             </div>
 
             <div>
-               <button class="btn btn-sm btn-primary" id="novo" wire:click="novo()" title="Nova Disciplina">
+               <button class="btn btn-sm btn-primary" id="novo" wire:click="novo()" title={{ __('New Subject') }}>
                    <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff;"></i>
                </button>
             </div>
@@ -62,9 +62,9 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Editar</th>
-                                <th>Excluir</th>
+                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Edit') }}</th>
+                                <th>{{ __('Delete') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,12 +72,12 @@
                                 <tr>
                                     <td>{{ $disciplina->name }}</td>
                                     <td>
-                                        <button class="btn btn-warning" wire:click="editar({{ $disciplina->id }})" title="Editar">
+                                        <button class="btn btn-warning" wire:click="editar({{ $disciplina->id }})" title={{ __('Edit') }}>
                                             <i class="bi bi-pencil-square h2" style="color: #ffffff;"></i>
                                         </button>    
                                    </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger" wire:click="confirmarExcluir({{ $disciplina->id }})" title="Excluir">
+                                        <button type="button" class="btn btn-danger" wire:click="confirmarExcluir({{ $disciplina->id }})" title={{ __('Delete') }}>
                                             <i class="bi bi-trash3 h2" style="color: #ffffff;"></i>
                                         </button>
                                     </td>
@@ -92,7 +92,7 @@
                 </div>
             @else
                 <div>
-                    <h2>Nenhuma disciplina cadastrada</h2>
+                    <h2>{{ __('No subject registered') }}</h2>
                 </div>
             @endif
         </div>
@@ -120,7 +120,7 @@
 
                     <form wire:submit.prevent="salvar" autocomplete="off">
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">Nome:</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}:</label>
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" wire:model="name" required autofocus>
                                 @error('name')
@@ -129,8 +129,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Salvar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                         </div>
                     </form>
                 </div>
@@ -142,11 +142,11 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h3>Você tem certeza que deseja excluir a disciplina <b>{{ $disciplinaExcluir }}</b>?</h3>
+                    <h3> {{ __('Confirm delete the subject :subject', ["subject" => $disciplinaExcluir]) }} </h3>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
-                    <button type="button" class="btn btn-danger" wire:click="excluir()">Sim</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('No') }}</button>
+                    <button type="button" class="btn btn-danger" wire:click="excluir()">{{ __('Yes') }}</button>
                 </div>
             </div>
         </div>

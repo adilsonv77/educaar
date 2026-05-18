@@ -26,6 +26,7 @@
   "User": "Usuário",
   "E-Mail": "Email",
   "Password": "Senha",
+  "Confirm Password": "Confirme a senha",
   "Login": "Iniciar sessão",
   "Register": "Registre-se",
   "Forgot Password?": "Esqueceu sua senha?",
@@ -119,6 +120,7 @@
   "Enter the activity": "Informe a atividade",
   "Questionnaire" : "Questionário",
   "Questionnaires" : "Questionários",
+  "No activities registered": "Nenhuma atividade cadastrada",
 
   "===== RANKING MANAGEMENT =====": "===== GESTÃO DE RANKING =====",
   "Ranking of": "Ranking de",
@@ -232,6 +234,24 @@
   "Select a subject": "Selecione uma disciplina",
   "Are you sure you want to delete the mural": "Você tem certeza que deseja excluir o mural",
   "No": "Não",
-  "Yes": "Sim"
+  "Yes": "Sim",
+
+  "===== ADMIN VIEWS =====": "===== TELAS DE ADMINISTRADOR =====",
+  "Enter the name": "Informe o nome",
+  "Type": "Tipo",
+  "No classes registered": "Nenhuma turma registrada",
+  "No users registered": "Nenhum usuário registrado",
+  "Enter the subject": "Informa a disciplina",
+  "No subject registered": "Nenhuma disciplina cadastrada",
+  "Confirm delete the subject :subject": "Excluir a disciplina :subject",
+  "New Subject": "Nova Disciplina",
+  "Edit Subject": "Editar Disciplina",
+  
+  "===== USER REGISTER =====": "===== REGISTRO DE USUÁRIO =====",
+  "Complete name": "Nome completo",
+  "Choose the class": "Escolha a turma"
+
+
+
 
 }

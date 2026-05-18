@@ -11,7 +11,7 @@
     <div>
         <form action="{{ route($userCreate) }}">
             @csrf
-            <button class="btn btn-sm btn-primary" id="novo" title="Novo">
+            <button class="btn btn-sm btn-primary" id="novo" title={{ __('New') }}>
                 <i class="bi bi-plus-circle-dotted h1" style="color: #ffffff;"></i>
             </button>
         </form>
@@ -19,10 +19,10 @@
 
     <form action="{{ route($userindex) }}" method="GET">
         <div class="form-inline">
-            <label for="titulo">Informe o nome:</label>
+            <label for="titulo">{{ __('Enter the name') }}</label>
             <input class="form-control" type="text" name="titulo" id="titulo" value="{{ request('titulo') }}" list="historico" />
             <section class="itens-group">
-                <button class="btn btn-primary btn-lg" type="submit">Pesquisar</button>
+                <button class="btn btn-primary btn-lg" type="submit">{{ __('Search') }}</button>
             </section>
         </div>
     </form>
@@ -45,11 +45,11 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Nome</th>
+                                <th>{{ __('Name') }}</th>
                                 <th>Login</th>
-                                @if ($type == 'student') <th>Turma</th> @endif
-                                @if ($type == 'developer') <th>Tipo</th> @endif
-                                <th>Editar</th>
+                                @if ($type == 'student') <th>{{ __('Class') }}</th> @endif
+                                @if ($type == 'developer') <th>{{ __('Type') }}</th> @endif
+                                <th>{{ __('Edit') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,21 +67,21 @@
                                         @if ($item->turma_nome)
                                             {{ $item->turma_nome }}
                                         @else
-                                            <span class="text-muted">Nenhuma turma</span>
+                                            <span class="text-muted">{{ __('No classes registered') }}</span>
                                         @endif
                                         </td>
                                     @endif
 
                                     <!-- Tipo de usuário (se for desenvolvedor) -->
                                     @if ($type == 'developer')
-                                        <td>{{ $item->type == 'admin' ? 'Administrador' : 'Desenvolvedor' }}</td>
+                                        <td>{{ $item->type == 'admin' ? __('Administrator') : __('Developer') }}</td>
                                     @endif
 
                                     <!-- Editar -->
                                     <td>
                                         <form action="{{ route('user.edit', $item->id) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning" title="Editar">
+                                            <button type="submit" class="btn btn-warning" title={{ __('Edit') }}>
                                                 <i class="bi bi-pencil-square h2" style="color: #ffffff;"></i>
                                             </button>
                                         </form>
@@ -97,7 +97,7 @@
                 </div>
             @else
                 <div>
-                    <h2>Nenhum usuário cadastrado</h2>
+                    <h2>{{ __('No users registered') }}</h2>
                 </div>
             @endif
         </div>
