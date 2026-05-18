@@ -46,6 +46,26 @@ where a.id = 7 and atu.aluno_id = 261 and t.ano_id = 4
             ->where("t.ano_id", "=",  $ano_id);
         return $sql;
     }
+
+    public static function buscarEscolaAluno($aluno_id){
+        $sql = DB::table('users as a')
+            ->join('schools as e', 'e.id', '=', 'a.school_id')
+            ->where('a.id', '=', $aluno_id)
+            ->select('e.id as id', 'e.name as nome')
+            ->first();
+
+        return $sql;
+    }
+
+    public static function buscarTurmaAluno($aluno_id){
+        $sql1 = DB::table('alunos_turmas as atu')
+            ->join('turmas as t', 't.id', '=', 'atu.turma_id')
+            ->where('atu.aluno_id', '=', $aluno_id)
+            ->select('t.id as id', 't.nome as nome')
+            ->first();
+
+        return $sql1;
+    }
 }
 
 ?>

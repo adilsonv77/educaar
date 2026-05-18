@@ -71,7 +71,6 @@
                                 <li class="nav-item dropdown header-profile">
                                     <a class="nav-link" href="javascript:void()" role="button" data-toggle="dropdown">
                                         <div class="header-info">
-
                                             <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
                                             <p class="fs-12 mb-0">
 
@@ -94,8 +93,8 @@
                                                     {{ __('Master Administrator') }}
                                                 @endif
                                             </p>
+                                        </div>  
 
-                                        </div>
                                         @if (session('type') == 'admin')
                                             <a href="{{ route('config.index') }}" title="{{ __('Config') }}" ;
                                                 class="dropdown-item ai-icon">
@@ -174,7 +173,8 @@
                                 </a>
                             </li>
 -->
-                            <li><a class="ai-icon" href="{{ route('mural.index') }}" aria-expanded="false">
+                            <li>
+                                <a class="ai-icon" href="{{ route('mural.index') }}" aria-expanded="false">
                                     <i class="bi-bricks"></i>
                                     <span class="nav-text">{{ __('Murals') }}</span>
                                 </a>
@@ -184,7 +184,8 @@
                                     <span class="nav-text">{{ __('Students') }}</span>
                                 </a>
                             </li>
-                            <li><a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
+                            <li>
+                                <a class="ai-icon" href="{{ route('turma.resultados') }}" aria-expanded="false">
                                     <i class="bi-table"></i>
                                     <span class="nav-text">{{ __('Results') }}</span>
                                 </a>
@@ -196,7 +197,8 @@
                                 </a>
                             </li>
                             
-                            <li><a class="ai-icon" href="{{ route('ranking.create') }}" aria-expanded="false">
+                            <li>
+                                <a class="ai-icon" href="{{ route('ranking.create') }}" aria-expanded="false">
                                     <i class="bi-trophy"></i>
                                     <span class="nav-text">Ranking</span>
                                 </a>
@@ -205,19 +207,22 @@
 
                         @if (session('type') == 'admin')
 
-                            <li><a class="ai-icon" href="{{ route('user.indexAluno') }}" aria-expanded="false">
+                            <li>
+                                <a class="ai-icon" href="{{ route('user.indexAluno') }}" aria-expanded="false">
                                     <i class="flaticon-381-user-9"></i>
                                     <span class="nav-text">{{ __('Students') }}</span>
                                 </a>
                             </li>
 
-                            <li><a class="ai-icon" href="{{ route('user.indexProf') }}" aria-expanded="false">
+                            <li>
+                                <a class="ai-icon" href="{{ route('user.indexProf') }}" aria-expanded="false">
                                     <i class="bi-person-hearts"></i>
                                     <span class="nav-text">{{ __('Teachers') }}</span>
                                 </a>
                             </li>
 
-                            <li><a class="ai-icon" href="{{ route('user.indexDev') }}" aria-expanded="false">
+                            <li>
+                                <a class="ai-icon" href="{{ route('user.indexDev') }}" aria-expanded="false">
                                     <i class="bi-person-fill-gear"></i>
                                     <span class="nav-text">{{ __('Developers') }}</span>
                                 </a>

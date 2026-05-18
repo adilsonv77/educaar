@@ -106,10 +106,10 @@ class StudentController extends Controller
         return view('student.indexContentStudent', compact('conteudos', 'rota', 'conteudosRespondidos', 'conteudosComAtividadesPontuadas'));
     }
 
-
     /**
      * Após clicar no conteúdo, entra na página de RA da aplicação
      */
+
     public function showActivity(Request $request)
     {
         session()->put('primeira_entrada', 1);
@@ -265,6 +265,34 @@ class StudentController extends Controller
                 'sort' => implode(',', $sort)
             ]);
         }
+    }
+
+    public function profile()
+    {
+        $student = Auth::user();
+        $student->turma = StudentAppDAO::buscarTurmaAluno($student->id);
+        $student->escola = StudentAppDAO::buscarEscolaAluno($student->id);
+        $rota = route("home");
+        return view('student.profile', compact('student', 'rota'));
+
+    }
+
+    public function studentAvatar(){
+        $student = Auth::user();
+        $rota = route("home");
+        $urlBase = "https://api.dicebear.com/9.x/toon-head/svg?seed=" . $student->name . "&backgroundColor=b6e3f4&hairProbability=0&skinColor=ffffff&clothes=dress&clothesColor=ffffff&hairColor=000000&rearHairProbability=0";
+        return view('student.student-avatar', compact('student', 'rota', 'urlBase'));
+    }
+
+    public function updateStudentAvatar(Request $request, $id){
+
+        $request = request();
+        $avatar = $request->input('avatar');
+        $student = Auth::user();
+        $student->avatar = $avatar;
+        $student->save();
+
+        return redirect()->route('student.avatar', $student->id)->with('success', 'Avatar atualizado com sucesso!');
     }
 
 }

@@ -162,6 +162,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/students/store', [App\Http\Controllers\StudentController::class, 'store'])->name('student.store');
     Route::get('/students/questoes', [App\Http\Controllers\StudentController::class, 'questoes'])->name('student.questoes');
     Route::post('/students/atualizar-progresso', [App\Http\Controllers\StudentController::class, 'atualizarProgressoConteudoOrdenado'])->name('student.atualizarProgressoConteudoOrdenado');
+    Route::get('/students/profile', [App\Http\Controllers\StudentController::class, 'profile'])->name('student.profile');
+
+    Route::get('/students/avatar', [App\Http\Controllers\StudentController::class, 'studentAvatar'])->name('student.avatar');
+    Route::put('/students/avatar/{id}', [App\Http\Controllers\StudentController::class, 'updateStudentAvatar'])->name('student.avatar.update');
 
     //criei essa rota para resetar o progresso do conteudo ordenado na sessão
     Route::get('/reset-progresso/{content-id}', function($contentId){
