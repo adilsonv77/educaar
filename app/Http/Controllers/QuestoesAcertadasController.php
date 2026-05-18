@@ -16,7 +16,6 @@ class QuestoesAcertadasController extends Controller
     {
         $data= $request->all(); 
         
-
         $aluno = DB::table('users')->where('id', $data['aluno_id'])->first();
 
         $mostra_resposta = 1;

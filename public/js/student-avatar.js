@@ -1,16 +1,10 @@
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    let avatarState = {
-        seed: 'Luke',
-        backgroundColor: 'b6e3f4',
-    };
-
-    const urlBase = "https://api.dicebear.com/9.x/toon-head/svg?";
-
     const imgPreview = document.getElementById('avatar-preview');
     const inputHidden = document.getElementById('avatar-input');
-
     const cards = document.querySelectorAll('.card');
+
+    inputHidden.value = imgPreview.src;
 
     cards.forEach(card => {
         card.addEventListener('click', () => {
@@ -26,20 +20,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
             const propriedade = card.dataset.property;
             const valor = card.dataset.value;
 
+            let urlAtual = new URL(imgPreview.src);
+
             if(valor === 'none'){
-                delete avatarState[propriedade];
-                avatarState[`${propriedade}Probability`] = 0;
+                urlAtual.searchParams.delete(propriedade);
+                urlAtual.searchParams.set(`${propriedade}Probability`, 0);
             } else
                  if(propriedade === 'beard') {
-                 avatarState[propriedade] = valor;
-                 avatarState[`${propriedade}Probability`] = 100;
+                 urlAtual.searchParams.set(propriedade, valor);
+                 urlAtual.searchParams.set(`${propriedade}Probability`, 100);
             } else{
-                avatarState[propriedade] = valor;
-                delete avatarState[`${propriedade}Probability`];
+                urlAtual.searchParams.set(propriedade, valor);
+                urlAtual.searchParams.delete(`${propriedade}Probability`);
             }
 
-            const parametros = new URLSearchParams(avatarState).toString();
-            const urlFinal = urlBase + parametros;
+            const urlFinal = urlAtual.toString();
 
             imgPreview.src = urlFinal;
 
