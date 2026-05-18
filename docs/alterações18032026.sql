@@ -43,3 +43,6 @@ ALTER TABLE content_developer
 ADD CONSTRAINT fk_content_developer_content
 FOREIGN KEY (content_id) REFERENCES contents(id)
 ON DELETE CASCADE;
+
+ALTER TABLE users
+ADD COLUMN avatar VARCHAR(255) DEFAULT NULL;

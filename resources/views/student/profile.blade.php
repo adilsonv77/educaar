@@ -8,7 +8,7 @@
         <div class="position-relative mx-auto mb-3 mt-5" style="width: 100px; height: 100px;">
             
             <div class="bg-light rounded-circle d-flex justify-content-center align-items-center w-100 h-100" style="overflow: hidden;">
-                <img src="https://api.dicebear.com/9.x/toon-head/svg?seed=Luke&backgroundColor=b6e3f4" alt="Avatar" style="width: 100%; height: auto;">
+                <img src={{ $urlAvatar }} alt="Avatar" style="width: 100%; height: auto;">
             </div>
 
             <a href="{{ route('student.avatar') }}" class="position-absolute d-flex justify-content-center align-items-center text-white text-decoration-none" style="bottom: 0px; right: 0px; width: 32px; height: 32px; background-color: #bb68ff; border-radius: 50%; border: 2px solid #f2e3ff;">

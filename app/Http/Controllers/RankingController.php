@@ -18,6 +18,7 @@ class RankingController extends Controller
         $content_name = ContentDAO::getNameById($content_id);
         $activity_id = request('activity_id');
         $studentCount = 0;
+        $urlAvatar = session('avatar');
 
         if($type) {
             $layout = 'mobile';
@@ -34,7 +35,7 @@ class RankingController extends Controller
                 : RankingDAO::buscarRankingPorAtividade($activity_id);
         }
 
-        return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type', 'layout', 'content_name', 'studentCount'));
+        return view('pages.activity.ranking', compact('atividades', 'ranking', 'content_id', 'type', 'layout', 'content_name', 'studentCount', 'urlAvatar'));
     }
 
 }

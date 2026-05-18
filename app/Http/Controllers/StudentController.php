@@ -272,8 +272,9 @@ class StudentController extends Controller
         $student = Auth::user();
         $student->turma = StudentAppDAO::buscarTurmaAluno($student->id);
         $student->escola = StudentAppDAO::buscarEscolaAluno($student->id);
+        $urlAvatar = $student->avatar;
         $rota = route("home");
-        return view('student.profile', compact('student', 'rota'));
+        return view('student.profile', compact('student', 'rota', 'urlAvatar'));
 
     }
 

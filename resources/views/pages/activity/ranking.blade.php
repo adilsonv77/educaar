@@ -107,6 +107,9 @@
                                                 <i class="bi bi-person" style="font-size: 1.5rem"></i>
                                             </div>
                                         @endif
+                                        <div class="bg-light rounded-circle d-flex justify-content-center align-items-center w-16 h-16" style="overflow: hidden;">
+                                            <img src={{ $urlAvatar }} alt="Avatar" style="width: 42px; height: auto;">
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
