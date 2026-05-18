@@ -18,7 +18,6 @@ $pageName = __('Activities');
 <form action="{{ route('activity.index') }}" method="GET">
 
     <div class="form-inline ">
-        <label for="">{{ __('Activities') }} :</label>
         <input maxlength="100" class="form-control " type="text" name="titulo" id="titulo" value="{{ $activity }}" list="historico" />
         <section class="itens-group">
             <button class="btn btn-primary btn-lg" type="submit">{{ __('Search') }}</button>
@@ -30,7 +29,7 @@ $pageName = __('Activities');
     @endforeach
     </datalist>
 
-    <div class="dropdown">
+    <div class="dropdown mt-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ __('Contents') }}
         </button>
