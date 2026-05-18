@@ -301,6 +301,10 @@
    
   "===== USER REGISTER =====": "===== REGISTRO DE USUÁRIO =====",
   "Complete name": "Nome completo",
-  "Choose the class": "Escolha a turma"
+  "Choose the class": "Escolha a turma",
+
+  "School Configurations": "Configurações da Escola",
+  "School Name": "Nome da Escola",
+  "Standard Teacher": "Professor Padrão"
 
 }

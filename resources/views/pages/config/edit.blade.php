@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', 'Configurar a escola')
+@section('page-name', __('School Configuration'))
 
 @section('content')
     <div class="card">
@@ -22,7 +22,7 @@
                 <input type="hidden" name="beforeId" value="{{ $beforeId }}" />
 
                 <div class="form-group row">
-                    <label for="schoolName" class="col-md-4 col-form-label text-md-right">Nome da Escola : </label>
+                    <label for="schoolName" class="col-md-4 col-form-label text-md-right">{{ __('School Name') }} : </label>
 
                     <div class="col-md-6">
                         <input id="schoolName" type="text" class="form-control @error('name') is-invalid @enderror"
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="anoLetivoAtual" class="col-md-4 col-form-label text-md-right">Ano letivo atual : </label>
+                    <label for="anoLetivoAtual" class="col-md-4 col-form-label text-md-right">{{ __('Current school year') }} : </label>
                     <div class="col-md-6">
                         <select id="anoLetivoAtual" name="anoLetivoAtual">
                             @foreach ($anosletivos as $item)
@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="prof_Atual" class="col-md-4 col-form-label text-md-right">Professor padrão : </label>
+                    <label for="prof_Atual" class="col-md-4 col-form-label text-md-right">{{ __('Standard Teacher') }} : </label>
                     <div class="col-md-6">
                         <select id="prof_atual" name="prof_atual">
                             @foreach ($professores as $prof)
@@ -63,7 +63,7 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-6 offset-md-4">
                         <button type="submit" class="btn btn-primary">
-                            Salvar
+                            {{ __('Save') }}
                         </button>
                     </div>
                 </div>

@@ -198,7 +198,7 @@ class UserController extends Controller
     }
     public function matricula()
     {
-        $titulo = __('Import stduents from file');
+        $titulo = __('Import students from file');
 
         $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
