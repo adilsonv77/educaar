@@ -59,7 +59,7 @@ class MatriculaNovoAluno extends Component
             ->get();
         //'nome', 'turma_modelo_id', 'school_id', 'ano_id';
         //turmaficticia = {'nome': 'Sem alteração', 'id' : 0};
-        $this->turmas->push((object)['nome' => 'Sem alteração', 'id' => 0]);
+        $this->turmas->push((object)['nome' => __('No change'), 'id' => 0]);
 
         if (!empty($this->turmaKey)) {
             $this->turma = $this->turmaKey;

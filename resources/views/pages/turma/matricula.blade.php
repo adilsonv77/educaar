@@ -20,7 +20,7 @@
                 @csrf
 
                 <div class="form-group">
-                    <label for="">Escolha a turma*</label>
+                    <label for="">{{ __('Enter the class') }}*</label>
                     <select class="form-control" name="turma_id">
                         @foreach ($turmas as $item)
                             <option value="{{ $item->id }}"
@@ -33,17 +33,17 @@
 
 
                 <div class="form-group">
-                    <label for="">Arquivo CSV*</label>
+                    <label for="">{{ __('CSV File') }}*</label>
                     <input type="file" style="border:none" class="form-control" name="csv" id="csv"
                         accept=".csv" required>
 
                     <div class="alert alert-primary">
-                        <b>Instruções para o arquivo CSV</b>
+                        <b>{{ __('CSV file instructions') }}</b>
                         <ul>
-                            <li style="list-style:square">Separado por ponto e vírgula (;)</li>
-                            <li style="list-style:square">A primeira linha com cabeçalho. A segunda linha em diante com dados</li>
-                            <li style="list-style:square">Três colunas: a primeira é ignorada, a segunda com a matrícula e a terceira com o nome completo</li>
-                            <li style="list-style:square">A matrícula será usada como nome do usuário e senha</li>
+                            <li style="list-style:square">{{ __('Separated by semicolon (;)') }}</li>
+                            <li style="list-style:square">{{ __('The first line with header. The second line onwards with the data') }}</li>
+                            <li style="list-style:square">{{ __('Three columns: the first is ignored, the second with the registration number and the third with the full name') }}</li>
+                            <li style="list-style:square">{{ __('The registration number will be used as the username and password') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-6 offset-md-4">
                         <button type="submit" class="btn btn-primary">
-                            Importar
+                            {{ __('Import') }}
                         </button>
                     </div>
                 </div>

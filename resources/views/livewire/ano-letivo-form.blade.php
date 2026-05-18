@@ -23,11 +23,11 @@
         <div class="flex justify-between">
             <div class="w-1/4">
                 <div class="form-inline">
-                <label for="">Informe o ano : </label>
+                <label for="">{{ __('Enter the School Year') }} : </label>
                     <input class="form-control" type="text" wire:model.defer="filtroTemp"
                         list="historico" />
                     <section class="itens-group">
-                        <button class="btn btn-primary btn-lg" type="button" wire:click="aplicarFiltro">Filtrar</button>
+                        <button class="btn btn-primary btn-lg" type="button" wire:click="aplicarFiltro">{{ __('Filter') }}</button>
                         
                     </section>
                 </div>
@@ -51,7 +51,7 @@
             </div>
 
             <div>
-               <button class="btn btn-sm btn-primary " id="novo" wire:click="novo()" title="Novo"><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
+               <button class="btn btn-sm btn-primary " id="novo" wire:click="novo()" title={{ __('New') }}><i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i></button>
             </div>
         </div>
     </div>
@@ -63,9 +63,9 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Editar</th>
-                                <th>Excluir</th>
+                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Edit') }}</th>
+                                <th>{{ __('Delete') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -105,7 +105,7 @@
                 </div>
             @else
                 <div>
-                    <h2>Nenhum ano letivo cadastrado</h2>
+                    <h2>{{ __('No school year registered') }}</h2>
                 </div>
             @endif
         </div>
@@ -147,11 +147,11 @@
                         
                         <div class="modal-footer">
                                 <button class="btn btn-primary">
-                                    Salvar
+                                    {{ __('Save') }}
                                 </button>
 
                                 <button type="button"  data-dismiss="modal" class="btn btn-primary">
-                                    Cancelar
+                                    {{ __('Cancel') }}
                                 </button>
 
                         </div>
@@ -170,14 +170,12 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h3>Você tem certeza que deseja excluir o ano letivo
-                        <b>{{ $anoLetivoExcluir }}?</b>
-                    </h3>
+                    <h3> {{ __('Confirm delete school year :school_year', ["school_year" => $anoLetivoExcluir]) }} </h3>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Não</button>
-                    <button type="button" class="btn btn-danger" wire:click="excluir()">Sim</button>
+                        data-dismiss="modal">{{ __('No') }}</button>
+                    <button type="button" class="btn btn-danger" wire:click="excluir()">{{ __('Sim') }}</button>
                 </div>
             </div>
         </div>

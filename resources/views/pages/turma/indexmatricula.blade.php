@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Alunos da turma ' . $turma->nome;
+    $pageName = __('Students of class :class', ["class" => $turma->nome]);
 @endphp
 
 @section('page-name', $pageName)
@@ -19,8 +19,8 @@
         @csrf
         
         <div class="form-inline">
-        <label for="">Informe a turma: <br>
-             (Ano letivo atual {{ $anoletivo->name }})</label>
+        <label for="">{{ __('Enter the class') }}: <br>
+             ({{ __('Current school year: :school_year', ["school_year" => $anoletivo->name]) }})</label>
             <select class="form-control" name="turma_id">
                 @foreach ($turmas as $item)
                     <option value="{{ $item->id }}" @if ($item->id === $turma->id) selected="selected" @endif>
@@ -28,7 +28,7 @@
                 @endforeach
             </select>
             <section class="itens-group">
-                <button class="btn btn-primary btn-lg "type="submit">Pesquisar</button>
+                <button class="btn btn-primary btn-lg "type="submit">{{ __('Search') }}</button>
             </section>
         </div>
     </form>
@@ -53,8 +53,8 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Desmatricular</th>
+                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Unregister') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,18 +74,16 @@
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-body">
-                                                    <h3>Você tem certeza que deseja desmatricular o aluno
-                                                        {{ $aluno->name }}?
-                                                    </h3>
+                                                    <h3>{{ __('Confirm unregister student :student', ["student" => $aluno->name]) }}</h3>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Cancelar</button>
+                                                        data-dismiss="modal">{{ __('Cancel') }}</button>
                                                     <form action="{{ route('turmas.desmatricular') }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="aluno_id" value="{{ $aluno->id }}">
                                                         <input type="hidden" name="turma_id" value="{{ $turma->id }}">
-                                                        <button type="submit" class="btn btn-danger">Desmatricular</button>
+                                                        <button type="submit" class="btn btn-danger">{{ __('Unregister') }}</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -101,7 +99,7 @@
         </div>
     @else
         <div>
-            <h2>Nenhum aluno matriculado nesta turma </h2>
+            <h2>{{ __('No student registered in this class') }}</h2>
         </div>
         @endif
     </div>

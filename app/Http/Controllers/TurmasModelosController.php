@@ -58,7 +58,7 @@ class TurmasModelosController extends Controller
         });
 
         $params = [
-            'titulo' => 'Adicionar Turma Modelo',
+            'titulo' => __('Add Model Class'),
             'acao' => $acao,
             'id' => 0,
             'serie' => '',
@@ -132,7 +132,7 @@ class TurmasModelosController extends Controller
         });
 
         $params = [
-            'titulo' => 'Editar Turma Modelo',
+            'titulo' => __('Edit Model Class'),
             'acao' => 'edit',
             'id' => $turma->id,
             'disciplinas' => $disciplinas_turma,

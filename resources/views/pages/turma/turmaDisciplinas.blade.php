@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Disciplinas da Turma';
+    $pageName = __('Class subjects');
 @endphp
 
 @section('page-name', $pageName)
-
+No student registered in this class
 @section('content')
     <div class="card">
         <div class="card-body">
@@ -15,8 +15,8 @@
                         <table class="table table-hover table-responsive-sm">
                             <thead>
                                 <tr>
-                                    <th>Disciplina</th>
-                                    <th>Escolha o professor
+                                    <th>{{ __('Subject') }}</th>
+                                    <th>{{ __('Choose the teacher') }}
                                     </th>
 
                                 </tr>
@@ -46,14 +46,14 @@
                         </table>
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary">
-                                Salvar
+                                {{ __('Save') }}
                             </button>
                         </div>
                     </form>
                 </div>
             @else
                 <div>
-                    <h2>Nenhuma turma modelo cadastrada</h2>
+                    <h2>{{ __('No model class registered') }}</h2>
                 </div>
             @endif
         </div>

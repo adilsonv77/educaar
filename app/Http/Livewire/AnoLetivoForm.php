@@ -49,7 +49,7 @@ class AnoLetivoForm extends Component
 
         $this->id_anoletivo = 0;
         $this->name = "";
-        $this->modalTitulo = "Novo ano letivo";
+        $this->modalTitulo = __('New School Year');
         $this->inserir = true;
 
         $this->dispatchBrowserEvent('openAnoLetivoModal');
@@ -63,7 +63,7 @@ class AnoLetivoForm extends Component
 
         $this->id_anoletivo = $anoletivo->id;
         $this->name = $anoletivo->name;
-        $this->modalTitulo = "Editar ano letivo";
+        $this->modalTitulo = __('Edit School Year');
         $this->inserir = false;
 
         $this->dispatchBrowserEvent('openAnoLetivoModal');

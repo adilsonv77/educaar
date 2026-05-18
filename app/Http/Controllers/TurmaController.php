@@ -68,7 +68,7 @@ class TurmaController extends Controller
         $turmasmodelos = DB::table('turmas_modelos')->where('school_id', Auth::user()->school_id)->get();
 
         $params = [
-            'titulo' => 'Adicionar Turma',
+            'titulo' => __('Add Class'),
             'acao' => $acao,
             'id' => 0,
             'nome' => '',
@@ -134,7 +134,7 @@ class TurmaController extends Controller
         $turmasmodelos = DB::table('turmas_modelos')->where('school_id', Auth::user()->school_id)->get();
 
         $params = [
-            'titulo' => 'Editar Turma',
+            'titulo' => __('Edit Class'),
             'acao' => $acao,
             'id' => $turma->id,
             'nome' => $turma->nome,
@@ -202,7 +202,7 @@ class TurmaController extends Controller
         $params = [
             'acao' => 'insert',
             'nome' => '',
-            'titulo' => 'Matricular aluno em uma Turma',
+            'titulo' => __('Register student in a class'),
             'anoletivo' => $anoletivo
         ];
 

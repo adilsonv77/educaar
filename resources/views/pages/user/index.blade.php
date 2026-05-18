@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Usuários';
+    $pageName = __('Users');
 @endphp
 
 @section('page-name', $pageName)

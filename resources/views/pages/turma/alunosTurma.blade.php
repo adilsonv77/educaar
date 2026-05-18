@@ -15,7 +15,7 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Nome</th>
+                                <th>{{ __('Name') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,7 +34,7 @@
         </div>
     @else
         <div>
-            <h2>Nenhum aluno matriculado nesta turma </h2>
+            <h2>{{ __('No student registered in this class') }} </h2>
         </div>
         @endif
     </div>

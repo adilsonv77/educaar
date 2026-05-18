@@ -7,6 +7,20 @@
     <script src="/js/jquery.bootstrap-duallistbox.js"></script>
 
 @endsection
+
+@php
+    /* Variáveis de tradução para o JS */
+    $allSubjects = __('All subjects');
+    $classSubjects = __('Class subjects');
+    $showAll = __("Show all");
+    $moveAll = __('Move all');
+    $removeAll = __('Remove all');
+    $showingAll = __('Showing all');
+    $filtered = __('Filtered');
+    $emptyList = __('Empty list');
+    $filter = __('Filter');
+@endphp
+
 @section('page-name', $titulo)
 
 @section('content')
@@ -30,7 +44,7 @@
                 <input name="acao" type="hidden" value="{{ $acao }}" />
 
                 <div class="form-group row">
-                    <label for="serie" class="col-md-4 col-form-label text-md-right">{{ __('Série') }} : </label>
+                    <label for="serie" class="col-md-4 col-form-label text-md-right">{{ __('Model Class') }} : </label>
 
                     <div class="col-md-6">
                         <input id="serie" type="text" class="form-control @error('serie') is-invalid @enderror"
@@ -49,16 +63,16 @@
 
                     <script>
                         var demo1 = $('select[name="duallistbox_disc[]"]').bootstrapDualListbox({
-                            nonSelectedListLabel: 'Todas as disciplinas',
-                            selectedListLabel: 'Todas as disciplinas para a turma',
+                            nonSelectedListLabel: " <?php print $allSubjects ?> ",
+                            selectedListLabel: " <?php print $classSubjects ?> ",
                             bootstrap2Compatible: false,
-                            filterTextClear: "Mostrar tudo",
-                            filterPlaceHolder: "Filtro",
-                            moveAllLabel: "Mover todos",
-                            removeAllLabel: "Remover todos",
-                            infoText: "Mostrando todos os {0}",
-                            infoTextFiltered: "<span class='label label-warning'>Filtrado</span> {0} de {1}",
-                            infoTextEmpty: "Lista vazia"
+                            filterTextClear: " <?php print $showAll ?> ",
+                            filterPlaceHolder: " <?php print $filter ?> ",
+                            moveAllLabel: " <?php print $moveAll ?> ",
+                            removeAllLabel: " <?php print $removeAll ?> ",
+                            infoText: " <?php print $showingAll ?> ",
+                            infoTextFiltered: "<span class='label label-warning'> <?php print $filtered ?> </span> {0} de {1}",
+                            infoTextEmpty: " <?php print $emptyList ?> "
 
                         });
                     </script>
@@ -67,7 +81,7 @@
                 <div class="form-group row mb-0">
                     <div class="col-md-6 offset-md-4">
                         <button type="submit" class="btn btn-primary">
-                            Salvar
+                            {{ __('Save') }}
                         </button>
                     </div>
                 </div>

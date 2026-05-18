@@ -21,9 +21,11 @@
   "Filter": "Filtrar",
   "Back": "&laquo; Anterior",
   "Next": "Próximo &raquo;",
+  "Import": "Importar",
 
   "===== AUTHENTICATION =====": "===== AUTENTICAÇÃO =====",
   "User": "Usuário",
+  "Users": "Usuários",
   "E-Mail": "Email",
   "Password": "Senha",
   "Confirm Password": "Confirme a senha",
@@ -241,17 +243,64 @@
   "Type": "Tipo",
   "No classes registered": "Nenhuma turma registrada",
   "No users registered": "Nenhum usuário registrado",
+
   "Enter the subject": "Informa a disciplina",
   "No subject registered": "Nenhuma disciplina cadastrada",
   "Confirm delete the subject :subject": "Excluir a disciplina :subject",
   "New Subject": "Nova Disciplina",
   "Edit Subject": "Editar Disciplina",
+
+  "Enter the School Year": "Informe o Ano Letivo",
+  "No school year registered": "Nenhum ano letivo cadastrado",
+  "Confirm delete school year :school_year": "Excluir o ano letivo :school_year",
+  "New School Year": "Novo Ano Letivo",
+  "Edit School Year": "Editar Ano Letivo",
+
+  "Enter the Model Class": "Informe a Turma Modelo",
+  "No model class registered": "Nenhuma turma modelo registrada",
+  "Confirm delete the model class :model_class": "Excluir a turma modelo :model_class",
+  "Add Model Class": "Adicionar Turma Modelo", 
+  "Edit Model Class": "Editar Turma Modelo",
+
+  "All subjects": "Todas as disciplinas",
+  "Class subjects": "Disciplinas da turma",
+  "Move all": "Mover todos",
+  "Remove all": "Remover tudo",
+  "Showing all": "Mostrando todos",
+  "Filtered": "Filtrado",
+  "Empty list": "Lista vazia",
+  "Show all": "Mostrar todos",
   
+  "Confirm delete the class :class": "Excluir a turma :class",
+  "No class registered": "Nenhuma turma registrada",
+  "No student registered in this class": "Nenhum aluno registrado nessa turma",
+  "Choose the teacher": "Escolha o professor",
+  "Class name": "Nome da turma",
+  "Add Class": "Adicionar Turma",
+  "Edit Class": "Editar Turma",
+
+  "CSV File": "Arquivo CSV",
+  "CSV file instructions": "Instruções para o arquivo CSV",
+  "Separated by semicolon (;)": "Separado por ponto e vírgula (;)",
+  "The first line with header. The second line onwards with the data": "A primeira linha com cabeçalho. A segunda linha em diante com os dados",
+  "Three columns: the first is ignored, the second with the registration number and the third with the full name": "Três colunas: a primiera é ignorada, a segunda com a matrícula e a terceira com o nome completo",
+  "The registration number will be used as the username and password": "A matrícula será usada como o nome do usuário e senha",
+  "Unregister": "Desmatricular",
+  "Confirm unregister student :student": "Desmatricular o aluno :student",
+  "Current school year: :school_year": "Ano letivo atual: :school_year",
+  "Students of class :class": "Alunos da turma :class",
+  "Import students from file": "Importar alunos de arquivo",
+
+  "Student name": "Nome do aluno",
+  "Student already registered" : "Aluno já matriculado",
+  "Student already registered in the class :class": "Aluno já matriculado na turma :class",
+  "Do you want to change the class of student :student": "Você deseja alterar a turma do aluno :student",
+  "Change": "Alterar",
+  "Register student in a class": "Registrar aluno em uma turma",
+  "No change": "Sem alteração",
+   
   "===== USER REGISTER =====": "===== REGISTRO DE USUÁRIO =====",
   "Complete name": "Nome completo",
   "Choose the class": "Escolha a turma"
-
-
-
 
 }

@@ -14,7 +14,7 @@
 
 
                     <div class="form-group">
-                        <label for="name">Nome Da Turma* </label>
+                        <label for="name">{{ __('Class name') }}* </label>
                         <div class="col-md-10">
                             <input id="nome" type="text" class="form-control @error('nome') is-invalid @enderror"
                                 name="nome" value="{{ old('nome', $nome) }}" required autocomplete="nome" autofocus 
@@ -24,7 +24,7 @@
                         <br>
 
                         <div class="form-group">
-                            <label for="">Escolha o Ano*</label>
+                            <label for="">{{ __('School Year') }}*</label>
                             <select class="form-control" name="ano_id">
                                 @foreach ($anosletivos as $item)
                                     <option value="{{ $item->id }}"
@@ -34,7 +34,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="">Escolha a Turma Modelo*</label>
+                            <label for="">{{ __('Model Class') }}*</label>
                             <select class="form-control" @if ($turma_modelo_id != 0) delete @endif
                                 name="turma_modelo_id">
                                 @if ($turma_modelo_id != 0)
@@ -50,7 +50,7 @@
                             </select>
                         </div>
                         <div class="form-group mt-4">
-                            <input type="submit" value="Salvar" class="btn btn-success">
+                            <input type="submit" value="{{ __('Save') }}" class="btn btn-success">
                         </div>
                 </form>
             </div>

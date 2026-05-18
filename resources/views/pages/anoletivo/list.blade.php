@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', 'Anos Letivos')
+@section('page-name', __('School Years'))
 
 @section('content')
 

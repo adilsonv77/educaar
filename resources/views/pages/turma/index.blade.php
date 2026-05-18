@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $pageName = 'Turmas';
+    $pageName = __('Classes');
 @endphp
 
 @section('page-name', $pageName)
@@ -19,7 +19,7 @@
         @csrf
         
         <div class="form-inline">
-        <label for="">Informe a turma :</label>
+        <label for="">{{ __('Enter the class') }} :</label>
             <select class="form-control" name="ano_id">
                 @foreach ($anosletivos as $item)
                     <option value="{{ $item->id }}" @if ($item->id === $anoletivo->id) selected="selected" @endif>
@@ -27,7 +27,7 @@
                 @endforeach
             </select>
             <section class="itens-group">
-                <button class="btn btn-primary btn-lg "type="submit">Pesquisar</button>
+                <button class="btn btn-primary btn-lg "type="submit">{{ __('Search') }}</button>
             </section>
         </div>
     </form>
@@ -51,12 +51,12 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Modelo</th>
-                                <th>Alunos</th>
-                                <th>Disciplinas</th>
-                                <th>Editar</th>
-                                <th>Excluir</th>
+                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Model Class') }}</th>
+                                <th>{{ __('Students') }}</th>
+                                <th>{{__('Students')  }}</th>
+                                <th>{{ __('Edit') }}</th>
+                                <th>{{ __('Delete') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,14 +90,14 @@
                                         <form action="{{ route('turmas.edit', $item->id) }}">
                                             @csrf
                                             <button type="submit" class="btn btn-warning"
-                                                @if ($item->qtosAlunos > 0) disabled @endif  title="Editar">
+                                                @if ($item->qtosAlunos > 0) disabled @endif  title={{ __('Edit') }}>
                                                 <i class="bi bi-pencil-square h2" style = "color : #ffffff;"></i></button>
                                         </form>
                                     </td>
                                     <td>
                                         <button type="button"
                                             class="btn btn-danger"@if ($item->qtosAlunos > 0) disabled @endif
-                                            data-toggle="modal" data-target="#modal{{ $item->id }}" title="Excluir">
+                                            data-toggle="modal" data-target="#modal{{ $item->id }}" title={{ __('Delete') }}>
                                             <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
                                         </button>
                                     </td>
@@ -106,16 +106,15 @@
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-body">
-                                                    <h3>Você tem certeza que deseja excluir o conteúdo {{ $item->nome }}?
-                                                    </h3>
+                                                    <h3>{{ __('Confirm delete the class :class', ["class" => $item->nome]) }}</h3>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Cancelar</button>
+                                                        data-dismiss="modal">{{ __('Cancel') }}</button>
                                                     <form action="{{ route('turmas.destroy', $item->id) }}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger">Excluir</button>
+                                                        <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -132,7 +131,7 @@
                 </div>
             @else
                 <div>
-                    <h2>Nenhuma turma modelo cadastrada</h2>
+                    <h2>{{ __('No class registered') }}</h2>
                 </div>
             @endif
         </div>
