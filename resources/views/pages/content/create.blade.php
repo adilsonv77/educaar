@@ -44,15 +44,12 @@
                     <div class="form-group row">
                         <label for="name">{{ __('Name') }}* </label>
                     
-                        <div class="col-md-6">
-                            <input id="name" type="text" maxlength="100" class="form-control @error('name') is-invalid @enderror"
-                                name="name" value="{{ old('name', $name) }}" required
-                                placeholder=
+                        <input id="name" type="text" maxlength="100" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $name) }}" required 
+                            placeholder=
                                 @if($name !== "") $name 
                                 @else "{{ __('Name') }}"
                                 @endif
-                                autofocus />
-                        </div>
+                        autofocus />
                     </div>
                     @if (session('type') == 'teacher')
                     <div class="form-group row">
