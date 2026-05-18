@@ -48,6 +48,9 @@ Route::controller(ResetPasswordController::class) -> group(function () {
     Route::post('/password/reset', 'update') -> name('password.change');
 });
 
+//Locale
+Route::get('/locale/{locale}', [UserController::class, 'localeUpdate'])->name('locale.update');
+
 
 Auth::routes(['register' => false, 'reset' => false]);
 
@@ -196,9 +199,6 @@ Route::middleware(['auth'])->group(function () {
 
     //Ranking
     Route::get('/ranking', [RankingController::class, 'create']) -> name('ranking.create');
-
-    //Locale
-    Route::get('/locale', [UserController::class, 'localeChange'])->name('locale.update');
 });
 
 //backup
