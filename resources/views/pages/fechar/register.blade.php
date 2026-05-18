@@ -18,7 +18,7 @@
                             <td>{{ __('Name') }} : <b>{{ $content->name }}</b></td>
                         </tr>
                         <tr>
-                            <td>{{ __('Discipline') }} ({{ __('Model Class') }}) : <b> {{ $content->dname }} ( {{ $content->tserie }} )</b></td>
+                            <td>{{ __('Subject') }} ({{ __('Model Class') }}) : <b> {{ $content->dname }} ( {{ $content->tserie }} )</b></td>
                         </tr>
 
                     </tbody>

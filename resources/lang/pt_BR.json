@@ -3,7 +3,7 @@
   "Portuguese"           : "Português",
   "English"              : "Inglês",
 
-  "===== AÇÕES COMUNS =====": "===== COMMON ACTIONS =====",
+  "===== COMMON ACTIONS =====": "===== AÇÕES COMUNS =====",
   "Save": "Salvar",
   "Edit": "Editar",
   "Delete": "Excluir",
@@ -18,6 +18,7 @@
   "Click": "Clique",
   "Wait": "Aguarde",
   "Compiling": "Compilando",
+  "Filter": "Filtrar",
   "Back": "&laquo; Anterior",
   "Next": "Próximo &raquo;",
 
@@ -60,8 +61,8 @@
   "Scores": "Pontuações",
   "Result": "Resultado",
   "Results": "Resultados",
-  "Discipline": "Disciplina",
-  "Disciplines": "Disciplinas",
+  "Subject": "Disciplina",
+  "Subjects": "Disciplinas",
   "Class": "Turma",
   "Classes": "Turmas",
   "Model Class": "Turma Modelo",
@@ -122,6 +123,7 @@
   "Points": "Pontos",
   "Position": "Posição",
   "Select the activity": "Selecione a atividade",
+  "Enter the activity": "Informe a atividade",
 
   "===== SCORED ACTIVITY SETTINGS =====": "===== CONFIGURAÇÕES DE ATIVIDADE PONTUADA =====",
   "Activity Grade": "Nota da atividade",
@@ -140,7 +142,7 @@
   "Statement": "Enunciado",
   "Options": "Alternativas",
   "Correct Answer": "Resposta Correta",
-  "Wrong Answer": "Resposta Errada",
+  "Incorrect Answer": "Resposta Errada",
   "Correct": "Correto",
   "Incorrect": "Incorreto",
   "Not Answered": "Não Respondeu",
@@ -212,12 +214,21 @@
   "System access frequency": "Frequência de acesso ao sistema",
   "Start date": "Data inicial",
   "Final date": "Data final",
-  "Filter": "Filtro",
   "Accesses per day": "Acessos por dia",
   "Student who accessed per day": "Alunos que acessaram por dia",
   "Last access for each student": "Último acesso de cada aluno",
   "Never": "Nunca",
   "How many": "Quantos",
-  "Date": "Data"
+  "Date": "Data",
+
+  "===== MURAL =====": "===== MURAL =====",
+  "Enter the mural": "Informe o mural",
+  "Open": "Abrir",
+  "No Murals": "Sem Murais",
+  "Add Mural": "Adicionar Mural",
+  "Select a subject": "Selecione uma disciplina",
+  "Are you sure you want to delete the mural": "Você tem certeza que deseja excluir o mural",
+  "No": "Não",
+  "Yes": "Sim"
 
 }

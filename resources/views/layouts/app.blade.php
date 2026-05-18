@@ -225,7 +225,7 @@
 
                             <li><a class="ai-icon" href="{{ route('class.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-book"></i>
-                                    <span class="nav-text">{{ __('Disciplines') }}</span>
+                                    <span class="nav-text">{{ __('Subjects') }}</span>
                                 </a>
                             </li>
 

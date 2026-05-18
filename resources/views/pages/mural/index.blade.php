@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', 'Murais')
+@section('page-name', __('Murals'))
 
 @section('content')
     <livewire:mural-listing/>

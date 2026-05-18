@@ -67,7 +67,7 @@
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Correct Questions') }}</th>
                                 <th>{{ __('Incorrect Questions') }}</th>
-                                <th>{{ __('unanswered Questions') }}</th>
+                                <th>{{ __('Unanswered Questions') }}</th>
                             </tr>
                         </thead>
                         <tbody>

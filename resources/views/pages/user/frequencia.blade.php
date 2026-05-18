@@ -119,11 +119,11 @@
               </div>
               <div class="form-check form-check-inline">  
                 <input class="form-check-input" type="radio" id="poralunos" name="acessos" value="poralunos" onchange="this.form.submit();" @if($acesso === 'poralunos') checked @endif>
-                <label class="form-check-label" for="poralunos">{{ __('Student who acessed per day') }}</label><br>
+                <label class="form-check-label" for="poralunos">{{ __('Student who accessed per day') }}</label><br>
               </div>
               <div class="form-check form-check-inline">  
                 <input class="form-check-input" type="radio" id="ultacesso" name="acessos" value="ultacesso" onchange="this.form.submit();" @if($acesso === 'ultacesso') checked @endif>
-                <label class="form-check-label" for="ultacesso">{{ __('Last acess for each student') }}</label><br>
+                <label class="form-check-label" for="ultacesso">{{ __('Last access for each student') }}</label><br>
               </div>
 
           </div>

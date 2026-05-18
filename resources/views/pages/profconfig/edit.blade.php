@@ -24,7 +24,7 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>{{ __('Discipline') }}</th>
+                                <th>{{ __('Subject') }}</th>
                                 <th>{{ __('Class') }}</th>
                                 <th>{{ __('Deadline to answer') }}</th>
                             </tr>

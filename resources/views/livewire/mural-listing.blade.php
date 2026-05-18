@@ -18,11 +18,11 @@
         <div class="flex justify-between">
             <div class="w-1/4">
                 <div class="form-inline">
-                    <label for="disciplinaFiltro">Informe o mural : </label>
+                    <label for="disciplinaFiltro">{{ __("Enter the mural") }}: </label>
                     <input class="form-control" type="text" wire:model.defer="filtroTemp" list="disciplinas"
                         id="disciplinaFiltro" />
                     <section class="itens-group">
-                        <button class="btn btn-primary btn-lg" type="button" wire:click="aplicarFiltro">Filtrar</button>
+                        <button class="btn btn-primary btn-lg" type="button" wire:click="aplicarFiltro">{{ __("Search") }}</button>
                     </section>
                 </div>
 
@@ -65,11 +65,11 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr style="text-align: center;">
-                                <th>Nome</th>
-                                <th>Disciplina</th>
-                                <th>Abrir</th>
-                                <th>Editar</th>
-                                <th>Excluir</th>
+                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Subject') }}</th>
+                                <th>{{ __('Open') }}</th>
+                                <th>{{ __('Edit') }}</th>
+                                <th>{{ __('Delete') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,7 +83,7 @@
                                     <td>
                                         <form action="{{ route('mural.view', [$mural->id]) }}" method="GET">
                                             @csrf
-                                            <button type="submit" class="btn btn-primary" title="Editar">
+                                            <button type="submit" class="btn btn-primary" title="{{ __('Open') }}">
                                                 <i class="bi bi-eye-fill h2" style="color: #ffffff; font-size: 30px;"></i>
                                             </button>
                                         </form>
@@ -93,7 +93,7 @@
 
                                         <form action="{{ route('mural.edit', [$mural->id]) }}" method="GET">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning" title="Editar">
+                                            <button type="submit" class="btn btn-warning" title="{{ __('Edit') }}">
                                                 <i class="bi bi-pencil-square h2" style="color: #ffffff;"></i>
                                             </button>
                                         </form>
@@ -102,7 +102,7 @@
                                     <!-- EXCLUIR MURAL -->
                                     <td>
                                         <button type="button" class="btn btn-danger"
-                                            wire:click="confirmarExcluir({{ $mural->id }})" title="Excluir">
+                                            wire:click="confirmarExcluir({{ $mural->id }})" title="{{ __('Delete') }}">
                                             <i class="bi bi-trash3 h2" style="color: #ffffff;"></i>
                                         </button>
                                     </td>
@@ -113,7 +113,7 @@
                 </div>
             @else
                 <div>
-                    <h2>Nenhum mural cadastrado</h2>
+                    <h2>{{ __('No Murals') }}</h2>
                 </div>
             @endif
         </div>
@@ -125,7 +125,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Adicionar Mural</h5>
+                    <h5 class="modal-title">{{ __('Add Mural') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -143,7 +143,7 @@
 
                     <form wire:submit.prevent="salvar">
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">Nome:</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}:</label>
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
                                     wire:model="nome" required autofocus>
@@ -153,11 +153,11 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="disciplina_id" class="col-md-4 col-form-label text-md-right">Disciplina:</label>
+                            <label for="disciplina_id" class="col-md-4 col-form-label text-md-right">{{ __('Subject') }}:</label>
                             <div class="col-md-6 select">
                                 <select class="form-control" name="disciplina_id" aria-label=""
                                     wire:model="disciplina_id" id="disciplina_id" required>
-                                    <option value="">Selecione uma disciplina</option>
+                                    <option value="">{{ __('Select a subject') }}</option>
                                     @foreach ($disciplinas as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
@@ -165,8 +165,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Salvar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                         </div>
                     </form>
                 </div>
@@ -179,11 +179,11 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h3>Você tem certeza que deseja excluir o mural <b>{{ $muralExcluir }}</b>?</h3>
+                    <h3>{{ __('Are you sure you want to delete the mural') }} <b>{{ $muralExcluir }}</b>?</h3>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
-                    <button type="button" class="btn btn-danger" wire:click="excluir()">Sim</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('No') }}</button>
+                    <button type="button" class="btn btn-danger" wire:click="excluir()">{{ __('Yes') }}</button>
                 </div>
             </div>
         </div>

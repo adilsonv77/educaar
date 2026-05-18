@@ -36,7 +36,7 @@
     @if($ranking === null)
         <hr>
         <div class="mt-4"">
-            <h1>{{ __('No Results') }}</h1>
+            <h1>{{ __('No results available') }}</h1>
         </div>
     @elseif($layout == 'app')
         <!-- Usando sorttable.js para a ordenação da tabelas --> 

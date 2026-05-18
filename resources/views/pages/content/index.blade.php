@@ -61,7 +61,7 @@
                         <thead>
                             <tr style="text-align: center;">
                                 <th style="text-align: left;">{{ __('Name') }}</th>
-                                <th>{{ __('Discipline') }}</th>
+                                <th>{{ __('Subject') }}</th>
                                 <th>{{ __('Model Class') }}</th>
                                 <th>{{ __('Close') }}</th>
                                 @if (session('type') == 'teacher')

@@ -56,7 +56,7 @@
                     </div>
                     @if (session('type') == 'teacher')
                     <div class="form-group row">
-                        <label for="">{{ __('Discipline') }}*</label>
+                        <label for="">{{ __('Subject') }}*</label>
                         <select class="form-control" name="disciplina_id">
                             @foreach ($disciplinas as $item)
                                 <option value="{{ $item->tid }}_{{ $item->did }}"
