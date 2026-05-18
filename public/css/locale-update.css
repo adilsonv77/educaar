@@ -1,0 +1,35 @@
+/* Não consegui fazer tudo em bootstrap e quando tentei fazer de forma híbrida, utilizando bootstrap e css juntos, não ficou do mesmo jeito. Aqui está puramente em CSS */
+
+.locale-update {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.lang-btn {
+    color: #666;
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease; 
+    display: inline-block;
+}
+
+.lang-btn:hover {
+    color: #86398e;
+    background-color: rgba(162, 0, 255, 0.1);
+}
+
+.lang-btn.active {
+    color: #86398e;
+    font-weight: 700;
+   /* border-bottom: 1px solid #7302804f; fica mais visível a opção ativa, mas achei meio estranho, sla*/
+}
+
+.linha-vertical {
+    color: #ccc;
+    margin: 0 5px;
+}

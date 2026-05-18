@@ -11,6 +11,7 @@
     @yield('style')
 
     <link rel="stylesheet" href="{{ asset('css/login.css?v=' . filemtime(public_path('css/login.css'))) }}" />
+    <link rel="stylesheet" href="{{ asset('css/locale-update.css') }}">
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> -->
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
     <link
@@ -33,7 +34,19 @@
 
 <body> 
     <div class="prision">
-    <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo"/>     
+    <img src="{{ asset('images/gif/gif01.gif') }}" alt="Animação" class="img-fundo"/>
+    
+
+    <div class="locale-update">
+        <a href="{{ route('locale.update', 'pt_BR') }}" class="lang-btn {{ app()->getLocale() === 'pt_BR' ? 'active' : '' }}" title="Português">
+            PT
+        </a>
+        <span class="linha-vertical">|</span>
+        <a href="{{ route('locale.update', 'en') }}" class="lang-btn 
+        {{ app()->getLocale() === 'en' ? 'active' : '' }}" title="English">
+            EN
+        </a>
+    </div>
     
         @if ($errors->any())
             <div class="alert alert-danger" id="alerta">
@@ -112,19 +125,6 @@
         <footer>   
                 <img src="{{ asset('images/GameLAB.png') }}" alt="Imagem" class="img-fluid">
                 <img src="{{ asset('images/Fapesc.png') }}" alt="Imagem" class="img-fluid">
-
-                <div>
-                    <form action="{{ route('locale.update') }}" method="GET"> @csrf
-                        <select name="locale" id="locale">
-                            <option value="pt_BR">{{ __('Portuguese') }}</option>
-                            <option value="en">{{ __('English') }}</option>
-                        </select>
-
-                        <button type="submit">
-                            {{ __('Save') }}
-                        </button>
-                    </form>
-                </div>
         </footer>
 
     </div>                    
