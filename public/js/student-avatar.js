@@ -26,7 +26,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
             const propriedade = card.dataset.property;
             const valor = card.dataset.value;
 
-            avatarState[propriedade] = valor;
+            if(valor === 'none'){
+                delete avatarState[propriedade];
+                avatarState[`${propriedade}Probability`] = 0;
+            } else
+                 if(propriedade === 'beard') {
+                 avatarState[propriedade] = valor;
+                 avatarState[`${propriedade}Probability`] = 100;
+            } else{
+                avatarState[propriedade] = valor;
+                delete avatarState[`${propriedade}Probability`];
+            }
 
             const parametros = new URLSearchParams(avatarState).toString();
             const urlFinal = urlBase + parametros;

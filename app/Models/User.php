@@ -24,6 +24,7 @@ class User extends Authenticatable
         'type',
         'school_id',
         'username',
+        'avatar',
     ];
 
     /**

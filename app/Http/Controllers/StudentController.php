@@ -280,8 +280,9 @@ class StudentController extends Controller
     public function studentAvatar(){
         $student = Auth::user();
         $rota = route("home");
-        $urlBase = "https://api.dicebear.com/9.x/toon-head/svg?seed=" . $student->name . "&backgroundColor=b6e3f4&hairProbability=0&skinColor=ffffff&clothes=dress&clothesColor=ffffff&hairColor=000000&rearHairProbability=0";
-        return view('student.student-avatar', compact('student', 'rota', 'urlBase'));
+        $urlAvatar = $student->avatar;
+        session()->put('avatar', $urlAvatar);
+        return view('student.student-avatar', compact('student', 'rota', 'urlAvatar'));
     }
 
     public function updateStudentAvatar(Request $request, $id){
