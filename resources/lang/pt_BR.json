@@ -101,6 +101,7 @@
   "Ordered Content": "Conteúdo Ordenado",
   "Randomly Ordered Content": "Conteúdo Ordenado Aleatoriamente",
   "With this option, each student will have a different order in which to answer the activities.": "Com esta opção cada aluno terá uma ordem diferentes para responder as atividades.",
+  "Delete the content :content?": "Excluir o conteúdo :content",
 
   "===== ACTIVITY MANAGEMENT =====": "===== GESTÃO DE ATIVIDADES =====",
   "Add Activity": "Adicionar Atividade",
@@ -114,6 +115,10 @@
   "Option unavailable for scenes.": "Opção indisponível para cenas.",
   "Customized Hint": "Pista Customizada",
   "Leave it empty to not add a custom hint": "Deixe vazio para não adicionar uma pista customizada",
+  "Delete activity :attribute?": "Excluir a atividade :attribute?",
+  "Enter the activity": "Informe a atividade",
+  "Questionnaire" : "Questionário",
+  "Questionnaires" : "Questionários",
 
   "===== RANKING MANAGEMENT =====": "===== GESTÃO DE RANKING =====",
   "Ranking of": "Ranking de",
@@ -123,7 +128,6 @@
   "Points": "Pontos",
   "Position": "Posição",
   "Select the activity": "Selecione a atividade",
-  "Enter the activity": "Informe a atividade",
 
   "===== SCORED ACTIVITY SETTINGS =====": "===== CONFIGURAÇÕES DE ATIVIDADE PONTUADA =====",
   "Activity Grade": "Nota da atividade",
@@ -146,7 +150,6 @@
   "Correct": "Correto",
   "Incorrect": "Incorreto",
   "Not Answered": "Não Respondeu",
-  "Delete activity :attribute?": "Excluir a atividade :attribute?",
   "Delete question :attribute?": "Excluir a questão :attribute?",
   "How do you want to save your changes?": "Como deseja salvar suas mudanças?",
   "Confirm changes": "Salvar mudanças",
@@ -166,7 +169,7 @@
   "Download 3D model": "Baixar modelo 3D",
   "File not found": "Arquivo não encontrado",
   "View PDF": "Visualizar PDF",
-  "Import Files": "Importar Arquivo",
+  "Import File": "Importar Arquivo",
 
   "===== RESULTS AND REPORTS =====": "==== RESULTADOS E RELATÓRIOS =====",
   "Results of": "Resultado de",
@@ -189,7 +192,7 @@
   "See more details when you hover over the question title or student answer": "Veja mais detalhes ao passar o mouse sobre o título da questão ou a resposta do aluno",
   "The student answered the question correctly": "O aluno acertou a questão",
   "The student answered the question wrongly": "O aluno errou a questão",
-  "The student did not ask the question": "O aluno não fez a questão",
+  "The student did not asnwer the question": "O aluno não fez a questão",
   "Results of a Class": "Resultados de uma Turma",
   "All classes": "Todas as turmas",
   "Student didn't respond": "Aluno não respondeu",

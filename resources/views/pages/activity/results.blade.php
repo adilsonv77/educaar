@@ -78,7 +78,7 @@
       <ul>
           <li style="list-style:square"> &#9989; : {{ __('See more details when you hover over the question title or student answer') }}</li>
           <li style="list-style:square"> &#10060; : {{ __('The student answered the question wrongly') }}</li>
-          <li style="list-style:square">&#128993; : {{ __('The student did not ask the question') }}</li>
+          <li style="list-style:square">&#128993; : {{ __('The student did not asnwer the question') }}</li>
       </ul>
     </div>
 

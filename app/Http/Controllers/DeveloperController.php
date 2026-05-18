@@ -42,7 +42,7 @@ class DeveloperController extends Controller
             return redirect('/');
         }
 
-        $titulo = 'Atividade Nova';
+        $titulo = __('Add Activity');
         $acao = 'insert';
         $contents = ContentDAO::buscarConteudosDeveloper(Auth::user()->id);
         

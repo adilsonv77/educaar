@@ -18,6 +18,7 @@ $pageName = __('Activities');
 <form action="{{ route('activity.index') }}" method="GET">
 
     <div class="form-inline ">
+        <label for="">{{ __('Enter the activity') }} :</label>
         <input maxlength="100" class="form-control " type="text" name="titulo" id="titulo" value="{{ $activity }}" list="historico" />
         <section class="itens-group">
             <button class="btn btn-primary btn-lg" type="submit">{{ __('Search') }}</button>

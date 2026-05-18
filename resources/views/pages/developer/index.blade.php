@@ -25,11 +25,11 @@
                     <table class="table table-hover table-responsive-sm">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Marcador</th>
-                                <th>Visualizar</th>
-                                <th>Questionários</th>
-                                <th>Editar</th>
+                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Marker') }}</th>
+                                <th>{{ __('View') }}</th>
+                                <th>{{ __('Questionnaires') }}</th>
+                                <th>{{ __('Edit') }}</th>
                             </tr>
                         </thead>
                         <tbody>
