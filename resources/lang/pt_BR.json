@@ -126,7 +126,7 @@
 
   "===== RANKING MANAGEMENT =====": "===== GESTÃO DE RANKING =====",
   "Ranking of": "Ranking de",
-  "Participant": "Parcipante",
+  "Participant": "Participante",
   "Participants": "Participantes",
   "Point": "Ponto",
   "Points": "Pontos",
@@ -175,7 +175,7 @@
   "View PDF": "Visualizar PDF",
   "Import File": "Importar Arquivo",
 
-  "===== RESULTS AND REPORTS =====": "==== RESULTADOS E RELATÓRIOS =====",
+  "===== RESULTS AND REPORTS =====": "===== RESULTADOS E RELATÓRIOS =====",
   "Results of": "Resultado de",
   "Activity Report": "Relatório da Atividade",
   "Teacher ID": "Professor ID",
@@ -196,7 +196,7 @@
   "See more details when you hover over the question title or student answer": "Veja mais detalhes ao passar o mouse sobre o título da questão ou a resposta do aluno",
   "The student answered the question correctly": "O aluno acertou a questão",
   "The student answered the question wrongly": "O aluno errou a questão",
-  "The student did not asnwer the question": "O aluno não fez a questão",
+  "The student did not answer the question": "O aluno não fez a questão",
   "Results of a Class": "Resultados de uma Turma",
   "All classes": "Todas as turmas",
   "Student didn't respond": "Aluno não respondeu",
@@ -213,7 +213,7 @@
   "Password reset. A new password has been sent to your email": "Senha redefinida. Uma nova senha foi enviada ao seu e-mail",
   "Reset attempt failed": "A tentativa de redefinição falhou",
 
-  "===== USER SETTINGS": "CONFIGURAÇÕES DE USUÁRIO",
+  "===== USER SETTINGS =====": "===== CONFIGURAÇÕES DE USUÁRIO =====",
   "Teacher Settings": "Configurações do Professor",
   "Deadline to answer": "Data limite para responder",
 
@@ -244,7 +244,7 @@
   "No classes registered": "Nenhuma turma registrada",
   "No users registered": "Nenhum usuário registrado",
 
-  "Enter the subject": "Informa a disciplina",
+  "Enter the subject": "Informe a disciplina",
   "No subject registered": "Nenhuma disciplina cadastrada",
   "Confirm delete the subject :subject": "Excluir a disciplina :subject",
   "New Subject": "Nova Disciplina",
@@ -283,7 +283,7 @@
   "CSV file instructions": "Instruções para o arquivo CSV",
   "Separated by semicolon (;)": "Separado por ponto e vírgula (;)",
   "The first line with header. The second line onwards with the data": "A primeira linha com cabeçalho. A segunda linha em diante com os dados",
-  "Three columns: the first is ignored, the second with the registration number and the third with the full name": "Três colunas: a primiera é ignorada, a segunda com a matrícula e a terceira com o nome completo",
+  "Three columns: the first is ignored, the second with the registration number and the third with the full name": "Três colunas: a primeira é ignorada, a segunda com a matrícula e a terceira com o nome completo",
   "The registration number will be used as the username and password": "A matrícula será usada como o nome do usuário e senha",
   "Unregister": "Desmatricular",
   "Confirm unregister student :student": "Desmatricular o aluno :student",
