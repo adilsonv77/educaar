@@ -10,6 +10,7 @@
     <title>EducaAR</title>
     @yield('style')
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css"/>
     <link rel="stylesheet" href="{{ asset('css/login.css?v=' . filemtime(public_path('css/login.css'))) }}" />
     <link rel="stylesheet" href="{{ asset('css/locale-update.css') }}">
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> -->
@@ -39,12 +40,13 @@
 
     <div class="locale-update">
         <a href="{{ route('locale.update', 'pt_BR') }}" class="lang-btn {{ app()->getLocale() === 'pt_BR' ? 'active' : '' }}" title="Português">
-            PT
+            <span class="fi fi-br"></span>
+            <span class="d-none">PT</span>
         </a>
         <span class="linha-vertical">|</span>
-        <a href="{{ route('locale.update', 'en') }}" class="lang-btn 
-        {{ app()->getLocale() === 'en' ? 'active' : '' }}" title="English">
-            EN
+        <a href="{{ route('locale.update', 'en') }}" class="lang-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}" title="English">
+            <span class="fi fi-us"></span>
+            <span class="d-none">EN</span>
         </a>
     </div>
     
@@ -130,6 +132,24 @@
     </div>                    
 </body>
 
+<script>
+    /* Fallback para caso as bandeiras não carreguem */
+    function checkFlags() {
+      const flags = document.querySelectorAll('.locale-update span.fi[class*="fi-"]');
 
+        for (const span of flags) {
+          const bgImage = getComputedStyle(span).backgroundImage;
+          const fallback = span.nextElementSibling;
+
+          if (!fallback) continue;
+
+          if (!bgImage || bgImage === 'none') {
+            fallback.classList.remove('d-none');
+          }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', checkFlags);
+</script>
 
 </html>
