@@ -304,7 +304,7 @@
                     <!-----------------PISTA------------------>
                     <div class="extras collapse" id="hint">
                         <div class="hint mt-5">
-                            <label for="hintLabel" >Customized Hint</label>
+                            <label for="hintLabel" >{{ __('Customized Hint') }}</label>
                             <input type="text" name="pista_customizada" id="pista_customizada" class="form-control" placeholder="{{ __('Leave it empty to not add a custom hint') }}">
                         </div>
                     </div>
