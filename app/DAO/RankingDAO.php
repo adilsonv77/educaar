@@ -29,7 +29,7 @@ class RankingDAO {
             ->select([
                 'users.name',
                 'pontuacoes.pontuacao',
-                'student_answers.tentativas'
+                'student_answers.tentativas',
             ])
             ->orderBy('pontuacao', 'DESC')
             ->get();
@@ -53,10 +53,11 @@ class RankingDAO {
             ->select(
                 'users.name',
                 'pontuacoes.user_id',
+                'users.avatar',
                 DB::raw('SUM(pontuacoes.pontuacao) as pontuacao'),
                 DB::raw('ROW_NUMBER() OVER (ORDER BY SUM(pontuacoes.pontuacao) DESC) as posicao'),
             )
-            ->groupBy('pontuacoes.user_id', 'users.name');
+            ->groupBy('pontuacoes.user_id', 'users.name', 'users.avatar');
 
         $results = $simple->get();
 

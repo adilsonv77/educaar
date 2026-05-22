@@ -108,7 +108,7 @@
                                             </div>
                                         @endif
                                         <div class="bg-light rounded-circle d-flex justify-content-center align-items-center w-16 h-16" style="overflow: hidden;">
-                                            <img src={{ $urlAvatar }} alt="Avatar" style="width: 42px; height: auto;">
+                                            <img src={{ $aluno->avatar }} alt="Avatar" style="width: 42px; height: auto;">
                                         </div>
                                     </div>
                                 </td>
