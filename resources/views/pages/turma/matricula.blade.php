@@ -91,7 +91,9 @@
 
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
+                <form action="{{ route('user.cancelMatricula') }}" method="post"> @csrf
+                    <button type="submit" class="btn btn-secondary">{{ __('Close') }}</button>
+                </form>
                 
                 <form action="{{ route('user.storeMatricula') }}" method="post"> @csrf
                     <button type="submit" class="btn btn-primary">{{ __('Confirm') }}</button>

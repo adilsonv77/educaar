@@ -286,7 +286,6 @@ class UserController extends Controller
 
         $file = $request->csv;
         $turma = $request->turma_id;
-        $turmas = $request->turmas;
 
         $students = [];
         $lines = file($file->getRealPath());
@@ -356,6 +355,13 @@ class UserController extends Controller
         }
 
         return redirect()->route('turmas.turmasAlunosIndex', ['turma_id' => $turmaId]);
+    }
+
+    public function cancelMatricula() {
+        $token = session()->pull('importToken');
+        Cache::forget("import:{$token}");
+
+        return redirect()->route('user.matricula');
     }
 
     public function localeUpdate(string $locale) {

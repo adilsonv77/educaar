@@ -76,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matricula', [App\Http\Controllers\UserController::class, 'matricula'])->name('user.matricula');
     Route::post('/storeMatricula', [App\Http\Controllers\UserController::class, 'storeMatricula'])->name('user.storeMatricula');    //class
     Route::post('/matricula/create', [App\Http\Controllers\UserController::class, 'createMatricula'])->name('user.createMatricula');
+    Route::post('/matricula/cancel', [App\Http\Controllers\UserController::class, 'cancelMatricula'])->name('user.cancelMatricula');
 
     //Route::get('/disciplinas', DisciplinaForm::class)->name('disciplinas');
     //Route::resource('class', App\Http\Controllers\DisciplinaController::class);
