@@ -6,20 +6,16 @@ ini_set('default_charset', 'UTF-8');
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\School;
-use App\Models\Disciplina;
-use App\Models\Matricula;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use App\csv;
 use App\Models\AlunoTurma;
 use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
-use mysqli;
-use UConverter;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
+
+
 
 
 class UserController extends Controller
@@ -277,71 +273,90 @@ class UserController extends Controller
         $user->delete();
         return redirect('/user');
     }
-    public function storeMatricula(Request $request)
-    {
-        $data = $request->all();
-        $arquivo = $data['csv'];
-        //  dd($arquivo);
-        $validation = Validator::make(
-            $request->all(),
-            $rules = [
-                'csv' => 'required|file|mimes:csv,txt'
-            ]
-        );
 
-        if ($validation->fails()) {
+    public function createMatricula(Request $request) {
+        $validation = Validator::make($request->all(), [
+            'csv'  => 'required|file|mimes:csv,txt',
+            'turma_id' => 'required|integer',
+        ]);
+
+        if($validation->fails()) {
             return redirect()->back()->withInput()->withErrors($validation);
         }
 
-        $turma = $data['turma_id'];
-        $count = 0;
-        $user = array();
-        $lines = file($arquivo->getRealPath());
-        $csvFile = time() . '.' . $request->csv->getClientOriginalExtension();
+        $file = $request->csv;
+        $turma = $request->turma_id;
+        $turmas = $request->turmas;
 
-        // dd($csvFile);
+        $students = [];
+        $lines = file($file->getRealPath());
+        $csvFile = time() . '.' . $file->getClientOriginalExtension();
         $request->csv->move(public_path('uploads'), $csvFile);
-        foreach ($lines as $line) {
-            if ($count != 0) {
-                $campos = explode(";", $line);
-                try {
-                    $user['username'] = $campos[1];
-                    $user['name'] = utf8_encode($campos[2]);
-                    $user['type'] = 'student';
-                    $user['password'] = Hash::make($campos[1]);
-                    $user['email'] = '@';
-                    $user['school_id'] = Auth::user()->school_id;
-                    $aluno = User::create($user);
 
-                    $aluno_turma = AlunoTurma::create([
-                        'turma_id' => $turma,
-                        'aluno_id'  => $aluno->id
-                    ]);
-                } catch (\Illuminate\Database\QueryException $e) {
-                    //dd($e);
+        $isFirst = true;
+        foreach($lines as $line) {
+            if($isFirst) { $isFirst = false; continue; }
 
-                    $aluno2 = User::where('username', $campos[1])->first();
-                    if (!AlunoTurma::where('aluno_id', $aluno2->id)->exists()) {
-                        $aluno_turma = AlunoTurma::create([
-                            'turma_id' => $turma,
-                            'aluno_id'  => $aluno2->id
-                        ]);
-                    } else {
-                        $aluno_turma = AlunoTurma::where('aluno_id', $aluno2->id)
-                            ->update([
-                                'turma_id' => $turma
-                            ]);
-                    }
-                    continue;
-                }
-            }
-            $count++;
+            $campos = explode(';', trim($line));
+            $students[] = [
+                'username' => $campos[1],
+                'name' => mb_convert_encoding($campos[2], 'UTF-8', 'ISO-8859-1'),
+                'type' => 'student',
+                'password' => Hash::make($campos[1]),
+                'email' => '@',
+                'school_id' => Auth::user()->school_id,
+            ];
         }
 
-        unlink('uploads/' . $csvFile);
-        // dd(unlink('uploads/'.$csvFile));
+        $token = Str::uuid()->toString();
+        Cache::put("import:{$token}", [$students, $turma], now()->addMinutes(30));
+        session(['importToken' => $token]);
 
-        return redirect()->route('turmas.turmasAlunosIndex', $data);
+        unlink('uploads/' . $csvFile);
+
+        $anoletivo = AnoLetivo::where('school_id', Auth::user()->school_id)
+            ->where('bool_atual', 1)->first();
+        $turmas = DB::table('turmas')
+            ->select('turmas.nome', 'turmas.id')
+            ->where('school_id', Auth::user()->school_id)
+            ->where('ano_id', $anoletivo->id)
+            ->get();
+
+        return view('pages.turma.matricula', [
+            'turmas' => $turmas,
+            'students' => $students,
+            'turma_id' => $turma,
+            'titulo' => __('Import students from file')
+        ]); 
+    }
+
+    public function storeMatricula() {
+        $token = session()->pull('importToken');
+        $cached = Cache::pull("import:{$token}");
+
+        $students = $cached[0];
+        $turmaId = $cached[1];
+        #if (!$students) abort(410, 'corsa capotado');
+
+        foreach($students as $student) {
+            try {
+                $stu = User::create($student);
+
+                AlunoTurma::create([
+                    'turma_id' => $turmaId,
+                    'aluno_id' => $stu->id
+                ]);
+            } catch(\Illuminate\Database\QueryException $e) {
+                $stu2 = User::where('username', $student['username'])->first();
+
+                AlunoTurma::updateOrCreate(
+                    ['aluno_id' => $stu2->id],
+                    ['turma_id' => $turmaId]
+                );
+            }
+        }
+
+        return redirect()->route('turmas.turmasAlunosIndex', ['turma_id' => $turmaId]);
     }
 
     public function localeUpdate(string $locale) {
