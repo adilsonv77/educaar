@@ -22,6 +22,7 @@
   "Back": "&laquo; Anterior",
   "Next": "Próximo &raquo;",
   "Import": "Importar",
+  "Confirm": "Confirmar",
 
   "===== AUTHENTICATION =====": "===== AUTENTICAÇÃO =====",
   "User": "Usuário",
@@ -290,6 +291,8 @@
   "Current school year: :school_year": "Ano letivo atual: :school_year",
   "Students of class :class": "Alunos da turma :class",
   "Import students from file": "Importar alunos de arquivo",
+  "Invalid file format. Only .csv files are allowed": "Formato de arquivo inválido. Apenas arquivos .csv são permitidos",
+  "Students to be registrated": "Alunos a serem cadastrados",
 
   "Student name": "Nome do aluno",
   "Student already registered" : "Aluno já matriculado",

@@ -63,23 +63,25 @@
 
     @if(isset($students))
         <div class="modal fade" id="matriculasModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
+          <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Alunos a serem matriculados</h5>
+                <h3 class="modal-title" id="exampleModalLabel">{{ __('Students to be registrated') }}</h3>
               </div>
               <div class="modal-body">
                 
                 <table class="table table-layout-fixed">
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Matrícula</th>
+                            <th></th>
+                            <th>{{ __('Registration') }}</th>
+                            <th>{{ __('Name') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($students as $student)
+                        @foreach($students as $i => $student)
                             <tr>
+                                <td>{{ $i + 1 }}</td>
                                 <td>{{ $student['username'] }}</td>
                                 <td>{{ $student['name'] }}</td>
                             </tr>
@@ -89,10 +91,10 @@
 
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
                 
                 <form action="{{ route('user.storeMatricula') }}" method="post"> @csrf
-                    <button type="submit" class="btn btn-primary">Confirm</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Confirm') }}</button>
                 </form>
               </div>
             </div>
