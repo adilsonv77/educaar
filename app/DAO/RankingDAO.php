@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RankingDAO {
     /**
-     * @return array<int, array{nome: string, pontuacao: int, tentativas: int}
+     * @return array<int, array{nome: string, pontuacao: int, tentativas: int}>
     */
     public static function buscarRankingPorAtividade(int $activityId) : \Illuminate\Support\Collection {
         $ultimaTentativa = DB::table('student_answers')
@@ -42,9 +42,9 @@ class RankingDAO {
      * Caso tenha mais de 10 respostas, irá ser retornado as 10 primeiras
      * mais a posição do aluno autenticado.
      * 
-     * @return array<int, array{name: string, user_id: int, pontuacao: string, posicao: int}
+     * @return \Illuminate\Support\Collection<int, array{name: string, user_id: int, avatar: string, pontuacao: string, posicao: int}>
     */
-    public static function somaDasPontuacoesDeUmConteudo(int $contentId): \Illuminate\Support\Collection {
+    public static function somaDasPontuacoesDeUmConteudo(int $contentId, int $userId): \Illuminate\Support\Collection {
         $simple = DB::table('contents')
             ->join('activities', 'activities.content_id', '=', 'contents.id')
             ->join('pontuacoes', 'pontuacoes.activity_id', '=', 'activities.id')
@@ -59,23 +59,23 @@ class RankingDAO {
             )
             ->groupBy('pontuacoes.user_id', 'users.name', 'users.avatar');
 
-        $results = $simple->get();
+        $results = DB::query()->fromSub($simple, 'ranking')->count();
 
-        if(count($results) > 10) {
-            $userId = Auth::id();
-
-            $top10 = DB::table(DB::raw("({$simple->toSql()}) as ranking"))
-                ->mergeBindings($simple)
-                ->where(function ($query) use ($userId) {
-                    $query->where('posicao', '<=', 10)
-                        ->orWhere('user_id', $userId);
-                })
-                ->orderBy('posicao');
-
-            return $top10->get();
+        if($results <= 10) {
+            return DB::query()
+                ->fromSub($simple, 'ranking')
+                ->orderBy('posicao')
+                ->get();
         }
 
-        return $results;
+        return DB::query()
+            ->fromSub($simple, 'ranking')
+            ->where(fn($q) => $q
+                ->where('posicao', '<=', 10)
+                ->orWhere('user_id', $userId)
+                )
+                ->orderBy('posicao')
+                ->get();
     }
 
     public static function somaDosParticipantes(int $contentId) : int {

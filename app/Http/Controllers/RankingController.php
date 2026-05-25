@@ -24,7 +24,7 @@ class RankingController extends Controller
             $atividades = null;
             $studentCount = RankingDAO::somaDosParticipantes($content_id);
 
-            $ranking = RankingDAO::somaDasPontuacoesDeUmConteudo($content_id);
+            $ranking = RankingDAO::somaDasPontuacoesDeUmConteudo($content_id, Auth::id());
         } else {
             $layout = 'app';
             $atividades = ActivityDAO::getAtividadesPontuadasPorProf(Auth::id());
