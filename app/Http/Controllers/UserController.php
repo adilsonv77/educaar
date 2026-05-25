@@ -336,7 +336,6 @@ class UserController extends Controller
 
         $students = $cached[0];
         $turmaId = $cached[1];
-        #if (!$students) abort(410, 'corsa capotado');
 
         foreach($students as $student) {
             try {

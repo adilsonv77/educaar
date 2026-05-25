@@ -63,7 +63,7 @@
 
     @if(isset($students))
         <div class="modal fade" id="matriculasModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
+          <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <h3 class="modal-title" id="exampleModalLabel">{{ __('Students to be registrated') }}</h3>
@@ -73,13 +73,15 @@
                 <table class="table table-layout-fixed">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>{{ __('Registration') }}</th>
                             <th>{{ __('Name') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($students as $student)
+                        @foreach($students as $i => $student)
                             <tr>
+                                <td>{{ $i + 1 }}</td>
                                 <td>{{ $student['username'] }}</td>
                                 <td>{{ $student['name'] }}</td>
                             </tr>
