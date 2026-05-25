@@ -3,10 +3,10 @@
 @section('content')
 
 <div class="container px-3 px-md-0">
-    <div class="d-flex flex-column align-items-center mx-auto mt-4 rounded" style="width: 100%; max-width: 800px; background-color: #f2e3ff; border: 2px solid #bb68ff;" id="student-profile">
+    <div class="d-flex flex-column align-items-center mx-auto mt-4 rounded" style="width: 100%; max-width: 700px; background-color: #f2e3ff; border: 2px solid #bb68ff;" id="student-profile">
 
         <div class="position-relative mx-auto mb-3 mt-5" style="width: 100px; height: 100px;">
-            
+
             <div class="bg-light rounded-circle d-flex justify-content-center align-items-center w-100 h-100" style="overflow: hidden;">
                 @php
                     $urlAvatar = Auth::user()->avatar;
@@ -24,12 +24,13 @@
             </a>
             
         </div>
+
         <h2 class="text-center px-3">{{ $student->name }}</h2>
 
-        <div class="vstack gap-3 mx-auto mb-4 mt-4 w-100 px-4" id="student-info">
-            <div class="p-2"><span class="h4">Email: </span>{{ $student->email }}</div>
-            <div class="p-2"><span class="h4">Escola: </span>{{ $student->escola->nome }}</div>
-            <div class="p-2"><span class="h4">Turma: </span>{{ $student->turma->nome }}</div>
+        <div class="rounded-xl g-4 mx-auto mb-4 mt-4 px-4 bg-white py-4" id="student-info">
+            <div class="px-3 py-2"><span class="h4">Email: </span>{{ $student->email }}</div>
+            <div class="px-3 py-2"><span class="h4">Escola: </span>{{ $student->escola->nome }}</div>
+            <div class="px-3 py-2"><span class="h4">Turma: </span>{{ $student->turma->nome }}</div>
         </div>
         
     </div>
