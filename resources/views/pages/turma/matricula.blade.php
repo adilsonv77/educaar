@@ -16,7 +16,7 @@
                     </ul>
                 </div>
             @endif
-            <form method="POST" action="{{ route('user.storeMatricula') }}" enctype="multipart/form-data" file="true">
+            <form method="POST" action="{{ route('user.createMatricula') }}" enctype="multipart/form-data" file="true">
                 @csrf
 
                 <div class="form-group">
@@ -60,4 +60,50 @@
             </form>
         </div>
     </div>
+
+    @if(isset($students))
+        <div class="modal fade" id="matriculasModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Alunos a serem matriculados</h5>
+              </div>
+              <div class="modal-body">
+                
+                <table class="table table-layout-fixed">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Matrícula</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($students as $student)
+                            <tr>
+                                <td>{{ $student['username'] }}</td>
+                                <td>{{ $student['name'] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                
+                <form action="{{ route('user.storeMatricula') }}" method="post"> @csrf
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                $('#matriculasModal').modal('show');
+            })
+        </script>
+    @endif
+
 @endsection
