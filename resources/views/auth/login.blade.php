@@ -48,6 +48,11 @@
             <span class="fi fi-us"></span>
             <span class="d-none">EN</span>
         </a>
+        <span class="linha-vertical">|</span>
+        <a href="{{ route('locale.update', 'es') }}" class="lang-btn {{ app()->getLocale() === 'es' ? 'active' : '' }}" title="Español">
+            <span class="fi fi-es"></span>
+            <span class="d-none">ES</span>
+        </a>
     </div>
     
         @if ($errors->any())
