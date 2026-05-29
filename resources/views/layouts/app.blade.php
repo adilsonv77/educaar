@@ -256,7 +256,7 @@
                                     <span class="nav-text">{{ __('Registrations') }}</span>
                                 </a>
                                 <ul aria-expanded="false">
-                                    <li><a href="{{ route('user.matricula') }}">{{ __('Import Files') }}</a></li>
+                                    <li><a href="{{ route('user.matricula') }}">{{ __('Import File') }}</a></li>
                                     <li><a href="{{ route('turmas.indexmatricula') }}">{{ __('List') }}</a></li>
                                 </ul>
                             </li>
