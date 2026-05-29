@@ -66,6 +66,7 @@
                                 <ul class="navbar-nav header-right">
                                     <a class="nav-link" href="javascript:void(0)" role="button" data-toggle="dropdown">
                                         <div class="header-info">
+                                            
                                             <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
                                             <p class="fs-12 mb-0">
                                                 @if (session('type') == 'student')
