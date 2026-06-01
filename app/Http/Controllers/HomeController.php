@@ -117,14 +117,11 @@ class HomeController extends Controller
             //dd(DB::getQueryLog());
             $activities = ActivityDAO::buscarActivitiesDoProf($prof_id, $anoletivo_id)
                 ->selectRaw("count(distinct(activities.id)) as quantos")->get();
-                
-            $fechados = ContentDAO::buscarContentsDoProf($prof_id, $anoletivo_id)
-                ->selectRaw("sum(contents.fechado) as quantos")->get();
 
             $alunosProf = UserDAO::buscarAlunosProf($prof_id, $anoletivo_id)
                 ->selectRaw("count(distinct(u.id)) as quantos")->get();
 
-            $fechadoCount = $fechados[0] -> quantos;
+            $fechadoCount = ContentDAO::getClosedContentsCount(Auth::id());
             $activitiesCount = $activities[0]->quantos;
             $usersCount = $alunosProf[0]->quantos;
             $contentCount = $contents[0]->quantos;

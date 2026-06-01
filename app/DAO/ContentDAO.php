@@ -156,7 +156,7 @@ class ContentDAO
             ->value('name');
     }
 
-    public static function getReadyContentCount($profId) : int {
+    public static function getReadyContentCount(int $profId) : int {
         return DB::table('contents')
             ->join('activities', function ($join) {
                 $join->on('activities.content_id', '=', 'contents.id')
@@ -164,6 +164,22 @@ class ContentDAO
             })
             ->join('questions', 'questions.activity_id', '=', 'activities.id')
             ->where('contents.user_id', $profId)
+            ->where('contents.fechado', '=', 0)
+            ->select('contents.*')
+            ->groupBy('contents.id')
+            ->get()
+            ->count();
+    }
+
+    public static function getClosedContentsCount(int $profId) : int {
+        return DB::table('contents')
+            ->join('activities', function ($join) {
+                $join->on('activities.content_id', '=', 'contents.id')
+                    ->on('activities.professor_id', '=', 'contents.user_id');
+            })
+            ->join('questions', 'questions.activity_id', '=', 'activities.id')
+            ->where('contents.user_id', $profId)
+            ->where('contents.fechado', '=', 1)
             ->select('contents.*')
             ->groupBy('contents.id')
             ->get()
