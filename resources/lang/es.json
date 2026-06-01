@@ -289,6 +289,7 @@
   "Unregister": "Dar de baja",
   "Confirm unregister student :student": "Dar de baja al alumno :student",
   "Current school year: :school_year": "Año escolar actual: :school_year",
+    "Current school year": "Año escolar actual",
   "Students of class :class": "Alumnos del grupo :class",
   "Import students from file": "Importar alumnos desde archivo",
   "Invalid file format. Only .csv files are allowed": "Formato de archivo inválido. Solo se permiten archivos .csv",

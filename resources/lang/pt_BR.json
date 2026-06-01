@@ -289,6 +289,7 @@
   "Unregister": "Desmatricular",
   "Confirm unregister student :student": "Desmatricular o aluno :student",
   "Current school year: :school_year": "Ano letivo atual: :school_year",
+  "Current school year": "Ano letivo atual",
   "Students of class :class": "Alunos da turma :class",
   "Import students from file": "Importar alunos de arquivo",
   "Invalid file format. Only .csv files are allowed": "Formato de arquivo inválido. Apenas arquivos .csv são permitidos",
