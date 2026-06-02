@@ -213,6 +213,9 @@
   "Email not found": "Email não encontrado",
   "Password reset. A new password has been sent to your email": "Senha redefinida. Uma nova senha foi enviada ao seu e-mail",
   "Reset attempt failed": "A tentativa de redefinição falhou",
+  "Session expired or already processed.":"Sessão expirada ou já processada.",
+  "Expired data. Reimport the file.": "Dados expirados. Reimporte o arquivo.",
+  "Expired data.": "Dados expirados.",
 
   "===== USER SETTINGS =====": "===== CONFIGURAÇÕES DE USUÁRIO =====",
   "Teacher Settings": "Configurações do Professor",

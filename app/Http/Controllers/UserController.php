@@ -331,7 +331,14 @@ class UserController extends Controller
 
     public function storeMatricula() {
         $token = session()->pull('importToken');
+        if(!$token) { 
+            return redirect()->route('user.matricula')->withErrors( __('Session expired or already processed.') ); 
+        }
+
         $cached = Cache::pull("import:{$token}");
+        if(!$cached) {
+            return redirect()->route('user.matricula')->withErrors( __('Expired data. Reimport the file.') );
+        }
 
         $students = $cached[0];
         $turmaId = $cached[1];
@@ -359,6 +366,10 @@ class UserController extends Controller
 
     public function cancelMatricula() {
         $token = session()->pull('importToken');
+        if($token === null) {
+            return redirect()->route('user.matricula')->withErrors( __('Expired data.') );
+        }
+        
         Cache::forget("import:{$token}");
 
         return redirect()->route('user.matricula');
