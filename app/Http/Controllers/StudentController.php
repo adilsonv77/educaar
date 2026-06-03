@@ -286,7 +286,7 @@ class StudentController extends Controller
         return view('student.student-avatar', compact('student', 'rota', 'urlAvatar'));
     }
 
-    public function updateStudentAvatar(Request $request, $id){
+    public function updateStudentAvatar(Request $request){
 
         $request = request();
         $avatar = $request->input('avatar');

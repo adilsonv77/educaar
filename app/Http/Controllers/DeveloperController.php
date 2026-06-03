@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Models\Activity;
 use App\DAO\ContentDAO;
+use App\DAO\DeveloperDAO;
 
 class DeveloperController extends Controller
 {
@@ -90,14 +91,14 @@ class DeveloperController extends Controller
                 ->where('type', 'developer')
                 ->select('users.*')
                 ->selectRaw('exists (select 1 from content_developer where content_developer.developer_id = users.id and content_developer.content_id = ?) as selected_dev', [$data]);
-        
+
         if($nomeDev == null) {
             $devs = $sql->get();
         } else {
             $devs = $sql
                 ->where('name', $nomeDev)
                 ->get();
-        }
+        } 
 
         return view('pages.developer.selectDevelopers', compact('devs'));
     }

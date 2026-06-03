@@ -42,6 +42,22 @@ class UserDAO
     public static function buscarUsuarioPorId($id) {
         return User::where('id', $id)->get();
     }
+
+    public static function buscarUsuariosPorNome($tipo, $usuarios){
+         $wusers = User::where('users.school_id', Auth::user()->school_id)
+            ->where('users.type', '=', $tipo)
+            ->leftJoin('alunos_turmas', 'users.id', '=', 'alunos_turmas.aluno_id')
+            ->leftJoin('turmas', 'alunos_turmas.turma_id', '=', 'turmas.id')
+            ->select('users.*', DB::raw('GROUP_CONCAT(turmas.nome SEPARATOR ", ") as turma_nome'))
+            ->groupBy('users.id'); 
+
+        if ($usuarios) {
+            $r = '%' . $usuarios . '%';
+            $wusers = $wusers->where('name', 'like', $r);
+        }
+
+        return $wusers->distinct()->paginate(20);
+    }
 }
 
 // SELECT COUNT(u.id), t.nome FROM `turmas_disciplinas` as td 

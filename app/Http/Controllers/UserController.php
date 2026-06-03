@@ -14,6 +14,7 @@ use App\Models\AnoLetivo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use App\DAO\UserDAO;
 
 
 
@@ -21,36 +22,15 @@ use Illuminate\Support\Facades\Cache;
 class UserController extends Controller
 {
 
-    private function doIndex(Request $request, $userindex, $tipo, $tipo2, $userCreate)
+    private function doIndex(Request $request, $userindex, $tipo, $userCreate)
     {
         if (session('type') != 'admin') {
             return redirect('/');
         }
 
-        $wusers = User::where('users.school_id', Auth::user()->school_id)
-            ->where('users.type', '=', $tipo)
-            ->leftJoin('alunos_turmas', 'users.id', '=', 'alunos_turmas.aluno_id')
-            ->leftJoin('turmas', 'alunos_turmas.turma_id', '=', 'turmas.id')
-            ->select('users.*', DB::raw('GROUP_CONCAT(turmas.nome SEPARATOR ", ") as turma_nome')) // Junta os nomes das turmas
-            ->groupBy('users.id'); // Agrupa pelo ID do usuário
-
-       
-
-        if (!empty($tipo2)) {
-            $wusers = $wusers->orWhere('type', '=', $tipo2);
-        }
-
         $usuarios = $request->titulo;
-        if ($usuarios) {
-            $r = '%' . $usuarios . '%';
-            $wusers = $wusers->where(DB::raw('concat(name, " - ", username) '), 'like', $r);
-        }
-
-
         
-
-        
-        $users = $wusers->distinct()->paginate(20);
+        $users = UserDAO::buscarUsuariosPorNome($tipo, $usuarios);
        
         $type = $tipo;
 
@@ -64,16 +44,16 @@ class UserController extends Controller
 
     public function indexAluno(Request $request)
     {
-        return $this->doIndex($request, 'user.indexAluno', 'student', '', 'user.createStudent');
+        return $this->doIndex($request, 'user.indexAluno', 'student', 'user.createStudent');
     }
 
     public function indexProf(Request $request)
     {
-        return $this->doIndex($request, 'user.indexProf', 'teacher', '', 'user.createTeacher');
+        return $this->doIndex($request, 'user.indexProf', 'teacher', 'user.createTeacher');
     }
     public function indexDev(Request $request)
     {
-        return $this->doIndex($request, 'user.indexDev', 'developer', 'admin', 'user.createDeveloper');
+        return $this->doIndex($request, 'user.indexDev', 'developer', 'user.createDeveloper');
     }
 
     public function createStudent()
