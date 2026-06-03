@@ -14,54 +14,29 @@ class ActivityDAO
         return Activity::where('mural_id',$id);
     }
 
-    public static function buscarActivitiesDoProf($profid, $anoletivoid)
-    {
-        /*
-        SELECT distinct activities.* FROM activities
-            join contents on activities.content_id = contents.id
-            join turmas_disciplinas on contents.disciplina_id = turmas_disciplinas.disciplina_id
-            join turmas on turmas_disciplinas.turma_id = turmas.id
-            join anos_letivos on turmas.ano_id = anos_letivos.id
-            where anos_letivos.bool_atual = 1 and turmas_disciplinas.professor_id = 5
-    */
-    /* mudar para:
-       select distinct activities.* from turmas_disciplinas 
-                    join turmas on turmas_disciplinas.turma_id = turmas.id
-                    join contents on turmas.turma_modelo_id = contents.turma_modelo_id and
-                                    turmas_disciplinas.disciplina_id = contents.disciplina_id
-                join activities on activities.content_id = contents.id 
-                    where turmas_disciplinas.professor_id = 5/209 and ano_id = 4
-    */
-
-     $sql = DB::table('turmas_disciplinas')
-            
-            ->join('turmas','turmas_disciplinas.turma_id','=','turmas.id')
-            ->join('contents', function($join) {
+    public static function buscarActivitiesDoProf(int $profId, int $anoLetivoId) {
+        return DB::table('activities')
+            ->whereExists(function ($query) use ($profId, $anoLetivoId) {
+                $query->select(DB::raw(1))
+                    ->from('turmas_disciplinas as td')
+                    ->join('turmas', 'td.turma_id', '=', 'turmas.id')
+                    ->join('contents', function ($join) {
                         $join->on('turmas.turma_modelo_id', '=', 'contents.turma_modelo_id');
-                        $join->on('turmas_disciplinas.disciplina_id', '=', 'contents.disciplina_id');
+                        $join->on('td.disciplina_id', '=', 'contents.disciplina_id');
                     })
-            ->join('activities', 'activities.content_id', '=', 'contents.id')
+                    ->whereColumn('contents.id', '=', 'activities.content_id')
+                    ->where('td.professor_id', '=', $profId)
+                    ->where('turmas.ano_id', '=', $anoLetivoId);
+            })
+            ->join('contents', 'contents.id', '=', 'activities.content_id')
             ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
-            //->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_modelo_id')
-            ->where('turmas_disciplinas.professor_id', '=', $profid)
-            ->where("ano_id", "=", $anoletivoid)
-            ->distinct();
-
-    /*    
-    $sql = DB::table("activities")
-            ->join("contents", "activities.content_id", "=", "contents.id")
-            ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
-            ->join("turmas_disciplinas", "contents.disciplina_id", "=", "turmas_disciplinas.disciplina_id")
-            ->join("turmas", "turmas_disciplinas.turma_id", "=", "turmas.id")
-            ->join("anos_letivos", "turmas.ano_id", "=", "anos_letivos.id")
-            
-            ->where('turmas_disciplinas.professor_id', $profid)
-            ->where("anos_letivos.bool_atual", 1);
-*/
-
-         //dd($sql);
-        return $sql;
-    }
+            ->select([
+                'activities.*',
+                'contents.name AS nome_conteudo',
+                DB::raw('concat(activities.name, " - ", disciplinas.name, " (", contents.name, ")") AS pesq_name'),
+            ])
+            ->groupBy('activities.id');
+    }   
 
     public static function buscarActivitiesDoDev($devid)
     {

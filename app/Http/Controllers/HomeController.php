@@ -115,21 +115,19 @@ class HomeController extends Controller
             $contents = ContentDAO::buscarContentsDoProf($prof_id, $anoletivo_id)
                 ->selectRaw("count(distinct(contents.id)) as quantos")->get();
             //dd(DB::getQueryLog());
-            $activities = ActivityDAO::buscarActivitiesDoProf($prof_id, $anoletivo_id)
-                ->selectRaw("count(distinct(activities.id)) as quantos")->get();
 
             $alunosProf = UserDAO::buscarAlunosProf($prof_id, $anoletivo_id)
                 ->selectRaw("count(distinct(u.id)) as quantos")->get();
 
             $fechadoCount = ContentDAO::getClosedContentsCount(Auth::id());
-            $activitiesCount = $activities[0]->quantos;
+            $activitiesCount = ActivityDAO::buscarActivitiesDoProf($prof_id, $anoletivo_id)->get()->count();
             $usersCount = $alunosProf[0]->quantos;
             $contentCount = $contents[0]->quantos;
             $readyContentCount = session('type') !== 'developer'
                 ? ContentDAO::getReadyContentCount(Auth::id())
                 : null;
 
-            return view('home', compact('activitiesCount', 'usersCount', 'contentCount', 'activitiesCount', 'schools', 'fechadoCount', 'readyContentCount'));
+            return view('home', compact('activitiesCount', 'usersCount', 'contentCount', 'schools', 'fechadoCount', 'readyContentCount'));
         }
 
         // return view('home')->withErrors('Login ou senha inválidos. Por favor, tente novamente.');
