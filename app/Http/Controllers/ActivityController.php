@@ -306,6 +306,7 @@ class ActivityController extends Controller
             $content = Content::find($activity->content_id);
             $content->update(['fechado' => 0]);
             $data['mural_id'] = null;
+            $data['hint'] = $request->pista_customizada;
             $activity->update($data);
         } else {
             //Editar
@@ -399,6 +400,8 @@ class ActivityController extends Controller
             $naoRefeita = false;
         }
 
+        $hint = ActivityDAO::getHint($activity->content_id, $activity->id);
+
         $params = [
             'titulo' => $titulo,
             'acao' => $acao,
@@ -408,7 +411,8 @@ class ActivityController extends Controller
             'content' => $activity->content_id,
             'mural_id' => $activity->mural_id,
             'murais' => $murais,
-            'naoRefeita' => $naoRefeita
+            'naoRefeita' => $naoRefeita,
+            'hint' => $hint
         ];
 
         return view('pages.activity.register', $params);

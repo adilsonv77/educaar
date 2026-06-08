@@ -303,9 +303,9 @@
 
                     <!-----------------PISTA------------------>
                     <div class="extras collapse" id="hint">
-                        <div class="hint mt-5">
+                        <div class="hint mt-4">
                             <label for="hintLabel" >{{ __('Customized Hint') }}</label>
-                            <input type="text" name="pista_customizada" id="pista_customizada" class="form-control" placeholder="{{ __('Leave it empty to not add a custom hint') }}">
+                            <input type="text" name="pista_customizada" id="pista_customizada" class="form-control" placeholder="{{ __('Leave it empty to not add a custom hint') }}" value=@if(!empty($hint)) "{{ $hint }}" @endif>
                         </div>
                     </div>
                     
@@ -324,6 +324,7 @@
             let orderedContentString = <?php echo json_encode($orderedContentString) ?>;
             let noOrderedContentString = <?php echo json_encode($noOrderedContentString) ?>;
             let sceneTypeString = <?php echo json_encode($sceneTypeString) ?>;
+            let acao = <?php echo json_encode($acao) ?>;
 
             const el = {
                 selectActivity: document.getElementById("selectActivityType"),
@@ -352,60 +353,68 @@
                 el.model3D.style.display = isModelo3D ? "block" : "none";
                 el.panelOption.style.display = isModelo3D ? "none" : "block";
 
-                if (isModelo3D) {
-                    el.switchPontuada.disabled = false;
-                    el.ponAle.textContent = "";
-                    el.btnPontuada.hidden = false;
-
-                    if (contentType >= "1") {
-                        el.switchRefeita.disabled = true;
-                        el.switchRefeita.checked = false;
-                        el.refAle.textContent = orderedContentString;
-                        $(el.hint).collapse('show');
-
-                    } else {
-                        el.switchRefeita.disabled = false;
-                        el.refAle.textContent = noOrderedContentString;
-                        $(el.hint).collapse('hide');
-                        el.switchPontuada.checked = false;
-                    }
-                } else {
-                    el.switchRefeita.checked = false;
-                    el.switchRefeita.disabled = true;
-                    el.switchPontuada.checked = false;
-                    el.switchPontuada.disabled = true;
-                    el.refAle.textContent = sceneTypeString;
-                    el.ponAle.textContent = sceneTypeString;
-                    el.btnPontuada.hidden = true;
-                    $(el.camposExtras).collapse('hide');
+                if(el.switchPontuada === null && acao == 'edit' && contentType >= 1) {
+                    $(el.hint).collapse('show');
+                    return;
                 }
+
+                    if (isModelo3D) {
+                        el.switchPontuada.disabled = false;
+                        el.ponAle.textContent = "";
+                        el.btnPontuada.hidden = false;
+
+                        if (contentType >= "1") {
+                            el.switchRefeita.disabled = true;
+                            el.switchRefeita.checked = false;
+                            el.refAle.textContent = orderedContentString;
+                            $(el.hint).collapse('show');
+
+                        } else {
+                            el.switchRefeita.disabled = false;
+                            el.refAle.textContent = noOrderedContentString;
+                            $(el.hint).collapse('hide');
+                            el.switchPontuada.checked = false;
+                        }
+                    } else {
+                        el.switchRefeita.checked = false;
+                        el.switchRefeita.disabled = true;
+                        el.switchPontuada.checked = false;
+                        el.switchPontuada.disabled = true;
+                        el.refAle.textContent = sceneTypeString;
+                        el.ponAle.textContent = sceneTypeString;
+                        el.btnPontuada.hidden = true;
+                        $(el.camposExtras).collapse('hide');
+                    }
+
             };
 
             el.selectActivity.addEventListener('change', atualizarInterface);
             el.selectContent.addEventListener('change', atualizarInterface);
 
-            el.switchPontuada.addEventListener('change', function() {
-                const isChecked = this.checked;
-                $(el.camposExtras).collapse(isChecked ? 'show' : 'hide');
-                el.nota.required = isChecked;
-                el.tempo.required = isChecked;
+            if(el.switchPontuada !== null) {
+                el.switchPontuada.addEventListener('change', function() {
+                    const isChecked = this.checked;
+                    $(el.camposExtras).collapse(isChecked ? 'show' : 'hide');
+                    el.nota.required = isChecked;
+                    el.tempo.required = isChecked;
 
-                if (isChecked) {
-                    el.switchRefeita.disabled = true;
-                    el.switchRefeita.parentElement.style.display = 'block';
-                } else if (getContentType() != "1") {
-                    el.switchRefeita.disabled = false;
-                    el.switchRefeita.parentElement.style.display = '';
-                }
-            });
+                    if (isChecked) {
+                        el.switchRefeita.disabled = true;
+                        el.switchRefeita.parentElement.style.display = 'block';
+                    } else if (getContentType() != "1") {
+                        el.switchRefeita.disabled = false;
+                        el.switchRefeita.parentElement.style.display = '';
+                    }
+                });
 
-            el.switchRefeita.addEventListener('change', function() {
-                el.switchPontuada.disabled = this.checked;
-                el.switchPontuada.parentElement.style.display = this.checked ? 'block' : '';
-            });
+                el.switchRefeita.addEventListener('change', function() {
+                    el.switchPontuada.disabled = this.checked;
+                    el.switchPontuada.parentElement.style.display = this.checked ? 'block' : '';
+                });
 
-            
-            el.switchPontuada.checked = false;
+
+                el.switchPontuada.checked = false;
+            }
             atualizarInterface();
         });
         

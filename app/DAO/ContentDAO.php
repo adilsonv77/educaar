@@ -186,7 +186,7 @@ class ContentDAO
             ->count();
     }
 
-    public static function getContentType($contentId) : int {
+    public static function getContentType(int $contentId) : int {
         return DB::table('contents')
             ->where('id', $contentId)
             ->value('sort_activities');
