@@ -220,5 +220,17 @@ class ActivityDAO
             ->where('activities.position', $sort[$positionSorted + 1])
             ->value('hint') ?? '';
     }
+
+    public static function getHint(int $contentId, int $activityId) : string {
+        $position = DB::table('activities')
+            ->where('id', $activityId)
+            ->value('position');
+
+         return DB::table('contents')
+            ->join('activities', 'activities.content_id', '=', 'contents.id')
+            ->where('contents.id', $contentId)
+            ->where('activities.position', $position)
+            ->value('hint') ?? '';
+    }
 }
 
