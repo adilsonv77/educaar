@@ -401,7 +401,7 @@
                     if (isChecked) {
                         el.switchRefeita.disabled = true;
                         el.switchRefeita.parentElement.style.display = 'block';
-                    } else if (getContentType() != "1") {
+                    } else if (getContentType() != 1) {
                         el.switchRefeita.disabled = false;
                         el.switchRefeita.parentElement.style.display = '';
                     }
