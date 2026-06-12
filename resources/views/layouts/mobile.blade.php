@@ -172,7 +172,6 @@
 </body>
 
 
-
 <footer>
     <div class='nav_bar'>
         <div class='buttons_ar' id="buttons_footer">
@@ -183,6 +182,12 @@
                         <button id="button-back" type="button" class="btn btn-warning" onclick="location.href='{{ $back }}'">
                             <span><i style="color:#ffffff;" class="bi bi-arrow-left"></i></span>
                         </button>
+
+                        @if($hintContent)
+                            <button id="hintButton" class="btn btn-warning" type="button">
+                                <span><i style="color:#ffffff;" class="bi bi-question"></i></span>
+                            </button>
+                        @endif
                 
         @endif
 
@@ -198,6 +203,8 @@
                         </button> 
             </div>
             @endif
+
+        
         
     </div>
 </footer>

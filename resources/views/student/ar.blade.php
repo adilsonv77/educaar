@@ -1,4 +1,9 @@
-@extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => true])
+@php
+    $hintContent = $content->sort_activities >= 1
+        ? true : false;
+@endphp
+
+@extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => true, 'hintContent' => $hintContent])
 
 <meta name = "csrf-token" content="{{ csrf_token() }}">
 
