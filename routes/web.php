@@ -150,6 +150,13 @@ Route::middleware(['auth'])->group(function () {
         return response()->json($arquivos);
     });
 
+    //jogo
+    Route::resource('game', App\Http\Controllers\JogoController::class);
+    Route::get('/game/store', [App\Http\Controllers\JogoController::class, 'store'])->name('game.store');
+    Route::get('/game/edit/{id}', [App\Http\Controllers\JogoController::class, 'edit'])->name('game.edit');
+    Route::delete('/game/{id}', [App\Http\Controllers\JogoController::class, 'destroy'])->name('game.destroy');
+
+
     //fechar
     Route::resource('fechar', App\Http\Controllers\FecharController::class);
     Route::get('/fecharstore', [App\Http\Controllers\FecharController::class, 'store'])->name('fecharconteudo.store');
