@@ -183,7 +183,7 @@
                             <span><i style="color:#ffffff;" class="bi bi-arrow-left"></i></span>
                         </button>
 
-                        @if($hintContent)
+                        @if($hintConten ?? false)
                             <button id="hintButton" class="btn btn-warning" type="button">
                                 <span><i style="color:#ffffff;" class="bi bi-question"></i></span>
                             </button>
