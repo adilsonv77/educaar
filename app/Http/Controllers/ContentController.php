@@ -186,7 +186,7 @@ class ContentController extends Controller
 
         $content = Content::find($id);
         $activities = Activity::where('content_id', $content->id)->orderBy('position', 'asc')->get();
-        $titulo = 'Edit Content';
+        $titulo = __('Edit Content');
         $acao = 'edit';
         $idprof = Auth::user()->id;
         $anoLetivo = AnoLetivo::where('bool_atual', 1)
