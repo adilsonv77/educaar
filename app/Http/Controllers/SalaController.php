@@ -35,7 +35,7 @@ class SalaController extends Controller
     {
         $titulo = 'Salas';
         $rules = Regras::all();
-        $jogoId = $request->content;
+        $jogoId = $request->jogo_id;
         $classes = TurmaDAO::getTurmasDisponiveisParaSala(Auth::id());
 
         return view('pages.sala.create', compact('rules', 'titulo', 'jogoId', 'classes'));
