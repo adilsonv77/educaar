@@ -6,6 +6,8 @@ use App\Models\Sala;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSalaRequest;
 use App\Http\Requests\UpdateSalaRequest;
+use App\Models\Regras;
+use Illuminate\Http\Request;
 
 class SalaController extends Controller
 {
@@ -26,10 +28,13 @@ class SalaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $titulo = 'Criar Sala';
-        return view('pages.sala.create', compact('titulo'));
+        $titulo = 'Salas';
+        $rules = Regras::all();
+        $jogoId = $request('content');
+
+        return view('pages.sala.create', compact('rules', 'titulo', 'jogoId'));
     }
 
     /**
@@ -38,9 +43,19 @@ class SalaController extends Controller
      * @param  \App\Http\Requests\StoreSalaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSalaRequest $request)
+    public function store(Request $request)
     {
-        //
+        dd($request);
+        $data = $request->validate([
+            'name' => 'string|min:3|max:255|required',
+            'rules' => 'integer|min:0|required',
+            'jogo_id' => 'integer|min:0|required'
+        ]);
+
+        Sala::create($data);
+        dd('aaaa');
+        
+        return redirect()->back();
     }
 
     /**
