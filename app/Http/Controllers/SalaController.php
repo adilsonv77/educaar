@@ -79,13 +79,23 @@ class SalaController extends Controller
             return redirect()->back()->with('error', 'Sala não encontrada.');
         }
 
-        // Lógica para entrar na sala
         return view('pages.sala.enter', compact('sala'));
     }
 
-    public function results(){
-        $salas = Sala::all();
-        return view('pages.sala.results', compact('salas'));
+    public function show(int $salaId){
+        $results = SalaDAO::buscarPontuacoesSala($salaId);
+        $id_jogo = $results->first() ? $results->first()->jogo_id : null;
+        return view('pages.sala.results', compact('results', 'id_jogo'));
+    }
+
+    public function resultsDestroy(int $resultId){
+        $result = SalaDAO::buscarResultadoPorId($resultId);
+        if (!$result) {
+            return redirect()->back()->with('error', 'Resultado não encontrado.');
+        }
+
+        SalaDAO::deletarResultado($resultId);
+        return redirect()->route('sala.index')->with('success', 'Resultado deletado com sucesso.');
     }
 
     /**

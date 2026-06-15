@@ -161,7 +161,8 @@ Route::middleware(['auth'])->group(function () {
     //sala
     Route::resource('sala', App\Http\Controllers\SalaController::class);
     Route::post('/sala/enter/{id}', [App\Http\Controllers\SalaController::class, 'enter'])->name('sala.enter');
-    Route::get('/sala/results', [App\Http\Controllers\SalaController::class, 'results'])->name('sala.results');
+    Route::get('/sala/results/{id}', [App\Http\Controllers\SalaController::class, 'show'])->name('sala.results');
+    Route::delete('/sala/results/destroy/{id}', [App\Http\Controllers\SalaController::class, 'resultsDestroy'])->name('sala.results.destroy');
     Route::get('/sala', [App\Http\Controllers\SalaController::class, 'index'])->name('sala.index');
     Route::post('/sala/store', [App\Http\Controllers\SalaController::class, 'store'])->name('sala.store');
     Route::get('/sala/edit/{id}', [App\Http\Controllers\SalaController::class, 'edit'])->name('sala.edit');

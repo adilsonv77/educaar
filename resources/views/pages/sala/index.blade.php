@@ -92,12 +92,12 @@
     </div>
 
     <div>
-    <form action="{{ route('sala.create') }}">
-        @csrf
-        <input type="hidden" name="jogo_id" value="{{ $jogo->id }}">
-        <button class="btn btn-smaller, btn-primary " id="novo" title="{{ __('New') }}">
-            <i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i>
-        </button>
-    </form>
-</div>
+        <form action="{{ route('sala.create') }}">
+            @csrf
+            <input type="hidden" name="jogo_id" value="{{ $jogo->id }}">
+            <button class="btn btn-smaller, btn-primary " id="novo" title="{{ __('New') }}">
+                <i class="bi bi-plus-circle-dotted h1" style = "color : #ffffff;"></i>
+            </button>
+        </form>
+    </div>
 @endsection
