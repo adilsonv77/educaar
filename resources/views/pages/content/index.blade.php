@@ -186,7 +186,7 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-body">
-                                                <h3>{{ __('Delete the content :content', ["content" => $item->content_name]) }} </h3>
+                                                <h3>{{ __('Delete the content :content?', ["content" => $item->content_name]) }} </h3>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
