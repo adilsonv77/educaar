@@ -40,6 +40,18 @@ class SalaDAO {
             ->where('id', $resultId)
             ->delete();
     }
+
+    public static function buscarInfosSala(int $salaId){
+        return DB::table('salas')
+            ->join('turmas', 'salas.turma_id', '=', 'turmas.id')
+            ->join('jogos', 'salas.jogo_id', '=', 'jogos.id')
+            ->join('contents', 'jogos.content_id', '=', 'contents.id')
+            ->join('regras', 'salas.regra_id', '=', 'regras.id')
+            ->select('salas.*', 'turmas.nome as nome_turma', 'contents.name as nome_conteudo', 'regras.pontMax as pontuacaoMaxima', 'regras.tempo as tempo')
+            ->where('salas.id', $salaId)
+            ->first();
+    }
+
 }
 
 

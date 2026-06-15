@@ -31,7 +31,7 @@
                                     </td>
 
                                     <td>
-                                        <form action="{{ route('sala.enter', [$sala->id]) }}">
+                                        <form action="{{ route('sala.enter', $sala->id) }}">
                                             @csrf
                                             <input type="hidden" name="sala_id" value="{{ $sala->id }}">
                                             <button type="submit" class="btn btn-primary"><i class="bi bi-collection"></i></button>

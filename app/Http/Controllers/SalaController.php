@@ -72,9 +72,9 @@ class SalaController extends Controller
      * @param  \App\Models\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function enter(int $salaId)
-    {
-        $sala = Sala::find($salaId);
+    public function enter(int $salaId){
+
+        $sala = SalaDAO::buscarInfosSala($salaId);
         if (!$sala) {
             return redirect()->back()->with('error', 'Sala não encontrada.');
         }
