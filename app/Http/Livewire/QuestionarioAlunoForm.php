@@ -16,6 +16,7 @@ use App\Models\Content;
 use App\Models\Pontuacao;
 use Exception;
 use Illuminate\Notifications\Action;
+use App\Http\Livewire\HintButton;
 
 class QuestionarioAlunoForm extends Component
 {
@@ -309,6 +310,8 @@ class QuestionarioAlunoForm extends Component
             if($timeout == false) {
                 $this->dispatchBrowserEvent('openFeedbackModal');
             }
+
+            $this->emitTo('hint-button', 'updateHint', $this->hint);
 
             session()->put('primeira_entrada', 1);
         } catch (Exception $e) {

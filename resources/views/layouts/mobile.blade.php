@@ -156,7 +156,12 @@
    
 
     </div>
+
     
+    @if($hintContent ?? false)
+        @livewire('hint-button', ['activities' => $activities, 'nextPosition' => $progress->next_position], key('hint-' . ($progress->next_position)))
+    @endif
+
     <script src="/vendor/global/global.min.js"></script>
     <script src="/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
     <script src="/vendor/deznav/deznav.min.js"></script>
@@ -184,7 +189,7 @@
                         </button>
 
                         @if($hintContent ?? false)
-                            <button id="hintButton" class="btn btn-warning mr-1 ml-1" style="width: 85%; height: 51.2px;" type="button">
+                            <button id="hintButton" class="btn btn-warning mr-1 ml-1" style="width: 85%; height: 51.2px;" type="button" onclick="Livewire.emitTo('hint-button', 'showHint')">
                                 <span><i style="color:#ffffff;" class="bi bi-question"></i></span>
                             </button>
                         @endif
