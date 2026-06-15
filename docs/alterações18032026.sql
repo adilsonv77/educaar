@@ -83,3 +83,12 @@ CREATE TABLE IF NOT EXISTS pontuacoesSalas(
   FOREIGN KEY (sala_id) REFERENCES salas(id) ON DELETE CASCADE,
   FOREIGN KEY (aluno_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE `random_sorts` (
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `content_id` bigint UNSIGNED NOT NULL,
+  `sort` char(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
