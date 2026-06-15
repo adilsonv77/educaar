@@ -18,9 +18,10 @@ class SalaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $salas = Sala::all();
+        $jogoId = $request->input('jogo_id');
+        $salas = Sala::where('jogo_id', $jogoId)->get();
         $titulo = 'Salas';
         return view('pages.sala.index', compact('salas', 'titulo'));
     }
@@ -66,9 +67,20 @@ class SalaController extends Controller
      * @param  \App\Models\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function show(Sala $sala)
+    public function enter(int $salaId)
     {
-        //
+        $sala = Sala::find($salaId);
+        if (!$sala) {
+            return redirect()->back()->with('error', 'Sala não encontrada.');
+        }
+
+        // Lógica para entrar na sala
+        return view('pages.sala.enter', compact('sala'));
+    }
+
+    public function results(){
+        $salas = Sala::all();
+        return view('pages.sala.results', compact('salas'));
     }
 
     /**

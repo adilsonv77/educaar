@@ -28,16 +28,15 @@
                                     <td>
                                         <form action="{{ route('sala.index') }}">
                                             @csrf
-                                            <input type="hidden" name="content" value="{{ $jogo->id }}">
+                                            <input type="hidden" name="jogo_id" value="{{ $jogo->id }}">
                                             <button type="submit" class="btn btn-primary"><i class="bi bi-collection"></i></button>
                                         </form>
                                     </td>
 
                                     <td>
-
                                     <form action="{{ route('sala.create') }}">
                                         @csrf
-                                        <input type="hidden" name="content" value="{{ $jogo->id }}">
+                                        <input type="hidden" name="jogo_id" value="{{ $jogo->id }}">
                                         <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i></button>
                                     </form>
                                     </td>
