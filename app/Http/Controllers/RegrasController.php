@@ -6,6 +6,7 @@ use App\Models\Regras;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRegrasRequest;
 use App\Http\Requests\UpdateRegrasRequest;
+use Illuminate\Http\Request;
 
 class RegrasController extends Controller
 {
@@ -32,12 +33,19 @@ class RegrasController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreRegrasRequest  $request
+     *  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRegrasRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'pontMax' => 'integer|min:0|required',
+            'tempo' => 'integer|min:0|required'
+        ]);
+
+        Regras::create($data);
+
+        return redirect()->route('sala.create')->with('success', 'Regra criada!');
     }
 
     /**

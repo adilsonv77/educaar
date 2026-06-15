@@ -15,6 +15,7 @@ use App\Http\Controllers\MuralController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RegrasController;
 
 // TUDO QUE ESTÁ FORA DO AUTH PODE SER ACESSADO SEM O USUÁRIO AUTENTICAR !!!!
 
@@ -163,6 +164,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/sala/store', [App\Http\Controllers\SalaController::class, 'store'])->name('sala.store');
     Route::get('/sala/edit/{id}', [App\Http\Controllers\SalaController::class, 'edit'])->name('sala.edit');
     Route::delete('/sala/{id}', [App\Http\Controllers\SalaController::class, 'destroy'])->name('sala.destroy');
+
+    Route::resource('regra', App\Http\Controllers\RegrasController::class);
 
     //fechar
     Route::resource('fechar', App\Http\Controllers\FecharController::class);

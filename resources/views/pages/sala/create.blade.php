@@ -4,6 +4,12 @@
 
 @section('content')
 
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="main">
     <div class="card">
         <div class="card-body">
@@ -59,15 +65,15 @@
             <div class="modal-body">
                 <h1>Criar nova regra</h1>
                 
-                <form action="" method="post" class="p-3"> @csrf
+                <form action="{{ route('regra.store') }}" method="post" class="p-3"> @csrf
                     <div class="form-group row">
                         <label for="duration">{{ __('Time') }}</label>
-                        <input type="number" class="form-control" name="duration" id="duration" min=0 required>
+                        <input type="number" class="form-control" name="tempo" id="tempo" min=0 required>
                     </div>
 
                     <div class="form-group row">
                         <label for="score">{{ __('Score') }}</label>
-                        <input type="number" class="form-control" name="score" id="score" min=0 required>
+                        <input type="number" class="form-control" name="pontMax" id="pontMax" min=0 required>
                     </div>
 
                     <div class="form-group row">
