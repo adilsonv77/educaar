@@ -287,5 +287,23 @@ AND u.id = 8
  
        return $sql;   
     }
+
+    public static function getTurmasDisponiveisParaSala(int $profId) {
+        $sql = DB::table('contents')
+            ->join('disciplinas', 'disciplinas.id', '=', 'contents.disciplina_id')
+            ->join('turmas_modelos', 'turmas_modelos.id', '=', 'contents.turma_modelo_id')
+            ->join('turmas_disciplinas', 'turmas_disciplinas.disciplina_id', '=', 'disciplinas.id')
+            ->join('turmas', function($join) {
+                $join->on('turmas.id', '=', 'turmas_disciplinas.turma_id');
+                $join->on('turmas.turma_modelo_id', '=', 'turmas_modelos.id');
+            })
+        ->where('contents.user_id', $profId)
+        ->where('turmas_disciplinas.professor_id', $profId)
+        ->select('turmas.*')
+        ->distinct()
+        ->get();
+
+        return $sql;
+    }
 }
 ?>

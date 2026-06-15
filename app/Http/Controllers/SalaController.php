@@ -8,6 +8,8 @@ use App\Http\Requests\StoreSalaRequest;
 use App\Http\Requests\UpdateSalaRequest;
 use App\Models\Regras;
 use Illuminate\Http\Request;
+use App\DAO\TurmaDAO;
+use Illuminate\Support\Facades\Auth;
 
 class SalaController extends Controller
 {
@@ -32,9 +34,10 @@ class SalaController extends Controller
     {
         $titulo = 'Salas';
         $rules = Regras::all();
-        $jogoId = $request('content');
+        $jogoId = $request->content;
+        $classes = TurmaDAO::getTurmasDisponiveisParaSala(Auth::id());
 
-        return view('pages.sala.create', compact('rules', 'titulo', 'jogoId'));
+        return view('pages.sala.create', compact('rules', 'titulo', 'jogoId', 'classes'));
     }
 
     /**
@@ -45,17 +48,16 @@ class SalaController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
         $data = $request->validate([
-            'name' => 'string|min:3|max:255|required',
-            'rules' => 'integer|min:0|required',
-            'jogo_id' => 'integer|min:0|required'
+            'nome' => 'string|min:3|max:255|required',
+            'regra_id' => 'integer|min:0|required',
+            'jogo_id' => 'integer|min:0|required',
+            'turma_id' => 'integer|min:0|required'
         ]);
-
-        Sala::create($data);
-        dd('aaaa');
         
-        return redirect()->back();
+        Sala::create($data);
+
+        return redirect()->route('sala.index')->with('success', 'Sala criada!');
     }
 
     /**

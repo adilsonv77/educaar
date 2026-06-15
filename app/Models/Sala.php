@@ -11,7 +11,7 @@ class Sala extends Model
 
     protected $fillable = [
         'jogo_id',
-        'regras_id',
+        'regra_id',
         'turma_id',
         'nome',
         'aberta'

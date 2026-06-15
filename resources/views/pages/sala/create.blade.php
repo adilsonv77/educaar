@@ -12,7 +12,18 @@
 
                 <div class="form-group row">
                     <label for="name">{{ __('Name') }}</label>
-                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" required autofocus>
+                    <input type="text" name="nome" id="nome" class="form-control @error('name') is-invalid @enderror" required autofocus>
+                </div>
+
+                <div class="form-group row">
+                    <label for="class">{{ __('Class') }}</label>
+                    <select name="turma_id" id="turma_id" class="form-control" required>
+                        @foreach($classes as $class)
+                            <option value={{ $class->id }}>
+                                {{ $class->nome }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-group row">
@@ -23,7 +34,7 @@
                                 + {{ __('New Rule') }}
                             </button>
                         </div>
-                        <select name="rules" id="rules" class="form-control" required>
+                        <select name="regra_id" id="regra_id" class="form-control" required>
                             @foreach($rules as $rule)
                                 <option value={{ $rule->id }}>
                                     {{ $rule->pontMax }} pontos | {{ $rule->tempo }} segundos
