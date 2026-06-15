@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateSalaRequest;
 use App\Models\Regras;
 use Illuminate\Http\Request;
 use App\DAO\TurmaDAO;
+use App\DAO\SalaDAO;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Jogo;
 use App\Models\Turma;
@@ -24,7 +25,7 @@ class SalaController extends Controller
     {
         $jogoId = $request->input('jogo_id');
         $jogo = Jogo::find($jogoId);
-        $salas = Sala::where('jogo_id', $jogoId)->get();
+        $salas = SalaDAO::buscarSalasENomeTurma($jogoId);
         $titulo = 'Salas';
         return view('pages.sala.index', compact('salas', 'titulo', 'jogo'));
     }
