@@ -50,6 +50,9 @@ ADD COLUMN avatar VARCHAR(400) DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS jogos (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   content_id BIGINT UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  
   FOREIGN KEY (content_id) REFERENCES contents(id) ON DELETE CASCADE
 );
 
@@ -90,5 +93,9 @@ CREATE TABLE `random_sorts` (
   `content_id` bigint UNSIGNED NOT NULL,
   `sort` char(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`content_id`) REFERENCES `contents`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;

@@ -191,4 +191,11 @@ class ContentDAO
             ->where('id', $contentId)
             ->value('sort_activities');
     }
+
+    public static function buscarConteudosOrdenadosAleatoriamente(int $profId){
+        return DB::table('contents')
+            ->where('user_id', $profId)
+            ->where('sort_activities', 2)
+            ->get();
+    }
 }

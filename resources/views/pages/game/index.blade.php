@@ -12,7 +12,6 @@
                         <thead>
                             <tr style="text-align: center;">
                                 <th style="text-align: left;">{{ __('Name') }}</th>
-                                <th>{{ __('Class') }}</th>
                                 <th>{{ __('Parties') }}</th>
                                 <th>{{ __('Create Party') }}</th>
                                 <th>{{ __('Delete') }}</th>
@@ -22,18 +21,15 @@
 
                             @foreach ($jogos as $jogo)
                                 
-                                
                                 <tr style="text-align: center;">
 
                                     <td style="text-align: left;">{{ $jogo->content->name }}</td>
-
-                                    <td>{{ $jogo->content->turma_name }}</td>
 
                                     <td>
                                         <form action="{{ route('sala.index') }}">
                                             @csrf
                                             <input type="hidden" name="content" value="{{ $jogo->id }}">
-                                            <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i></button>
+                                            <button type="submit" class="btn btn-primary"><i class="bi bi-collection"></i></button>
                                         </form>
                                     </td>
 
@@ -63,7 +59,7 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-body">
-                                                <h3>{{ __('Delete the content :content', ["content" => $jogo->content_name]) }} </h3>
+                                                <h3>{{ __('Delete the content :content', ["content" => $jogo->content->name]) }} </h3>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
