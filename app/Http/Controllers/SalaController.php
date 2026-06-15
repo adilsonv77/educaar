@@ -10,6 +10,7 @@ use App\Models\Regras;
 use Illuminate\Http\Request;
 use App\DAO\TurmaDAO;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Jogo;
 
 class SalaController extends Controller
 {
@@ -21,9 +22,10 @@ class SalaController extends Controller
     public function index(Request $request)
     {
         $jogoId = $request->input('jogo_id');
+        $jogo = Jogo::find($jogoId);
         $salas = Sala::where('jogo_id', $jogoId)->get();
         $titulo = 'Salas';
-        return view('pages.sala.index', compact('salas', 'titulo'));
+        return view('pages.sala.index', compact('salas', 'titulo', 'jogo'));
     }
 
     /**
