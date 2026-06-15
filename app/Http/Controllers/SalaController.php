@@ -16,7 +16,9 @@ class SalaController extends Controller
      */
     public function index()
     {
-        //
+        $salas = Sala::all();
+        $titulo = 'Salas';
+        return view('pages.sala.index', compact('salas', 'titulo'));
     }
 
     /**
@@ -26,7 +28,8 @@ class SalaController extends Controller
      */
     public function create()
     {
-        //
+        $titulo = 'Criar Sala';
+        return view('pages.sala.create', compact('titulo'));
     }
 
     /**

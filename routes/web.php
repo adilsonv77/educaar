@@ -157,6 +157,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/game/edit/{id}', [App\Http\Controllers\JogoController::class, 'edit'])->name('game.edit');
     Route::delete('/game/{id}', [App\Http\Controllers\JogoController::class, 'destroy'])->name('game.destroy');
 
+    //sala
+    Route::resource('sala', App\Http\Controllers\SalaController::class);
+    Route::get('/sala', [App\Http\Controllers\SalaController::class, 'index'])->name('sala.index');
+    Route::post('/sala/store', [App\Http\Controllers\SalaController::class, 'store'])->name('sala.store');
+    Route::get('/sala/edit/{id}', [App\Http\Controllers\SalaController::class, 'edit'])->name('sala.edit');
+    Route::delete('/sala/{id}', [App\Http\Controllers\SalaController::class, 'destroy'])->name('sala.destroy');
 
     //fechar
     Route::resource('fechar', App\Http\Controllers\FecharController::class);

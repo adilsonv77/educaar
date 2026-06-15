@@ -5,6 +5,7 @@
 
   "===== COMMON ACTIONS =====": "===== AÇÕES COMUNS =====",
   "Save": "Salvar",
+  "Create Party": "Criar Sala",
   "Edit": "Editar",
   "Delete": "Excluir",
   "Clone": "Clonar",
@@ -20,6 +21,7 @@
   "Compiling": "Compilando",
   "Filter": "Filtrar",
   "Back": "&laquo; Anterior",
+  "Select": "Selecionar",
   "Next": "Próximo &raquo;",
   "Import": "Importar",
   "Confirm": "Confirmar",
@@ -77,6 +79,7 @@
   "School Years": "Anos Letivos",
   "Registration": "Matrícula",
   "Registrations": "Matrículas",
+  "Parties": "Salas",
   "Mural": "Mural",
   "Murals": "Murais",
   "Access": "Acesso",
@@ -126,6 +129,9 @@
   "Questionnaire" : "Questionário",
   "Questionnaires" : "Questionários",
   "No activities registered": "Nenhuma atividade cadastrada",
+
+"===== GAME MANAGEMENT =====": "===== GESTÃO DE JOGOS =====",
+  "No Games": "Sem Jogos",
 
   "===== RANKING MANAGEMENT =====": "===== GESTÃO DE RANKING =====",
   "Ranking of": "Ranking de",

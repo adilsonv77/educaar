@@ -17,13 +17,14 @@ class JogoController extends Controller
 
     public function create()
     {
-        return view('pages.game.create');
+        $titulo = 'Criar Jogo';
+        return view('pages.game.create', compact('titulo'));
     }
 
     public function store(Request $request)
     {
         $jogo = Jogo::create($request->all());
-        return redirect()->route('games.index');
+        return redirect()->route('game.index');
     }
 
     public function show(Jogo $jogo)

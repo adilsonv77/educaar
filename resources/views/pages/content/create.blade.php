@@ -83,15 +83,6 @@
                     </div>
 
                     @endif
-                    {{-- Essa parte foi transferida para o Livewire content-activities-order  
-                    @if(Route::CurrentRouteName() == 'content.edit')
-                        @if(isset($id) && $content->sort_activities)
-                            <div class="mt-4">
-                                @livewire('content-activities-order', ['contentId' => $content->id])
-                            </div>
-                        @endif
-                    @endif
-                    --}}
                           
                     @if (session('type') == 'admin')
                     <livewire:discporturma :turma="$turma" :disciplinaKey="$disciplina"/>
