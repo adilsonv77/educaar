@@ -152,7 +152,8 @@ Route::middleware(['auth'])->group(function () {
 
     //jogo
     Route::resource('game', App\Http\Controllers\JogoController::class);
-    Route::get('/game/store', [App\Http\Controllers\JogoController::class, 'store'])->name('game.store');
+    Route::get('/game', [App\Http\Controllers\JogoController::class, 'index'])->name('game.index');
+    Route::post('/game/store', [App\Http\Controllers\JogoController::class, 'store'])->name('game.store');
     Route::get('/game/edit/{id}', [App\Http\Controllers\JogoController::class, 'edit'])->name('game.edit');
     Route::delete('/game/{id}', [App\Http\Controllers\JogoController::class, 'destroy'])->name('game.destroy');
 

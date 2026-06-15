@@ -11,12 +11,13 @@ class JogoController extends Controller
     public function index()
     {
         $jogos = Jogo::all();
-        return view('game.index', compact('jogos'));
+        $titulo = 'Jogos';
+        return view('pages.game.index', compact('jogos', 'titulo'));
     }
 
     public function create()
     {
-        return view('game.create');
+        return view('pages.game.create');
     }
 
     public function store(Request $request)
