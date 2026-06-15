@@ -184,7 +184,7 @@
                         </button>
 
                         @if($hintContent ?? false)
-                            <button id="hintButton" class="btn btn-warning" type="button">
+                            <button id="hintButton" class="btn btn-warning mr-1 ml-1" style="width: 85%; height: 51.2px;" type="button">
                                 <span><i style="color:#ffffff;" class="bi bi-question"></i></span>
                             </button>
                         @endif
