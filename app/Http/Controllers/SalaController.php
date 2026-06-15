@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\DAO\TurmaDAO;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Jogo;
+use App\Models\Turma;
 
 class SalaController extends Controller
 {
@@ -51,13 +52,14 @@ class SalaController extends Controller
      */
     public function store(Request $request)
     {
+
         $data = $request->validate([
             'nome' => 'string|min:3|max:255|required',
             'regra_id' => 'integer|min:0|required',
             'jogo_id' => 'integer|min:0|required',
             'turma_id' => 'integer|min:0|required'
         ]);
-        
+
         Sala::create($data);
 
         return redirect()->route('sala.index')->with('success', 'Sala criada!');
