@@ -54,7 +54,7 @@
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Model Class') }}</th>
                                 <th>{{ __('Students') }}</th>
-                                <th>{{__('Students')  }}</th>
+                                <th>{{__('Subjects')  }}</th>
                                 <th>{{ __('Edit') }}</th>
                                 <th>{{ __('Delete') }}</th>
                             </tr>
