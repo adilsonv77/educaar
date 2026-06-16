@@ -592,7 +592,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   //Inicia o projeto
-  start(true);
+  if (window.__jogoPodeComecar) {
+    // Modo Solo (Normal): Liga a câmera na hora, sistema antigo continua intacto!
+    start(true);
+} else {
+    // Modo Jogo: Fica esperando o Livewire gritar "jogo-comecou"
+    document.addEventListener('jogo-comecou', () => {
+        console.log("O professor iniciou o jogo! Ligando a câmera AR...");
+        window.__jogoPodeComecar = true;
+        start(true); 
+    });
+}
 
   document.addEventListener('touchmove', (event) => {
     if (event.scale !== 1) {

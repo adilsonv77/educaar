@@ -37,9 +37,15 @@
                                 </p>
                             </div>
 
-                            <button class="btn btn-primary px-5 mt-4 shadow-sm">
-                                Começar
-                            </button>
+
+                            <form action="{{ route('sala.comecar', $sala->id) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="iniciadorSala" value="{{ $sala->id }}">
+                                <button type="submit" class="btn btn-primary px-5 mt-4 shadow-sm" {{ $sala->aberta ? 'disabled' : '' }}>
+                                    <i class="bi bi-play-fill"></i> Começar
+                                </button>
+                            </form>
+                            
                         </div>
                     </div>
 

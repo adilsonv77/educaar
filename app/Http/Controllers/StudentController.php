@@ -19,6 +19,7 @@ use App\DAO\StudentAppDAO;
 use App\DAO\PainelDAO;
 use App\DAO\MuralDAO;
 use App\DAO\QuestionDAO;
+use App\DAO\JogoDAO;
 use App\Models\ArProgress;
 use App\Models\RandomSort;
 
@@ -118,6 +119,15 @@ class StudentController extends Controller
         $content_id = $request->id == null ? session()->get("content_id") : $request->id;
         $content = Content::find($content_id);
 
+        $turmaAluno = StudentAppDAO::buscarTurmaAluno(Auth::user()->id);
+
+        $jogo = JogoDAO::buscarJogoConteudo($content_id);
+        $isJogo = false;
+
+        if($jogo){
+            $isJogo = true;
+        }
+
         if($content->sort_activities == 2) {
             $this->createRandomSort($content_id);
         }
@@ -196,7 +206,7 @@ class StudentController extends Controller
     
         $disciplina = session()->get("disciplina");
         $rota = route("student.conteudos") . "?id=" . $disciplina;
-        return view('student.ar', compact('activities', 'rota','murais','panels','buttons', 'content', 'progress'));
+        return view('student.ar', compact('activities', 'rota','murais','panels','buttons', 'content', 'progress', 'turmaAluno', 'isJogo'));
     }
 
     public function atualizarProgressoConteudoOrdenado(Request $request){

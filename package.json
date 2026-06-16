@@ -1,6 +1,6 @@
 {
   "dependencies": {
+    "pusher-js": "^8.5.0",
     "trumbowyg": "^2.31.0"
   }
 }
-

@@ -76,7 +76,7 @@ class SalaController extends Controller
      * @param  \App\Models\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function enter(int $salaId){
+    public function enter($salaId){
 
         $sala = SalaDAO::buscarInfosSala($salaId);
         if (!$sala) {
@@ -86,13 +86,13 @@ class SalaController extends Controller
         return view('pages.sala.enter', compact('sala'));
     }
 
-    public function show(int $salaId){
+    public function show($salaId){
         $results = SalaDAO::buscarPontuacoesSala($salaId);
         $id_jogo = $results->first() ? $results->first()->jogo_id : null;
         return view('pages.sala.results', compact('results', 'id_jogo'));
     }
 
-    public function resultsDestroy(int $resultId){
+    public function resultsDestroy($resultId){
         $result = SalaDAO::buscarResultadoPorId($resultId);
         if (!$result) {
             return redirect()->back()->with('error', 'Resultado não encontrado.');
@@ -100,6 +100,25 @@ class SalaController extends Controller
 
         SalaDAO::deletarResultado($resultId);
         return redirect()->route('sala.index')->with('success', 'Resultado deletado com sucesso.');
+    }
+
+    public function comecarJogo($id){
+
+        $sala = Sala::find($id);
+        $sala->aberta = true;
+        $sala->started_at = now();
+        $sala->save();
+
+        return redirect()->back()->with('success', 'Jogo iniciado!');
+    }
+
+    public function terminarJogo($id){
+
+        $sala = Sala::find($id);
+        $sala->aberta = false;
+        $sala->save();
+
+        return redirect()->back()->with('success', 'Jogo terminado!');
     }
 
     /**
@@ -145,7 +164,7 @@ class SalaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $salaId)
+    public function destroy($salaId)
     {
         $sala = Sala::find($salaId);
         $sala->delete();

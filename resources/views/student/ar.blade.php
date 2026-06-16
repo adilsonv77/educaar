@@ -205,6 +205,13 @@
 @endsection
 
 @section('content')
+
+@if(isset($isJogo) && $isJogo)
+    <livewire:sala-espera :contentId="$content->id" :turmaId="$turmaDoAluno->id" />
+
+    <livewire:monitor-jogo :contentId="$content->id" :turmaId="$turmaDoAluno->id" />
+@endif
+
 <span id="mind" style="display: none;">/mind/{{session()->get('content_id')}}.mind</span>
 
 <script>
@@ -305,6 +312,8 @@
 <script>
     window.__proximaAtividadeLiberada = {{ $progress->next_position ?? 1 }};
     window.__content_id = {{ $content->id }};
+
+    window.__jogoPodeComecar = {{ (isset($isJogo) && $isJogo) ? 'false' : 'true' }};
 </script>
 
 <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>

@@ -17,6 +17,11 @@ class Sala extends Model
         'aberta'
     ];
 
+    protected $casts = [
+        'aberta' => 'boolean',
+        'started_at' => 'datetime',
+    ];
+
     protected $table = 'salas';
 
     public function jogo()
