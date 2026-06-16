@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS salas (
   FOREIGN KEY (turma_id) REFERENCES turmas(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS pontuacoesSalas(
+CREATE TABLE IF NOT EXISTS pontuacao_salas(
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   aluno_id BIGINT UNSIGNED NOT NULL,
   sala_id BIGINT UNSIGNED NOT NULL,
@@ -102,3 +102,18 @@ CREATE TABLE `random_sorts` (
 
 ALTER TABLE salas
 ADD COLUMN started_at TIMESTAMP NULL;
+
+CREATE TABLE IF NOT EXISTS `sala_aluno` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `sala_id` BIGINT UNSIGNED NOT NULL,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `created_at` TIMESTAMP NULL DEFAULT NULL,
+    `updated_at` TIMESTAMP NULL DEFAULT NULL,
+    
+    PRIMARY KEY (`id`),
+    
+    UNIQUE KEY `sala_aluno_sala_id_user_id_unique` (`sala_id`, `user_id`),
+    
+    CONSTRAINT `sala_aluno_sala_id_foreign` FOREIGN KEY (`sala_id`) REFERENCES `salas` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `sala_aluno_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+);

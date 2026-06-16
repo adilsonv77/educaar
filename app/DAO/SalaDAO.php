@@ -15,28 +15,28 @@ class SalaDAO {
     }
 
     public static function buscarPontuacoesSala($salaId){
-        return DB::table('pontuacoesSalas')
-            ->join('users', 'pontuacoesSalas.aluno_id', '=', 'users.id')
-            ->join('salas', 'pontuacoesSalas.sala_id', '=', 'salas.id')
-            ->select('pontuacoesSalas.*', 'users.name as nome_aluno', 'salas.jogo_id as jogo_id')
+        return DB::table('pontuacao_salas')
+            ->join('users', 'pontuacao_salas.aluno_id', '=', 'users.id')
+            ->join('salas', 'pontuacao_salas.sala_id', '=', 'salas.id')
+            ->select('pontuacao_salas.*', 'users.name as nome_aluno', 'salas.jogo_id as jogo_id')
             ->where('sala_id', $salaId)
             
             ->get();
     }
 
     public static function buscarResultadoPorId($resultId){
-        $result = DB::table('pontuacoesSalas')
-            ->join('users', 'pontuacoesSalas.aluno_id', '=', 'users.id')
-            ->join('salas', 'pontuacoesSalas.sala_id', '=', 'salas.id')
-            ->select('pontuacoesSalas.*', 'users.name as nome_aluno', 'salas.jogo_id as jogo_id')
-            ->where('pontuacoesSalas.id', $resultId)
+        $result = DB::table('pontuacao_salas')
+            ->join('users', 'pontuacao_salas.aluno_id', '=', 'users.id')
+            ->join('salas', 'pontuacao_salas.sala_id', '=', 'salas.id')
+            ->select('pontuacao_salas.*', 'users.name as nome_aluno', 'salas.jogo_id as jogo_id')
+            ->where('pontuacao_salas.id', $resultId)
             ->first();
 
         return $result;
     }
 
     public static function deletarResultado($resultId){
-        return DB::table('pontuacoesSalas')
+        return DB::table('pontuacao_salas')
             ->where('id', $resultId)
             ->delete();
     }

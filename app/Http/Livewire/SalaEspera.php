@@ -3,8 +3,8 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\Sala; // Adapte
-use App\Models\Jogo; // Adapte
+use App\Models\Sala;
+use App\Models\Jogo; 
 
 class SalaEspera extends Component
 {
@@ -21,6 +21,10 @@ class SalaEspera extends Component
             $sala = Sala::where('jogo_id', $jogo->id)
                         ->where('turma_id', $this->turmaId)
                         ->first();
+
+            if($sala){
+                $sala->alunosPresentes()->syncWithoutDetaching([auth()->id()]);
+            }
 
             if (!$sala) {
                 $this->mensagemStatus = 'Aguarde o professor criar a sala...';

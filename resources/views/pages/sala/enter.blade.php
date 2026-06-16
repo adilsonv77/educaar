@@ -5,6 +5,7 @@
 @section('content')
 
     <livewire:monitor-jogo :contentId="$sala->content_id" :turmaId="$sala->turma_id" />
+    <livewire:lista-presenca :salaId="$sala->id" />
 
     <div class="card border-0 mx-auto"
          style="
@@ -56,7 +57,7 @@
                                 </button>
                             </form>
                         </div>
-                        
+
                         @if(!$sala->aberta && $sala->started_at)
                             <div class="alert alert-warning mt-4 mx-auto text-center" style="max-width: 400px;">
                                 <i class="bi bi-lock-fill"></i> Jogo encerrado. Esta sala não pode ser reaberta.
