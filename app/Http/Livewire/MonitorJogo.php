@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Sala;
@@ -17,7 +17,7 @@ class MonitorJogo extends Component
     {
         $jogo = Jogo::where('content_id', $this->contentId)->first();
         if ($jogo) {
-            return Sala::with('regras')
+            return Sala::with('regra')
                        ->where('jogo_id', $jogo->id)
                        ->where('turma_id', $this->turmaId)
                        ->first();

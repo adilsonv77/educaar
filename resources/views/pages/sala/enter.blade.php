@@ -4,6 +4,8 @@
 
 @section('content')
 
+    <livewire:monitor-jogo :contentId="$sala->content_id" :turmaId="$sala->turma_id" />
+
     <div class="card border-0 mx-auto"
          style="
                 border-radius: 1.25rem;

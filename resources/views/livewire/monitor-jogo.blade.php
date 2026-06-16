@@ -3,16 +3,18 @@
     @if($sala && $sala->aberta && $sala->started_at)
         
         <!-- Faz a checagem no backend a cada 5 segundos -->
-        <div wire:poll.5s="verificarFimDeJogo" style="position: absolute; top: 10px; right: 10px; z-index: 1000; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; font-weight: bold; color: #833B8D; border: 2px solid #833B8D;">
+        <div wire:poll.5s="verificarFimDeJogo" style="position: absolute; top: 120px; right: 10px; z-index: 1000; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; font-weight: bold; color: #833B8D; border: 2px solid #833B8D;">
             <i class="bi bi-stopwatch"></i> <span id="cronometroVisual">Calculando...</span>
         </div>
+
+        
 
         <script>
             // Essa trava impede que o Livewire crie um novo cronômetro a cada 5 segundos
             if (!window.cronometroIniciado) {
                 window.cronometroIniciado = true;
 
-                let tempoTotalSegundos = {{ $sala->regras->tempo }};
+                let tempoTotalSegundos = {{ $sala->regra->tempo }};
                 let segundosPassados = {{ now()->diffInSeconds($sala->started_at) }};
                 let tempoRestante = tempoTotalSegundos - segundosPassados;
 

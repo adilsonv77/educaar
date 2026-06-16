@@ -207,9 +207,9 @@
 @section('content')
 
 @if(isset($isJogo) && $isJogo)
-    <livewire:sala-espera :contentId="$content->id" :turmaId="$turmaDoAluno->id" />
+    <livewire:sala-espera :contentId="$content->id" :turmaId="$turmaAluno->id" />
 
-    <livewire:monitor-jogo :contentId="$content->id" :turmaId="$turmaDoAluno->id" />
+    <livewire:monitor-jogo :contentId="$content->id" :turmaId="$turmaAluno->id" />
 @endif
 
 <span id="mind" style="display: none;">/mind/{{session()->get('content_id')}}.mind</span>

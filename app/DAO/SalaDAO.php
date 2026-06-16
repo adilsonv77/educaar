@@ -47,7 +47,7 @@ class SalaDAO {
             ->join('jogos', 'salas.jogo_id', '=', 'jogos.id')
             ->join('contents', 'jogos.content_id', '=', 'contents.id')
             ->join('regras', 'salas.regra_id', '=', 'regras.id')
-            ->select('salas.*', 'turmas.nome as nome_turma', 'contents.name as nome_conteudo', 'regras.pontMax as pontuacaoMaxima', 'regras.tempo as tempo')
+            ->select('salas.*', 'turmas.nome as nome_turma', 'contents.name as nome_conteudo', 'regras.pontMax as pontuacaoMaxima', 'regras.tempo as tempo', 'contents.id as content_id')
             ->where('salas.id', $salaId)
             ->first();
     }

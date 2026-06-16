@@ -6,8 +6,11 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Jogo;
 
 class JogoDAO {
-    public static function buscarJogoConteudo(int $conteudoId){
-        return Jogo::where('content_id', $conteudoId)->get();
+    public static function buscarJogoConteudoESalaAberta(int $conteudoId){
+        return DB::table('jogos')
+            ->join('contents', 'contents.id', '=', $conteudoId)
+            ->join('salas', 'salas.jogo_id', '=', 'jogos.id')
+            ->where('salas.aberta', 1)->first();    
     }
 
     public static function buscarJogosPorNome($nome) {
@@ -16,6 +19,3 @@ class JogoDAO {
 }
 
 
-
-
-?>
