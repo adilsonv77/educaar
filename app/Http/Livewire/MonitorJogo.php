@@ -11,7 +11,8 @@ class MonitorJogo extends Component
 {
     public $contentId;
     public $turmaId;
-
+    
+    protected $listeners = ['tempoAcabou' => 'verificarFimDeJogo'];
 
     private function getSala()
     {

@@ -48,6 +48,13 @@
                                 </button>
                             </form>
                             
+                            <form action="{{ route('sala.terminar', $sala->id) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="TerminadorSala" value="{{ $sala->id }}">
+                                <button type="submit" id="timerButton" class="btn btn-primary px-5 mt-4 shadow-sm" {{ $sala->aberta ? '' : 'disabled' }}>
+                                    <i class="bi bi-play-fill"></i> Terminar
+                                </button>
+                            </form>
                         </div>
 
                         <div class="card border-0 d-flex flex-column align-items-center py-5 px-4" style="border-radius: 1rem; background: #ffffff; box-shadow: 0 4px 24px rgba(60, 72, 130, 0.10), 0 1.5px 4px rgba(60, 72, 130, 0.07);">
