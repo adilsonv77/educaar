@@ -13,6 +13,7 @@ use App\DAO\SalaDAO;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Jogo;
 use App\Models\Turma;
+use Exception;
 
 class SalaController extends Controller
 {
@@ -27,7 +28,10 @@ class SalaController extends Controller
         $jogo = Jogo::find($jogoId);
         $salas = SalaDAO::buscarSalasENomeTurma($jogoId);
         $titulo = 'Salas';
-        return view('pages.sala.index', compact('salas', 'titulo', 'jogo'));
+        $classes = TurmaDAO::getTurmasDisponiveisParaSala(Auth::id());
+        $rules = Regras::all();
+
+        return view('pages.sala.index', compact('salas', 'titulo', 'jogo', 'jogoId', 'classes', 'rules'));
     }
 
     /**
@@ -63,7 +67,7 @@ class SalaController extends Controller
 
         Sala::create($data);
 
-        return redirect()->route('sala.index')->with('success', 'Sala criada!');
+        return redirect()->route('sala.index', ['jogo_id' => $data['jogo_id']])->with('success', 'Sala criada!');
     }
 
     /**
@@ -101,12 +105,27 @@ class SalaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Sala  $sala
      * @return \Illuminate\Http\Response
      */
-    public function edit(Sala $sala)
+    public function edit(Request $request)
     {
-        //
+        $data = $request->validate([
+            'sala_id' => 'integer|min:0', 
+            'nome' => 'string|min:3|max:255|required',
+            'regra_id' => 'integer|min:0|required',
+            'jogo_id' => 'integer|min:0|required',
+            'turma_id' => 'integer|min:0|required'
+        ]);
+
+        try {
+            $sala = Sala::find($data['sala_id']);
+            $sala->update($data);
+        } catch(Exception $e) {
+            report($e);
+            return redirect()->back()->withInput()->withErrors(['erro' => 'Falha ao editar sala']);
+        }
+
+        return redirect()->route('sala.index', ['jogo_id' => $data['jogo_id']])->with('success', 'Sala editada!');
     }
 
     /**

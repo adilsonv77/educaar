@@ -45,6 +45,10 @@ class RegrasController extends Controller
 
         Regras::create($data);
 
+        if(isset($request->type)) {
+            return redirect()->back()->with('success', 'Regra criada!');
+        }
+
         return redirect()->route('sala.create')->with('success', 'Regra criada!');
     }
 

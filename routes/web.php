@@ -165,7 +165,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/sala/results/destroy/{id}', [App\Http\Controllers\SalaController::class, 'resultsDestroy'])->name('sala.results.destroy');
     Route::get('/sala', [App\Http\Controllers\SalaController::class, 'index'])->name('sala.index');
     Route::post('/sala/store', [App\Http\Controllers\SalaController::class, 'store'])->name('sala.store');
-    Route::get('/sala/edit/{id}', [App\Http\Controllers\SalaController::class, 'edit'])->name('sala.edit');
+    Route::post('/sala/edit/{id}', [App\Http\Controllers\SalaController::class, 'edit'])->name('sala.edit');
     Route::delete('/sala/{id}', [App\Http\Controllers\SalaController::class, 'destroy'])->name('sala.destroy');
 
     Route::resource('regra', App\Http\Controllers\RegrasController::class);
