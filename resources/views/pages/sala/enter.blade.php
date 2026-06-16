@@ -4,35 +4,66 @@
 
 @section('content')
 
-    <div class="ms-2">
-        <button type="button" class="btn btn-info"><i class="bi bi-info-circle-fill"></i></button>
-    </div>
+    <div class="card border-0 mx-auto"
+         style="
+                border-radius: 1.25rem;
+                box-shadow: 0 8px 32px rgba(60, 72, 130, 0.13);">
 
-    <div class="mx-auto">
-        <h3>Jogo {{ $sala->nome_conteudo }}</h3>
-    </div>
+        <div class="card-body p-4">
+            <div class="container-fluid">
+                <div class="row align-items-start">
 
-    <div class="ms-2">
-        <button type="button" class="btn btn-primary">Começar</button>
-    </div>
-    <div class="ms-2">
-        <button type="button" class="btn btn-primary">Terminar</button>
-    </div>
-    
+                    <div class="col-auto">
+                        <div class="p-2">
+                            <button class="btn btn-secondary shadow-sm" data-toggle="modal" data-target="#regras-show">
+                                <i class="bi bi-book"></i>
+                            </button>
+                        </div>
+                    </div>
 
-    <div class="mx-auto">
+                    <div class="col">
+                        <div class="card border-0 d-flex flex-column align-items-center py-5 px-4" style="border-radius: 1rem; background: #ffffff; box-shadow: 0 4px 24px rgba(60, 72, 130, 0.10), 0 1.5px 4px rgba(60, 72, 130, 0.07);">
 
-        
-        <span>Alunos</span>
-        <!-- Isso aqui vai dar trabalho porque depende do aluno entrar na sala pra aparecer o ícone do avatar dele
-        <div class="card">
-            <div class="card-body">
-                <img src="" class="card-img-top rounded-circle mx-auto" style="width: 100px; height: 100px;" alt="avatarAluno">
-                <span>Aqui vai o nome do aluno</span>
+                            <h1 class="mb-4 fw-bold">{{ $sala->nome }}</h1>
+
+                            <div class="align-self-start mb-3 text-muted">
+                                <p class="mb-1">
+                                    <i class="bi bi-controller me-2"></i>
+                                    Jogo: <strong>{{ $sala->nome_conteudo }}</strong>
+                                </p>
+                                <p class="mb-0">
+                                    <i class="bi bi-people me-2"></i>
+                                    Turma: <strong>{{ $sala->nome_turma }} (9\20)</strong>
+                                </p>
+                            </div>
+
+                            <button class="btn btn-primary px-5 mt-4 shadow-sm">
+                                Começar
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-        -->
     </div>
-    
+
+
+    <div class="modal fade" id="regras-show" tabindex="-1" aria-labelledby="regras-show" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title">{{ __('Rules') }}</h5>
+          </div>
+          <div class="modal-body">
+            <p>Pontuação Máxima: {{ $sala->pontuacaoMaxima }}</p>
+            <p>Tempo: {{ $sala->tempo }}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 @endsection
