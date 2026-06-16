@@ -128,25 +128,21 @@
                             </div>
                         </td> -->
                         <td>
-                            <form action="{{ route('sala.destroy', $sala->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-                            </form>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal{{ $sala->id }}"><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>
 
-                    <div class="modal fade" id="modal{{ $jogo->id }}" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="modal{{ $sala->id }}" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-body">
-                                    <h3>{{ __('Delete the content :content', ["content" => $jogo->content->name]) }} </h3>
+                                    <h3>{{ __('Delete the party :party', ["party" => $sala->nome]) }} </h3>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-dismiss="modal">{{ __('Cancel') }}</button>
-                                    <form action="{{ route('game.destroy', $jogo->id) }}" method="POST">
+                                    <form action="{{ route('sala.destroy', $sala->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
