@@ -43,7 +43,7 @@
                             <form action="{{ route('sala.comecar', $sala->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="iniciadorSala" value="{{ $sala->id }}">
-                                <button type="submit" id="timerButton" class="btn btn-primary px-5 mt-4 shadow-sm" {{ $sala->aberta ? 'disabled' : '' }}>
+                                <button type="submit" id="timerButton" class="btn btn-primary px-5 mt-4 shadow-sm" {{ $sala->aberta || $sala->started_at ? 'disabled' : '' }}>
                                     <i class="bi bi-play-fill"></i> Começar
                                 </button>
                             </form>
@@ -51,11 +51,17 @@
                             <form action="{{ route('sala.terminar', $sala->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="TerminadorSala" value="{{ $sala->id }}">
-                                <button type="submit" id="timerButton" class="btn btn-primary px-5 mt-4 shadow-sm" {{ $sala->aberta ? '' : 'disabled' }}>
+                                <button type="submit" id="timerButton" class="btn btn-primary px-5 mt-4 shadow-sm" {{ !$sala->aberta ? 'disabled' : '' }}>
                                     <i class="bi bi-play-fill"></i> Terminar
                                 </button>
                             </form>
                         </div>
+                        
+                        @if(!$sala->aberta && $sala->started_at)
+                            <div class="alert alert-warning mt-4 mx-auto text-center" style="max-width: 400px;">
+                                <i class="bi bi-lock-fill"></i> Jogo encerrado. Esta sala não pode ser reaberta.
+                            </div>
+                        @endif
 
                         <div class="card border-0 d-flex flex-column align-items-center py-5 px-4" style="border-radius: 1rem; background: #ffffff; box-shadow: 0 4px 24px rgba(60, 72, 130, 0.10), 0 1.5px 4px rgba(60, 72, 130, 0.07);">
                             <h1 class="mb-4 fw-bold">{{ __('Students') }}</h1>

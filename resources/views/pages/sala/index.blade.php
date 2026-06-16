@@ -34,7 +34,7 @@
                             <form action="{{ route('sala.enter', $sala->id) }}">
                                 @csrf
                                 <input type="hidden" name="sala_id" value="{{ $sala->id }}">
-                                <button type="submit" class="btn btn-primary"><i class="bi bi-collection"></i></button>
+                                <button type="submit" class="btn btn-primary" {{ $sala->started_at ? 'disabled' : '' }}><i class="bi bi-collection"></i></button>
                             </form>
                         </td>
 
