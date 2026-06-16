@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Sala; // Adapte
@@ -28,7 +28,7 @@ class SalaEspera extends Component
                 $this->mensagemStatus = 'Sala pronta! Aguardando o professor iniciar o jogo...';
             } elseif ($sala->aberta && !$this->jogoIniciado) {
                 $this->jogoIniciado = true;
-                $this->dispatch('jogo-comecou');
+                $this->dispatchBrowserEvent('jogo-comecou');
             }
         }
     }

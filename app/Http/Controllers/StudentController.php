@@ -121,7 +121,7 @@ class StudentController extends Controller
 
         $turmaAluno = StudentAppDAO::buscarTurmaAluno(Auth::user()->id);
 
-        $jogo = JogoDAO::buscarJogoConteudo($content_id);
+        $jogo = JogoDAO::buscarJogoConteudoESalaAberta($content_id);
         $isJogo = false;
 
         if($jogo){

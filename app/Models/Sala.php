@@ -29,7 +29,7 @@ class Sala extends Model
         return $this->belongsTo(Jogo::class);
     }
 
-    public function regras()
+    public function regra()
     {
         return $this->belongsTo(Regras::class);
     }
