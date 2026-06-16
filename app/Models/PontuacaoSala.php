@@ -9,6 +9,8 @@ class PontuacaoSala extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'aluno_id',
         'sala_id',

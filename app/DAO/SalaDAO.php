@@ -52,6 +52,14 @@ class SalaDAO {
             ->first();
     }
 
+    public static function getSalaIDByJogo(int $jogoId) : int {
+        return DB::table('salas')
+            ->join('jogos', 'jogos.id', '=', 'salas.jogo_id')
+            ->where('salas.jogo_id', $jogoId)
+            ->where('salas.aberta', 1)
+            ->value('salas.id');
+    }
+
 }
 
 

@@ -292,7 +292,7 @@
     
 </div>
 
-<livewire:questionario-aluno-form/>
+<livewire:questionario-aluno-form :isJogo="$isJogo"/>
 
 
 @endsection

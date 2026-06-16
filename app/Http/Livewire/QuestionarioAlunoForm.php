@@ -11,6 +11,8 @@ use App\Models\StudentAnswer;
 use App\DAO\QuestionDAO;
 use App\DAO\ActivityDAO;
 use App\DAO\ContentDAO;
+use App\DAO\SalaDAO;
+use App\DAO\JogoDAO;
 use App\Models\ArProgress;
 use App\Models\Content;
 use App\Models\Pontuacao;
@@ -52,6 +54,7 @@ class QuestionarioAlunoForm extends Component
     public $alternativas;
 
     public $hint;
+    public bool $isJogo;
     /*
 - PRECISO TESTAR COMO FUNCIONA COM FORMULÁRIOS JÁ RESPONDIDOS
 */
@@ -290,6 +293,13 @@ class QuestionarioAlunoForm extends Component
                     ['next_position' => $this->proximaPosicaoCalculada ?? 1]
                 );
                 $this->proximaPosicaoCalculada = $progress->next_position + 1;
+
+                if($this->isJogo) {
+                    $jogo = JogoDAO::getJogoByContentId(session()->get('content_id'));
+                    $salaId = SalaDAO::getSalaIDByJogo($jogo->id);
+
+                    $this->emitTo('monitor-jogo', 'atividadeConcluida', Auth::id(), $salaId);
+                }
             } else{
                 $progress = ['next_position' => $this->proximaPosicaoCalculada ?? 1 ];
             }

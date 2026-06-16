@@ -4,6 +4,7 @@ namespace App\DAO;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Jogo;
+use Illuminate\Support\Collection;
 
 class JogoDAO {
     public static function buscarJogoConteudoESalaAberta(int $conteudoId) {
@@ -17,6 +18,12 @@ class JogoDAO {
 
     public static function buscarJogosPorNome($nome) {
         return Jogo::where('name', 'like', "%$nome%")->get();
+    }
+
+    public static function getJogoByContentId(int $contentId) {
+        return DB::table('jogos')
+            ->where('jogos.content_id', $contentId)
+            ->first();
     }
 }
 
