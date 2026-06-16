@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS pontuacao_salas(
 );
 
 CREATE TABLE `random_sorts` (
-  `id` bigint UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint UNSIGNED NOT NULL,
   `content_id` bigint UNSIGNED NOT NULL,
   `sort` char(255) NOT NULL,
