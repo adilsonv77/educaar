@@ -41,12 +41,19 @@
                             <form action="{{ route('sala.comecar', $sala->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="iniciadorSala" value="{{ $sala->id }}">
-                                <button type="submit" class="btn btn-primary px-5 mt-4 shadow-sm" {{ $sala->aberta ? 'disabled' : '' }}>
+                                <button type="submit" id="timerButton" class="btn btn-primary px-5 mt-4 shadow-sm" {{ $sala->aberta ? 'disabled' : '' }}>
                                     <i class="bi bi-play-fill"></i> Começar
                                 </button>
                             </form>
                             
                         </div>
+
+                        <div class="card border-0 d-flex flex-column align-items-center py-5 px-4" style="border-radius: 1rem; background: #ffffff; box-shadow: 0 4px 24px rgba(60, 72, 130, 0.10), 0 1.5px 4px rgba(60, 72, 130, 0.07);">
+                            <h1 class="mb-4 fw-bold">{{ __('Students') }}</h1>
+
+
+                        </div>
+
                     </div>
 
                 </div>
@@ -71,5 +78,31 @@
         </div>
       </div>
     </div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const el = {
+            timerButton: document.getElementById('timerButton'),
+        }
+
+        let start = true;
+        const updateButtonTimer = () => {
+            if(start) {
+                el.timerButton.innerHTML = '<i class="bi bi-stop-fill"></i> Parar';
+                el.timerButton.classList.replace('btn-start', 'btn-stop');
+                console.log('start');
+            } else {
+                el.timerButton.innerHTML = '<i class="bi bi-play-fill"></i> Começar';
+                el.timerButton.classList.replace( 'btn-stop', 'btn-start');
+                console.log('stop');
+            }
+
+            start = !start;
+        }
+
+        el.timerButton.addEventListener('click', updateButtonTimer);
+    });
+</script>
 
 @endsection
