@@ -99,3 +99,6 @@ CREATE TABLE `random_sorts` (
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`content_id`) REFERENCES `contents`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+ALTER TABLE salas
+ADD COLUMN started_at TIMESTAMP NULL;

@@ -7,7 +7,7 @@ use App\Models\Jogo;
 
 class JogoDAO {
     public static function buscarJogoConteudo(int $conteudoId){
-        return Jogo::where('conteudo_id', $conteudoId)->get();
+        return Jogo::where('content_id', $conteudoId)->get();
     }
 
     public static function buscarJogosPorNome($nome) {
