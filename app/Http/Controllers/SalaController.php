@@ -191,6 +191,8 @@ class SalaController extends Controller
             return redirect()->back()->with('error', 'Sala não encontrada.');
         }
 
+        $id_jogo = $sala->jogo_id;
+
         $contentId = DB::table('jogos')->where('id', $sala->jogo_id)->value('content_id');
 
         $alunosIds = DB::table('pontuacao_salas')
@@ -216,6 +218,6 @@ class SalaController extends Controller
 
         $sala->delete();
 
-        return redirect()->route('sala.index')->with('success', 'Sala, progresso e respostas excluídos com sucesso!');
+        return redirect()->route('sala.index', ['jogo_id' => $id_jogo])->with('success', 'Sala, progresso e respostas excluídos com sucesso!');
     }
 }
