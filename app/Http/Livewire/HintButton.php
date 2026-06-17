@@ -3,7 +3,10 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\Content;
 use App\DAO\ActivityDAO;
+use Illuminate\Support\Facades\DB;
+use App\Models\RandomSort;
 
 class HintButton extends Component {
     public string $hint = '';
@@ -15,6 +18,15 @@ class HintButton extends Component {
     ];
 
     public function mount($activities, int $nextPosition) {
+        $contentId = $activities[1]->content_id;
+        $contentType = DB::table('contents')
+            ->where('id', $contentId)
+            ->value('sort_activities');
+
+        if($contentType === 2) {
+            $activities = $this->syncOrdem($activities, $contentId);
+        }
+
         $this->hint = $activities[$nextPosition-1]->hint ?? '';
     }
 
@@ -35,5 +47,26 @@ class HintButton extends Component {
 
     public function showHint() {
         $this->dispatchBrowserEvent('show-hint-modal');
+    }
+
+    private function syncOrdem($activities, int $contentId) {
+        $randomSort = RandomSort::where('content_id', $contentId)->first();
+        $sortOrder = array_map('trim', explode(',', $randomSort->sort));
+
+        $activitiesByIndex = [];
+        $i = 1;
+        foreach ($activities as $activity) {
+            $activitiesByIndex[$i] = $activity;
+            $i++;
+        }
+
+        $sorted = [];
+        foreach ($sortOrder as $index) {
+            if (isset($activitiesByIndex[$index])) {
+                $sorted[] = $activitiesByIndex[$index];
+            }
+        }
+
+        return $sorted;
     }
 }
