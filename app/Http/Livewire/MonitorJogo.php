@@ -20,7 +20,7 @@ class MonitorJogo extends Component
     public $salaId;
     public $isProfessor = false;
     
-    protected $listeners = ['tempoAcabou' => 'verificarFimDeJogo', 'atividadeConcluida' => 'concluirAtividade', 'calcularPontuacao' => 'calcularPontuacao'];
+    protected $listeners = ['tempoAcabou' => 'verificarFimDeJogo', 'atividadeConcluida' => 'concluirAtividade', 'calcularPontuacao' => 'calcularPontuacao', 'alunoFinalizou' => 'alunoFinalizou'];
 
     public function mount() {
         $sala = $this->getSala();
@@ -107,5 +107,9 @@ class MonitorJogo extends Component
             'sala_id' => $this->salaId,
             'pontuacao' => $pontuacao
         ]);
+    }
+
+    public function alunoFinalizou() {
+        $this->calcularPontuacao();
     }
 }
