@@ -18,6 +18,7 @@ class MonitorJogo extends Component
     public $pontuacaoMaxima;
     public $userId;
     public $salaId;
+    public $isProfessor = false;
     
     protected $listeners = ['tempoAcabou' => 'verificarFimDeJogo', 'atividadeConcluida' => 'concluirAtividade', 'calcularPontuacao' => 'calcularPontuacao'];
 
@@ -51,9 +52,9 @@ class MonitorJogo extends Component
             $acabou = true;
         } 
 
-        elseif ($sala->started_at && $sala->regras) {
+        elseif ($sala->started_at && $sala->regra) {
 
-            $horaFim = Carbon::parse($sala->started_at)->addSeconds($sala->regras->tempo);
+            $horaFim = Carbon::parse($sala->started_at)->addSeconds($sala->regra->tempo);
             
             if (now()->greaterThanOrEqualTo($horaFim)) {
                 $acabou = true;
@@ -63,9 +64,14 @@ class MonitorJogo extends Component
         }
 
         if ($acabou) {
-            $this->calcularPontuacao();
 
-            return redirect()->route('student.conteudos');
+            if (!$this->isProfessor) {
+                $this->calcularPontuacao();
+                return redirect()->route('student.conteudos');
+            }
+            
+
+            return redirect()->route('sala.results', $sala->id);
         }
     }
 

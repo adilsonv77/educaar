@@ -25,14 +25,19 @@ class SalaDAO {
     }
 
     public static function buscarResultadoPorId($resultId){
-        $result = DB::table('pontuacao_salas')
-            ->join('users', 'pontuacao_salas.aluno_id', '=', 'users.id')
-            ->join('salas', 'pontuacao_salas.sala_id', '=', 'salas.id')
-            ->select('pontuacao_salas.*', 'users.name as nome_aluno', 'salas.jogo_id as jogo_id')
-            ->where('pontuacao_salas.id', $resultId)
-            ->first();
-
-        return $result;
+        return DB::table('pontuacao_salas')
+        ->join('users', 'pontuacao_salas.aluno_id', '=', 'users.id')
+        ->join('salas', 'pontuacao_salas.sala_id', '=', 'salas.id')
+        ->join('jogos', 'salas.jogo_id', '=', 'jogos.id')
+        ->select(
+            'pontuacao_salas.id',
+            'pontuacao_salas.aluno_id',
+            'pontuacao_salas.sala_id',
+            'users.name as nome_aluno',
+            'jogos.content_id'
+        )
+        ->where('pontuacao_salas.id', $resultId)
+        ->first();
     }
 
     public static function deletarResultado($resultId){

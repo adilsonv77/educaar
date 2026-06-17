@@ -9,14 +9,15 @@
             if (!window.cronometroIniciado) {
                 window.cronometroIniciado = true;
 
-                let tempoTotalSegundos = {{ $sala->regra->tempo }};
-                let segundosPassados = {{ now()->diffInSeconds($sala->started_at) }};
-                let tempoRestante = tempoTotalSegundos - segundosPassados;
+                let horaFim = new Date("{{ \Carbon\Carbon::parse($sala->started_at)->addSeconds($sala->regra->tempo)->toIso8601String() }}").getTime();
 
                 let intervalo = setInterval(function () {
-                    
+                    let agora = new Date().getTime();
+
+                    let distancia = horaFim - agora;
+                    let tempoRestante = Math.floor(distancia / 1000);
+
                     if (tempoRestante > 0) {
-                        tempoRestante--;
                         let minutos = Math.floor(tempoRestante / 60);
                         let segundos = tempoRestante % 60;
                         
@@ -24,11 +25,8 @@
                             String(minutos).padStart(2, '0') + ':' + 
                             String(segundos).padStart(2, '0');
                     } else {
-  
                         document.getElementById('cronometroVisual').innerText = "Tempo Esgotado!";
-
                         clearInterval(intervalo); 
-
                         Livewire.emit('tempoAcabou');
                     }
                     

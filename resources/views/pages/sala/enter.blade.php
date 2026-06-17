@@ -4,8 +4,8 @@
 
 @section('content')
 
-    <livewire:monitor-jogo :contentId="$sala->content_id" :turmaId="$sala->turma_id" />
-    <livewire:lista-presenca :salaId="$sala->id" />
+    <livewire:monitor-jogo :contentId="$sala->content_id" :turmaId="$sala->turma_id" :isProfessor="true" />
+    
 
     <div class="card border-0 mx-auto"
          style="
@@ -36,7 +36,7 @@
                                 </p>
                                 <p class="mb-0">
                                     <i class="bi bi-people me-2"></i>
-                                    Turma: <strong>{{ $sala->nome_turma }} (9\20)</strong>
+                                    Turma: <strong>{{ $sala->nome_turma }}</strong>
                                 </p>
                             </div>
 
@@ -67,7 +67,7 @@
                         <div class="card border-0 d-flex flex-column align-items-center py-5 px-4" style="border-radius: 1rem; background: #ffffff; box-shadow: 0 4px 24px rgba(60, 72, 130, 0.10), 0 1.5px 4px rgba(60, 72, 130, 0.07);">
                             <h1 class="mb-4 fw-bold">{{ __('Students') }}</h1>
 
-
+                            <livewire:lista-presenca :salaId="$sala->id" />
                         </div>
 
                     </div>

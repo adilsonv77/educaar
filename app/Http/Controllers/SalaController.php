@@ -10,8 +10,11 @@ use App\Models\Regras;
 use Illuminate\Http\Request;
 use App\DAO\TurmaDAO;
 use App\DAO\SalaDAO;
+use App\Models\ArProgress;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Jogo;
+use App\Models\StudentAnswer;
+use Illuminate\Support\Facades\DB;
 use App\Models\Turma;
 use Exception;
 
@@ -92,14 +95,30 @@ class SalaController extends Controller
         return view('pages.sala.results', compact('results', 'id_jogo'));
     }
 
-    public function resultsDestroy($resultId){
+    public function resultsDestroy($resultId) {
+        
         $result = SalaDAO::buscarResultadoPorId($resultId);
+        
         if (!$result) {
             return redirect()->back()->with('error', 'Resultado não encontrado.');
         }
 
+        DB::table('student_answers')
+            ->join('activities', 'student_answers.activity_id', '=', 'activities.id')
+            ->where('activities.content_id', $result->content_id)
+            ->where('student_answers.user_id', $result->aluno_id)
+            ->delete(); 
+
+        DB::table('ar_progress')
+            ->where('content_id', $result->content_id)
+            ->where('student_id', $result->aluno_id)
+            ->delete();
+
+        
         SalaDAO::deletarResultado($resultId);
-        return redirect()->route('sala.index')->with('success', 'Resultado deletado com sucesso.');
+
+        
+        return redirect()->back()->with('success', 'Resultado, respostas e progresso do aluno limpos com sucesso.');
     }
 
     public function comecarJogo($id){
