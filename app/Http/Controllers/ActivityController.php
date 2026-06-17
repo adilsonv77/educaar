@@ -294,6 +294,13 @@ class ActivityController extends Controller
             //Edita modelo 3D
             $activity = Activity::find($data['id']);
 
+            if (isset($data['content_id']) && $data['content_id'] != $activity->content_id) {
+                $newContent = Content::find($data['content_id']);
+                if ($newContent && in_array($newContent->sort_activities, [1, 2])) {
+                    $data['refeita'] = 1;
+                }
+            }
+
             if ($zipdir !== "") {
                 self::deleteDir(public_path('modelos3d/' . $activity->id));
                 $data['glb'] = $activity->id . "/" . $achou;
@@ -313,6 +320,13 @@ class ActivityController extends Controller
             $activity = Activity::find($data['id']);
             if (array_key_exists('scene', $data))
                 $data['mural_id'] = $data['scene'];
+
+            if (isset($data['content_id']) && $data['content_id'] != $activity->content_id) {
+                $newContent = Content::find($data['content_id']);
+                if ($newContent && in_array($newContent->sort_activities, [1, 2])) {
+                    $data['refeita'] = 1;
+                }
+            }
 
             //Deleta o arquivo GLB
             if (!empty($activity->glb)) {
