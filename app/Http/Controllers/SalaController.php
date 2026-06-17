@@ -183,10 +183,39 @@ class SalaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($salaId)
-    {
+    public function destroy($salaId){
+
         $sala = Sala::find($salaId);
+
+        if (!$sala) {
+            return redirect()->back()->with('error', 'Sala não encontrada.');
+        }
+
+        $contentId = DB::table('jogos')->where('id', $sala->jogo_id)->value('content_id');
+
+        $alunosIds = DB::table('pontuacao_salas')
+            ->where('sala_id', $salaId)
+            ->pluck('aluno_id')
+            ->toArray();
+
+        if (!empty($alunosIds) && $contentId) {
+
+            DB::table('student_answers')
+                ->join('activities', 'student_answers.activity_id', '=', 'activities.id')
+                ->where('activities.content_id', $contentId)
+                ->whereIn('student_answers.user_id', $alunosIds)
+                ->delete();
+
+            DB::table('ar_progress')
+                ->where('content_id', $contentId)
+                ->whereIn('student_id', $alunosIds)
+                ->delete();
+        }
+
+        DB::table('pontuacao_salas')->where('sala_id', $salaId)->delete();
+
         $sala->delete();
-        return redirect()->back()->with('success', 'Sala excluída');
+
+        return redirect()->route('sala.index')->with('success', 'Sala, progresso e respostas excluídos com sucesso!');
     }
 }
