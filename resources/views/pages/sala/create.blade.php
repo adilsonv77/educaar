@@ -67,7 +67,7 @@
                 
                 <form action="{{ route('regra.store') }}" method="post" class="p-3"> @csrf
                     <div class="form-group row">
-                        <label for="duration">{{ __('Time') }}</label>
+                        <label for="duration">{{ __('Time Limit') }}</label>
                         <input type="number" class="form-control" name="tempo" id="tempo" min=0 required>
                     </div>
 
