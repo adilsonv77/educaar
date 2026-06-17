@@ -177,13 +177,14 @@
                                     <span class="nav-text">Murais</span>
                                 </a>
                             </li>
--->
-                            <li>
+-->                          
+                            <!-- <li>
                                 <a class="ai-icon" href="{{ route('mural.index') }}" aria-expanded="false">
                                     <i class="bi-bricks"></i>
                                     <span class="nav-text">{{ __('Murals') }}</span>
                                 </a>
-                            </li>
+                            </li> -->
+
                             <li><a class="ai-icon" href="{{ route('turmas.listarTurmasAlunosProf') }}" aria-expanded="false">
                                     <i class="flaticon-381-user-9"></i>
                                     <span class="nav-text">{{ __('Students') }}</span>
