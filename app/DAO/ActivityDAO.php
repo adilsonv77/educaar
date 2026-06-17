@@ -197,22 +197,21 @@ class ActivityDAO
      * Retorna '' caso hint, no banco de dados, for nulo.
     */
     public static function getNextHintRandom(int $contentId, int $activityId) : string {
-        $sort = explode(',', DB::table('random_sorts')
+        $sortRaw = DB::table('random_sorts')
             ->where('user_id', Auth::id())
             ->where('content_id', $contentId)
-            ->value('sort'));
+            ->value('sort');
+
+        if($sortRaw === null) return '';
             
+        $sort = explode(',', $sortRaw);
+
         $positionBase = DB::table('activities')
             ->where('id', $activityId)
             ->value('position');
 
-        $positionSorted = 0;
-        for($x = 0; $x < count($sort); $x++) {
-            if($sort[$x] == $positionBase) {
-                $positionSorted = $x;
-                break;
-            }
-        }
+        $positionSorted = array_search($positionBase, $sort);
+        if($positionSorted === false || $positionSorted >= count($sort) - 1) return '';
 
         return DB::table('contents')
             ->join('activities', 'activities.content_id', '=', 'contents.id')
