@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS pontuacao_salas(
   FOREIGN KEY (aluno_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE `random_sorts` (
+CREATE TABLE IF NOT EXISTS `random_sorts` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint UNSIGNED NOT NULL,
   `content_id` bigint UNSIGNED NOT NULL,
