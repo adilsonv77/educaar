@@ -9,6 +9,11 @@
         {{ session('success') }}
     </div>
 @endif
+@if (session('error'))
+    <div class="alert alert-warning">
+        {{ session('error') }}
+    </div>
+@endif
 
 <div class="main">
     <div class="card">
@@ -66,6 +71,8 @@
                 <h1>Criar nova regra</h1>
                 
                 <form action="{{ route('regra.store') }}" method="post" class="p-3"> @csrf
+                    <input type="hidden" name="jogo_id" value="{{ $jogoId }}">
+
                     <div class="form-group row">
                         <label for="duration">{{ __('Time Limit') }}</label>
                         <input type="number" class="form-control" name="tempo" id="tempo" min=0 required>
