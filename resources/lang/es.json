@@ -325,6 +325,7 @@
   "School Name": "Nombre de la Escuela",
   "Standard Teacher": "Profesor Estándar",
 
-    "===== GAME/PARTY =====": "===== JOGO/SALA =====",
-  "New Rule": "Nueva regla"
+    "===== GAME/PARTY =====": "===== JUEGO/SALA =====",
+  "New Rule": "Nueva regla",
+  "Delete the party :party": "Eliminar la sala :party"
 }

@@ -326,6 +326,7 @@
   "Standard Teacher": "Professor Padrão",
 
   "===== GAME/PARTY =====": "===== JOGO/SALA =====",
-  "New Rule": "Nova Regra"
+  "New Rule": "Nova Regra",
+  "Delete the party :party": "Excluir a sala :party"
 
 }
