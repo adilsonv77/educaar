@@ -5,17 +5,20 @@
             <span id="cronometroVisual">Calculando...</span>
         </div>
 
-        <script>
+       <script>
             if (!window.cronometroIniciado) {
                 window.cronometroIniciado = true;
 
-                let horaFim = new Date("{{ \Carbon\Carbon::parse($sala->started_at)->addSeconds($sala->regra->tempo)->toIso8601String() }}").getTime();
+                let tempoRestanteServidor = {{ $sala->regra->tempo - now()->diffInSeconds(\Carbon\Carbon::parse($sala->started_at)) }};
+                
+                let horaInicioLocal = new Date().getTime();
 
                 let intervalo = setInterval(function () {
-                    let agora = new Date().getTime();
 
-                    let distancia = horaFim - agora;
-                    let tempoRestante = Math.floor(distancia / 1000);
+                    let agoraLocal = new Date().getTime();
+                    let segundosDecorridos = Math.floor((agoraLocal - horaInicioLocal) / 1000);
+
+                    let tempoRestante = tempoRestanteServidor - segundosDecorridos;
 
                     if (tempoRestante > 0) {
                         let minutos = Math.floor(tempoRestante / 60);

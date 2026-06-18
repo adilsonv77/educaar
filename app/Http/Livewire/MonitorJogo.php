@@ -26,6 +26,17 @@ class MonitorJogo extends Component
         $sala = $this->getSala();
         $this->tempoMaximo = Regras::find($sala->regra_id)->tempo;
         $this->pontuacaoMaxima = Regras::find($sala->regra_id)->pontMax;
+
+        /* Talvez isso aqui possa resolver o problema do regra_id no futuro, mas pode quebrar o resto do sistema também, preciso estudar essa possibilidade
+        if ($sala && $sala->regra) {
+            $this->tempoMaximo = $sala->regra->tempo;
+            $this->pontuacaoMaxima = $sala->regra->pontMax;
+        } else {
+            $this->tempoMaximo = 0;
+            $this->pontuacaoMaxima = 0;
+        }
+        */
+
     }
 
     private function getSala()
