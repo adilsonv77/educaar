@@ -402,35 +402,37 @@
     </div>
 
     <div wire:ignore.self class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" data-backdrop="static"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document" style="max-height: 90vh; overflow: hidden;">
-            <div class="modal-content">
-                <div class="modal-body">
+        aria-labelledby="exampleModalLabel" aria-hidden="true" style="max-height: 95%; overflow: visible;">
+        <div class="modal-dialog" role="document" style=" display: flex; flex-direction: column; height: 100%;">
+            <div class="modal-content" style="height: 100%;">
+                <div class="modal-body" style="max-height: 150px;">
                     <h1>Respostas salvas!</h1>
                     <p>Acompanhe seus resultados abaixo:</p>
                 </div>
-                <div class="container my-4 max" style="max-height: 60vh; overflow-y: auto;">
-                    @if($pontuacaoAtual != null)
-                        <div class="card mb-3 shadow-sm">
-                            <div class="card-body">
-                                <p class="card-text">
-                                    <strong>Pontuação:</strong> {{$pontuacaoAtual}} Pontos
-                                </p>
-                            </div>
-                        </div>
-                    @endif
-                    @foreach($feedback as $questao)
-                        <div class="card mb-3 shadow-sm">
-                            <div class="card-body">
-                                <p class="card-text mb-3">{{ $questao['question'] }}</p>
-                                <div class="alert alert-primary mb-0 d-flex align-items-center" role="alert">
-                                    <div><strong>Sua resposta:</strong> {{ $questao['alternative_answered'] }}</div>
+                <div class="container mt-1" style="height: 80%; overflow: hidden;">
+                    <div class="container my-4 max" style="max-height: 100%; overflow-y: auto;">
+                        @if($pontuacaoAtual != null)
+                            <div class="card mb-3 shadow-sm">
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <strong>Pontuação:</strong> {{$pontuacaoAtual}} Pontos
+                                    </p>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="modal-footer">
+                        @endif
+                        @foreach($feedback as $questao)
+                            <div class="card mb-3 shadow-sm">
+                                <div class="card-body">
+                                    <p class="card-text mb-3">{{ $questao['question'] }}</p>
+                                    <div class="alert alert-primary mb-0 d-flex align-items-center" role="alert">
+                                        <div><strong>Sua resposta:</strong> {{ $questao['alternative_answered'] }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>      
+                <div class="modal-footer" style="max-height: 20%;">
                     @if($hint !== '')
                         <button type="button" wire:click="hint()" class="btn btn-primary">Pista</button>
                     @else
