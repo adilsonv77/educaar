@@ -403,7 +403,7 @@
 
     <div wire:ignore.self class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" data-backdrop="static"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog" role="document" style="max-height: 90vh; overflow: hidden;">
             <div class="modal-content">
                 <div class="modal-body">
                     <h1>Respostas salvas!</h1>
