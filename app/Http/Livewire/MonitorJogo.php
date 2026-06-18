@@ -102,11 +102,11 @@ class MonitorJogo extends Component
         $tempoGasto = min($tempoGasto, $this->tempoMaximo);
 
         $pontuacao = (1 - (($tempoGasto / $this->tempoMaximo) / 2)) * $this->pontuacaoMaxima;
-        PontuacaoSala::create([
-            'aluno_id' => $this->userId,
-            'sala_id' => $this->salaId,
-            'pontuacao' => $pontuacao
-        ]);
+        PontuacaoSala::updateOrCreate(
+            ['aluno_id' => $this->userId,
+            'sala_id' => $this->salaId],
+            ['pontuacao' => $pontuacao]
+            );
     }
 
     public function alunoFinalizou() {
