@@ -12,7 +12,7 @@
                 let tempoRestanteServidor = {{ $sala->regra->tempo - now()->diffInSeconds(\Carbon\Carbon::parse($sala->started_at)) }};
                 
                 let horaInicioLocal = new Date().getTime();
-
+                
                 let intervalo = setInterval(function () {
 
                     let agoraLocal = new Date().getTime();

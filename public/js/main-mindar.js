@@ -179,26 +179,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const usarModelo = li.getAttribute("mural_id") == 0;
 
       if (usarModelo) {
-        //------ CARREGAR ATIVIDADE DE MODELO 3D ---------------------------------------------------------------------
+        // Mudanca a partir de 19/06/2026 pois crashava o sistema com oito GLBs carregados !!
+		// ------ ATIVIDADE DE MODELO 3D — LAZY LOADING ---------------------------------------------------------------------
+        // O GLB NÃO é carregado aqui. Apenas o marcador é registrado.
+        // O GLB só será baixado quando o aluno apontar a câmera para o marcador.
 
-        const glb = await loadGLTF(li.textContent);
-        const glbScene = glb.scene;
-
-        const box = new THREE.Box3().setFromObject(glbScene);
-        const sceneSize = box.getSize(new THREE.Vector3());
-        const sceneCenter = box.getCenter(new THREE.Vector3());
-
-        // Normaliza e posicionar o objeto
-        var maxAxis = Math.max(sceneSize.x, sceneSize.y, sceneSize.z);
-        glbScene.scale.multiplyScalar(1.0 / maxAxis);
-        box.setFromObject(glbScene);
-        box.getCenter(sceneCenter);
-        box.getSize(sceneSize);
-        glbScene.position.copy(sceneCenter).multiplyScalar(-1);
-
-        let posPermitida = parseInt(li.getAttribute("allowedPosition"));
-        //console.log("Posição permitida: " + posPermitida);
-        
+        const glbPath = li.textContent.trim();
 
         let posAncora = i;
 
@@ -217,12 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const anchor = mindarThree.addAnchor(posAncora);
         //console.log("Posição da âncora: " + posAncora);
          
-        
-        
-        anchor.glb = glb;
         anchor.activityid = li.id.split("_")[1];
         anchor.clazz = li.getAttribute("usar_class");
-        anchor.group.add(glbScene);
+		
+		// Estado do lazy loading
+        anchor.glb = null;          // glb carregado (null até a primeira detecção)
+        anchor.glbContainer = null; // Object3D que envolve a cena do GLB
+        anchor.glbLoading = false;  // evita carregamentos simultâneos
+        anchor.isTargetVisible = false; // rastreia se o marcador ainda está visível
 
         //Tudo o que estiver daqui para baixo, até a adição ao anchor.group, diz respeito ao símbolo de bloqueado
         
@@ -254,7 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         anchor.group.add(blockedMesh);
 
-        anchor.onTargetFound = () => {
+        anchor.onTargetFound = () => { (async () => {
+		      anchor.isTargetVisible = true;
           const actualPosition = parseInt(li.getAttribute('activityPosition'));
           // console.log("chegou no targetfound")
           //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;  
@@ -263,22 +252,61 @@ document.addEventListener('DOMContentLoaded', () => {
           if((is_sort == "1" && proximaAtividadeLiberada < posAncora + 1) || (is_sort == "2" && proximaAtividadeLiberada < actualPosition)) {
             //console.log("Posição não permitida");
 
-            glbScene.visible = false;
-
+            //glbScene.visible = false;
             blockedMesh.visible = true;
-
-
-            
             return;
           } 
 
-
-          glbScene.visible = true;
-          
+          //glbScene.visible = true;
           blockedMesh.visible = false;
 
-          buttonAR.activityid = anchor.activityid;
+          // Carrega o GLB pela primeira vez (lazy loading)
+          if (!anchor.glb && !anchor.glbLoading) {
+            anchor.glbLoading = true;
 
+            let barradeprogresso = document.getElementById("barradeprogresso");
+            barradeprogresso.style.display = "block";
+
+            const gltf = await loadGLTF(glbPath);
+            anchor.glb = gltf;
+
+            const glbScene = gltf.scene;
+
+            // Normaliza e posiciona o objeto
+            const box = new THREE.Box3().setFromObject(glbScene);
+            const sceneSize = box.getSize(new THREE.Vector3());
+            const sceneCenter = box.getCenter(new THREE.Vector3());
+            const maxAxis = Math.max(sceneSize.x, sceneSize.y, sceneSize.z);
+            glbScene.scale.multiplyScalar(1.0 / maxAxis);
+            box.setFromObject(glbScene);
+            box.getCenter(sceneCenter);
+            glbScene.position.copy(sceneCenter).multiplyScalar(-1);
+
+            // Centraliza dentro do container
+            const center = new THREE.Box3().setFromObject(glbScene).getCenter(new THREE.Vector3());
+            glbScene.position.sub(center);
+
+            // Cria o container com rotação
+            const container = new THREE.Object3D();
+            container.add(glbScene);
+            container.rotation.set(0, Math.PI / 2, 0);
+
+            anchor.glbContainer = container;
+            anchor.group.add(container);
+
+            barradeprogresso.style.display = "none";
+            anchor.glbLoading = false;
+
+            // Se o marcador já saiu do campo de visão enquanto carregava, não exibe
+            if (!anchor.isTargetVisible) return;
+          }
+          // Aguarda carregamento se iniciado em paralelo
+          if (!anchor.glbContainer) return;
+
+          anchor.glbContainer.visible = true;
+          activeScene = anchor.glbContainer;
+		  
+          buttonAR.activityid = anchor.activityid;
           buttonAR.disabled = (anchor.clazz == "#000000"); // criancas.. nao façam isso em casa... tenho que melhorar isso
 
           var bq = document.getElementById("button-ar");
@@ -295,29 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
             action = mixer.clipAction(anchor.glb.animations[0]);
             action.play();
           }
-
-          // Calcula a caixa delimitadora do objeto para encontrar o centro
-          const box = new THREE.Box3().setFromObject(glbScene);
-          const center = box.getCenter(new THREE.Vector3());
-
-          // Centraliza o objeto na cena
-          glbScene.position.sub(center);
-
-          // Cria uma caixa para conter o objeto
-          const container = new THREE.Object3D();
-          container.add(glbScene);  // Adiciona o objeto centralizado na caixa
-
-          // Ajusta a rotação da caixa (com o objeto dentro)
-          container.rotation.set(0, Math.PI / 2, 0);  // Exemplo de rotação, ajuste conforme necessário
-
-          // Define a cena ativa como a caixa contendo o objeto
-          activeScene = container;
-
-          // Adiciona o container (com o objeto centralizado) ao grupo do anchor
-          anchor.group.add(container);
-
-          // Torna o objeto visível
-          activeScene.visible = true;
 
           /*
           Esse código ta comentado a um tempo ele é necessário? -05/05/25
@@ -338,9 +343,10 @@ document.addEventListener('DOMContentLoaded', () => {
             container.scale.clampScalar(0.4, 10);
           });
           */
-        };
+        }) (); };
 
         anchor.onTargetLost = () => {
+		      anchor.isTargetVisible = false;
           lastActiveScene = activeScene;
           activeScene = null;
 
@@ -354,6 +360,12 @@ document.addEventListener('DOMContentLoaded', () => {
             action = null;
             mixer = null;
           }
+		  
+		  if (anchor.glbContainer) {
+            anchor.glbContainer.visible = false;
+          }
+
+          blockedMesh.visible = false;
         };
 
 
