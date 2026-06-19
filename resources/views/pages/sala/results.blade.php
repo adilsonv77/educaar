@@ -69,6 +69,7 @@
             @endif
         </div>
     </div>
+    <!--
     <div>
         <form action="{{ route('sala.index') }}">
             @csrf
@@ -78,4 +79,5 @@
             </button>
         </form>
     </div>
+    -->
 @endsection
