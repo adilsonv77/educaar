@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Content;
 use App\DAO\ActivityDAO;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\RandomSort;
 
 class HintButton extends Component {
@@ -50,7 +51,7 @@ class HintButton extends Component {
     }
 
     private function syncOrdem($activities, int $contentId) {
-        $randomSort = RandomSort::where('content_id', $contentId)->first();
+        $randomSort = RandomSort::where('content_id', $contentId)->where('user_id', Auth::id())->first();
         $sortOrder = array_map('trim', explode(',', $randomSort->sort));
 
         $activitiesByIndex = [];
