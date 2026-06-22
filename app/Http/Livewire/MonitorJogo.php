@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\DAO\ActivityDAO;
 use Livewire\Component;
 use App\Models\Sala;
 use App\Models\Jogo;
@@ -19,6 +20,7 @@ class MonitorJogo extends Component
     public $userId;
     public $salaId;
     public $isProfessor = false;
+    public $qntAcitivites;
     
     protected $listeners = ['tempoAcabou' => 'verificarFimDeJogo', 'atividadeConcluida' => 'concluirAtividade', 'calcularPontuacao' => 'calcularPontuacao', 'alunoFinalizou' => 'alunoFinalizou'];
 
@@ -26,6 +28,7 @@ class MonitorJogo extends Component
         $sala = $this->getSala();
         $this->tempoMaximo = Regras::find($sala->regra_id)->tempo;
         $this->pontuacaoMaxima = Regras::find($sala->regra_id)->pontMax;
+        $this->qntAcitivites = ActivityDAO::getActivitiesBySala($sala->id)->count();
 
         /* Talvez isso aqui possa resolver o problema do regra_id no futuro, mas pode quebrar o resto do sistema também, preciso estudar essa possibilidade
         if ($sala && $sala->regra) {
@@ -112,7 +115,7 @@ class MonitorJogo extends Component
         $tempoGasto = $conclusao->diffInSeconds($inicio);
         $tempoGasto = min($tempoGasto, $this->tempoMaximo);
 
-        $pontuacao = (1 - (($tempoGasto / $this->tempoMaximo) / 2)) * $this->pontuacaoMaxima;
+        $pontuacao = (1 - (($tempoGasto / $this->tempoMaximo) / 2)) * ($this->pontuacaoMaxima / $this->qntAcitivites);
         PontuacaoSala::updateOrCreate(
             ['aluno_id' => $this->userId,
             'sala_id' => $this->salaId],

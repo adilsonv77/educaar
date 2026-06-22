@@ -231,5 +231,16 @@ class ActivityDAO
             ->where('activities.position', $position)
             ->value('hint') ?? '';
     }
+
+    public static function getActivitiesBySala(int $salaId) {
+        $result = DB::table('salas')
+            ->join('jogos', 'jogos.id', '=', 'salas.jogo_id')
+            ->join('contents', 'contents.id', '=', 'jogos.content_id')
+            ->join('activities', 'activities.content_id', '=', 'contents.id')
+            ->select('activities.*')
+            ->get();
+
+        return $result;
+    }
 }
 
