@@ -31,7 +31,9 @@ class SalaController extends Controller
         $jogo = Jogo::find($jogoId);
         $salas = SalaDAO::buscarSalasENomeTurma($jogoId);
         $titulo = 'Salas';
-        $classes = TurmaDAO::getTurmasDisponiveisParaSala(Auth::id());
+        
+        $classes = TurmaDAO::getTurmasDisponiveisParaSala(Auth::id(), $jogoId); 
+        
         $rules = Regras::all();
 
         return view('pages.sala.index', compact('salas', 'titulo', 'jogo', 'jogoId', 'classes', 'rules'));
@@ -47,7 +49,7 @@ class SalaController extends Controller
         $titulo = 'Salas';
         $rules = Regras::all();
         $jogoId = $request->jogo_id;
-        $classes = TurmaDAO::getTurmasDisponiveisParaSala(Auth::id());
+        $classes = TurmaDAO::getTurmasDisponiveisParaSala(Auth::id(), $jogoId);
 
         return view('pages.sala.create', compact('rules', 'titulo', 'jogoId', 'classes'));
     }
@@ -91,8 +93,10 @@ class SalaController extends Controller
 
     public function show($salaId){
         $results = SalaDAO::buscarPontuacoesSala($salaId);
-        $id_jogo = $results->first() ? $results->first()->jogo_id : null;
-        return view('pages.sala.results', compact('results', 'id_jogo'));
+        $jogo_id = $results->first() ? $results->first()->jogo_id : null;
+        $jogo = Jogo::find($jogo_id);
+
+        return view('pages.sala.results', compact('results', 'jogo', 'jogo_id'));
     }
 
     public function resultsDestroy($resultId) {

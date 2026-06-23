@@ -69,15 +69,17 @@
             @endif
         </div>
     </div>
+
     <!--
     <div>
         <form action="{{ route('sala.index') }}">
             @csrf
-            <input type="hidden" name="jogo_id" value="{{ $id_jogo }}">
+            <input type="hidden" name="jogo_id" value="{{ $jogo_id }}">
             <button class="btn btn-smaller, btn-primary " id="novo" title="{{ __('New') }}">
                 <i class="bi bi-collection"></i>
             </button>
         </form>
     </div>
     -->
+    
 @endsection
