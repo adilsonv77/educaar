@@ -163,7 +163,9 @@ class StudentController extends Controller
             $activity->bloquearPorData = $bloquearPorData;
             if ($bloquearPorData == 0) {
                 // uma questao respondida ou nao jah diz tudo da atividade
-                $respondida = StudentAppDAO::verificaAtividadeRespondida($activity->id, Auth::user()->id);
+                $respondida = StudentAppDAO::verificaAtividadeRespondida($activity->id, Auth::user()->id, 
+                    $content->sort_activities > 0);
+
                 $activity->respondido = $respondida ? 1 : 0;
             }
 
@@ -184,7 +186,7 @@ class StudentController extends Controller
                 }
             }
         }
-        
+
         // guarda content_id na sessão
         session(["content_id" => $content_id]);
 

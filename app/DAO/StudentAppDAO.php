@@ -7,16 +7,22 @@ use Illuminate\Support\Facades\DB;
 
 class StudentAppDAO
 {
-    public static function verificaAtividadeRespondida($activity_id,$user_id){
-        $resultado = DB::table('questions as q')
+    public static function verificaAtividadeRespondida($activity_id, $user_id, $isJogo){
+        if ($isJogo) { // quando é um jogo, atividade respondida somente quando todas estiverem corretaas
+            $SelectRaw = 'COUNT(q.id) as total, SUM(sa.correct) as respondidas';
+        } else {
+            $SelectRaw = 'COUNT(q.id) as total, COUNT(sa.id) as respondidas';
+
+        }
+        $sql = DB::table('questions as q')
             ->leftJoin('student_answers as sa', function($join) use($user_id) {
                 $join->on('q.id', '=', 'sa.question_id')
                     ->where('sa.user_id', '=', $user_id);
             })
             ->where('q.activity_id', $activity_id)
-            ->selectRaw('COUNT(q.id) as total, COUNT(sa.id) as respondidas')
-            ->first();
-
+            ->selectRaw($SelectRaw);
+ 
+        $resultado = $sql->first();
         return $resultado -> total > 0 && $resultado -> total == $resultado -> respondidas;
     }
 
