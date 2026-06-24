@@ -155,14 +155,15 @@
                         @endif
 
                         @if (session('type') == 'teacher')
-                            <li><a class="ai-icon" href="{{ route('game.index') }}" aria-expanded="false">
-                                    <i class="bi bi-dice-5"></i>
-                                    <span class="nav-text">{{ __('Games') }}</span>
-                                </a>
-                            </li>
                             <li><a class="ai-icon" href="{{ route('content.index') }}" aria-expanded="false">
                                     <i class="flaticon-381-smartphone-5"></i>
                                     <span class="nav-text">{{ __('Contents') }}</span>
+                                </a>
+                            </li>
+
+                            <li><a class="ai-icon" href="{{ route('game.index') }}" aria-expanded="false">
+                                    <i class="bi bi-dice-5"></i>
+                                    <span class="nav-text">{{ __('Games') }}</span>
                                 </a>
                             </li>
 
