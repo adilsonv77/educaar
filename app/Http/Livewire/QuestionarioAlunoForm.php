@@ -300,7 +300,7 @@ class QuestionarioAlunoForm extends Component
                     $activitesCount = ActivityDAO::buscarActivitiesPorConteudo(session()->get('content_id'))->count();
 
                     $this->emitTo('monitor-jogo', 'atividadeConcluida', Auth::id(), $salaId);
-                    
+
                 }
             } else{
                 $progress = ['next_position' => $this->proximaPosicaoCalculada ?? 1 ];
@@ -346,6 +346,7 @@ class QuestionarioAlunoForm extends Component
         session()->put('position', $activity->position);
 
         //padronizei a posição do progresso em 1 para que atividades não ordenadas não sejam afetadas pelo sistema de ordenação
+        /*
         $progress = [
             'next_position' => 1
         ];
@@ -359,6 +360,7 @@ class QuestionarioAlunoForm extends Component
             $progress->save();
             $this->emitTo('ar-progress-state', 'updatePosition', $progress->next_position, $progress->content_id);
         }
+        */
 
         $this->feedback = [];
         
