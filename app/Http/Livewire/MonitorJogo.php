@@ -80,7 +80,6 @@ class MonitorJogo extends Component
         if ($acabou) {
 
             if (!$this->isProfessor) {
-                $this->calcularPontuacao();
                 return redirect()->route('student.conteudos');
             }
             
@@ -101,6 +100,7 @@ class MonitorJogo extends Component
         $this->userId = $userId;
         $this->salaId = $salaId;
         $this->ultimoCarbon = Carbon::now()->toIso8601String();
+        $this->calcularPontuacao();
     }
 
     private function calcularPontuacao() {
@@ -125,7 +125,4 @@ class MonitorJogo extends Component
         $registro->save();
     }
 
-    public function alunoFinalizou() {
-        $this->calcularPontuacao();
-    }
 }

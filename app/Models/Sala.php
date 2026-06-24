@@ -39,10 +39,8 @@ class Sala extends Model
         return $this->belongsTo(Turma::class);
     }
 
-    public function alunosPresentes(){
-        return $this->belongsToMany(User::class, 'sala_aluno', 'sala_id', 'user_id')
-                    ->join('random_sorts', 'random_sorts.user_id', '=', 'users.id')
-                            ->select('users.*', 'random_sorts.sort as sort')
-                            ->orderBy('random_sorts.sort');
+    public function alunosPresentes()
+    {
+        return $this->belongsToMany(User::class, 'sala_aluno', 'sala_id', 'user_id');
     }
 }
