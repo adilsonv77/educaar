@@ -300,10 +300,7 @@ class QuestionarioAlunoForm extends Component
                     $activitesCount = ActivityDAO::buscarActivitiesPorConteudo(session()->get('content_id'))->count();
 
                     $this->emitTo('monitor-jogo', 'atividadeConcluida', Auth::id(), $salaId);
-
-                    if($activitesCount == ($this->proximaPosicaoCalculada + 1)) {
-                        $this->emitTo('monitor-jogo', 'alunoFinalizou');
-                    }
+                    
                 }
             } else{
                 $progress = ['next_position' => $this->proximaPosicaoCalculada ?? 1 ];

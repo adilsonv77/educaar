@@ -4,9 +4,9 @@
         <h6 class="fw-bold mb-3" style="color: #833B8D;">
             <i class="bi bi-list-ol"></i> Atividades do Jogo
         </h6>
-        <div class="d-flex flex-wrap gap-2">
+        <div class="d-flex flex-wrap gap-5">
             @foreach($atividades as $index => $atividade)
-                <span class="badge bg-white text-dark border border-secondary p-2 shadow-sm" style="font-size: 13px;">
+                <span class="badge bg-white text-dark border border-secondary p-2 mr-2 shadow-sm" style="font-size: 13px;">
                     <strong>{{ $index + 1 }}.</strong> {{ $atividade->name }}
                 </span>
             @endforeach
@@ -30,9 +30,9 @@
                     @endif
                 </div>
                 
-                <div class="d-flex gap-1 align-items-center">
+                <div class="d-flex gap-3 align-items-center">
                     @if($aluno->is_finalizado)
-                        <span class="badge bg-success p-2 fs-6 shadow-sm">
+                        <span class="badge p-2 fs-6 shadow-sm" style="background-color: #833B8D; color: #ffffff;">
                             <i class="bi bi-check-circle-fill"></i> Concluído
                         </span>
                     @else
@@ -41,9 +41,15 @@
                                 $isAtual = ($aluno->atividade_id_atual == $atividade->id);
                             @endphp
                             
-                            <span class="badge {{ $isAtual ? 'bg-warning text-dark border border-warning' : 'bg-secondary opacity-50' }}" 
+                            <span class="badge mr-1" 
                                   title="{{ $atividade->name }}"
-                                  style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 14px; {{ $isAtual ? 'transform: scale(1.2); box-shadow: 0 0 10px rgba(255,193,7,0.7); z-index: 2; transition: 0.3s;' : 'transition: 0.3s;' }}">
+                                  style="
+                                      width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: 0.3s;
+                                      {{ $isAtual 
+                                          ? 'background-color: #833B8D; color: #ffffff; transform: scale(1.2); box-shadow: 0 0 10px rgba(131,59,141,0.6); z-index: 2;' 
+                                          : 'background-color: #ffffff; color: #833B8D; border: 1px solid #833B8D; opacity: 0.6;' 
+                                      }}
+                                  ">
                                 {{ $index + 1 }}
                             </span>
                         @endforeach
