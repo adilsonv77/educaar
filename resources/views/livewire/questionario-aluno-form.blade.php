@@ -92,7 +92,7 @@
             $('#hintModal').modal('hide');
 
             buttonDescongelar = document.getElementById("removeObject");
-            if (buttonDescongelar != null) {
+            if (buttonDescongelar.style.display != 'none') {
                 buttonDescongelar.click();
             }
         });
