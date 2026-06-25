@@ -3,16 +3,22 @@
 @section('page-name', 'Resultados da Sala')
 
 @section('content')
+    <style>
+        table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
+            content: " \25B4\25BE" 
+        }
+    </style>
+
     <div class="card">
         <div class="card-body">
             @if (!empty($results))
                 <div class="table-responsive">
-                    <table class="table table-hover table-responsive-sm">
+                    <table class="table table-hover table-responsive-sm sortable" id="table">
                         <thead>
                             <tr style="text-align: center;">
-                                <th style="text-align: left;">{{ __('Name') }}</th>
-                                <th>{{ __('Score') }}</th>
-                                <th>{{ __('Delete') }}</th>
+                                <th style="text-align: left; cursor:pointer; user-select:none;">{{ __('Name') }}</th>
+                                <th style="cursor:pointer; user-select:none;">{{ __('Score') }}</th>
+                                <th class="sorttable_nosort">{{ __('Delete') }}</th>
                             </tr>
                         </thead>
                         <tbody>
