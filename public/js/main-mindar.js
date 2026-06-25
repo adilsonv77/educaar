@@ -456,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       //Bloquear atividade sendo mostrada
       document.getElementById("removeObject").addEventListener('click', () => {
+        
         desbloquear.style.display = "none";
         buttonAR.style.display = "none";
         document.getElementById("barradeprogresso").style.display = "block";

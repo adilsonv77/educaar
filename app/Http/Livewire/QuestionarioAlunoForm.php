@@ -320,7 +320,11 @@ class QuestionarioAlunoForm extends Component
             $this->hint = $this->incorreta ? '' : $this->hint;
             
             if($timeout == false) {
-                $this->dispatchBrowserEvent('openFeedbackModal');
+                if ($this->hint)
+                   $this->dispatchBrowserEvent('openHintModal'); 
+                else
+                   $this->dispatchBrowserEvent('closeQuestionarioModal');  
+                //$this->dispatchBrowserEvent('openFeedbackModal');
             }
 
             $this->emitTo('hint-button', 'updateHint', $this->hint);

@@ -64,7 +64,7 @@
 
         window.addEventListener('openFeedbackModal', event => {
             $('#questionarioModal').modal('hide');
-            $('#feedbackModal').modal('show');
+           //$('#feedbackModal').modal('show');
         });
 
         window.addEventListener('closeFeedbackModal', event => {
@@ -76,13 +76,25 @@
             $('#stopTimer').modal('show');
         });
 
+        window.addEventListener('closeQuestionarioModal', event => {
+            
+            $('#questionarioModal').modal('hide');
+            
+        });
+
         window.addEventListener('openHintModal', event => {
-            $('#feedbackModal').modal('hide');
+            //$('#feedbackModal').modal('hide');
+            $('#questionarioModal').modal('hide');
             $('#hintModal').modal('show');
         });
 
         window.addEventListener('closeHintModal', event => {
             $('#hintModal').modal('hide');
+
+            buttonDescongelar = document.getElementById("removeObject");
+            if (buttonDescongelar != null) {
+                buttonDescongelar.click();
+            }
         });
 
         window.addEventListener('openCameraAlert', event => {
@@ -462,9 +474,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <!--
                     <button wire:click="voltar()" type="button" class="btn btn-primary" data-dismiss="modal">
                         Voltar
                     </button>
+                    -->
                     <button wire:click="close()" type="button" class="btn btn-primary" data-dismiss="modal">
                         Fechar
                     </button>
