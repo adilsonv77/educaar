@@ -71,28 +71,10 @@ async function atualizarProgressoConteudoOrdenado(content_id, newPosition){
 }
 
 async function handleAtividadeConcluida(detail) {
-  try{
-    if(!detail) return;
-
-    const positionConcluida = Number(detail.position);
-    const content_id = window.__content_id;
-
-    if(Number.isNaN(positionConcluida) || !content_id){
-      console.error('handleAtividadeConcluida: Posição ou ContentID inválido.', detail);
-      return;
-    }
-
-    const proximaPosicao = positionConcluida + 1;
-
-    proximaAtividadeLiberada = proximaPosicao;
-
-    //console.log(`Atividade: ${positionConcluida} concluída. Próxima permitida: ${proximaAtividadeLiberada}`);
-
-    await atualizarProgressoConteudoOrdenado(content_id, proximaPosicao);
+  
+  if(!detail) return;
+  proximaAtividadeLiberada = Number(detail.position);
     
-  } catch (err) {
-    console.error('Erro em handleAtividadeConcluida (Gatilho principal)', err);
-  }
 }
 
 window.addEventListener('atividade-concluida', (e) => {

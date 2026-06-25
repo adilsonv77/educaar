@@ -288,11 +288,23 @@ class QuestionarioAlunoForm extends Component
             $content = Content::find(session()->get('content_id'));
             
             if(!$this->incorreta && $content->sort_activities){
-                $progress = ArProgress::updateOrCreate(
+
+                Log::info('LIVEWIRE progresso', ['fallback' => $this->proximaPosicaoCalculada]);
+
+                $progress = ArProgress::firstOrCreate(
                     ['student_id' => Auth::id(), 'content_id' => session()->get('content_id')],
-                    ['next_position' => $this->proximaPosicaoCalculada ?? 1]
+                    ['next_position' => 1]
                 );
-                $this->proximaPosicaoCalculada = $progress->next_position + 1;
+
+                $progress->next_position = $progress->next_position + 1;
+                $progress->save();
+
+                $this->dispatchBrowserEvent('atividade-concluida', [
+                    'position' => $progress->next_position,
+                    'activity_id' => $this->activity_id
+                ]);
+
+                $this->proximaPosicaoCalculada = $progress->next_position;
 
                 if($this->isJogo) {
                     $jogo = JogoDAO::getJogoByContentId(session()->get('content_id'));
@@ -308,13 +320,8 @@ class QuestionarioAlunoForm extends Component
             
             DB::commit();
             session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao']);
+
             $this->questions = null;
-            if(!$this->incorreta && $content->sort_activities){
-                $this->dispatchBrowserEvent('atividade-concluida', [
-                    'position' => $progress->next_position,
-                    'activity_id' => $this->activity_id
-                ]);
-            }
 
             $this->incorreta = in_array(0, $corretas);
             $this->hint = $this->incorreta ? '' : $this->hint;
