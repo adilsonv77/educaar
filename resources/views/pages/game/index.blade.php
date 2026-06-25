@@ -37,7 +37,7 @@
                                     <form action="{{ route('sala.create') }}">
                                         @csrf
                                         <input type="hidden" name="jogo_id" value="{{ $jogo->id }}">
-                                        <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i></button>
+                                        <button type="submit" class="btn btn-primary" @if(!$jogo->podeCriarSala) disabled title="Sala não inicializada já criada" @endif><i class="bi bi-plus-circle"></i></button>
                                     </form>
                                     </td>
 

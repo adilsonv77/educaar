@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Jogo;
 use App\DAO\ContentDAO;
+use App\DAO\SalaDAO;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
@@ -19,6 +20,11 @@ class JogoController extends Controller
     {
         $jogos = Jogo::all();
         $titulo = 'Jogos';
+        
+        foreach($jogos as $jogo) {
+            $jogo->podeCriarSala = SalaDAO::podeCriarSala($jogo->id);
+        }
+
         return view('pages.game.index', compact('jogos', 'titulo'));
     }
 

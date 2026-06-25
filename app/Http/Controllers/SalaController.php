@@ -36,7 +36,9 @@ class SalaController extends Controller
         
         $rules = Regras::all();
 
-        return view('pages.sala.index', compact('salas', 'titulo', 'jogo', 'jogoId', 'classes', 'rules'));
+        $podeCriarSala = SalaDAO::podeCriarSala($jogoId);
+
+        return view('pages.sala.index', compact('salas', 'titulo', 'jogo', 'jogoId', 'classes', 'rules', 'podeCriarSala'));
     }
 
     /**
