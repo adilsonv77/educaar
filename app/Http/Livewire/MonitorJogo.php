@@ -49,6 +49,8 @@ class MonitorJogo extends Component
             return Sala::with('regra')
                        ->where('jogo_id', $jogo->id)
                        ->where('turma_id', $this->turmaId)
+                       ->orderByRaw('CASE WHEN started_at IS NULL THEN 0 ELSE 1 END')
+                       ->orderBy('started_at', 'desc')
                        ->first();
         }
         return null;

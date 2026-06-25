@@ -20,6 +20,7 @@ class SalaEspera extends Component
         if ($jogo) {
             $sala = Sala::where('jogo_id', $jogo->id)
                         ->where('turma_id', $this->turmaId)
+                        ->where('aberta', 1)
                         ->first();
 
             if($sala){

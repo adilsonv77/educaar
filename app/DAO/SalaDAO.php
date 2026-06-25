@@ -65,6 +65,13 @@ class SalaDAO {
             ->value('salas.id');
     }
 
+    public static function podeCriarSala(int $jogoId): bool {
+        return !DB::table('salas')
+            ->where('jogo_id', $jogoId)
+            ->whereNull('started_at')
+            ->exists();
+    }
+
 }
 
 
