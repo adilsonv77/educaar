@@ -228,6 +228,8 @@ class StudentController extends Controller
                 ['next_position' => $newPosition]
             );
 
+            Log::info('ROTA progresso', ['novo' => $newPosition, 'aluno' => $studentId]);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Progresso atualizado no banco de dados com sucesso.',
