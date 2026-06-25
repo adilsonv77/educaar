@@ -47,6 +47,23 @@ class ListaPresenca extends Component
 
                     $aluno->sort = $sorts[$aluno->id] ?? null;
                     
+                    $atividadesCompletadas = [];
+                    if (!empty($aluno->sort)) {
+                        $ordemPosicoes = explode(',', $aluno->sort);
+                        $posicoesCompletadas = array_map('intval', array_slice($ordemPosicoes, 0, $posicaoAtual - 1));
+
+                        foreach ($atividades as $atividade) {
+                            $atividadesCompletadas[$atividade->id] = in_array($atividade->position, $posicoesCompletadas);
+                        }
+                    } else {
+                        foreach ($atividades as $atividade) {
+                            $atividadesCompletadas[$atividade->id] = $atividade->position < $posicaoAtual;
+                        }
+                        
+                    }
+
+                    $aluno->atividades_completadas = $atividadesCompletadas;
+                    
                     if (!$aluno->is_finalizado) {
                         if (!empty($aluno->sort)) {
 

@@ -39,6 +39,7 @@
                         @foreach($atividades as $index => $atividade)
                             @php
                                 $isAtual = ($aluno->atividade_id_atual == $atividade->id);
+                                $isCompletada = $aluno->atividades_completadas[$atividade->id] ?? false;
                             @endphp
                             
                             <span class="badge mr-1" 
@@ -47,10 +48,19 @@
                                       width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: 0.3s;
                                       {{ $isAtual 
                                           ? 'background-color: #833B8D; color: #ffffff; transform: scale(1.2); box-shadow: 0 0 10px rgba(131,59,141,0.6); z-index: 2;' 
-                                          : 'background-color: #ffffff; color: #833B8D; border: 1px solid #833B8D; opacity: 0.6;' 
+                                          : ($isCompletada 
+                                                ? 'background-color: #28a745; color: #ffffff; border: 1px solid #28a745;' 
+                                                : 'background-color: #ffffff; color: #833B8D; border: 1px solid #833B8D; opacity: 0.6;'
+                                            )
                                       }}
                                   ">
-                                {{ $index + 1 }}
+
+                                @if($isCompletada)
+                                    <i class="bi bi-check-lg"></i>
+                                @else
+                                    {{ $index + 1 }}
+                                @endif
+                                
                             </span>
                         @endforeach
                     @endif
