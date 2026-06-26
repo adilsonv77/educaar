@@ -17,8 +17,6 @@ use App\Models\ArProgress;
 use App\Models\Content;
 use App\Models\Pontuacao;
 use Exception;
-use Illuminate\Notifications\Action;
-use App\Http\Livewire\HintButton;
 
 class QuestionarioAlunoForm extends Component
 {
@@ -27,7 +25,7 @@ class QuestionarioAlunoForm extends Component
     
     public $activity_id;
 
-    public $refeita;
+    public bool $conteudoRefeito;
     public $jaRespondeu;
 
     public $tempoMaximo;
@@ -60,15 +58,16 @@ class QuestionarioAlunoForm extends Component
 */
     public function openQuestions($value)
     {
-        $this->activity_id = (int)$value;
+        $contentId = session()->get('content_id');
 
-        $this->refeita = ActivityDAO::refeita($this->activity_id);
+        $this->activity_id = (int)$value;
+        $this->conteudoRefeito = Content::where('id', $contentId)->value('refeito');
+
         $this->jaRespondeu = QuestionDAO::jaRespondeuAlguma($this->activity_id);
         $this->tempoMaximo = QuestionDAO::getDuration($this->activity_id);
         $this->tempoRestante = ActivityDAO::getTempoRestante(Auth::id(), $this->activity_id);
         $this->pontuacaoMaxima = ActivityDAO::getPontuacao($this->activity_id);
 
-        $contentId = session()->get('content_id');
         $this->hint = ContentDAO::getContentType($contentId) == 2
             ? ActivityDAO::getNextHintRandom($contentId, $this->activity_id)
             : ActivityDAO::getNextHint($contentId, $this->activity_id);
@@ -90,7 +89,7 @@ class QuestionarioAlunoForm extends Component
             $where = DB::table('questions')
                 ->where('activity_id', $this->activity_id);
             
-            /* when() usado para caso a atividade possa ser refeita, então só irá ser pego as questões que o usuário autenticado acertou */
+            /* when() usado para caso o conteúdo possa ser refeito, então só irá ser pego as questões que o usuário autenticado acertou */
             $subwhere = DB::table('student_answers as sa')
                 ->select('sa.alternative_answered')
                 ->whereColumn('sa.question_id', '=', 'questions.id')
@@ -98,7 +97,7 @@ class QuestionarioAlunoForm extends Component
                 ->where('sa.user_id', '=', Auth::id())
                 ->orderBy('sa.created_at', 'desc')
                 ->limit(1)
-                ->when($this->refeita && $this->jaRespondeu, function($subwhen) {
+                ->when($this->conteudoRefeito && $this->jaRespondeu, function($subwhen) {
                     $subwhen->where('sa.correct', 1);
                 });
 
@@ -218,8 +217,10 @@ class QuestionarioAlunoForm extends Component
         $questions = session()->get('livewire_questoes');
         foreach($questions as $questao) {
             $questionId = $questao->id;
+
             if(isset($this->alternativas[$questionId])) {
                 $selectedIndex = $this->alternativas[$questionId];
+
                 if(isset($questao->options[$selectedIndex])) {
                     $selectedOption = $questao->options[$selectedIndex];
                     $questao->alternative_answered = $selectedOption;
@@ -228,17 +229,17 @@ class QuestionarioAlunoForm extends Component
         }
     
         $tentativa = ActivityDAO::getTentativa((int)session()->get('livewire_activity_id'), Auth::id());
-        if(DB::table('activities')
-            ->where('id', (int)session()->get('livewire_activity_id'))
-            ->value('refeita') == 0) {
+
+        if(Content::where('id', session()->get('content_id'))->value('refeito')) {
             $this->jaRespondeu = QuestionDAO::jaRespondeuTodas((int)session()->get('livewire_activity_id'));
         }
+
         try {
             $corretas = [];
             foreach ($questions as $questao) {
                 $data = [];
                 
-                if(!$this->refeita && $this->jaRespondeu) {
+                if(!$this->conteudoRefeito && $this->jaRespondeu) {
                     continue;
                 }
                 

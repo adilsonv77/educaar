@@ -7,6 +7,7 @@ use App\Models\Activity;
 use App\Models\Turma;
 use App\Models\Question;
 use App\Models\StudentAnswer;
+use App\Models\Content;
 use App\Models\StudentTimeActivity;
 use App\Models\AnoLetivo;
 use App\Models\ArProgress;
@@ -298,6 +299,8 @@ class QuestionController extends Controller
         foreach ($questions as $question) {
             $question->quntRespondCerto = (int)$question->quntRespondCerto;
         }
+
+        $activity->conteudoRefeito = Content::where('id', $activity['content_id'])->value('refeito');
 
         //dd($respostasSelecionadas, $questions);
         return view('pages.activity.results', compact('result', 'questions', 'turmas', 'turma', 'activity', 'respostasSelecionadas'));

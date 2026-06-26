@@ -233,73 +233,6 @@
                         </div>
                     </div>
                 </div>
-                
-
-                @if(session('type') != 'developer' && $acao != 'edit')
-                    <!----------------REFEITA----------------->
-    
-                        <div class="mb-4">
-                            <div class="custom-control custom-switch switch">
-                                <input type="hidden" name="refeitaMarcador" value="0">
-                                <input type="checkbox" class="custom-control-input" id="refeitaMarcador" name="refeitaMarcador" value="1">
-                                <label class="custom-control-label" for="refeitaMarcador">{{ __('Redone') }}</label>
-                                <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="refeitaAlerta" role="alert"><!-- Texto controlado pelo JS --></div>
-                            </div>
-                        </div>
-    
-                        <!----------------PONTUADA----------------->
-                    
-                        <div class="custom-control custom-switch switch pontuada mb-2 mt-3">
-                            <input type="hidden" name="pontuadaMarcador" value="0">
-                            <input type="checkbox" class="custom-control-input" id="switchPontuada" name="pontuadaMarcador" value="1">
-                            <label class="custom-control-label" for="switchPontuada">{{ __('Scored') }}</label>
-                            <div class="form-text alert-danger d-inline-block small ml-1 p-0" id="pontuadaAlerta" role="alert"><!-- Texto controlado pelo JS --></div>
-
-                            <button type="button" id="btnPontuadaMarcador" data-toggle="modal" data-target="#pontuadaModal" class="btn btn-link p-0 m-0 align-baseline">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-lg" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M4.475 5.458c-.284 0-.514-.237-.47-.517C4.28 3.24 5.576 2 7.825 2c2.25 0 3.767 1.36 3.767 3.215 0 1.344-.665 2.288-1.79 2.973-1.1.659-1.414 1.118-1.414 2.01v.03a.5.5 0 0 1-.5.5h-.77a.5.5 0 0 1-.5-.495l-.003-.2c-.043-1.221.477-2.001 1.645-2.712 1.03-.632 1.397-1.135 1.397-2.028 0-.979-.758-1.698-1.926-1.698-1.009 0-1.71.529-1.938 1.402-.066.254-.278.461-.54.461h-.777ZM7.496 14c.622 0 1.095-.474 1.095-1.09 0-.618-.473-1.092-1.095-1.092-.606 0-1.087.474-1.087 1.091S6.89 14 7.496 14"/>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- Campos extras para caso a atividade seja pontuada (nota e tempo da atividade) -->
-                        <div class="extras collapse" id="extras">
-                            <div class="nota">
-                                <label for="nota">{{ __('Activity Grade') }}</label>
-                                <div class="form-text alert-danger d-inline-block small ml-1 p-0" role="alert">
-                                    {{ __('The maximum grade for an activity') }}
-                                </div>
-                                <input type="number" class="form-control mb-2" name="nota" id="nota" value=100>
-                            </div>
-                            <div class="tempo">
-                                <label for="tempo">{{ __('Time Limit') }}</label>
-                                <div class="form-text alert-danger d-inline-block small ml-1 p-0" role="alert">
-                                    {{ __('Time limit to complete an activity') }}
-                                </div>
-                                <input type="number" name="tempo" id="tempo" class="form-control" value=30>
-                            </div>
-                        </div>
-
-                        <!-- Modal para explicação da atividade pontuada -->
-                        <div class="modal fade" id="pontuadaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content" >
-                                    <div class="modal-body">
-                                        <h3>{{ __('Scored Activities') }}</h3>
-                                        <p>{{ __("The scored activities calculate the student's performance based on correct answer and agility, respecting a time limit.") }}</p>
-                                        <p>{{ __('The score is inversely proportional to the time spent: the longer the answer, the lower the grade. Incorrect answers do not earn points.') }}</p>
-                                        <p>{{ __('The system only considers the result of the first attempt. But if the student has not answered all the questions correctly, they can redo the activity for learning purposes. In this new stage, there will be no timer and the original score will not be changed.') }}</p>
-                                        <hr>
-                                        <p class="small">{{ __("A scored activity is a 'redone' activity with a score, so for a better visual experience of the system, we have restricted the markers so that you can choose a 'redone' or 'scored' activity.") }}</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                @endif
 
                     <!-----------------PISTA------------------>
                     <div class="extras collapse" id="hint">
@@ -331,14 +264,9 @@
                 selectContent: document.querySelector('select[name="content_id"]'),
                 model3D: document.getElementById("3DmodelOption"),
                 panelOption: document.getElementById("panelOption"),
-                switchRefeita: document.getElementById('refeitaMarcador'),
                 switchPontuada: document.getElementById('switchPontuada'),
                 camposExtras: document.getElementById('extras'),
-                refAle: document.getElementById('refeitaAlerta'),
                 ponAle: document.getElementById('pontuadaAlerta'),
-                btnPontuada: document.getElementById('btnPontuadaMarcador'),
-                nota: document.getElementById('nota'),
-                tempo: document.getElementById('tempo'),
                 hint: document.getElementById('hint')
             };
 
@@ -364,20 +292,15 @@
                         el.btnPontuada.hidden = false;
 
                         if (contentType >= "1") {
-                            el.switchRefeita.disabled = true;
-                            el.switchRefeita.checked = false;
                             el.refAle.textContent = orderedContentString;
                             $(el.hint).collapse('show');
 
                         } else {
-                            el.switchRefeita.disabled = false;
                             el.refAle.textContent = noOrderedContentString;
                             $(el.hint).collapse('hide');
                             el.switchPontuada.checked = false;
                         }
                     } else {
-                        el.switchRefeita.checked = false;
-                        el.switchRefeita.disabled = true;
                         el.switchPontuada.checked = false;
                         el.switchPontuada.disabled = true;
                         el.refAle.textContent = sceneTypeString;
@@ -395,23 +318,7 @@
                 el.switchPontuada.addEventListener('change', function() {
                     const isChecked = this.checked;
                     $(el.camposExtras).collapse(isChecked ? 'show' : 'hide');
-                    el.nota.required = isChecked;
-                    el.tempo.required = isChecked;
-
-                    if (isChecked) {
-                        el.switchRefeita.disabled = true;
-                        el.switchRefeita.parentElement.style.display = 'block';
-                    } else if (getContentType() != 1) {
-                        el.switchRefeita.disabled = false;
-                        el.switchRefeita.parentElement.style.display = '';
-                    }
                 });
-
-                el.switchRefeita.addEventListener('change', function() {
-                    el.switchPontuada.disabled = this.checked;
-                    el.switchPontuada.parentElement.style.display = this.checked ? 'block' : '';
-                });
-
 
                 el.switchPontuada.checked = false;
             }

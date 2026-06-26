@@ -65,6 +65,14 @@
 
                     <div class="mb-4">
                         <div class="custom-control custom-switch switch">
+                            <input type="hidden" name="refeito" value="0">
+                            <input type="checkbox" name="refeito" id="refeito" class="custom-control-input" value="1" @if($refeito) checked @endif>
+                            <label for="refeito" class="custom-control-label">{{ __('Redone') }}</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="custom-control custom-switch switch">
                             <input type="hidden" name="ordered" value="0">
                             <input type="checkbox" name="ordered" id="ordered" class="custom-control-input" value="1" @if($sort_activities >= 1) checked @endif>
                             <label for="ordered" class="custom-control-label">{{ __('Ordered Content') }}</label>

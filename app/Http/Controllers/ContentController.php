@@ -127,7 +127,8 @@ class ContentController extends Controller
             'acao' => $acao,
             'name' => '',
             'id' => 0,
-            'sort_activities' => false
+            'sort_activities' => false,
+            'refeito' => false
         ];
         if (session('type') == 'teacher') {
             $disciplinas = ContentDAO::buscarDisciplinas($anoLetivo->id, $idprof);
@@ -201,7 +202,8 @@ class ContentController extends Controller
             'user_id' => $content->user_id,
             'content' => $content,
             'activities' => $activities,
-            'sort_activities' => $content->sort_activities
+            'sort_activities' => $content->sort_activities,
+            'refeito' => $content->refeito
         ];
 
         if (session('type') == 'teacher') {

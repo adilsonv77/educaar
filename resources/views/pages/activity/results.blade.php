@@ -2,7 +2,6 @@
 
 @php
     $pageName =  $activity->name;
-    $refeita = \App\DAO\ActivityDAO::refeita($activity['id']);
     $pontuada = \App\DAO\ActivityDAO::getPontuacao($activity['id']);
     $qntCompletas= $result['qtd_alunos_fizeram_completo'];
     $qntIncompletas= $result['qtd_alunos_fizeram_incompleto'];
@@ -94,7 +93,7 @@
             <th id="Q{{ $count }}" data-bs-toggle="tooltip" title="Q{{ $count }}" scope="col">{{ "Q".$count++ }}</th>
           @endforeach
 
-          @if($refeita)
+          @if($activity['conteudoRefeito'])
             <th scope="col1" style="width: 15%;">{{ __('Attempts') }}</th>
 
             @if($pontuada != null)
@@ -125,7 +124,7 @@
 
                     @endforeach
 
-                    @if($refeita)
+                    @if($activity['conteudoRefeito'])
                       <td>{{$item['tentativa']}}</td>
                     @endif
 
