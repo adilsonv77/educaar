@@ -115,7 +115,6 @@ class ActivityController extends Controller
             'content' => $content,
             'murais' => $murais,
             'mural_id' => "modelo3D",
-            'naoRefeita' => true,
         ];
 
         return view('pages.activity.register', $params);
@@ -167,7 +166,6 @@ class ActivityController extends Controller
             'name' => 'required|max:100',
             'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:40960000', 'mimetypes:model/gltf-binary,application/zip,application/x-zip-compressed,application/octet-stream',],
             'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg', 'mimetypes:image/png,image/jpeg'],
-            'refeitarMarcador' => 'boolean',
             'pontuadaMarcador' => 'boolean',
             'pista_customizada' => 'max:255' 
         ],
@@ -249,13 +247,8 @@ class ActivityController extends Controller
             $data['professor_id'] = Auth::user()->id;
             $data['mural_id'] = $data['scene'];
             
-            $data['refeita'] = $request->refeitaMarcador == null
-                ? 0
-                : ($request->refeitaMarcador);
             $content = Content::find($data['content_id']);
-            if($content->sort_activities){
-                $data['refeita'] = 1;
-            }
+
             if($request->pontuadaMarcador) {
                 $request -> validate([
                     'tempo' => 'int|min:10|max:300',
@@ -265,7 +258,6 @@ class ActivityController extends Controller
                     'duration' => $request->tempo, 
                     'score' => $request->nota,
                 ];
-                $data['refeita'] = 1;
             }
             
             $data['hint'] = $request->pista_customizada;
@@ -294,13 +286,6 @@ class ActivityController extends Controller
             //Edita modelo 3D
             $activity = Activity::find($data['id']);
 
-            if (isset($data['content_id']) && $data['content_id'] != $activity->content_id) {
-                $newContent = Content::find($data['content_id']);
-                if ($newContent && in_array($newContent->sort_activities, [1, 2])) {
-                    $data['refeita'] = 1;
-                }
-            }
-
             if ($zipdir !== "") {
                 self::deleteDir(public_path('modelos3d/' . $activity->id));
                 $data['glb'] = $activity->id . "/" . $achou;
@@ -320,13 +305,6 @@ class ActivityController extends Controller
             $activity = Activity::find($data['id']);
             if (array_key_exists('scene', $data))
                 $data['mural_id'] = $data['scene'];
-
-            if (isset($data['content_id']) && $data['content_id'] != $activity->content_id) {
-                $newContent = Content::find($data['content_id']);
-                if ($newContent && in_array($newContent->sort_activities, [1, 2])) {
-                    $data['refeita'] = 1;
-                }
-            }
 
             //Deleta o arquivo GLB
             if (!empty($activity->glb)) {
@@ -409,11 +387,6 @@ class ActivityController extends Controller
             $murais = $murais->merge(MuralDAO::getByDisciplinaId($disciplina->id));
         }
 
-        $naoRefeita = !ActivityDAO::refeita($activity->id);
-        if(QuestionDAO::getDuration($activity->id) !=  null) {
-            $naoRefeita = false;
-        }
-
         $hint = ActivityDAO::getHint($activity->content_id, $activity->id);
 
         $params = [
@@ -425,7 +398,6 @@ class ActivityController extends Controller
             'content' => $activity->content_id,
             'mural_id' => $activity->mural_id,
             'murais' => $murais,
-            'naoRefeita' => $naoRefeita,
             'hint' => $hint
         ];
 
