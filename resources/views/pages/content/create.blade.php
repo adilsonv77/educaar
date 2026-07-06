@@ -29,6 +29,11 @@
         .custom-control {
             line-height: 1.5em!important;
         }
+
+        /* Por algum motivo margin-top vem com 0.25rem, desabilitei pois causa desalinhamento com o resto da linha */
+        .form-text {
+            margin-top: 0 !important;
+        }
     </style>
 @endsection
 
@@ -61,14 +66,6 @@
                                     {{ $item->tnome }} - {{ $item->dnome }}</option>
                             @endforeach
                         </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <div class="custom-control custom-switch switch">
-                            <input type="hidden" name="refeito" value="0">
-                            <input type="checkbox" name="refeito" id="refeito" class="custom-control-input" value="1" @if($refeito) checked @endif>
-                            <label for="refeito" class="custom-control-label">{{ __('Redone') }}</label>
-                        </div>
                     </div>
 
                     <div class="mb-4">

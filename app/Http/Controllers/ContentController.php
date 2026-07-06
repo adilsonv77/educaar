@@ -146,9 +146,17 @@ class ContentController extends Controller
     {
         $data = $request->all();
 
-        $data['sort_activities'] = $request->ordered == "1"
-            ? ($request->random == "1" ? 2 : 1)
-            : 0;
+        if($request->ordered == "1") {
+            if($request->random == "1")
+                $data['sort_activities'] = 2;
+            else
+                $data['sort_activities'] = 1;
+
+            $data['refeito'] = 1;
+        } else {
+            $data['sort_activities'] = 0;
+            $data['refeito'] = 0;
+        }
 
         if (session('type') == 'teacher') {
             $turma_disc = explode("_", $data['disciplina_id']);
