@@ -254,19 +254,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            let orderedContentString = <?php echo json_encode($orderedContentString) ?>;
-            let noOrderedContentString = <?php echo json_encode($noOrderedContentString) ?>;
-            let sceneTypeString = <?php echo json_encode($sceneTypeString) ?>;
-            let acao = <?php echo json_encode($acao) ?>;
-
             const el = {
                 selectActivity: document.getElementById("selectActivityType"),
                 selectContent: document.querySelector('select[name="content_id"]'),
                 model3D: document.getElementById("3DmodelOption"),
                 panelOption: document.getElementById("panelOption"),
-                switchPontuada: document.getElementById('switchPontuada'),
-                camposExtras: document.getElementById('extras'),
-                ponAle: document.getElementById('pontuadaAlerta'),
                 hint: document.getElementById('hint')
             };
 
@@ -278,50 +270,26 @@
                 const isModelo3D = el.selectActivity.value === "Modelo3D";
                 const contentType = getContentType();
 
-                el.model3D.style.display = isModelo3D ? "block" : "none";
-                el.panelOption.style.display = isModelo3D ? "none" : "block";
+                if (isModelo3D) {
+                    el.model3D.style.display = "block";
+                    el.panelOption.style.display = "none";
 
-                if(el.switchPontuada === null && acao == 'edit' && contentType >= 1) {
-                    $(el.hint).collapse('show');
-                    return;
+                    if (contentType > 0)
+                        $(el.hint).collapse('show');
+                    else 
+                        $(el.hint).collapse('hide');
+                    
+                } else {
+                    el.model3D.style.display = "none";
+                    el.panelOption.style.display = "block";
+
+                    $(el.hint).collapse('hide');
                 }
-
-                    if (isModelo3D) {
-                        el.switchPontuada.disabled = false;
-                        el.ponAle.textContent = "";
-                        el.btnPontuada.hidden = false;
-
-                        if (contentType >= "1") {
-                            el.refAle.textContent = orderedContentString;
-                            $(el.hint).collapse('show');
-
-                        } else {
-                            el.refAle.textContent = noOrderedContentString;
-                            $(el.hint).collapse('hide');
-                            el.switchPontuada.checked = false;
-                        }
-                    } else {
-                        el.switchPontuada.checked = false;
-                        el.switchPontuada.disabled = true;
-                        el.refAle.textContent = sceneTypeString;
-                        el.ponAle.textContent = sceneTypeString;
-                        el.btnPontuada.hidden = true;
-                        $(el.camposExtras).collapse('hide');
-                    }
-
             };
 
             el.selectActivity.addEventListener('change', atualizarInterface);
             el.selectContent.addEventListener('change', atualizarInterface);
 
-            if(el.switchPontuada !== null) {
-                el.switchPontuada.addEventListener('change', function() {
-                    const isChecked = this.checked;
-                    $(el.camposExtras).collapse(isChecked ? 'show' : 'hide');
-                });
-
-                el.switchPontuada.checked = false;
-            }
             atualizarInterface();
         });
         
