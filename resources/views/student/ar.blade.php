@@ -1,6 +1,5 @@
 @php
-    $hintContent = $content->sort_activities >= 1
-        ? true : false;
+    $hintContent = $content->is_jogo;
 @endphp
 
 @extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => true, 'hintContent' => $hintContent])
@@ -242,14 +241,14 @@
     @endforeach
 </div>
 
-    @if($content->sort_activities)
+    @if($content->is_jogo)
         @livewire('ar-progress-state', [
             'nextPosition' => $progress->next_position,
             'contentId' => $content->id
         ], key($content->id))
     @endif
 
-<span id="glbs" style="display: none;" is_sort="{{ $content->sort_activities }}">
+<span id="glbs" style="display: none;" is_sort="{{ $content->is_jogo }}">
     @foreach ($activities as $item)
         <li id="act_{{$item->id}}"
             activityPosition = "{{$item->position}}"

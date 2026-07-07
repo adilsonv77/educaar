@@ -128,15 +128,15 @@ class StudentController extends Controller
             $isJogo = true;
         }
 
-        if($content->sort_activities == 2) {
+        if($content->is_jogo) {
             $this->createRandomSort($content_id);
         }
 
-        $activities = match($content->sort_activities) {
-            1 => ActivityDAO::buscarOrderedActivitiesPorConteudo($content_id),
-            2 => ActivityDAO::buscarRandomOrderedActivitiesPorConteudo($content_id),
-            default => ActivityDAO::buscarActivitiesPorConteudo($content_id)
-        };
+        if($content->is_jogo){
+            $activities = ActivityDAO::buscarRandomOrderedActivitiesPorConteudo($content_id);
+        } else{
+            $activities = ActivityDAO::buscarActivitiesPorConteudo($content_id);
+        }
 
         $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
             ->where('bool_atual', 1)->first();
@@ -164,7 +164,7 @@ class StudentController extends Controller
             if ($bloquearPorData == 0) {
                 // uma questao respondida ou nao jah diz tudo da atividade
                 $respondida = StudentAppDAO::verificaAtividadeRespondida($activity->id, Auth::user()->id, 
-                    $content->sort_activities > 0);
+                    $content->is_jogo);
 
                 $activity->respondido = $respondida ? 1 : 0;
             }
@@ -194,7 +194,7 @@ class StudentController extends Controller
             'next_position' => 1,
         ];
 
-        if($content->sort_activities){
+        if($content->is_jogo){
             $progress = ArProgress::firstOrCreate(
                 [
                     'student_id' => Auth::user()->id,

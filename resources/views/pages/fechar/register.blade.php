@@ -28,7 +28,7 @@
                 
                 <table class="table">
                     <tbody>
-                        @if(isset($id) && $content->sort_activities)
+                        @if(isset($id) && $content->is_jogo)
                         <tr>
                             <td>
                                 <div class="mt-4">

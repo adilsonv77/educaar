@@ -22,9 +22,9 @@ class HintButton extends Component {
         $contentId = $activities[1]->content_id;
         $contentType = DB::table('contents')
             ->where('id', $contentId)
-            ->value('sort_activities');
+            ->value('is_jogo');
 
-        if($contentType === 2) {
+        if($contentType) {
             $activities = $this->syncOrdem($activities, $contentId);
         }
 

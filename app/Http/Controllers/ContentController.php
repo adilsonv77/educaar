@@ -28,6 +28,8 @@ class ContentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    
     public function index(Request $request)
     {
         if (session('type') == 'student') {
@@ -128,7 +130,8 @@ class ContentController extends Controller
             'name' => '',
             'id' => 0,
             'sort_activities' => false,
-            'refeito' => false
+            'refeito' => false,
+            'is_jogo' => false
         ];
         if (session('type') == 'teacher') {
             $disciplinas = ContentDAO::buscarDisciplinas($anoLetivo->id, $idprof);
@@ -146,15 +149,11 @@ class ContentController extends Controller
     {
         $data = $request->all();
 
-        if($request->ordered == "1") {
-            if($request->random == "1")
-                $data['sort_activities'] = 2;
-            else
-                $data['sort_activities'] = 1;
-
+        if($request->is_jogo == "1") {
             $data['refeito'] = 1;
+            $data['is_jogo'] = $request->is_jogo;
         } else {
-            $data['sort_activities'] = 0;
+            $data['is_jogo'] = 0;
             $data['refeito'] = 0;
         }
 
@@ -174,12 +173,17 @@ class ContentController extends Controller
             // usuário que cadastrou
             $data['user_id'] = Auth::user()->id;
 
-            Content::create($data);
+            $newContent = Content::create($data);
+            if($newContent->is_jogo){
+                return redirect()->route('game.store', ['newContent']);
+            }
         } else {
 
             $content = Content::find($data['id']);
             $content->update($data);
         }
+
+        
 
         return redirect('/content');
     }
@@ -211,7 +215,8 @@ class ContentController extends Controller
             'content' => $content,
             'activities' => $activities,
             'sort_activities' => $content->sort_activities,
-            'refeito' => $content->refeito
+            'refeito' => $content->refeito,
+            'is_jogo' => $content->is_jogo
         ];
 
         if (session('type') == 'teacher') {

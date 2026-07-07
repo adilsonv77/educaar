@@ -28,6 +28,8 @@ class JogoController extends Controller
         return view('pages.game.index', compact('jogos', 'titulo'));
     }
 
+    /* Esse método não é mais utilizado, pois a criação do jogo é realizada na criação de conteúdo
+
     public function create()
     {
         $titulo = 'Criar Jogo';
@@ -74,11 +76,12 @@ class JogoController extends Controller
         $contents = $where->paginate(20);
         return view('pages.game.create', compact('titulo', 'contents'));
     }
+    */    
 
     public function store(Request $request)
     {
         $jogo = Jogo::create($request->all());
-        return redirect()->route('game.index');
+        return redirect()->route('content.index');
     }
 
     public function show(Jogo $jogo)

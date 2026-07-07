@@ -70,12 +70,13 @@
 
                     <div class="mb-4">
                         <div class="custom-control custom-switch switch">
-                            <input type="hidden" name="ordered" value="0">
-                            <input type="checkbox" name="ordered" id="ordered" class="custom-control-input" value="1" @if($sort_activities >= 1) checked @endif>
-                            <label for="ordered" class="custom-control-label">{{ __('Ordered Content') }}</label>
+                            <input type="hidden" name="is_jogo" value="0">
+                            <input type="checkbox" name="is_jogo" id="is_jogo" class="custom-control-input" value="1" @if($is_jogo) checked @endif>
+                            <label for="is_jogo" class="custom-control-label">{{ __('Game Content') }}</label>
                         </div>
                     </div>
 
+                {{-- Esse switch era sobre o conteúdo ser ordenado aleatoriamente. Porém, agora, todo conteúdo que é um jogo, torna-se ordenado aleatoriamente. Conteúdos ordenados não existem mais.  
                     <div class="extras collapse" id="extras">
                         <div class="mb-4">
                             <div class="custom-control custom-switch switch">
@@ -86,6 +87,7 @@
                             </div>
                         </div>
                     </div>
+                --}}
 
                     @endif
                           

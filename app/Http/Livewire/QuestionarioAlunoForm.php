@@ -287,8 +287,8 @@ class QuestionarioAlunoForm extends Component
                 }
             }
             $content = Content::find(session()->get('content_id'));
-            
-            if(!$this->incorreta && $content->sort_activities){
+
+            if(!$this->incorreta && $content->is_jogo){
 
                 Log::info('LIVEWIRE progresso', ['fallback' => $this->proximaPosicaoCalculada]);
 

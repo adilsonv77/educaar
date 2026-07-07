@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('contents', function (Blueprint $table) {
-            $table->boolean('sort_activities')->default(false);
+            $table->boolean('is_jogo')->default(false);
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('contents', function (Blueprint $table) {
-            $table->dropColumn('sort_activities');
+            $table->dropColumn('is_jogo');
         });
     }
 };

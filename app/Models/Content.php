@@ -10,7 +10,7 @@ class Content extends Model
 {
     use HasFactory;
 
-     protected $fillable = ['name', 'fechado', 'user_id', 'disciplina_id', 'turma_modelo_id', 'sort_activities', 'refeito'];
+     protected $fillable = ['name', 'fechado', 'user_id', 'disciplina_id', 'turma_modelo_id', 'is_jogo', 'refeito'];
 
 }
 

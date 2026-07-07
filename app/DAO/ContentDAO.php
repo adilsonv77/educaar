@@ -94,6 +94,7 @@ class ContentDAO
         return $contents;
 
     }
+    
     public static function buscarQuestoesPorConteudo($content_id, $turma_id)
     {
         return DB::table('questions as q')
@@ -189,13 +190,13 @@ class ContentDAO
     public static function getContentType(int $contentId) : int {
         return DB::table('contents')
             ->where('id', $contentId)
-            ->value('sort_activities');
+            ->value('is_jogo');
     }
 
-    public static function buscarConteudosOrdenadosAleatoriamente(int $profId){
+    public static function buscarConteudosJogos(int $profId){
         return DB::table('contents')
             ->where('user_id', $profId)
-            ->where('sort_activities', 2)
+            ->where('is_jogo', 1)
             ->get();
     }
 }

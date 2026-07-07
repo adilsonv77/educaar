@@ -49,7 +49,7 @@ class DeveloperController extends Controller
         
         $contents = $contents
             ->select('contents.id as id', 
-                    'contents.sort_activities as sort',
+                    'contents.is_jogo as is_jogo',
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name'))
             ->get();
         $content = 0;
@@ -157,7 +157,7 @@ class DeveloperController extends Controller
     
         $contents = $contents
             ->select ('contents.id as id', 
-                    'contents.sort_activities as sort',
+                    'contents.is_jogo as is_jogo',
                     DB::raw('concat(contents.name, " - ", disciplinas.name, " (" , turmas_modelos.serie, ")") AS total_name')
                     )
             ->get();
