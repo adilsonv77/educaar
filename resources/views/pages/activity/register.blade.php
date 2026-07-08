@@ -149,7 +149,7 @@
                     <label for="">{{ __('Content') }}*</label>
                     <select class="form-control" name="content_id" aria-label="">
                         @foreach ($contents as $item)
-                            <option value="{{ $item->id }}" data-check="{{ $item->sort }}" 
+                            <option value="{{ $item->id }}" data-check="{{ $item->is_jogo }}" 
                             @if ($item->id === ($content ?? $content->first()->id)) selected="selected" @endif>{{ $item->total_name }}</option>
                         @endforeach
                     </select>
