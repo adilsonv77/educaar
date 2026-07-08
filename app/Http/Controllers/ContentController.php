@@ -10,6 +10,7 @@ use App\Models\Turma;
 use App\Models\Content;
 use App\Models\Activity;
 use App\Models\AnoLetivo;
+use App\Models\Jogo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -109,6 +110,7 @@ class ContentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
         if (session('type') == 'student') {
@@ -129,7 +131,6 @@ class ContentController extends Controller
             'acao' => $acao,
             'name' => '',
             'id' => 0,
-            'sort_activities' => false,
             'refeito' => false,
             'is_jogo' => false
         ];
@@ -175,7 +176,9 @@ class ContentController extends Controller
 
             $newContent = Content::create($data);
             if($newContent->is_jogo){
-                return redirect()->route('game.store', ['newContent']);
+                Jogo::create([
+                    'content_id' => $newContent->id,
+                ]);
             }
         } else {
 
@@ -214,7 +217,6 @@ class ContentController extends Controller
             'user_id' => $content->user_id,
             'content' => $content,
             'activities' => $activities,
-            'sort_activities' => $content->sort_activities,
             'refeito' => $content->refeito,
             'is_jogo' => $content->is_jogo
         ];

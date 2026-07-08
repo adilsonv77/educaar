@@ -80,13 +80,8 @@ class JogoController extends Controller
 
     public function store(Request $request)
     {
-        $jogo = Jogo::create($request->all());
-        return redirect()->route('content.index');
-    }
-
-    public function show(Jogo $jogo)
-    {
-        return view('game.show', compact('jogo'));
+        Jogo::create($request->all());
+        return redirect()->route('game.index');
     }
 
     public function update(Request $request, Jogo $jogo)

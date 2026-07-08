@@ -218,7 +218,7 @@ class BackupController extends Controller{
             $zip->close();
 
         } else {
-            \Log::error('Erro ao criar o ZIP.');
+            Log::error('Erro ao criar o ZIP.');
         }
 
         $backupPath = public_path('backupEducaar');
