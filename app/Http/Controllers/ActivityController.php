@@ -166,7 +166,6 @@ class ActivityController extends Controller
             'name' => 'required|max:100',
             'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:40960000', 'mimetypes:model/gltf-binary,application/zip,application/x-zip-compressed,application/octet-stream',],
             'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg', 'mimetypes:image/png,image/jpeg'],
-            'pontuadaMarcador' => 'boolean',
             'pista_customizada' => 'max:255' 
         ],
         [
@@ -248,17 +247,6 @@ class ActivityController extends Controller
             $data['mural_id'] = $data['scene'];
             
             $content = Content::find($data['content_id']);
-
-            if($request->pontuadaMarcador) {
-                $request -> validate([
-                    'tempo' => 'int|min:10|max:300',
-                    'nota' => 'int|min:10|max:1000'
-                ]);
-                $data += [
-                    'duration' => $request->tempo, 
-                    'score' => $request->nota,
-                ];
-            }
             
             $data['hint'] = $request->pista_customizada;
             $activity = Activity::create($data);

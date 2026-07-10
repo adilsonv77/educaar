@@ -198,7 +198,6 @@ ORDER BY name
                     $newd = [
                         'name' => $linha->name,
                         'tentativa' => (ActivityDAO::getTentativa($activity_id, $linha->aluno_id)-1),
-                        'pontuacao' => ActivityDAO::getPontuacaoAluno($activity_id, $linha->aluno_id)
                     ];
                     $nomealuno = $linha->name;
             } 

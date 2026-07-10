@@ -2,7 +2,6 @@
 
 @php
     $pageName =  $activity->name;
-    $pontuada = \App\DAO\ActivityDAO::getPontuacao($activity['id']);
     $qntCompletas= $result['qtd_alunos_fizeram_completo'];
     $qntIncompletas= $result['qtd_alunos_fizeram_incompleto'];
     $qntNaoFizeram= $result['qtd_alunos_nao_fizeram'];
@@ -95,11 +94,6 @@
 
           @if($activity['conteudoRefeito'])
             <th scope="col1" style="width: 15%;">{{ __('Attempts') }}</th>
-
-            @if($pontuada != null)
-              <th scope="col1" style="width: 15%;">{{ __('Score') }}</th>
-            @endif
-
           @endif
         </tr>
       </thead>
@@ -127,11 +121,6 @@
                     @if($activity['conteudoRefeito'])
                       <td>{{$item['tentativa']}}</td>
                     @endif
-
-                    @if($pontuada)
-                      <td>{{$item['pontuacao']}}</td>
-                    @endif
-                    
                   </tr>
             @endforeach
       </tbody>

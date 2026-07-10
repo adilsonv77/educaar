@@ -137,20 +137,16 @@ class ContentDAO
         return $disciplinas;
     }
 
-    /**
-     * Retorna se um conteúdo tem uma atividade pontuada(true ou false)
-    */
-    public static function conteudoTemAtividadePontuada($content_id) {
+    public static function conteudoTemAtividadePontuada(int $content_id): bool {
         return DB::table('activities')
             ->where('content_id', $content_id)
             ->whereNotNull('score')
             ->exists();
     }
 
-    public static function getNameById($content_id): string {
-        if($content_id === null || $content_id === 0) {
+    public static function getNameById(int $content_id): string {
+        if($content_id === null || $content_id === 0)
             return '';
-        }
 
         return DB::table('contents')
             ->where('id', $content_id)

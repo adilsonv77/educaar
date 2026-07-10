@@ -28,12 +28,6 @@ class QuestionarioAlunoForm extends Component
     public bool $conteudoRefeito;
     public $jaRespondeu;
 
-    public $tempoMaximo;
-    public $pontuacaoMaxima;
-    public $pontuacaoAtual;
-    public $tempoResposta = [];
-    public $tempoRestante;
-
     public $feedback = [];
 
     public $questions;
@@ -64,11 +58,8 @@ class QuestionarioAlunoForm extends Component
         $this->conteudoRefeito = Content::where('id', $contentId)->value('refeito');
 
         $this->jaRespondeu = QuestionDAO::jaRespondeuAlguma($this->activity_id);
-        $this->tempoMaximo = QuestionDAO::getDuration($this->activity_id);
-        $this->tempoRestante = ActivityDAO::getTempoRestante(Auth::id(), $this->activity_id);
-        $this->pontuacaoMaxima = ActivityDAO::getPontuacao($this->activity_id);
 
-        $this->hint = ContentDAO::getContentType($contentId) == 2
+        $this->hint = ContentDAO::getContentType($contentId) == 1
             ? ActivityDAO::getNextHintRandom($contentId, $this->activity_id)
             : ActivityDAO::getNextHint($contentId, $this->activity_id);
 
@@ -128,18 +119,6 @@ class QuestionarioAlunoForm extends Component
         $this->qtasquestoes = count($questions);
 
         $this->dispatchBrowserEvent('openQuestionsModal');
-
-        $pontuacao = Pontuacao::where('user_id', Auth::id())->where('activity_id', $this->activity_id);
-        if($this->tempoMaximo !== null && $pontuacao->doesntExist() && session('primeira_entrada') === 1) {
-            $tempo = ($this->tempoRestante !== 0 && $this->tempoRestante !== null)
-                ? $pontuacao->value('tempo_restante')
-                : $this->tempoMaximo;
-            
-            $this->dispatchBrowserEvent('startTimer', [
-                'tempoMaximo' => $tempo,
-                'qtaQuestoes' => $this->qtasquestoes
-            ]);
-        }
     }
 
     private function questionarioRespondido()
@@ -187,7 +166,6 @@ class QuestionarioAlunoForm extends Component
         // as alternativas escolhidas salvar na sessão, assim como o numero da questao que estava observando
         session()->put("livewire_alternativas", $this->alternativas);
         session()->put("livewire_nrquestao", $this->nrquestao);
-        session()->put('primeira_entrada', 0);
     }
 
 
@@ -198,21 +176,12 @@ class QuestionarioAlunoForm extends Component
         } 
     }
 
-    public function salvar($timeout, $tempoRestante) {
-        $this->incorreta = false;
-
-        if($timeout == true) {
-            $this->salvarRespostas(true, $tempoRestante);
-        } else {
-            if($this->nrquestao < $this->qtasquestoes-1) {
+    public function salvar() {
+        if($this->nrquestao < $this->qtasquestoes - 1) {
                 $this->nrquestao = $this->nrquestao + 1;
-            } else {
-                $this->salvarRespostas(false, $tempoRestante);
-            }
+                return;
         }
-    }
 
-    public function salvarRespostas($timeout, $tempoRestante) {
         DB::beginTransaction();
         $questions = session()->get('livewire_questoes');
         foreach($questions as $questao) {
@@ -261,21 +230,6 @@ class QuestionarioAlunoForm extends Component
                     'correct' => ($opcao === $questao->a),
                 ];
                 StudentAnswer::create($data);
-            }
-            
-            $tempoRestanteAtual = ActivityDAO::getTempoRestante(Auth::id(), $this->activity_id);
-
-            if($tempoRestanteAtual === null && $this->tempoMaximo !== null) {
-                $this->pontuacaoAtual = $this->calcularPontuacao($corretas);
-                Pontuacao::create([
-                    'user_id' => Auth::id(),
-                    'activity_id' => $this->activity_id,
-                    'pontuacao' => $this->pontuacaoAtual,
-                    'tempo_restante' => $timeout ? 0 : $tempoRestante
-                ]);
-            } else if($tempoRestanteAtual > 0) {
-                Pontuacao::where('user_id', Auth::id())->where('activity_id', $this->activity_id)
-                    ->update(['tempo_restante' => $tempoRestante]);
             }
 
             foreach($this->feedback as $item) {
@@ -327,17 +281,13 @@ class QuestionarioAlunoForm extends Component
             $this->incorreta = in_array(0, $corretas);
             $this->hint = $this->incorreta ? '' : $this->hint;
             
-            if($timeout == false) {
-                if ($this->hint)
-                   $this->dispatchBrowserEvent('openHintModal'); 
-                else
-                   $this->dispatchBrowserEvent('closeQuestionarioModal');  
-                //$this->dispatchBrowserEvent('openFeedbackModal');
-            }
+            if ($this->hint)
+               $this->dispatchBrowserEvent('openHintModal'); 
+            else
+               $this->dispatchBrowserEvent('closeQuestionarioModal');  
 
             $this->emitTo('hint-button', 'updateHint', $this->hint);
 
-            session()->put('primeira_entrada', 1);
         } catch (Exception $e) {
             DB::rollback();
             dd($e);
@@ -387,31 +337,6 @@ class QuestionarioAlunoForm extends Component
         $this->dispatchBrowserEvent('closeNotAllowedModal');
     }
      */   
-
-    public function addTempo($tempo) {
-        $valor = is_numeric($tempo) ? floatval($tempo) : 0.0;
-        $this->tempoResposta[] = $valor;
-    }
-
-    private function calcularPontuacao($corretas) {
-        $pontos = [];
-
-        if (empty($this->tempoResposta)) {
-            return 0;
-        }
-
-        $pontos = collect($corretas)->map(function ($correta, $i) {
-            if($correta !== 1) return 0;
-
-            $tempoGasto = $i === 0
-                ? $this->tempoResposta[0]
-                : $this->tempoResposta[$i] - $this->tempoResposta[$i-1];
-
-            return round((1-($tempoGasto/$this->tempoMaximo)/2) * ($this->pontuacaoMaxima/$this->qtasquestoes));
-        })->filter()->values()->toArray();
-
-        return array_sum($pontos);
-    }
 
     public function hint() {
         $this->dispatchBrowserEvent('openHintModal');

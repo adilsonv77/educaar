@@ -4,6 +4,7 @@ namespace App\DAO;
 
 use App\Models\AnoLetivo;
 use App\Models\Activity;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -64,10 +65,8 @@ class ActivityDAO
 
     /**
      * Retorna a ordem de um conteúdo baseado na sequência particular de um aluno
-     * @param int $content_id
-     * @return array
     */
-    public static function buscarRandomOrderedActivitiesPorConteudo($content_id) {
+    public static function buscarRandomOrderedActivitiesPorConteudo(int $content_id): Collection {
         $activities = self::buscarActivitiesPorConteudo($content_id);
 
         $studentSort = DB::table('random_sorts')
@@ -92,29 +91,7 @@ class ActivityDAO
         return $activityDic;
     }
 
-    /**
-     * Retorna o tempo restante que o usuário tem para responder a atividade em questão
-    */
-    public static function getTempoRestante($user_id, $activity_id) {
-        return DB::table('pontuacoes')
-            ->where('user_id', $user_id)
-            ->where('activity_id', $activity_id)
-            ->value('tempo_restante');
-    }
-
-    /**
-     * Retorna se a atividade pode ser refeita ou não.
-    */
-    public static function refeita($activity_id) {
-        return DB::table('activities')
-            ->where('id', $activity_id)
-            ->value('refeita');
-    }
-
-    /**
-     * Retorna a tentativa atual do usuário (Última tentativa + 1).
-    */
-    public static function getTentativa($id_activity, $id_user) {
+    public static function getTentativa(int $id_activity, int $id_user): int {
         $tentativa = DB::table('student_answers as sa')
             ->select('sa.tentativas')
             ->where('sa.activity_id', $id_activity)
@@ -123,39 +100,6 @@ class ActivityDAO
             ->value('tentativas') ?? 0;
 
         return ++$tentativa;
-    }
-
-    /**
-     * Retorna a pontuação máxima de uma atividade.
-    */
-    public static function getPontuacao($activity_id) {
-        return DB::table('activities')
-            ->where('id', $activity_id)
-            ->value('score');
-    }
-
-    /**
-     * Retorna a pontuacao de um aluno em certa atividade.
-    */
-    public static function getPontuacaoAluno($activity_id, $aluno_id) {
-        return DB::table('pontuacoes')
-            ->where('activity_id', $activity_id)
-            ->where('user_id', $aluno_id)
-            ->value('pontuacao');
-    }
-
-    /**
-     * Retorna as atividades pontuadas de um professor
-    */
-    public static function getAtividadesPontuadasPorProf($prof_id) {
-        return DB::table('activities')
-            ->where('professor_id'  , $prof_id)
-            ->where('duration', '>', 0)
-            ->select([
-                'id',
-                'name'
-            ])
-            ->get();
     }
 
     /**
@@ -170,12 +114,6 @@ class ActivityDAO
                 'name'
             ])
             ->get();
-    }
-
-    public static function hasAnswers(int $activity_id): bool {
-        return DB::table('pontuacoes')
-            ->where('activity_id', $activity_id)
-            ->exists();
     }
 
     /**

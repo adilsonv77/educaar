@@ -157,101 +157,6 @@
 
             checkIfAllAnswered();
         });
-
-        /* Eventos do Timer */
-        let intervalo = null;
-        let tempoMaximo = 0;
-        let questaoAtual = 1;
-        let qtaQuestoes = 0;
-        let restanteSeg = 0;
-
-        window.addEventListener('startTimer', event => {
-            tempoMaximo = event.detail?.tempoMaximo ? (Number(event.detail.tempoMaximo) * 1000) + 1000 : tempoMaximo;
-            qtaQuestoes = event.detail?.qtaQuestoes ? Number(event.detail.qtaQuestoes) : qtaQuestoes;
-
-            inicio = performance.now();
-
-            if(intervalo === null) {
-                intervalo = setInterval(() => {
-                    const decorrido = performance.now() - inicio;
-                    restanteMs = tempoMaximo - decorrido;
-
-                    if(restanteMs <= 0) {
-                        timesOver();
-                        return;
-                    }
-
-                    restanteSeg = (restanteMs / 1000).toFixed(2);
-                    updateTimer(restanteSeg);
-                }, 250);
-            }
-        });
-
-        function getComponent() {
-            const id = document.getElementById('questionarioModal')
-                               ?.getAttribute('data-livewire-id');
-            return id ? window.Livewire.find(id) : null;
-        }
-
-        function timesOver() {
-            const livewireEvent = getComponent();
-
-            if(intervalo) {
-                clearIntervalo();
-            }
-            dispatchEvent(new CustomEvent('stopTimer'));
-            livewireEvent.call('salvar', true, 0);
-        }
-
-        function handleSubmit() {
-            /*  const button = event.target.closest('#salvibutton');
-            const livewireEvent = button?.closest('[wire\\:id]')?.__livewire; */
-            const livewireEvent = getComponent();
-
-            if(tempoMaximo > 0) {
-                if(livewireEvent) {
-                    livewireEvent.call('addTempo', ((tempoMaximo / 1000) - restanteSeg));
-                    
-                    setTimeout(() => {
-                        livewireEvent.call('salvar', false, restanteSeg);
-                    }, 50);
-                }
-                if(qtaQuestoes === questaoAtual) {
-                    clearIntervalo();
-                }
-                questaoAtual++;
-            } else {
-                setTimeout(() => {
-                    livewireEvent.call('salvar', false, 0);
-                });
-            }
-        }
-
-        /**
-         * Operador Bitwise ( | 0 ) descarta a parte decimal
-         * .slice(-2) impede a string de ter mais de dois caracteres
-        */
-        function updateTimer(restanteSeg) {
-            if(restanteSeg <= 0) {
-                timerSpan.textContent = "00:00";
-                return;
-            }
-
-            const total = restanteSeg > 0 ? restanteSeg | 0 : 0;
-
-            const min = ('0' + ((total / 60) | 0)).slice(-2);
-            const seg = ('0' + (total % 60)).slice(-2);
-            const texto = `${min}:${seg}`;
-
-            if(timerSpan.textContent !== texto) {
-                timerSpan.textContent = texto;
-            }
-        }
-
-        function clearIntervalo() {
-            clearInterval(intervalo);
-            intervalo = null;
-        } 
 </script>
 
     <!-- wire:ignore foi necessario porque livewire escondia o botão assim que mostrava a janela de diálogo -->
@@ -309,17 +214,6 @@
                     <h5 class="modal-title">
                         Questão  {{ ($nrquestao+1) }} de {{ $qtasquestoes }}
                     </h5>
-                    @if($tempoMaximo != null)
-                        @if($tempoMaximo != 0)
-                            <span id="timerSpan" wire:ignore>
-                                {{ gmdate('i:s', $tempoMaximo) }}
-                            </span>
-                        @else
-                            <span wire:ignore">
-                                O tempo acabou!
-                            </span>
-                        @endif
-                    @endif
                 </div>
                 <div class="modal-body scroll" >
                     <div> <!--  class="scroll" -->
@@ -382,8 +276,7 @@
                                          <!-- @ if ($respondida == 1) hidden="hidden" @ endif -->
                                             <button id="salvibutton" 
                                                     class="btn btn-success" 
-                                                    type="button"
-                                                    onclick="handleSubmit()"
+                                                    type="submit"
                                                     @if ($nrquestao == $qtasquestoes-1 && $respondida == 1) 
                                                         respondida_ultima="1" 
                                                     @else
@@ -413,46 +306,44 @@
         </div>
     </div>
 
-    <div wire:ignore.self class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" data-backdrop="static"
-        aria-labelledby="exampleModalLabel" aria-hidden="true" style="max-height: 95%; overflow: visible;">
-        <div class="modal-dialog" role="document" style=" display: flex; flex-direction: column; height: 100%;">
-            <div class="modal-content" style="height: 100%;">
-                <div class="modal-body" style="max-height: 150px;">
-                    <h1>Respostas salvas!</h1>
-                    <p>Acompanhe seus resultados abaixo:</p>
+    <div wire:ignore.self class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="feedbackModalLabel">Respostas salvas!</h5>
                 </div>
-                <div class="container mt-1" style="height: 80%; overflow: hidden;">
-                    <div class="container my-4 max" style="max-height: 100%; overflow-y: auto;">
-                        @if($pontuacaoAtual != null)
-                            <div class="card mb-3 shadow-sm">
-                                <div class="card-body">
-                                    <p class="card-text">
-                                        <strong>Pontuação:</strong> {{$pontuacaoAtual}} Pontos
-                                    </p>
-                                </div>
-                            </div>
-                        @endif
-                        @foreach($feedback as $questao)
-                            <div class="card mb-3 shadow-sm">
-                                <div class="card-body">
-                                    <p class="card-text mb-3">{{ $questao['question'] }}</p>
-                                    <div class="alert alert-primary mb-0 d-flex align-items-center" role="alert">
-                                        <div><strong>Sua resposta:</strong> {{ $questao['alternative_answered'] }}</div>
+
+                <div class="modal-body">
+                    <p class="text-muted mb-3">Acompanhe seus resultados abaixo:</p>
+
+                    @foreach($feedback as $questao)
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-body">
+                                <p class="card-text mb-3">{{ $questao['question'] }}</p>
+                                <div class="alert alert-primary mb-0 d-flex align-items-center" role="alert">
+                                    <div>
+                                        <strong>Sua resposta:</strong> {{ $questao['alternative_answered'] }}
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
-                </div>      
-                <div class="modal-footer" style="max-height: 20%;">
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="modal-footer">
                     @if($hint !== '')
-                        <button type="button" wire:click="hint()" class="btn btn-primary">Pista</button>
+                        <button type="button" wire:click="hint()" class="btn btn-primary w-100">
+                            Pista
+                        </button>
                     @else
-                        <button wire:click="close()" type="button" class="btn btn-primary" data-dismiss="modal">
+                        <button wire:click="close()" type="button" class="btn btn-primary w-100" data-dismiss="modal">
                             Fechar
                         </button>
                     @endif
                 </div>
+
             </div>
         </div>
     </div>
@@ -485,34 +376,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div wire:ignore.self class="modal fade" id="stopTimer" tabindex="-1" role="dialog"
-     aria-labelledby="stopTimerLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content border-0 rounded-4 overflow-hidden" style="box-shadow: 0 20px 60px rgba(0,0,0,0.18);">
-    
-          <div class="modal-body text-center pt-4 pb-2 px-4">
-    
-            <div class="position-relative mx-auto mb-3" style="width: 64px; height: 64px;">
-              <i class="bi bi-clock" style="font-size: 2rem"></i>
-            </div>
-    
-            <h5 class="fw-medium mb-1" style="font-size: 1.2rem;">O tempo acabou!</h5>
-            <p class="text-muted mb-4" style="font-size: 0.875rem;">
-              As pontuações de próximas tentativas não serão contabilizadas.
-            </p>
-          </div>
-    
-          <div class="modal-footer border-0 pt-0 px-4 pb-4">
-            <button type="button" class="btn w-100 fw-medium btn-primary" data-dismiss="modal"
-                    style="color:#fff; border:none; padding: 11px; border-radius: 8px;">
-              Entendido
-            </button>
-          </div>
-          
-        </div>
-      </div>
     </div>
 
 </div>
