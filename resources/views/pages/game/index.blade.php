@@ -14,7 +14,6 @@
                                 <th style="text-align: left;">{{ __('Name') }}</th>
                                 <th>{{ __('Parties') }}</th>
                                 <th>{{ __('Create Party') }}</th>
-                                <th>{{ __('Delete') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,38 +39,7 @@
                                         <button type="submit" class="btn btn-primary" @if(!$jogo->podeCriarSala) disabled title="Sala não inicializada já criada" @endif><i class="bi bi-plus-circle"></i></button>
                                     </form>
                                     </td>
-
-                                    @if (session('type') == 'teacher')
-                                        <td>
-                                            <button type="button"
-                                                class="btn btn-danger"  @if ($jogo->content->qtasatividades > 0) disabled @endif
-                                                data-toggle="modal" data-target="#modal{{ $jogo->id }}"
-                                                title="{{ __('Delete') }}">
-                                                <i class="bi bi-trash3 h2" style = "color : #ffffff;"></i>
-                                            </button>
-                                        </td>
-                                    @endif
                                 </tr>
-
-                                <div class="modal fade" id="modal{{ $jogo->id }}" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <h3>{{ __('Deletar o conteúdo :content ?', ["content" => $jogo->content->name]) }} </h3>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">{{ __('Cancel') }}</button>
-                                                <form action="{{ route('game.destroy', $jogo->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             @endforeach
 
                         </tbody>

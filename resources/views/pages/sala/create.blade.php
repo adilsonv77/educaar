@@ -69,7 +69,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h1>Criar nova regra</h1>
-                
+
                 <form action="{{ route('regra.store') }}" method="post" class="p-3"> @csrf
                     <input type="hidden" name="jogo_id" value="{{ $jogoId }}">
 

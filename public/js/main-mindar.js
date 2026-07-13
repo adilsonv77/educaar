@@ -231,8 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
           //buttonAR.href = buttonAR.dataset.href + "?id=" + anchor.activityid;  
           
           //caso a atividade seja ordenada e o aluno tenta acessar uma atividade fora da ordem, o modal aparece avisando que a atividade anterior deve ser concluída. Esse modal está em questionario-aluno-form.blade.php
-          if (is_sort == "1" && proximaAtividadeLiberada != actualPosition) {
-
+          if(is_sort == "1" && proximaAtividadeLiberada != actualPosition) {
+            
             //console.log("Posição não permitida");
 
             //glbScene.visible = false;

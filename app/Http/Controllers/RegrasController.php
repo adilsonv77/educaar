@@ -43,6 +43,10 @@ class RegrasController extends Controller
             'tempo' => 'integer|min:0|required'
         ]);
 
+        if($data['tempo'] <= 0){
+            $data['tempo'] = PHP_INT_MAX;
+        }
+
         Regras::create($data);
 
         if(isset($request->type)) {
