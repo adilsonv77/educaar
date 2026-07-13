@@ -47,6 +47,7 @@ class QuestionarioAlunoForm extends Component
 
     public $hint;
     public bool $isJogo;
+    public int $feitas = 1;
     /*
 - PRECISO TESTAR COMO FUNCIONA COM FORMULÁRIOS JÁ RESPONDIDOS
 */
@@ -59,9 +60,19 @@ class QuestionarioAlunoForm extends Component
 
         $this->jaRespondeu = QuestionDAO::jaRespondeuAlguma($this->activity_id);
 
-        $this->hint = ContentDAO::getContentType($contentId) == 1
-            ? ActivityDAO::getNextHintRandom($contentId, $this->activity_id)
-            : ActivityDAO::getNextHint($contentId, $this->activity_id);
+        $this->feitas = ArProgress::where('content_id', $contentId)
+            ->where('student_id', Auth::id())
+            ->value('next_position');
+        
+        if($this->feitas >= ActivityDAO::buscarActivitiesPorConteudo($contentId)->count()) {
+            $this->hint = "Acabou!";
+        } else {
+            $this->hint = ContentDAO::getContentType($contentId) == 1
+                ? ActivityDAO::getNextHintRandom($contentId, $this->activity_id)
+                : ActivityDAO::getNextHint($contentId, $this->activity_id);
+
+            $this->feitas++;
+        }
 
         $this->feedback = [];
 
