@@ -175,11 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //console.log("Posição da atividade: " + li.getAttribute("activityPosition"));
         
         //se for um conteúdo com atividades ordenadas, pega a posição da atividade
-        if(is_sort == "1"){
-          posAncora = li.getAttribute("activityPosition") - 1;
-        } else{
-          posAncora = i;
-        }
+        posAncora = i;
         
         //o anchor é criado com a posição correta
         const anchor = mindarThree.addAnchor(posAncora);
