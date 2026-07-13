@@ -327,5 +327,6 @@
 
     "===== GAME/PARTY =====": "===== JUEGO/SALA =====",
   "New Rule": "Nueva regla",
-  "Delete the party :party": "Eliminar la sala :party"
+  "Delete the party :party": "Eliminar la sala :party",
+  "Game Content": "Juego"
 }
