@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRegrasRequest;
 use App\Http\Requests\UpdateRegrasRequest;
 use Illuminate\Http\Request;
+use App\Models\RegraProfessor;
+use Illuminate\Support\Facades\Auth;
 
 class RegrasController extends Controller
 {
@@ -40,14 +42,19 @@ class RegrasController extends Controller
     {
         $data = $request->validate([
             'pontMax' => 'integer|min:0|required',
-            'tempo' => 'integer|min:0|required'
+            'tempo'   => 'integer|min:0|required'
         ]);
 
         if($data['tempo'] == 0){
             $data['tempo'] = 999999999;
         }
 
-        Regras::create($data);
+        $novaRegra = Regras::create($data);
+
+        RegraProfessor::create([
+            'regra_id'     => $novaRegra->id,
+            'professor_id' => Auth::id(),
+        ]);
 
         if(isset($request->type)) {
             return redirect()->route('sala.create', ['jogo_id' => $request['jogo_id']])->with('error', 'Erro ao criar regra! Tente novamente');

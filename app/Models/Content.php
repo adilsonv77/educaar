@@ -10,7 +10,11 @@ class Content extends Model
 {
     use HasFactory;
 
-     protected $fillable = ['name', 'fechado', 'user_id', 'disciplina_id', 'turma_modelo_id', 'is_jogo', 'refeito'];
+    protected $fillable = ['name', 'fechado', 'user_id', 'disciplina_id', 'turma_modelo_id', 'is_jogo', 'refeito'];
+
+    public function jogo() {
+        return $this->hasOne(Jogo::class);
+    }
 
 }
 

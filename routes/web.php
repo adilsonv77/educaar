@@ -166,6 +166,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/sala', [App\Http\Controllers\SalaController::class, 'index'])->name('sala.index');
     Route::post('/sala/store', [App\Http\Controllers\SalaController::class, 'store'])->name('sala.store');
     Route::post('/sala/edit/{id}', [App\Http\Controllers\SalaController::class, 'edit'])->name('sala.edit');
+    Route::post('/sala/abrir/{id}', [App\Http\Controllers\SalaController::class, 'abrirSala'])->name('sala.abrir');
     Route::post('/sala/{id}/comecar', [App\Http\Controllers\SalaController::class, 'comecarJogo'])->name('sala.comecar');
     Route::post('/sala/{id}/terminar', [App\Http\Controllers\SalaController::class, 'terminarJogo'])->name('sala.terminar');
     Route::delete('/sala/{id}', [App\Http\Controllers\SalaController::class, 'destroy'])->name('sala.destroy');

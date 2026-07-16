@@ -313,6 +313,10 @@
     window.__content_id = {{ $content->id }};
 
     window.__jogoPodeComecar = {{ (isset($isJogo) && $isJogo) ? 'false' : 'true' }};
+
+    window.addEventListener('jogo-comecou', event => {
+        window.__jogoPodeComecar = true;
+    });
 </script>
 
 <script src="{{ asset('js/main-mindar.js?v=' . filemtime(public_path('js/main-mindar.js'))) }}" type="module"></script>

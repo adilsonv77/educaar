@@ -131,20 +131,27 @@ class SalaController extends Controller
         return redirect()->back()->with('success', 'Resultado, respostas e progresso do aluno limpos com sucesso.');
     }
 
-    public function comecarJogo($id){
-
+    public function abrirSala($id){
         $sala = Sala::find($id);
-        $sala->aberta = true;
-        $sala->started_at = now();
+        $sala->aberta = true; 
+        $sala->started_at = null;
+        $sala->save();
+
+        return redirect()->back()->with('success', 'Sala aberta! Os alunos já podem entrar.');
+    }
+
+    public function comecarJogo($id){
+        $sala = Sala::find($id);
+        $sala->aberta = true; 
+        $sala->started_at = now(); 
         $sala->save();
 
         return redirect()->back()->with('success', 'Jogo iniciado!');
     }
 
     public function terminarJogo($id){
-
         $sala = Sala::find($id);
-        $sala->aberta = false;
+        $sala->aberta = false; 
         $sala->save();
 
         return redirect()->back()->with('success', 'Jogo terminado!');

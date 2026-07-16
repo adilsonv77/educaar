@@ -1,11 +1,14 @@
-<div>
+
+<div wire:poll.5s="verificarFimDeJogo">
+    
     @if($sala && $sala->aberta && $sala->started_at)
-        <div wire:poll.5s="verificarFimDeJogo" style="position: absolute; top: 10px; right: 10px; z-index: 1000; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; font-weight: bold; color: #833B8D; border: 2px solid #833B8D;">
+        
+        <div wire:ignore style="position: absolute; top: 10px; right: 10px; z-index: 1000; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; font-weight: bold; color: #833B8D; border: 2px solid #833B8D;">
             <i class="bi bi-stopwatch"></i> 
             <span id="cronometroVisual">Calculando...</span>
         </div>
 
-       <script>
+        <script>
             if (!window.cronometroIniciado) {
                 window.cronometroIniciado = true;
 
@@ -36,6 +39,10 @@
                 }, 1000);
             }
         </script>
-
+        <script>
+        window.addEventListener('forcar-redirecionamento', event => {
+            window.location.href = event.detail.url;
+        });
+    </script>
     @endif
 </div>

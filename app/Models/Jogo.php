@@ -19,4 +19,8 @@ class Jogo extends Model
         return $this->belongsTo(Content::class);
     }
 
+    public function salas() {
+        return $this->hasMany(Sala::class);
+    }
+
 }

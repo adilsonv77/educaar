@@ -66,10 +66,8 @@ class MonitorJogo extends Component
         if (!$sala->aberta) {
             $acabou = true;
         } 
-
         elseif ($sala->started_at && $sala->regra) {
-
-            $horaFim = Carbon::parse($sala->started_at)->addSeconds($sala->regra->tempo);
+            $horaFim = \Carbon\Carbon::parse($sala->started_at)->addSeconds($sala->regra->tempo);
             
             if (now()->greaterThanOrEqualTo($horaFim)) {
                 $acabou = true;
@@ -79,13 +77,11 @@ class MonitorJogo extends Component
         }
 
         if ($acabou) {
+            $urlDestino = $this->isProfessor 
+                ? route('sala.results', $sala->id) 
+                : route('home'); 
 
-            if (!$this->isProfessor) {
-                return redirect()->route('student.conteudos');
-            }
-            
-
-            return redirect()->route('sala.results', $sala->id);
+            $this->dispatchBrowserEvent('forcar-redirecionamento', ['url' => $urlDestino]);
         }
     }
 

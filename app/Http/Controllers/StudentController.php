@@ -22,6 +22,7 @@ use App\DAO\QuestionDAO;
 use App\DAO\JogoDAO;
 use App\Models\ArProgress;
 use App\Models\RandomSort;
+use App\Models\Sala;
 
 class StudentController extends Controller
 {
@@ -32,69 +33,83 @@ class StudentController extends Controller
      */
     public function indexContentStudent(Request $request)
     {
-        // Valida se o ID da disciplina foi enviado
         if ($request->has('id')) {
             session()->put('disciplina', $request->id);
         }
 
         $id = session()->get("disciplina");
+        $userId = Auth::id(); 
 
-        // Verifica se o usuário tem permissão correta
         if (Auth::user()->type != session('type')) {
-            $conteudos = ContentDAO::buscarConteudosDeveloper(Auth::user()->id)
+            $conteudosPadrao = ContentDAO::buscarConteudosDeveloper($userId)
                 ->where('disciplinas.id', '=', $id)
                 ->where('contents.fechado', '=', 1)
-                ->select('contents.name', 'contents.id', 'contents.fechado')
+                ->where('contents.is_jogo', '=', 0) 
+                ->select('contents.name', 'contents.id', 'contents.fechado', 'contents.is_jogo')
                 ->get();
         } else {
             $anoAtual = AnoLetivo::where('school_id', Auth::user()->school_id)
                 ->where('bool_atual', 1)
                 ->first();
 
-            $conteudos = DB::table('alunos_turmas as at')
+            $conteudosPadrao = DB::table('alunos_turmas as at')
                 ->select('c.name', 'c.id', 'c.is_jogo')
                 ->join('turmas as t', 't.id', '=', 'at.turma_id')
                 ->join('disciplinas_turmas_modelos as dtm', 'dtm.turma_modelo_id', '=', 't.turma_modelo_id')
-                ->join('contents as c', function (JoinClause $join) {
+                ->join('contents as c', function ($join) {
                     $join->on('dtm.turma_modelo_id', '=', 'c.turma_modelo_id')
                         ->on('c.disciplina_id', '=', 'dtm.disciplina_id');
                 })
                 ->where([
-                    ['at.aluno_id', '=', Auth::user()->id],
+                    ['at.aluno_id', '=', $userId],
                     ['t.ano_id', '=', $anoAtual->id],
                     ['c.disciplina_id', '=', $id],
-                    ['c.fechado', '=', 1]
+                    ['c.fechado', '=', 1],
+                    ['c.is_jogo', '=', 0] 
                 ])
                 ->distinct()
                 ->get();
         }
-        // Aqui você pode calcular o valor de 'conteudoRespondido' com base nas respostas do aluno
+
+        $turmasIds = DB::table('alunos_turmas')
+            ->where('aluno_id', $userId)
+            ->pluck('turma_id');
+
+        $salas = Sala::with('jogo.content') 
+            ->whereIn('turma_id', $turmasIds) 
+            ->where('aberta', true) 
+            ->whereNull('started_at')        
+            ->get();
+
+        $conteudosJogo = $salas->pluck('jogo.content')
+            ->filter()       
+            ->values();
+
+        $conteudos = $conteudosPadrao->concat($conteudosJogo)->unique('id')->values();
+
+
         $conteudosRespondidos = [];
         foreach ($conteudos as $conteudo) {
-            // Conta questões respondidas dentro do conteúdo
+            
             $respondidas = DB::table('student_answers as sa')
                 ->join('questions as q', 'sa.question_id', '=', 'q.id')
                 ->join('activities as a', 'q.activity_id', '=', 'a.id')
                 ->where('a.content_id', $conteudo->id)
-                ->where('sa.user_id', Auth::user()->id)
+                ->where('sa.user_id', $userId)
                 ->distinct('sa.question_id')
                 ->count('sa.question_id');
 
-            // Conta total de questões no conteúdo
             $totalQuestoes = DB::table('questions as q')
                 ->join('activities as a', 'q.activity_id', '=', 'a.id')
                 ->where('a.content_id', $conteudo->id)
                 ->count();
 
-            // Se todas as questões foram respondidas, marca como concluído
-            $conteudosRespondidos[$conteudo->id] = ($respondidas === $totalQuestoes);
+            if ($totalQuestoes > 0) {
+                $conteudosRespondidos[$conteudo->id] = ($respondidas === $totalQuestoes);
+            } else {
+                $conteudosRespondidos[$conteudo->id] = false; 
+            }
         }
-
-        // dd($totalQuestoes, $respondidas);
-
-        // Log::info("Total de questões: $totalQuestoes, Questões respondidas: $respondidas");
-        // dd($conteudosRespondidos);
-        // dd($respondido);
 
         $conteudos = $conteudos->reject(function ($conteudo) use ($conteudosRespondidos) {
             return $conteudosRespondidos[$conteudo->id] === true;
@@ -102,7 +117,6 @@ class StudentController extends Controller
 
         $rota = route("home");
 
-        // limpar a sessao a ser usada nos questionarios
         session()->forget(['livewire_nrquestao', 'livewire_alternativas', 'livewire_questoes', 'livewire_activity_id']);
 
         return view('student.indexContentStudent', compact('conteudos', 'rota', 'conteudosRespondidos'));
