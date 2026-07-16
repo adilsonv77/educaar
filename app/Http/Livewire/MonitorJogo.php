@@ -39,7 +39,6 @@ class MonitorJogo extends Component
             $this->pontuacaoMaxima = 0;
         }
         */
-
     }
 
     private function getSala()

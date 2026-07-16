@@ -52,7 +52,7 @@ class StudentController extends Controller
                 ->first();
 
             $conteudos = DB::table('alunos_turmas as at')
-                ->select('c.name', 'c.id')
+                ->select('c.name', 'c.id', 'c.is_jogo')
                 ->join('turmas as t', 't.id', '=', 'at.turma_id')
                 ->join('disciplinas_turmas_modelos as dtm', 'dtm.turma_modelo_id', '=', 't.turma_modelo_id')
                 ->join('contents as c', function (JoinClause $join) {
@@ -95,6 +95,10 @@ class StudentController extends Controller
         // Log::info("Total de questões: $totalQuestoes, Questões respondidas: $respondidas");
         // dd($conteudosRespondidos);
         // dd($respondido);
+
+        $conteudos = $conteudos->reject(function ($conteudo) use ($conteudosRespondidos) {
+            return $conteudosRespondidos[$conteudo->id] === true;
+        });
 
         $rota = route("home");
 
@@ -304,6 +308,13 @@ class StudentController extends Controller
         $student = Auth::user();
         $student->avatar = $avatar;
         $student->save();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true, 
+                'message' => 'Avatar atualizado com sucesso!'
+            ]);
+        }
 
         return redirect()->route('student.avatar', $student->id)->with('success', 'Avatar atualizado com sucesso!');
     }

@@ -1,35 +1,78 @@
 @extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => false])
 
 @section('content')
+
+    <style>
+        .btn-animado {
+
+            background-image: linear-gradient(to right, #86398e 0%, #d400ff 50%, #86398e 100%);
+            background-size: 200% auto;
+            color: white;
+            border: none;
+            transition: all 0.5s ease;
+        }
+
+        .btn-animado:hover {
+            background-position: right center;
+            color: white;
+            box-shadow: 0 8px 15px rgba(13, 110, 253, 0.4);
+        }
+
+        .btn-animado:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 5px rgba(13, 110, 253, 0.4);
+        }
+    </style>
     <div class="">
         @if (session('type') == 'student' || session('type') == 'developer')
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <tbody>
-                        @for($i = 0; $i < count($conteudos); $i++)
-                        @php $conteudo_id = $conteudos[$i]->id @endphp
-                            <tr>
-                                <td>
-                                    <div class="d-flex gap-2 text-center">
-                                        <form action="{{ route('student.showActivity') }}" method="get" class="flex-grow-1 mr-2"> @csrf
-                                            <input name="id" type="hidden" value="{{ $conteudo_id }}"/>
-                                            <input name="type" type="hidden" value="aluno"/>
-                                            <button type="submit" class="btn btn-warning flex-grow-1">
-                                                {{ $conteudos[$i]->name }}
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endfor
-                        <tr><td><br/></td></tr> <!-- para deixar um espaço após o último elemento -->
-                        </tbody>
-                    </table>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="text-center fw-bold py-3">
+                                        Conteúdos Padrão
+                                    </td>
+                                </tr>
+                                @php
+                                    $mostrouDivisorJogos = false;
+                                @endphp
+
+                                @foreach ($conteudos->sortBy('is_jogo') as $conteudo)
+                                    @if ($conteudo->is_jogo && !$mostrouDivisorJogos)
+                                        <tr>
+                                            <td class="text-center fw-bold py-3"
+                                                style="border-top: 80px solid #ffffff;">
+                                                Jogos
+                                            </td>
+                                        </tr>
+                                        @php $mostrouDivisorJogos = true; @endphp
+                                    @endif
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex gap-2 text-center">
+                                                <form action="{{ route('student.showActivity') }}" method="get"
+                                                    class="flex-grow-1 mr-2">
+                                                    @csrf
+                                                    <input name="id" type="hidden" value="{{ $conteudo->id }}" />
+                                                    <input name="type" type="hidden" value="aluno" />
+
+                                                    <button type="submit"
+                                                        class="btn btn-warning flex-grow-1 {{ $conteudo->is_jogo ? 'btn-animado' : '' }}">
+                                                        {{ $conteudo->name }}
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
 
 
@@ -39,7 +82,6 @@
             @endsection
 
             @section('style')
-            <!-- isso tem que sair pois está duplicado em mobile.css -->
                 <style>
                     body {
                         margin: 1em;
@@ -61,8 +103,8 @@
                     .btn.btn-warning {
                         width: 100%;
                         height: 40%;
-                      
-                       
+
+
                     }
 
                     .btn.btn-success {
@@ -70,7 +112,7 @@
                         height: 40%;
                         /* background-color: #efbecc;  */
                         background-color: gray;
-                        
+
                     }
 
                     .attribution {

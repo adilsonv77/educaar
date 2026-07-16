@@ -117,3 +117,16 @@ CREATE TABLE IF NOT EXISTS `sala_aluno` (
     CONSTRAINT `sala_aluno_sala_id_foreign` FOREIGN KEY (`sala_id`) REFERENCES `salas` (`id`) ON DELETE CASCADE,
     CONSTRAINT `sala_aluno_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS `regras_professores` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `regra_id` BIGINT UNSIGNED NOT NULL,
+  `professor_id` BIGINT UNSIGNED NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
+
+  PRIMARY KEY (`id`),
+
+  CONSTRAINT `regras_professores_regra_id_foreign` FOREIGN KEY (`regra_id`) REFERENCES `regras` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `regras_professores_professor_id_foreign` FOREIGN KEY (`professor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+);

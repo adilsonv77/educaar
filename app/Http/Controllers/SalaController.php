@@ -16,6 +16,7 @@ use App\Models\Jogo;
 use App\Models\StudentAnswer;
 use Illuminate\Support\Facades\DB;
 use App\Models\Turma;
+use App\Models\RegraProfessor;
 use Exception;
 
 class SalaController extends Controller
@@ -49,7 +50,10 @@ class SalaController extends Controller
     public function create(Request $request)
     {
         $titulo = 'Salas';
-        $rules = Regras::all();
+        $teacherRules = RegraProfessor::with('regra')
+            ->where('professor_id', Auth::id())
+            ->get();
+        $rules = $teacherRules->pluck('regra');
         $jogoId = $request->jogo_id;
         $classes = TurmaDAO::getTurmasDisponiveisParaSala(Auth::id(), $jogoId);
 

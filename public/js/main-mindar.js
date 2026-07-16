@@ -124,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
     async function inciarSorteio() {
       const response = await fetch('/api/textures');
       const arquivos = await response.json();
-
       const sorteado = arquivos[Math.floor(Math.random() * arquivos.length)];
       return sorteado;
     }
@@ -174,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //console.log("Posição da atividade: " + li.getAttribute("activityPosition"));
         
-        //se for um conteúdo com atividades ordenadas, pega a posição da atividade
         posAncora = i;
         
         //o anchor é criado com a posição correta
