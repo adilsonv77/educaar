@@ -70,7 +70,6 @@ class QuestionarioAlunoForm extends Component
             $this->hint = ContentDAO::getContentType($contentId) == 1
                 ? ActivityDAO::getNextHintRandom($contentId, $this->activity_id)
                 : ActivityDAO::getNextHint($contentId, $this->activity_id);
-
             $this->feitas++;
         }
 
@@ -292,12 +291,27 @@ class QuestionarioAlunoForm extends Component
             $this->incorreta = in_array(0, $corretas);
             $this->hint = $this->incorreta ? '' : $this->hint;
             
+            if (!$this->incorreta) {
+                $contentId = session()->get('content_id');
+                
+                $posicaoAtual = ArProgress::where('content_id', $contentId)
+                    ->where('student_id', Auth::id())
+                    ->value('next_position');
+                    
+                $totalAtividades = ActivityDAO::buscarActivitiesPorConteudo($contentId)->count();
+
+                if ($posicaoAtual > $totalAtividades) {
+                    return redirect()->route('home'); 
+                }
+            }
+
             if ($this->hint)
                $this->dispatchBrowserEvent('openHintModal'); 
             else
                $this->dispatchBrowserEvent('closeQuestionarioModal');  
 
             $this->emitTo('hint-button', 'updateHint', $this->hint);
+
 
         } catch (Exception $e) {
             DB::rollback();

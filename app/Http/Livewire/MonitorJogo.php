@@ -67,6 +67,7 @@ class MonitorJogo extends Component
             $acabou = true;
         } 
         elseif ($sala->started_at && $sala->regra) {
+            
             $horaFim = \Carbon\Carbon::parse($sala->started_at)->addSeconds($sala->regra->tempo);
             
             if (now()->greaterThanOrEqualTo($horaFim)) {
