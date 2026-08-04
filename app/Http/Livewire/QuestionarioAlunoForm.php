@@ -13,6 +13,7 @@ use App\DAO\QuestionDAO;
 use App\DAO\ActivityDAO;
 use App\DAO\SalaDAO;
 use App\DAO\JogoDAO;
+use App\DAO\ContentDAO;
 use App\Models\ArProgress;
 use App\Models\Content;
 use Exception;
