@@ -59,7 +59,7 @@
                                                     <input name="type" type="hidden" value="aluno" />
 
                                                     <button type="submit"
-                                                        class="btn flex-grow-1 {{ $conteudo->is_jogo ? 'btn-warning btn-animado' : ($conteudosRespondidos[$conteudo->id] ? 'btn-secondary text-white' : 'btn-warning') }}">
+                                                        class="btn flex-grow-1 {{ $conteudo->is_jogo ? 'btn-warning btn-animado' : ($conteudosRespondidos[$conteudo->id] ? 'btn-dark btn-warning' : 'btn-warning') }}">
                                                         {{ $conteudo->name }}
                                                     </button>
                                                 </form>
