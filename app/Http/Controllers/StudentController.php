@@ -112,7 +112,7 @@ class StudentController extends Controller
         }
 
         $conteudos = $conteudos->reject(function ($conteudo) use ($conteudosRespondidos) {
-            return $conteudosRespondidos[$conteudo->id] === true;
+            return $conteudo->is_jogo == 1 && $conteudosRespondidos[$conteudo->id] === true;
         });
 
         $rota = route("home");
@@ -121,10 +121,6 @@ class StudentController extends Controller
 
         return view('student.indexContentStudent', compact('conteudos', 'rota', 'conteudosRespondidos'));
     }
-
-    /**
-     * Após clicar no conteúdo, entra na página de RA da aplicação
-     */
 
     public function showActivity(Request $request)
     {

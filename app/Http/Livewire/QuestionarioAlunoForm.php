@@ -132,6 +132,7 @@ class QuestionarioAlunoForm extends Component {
         }
 
         $questions = session()->get('livewire_questoes');
+        //dd($questions);
         $this->selectQuestions($questions);
         
         $tentativa = ActivityDAO::getTentativa($this->activity->id, Auth::id());

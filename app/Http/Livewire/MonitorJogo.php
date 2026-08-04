@@ -43,7 +43,9 @@ class MonitorJogo extends Component
 
     private function getSala()
     {
+        
         $jogo = Jogo::where('content_id', $this->contentId)->first();
+
         if ($jogo) {
             return Sala::with('regra')
                        ->where('jogo_id', $jogo->id)
