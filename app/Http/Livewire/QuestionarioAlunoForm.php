@@ -6,369 +6,271 @@ use App\Models\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use App\Models\StudentAnswer;
 use App\DAO\QuestionDAO;
 use App\DAO\ActivityDAO;
-use App\DAO\ContentDAO;
 use App\DAO\SalaDAO;
 use App\DAO\JogoDAO;
 use App\Models\ArProgress;
 use App\Models\Content;
-use App\Models\Pontuacao;
 use Exception;
 
-class QuestionarioAlunoForm extends Component
-{
+enum QuestionaireStatus: int {
+    case COMPLETO = 1;
+    case INCOMPLETO = -1;
+    case NAO_RESPONDIDO = 0;
+}
 
-    protected $listeners = ['openQuestions', 'addTempo' => 'addTempo'];
-    
-    public $activity_id;
+class QuestionarioAlunoForm extends Component {
+    protected $listeners =['openQuestions'];
 
-    public bool $conteudoRefeito;
-    public $jaRespondeu;
+    public Content $content;
+    public Activity $activity;
 
-    public $feedback = [];
-
-    public $questions;
-    public $respondida;
-    public $activequestion;
-
-    public $incorreta;
-
-    public $activity;
-
-    public $nrquestao;
-    public $qtasquestoes;
-
-    public $proximaPosicaoCalculada;
-    public $questionarioRespondido;
-    public $alternativas;
-
-    public $hint;
     public bool $isJogo;
-    public int $feitas = 1;
-    /*
-- PRECISO TESTAR COMO FUNCIONA COM FORMULÁRIOS JÁ RESPONDIDOS
-*/
-    public function openQuestions($value)
-    {
-        $contentId = session()->get('content_id');
+    public int $proximaPosicaoCalculada;
+    public string $hint = '';
 
-        $this->activity_id = (int)$value;
-        $this->conteudoRefeito = Content::where('id', $contentId)->value('refeito');
+    public bool $jaRespondeu;
+    public int $nrquestao;
+    public array $alternativas;
+    public QuestionaireStatus $respondida;
+    public int $qtasquestoes;
+    public array $feedback = [];
+    public Collection $questions;
+    public bool $incorreta = false;
 
-        $this->jaRespondeu = QuestionDAO::jaRespondeuAlguma($this->activity_id);
+    public function mount() {
+        $this->content = Content::find(session()->get('content_id'));
+        $this->isJogo = $this->content->is_jogo;
+    }
 
-        $this->feitas = ArProgress::where('content_id', $contentId)
-            ->where('student_id', Auth::id())
-            ->value('next_position');
-        
-        if($this->feitas >= ActivityDAO::buscarActivitiesPorConteudo($contentId)->count()) {
-            $this->hint = "Acabou!";
-        } else {
-            $this->hint = ContentDAO::getContentType($contentId) == 1
-                ? ActivityDAO::getNextHintRandom($contentId, $this->activity_id)
-                : ActivityDAO::getNextHint($contentId, $this->activity_id);
-            $this->feitas++;
-        }
+    /* Esse método sempre será executado ao final da chamada de execução dos outros métodos */
+    public function render() {
+        $this->dispatchBrowserEvent('checkAllPost');
+        return view('livewire.questionario-aluno-form');
+    }
 
-        $this->feedback = [];
+    public function openQuestions(int $value): void {
+        $this->activity = Activity::find((int)$value);
+        $this->jaRespondeu = QuestionDAO::jaRespondeuAlguma($this->activity->id);
 
-        if (session()->has('livewire_nrquestao') && session()->get('livewire_activity_id') == $value) {
-            // pull jah busca e exclui
+        if(session()->has('livewire_nrquestao') && session()->get('livewire_activity_id') === $value) {
             $this->nrquestao = session()->pull('livewire_nrquestao');
             $this->alternativas = session()->pull('livewire_alternativas');
             $questions = session()->get('livewire_questoes');
-            $this->activity_id = session()->get('livewire_activity_id');
-
         } else {
+            session()->put('livewire_activity_id', $this->activity->id);
 
-            session()->put('livewire_activity_id', $this->activity_id);
-            // buscar da tabela student_answers uma questao respondida da activity_id, question_id, user_id
-
-            $where = DB::table('questions')
-                ->where('activity_id', $this->activity_id);
-            
-            /* when() usado para caso o conteúdo possa ser refeito, então só irá ser pego as questões que o usuário autenticado acertou */
-            $subwhere = DB::table('student_answers as sa')
-                ->select('sa.alternative_answered')
-                ->whereColumn('sa.question_id', '=', 'questions.id')
-                ->whereColumn('sa.activity_id', '=', 'questions.activity_id')
-                ->where('sa.user_id', '=', Auth::id())
-                ->orderBy('sa.created_at', 'desc')
-                ->limit(1)
-                ->when($this->conteudoRefeito && $this->jaRespondeu, function($subwhen) {
-                    $subwhen->where('sa.correct', 1);
-                });
-
-            $where->addSelect(['alternative_answered' => $subwhere]);
-
-            $questions = $where->get();
+            $questions = QuestionDAO::buscarQuestoesDaAtividade($this->activity->id, Auth::id(), ($this->isJogo && $this->jaRespondeu));
             $questions = $questions->shuffle();
 
-            $this->alternativas = array();
-            foreach ($questions as $item) {
+            $this->shuffleAlternatives($questions);
 
-                $options = [$item->a, $item->b, $item->c, $item->d];
-                shuffle($options);
-                $item->options = $options;
-                if ($item->alternative_answered != null) {
-                    $key = array_search($item->alternative_answered, $options);
-                    $this->alternativas[$item->id] = $key;
-                }
-            }
             session()->put('livewire_questoes', $questions);
-            //dd($questions);
             $this->nrquestao = 0;
         }
 
-        $this->respondida = $this->questionarioRespondido();
+        $this->respondida = $this->answeredQuestionaire();
         $this->questions = $questions;
-
         $this->qtasquestoes = count($questions);
 
         $this->dispatchBrowserEvent('openQuestionsModal');
     }
 
-    private function questionarioRespondido()
-    {
+    private function shuffleAlternatives(Collection $questions): void {
+        $this->alternativas = array();
+
+        foreach($questions as $item) {
+            $options = [$item->a, $item->b, $item->c, $item->d];
+            shuffle($options);
+            $item->options = $options;
+
+            if($item->alternative_answered != null) {
+                $key = array_search($item->alternative_answered, $options);
+                $this->alternativas[$item->id] = $key;
+            }
+        }
+    }
+
+    private function answeredQuestionaire(): QuestionaireStatus {
         $questions = session()->get('livewire_questoes');
-
-        
-
-        $resposta = 0;
-        // vou fazer o sistema de resposta assim: 
-        // 1- retorna que o questionário foi respondido completo
-        // -1 -retorna que o questionário não foi respondido completo
-        // 0 - retorna que o questionário não foi respondido 
-        // dd($questions);
         $qntQuestoes = count($questions);
         $qntRespondidas = 0;
-        foreach ($questions as $question) {
-            if ($question->alternative_answered != null) {
+
+        foreach($questions as $question) {
+            if($question->alternative_answered != null) {
                 $qntRespondidas += 1;
             }
         }
 
-        if ($qntRespondidas == $qntQuestoes) {
-            $resposta = 1;
-        } else {
-            if ($qntRespondidas == 0) {
-                $resposta = 0;
-            } else {
-                $resposta = -1;
-            }
+        return ($qntRespondidas == $qntQuestoes)
+            ? QuestionaireStatus::COMPLETO
+            : ($qntRespondidas == 0
+                ? QuestionaireStatus::NAO_RESPONDIDO
+                : QuestionaireStatus::INCOMPLETO);
+    }
+
+    public function cancel(): void {
+        session()->put('livewire_alternativas', $this->alternativas);
+        session()->put('livewire_nrquestao', $this->nrquestao);
+    }
+
+    public function anterior(): void {
+        if($this->nrquestao > 0) {
+            $this->nrquestao -= 1;
         }
-
-        return $resposta;
-
-    }
-
-     // esse método sempre será executado ao final da chamada da execução dos outros métodos
-    public function render()
-    {
-        $this->dispatchBrowserEvent('checkAllPost');
-        return view('livewire.questionario-aluno-form');
-    }
-
-    public function cancel() {
-        // as alternativas escolhidas salvar na sessão, assim como o numero da questao que estava observando
-        session()->put("livewire_alternativas", $this->alternativas);
-        session()->put("livewire_nrquestao", $this->nrquestao);
-    }
-
-
-
-    public function anterior() {
-        if ($this->nrquestao > 0) {
-            $this->nrquestao = $this->nrquestao - 1;
-        } 
     }
 
     public function salvar() {
         if($this->nrquestao < $this->qtasquestoes - 1) {
-                $this->nrquestao = $this->nrquestao + 1;
-                return;
+            $this->nrquestao++;
+            return;
         }
 
-        DB::beginTransaction();
         $questions = session()->get('livewire_questoes');
-        foreach($questions as $questao) {
-            $questionId = $questao->id;
-
-            if(isset($this->alternativas[$questionId])) {
-                $selectedIndex = $this->alternativas[$questionId];
-
-                if(isset($questao->options[$selectedIndex])) {
-                    $selectedOption = $questao->options[$selectedIndex];
-                    $questao->alternative_answered = $selectedOption;
-                }
-            }
-        }
-    
-        $tentativa = ActivityDAO::getTentativa((int)session()->get('livewire_activity_id'), Auth::id());
-
-        if(Content::where('id', session()->get('content_id'))->value('refeito')) {
-            $this->jaRespondeu = QuestionDAO::jaRespondeuTodas((int)session()->get('livewire_activity_id'));
+        $this->selectQuestions($questions);
+        
+        $tentativa = ActivityDAO::getTentativa($this->activity->id, Auth::id());
+        if(Content::where('id', $this->content->id)->value('refeito')) {
+            $this->jaRespondeu = QuestionDAO::jaRespondeuTodas($this->activity->id);
         }
 
         try {
-            $corretas = [];
-            foreach ($questions as $questao) {
-                $data = [];
-                
-                if(!$this->conteudoRefeito && $this->jaRespondeu) {
-                    continue;
-                }
-                
-                $opcao = $questao->alternative_answered;
-                $corretas[] = $opcao === $questao->a ? 1 : 0;
-                
-                $data = [
-                    'question_id' => $questao->id,
-                    'user_id' => Auth::user()->id,
-                    'alternative_answered' => $opcao,
-                    'correct' => ($opcao === $questao->a),
-                    'activity_id' => $questao->activity_id,
-                    'tentativas' => $tentativa,
-                ];
-                
-                $this->feedback[] = [
-                    'question' => QuestionDAO::getTextoQuestao($questao->id),
-                    'alternative_answered' => $opcao,
-                    'correct' => ($opcao === $questao->a),
-                ];
-                StudentAnswer::create($data);
-            }
+            DB::beginTransaction();
 
-            foreach($this->feedback as $item) {
-                
-                if(!$item['correct']) {
-                    $this->hint = '';
-                    $this->incorreta = true;
-                    break;
-                }
-            }
-            $content = Content::find(session()->get('content_id'));
+            $this->saveAnswers($questions, $tentativa);
+            $this->verifySavedAnswers();
 
-            if(!$this->incorreta && $content->is_jogo){
+            $this->updateGameProgress();
 
-                Log::info('LIVEWIRE progresso', ['fallback' => $this->proximaPosicaoCalculada]);
-
-                $progress = ArProgress::firstOrCreate(
-                    ['student_id' => Auth::id(), 'content_id' => session()->get('content_id')],
-                    ['next_position' => 1]
-                );
-
-                $progress->next_position = $progress->next_position + 1;
-                $progress->save();
-
-                $this->dispatchBrowserEvent('atividade-concluida', [
-                    'position' => $progress->next_position,
-                    'activity_id' => $this->activity_id
-                ]);
-
-                $this->proximaPosicaoCalculada = $progress->next_position;
-
-                if($this->isJogo) {
-                    $jogo = JogoDAO::getJogoByContentId(session()->get('content_id'));
-                    $salaId = SalaDAO::getSalaIDByJogo($jogo->id);
-                    $activitesCount = ActivityDAO::buscarActivitiesPorConteudo(session()->get('content_id'))->count();
-
-                    $this->emitTo('monitor-jogo', 'atividadeConcluida', Auth::id(), $salaId);
-
-                }
-            } else{
-                $progress = ['next_position' => $this->proximaPosicaoCalculada ?? 1 ];
-            }
-            
             DB::commit();
+            
             session()->forget(['livewire_questoes', 'livewire_alternativas', 'livewire_nrquestao']);
 
-            $this->questions = null;
-
-            $this->incorreta = in_array(0, $corretas);
             $this->hint = $this->incorreta ? '' : $this->hint;
-            
-            if (!$this->incorreta) {
-                $contentId = session()->get('content_id');
-                
-                $posicaoAtual = ArProgress::where('content_id', $contentId)
-                    ->where('student_id', Auth::id())
-                    ->value('next_position');
-                    
-                $totalAtividades = ActivityDAO::buscarActivitiesPorConteudo($contentId)->count();
 
-                if ($posicaoAtual > $totalAtividades) {
-                    return redirect()->route('home'); 
-                }
+            if(!$this->incorreta && $this->verifyContentFinished()) {
+                return redirect()->route('home');
             }
 
-            if ($this->hint)
-               $this->dispatchBrowserEvent('openHintModal'); 
-            else
-               $this->dispatchBrowserEvent('closeQuestionarioModal');  
+            if($this->hint) {
+                $this->dispatchBrowserEvent('openHintModal');
+            } else {
+                $this->dispatchBrowserEvent('closeQuestionarioModal');
+            }
 
             $this->emitTo('hint-button', 'updateHint', $this->hint);
-
-
-        } catch (Exception $e) {
+        } catch(Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
             DB::rollback();
-            dd($e);
             $this->dispatchBrowserEvent('showError');
         }
     }
 
-    public function close() {
+    private function selectQuestions(Collection $questions) {
+        foreach($questions as $question) {
+            $questionId = $question->id;
 
-        $this->dispatchBrowserEvent('closeFeedbackModal');
-        $this->dispatchBrowserEvent('closeHintModal');
-        $content_id = session()->get('content_id');
-        $content = Content::find($content_id);
-        
-        $activity = Activity::find($this->activity_id);
+            if(isset($this->alternativas[$questionId])) {
+                $selectedIndex = $this->alternativas[$questionId];
 
-        session()->put('activity', $activity);
-        session()->put('position', $activity->position);
-
-        //padronizei a posição do progresso em 1 para que atividades não ordenadas não sejam afetadas pelo sistema de ordenação
-        /*
-        $progress = [
-            'next_position' => 1
-        ];
-
-        //caso o conteúdo seja de atividades ordenadas, atualiza a posição permitida para o aluno realizar a atividade
-        if($content->sort_activities && $this->incorreta == false){
-            $progress = ArProgress::where('student_id', Auth::id())
-            ->where('content_id', session()->get('content_id'))
-            ->first();
-            $progress->next_position = $activity->position + 1;
-            $progress->save();
-            $this->emitTo('ar-progress-state', 'updatePosition', $progress->next_position, $progress->content_id);
+                if(isset($question->options[$selectedIndex])) {
+                    $selectedOption = $question->options[$selectedIndex];
+                    $question->alternative_answered = $selectedOption;
+                }
+            }
         }
-        */
+    }
 
-        $this->feedback = [];
-        
-        session()->put([
-            'id' => session()->get('content_id'),
+    private function saveAnswers(Collection $questions, int $tentativa): void {
+        foreach($questions as $question) {
+            if(!$this->isJogo && $this->jaRespondeu) {
+                continue;
+            }
+
+            $option = $question->alternative_answered;
+            $isCorrect = $option === $question->a;
+
+            $data = [
+                'question_id' => $question->id,
+                'user_id' => Auth::id(),
+                'alternative_answered' => $option,
+                'correct' => $isCorrect,
+                'activity_id' => $question->activity_id,
+                'tentativas' => $tentativa,
+            ];
+
+            $this->feedback[] = [
+                'question' => QuestionDAO::getTextoQuestao($question->id),
+                'alternative_answered' => $option,
+                'correct' => $isCorrect,
+            ];
+
+            StudentAnswer::create($data);
+        }
+    }
+
+    private function verifySavedAnswers(): void {
+        foreach($this->feedback as $item) {
+            if(!$item['correct']) {
+                $this->hint = '';
+                $this->incorreta = true;
+                break;
+            }
+        }
+    }
+
+    private function updateGameProgress(): void {
+        if($this->incorreta || !$this->isJogo) {
+            $progress = ['next_position' => $this->proximaPosicaoCalculada ?? 1];
+            return;
+        }
+
+        $progress = ArProgress::firstOrCreate(
+            ['student_id' => Auth::id(), 'content_id' => $this->content->id],
+            ['next_position' => 1]
+        );
+        $progress->next_position++;
+        $progress->save();
+
+        $this->dispatchBrowserEvent('atividade-concluida', [
+            'position' => $progress->next_position,
+            'activity_id' => $this->activity->id
         ]);
 
+        $this->proximaPosicaoCalculada = $progress->next_position;
+
+        $jogo = JogoDAO::getJogoByContentId($this->content->id);
+        $salaId = SalaDAO::getSalaIDByJogo($jogo->id);
+
+        $this->emitTo('monitor-jogo', 'atividadeConcluida', Auth::id(), $salaId);
     }
 
-    /* Essa função não está sendo mais utilizada
-    public function closeNotAllowedModal() {
-        $this->dispatchBrowserEvent('closeNotAllowedModal');
+    private function verifyContentFinished(): bool {
+        $posicaoAtual = ArProgress::where('content_id', $this->content->id)
+            ->where('student_id', Auth::id())
+            ->value('next_position');
+
+        $totalAtividades = ActivityDAO::buscarActivitiesPorConteudo($this->content->id)->count();
+
+        return ($posicaoAtual > $totalAtividades);
     }
-     */   
+
+    public function close(): void {
+        $this->dispatchBrowserEvent('closeFeedbackModal');
+        $this->dispatchBrowserEvent('closeHintModal');
+        
+        session()->put('activity', $this->activity);
+        session()->put('position', $this->activity->position);
+        session()->put('id', $this->content->id);
+
+        $this->feedback = [];
+    }
 
     public function hint() {
         $this->dispatchBrowserEvent('openHintModal');
-    }
-
-    public function voltar() {
-        $this->dispatchBrowserEvent('closeFeedbackModal');
-        $this->dispatchBrowserEvent('openFeedbackModal');
     }
 }

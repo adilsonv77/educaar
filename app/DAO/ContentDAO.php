@@ -195,4 +195,11 @@ class ContentDAO
             ->where('is_jogo', 1)
             ->get();
     }
+
+    public static function getQuantityActvities(int $contentId): int {
+        return DB::table('contents')
+            ->join('activities', 'contents.id', '=', 'activities.content_id')
+            ->where('contents.id', $contentId)
+            ->count();
+    }
 }

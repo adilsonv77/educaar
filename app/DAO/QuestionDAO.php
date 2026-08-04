@@ -9,6 +9,7 @@ use App\Models\Question;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Collection;
 
 class QuestionDAO
 {
@@ -121,6 +122,26 @@ class QuestionDAO
             ->count();
 
         return ($quantidadeQuestoes === $quantidadeRespondidas);
+    }
+
+    public static function buscarQuestoesDaAtividade(int $activityId, int $userId, bool $considerarApenasCorretas): Collection {
+        $where = DB::table('questions')
+                ->where('activity_id', $activityId);
+
+        $subwhere = DB::table('student_answers as sa')
+            ->select('sa.alternative_answered')
+            ->whereColumn('sa.question_id', '=', 'questions.id')
+            ->whereColumn('sa.activity_id', '=', 'questions.activity_id')
+            ->where('sa.user_id', '=', $userId)
+            ->orderBy('sa.created_at', 'desc')
+            ->limit(1)
+            ->when($considerarApenasCorretas, function($subwhen) {
+                $subwhen->where('sa.correct', 1);
+            });
+
+        $where->addSelect(['alternative_answered' => $subwhere]);
+
+        return $where->get();
     }
 
 }
