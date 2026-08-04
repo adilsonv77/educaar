@@ -277,7 +277,7 @@
                                             <button id="salvibutton" 
                                                     class="btn btn-success" 
                                                     type="submit"
-                                                    @if ($nrquestao == $qtasquestoes-1 && $respondida == 1) 
+                                                    @if ($nrquestao == $qtasquestoes-1 && $respondida->value == 1) 
                                                         respondida_ultima="1" 
                                                     @else
                                                         respondida_ultima="0"
