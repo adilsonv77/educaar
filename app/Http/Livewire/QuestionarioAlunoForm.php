@@ -13,7 +13,6 @@ use App\DAO\QuestionDAO;
 use App\DAO\ActivityDAO;
 use App\DAO\SalaDAO;
 use App\DAO\JogoDAO;
-use App\DAO\ContentDAO;
 use App\Models\ArProgress;
 use App\Models\Content;
 use Exception;
@@ -57,6 +56,9 @@ class QuestionarioAlunoForm extends Component {
     public function openQuestions(int $value): void {
         $this->activity = Activity::find((int)$value);
         $this->jaRespondeu = QuestionDAO::jaRespondeuAlguma($this->activity->id);
+        $this->hint = ($this->content->is_jogo)
+            ? ActivityDAO::getNextHintRandom($this->content->id, $this->activity->id)
+            : '';
 
         if(session()->has('livewire_nrquestao') && session()->get('livewire_activity_id') === $value) {
             $this->nrquestao = session()->pull('livewire_nrquestao');
@@ -131,6 +133,9 @@ class QuestionarioAlunoForm extends Component {
             return;
         }
 
+        $this->incorreta = false;
+        $this->feedback = [];
+        
         $questions = session()->get('livewire_questoes');
         //dd($questions);
         $this->selectQuestions($questions);
@@ -158,7 +163,7 @@ class QuestionarioAlunoForm extends Component {
                 return redirect()->route('home');
             }
 
-            if($this->hint) {
+            if($this->hint != '') {
                 $this->dispatchBrowserEvent('openHintModal');
             } else {
                 $this->dispatchBrowserEvent('closeQuestionarioModal');
