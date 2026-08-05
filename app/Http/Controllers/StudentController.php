@@ -126,6 +126,8 @@ class StudentController extends Controller
     {
         session()->put('primeira_entrada', 1);
 
+        session()->put('horario_acesso_jogo', now());
+
         $data = $request->all();
         $content_id = $request->id == null ? session()->get("content_id") : $request->id;
         $content = Content::find($content_id);

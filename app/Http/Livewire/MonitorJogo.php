@@ -109,7 +109,7 @@ class MonitorJogo extends Component
             return 0;
         }
 
-        $inicio = Carbon::parse($sala->started_at);
+        $inicio = Carbon::parse(session()->get('horario_acesso_jogo'));
         $conclusao = Carbon::parse($this->ultimoCarbon);
 
         $tempoGasto = $conclusao->diffInSeconds($inicio);
