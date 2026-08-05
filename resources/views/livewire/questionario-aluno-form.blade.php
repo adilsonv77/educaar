@@ -77,9 +77,8 @@
         });
 
         window.addEventListener('closeQuestionarioModal', event => {
-            
             $('#questionarioModal').modal('hide');
-            
+            unlockGlb();
         });
 
         window.addEventListener('openHintModal', event => {
@@ -90,12 +89,17 @@
 
         window.addEventListener('closeHintModal', event => {
             $('#hintModal').modal('hide');
+        
+            unlockGlb();
+        });
 
-            buttonDescongelar = document.getElementById("removeObject");
-            if (buttonDescongelar.style.display != 'none') {
+        function unlockGlb() {
+            const buttonDescongelar = document.getElementById('removeObject');
+            
+            if (buttonDescongelar && buttonDescongelar.style.display !== 'none') {
                 buttonDescongelar.click();
             }
-        });
+        }
 
         window.addEventListener('openCameraAlert', event => {
             $('#alertaCameraModal').modal('show');
