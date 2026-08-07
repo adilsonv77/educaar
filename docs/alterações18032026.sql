@@ -130,3 +130,7 @@ CREATE TABLE IF NOT EXISTS `regras_professores` (
   CONSTRAINT `regras_professores_regra_id_foreign` FOREIGN KEY (`regra_id`) REFERENCES `regras` (`id`) ON DELETE CASCADE,
   CONSTRAINT `regras_professores_professor_id_foreign` FOREIGN KEY (`professor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 );
+
+ALTER TABLE regras
+ADD COLUMN data_inicio TIMESTAMP NULL DEFAULT NULL,
+ADD COLUMN data_limite TIMESTAMP NULL DEFAULT NULL;
