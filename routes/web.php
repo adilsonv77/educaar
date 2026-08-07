@@ -170,6 +170,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/sala/{id}/comecar', [App\Http\Controllers\SalaController::class, 'comecarJogo'])->name('sala.comecar');
     Route::post('/sala/{id}/terminar', [App\Http\Controllers\SalaController::class, 'terminarJogo'])->name('sala.terminar');
     Route::delete('/sala/{id}', [App\Http\Controllers\SalaController::class, 'destroy'])->name('sala.destroy');
+    Route::get('/sala/qrcode/{id}', [App\Http\Controllers\SalaController::class, 'test'])->name('sala.qrcode');
 
     Route::resource('regra', App\Http\Controllers\RegrasController::class);
 
