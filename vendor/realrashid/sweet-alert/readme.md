@@ -28,8 +28,12 @@ composer require realrashid/sweet-alert
 <h3 align="center">
     <a href="https://realrashid.github.io/sweet-alert" target="_blank">Documentation</a>
 </h3>
-<br> 
- 
+<br>
+
+<br>
+<h3 align="center">
+    <a href="https://github.com/sweetalert2/sweetalert2" target="_blank">Checkout the Js Library</a>
+</h3>
 <br>
 
 ## Sponsors

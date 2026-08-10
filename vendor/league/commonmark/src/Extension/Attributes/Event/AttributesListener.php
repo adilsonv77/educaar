@@ -94,16 +94,7 @@ final class AttributesListener
             }
 
             if ($node instanceof AttributesInline && ($previous === null || ($previous instanceof AbstractInline && $node->isBlock()))) {
-                // Once this condition holds it holds for every remaining iteration, as walking
-                // further to the left can only ever yield another inline sibling or null. No
-                // sibling can therefore be chosen, so the target must be the parent; continuing
-                // to walk would only re-scan the remaining siblings for nothing.
-                if (! $node->parent() instanceof FencedCode) {
-                    $target    = $node->parent();
-                    $direction = self::DIRECTION_SUFFIX;
-                }
-
-                break;
+                continue;
             }
 
             if ($previous !== null && ! self::isAttributesNode($previous)) {

@@ -116,14 +116,6 @@ switch (parse_url($vars['REQUEST_URI'], \PHP_URL_PATH)) {
 
         return;
 
-    case '/304/etag':
-        if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
-            header('ETag: "abc123"', true, 304);
-            exit;
-        }
-        header('ETag: "abc123"');
-        break;
-
     case '/307':
         header('Location: http://localhost:8057/post', true, 307);
         break;
@@ -217,7 +209,6 @@ switch (parse_url($vars['REQUEST_URI'], \PHP_URL_PATH)) {
                 header($header);
             }
         }
-        break;
 }
 
 header('Content-Type: application/json', true);

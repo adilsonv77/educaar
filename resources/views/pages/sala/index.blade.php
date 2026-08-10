@@ -14,7 +14,6 @@
                         <th style="text-align: left;">{{ __('Name') }}</th>
                         <th>{{ __('Class') }}</th>
                         <th>{{ __('Enter') }}</th>
-                        <th>{{ __('QR Code') }}</th>
                         <th>{{ __('Results') }}</th>
                         <!-- <th>{{ __('Edit') }}</th> -->
                         <th>{{ __('Delete') }}</th>
@@ -36,12 +35,6 @@
                                 @csrf
                                 <input type="hidden" name="sala_id" value="{{ $sala->id }}">
                                 <button type="submit" class="btn btn-primary" {{ $sala->started_at ? 'disabled' : '' }}><i class="bi bi-collection"></i></button>
-                            </form>
-                        </td>
-
-                        <td>
-                            <form action="{{ route('sala.qrcode', $sala->id) }}">
-                                <button type="submit" class="btn btn-primary"  ><i class="bi bi-qr-code"></i></button>
                             </form>
                         </td>
 

@@ -90,7 +90,8 @@ class SweetAlertServiceProvider extends ServiceProvider
         // Binding required classes to app
         $this->app->bind(
             'RealRashid\SweetAlert\Storage\SessionStore',
-            'RealRashid\SweetAlert\Storage\AlertSessionStore'
+            'RealRashid\SweetAlert\Storage\AlertSessionStore',
+            'RealRashid\SweetAlert\ToSweetAlert'
         );
 
         // Register the main class to use with the facade

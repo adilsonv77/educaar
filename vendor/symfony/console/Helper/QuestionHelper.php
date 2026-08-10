@@ -258,7 +258,11 @@ class QuestionHelper extends Helper
         $ofs = -1;
         $matches = $autocomplete($ret);
         $numMatches = \count($matches);
-        $inputHelper = new TerminalInputHelper($inputStream);
+
+        $sttyMode = shell_exec('stty -g');
+        $isStdin = 'php://stdin' === (stream_get_meta_data($inputStream)['uri'] ?? null);
+        $r = [$inputStream];
+        $w = [];
 
         // Disable icanon (so we can fread each keypress) and echo (we'll do echoing here instead)
         shell_exec('stty -icanon -echo');
@@ -268,13 +272,15 @@ class QuestionHelper extends Helper
 
         // Read a keypress
         while (!feof($inputStream)) {
-            $inputHelper->waitForInput();
+            while ($isStdin && 0 === @stream_select($r, $w, $w, 0, 100)) {
+                // Give signal handlers a chance to run
+                $r = [$inputStream];
+            }
             $c = fread($inputStream, 1);
 
             // as opposed to fgets(), fread() returns an empty string when the stream content is empty, not false.
             if (false === $c || ('' === $ret && '' === $c && null === $question->getDefault())) {
-                // Restore the terminal so it behaves normally again
-                $inputHelper->finish();
+                shell_exec('stty '.$sttyMode);
                 throw new MissingInputException('Aborted.');
             } elseif ("\177" === $c) { // Backspace Character
                 if (0 === $numMatches && 0 !== $i) {
@@ -311,19 +317,19 @@ class QuestionHelper extends Helper
                     $ofs += ('A' === $c[2]) ? -1 : 1;
                     $ofs = ($numMatches + $ofs) % $numMatches;
                 }
-            } elseif ('' === $c || \ord($c) < 32) {
+            } elseif (\ord($c) < 32) {
                 if ("\t" === $c || "\n" === $c) {
                     if ($numMatches > 0 && -1 !== $ofs) {
                         $ret = (string) $matches[$ofs];
                         // Echo out remaining chars for current match
-                        $remainingCharacters = substr($ret, \strlen($this->mostRecentlyEnteredValue($fullChoice)));
+                        $remainingCharacters = substr($ret, \strlen(trim($this->mostRecentlyEnteredValue($fullChoice))));
                         $output->write($remainingCharacters);
                         $fullChoice .= $remainingCharacters;
                         $i = (false === $encoding = mb_detect_encoding($fullChoice, null, true)) ? \strlen($fullChoice) : mb_strlen($fullChoice, $encoding);
 
                         $matches = array_filter(
                             $autocomplete($ret),
-                            static fn ($match) => '' === $ret || str_starts_with($match, $ret)
+                            fn ($match) => '' === $ret || str_starts_with($match, $ret)
                         );
                         $numMatches = \count($matches);
                         $ofs = -1;
@@ -370,14 +376,14 @@ class QuestionHelper extends Helper
             if ($numMatches > 0 && -1 !== $ofs) {
                 $cursor->savePosition();
                 // Write highlighted text, complete the partially entered response
-                $charactersEntered = \strlen($this->mostRecentlyEnteredValue($fullChoice));
+                $charactersEntered = \strlen(trim($this->mostRecentlyEnteredValue($fullChoice)));
                 $output->write('<hl>'.OutputFormatter::escapeTrailingBackslash(substr($matches[$ofs], $charactersEntered)).'</hl>');
                 $cursor->restorePosition();
             }
         }
 
-        // Restore the terminal so it behaves normally again
-        $inputHelper->finish();
+        // Reset stty so it behaves normally again
+        shell_exec('stty '.$sttyMode);
 
         return $fullChoice;
     }
@@ -428,25 +434,27 @@ class QuestionHelper extends Helper
             return $value;
         }
 
-        $inputHelper = null;
-
         if (self::$stty && Terminal::hasSttyAvailable()) {
-            $inputHelper = new TerminalInputHelper($inputStream);
+            $sttyMode = shell_exec('stty -g');
             shell_exec('stty -echo');
         } elseif ($this->isInteractiveInput($inputStream)) {
             throw new RuntimeException('Unable to hide the response.');
         }
 
-        $value = $this->doReadInput($inputStream, helper: $inputHelper);
+        $value = fgets($inputStream, 4096);
 
         if (4095 === \strlen($value)) {
             $errOutput = $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output;
             $errOutput->warning('The value was possibly truncated by your shell or terminal emulator');
         }
 
-        // Restore the terminal so it behaves normally again
-        $inputHelper?->finish();
+        if (self::$stty && Terminal::hasSttyAvailable()) {
+            shell_exec('stty '.$sttyMode);
+        }
 
+        if (false === $value) {
+            throw new MissingInputException('Aborted.');
+        }
         if ($trimmable) {
             $value = trim($value);
         }
@@ -474,8 +482,6 @@ class QuestionHelper extends Helper
 
             try {
                 return $question->getValidator()($interviewer());
-            } catch (MissingInputException $e) {
-                throw $error ?? $e;
             } catch (RuntimeException $e) {
                 throw $e;
             } catch (\Exception $error) {
@@ -508,7 +514,7 @@ class QuestionHelper extends Helper
     {
         if (!$question->isMultiline()) {
             $cp = $this->setIOCodepage();
-            $ret = $this->doReadInput($inputStream);
+            $ret = fgets($inputStream, 4096);
 
             return $this->resetIOCodepage($cp, $ret);
         }
@@ -518,8 +524,14 @@ class QuestionHelper extends Helper
             return false;
         }
 
+        $ret = '';
         $cp = $this->setIOCodepage();
-        $ret = $this->doReadInput($multiLineStreamReader, "\x4");
+        while (false !== ($char = fgetc($multiLineStreamReader))) {
+            if ("\x4" === $char || \PHP_EOL === "{$ret}{$char}") {
+                break;
+            }
+            $ret .= $char;
+        }
 
         if (stream_get_meta_data($inputStream)['seekable']) {
             fseek($inputStream, ftell($multiLineStreamReader));
@@ -588,36 +600,5 @@ class QuestionHelper extends Helper
         }
 
         return $cloneStream;
-    }
-
-    /**
-     * @param resource $inputStream
-     */
-    private function doReadInput($inputStream, ?string $exitChar = null, ?TerminalInputHelper $helper = null): string
-    {
-        $ret = '';
-        $helper ??= new TerminalInputHelper($inputStream, false);
-
-        while (!feof($inputStream)) {
-            $helper->waitForInput();
-            $char = fread($inputStream, 1);
-
-            // as opposed to fgets(), fread() returns an empty string when the stream content is empty, not false.
-            if (false === $char || ('' === $ret && '' === $char)) {
-                throw new MissingInputException('Aborted.');
-            }
-
-            if (\PHP_EOL === "{$ret}{$char}" || $exitChar === $char) {
-                break;
-            }
-
-            $ret .= $char;
-
-            if (null === $exitChar && "\n" === $char) {
-                break;
-            }
-        }
-
-        return $ret;
     }
 }

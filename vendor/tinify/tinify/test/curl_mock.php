@@ -17,7 +17,6 @@ class CurlMock {
     private static $version = array();
 
     public $options = array();
-	public $request;
     public $response;
     public $closed = false;
 
