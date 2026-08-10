@@ -164,7 +164,7 @@ class ActivityController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:100',
-            'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:40960000', 'mimetypes:model/gltf-binary,application/zip,application/x-zip-compressed,application/octet-stream',],
+            'glb' => [Rule::requiredIf($request['acao'] == 'insert' && !$usarPainel), 'extensao_invalida:glb,zip', 'max:30720000', 'mimetypes:model/gltf-binary,application/zip,application/x-zip-compressed,application/octet-stream',],
             'marcador' => [Rule::requiredIf($request['acao'] == 'insert'), 'extensao_invalida:png,jpeg,jpg', 'mimetypes:image/png,image/jpeg'],
             'pista_customizada' => 'max:255' 
         ],

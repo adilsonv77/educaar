@@ -49,7 +49,7 @@
        function upload_check()
         {
             var upl = document.getElementById("glb");
-            var max = 40*1024*1024; // 40MB
+            var max = 30*1024*1024; // 40MB
 
             var alert = document.getElementById("alertaGLB");
             if (alert !== null) {
@@ -69,7 +69,7 @@
                 div.appendChild(ul);
 
                 const li = document.createElement("li");
-                li.innerHTML = "Tamanho máximo excedido (~"+ Math.round(upl.files[0].size/1024/1024) + "MB > 40MB)";
+                li.innerHTML = "Tamanho máximo excedido (~"+ Math.round(upl.files[0].size/1024/1024) + "MB > 30MB)";
                 ul.appendChild(li);
 
                 upl.value = "";
@@ -180,7 +180,7 @@
                         @endif
                         
                         <label for="alterar3D">{{ __('3D Model') }} (GLB ou GLTF->ZIP)*</label>
-                        <span class="alert-danger">{{ __('Max size: :size', ['size' => '40MB']) }}</span>
+                        <span class="alert-danger">{{ __('Max size: :size', ['size' => '30MB']) }}</span>
                         <input type="file" @if($acao === 'insert') required @endif style="border:none" class="form-control" name="glb"
                             id="glb" accept=".glb, .zip" onchange="upload_check()" @if($acao === 'edit' && $mural_id == "modelo3D") disabled  @endif/>
                 </div>
