@@ -204,12 +204,12 @@
                                 </a>
                             </li>
                             
-                            <li>
+                            <!--<li>
                                 <a class="ai-icon" href="{{ route('ranking.create') }}" aria-expanded="false">
                                     <i class="bi-trophy"></i>
                                     <span class="nav-text">Ranking</span>
                                 </a>
-                            </li>
+                            </li>-->
                         @endif
 
                         @if (session('type') == 'admin')
