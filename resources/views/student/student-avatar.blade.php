@@ -3,219 +3,208 @@
 @section('content')
     <script src="{{ asset('js/student-avatar.js') }}"></script>
 
-    <style>
-        @media (max-width: 576px) {
-            .container.d-flex.wrap.p-2 {
-                flex-wrap: wrap;
-            }
-        }
-    </style>
-
     @php
         $urlBaseMenu = 'https://api.dicebear.com/9.x/toon-head/svg?seed=Luke';
-
         $coresFundo = ['b6e3f4', 'f4b6e3', 'e3f4b6', 'b6f4e3', 'e3b6f4'];
-
-        $coresRoupas = [
-            '0b3286',
-            '147f3c',
-            '731ac3',
-            '151613',
-            '545454',
-            'b11f1f',
-            'e8e9e6',
-            'eab308',
-            'ec4899',
-            'f97316',
-        ];
-
+        $coresRoupas = ['0b3286', '147f3c', '731ac3', '151613', '545454', 'b11f1f', 'e8e9e6', 'eab308', 'ec4899', 'f97316'];
         $coresCabelo = ['2c1b18', '724133', 'a55728', 'b58143', 'd6b370', '1A1A1A', 'CFCFCF'];
-
         $peles = ['5c3829', 'a36b4f', 'b98e6a', 'c68e7a', 'f1c3a5'];
-
         $cabelosCima = ['bun', 'sideComed', 'spiky', 'undercut', 'none'];
-
         $cabelosBaixo = ['longStraight', 'longWavy', 'neckHigh', 'shoulderHigh', 'none'];
-
         $roupas = ['dress', 'openJacket', 'shirt', 'tShirt', 'turtleNeck'];
-
         $barbas = ['chin', 'chinMoustache', 'fullBeard', 'longBeard', 'moustacheTwirl', 'none'];
-
         $bocas = ['agape', 'angry', 'laugh', 'sad', 'smile'];
-
         $olhos = ['bow', 'happy', 'humble', 'wide', 'wink'];
-
         $sobrancelhas = ['angry', 'neutral', 'happy', 'sad', 'raised'];
     @endphp
 
-    <div class="container px-3 px-md-0">
-        <div class="d-flex flex-column align-items-center mx-auto mt-4 mb-4 rounded"
+    <style>
+        .avatar-option-card {
+            background-color: #FAFAFA;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .avatar-option-card:hover, .avatar-option-card:active {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-color: #bb68ff;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #5a3286;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+        }
+    </style>
+
+    <div class="container px-3 px-md-0" style="padding-bottom: 100px;">
+        
+        <div class="d-flex flex-column align-items-center mx-auto mt-4 mb-4 rounded shadow"
             style="position: sticky; top: 15px; z-index: 999; width: 100%; max-width: 300px; background-color: #f2e3ff; border: 2px solid #bb68ff;"
             id="student-profile">
 
-            <div class="position-relative mx-auto mb-3 mt-3" style="width: 150px; height: 150px;">
-
-                <div class="bg-light rounded-circle d-flex justify-content-center align-items-center w-100 h-100"
-                    style="overflow: hidden;">
+            <div class="position-relative mx-auto mb-3 mt-3" style="width: 130px; height: 130px;">
+                <div class="bg-light rounded-circle d-flex justify-content-center align-items-center w-100 h-100 shadow-sm"
+                    style="overflow: hidden; border: 3px solid white;">
                     @php
-                        $urlAvatar = Auth::user()->avatar;
-                        if ($urlAvatar == null) {
-                            $urlAvatar = 'https://api.dicebear.com/9.x/toon-head/svg?seed=Luke&backgroundColor=b6e3f4';
-                        }
+                        $urlAvatar = Auth::user()->avatar ?? 'https://api.dicebear.com/9.x/toon-head/svg?seed=Luke&backgroundColor=b6e3f4';
                     @endphp
-                    <img id="avatar-preview" src="{{ $urlAvatar }}" alt="Avatar" style="width: 100%; height: auto;">
+                    <img id="avatar-preview" src="{{ $urlAvatar }}" alt="Avatar" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
-
-                <!-- <a href="{{ route('student.avatar') }}" class="position-absolute d-flex justify-content-center align-items-center text-white text-decoration-none" style="bottom: 0px; right: 0px; width: 32px; height: 32px; background-color: #bb68ff; border-radius: 50%; border: 2px solid #f2e3ff;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                    </svg>
-                </a>
-            -->
             </div>
         </div>
 
-        <h2>Cor de Fundo</h2>
-        <div class="container d-flex wrap p-2" id="cor-fundo-container">
+        <h2 class="section-title">Cor de Fundo</h2>
+        <div class="row justify-content-center" id="cor-fundo-container">
             @foreach ($coresFundo as $index => $cor)
-                <div class="card mx-auto" id="corFundo{{ $index + 1 }}" data-property="backgroundColor"
-                    data-value="{{ $cor }}" style="width: 18rem; background-color: #FAFAFA; cursor: pointer;">
-                    <img src="{{ $urlBaseMenu }}&skinColor=ffffff&hairColor=000000&rearHairProbability=0&clothesColor=ffffff&backgroundColor={{ $cor }}"
-                        class="card-img-top rounded-circle mx-auto" style="width: 100px;" alt="Cor de Fundo">
+                <div class="col-4 col-sm-3 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-2 avatar-option-card rounded" 
+                         id="corFundo{{ $index + 1 }}" data-property="backgroundColor" data-value="{{ $cor }}">
+                        <img src="{{ $urlBaseMenu }}&skinColor=ffffff&hairColor=000000&rearHairProbability=0&clothesColor=ffffff&backgroundColor={{ $cor }}"
+                            class="rounded-circle img-fluid" style="max-width: 70px;" alt="Cor de Fundo">
+                    </div>
                 </div>
             @endforeach
         </div>
 
-        <h2>Pele</h2>
-        <div class="container d-flex wrap p-2" id="pele-container">
+        <h2 class="section-title">Pele</h2>
+        <div class="row justify-content-center" id="pele-container">
             @foreach ($peles as $index => $cor)
-                <div class="card mx-auto" id="pele{{ $index + 1 }}" data-property="skinColor"
-                    data-value="{{ $cor }}" style="width: 18rem; background-color: #FAFAFA; cursor: pointer;">
-                    <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&clothesColor=ffffff&skinColor={{ $cor }}"
-                        class="card-img-top rounded-circle mx-auto" style="width: 100px;" alt="Pele">
+                <div class="col-4 col-sm-3 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-2 avatar-option-card rounded" 
+                         id="pele{{ $index + 1 }}" data-property="skinColor" data-value="{{ $cor }}">
+                        <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&clothesColor=ffffff&skinColor={{ $cor }}"
+                            class="rounded-circle img-fluid" style="max-width: 70px;" alt="Pele">
+                    </div>
                 </div>
             @endforeach
         </div>
 
-        <h2>Cabelo (Cima)</h2>
-
-        <div class="container d-flex wrap p-2" id="cabelo-container">
-
+        <h2 class="section-title">Cabelo (Cima)</h2>
+        <div class="row justify-content-center" id="cabelo-container">
             @foreach ($cabelosCima as $index => $cabelo)
                 @php
                     $parametroUrl = $cabelo == 'none' ? '&hairProbability=0' : '&hair=' . $cabelo;
                 @endphp
-
-                <div class="card mx-auto" id="cabelo{{ $index + 1 }}" data-property="hair"
-                    data-value="{{ $cabelo }}" style="width: 18rem; background-color: #FAFAFA; cursor: pointer;">
-                    <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&skinColor=ffffff&hairColor=000000&rearHairProbability=0&clothesColor=ffffff{{ $parametroUrl }}"
-                        class="card-img-top rounded-circle mx-auto" style="width: 100px;" alt="Cabelo">
+                <div class="col-4 col-sm-3 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-2 avatar-option-card rounded" 
+                         id="cabelo{{ $index + 1 }}" data-property="hair" data-value="{{ $cabelo }}">
+                        <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&skinColor=ffffff&hairColor=000000&rearHairProbability=0&clothesColor=ffffff{{ $parametroUrl }}"
+                            class="rounded-circle img-fluid" style="max-width: 70px;" alt="Cabelo">
+                    </div>
                 </div>
             @endforeach
-
         </div>
 
-        <h2>Cabelo (Baixo)</h2>
-        <div class="container d-flex wrap p-2" id="cabeloBaixo-container">
+        <h2 class="section-title">Cabelo (Baixo)</h2>
+        <div class="row justify-content-center" id="cabeloBaixo-container">
             @foreach ($cabelosBaixo as $index => $cabeloBaixo)
                 @php
                     $parametroUrl = $cabeloBaixo == 'none' ? '&rearHairProbability=0' : '&rearHair=' . $cabeloBaixo;
                 @endphp
-
-                <div class="card mx-auto" id="cabeloBaixo{{ $index + 1 }}" data-property="rearHair"
-                    data-value="{{ $cabeloBaixo }}" style="width: 18rem; background-color: #FAFAFA; cursor: pointer;">
-                    <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&skinColor=ffffff&hairColor=000000&hairProbability=0&clothesColor=ffffff{{ $parametroUrl }}"
-                        class="card-img-top rounded-circle mx-auto" style="width: 100px;" alt="Cabelo Baixo">
+                <div class="col-4 col-sm-3 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-2 avatar-option-card rounded" 
+                         id="cabeloBaixo{{ $index + 1 }}" data-property="rearHair" data-value="{{ $cabeloBaixo }}">
+                        <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&skinColor=ffffff&hairColor=000000&hairProbability=0&clothesColor=ffffff{{ $parametroUrl }}"
+                            class="rounded-circle img-fluid" style="max-width: 70px;" alt="Cabelo Baixo">
+                    </div>
                 </div>
             @endforeach
         </div>
 
-        <h2>Cor do cabelo</h2>
-        <div>
-            <div class="row row-cols-xs-2 row-cols-sm-3 row-cols-md-5 g-3">
-                @foreach ($coresCabelo as $index => $corCabelo)
-                    <div class="col">
-                        <div class="card h-100 py-2 d-flex justify-content-center align-items-center"
-                            id="corCabelo{{ $index + 1 }}" data-property="hairColor" data-value="{{ $corCabelo }}"
-                            style="background-color: #FAFAFA; cursor: pointer;">
-                            <div class="rounded-circle"
-                                style="background-color: #{{ $corCabelo }}; width: 100px; height: 100px;"></div>
-                        </div>
+        <h2 class="section-title">Cor do Cabelo</h2>
+        <div class="row justify-content-center">
+            @foreach ($coresCabelo as $index => $corCabelo)
+                <div class="col-3 col-sm-2 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-3 avatar-option-card rounded" 
+                         id="corCabelo{{ $index + 1 }}" data-property="hairColor" data-value="{{ $corCabelo }}">
+                        <div class="rounded-circle shadow-sm" style="background-color: #{{ $corCabelo }}; width: 45px; height: 45px;"></div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
 
-        <h2>Roupas</h2>
-        <div class="container d-flex wrap p-2" id="roupas-container">
+        <h2 class="section-title">Roupas</h2>
+        <div class="row justify-content-center" id="roupas-container">
             @foreach ($roupas as $index => $roupa)
-                <div class="card mx-auto" id="roupa{{ $index + 1 }}" data-property="clothes"
-                    data-value="{{ $roupa }}" style="width: 18rem; background-color: #FAFAFA; cursor: pointer;">
-                    <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothes={{ $roupa }}"
-                        class="card-img-top rounded-circle mx-auto" style="width: 100px;" alt="Roupa">
+                <div class="col-4 col-sm-3 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-2 avatar-option-card rounded" 
+                         id="roupa{{ $index + 1 }}" data-property="clothes" data-value="{{ $roupa }}">
+                        <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothes={{ $roupa }}"
+                            class="rounded-circle img-fluid" style="max-width: 70px;" alt="Roupa">
+                    </div>
                 </div>
             @endforeach
         </div>
 
-        <h2>Cor da roupa</h2>
-        <div class="container p-2" id="cor-roupa-container">
-            <div class="row row-cols-xs-2 row-cols-sm-3 row-cols-md-5 g-3">
-                @foreach ($coresRoupas as $index => $corRoupa)
-                    <div class="col">
-                        <div class="card h-100 py-2 d-flex justify-content-center align-items-center"
-                            id="corRoupa{{ $index + 1 }}" data-property="clothesColor" data-value="{{ $corRoupa }}"
-                            style="background-color: #FAFAFA; cursor: pointer;">
-                            <div class="rounded-circle"
-                                style="background-color: #{{ $corRoupa }}; width: 100px; height: 100px;"></div>
-                        </div>
+        <h2 class="section-title">Cor da Roupa</h2>
+        <div class="row justify-content-center" id="cor-roupa-container">
+            @foreach ($coresRoupas as $index => $corRoupa)
+                <div class="col-3 col-sm-2 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-3 avatar-option-card rounded" 
+                         id="corRoupa{{ $index + 1 }}" data-property="clothesColor" data-value="{{ $corRoupa }}">
+                        <div class="rounded-circle shadow-sm" style="background-color: #{{ $corRoupa }}; width: 45px; height: 45px;"></div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
 
-        <h2>Barba</h2>
-        <div class="container d-flex wrap p-2" id="barba-container">
+        <h2 class="section-title">Barba</h2>
+        <div class="row justify-content-center" id="barba-container">
             @foreach ($barbas as $index => $barba)
                 @php
                     $parametroUrl = $barba == 'none' ? '&beardProbability=0' : '&beardProbability=100&beard=' . $barba;
                 @endphp
-                <div class="card mx-auto" id="barba{{ $index + 1 }}" data-property="beard"
-                    data-value="{{ $barba }}" style="width: 18rem; background-color: #FAFAFA;">
-                    <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothesColor=ffffff{{ $parametroUrl }}"
-                        class="card-img-top rounded-circle mx-auto" style="width: 100px;" alt="Barba">
+                <div class="col-4 col-sm-3 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-2 avatar-option-card rounded" 
+                         id="barba{{ $index + 1 }}" data-property="beard" data-value="{{ $barba }}">
+                        <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothesColor=ffffff{{ $parametroUrl }}"
+                            class="rounded-circle img-fluid" style="max-width: 70px;" alt="Barba">
+                    </div>
                 </div>
             @endforeach
         </div>
 
-        <h2>Boca</h2>
-        <div class="container d-flex wrap p-2" id="boca-container">
+        <h2 class="section-title">Boca</h2>
+        <div class="row justify-content-center" id="boca-container">
             @foreach ($bocas as $index => $boca)
-                <div class="card mx-auto" id="boca{{ $index + 1 }}" data-property="mouth"
-                    data-value="{{ $boca }}" style="width: 18rem; background-color: #FAFAFA;">
-                    <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothesColor=ffffff&mouth={{ $boca }}"
-                        class="card-img-top rounded-circle mx-auto" style="width: 100px;" alt="Boca">
+                <div class="col-4 col-sm-3 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-2 avatar-option-card rounded" 
+                         id="boca{{ $index + 1 }}" data-property="mouth" data-value="{{ $boca }}">
+                        <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothesColor=ffffff&mouth={{ $boca }}"
+                            class="rounded-circle img-fluid" style="max-width: 70px;" alt="Boca">
+                    </div>
                 </div>
             @endforeach
         </div>
 
-        <h2>Olhos</h2>
-        <div class="container d-flex wrap p-2" id="olhos-container">
+        <h2 class="section-title">Olhos</h2>
+        <div class="row justify-content-center" id="olhos-container">
             @foreach ($olhos as $index => $olho)
-                <div class="card mx-auto" id="olho{{ $index + 1 }}" data-property="eyes"
-                    data-value="{{ $olho }}" style="width: 18rem; background-color: #FAFAFA;">
-                    <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothesColor=ffffff&eyes={{ $olho }}"
-                        class="card-img-top rounded-circle mx-auto" style="width: 100px;" alt="Olho">
+                <div class="col-4 col-sm-3 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-2 avatar-option-card rounded" 
+                         id="olho{{ $index + 1 }}" data-property="eyes" data-value="{{ $olho }}">
+                        <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothesColor=ffffff&eyes={{ $olho }}"
+                            class="rounded-circle img-fluid" style="max-width: 70px;" alt="Olho">
+                    </div>
                 </div>
             @endforeach
         </div>
 
-        <h2>Sobrancelhas</h2>
-        <div class="container d-flex wrap p-2" id="sobrancelhas-container">
+        <h2 class="section-title">Sobrancelhas</h2>
+        <div class="row justify-content-center" id="sobrancelhas-container">
             @foreach ($sobrancelhas as $index => $sobrancelha)
-                <div class="card mx-auto" id="sobrancelha{{ $index + 1 }}" data-property="eyebrows"
-                    data-value="{{ $sobrancelha }}" style="width: 18rem; background-color: #FAFAFA;">
-                    <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothesColor=ffffff&eyebrows={{ $sobrancelha }}"
-                        class="card-img-top rounded-circle mx-auto" style="width: 100px;" alt="Sobrancelha">
+                <div class="col-4 col-sm-3 col-md-2 mb-3">
+                    <div class="card h-100 align-items-center py-2 avatar-option-card rounded" 
+                         id="sobrancelha{{ $index + 1 }}" data-property="eyebrows" data-value="{{ $sobrancelha }}">
+                        <img src="{{ $urlBaseMenu }}&backgroundColor=b6e3f4&hairProbability=0&rearHairProbability=0&hairColor=000000&skinColor=ffffff&clothesColor=ffffff&eyebrows={{ $sobrancelha }}"
+                            class="rounded-circle img-fluid" style="max-width: 70px;" alt="Sobrancelha">
+                    </div>
                 </div>
             @endforeach
         </div>
@@ -226,7 +215,7 @@
                 data-url="{{ route('student.avatar.update', $student->id) }}"
                 data-token="{{ csrf_token() }}">
                 
-            <small class="text-success fw-bold" id="status-salvamento" style="display: none; transition: 0.3s;">
+            <small class="text-success fw-bold" id="status-salvamento" style="display: none; transition: 0.3s; font-size: 1.1rem;">
                 <i class="fas fa-check-circle"></i> Avatar salvo automaticamente!
             </small>
         </div>

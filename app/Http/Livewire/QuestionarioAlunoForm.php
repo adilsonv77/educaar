@@ -231,6 +231,7 @@ class QuestionarioAlunoForm extends Component {
     }
 
     private function updateGameProgress(): void {
+        
         if($this->incorreta || !$this->isJogo) {
             $progress = ['next_position' => $this->proximaPosicaoCalculada ?? 1];
             return;
@@ -240,6 +241,7 @@ class QuestionarioAlunoForm extends Component {
             ['student_id' => Auth::id(), 'content_id' => $this->content->id],
             ['next_position' => 1]
         );
+
         $progress->next_position++;
         $progress->save();
 
