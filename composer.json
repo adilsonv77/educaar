@@ -8,6 +8,7 @@
         "php": "^8.2.12",
         "barryvdh/laravel-dompdf": "^2.2",
         "chillerlan/php-qrcode": "^4.3",
+        "endroid/qr-code": "^6.0",
         "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^9.0",

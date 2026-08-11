@@ -4,23 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Sala;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreSalaRequest;
 use App\Http\Requests\UpdateSalaRequest;
 use App\Models\Regras;
 use Illuminate\Http\Request;
 use App\DAO\TurmaDAO;
 use App\DAO\SalaDAO;
-use App\Models\ArProgress;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Jogo;
-use App\Models\StudentAnswer;
 use Illuminate\Support\Facades\DB;
-use App\Models\Turma;
 use App\Models\RegraProfessor;
+use App\Services\QrCodeService;
 use Exception;
+use Illuminate\Contracts\View\View;
 
 class SalaController extends Controller
 {
+    /* WIP: link temporário até a implementação de autenticação da sala */
+    private const BASE_URL = 'https://educaar.ceavi.udesc.br';
+
+    public function __construct(private QrCodeService $QrCodeService) {}
+
     /**
      * Display a listing of the resource.
      *
@@ -236,5 +239,13 @@ class SalaController extends Controller
         $sala->delete();
 
         return redirect()->route('sala.index', ['jogo_id' => $id_jogo])->with('success', 'Sala, progresso e respostas excluídos com sucesso!');
+    }
+
+    public function createQrCode(int $id): View {
+        $result = $this->QrCodeService->generate(self::BASE_URL, $id)->build();
+        $qrCode = $result->getDataUri();
+        $qrCodeName = sprintf("%s.png", (Sala::find($id))->nome);
+
+        return view('pages.sala.qrcode', ['qrCode' => $qrCode, 'qrCodeName' => $qrCodeName]);
     }
 }
