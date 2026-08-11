@@ -47,8 +47,12 @@ class RegrasController extends Controller
             'data_limite' => 'nullable|date|required_if:time_limit,0|after_or_equal:data_inicio'
         ]);
 
-        if($data['tempo'] == null || $data['tempo'] == 0){
+        if(($data['tempo'] == null || $data['tempo'] == 0) && $data['data_inicio'] == null){
             $data['tempo'] = 999999999;
+        }
+
+        if($data['data_inicio'] != null && $data['data_limite'] != null){
+            $data['tempo'] = '0';
         }
 
         $novaRegra = Regras::create($data);
