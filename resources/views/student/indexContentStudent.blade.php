@@ -23,7 +23,7 @@
             box-shadow: 0 2px 5px rgba(13, 110, 253, 0.4);
         }
     </style>
-    <div class="">
+    <div class="mb-10">
         @if (session('type') == 'student' || session('type') == 'developer')
             <div class="card">
                 <div class="card-body">
