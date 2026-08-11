@@ -47,8 +47,13 @@
                         </div>
                         <select name="regra_id" id="regra_id" class="form-control" required>
                             @foreach($rules as $rule)
-                                <option value={{ $rule->id }}>
-                                    {{ $rule->pontMax }} pontos | {{ $rule->tempo }} segundos
+                                <option value="{{ $rule->id }}"> 
+                                    {{ $rule->pontMax }} pontos | 
+                                    @if(empty($rule->data_inicio))
+                                        {{ $rule->tempo }} segundos
+                                    @else
+                                        De {{ \Carbon\Carbon::parse($rule->data_inicio)->format('d/m/Y') }} até {{ \Carbon\Carbon::parse($rule->data_limite)->format('d/m/Y') }}
+                                    @endif
                                 </option>
                             @endforeach
                         </select>
@@ -76,25 +81,26 @@
                     <div class="mb-4">
                         <div class="custom-control custom-switch switch">
                             <input type="hidden" name="time_limit" value="0">
-                            <input type="checkbox" name="time_limit" id="time_limit" class="custom-control-input" value="1">
+                            <input type="checkbox" name="time_limit" id="time_limit" class="custom-control-input" value="1" onchange="toggleTimeLimit(this)">
                             <label for="time_limit" class="custom-control-label">{{ __('Switch Time Limit') }}</label>
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="duration">{{ __('Time Limit') }}</label>
-                        <input type="number" class="form-control" name="tempo" id="tempo" min=0 required>
+                    <div class="form-group row" id="block-duration" style="display: none;">
+                        <label for="tempo">{{ __('Time Limit') }}</label>
+                        <input type="number" class="form-control" name="tempo" id="tempo" min=0>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="starting_date">{{ __('Starting Date') }}</label>
-                        <input type="date" name="starting_date" id="starting_date">
-                    </div>
+                    <div id="block-dates">
+                        <div class="form-group row">
+                            <label for="data_inicio">{{ __('Starting Date') }}</label>
+                            <input type="date" class="form-control" name="data_inicio" id="data_inicio" required>
+                        </div>
 
-                    <div class="form-group row">
-                        <label for="deadline">{{ __('Deadline') }}</label>
-                        <input type="date" name="deadline" id="deadline">
-
+                        <div class="form-group row">
+                            <label for="data_limite">{{ __('Deadline') }}</label>
+                            <input type="date" class="form-control" name="data_limite" id="data_limite" required>
+                        </div>
                     </div>
 
                     <div class="form-group row">
@@ -111,5 +117,45 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggleTimeLimit(checkbox) {
+        const blockDuration = document.getElementById('block-duration');
+        const blockDates = document.getElementById('block-dates');
+        const inputTempo = document.getElementById('tempo');
+        
+       
+        const inputStarting = document.getElementById('data_inicio'); 
+        const inputDeadline = document.getElementById('data_limite'); 
+
+        if (checkbox.checked) {
+            blockDuration.style.display = 'flex'; 
+            blockDates.style.display = 'none';
+            
+            inputTempo.required = true;
+            inputStarting.required = false;
+            inputDeadline.required = false;
+            
+            inputStarting.value = '';
+            inputDeadline.value = '';
+        } else {
+            blockDuration.style.display = 'none';
+            blockDates.style.display = 'block';
+            
+            inputTempo.required = false;
+            inputStarting.required = true;
+            inputDeadline.required = true;
+            
+            inputTempo.value = '';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const switchBtn = document.getElementById('time_limit');
+        if(switchBtn) {
+            toggleTimeLimit(switchBtn);
+        }
+    });
+</script>
 
 @endsection

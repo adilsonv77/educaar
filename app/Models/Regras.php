@@ -14,6 +14,8 @@ class Regras extends Model
     protected $fillable = [
         'pontMax',
         'tempo',
+        'data_inicio',
+        'data_limite'
     ];
 
     protected $table = 'regras';

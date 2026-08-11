@@ -41,11 +41,13 @@ class RegrasController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'pontMax' => 'integer|min:0|required',
-            'tempo'   => 'integer|min:0|required'
+            'pontMax'     => 'integer|min:0|required',
+            'tempo'       => 'nullable|integer|min:0|required_if:time_limit,1',
+            'data_inicio' => 'nullable|date|required_if:time_limit,0',
+            'data_limite' => 'nullable|date|required_if:time_limit,0|after_or_equal:data_inicio'
         ]);
 
-        if($data['tempo'] == 0){
+        if($data['tempo'] == null || $data['tempo'] == 0){
             $data['tempo'] = 999999999;
         }
 
