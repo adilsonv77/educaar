@@ -9,7 +9,8 @@ class SalaDAO {
     public static function buscarSalasENomeTurma($jogoId){
         return DB::table('salas')
             ->join('turmas', 'salas.turma_id', '=', 'turmas.id')
-            ->select('salas.*', 'turmas.nome as nome_turma')
+            ->join('regras', 'salas.regra_id', '=', 'regras.id')
+            ->select('salas.*', 'turmas.nome as nome_turma', 'regras.data_inicio as data_inicio')
             ->where('salas.jogo_id', $jogoId)
             ->get();
     }
