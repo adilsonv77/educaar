@@ -73,9 +73,28 @@
                 <form action="{{ route('regra.store') }}" method="post" class="p-3"> @csrf
                     <input type="hidden" name="jogo_id" value="{{ $jogoId }}">
 
+                    <div class="mb-4">
+                        <div class="custom-control custom-switch switch">
+                            <input type="hidden" name="time_limit" value="0">
+                            <input type="checkbox" name="time_limit" id="time_limit" class="custom-control-input" value="1">
+                            <label for="time_limit" class="custom-control-label">{{ __('Switch Time Limit') }}</label>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="duration">{{ __('Time Limit') }}</label>
                         <input type="number" class="form-control" name="tempo" id="tempo" min=0 required>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="starting_date">{{ __('Starting Date') }}</label>
+                        <input type="date" name="starting_date" id="starting_date">
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="deadline">{{ __('Deadline') }}</label>
+                        <input type="date" name="deadline" id="deadline">
+
                     </div>
 
                     <div class="form-group row">
