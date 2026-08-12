@@ -67,7 +67,7 @@
 
 
         .nav_bar{
-            position:absolute;
+            position:fixed;
             bottom: 0;
             left:0;
             background-color:#f9f9f9;

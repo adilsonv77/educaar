@@ -35,7 +35,7 @@
 
 </head>
 
-<body class="h-100">
+<body class="h-100" style="overscroll-behavior: none;">
     <div id="preloader">
         <div class="sk-three-bounce">
             <div class="sk-child sk-bounce1"></div>
@@ -174,10 +174,7 @@
 
     @yield('script')
 
-</body>
-
-
-<footer>
+    <footer style="scroll-behavior: none;">
     <div class='nav_bar'>
         <div class='buttons_ar' id="buttons_footer">
 
@@ -213,6 +210,10 @@
         
     </div>
 </footer>
+</body>
+
+
+
 
 
 
