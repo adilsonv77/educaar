@@ -41,7 +41,14 @@
 
                         <td>
                             <form action="{{ route('sala.qrcode', $sala->id) }}"> @csrf
-                                <button type="submit" class="btn btn-primary" @if($sala->data_inicio !== null) disabled @endif><i class="bi bi-qr-code"></i></button>
+                                <button type="submit" class="btn btn-primary" 
+                                    @if($sala->data_inicio === null) 
+                                        disabled title="Não disponível"
+                                    @else 
+                                        title="QR Code"
+                                    @endif>
+                                    <i class="bi bi-qr-code"></i>
+                                </button>
                             </form>
                         </td>
 
