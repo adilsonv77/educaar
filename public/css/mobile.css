@@ -73,12 +73,9 @@
             background-color:#f9f9f9;
             width: 100vw;
             height: 4rem;
-            padding:0 1rem;
+            padding:0 0rem;
             display:grid;
             align-items: center;
-
-
-
         }
 
         .buttons_ar {

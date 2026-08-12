@@ -36,7 +36,7 @@ tr:nth-child(even) {
 
 .table-responsive {
 
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: vertical;
     /* Melhora a rolagem em dispositivos móveis */
     width: 100%;
     max-width: 100%;

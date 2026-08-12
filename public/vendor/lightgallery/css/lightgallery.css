@@ -403,7 +403,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   cursor: pointer;
 }
 .lg-outer .lg-has-iframe .lg-video {
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: vertical;
   overflow: auto;
 }
 .lg-outer .lg-has-vimeo .lg-video-play {

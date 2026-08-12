@@ -33,7 +33,7 @@
    /*
     @media (max-width: 640px    ) {
     .overflow-y-auto {
-        -webkit-overflow-scrolling: touch; /* Scroll suave no iOS 
+        -webkit-overflow-scrolling: vertical; /* Scroll suave no iOS 
         overscroll-behavior-y: contain; /* Evita que o scroll "vaze" para o body 
         }
     
