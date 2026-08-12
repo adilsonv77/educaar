@@ -242,7 +242,8 @@ class SalaController extends Controller
     }
 
     public function createQrCode(int $id): View {
-        $result = $this->QrCodeService->generate(self::BASE_URL, $id)->build();
+        $data = sprintf("%s%d", self::BASE_URL, $id);
+        $result = $this->QrCodeService->generate($data)->build();
         $qrCode = $result->getDataUri();
         $qrCodeName = sprintf("%s.png", (Sala::find($id))->nome);
 
