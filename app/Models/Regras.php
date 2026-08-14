@@ -18,5 +18,11 @@ class Regras extends Model
         'data_limite'
     ];
 
+    protected $casts = [
+        'data_inicio' => 'datetime',
+        'data_limite' => 'datetime',
+    ];
+
+
     protected $table = 'regras';
 }

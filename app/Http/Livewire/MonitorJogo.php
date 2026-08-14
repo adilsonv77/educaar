@@ -17,6 +17,8 @@ class MonitorJogo extends Component
     public $ultimoCarbon;
     public $tempoMaximo;
     public $pontuacaoMaxima;
+    public $data_inicio;
+    public $data_limite;
     public $userId;
     public $salaId;
     public $isProfessor = false;

@@ -239,30 +239,28 @@
                                 </div>
                                 <div>
                                     @foreach ($jsonDecodeValue[$nrquestao]['options'] as $option)
-                                    
-                                        <div class="form-check">
-
-                                        <!-- wire.model.defer para avisar que nao é preciso atualizar a tela a cada mudança  -->
+                                        <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 5px 10px;">
 
                                             <input 
                                                 autocomplete="off"                                           
                                                 wire:model.defer="alternativas.{{ $jsonDecodeValue[$nrquestao]['id'] }}"
-                                                class="form-check-input question-radio" type="radio" 
+                                                type="radio" 
                                                 name="questao{{ $jsonDecodeValue[$nrquestao]['id'] }}"
                                                 id="flexRadioDefault{{ $loop->index }}{{ $jsonDecodeValue[$nrquestao]['id'] }}" 
                                                 value="{{ $loop->index }}"
+                                                style="width: 20px; height: 20px; margin: 0; cursor: pointer; flex-shrink: 0;"
                                                 @if ($jsonDecodeValue[$nrquestao]['alternative_answered'] != NULL) 
                                                     disabled 
                                                     @if ($option == $jsonDecodeValue[$nrquestao]['alternative_answered']) checked @endif
-                                                @endif>
-                                                <label for="flexRadioDefault{{ $loop->index }}{{ $jsonDecodeValue[$nrquestao]['id'] }}"
-                                                    class="form-check-label" style="font-size: 17px">
-                                                    {{ $option }}
-                                                </label>
-                                            </input>
-                                        </div>
+                                                @endif
+                                            > 
 
-        
+                                            <label for="flexRadioDefault{{ $loop->index }}{{ $jsonDecodeValue[$nrquestao]['id'] }}"
+                                                style="font-size: 17px; margin: 0 0 0 10px; cursor: pointer; color: #535353; line-height: 1.3;">
+                                                {{ $option }}
+                                            </label>
+
+                                        </div>
                                     @endforeach
                                     <br/>
                                 </div>

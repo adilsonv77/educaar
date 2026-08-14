@@ -15,6 +15,12 @@
     </div>
 @endif
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
+
 <div class="main">
     <div class="card">
         <div class="card-body">
@@ -52,7 +58,7 @@
                                     @if(empty($rule->data_inicio))
                                         {{ $rule->tempo }} segundos
                                     @else
-                                        De {{ \Carbon\Carbon::parse($rule->data_inicio)->format('d/m/Y') }} até {{ \Carbon\Carbon::parse($rule->data_limite)->format('d/m/Y') }}
+                                        De {{ \Carbon\Carbon::parse($rule->data_inicio)->format('d/m/Y H:i') }} até {{ \Carbon\Carbon::parse($rule->data_limite)->format('d/m/Y H:i') }}
                                     @endif
                                 </option>
                             @endforeach
@@ -94,12 +100,12 @@
                     <div id="block-dates">
                         <div class="form-group row">
                             <label for="data_inicio">{{ __('Starting Date') }}</label>
-                            <input type="date" class="form-control" name="data_inicio" id="data_inicio" required>
+                            <input type="text" class="form-control seletor-data" name="data_inicio" id="data_inicio" placeholder="Selecione a data e hora...">
                         </div>
 
                         <div class="form-group row">
                             <label for="data_limite">{{ __('Deadline') }}</label>
-                            <input type="date" class="form-control" name="data_limite" id="data_limite" required>
+                            <input type="text" class="form-control seletor-data" name="data_limite" id="data_limite" placeholder="Selecione a data e hora..." required>
                         </div>
                     </div>
 
@@ -117,6 +123,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr(".seletor-data", {
+            enableTime: true, 
+            dateFormat: "Y-m-d H:i", 
+            altInput: true,
+            altFormat: "d/m/Y H:i", 
+            locale: "pt" 
+        });
+    });
+</script>
 
 <script>
     function toggleTimeLimit(checkbox) {
