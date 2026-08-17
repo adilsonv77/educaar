@@ -238,13 +238,14 @@
                                     </div>
                                 </div>
                                 <div>
-                                    @foreach ($jsonDecodeValue[$nrquestao]['options'] as $option)
+                                   @foreach ($jsonDecodeValue[$nrquestao]['options'] as $option)
                                         <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 5px 10px;">
 
                                             <input 
                                                 autocomplete="off"                                           
                                                 wire:model.defer="alternativas.{{ $jsonDecodeValue[$nrquestao]['id'] }}"
                                                 type="radio" 
+                                                class="question-radio"
                                                 name="questao{{ $jsonDecodeValue[$nrquestao]['id'] }}"
                                                 id="flexRadioDefault{{ $loop->index }}{{ $jsonDecodeValue[$nrquestao]['id'] }}" 
                                                 value="{{ $loop->index }}"
@@ -256,7 +257,7 @@
                                             > 
 
                                             <label for="flexRadioDefault{{ $loop->index }}{{ $jsonDecodeValue[$nrquestao]['id'] }}"
-                                                style="font-size: 17px; margin: 0 0 0 10px; cursor: pointer; color: #535353; line-height: 1.3;">
+                                                style="font-size: 17px; margin: 0 0 0 10px; cursor: pointer; color: #333333; line-height: 1.3;">
                                                 {{ $option }}
                                             </label>
 
