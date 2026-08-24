@@ -57,6 +57,8 @@ Auth::routes(['register' => false, 'reset' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/party/public/{id}', [App\Http\Controllers\SalaController::class, 'enterPublicParty']);
+
 Route::middleware(['auth'])->group(function () {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 

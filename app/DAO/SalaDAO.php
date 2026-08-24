@@ -3,7 +3,6 @@
 namespace App\DAO;
 
 use Illuminate\Support\Facades\DB;
-use App\Models\Sala;
 
 class SalaDAO {
     public static function buscarSalasENomeTurma($jogoId){
@@ -71,6 +70,33 @@ class SalaDAO {
             ->where('jogo_id', $jogoId)
             ->whereNull('started_at')
             ->exists();
+    }
+
+    public static function getSalaPorData(int $salaId): bool {
+        return DB::table('salas')
+        ->join('regras', 'salas.regra_id', 'regras.id')
+        ->where('salas.id', $salaId)
+        ->where(function ($query) {
+            $query->whereNotNull('regras.data_inicio')
+                  ->orWhereNotNull('regras.data_limite');
+        })
+        ->exists();
+    }
+
+    public static function getSchoolIdBySala(int $salaId): int {
+        return DB::table('salas')
+            ->join('jogos', 'salas.jogo_id', 'jogos.id')
+            ->join('contents', 'jogos.content_id', 'contents.id')
+            ->join('turmas_modelos', 'contents.turma_modelo_id', 'turmas_modelos.id')
+            ->where('salas.id', $salaId)
+            ->value('turmas_modelos.school_id');
+    }
+
+    public static function getDeadline(int $salaId) {
+        return DB::table('salas')
+            ->join('regras', 'salas.regra_id', 'regras.id')
+            ->where('salas.id', $salaId)
+            ->value('regras.data_limite');
     }
 
 }

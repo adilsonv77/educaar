@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DAO\ActivityDAO;
 use App\Models\Sala;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateSalaRequest;
@@ -16,13 +17,27 @@ use App\Models\RegraProfessor;
 use App\Services\QrCodeService;
 use Exception;
 use Illuminate\Contracts\View\View;
+use App\DAO\ContentDAO;
+use App\DAO\StudentAppDAO;
+use App\Models\AnoLetivo;
+use App\Services\ActivityService;
+use App\Services\RandomSortService;
+use App\Services\UserService;
+use Illuminate\Database\QueryException;
+use App\Models\ArProgress;
+use Illuminate\Http\RedirectResponse;
 
 class SalaController extends Controller
 {
     /* WIP: link temporário até a implementação de autenticação da sala */
     private const BASE_URL = 'https://educaar.ceavi.udesc.br';
 
-    public function __construct(private QrCodeService $QrCodeService) {}
+    public function __construct(
+        private QrCodeService $QrCodeService,
+        private UserService $UserService,
+        private RandomSortService $RandomSortService,
+        private ActivityService $ActivityService
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -248,5 +263,58 @@ class SalaController extends Controller
         $qrCodeName = sprintf("%s.png", (Sala::find($id))->nome);
 
         return view('pages.sala.qrcode', ['qrCode' => $qrCode, 'qrCodeName' => $qrCodeName]);
+    }
+
+    public function enterPublicParty(int $salaId): View|RedirectResponse {
+        $sala = Sala::find($salaId);
+        if (!isset($sala) || !$sala->aberta || !SalaDAO::getSalaPorData($salaId)) {
+            return redirect()->route('login')->withErrors('Sala não disponível');
+        }
+
+        $content = ContentDAO::getContentBySala($sala->id);
+        $activities = ActivityDAO::buscarActivitiesPorConteudo($content->id);
+
+        $user = Auth::user();
+        if ($user === null) {
+            try {
+                $user = $this->UserService->createTempUser($sala->id, $sala->turma_id);
+                Auth::login($user);
+
+                $this->RandomSortService->createRandomSort($content->id, Auth::id());
+            } catch (QueryException $e) {
+                Auth::logout();
+                report($e);
+                
+                return redirect()->route('login')->withErrors('Erro ao cadastrar usuário temporário');
+            }
+        }
+
+        if ($user->expires_at === null) {
+            Auth::logout();
+            return redirect()->route('login')->withErrors('Usuário inválido');
+        }
+
+        $progress = ArProgress::firstOrCreate(
+            ['student_id' => $user->id, 'content_id' => $content->id],
+            ['next_position' => 1]
+        );
+
+        $turmaAluno = StudentAppDAO::buscarTurmaAluno(Auth::id());
+        $anoId = AnoLetivo::where('school_id', Auth::user()->school_id)
+                            ->where('bool_atual', 1)
+                            ->value('id');
+        
+        $this->ActivityService->processToAr($activities->all(), Auth::id(), $anoId, $content->is_jogo);
+
+        session()->put('content_id', $content->id);
+
+        return view('student.ar', [
+            'content' => $content,
+            'activities' => $activities,
+            'rota' => 'teste',
+            'progress' => $progress,
+            'isJogo' => $content->is_jogo,
+            'turmaAluno' => $turmaAluno
+        ]);
     }
 }

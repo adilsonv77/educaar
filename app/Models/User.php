@@ -25,6 +25,7 @@ class User extends Authenticatable
         'school_id',
         'username',
         'avatar',
+        'expires_at'
     ];
 
     /**
@@ -44,6 +45,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'expires_at' => 'datetime'
     ];
 
     public function contents()

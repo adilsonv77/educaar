@@ -202,4 +202,13 @@ class ContentDAO
             ->where('contents.id', $contentId)
             ->count();
     }
+
+    public static function getContentBySala(int $salaId) {
+        return DB::table('salas')
+            ->join('jogos', 'salas.jogo_id', 'jogos.id')
+            ->join('contents', 'jogos.content_id', 'contents.id')
+            ->where('salas.id', $salaId)
+            ->get('contents.*')
+            ->first();
+    }
 }
