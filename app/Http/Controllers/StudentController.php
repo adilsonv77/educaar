@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\DAO\ActivityDAO;
 use App\DAO\ButtonDAO;
 use Illuminate\Http\Request;
-use App\Models\Activity;
-use App\Models\StudentAnswer;
 use Illuminate\Support\Facades\DB;
 use App\Models\AnoLetivo;
 use Exception;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Content;
@@ -18,14 +15,17 @@ use App\DAO\ContentDAO;
 use App\DAO\StudentAppDAO;
 use App\DAO\PainelDAO;
 use App\DAO\MuralDAO;
-use App\DAO\QuestionDAO;
 use App\DAO\JogoDAO;
 use App\Models\ArProgress;
-use App\Models\RandomSort;
 use App\Models\Sala;
+use App\Services\RandomSortService;
 
 class StudentController extends Controller
 {
+
+    public function __construct(
+        private RandomSortService $RandomSortService
+    ) {}
 
     /**
      * Página de home da aplicação... mostra todos os conteúdos do aluno.
@@ -142,7 +142,7 @@ class StudentController extends Controller
         }
 
         if($content->is_jogo) {
-            $this->createRandomSort($content_id);
+            $this->RandomSortService->createRandomSort($content_id, Auth::id());
         }
 
         if($content->is_jogo){
@@ -260,40 +260,6 @@ class StudentController extends Controller
         }
     }
 
-    /**
-     * Cria uma ordem aleatória em um conteúdo para o aluno autenticado.
-     * 
-     * @param int $content_id
-    */
-    private function createRandomSort(int $content_id) : void {
-        $activities = Activity::where('content_id', $content_id)->count();
-
-        if($activities <= 1) {
-            return;
-        }
-
-        $oldSort = count(explode(',', RandomSort::where('content_id', $content_id)->where('user_id', Auth::id())->value('sort')));
-
-        $sort = range(1, $activities);
-        shuffle($sort);
-        
-        if ($oldSort == $activities) {
-            RandomSort::firstOrCreate([
-                'user_id' => Auth::id(),
-                'content_id' => $content_id,
-            ],[
-                'sort' => implode(',', $sort)
-            ]);
-        } else {
-            RandomSort::updateOrInsert([
-                'user_id' => Auth::id(),
-                'content_id' => $content_id,
-            ], [
-                'sort' => implode(',', $sort)
-            ]);
-        }
-    }
-
     public function profile()
     {
         $student = Auth::user();
@@ -330,6 +296,5 @@ class StudentController extends Controller
 
         return redirect()->route('student.avatar', $student->id)->with('success', 'Avatar atualizado com sucesso!');
     }
-
 }
 
