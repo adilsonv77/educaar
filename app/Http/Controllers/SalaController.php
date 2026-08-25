@@ -26,6 +26,7 @@ use App\Services\UserService;
 use Illuminate\Database\QueryException;
 use App\Models\ArProgress;
 use Illuminate\Http\RedirectResponse;
+use App\Models\Login;
 
 class SalaController extends Controller
 {
@@ -34,9 +35,9 @@ class SalaController extends Controller
 
     public function __construct(
         private QrCodeService $QrCodeService,
-        private UserService $UserService,
-        private RandomSortService $RandomSortService,
-        private ActivityService $ActivityService
+        private UserService $userService,
+        private RandomSortService $randomSortService,
+        private ActivityService $activityService
     ) {}
 
     /**
@@ -277,11 +278,18 @@ class SalaController extends Controller
         $user = Auth::user();
         if ($user === null) {
             try {
-                $user = $this->UserService->createTempUser($sala->id, $sala->turma_id);
-                Auth::login($user);
+                DB::transaction(function () use ($sala, $content) {
+                    $user = $this->userService->createTempUser($sala->id, $sala->turma_id);
+                    Auth::login($user);
 
-                $this->RandomSortService->createRandomSort($content->id, Auth::id());
-            } catch (QueryException $e) {
+                    $this->randomSortService->createRandomSort($content->id, Auth::id());
+
+                    Login::create([
+                        'user_id' => $user->id,
+                        'entrada_momento' => now(),
+                    ]);
+                });
+            } catch (\Throwable $e) {
                 Auth::logout();
                 report($e);
                 
@@ -304,7 +312,7 @@ class SalaController extends Controller
                             ->where('bool_atual', 1)
                             ->value('id');
         
-        $this->ActivityService->processToAr($activities->all(), Auth::id(), $anoId, $content->is_jogo);
+        $this->activityService->processToAr($activities->all(), Auth::id(), $anoId, $content->is_jogo);
 
         session()->put('content_id', $content->id);
 
