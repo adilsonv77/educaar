@@ -34,19 +34,17 @@ class UserService {
         'Inventivo',
     ];
 
-    public function __construct(private salaDAO $salaDAO) {}
-
     public function createTempUser(int $salaId, int $turmaId): User {
         return DB::transaction(function() use ($salaId, $turmaId) {
-            $name = $this->createUserName();
-            $schoolId = $this->salaDAO->getSchoolIdBySala($salaId);
-            $expiresAt = $this->salaDAO::getDeadline($salaId);
+            $name = $this->createUsername();
+            $schoolId = salaDAO::getSchoolIdBySala($salaId);
+            $expiresAt = salaDAO::getDeadline($salaId);
 
             $data = [
                 'name' => $name,
                 'username' => $name,
                 'type' => 'student',
-                'password' => 'teste',
+                'password' => 'teste',  //hashed
                 'school_id' => $schoolId,
                 'expires_at' => $expiresAt
             ];
@@ -62,11 +60,15 @@ class UserService {
 
     }
 
-    private function createUsername(): String {
-        $substantivo = self::SUBSTANTIVOS[array_rand(self::SUBSTANTIVOS)];
-        $adjetivo = self::ADJETIVOS[array_rand(self::ADJETIVOS)];
-        $sufixo = random_int(10, 999);
+    private function createUsername(): string {
+        do {
+            $substantivo = self::SUBSTANTIVOS[array_rand(self::SUBSTANTIVOS)];
+            $adjetivo = self::ADJETIVOS[array_rand(self::ADJETIVOS)];
+            $sufixo = random_int(10, 999);
 
-        return "{$substantivo} {$adjetivo} {$sufixo}";
+            $username = "{$substantivo} {$adjetivo} {$sufixo}";
+        } while (User::where('username', $username)->exists());
+
+        return $username;
     }
 }
