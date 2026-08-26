@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\AlunoTurma;
 use App\DAO\SalaDAO;
@@ -44,7 +46,7 @@ class UserService {
                 'name' => $name,
                 'username' => $name,
                 'type' => 'student',
-                'password' => 'teste',  //hashed
+                'password' => Hash::make(Str::random(20)),
                 'school_id' => $schoolId,
                 'expires_at' => $expiresAt
             ];
