@@ -31,7 +31,6 @@
     @include('sweetalert::alert')
     @livewireStyles
     @yield('script-head')
-    @livewireScripts
 
 </head>
 
@@ -172,6 +171,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+    @livewireScripts
     @yield('script')
 
     <footer style="scroll-behavior: none;">
