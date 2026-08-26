@@ -138,3 +138,4 @@ ALTER TABLE contents RENAME COLUMN sort_activities TO is_jogo;
 
 ALTER TABLE users
 MODIFY COLUMN username VARCHAR(100);
+ADD COLUMN expires_at TIMESTAMP DEFAULT NULL
