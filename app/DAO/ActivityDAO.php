@@ -66,12 +66,12 @@ class ActivityDAO
     /**
      * Retorna a ordem de um conteúdo baseado na sequência particular de um aluno
     */
-    public static function buscarRandomOrderedActivitiesPorConteudo(int $content_id): Collection {
+    public static function buscarRandomOrderedActivitiesPorConteudo(int $content_id, int $userId): Collection {
         $activities = self::buscarActivitiesPorConteudo($content_id);
 
         $studentSort = DB::table('random_sorts')
             ->where('content_id', $content_id)
-            ->where('user_id', Auth::id())
+            ->where('user_id', $userId)
             ->value('sort');
 
         $activityDic = collect($activities)->keyBy('position');

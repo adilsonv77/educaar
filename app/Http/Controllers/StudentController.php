@@ -146,7 +146,7 @@ class StudentController extends Controller
         }
 
         if($content->is_jogo){
-            $activities = ActivityDAO::buscarRandomOrderedActivitiesPorConteudo($content_id);
+            $activities = ActivityDAO::buscarRandomOrderedActivitiesPorConteudo($content_id, Auth::id());
         } else{
             $activities = ActivityDAO::buscarActivitiesPorConteudo($content_id);
         }

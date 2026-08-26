@@ -311,7 +311,7 @@ class SalaController extends Controller
                             ->where('bool_atual', 1)
                             ->value('id');
         
-        $activities = ActivityDAO::buscarRandomOrderedActivitiesPorConteudo($content->id);
+        $activities = ActivityDAO::buscarRandomOrderedActivitiesPorConteudo($content->id, Auth::id());
         $this->activityService->processToAr($activities->all(), Auth::id(), $anoId, $content->is_jogo);
         session()->put('content_id', $content->id);
 
