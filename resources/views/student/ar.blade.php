@@ -219,27 +219,29 @@
 </script>
 
 <!--Carrega os dados de murais, painéis e botões recebidos pelo controller no html, para o JS pegar depois.-->
-<div id="murais">
-    @foreach ($murais as $mural)
-        <div id="mural-{{ $mural->id }}" start_panel_id="{{ $mural->start_panel_id }}">
-            @foreach ($panels as $panel)
-                @if($panel->mural_id == $mural->id)
-                    <div id="panel-{{ $panel->id }}" json="{{ $panel->panel }}">
-                        @foreach ($buttons as $button)
-                            @if($button->origin_id == $panel->id)
-                                <div id="button-{{ $button->id }}"
-                                    raw_id = "{{ $button->id }}"
-                                    json="{{ $button->configurations }}"
-                                    destination_id="{{ $button->destination_id }}"
-                                ></div>
-                            @endif
-                        @endforeach
-                    </div>
-                @endif
-            @endforeach
-        </div>
-    @endforeach
-</div>
+@if(isset($murais))
+    <div id="murais">
+        @foreach ($murais as $mural)
+            <div id="mural-{{ $mural->id }}" start_panel_id="{{ $mural->start_panel_id }}">
+                @foreach ($panels as $panel)
+                    @if($panel->mural_id == $mural->id)
+                        <div id="panel-{{ $panel->id }}" json="{{ $panel->panel }}">
+                            @foreach ($buttons as $button)
+                                @if($button->origin_id == $panel->id)
+                                    <div id="button-{{ $button->id }}"
+                                        raw_id = "{{ $button->id }}"
+                                        json="{{ $button->configurations }}"
+                                        destination_id="{{ $button->destination_id }}"
+                                    ></div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        @endforeach
+    </div>
+@endif
 
     @if($content->is_jogo)
         @livewire('ar-progress-state', [
