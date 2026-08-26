@@ -273,12 +273,11 @@ class SalaController extends Controller
         }
 
         $content = ContentDAO::getContentBySala($sala->id);
-        $activities = ActivityDAO::buscarActivitiesPorConteudo($content->id);
 
         $user = Auth::user();
         if ($user === null) {
             try {
-                DB::transaction(function () use ($sala, $content) {
+                $user = DB::transaction(function () use ($sala, $content) {
                     $user = $this->userService->createTempUser($sala->id, $sala->turma_id);
                     Auth::login($user);
 
@@ -288,6 +287,8 @@ class SalaController extends Controller
                         'user_id' => $user->id,
                         'entrada_momento' => now(),
                     ]);
+
+                    return $user;
                 });
             } catch (\Throwable $e) {
                 Auth::logout();
@@ -295,9 +296,7 @@ class SalaController extends Controller
                 
                 return redirect()->route('login')->withErrors('Erro ao cadastrar usuário temporário');
             }
-        }
-
-        if ($user->expires_at === null) {
+        } else if ($user->expires_at === null) {
             Auth::logout();
             return redirect()->route('login')->withErrors('Usuário inválido');
         }
@@ -312,8 +311,8 @@ class SalaController extends Controller
                             ->where('bool_atual', 1)
                             ->value('id');
         
+        $activities = ActivityDAO::buscarRandomOrderedActivitiesPorConteudo($content->id);
         $this->activityService->processToAr($activities->all(), Auth::id(), $anoId, $content->is_jogo);
-
         session()->put('content_id', $content->id);
 
         return view('student.ar', [
