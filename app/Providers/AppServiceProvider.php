@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 
 use App\Models\User;
 use App\Models\Disciplina;
@@ -146,6 +148,13 @@ class AppServiceProvider extends ServiceProvider
         
             return true;
         }, 'O mural já existe. Por favor, escolha outro nome.');
+
+        RateLimiter::for('party-entry', function (Request $request) {
+            return [
+                Limit::perMinute(5)->by('ip:' . $request->ip()),
+                Limit::perMinute(20)->by('sala:' . $request->route('salaId')),
+            ];
+        });
     }
 }
 

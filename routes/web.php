@@ -2,11 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use App\Models\School;
 use Illuminate\Support\Facades\File;
-use App\Http\Controllers\PainelController;
 use App\Http\Controllers\SceneController;
 use App\Http\Controllers\ButtonController;
 use App\Http\Controllers\BackupController;
@@ -15,7 +11,6 @@ use App\Http\Controllers\MuralController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\RegrasController;
 
 // TUDO QUE ESTÁ FORA DO AUTH PODE SER ACESSADO SEM O USUÁRIO AUTENTICAR !!!!
 
@@ -57,7 +52,9 @@ Auth::routes(['register' => false, 'reset' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/party/public/{id}', [App\Http\Controllers\SalaController::class, 'enterPublicParty']);
+Route::get('/party/public/{id}', [App\Http\Controllers\SalaController::class, 'enterPublicParty'])
+    ->middleware('throttle:party-entry')
+    ->name('party.public.enter');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
