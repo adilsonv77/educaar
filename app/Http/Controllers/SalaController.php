@@ -23,10 +23,10 @@ use App\Models\AnoLetivo;
 use App\Services\ActivityService;
 use App\Services\RandomSortService;
 use App\Services\UserService;
-use Illuminate\Database\QueryException;
 use App\Models\ArProgress;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Login;
+use App\Exceptions\ManyTempUsersException;
 
 class SalaController extends Controller
 {
@@ -277,6 +277,8 @@ class SalaController extends Controller
         $user = Auth::user();
         if ($user === null) {
             try {
+                $this->userService->checkThrottling();
+
                 $user = DB::transaction(function () use ($sala, $content) {
                     $user = $this->userService->createTempUser($sala->id, $sala->turma_id);
                     Auth::login($user);
@@ -290,6 +292,10 @@ class SalaController extends Controller
 
                     return $user;
                 });
+            } catch (ManyTempUsersException $e) {
+                report($e);
+                return redirect()->route('login')->withErrors('Muitos usuário cadastrados recentemente, tente novamente em breve.');
+
             } catch (\Throwable $e) {
                 Auth::logout();
                 report($e);
