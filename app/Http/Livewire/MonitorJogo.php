@@ -9,6 +9,7 @@ use App\Models\Jogo;
 use App\Models\Regras;
 use App\Models\PontuacaoSala;
 use Carbon\Carbon;
+use App\Models\User;
 
 class MonitorJogo extends Component
 {
@@ -23,13 +24,16 @@ class MonitorJogo extends Component
     public $salaId;
     public $isProfessor = false;
     public $qntAcitivites;
-    
+
     protected $listeners = ['tempoAcabou' => 'verificarFimDeJogo', 'atividadeConcluida' => 'concluirAtividade', 'calcularPontuacao' => 'calcularPontuacao', 'alunoFinalizou' => 'alunoFinalizou'];
 
     public function mount() {
         $sala = $this->getSala();
+        $this->userId = auth()->user()->id;
         $this->tempoMaximo = Regras::find($sala->regra_id)->tempo;
         $this->pontuacaoMaxima = Regras::find($sala->regra_id)->pontMax;
+        $this->data_inicio = Carbon::parse($sala->regra->data_inicio);
+        $this->data_limite = Carbon::parse($sala->regra->data_limite);
         $this->qntAcitivites = ActivityDAO::getActivitiesBySala($sala->id)->count();
 
         /* Talvez isso aqui possa resolver o problema do regra_id no futuro, mas pode quebrar o resto do sistema também, preciso estudar essa possibilidade
@@ -71,28 +75,44 @@ class MonitorJogo extends Component
             $acabou = true;
         } 
         elseif ($sala->started_at && $sala->regra) {
+            if($this->data_inicio == null && $this->data_limite == null){
+
+                $horaFim = \Carbon\Carbon::parse($sala->started_at)->addSeconds($sala->regra->tempo);
             
-            $horaFim = \Carbon\Carbon::parse($sala->started_at)->addSeconds($sala->regra->tempo);
+                if (now()->greaterThanOrEqualTo($horaFim)) {
+                    $acabou = true;
+                    $sala->aberta = false;
+                    $sala->save();
+                }
+
+            } else{
             
-            if (now()->greaterThanOrEqualTo($horaFim)) {
-                $acabou = true;
-                $sala->aberta = false;
-                $sala->save();
+                if (now()->greaterThanOrEqualTo($this->data_limite)) {
+                    $acabou = true;
+                }
             }
+            
         }
 
         if ($acabou) {
-            $urlDestino = $this->isProfessor 
-                ? route('sala.results', $sala->id) 
-                : route('home'); 
 
+            if($this->data_inicio == null && $this->data_limite == null){
+                $urlDestino = $this->isProfessor 
+                ? route('sala.results', $sala->id) 
+                : route('home');
+            } else {
+                $userExpires = User::find($this->userId)->expires_at;
+                $urlDestino = ($this->isProfessor)
+                ? route('sala.results', $sala->id)
+                : (($userExpires == null) ? route('logout') : route('home'));
+            }
+             
             $this->dispatchBrowserEvent('forcar-redirecionamento', ['url' => $urlDestino]);
         }
     }
 
     public function render()
     {
-
         return view('livewire.monitor-jogo', [
             'sala' => $this->getSala()
         ]);
@@ -107,6 +127,7 @@ class MonitorJogo extends Component
 
     private function calcularPontuacao() {
         $sala = $this->getSala();
+
         if (!$sala || !$this->ultimoCarbon || !$sala->started_at) {
             return 0;
         }

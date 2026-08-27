@@ -81,37 +81,28 @@
             <div class="modal-body">
                 <h1>Criar nova regra</h1>
 
-                <form action="{{ route('regra.store') }}" method="post" class="p-3"> @csrf
+                <form action="{{ route('regra.store') }}" method="post" id="form-regra" class="p-3"> 
+                    @csrf
                     <input type="hidden" name="jogo_id" value="{{ $jogoId }}">
 
-                    <div class="mb-4">
-                        <div class="custom-control custom-switch switch">
-                            <input type="hidden" name="time_limit" value="0">
-                            <input type="checkbox" name="time_limit" id="time_limit" class="custom-control-input" value="1" onchange="toggleTimeLimit(this)">
-                            <label for="time_limit" class="custom-control-label">{{ __('Switch Time Limit') }}</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group row" id="block-duration" style="display: none;">
+                    <div class="form-group row">
                         <label for="tempo">{{ __('Time Limit') }}</label>
-                        <input type="number" class="form-control" name="tempo" id="tempo" min=0>
+                        <input type="number" class="form-control" name="tempo" id="tempo" min="0">
                     </div>
 
-                    <div id="block-dates">
-                        <div class="form-group row">
-                            <label for="data_inicio">{{ __('Starting Date') }}</label>
-                            <input type="text" class="form-control seletor-data" name="data_inicio" id="data_inicio" placeholder="Selecione a data e hora...">
-                        </div>
+                    <div class="form-group row">
+                        <label for="data_inicio">{{ __('Starting Date') }}</label>
+                        <input type="text" class="form-control seletor-data" name="data_inicio" id="data_inicio" placeholder="Selecione a data e hora...">
+                    </div>
 
-                        <div class="form-group row">
-                            <label for="data_limite">{{ __('Deadline') }}</label>
-                            <input type="text" class="form-control seletor-data" name="data_limite" id="data_limite" placeholder="Selecione a data e hora..." required>
-                        </div>
+                    <div class="form-group row">
+                        <label for="data_limite">{{ __('Deadline') }}</label>
+                        <input type="text" class="form-control seletor-data" name="data_limite" id="data_limite" placeholder="Selecione a data e hora...">
                     </div>
 
                     <div class="form-group row">
                         <label for="score">{{ __('Score') }}</label>
-                        <input type="number" class="form-control" name="pontMax" id="pontMax" min=0 required>
+                        <input type="number" class="form-control" name="pontMax" id="pontMax" min="0" required>
                     </div>
 
                     <div class="form-group row">
@@ -133,46 +124,19 @@
             altFormat: "d/m/Y H:i", 
             locale: "pt" 
         });
-    });
-</script>
 
-<script>
-    function toggleTimeLimit(checkbox) {
-        const blockDuration = document.getElementById('block-duration');
-        const blockDates = document.getElementById('block-dates');
-        const inputTempo = document.getElementById('tempo');
-        
-       
-        const inputStarting = document.getElementById('data_inicio'); 
-        const inputDeadline = document.getElementById('data_limite'); 
+        document.getElementById('form-regra').addEventListener('submit', function(event) {
+            const dataInicio = document.getElementById('data_inicio').value;
+            const dataLimite = document.getElementById('data_limite').value;
 
-        if (checkbox.checked) {
-            blockDuration.style.display = 'flex'; 
-            blockDates.style.display = 'none';
-            
-            inputTempo.required = true;
-            inputStarting.required = false;
-            inputDeadline.required = false;
-            
-            inputStarting.value = '';
-            inputDeadline.value = '';
-        } else {
-            blockDuration.style.display = 'none';
-            blockDates.style.display = 'block';
-            
-            inputTempo.required = false;
-            inputStarting.required = true;
-            inputDeadline.required = true;
-            
-            inputTempo.value = '';
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const switchBtn = document.getElementById('time_limit');
-        if(switchBtn) {
-            toggleTimeLimit(switchBtn);
-        }
+            if (dataInicio && !dataLimite) {
+                event.preventDefault();
+                alert('A Data Limite também precisa ser selecionada se a Data de Início for preenchida.');
+            } else if (!dataInicio && dataLimite) {
+                event.preventDefault();
+                alert('A Data de Início também precisa ser selecionada se a Data Limite for preenchida.');
+            }
+        });
     });
 </script>
 

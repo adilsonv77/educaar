@@ -41,18 +41,18 @@ class RegrasController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'pontMax'     => 'integer|min:0|required',
-            'tempo'       => 'nullable|integer|min:0|required_if:time_limit,1',
-            'data_inicio' => 'nullable|date|required_if:time_limit,0',
-            'data_limite' => 'nullable|date|required_if:time_limit,0|after_or_equal:data_inicio'
+            'data_inicio' => 'required_with:data_limite|nullable|date', 
+            'data_limite' => 'required_with:data_inicio|nullable|date|after_or_equal:data_inicio',          
+            'pontMax'     => 'required|numeric|min:0',
+            'tempo'       => 'nullable|numeric|min:0',
+        ], [
+            'data_inicio.required_with'  => 'A data de início é obrigatória quando a data limite é preenchida.',
+            'data_limite.required_with'  => 'A data limite é obrigatória quando a data de início é preenchida.',
+            'data_limite.after_or_equal' => 'A data limite deve ser igual ou posterior à data de início.'
         ]);
 
         if(($data['tempo'] == null || $data['tempo'] == 0) && $data['data_inicio'] == null){
             $data['tempo'] = 999999999;
-        }
-
-        if($data['data_inicio'] != null && $data['data_limite'] != null){
-            $data['tempo'] = '0';
         }
 
         $novaRegra = Regras::create($data);
