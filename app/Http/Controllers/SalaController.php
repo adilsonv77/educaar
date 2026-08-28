@@ -30,8 +30,7 @@ use App\Exceptions\ManyTempUsersException;
 
 class SalaController extends Controller
 {
-    /* WIP: link temporário até a implementação de autenticação da sala */
-    private const BASE_URL = 'https://educaar.ceavi.udesc.br';
+    private const BASE_URL = 'https://educaar.ceavi.udesc.br/party/public/';
 
     public function __construct(
         private QrCodeService $QrCodeService,
