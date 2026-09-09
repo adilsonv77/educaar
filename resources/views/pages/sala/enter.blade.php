@@ -41,43 +41,41 @@
                             </div>
 
                             <div class="mt-4 text-center w-100">
-                                @if(!$sala->aberta && is_null($sala->started_at))
-                                    <form action="{{ route('sala.abrir', $sala->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success px-5 shadow-sm rounded-pill fw-bold">
-                                            <i class="bi bi-door-open-fill"></i> Abrir Sala (Lobby)
-                                        </button>
-                                        <p class="text-muted mt-2 small">Clique para permitir que os alunos entrem na sala.</p>
-                                    </form>
+                            @if ($salaStatus === 0)
+                                <form action="{{ route('sala.abrir', $sala->id) }}" method="POST"> @csrf
+                                    <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill fw-bold">
+                                        <i class="bi bi-door-open-fill"></i> Abrir Sala (Lobby)
+                                    </button>
+                                    <p class="text-muted mt-2 small">Clique para permitir que os alunos entrem na sala.</p>
+                                </form>
 
-                                @elseif($sala->aberta && is_null($sala->started_at))
-                                    <form action="{{ route('sala.comecar', $sala->id) }}" method="POST">
-                                        @csrf
-                                        <div class="alert alert-info py-2 px-3 mb-3 d-inline-block shadow-sm rounded-pill">
-                                            <i class="bi bi-info-circle-fill"></i> A sala está aberta. Aguarde os alunos entrarem!
-                                        </div>
-                                        <br>
-                                        <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill fw-bold">
-                                            <i class="bi bi-play-fill"></i> Começar Jogo
-                                        </button>
-                                    </form>
-
-                                @elseif($sala->aberta && !is_null($sala->started_at))
-                                    <form action="{{ route('sala.terminar', $sala->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger px-5 shadow-sm rounded-pill fw-bold">
-                                            <i class="bi bi-stop-fill"></i> Encerrar Jogo Manualmente
-                                        </button>
-                                    </form>
-
-                                @else
-                                    <div class="alert alert-warning mx-auto text-center shadow-sm" style="max-width: 400px; border-radius: 1rem;">
-                                        <i class="bi bi-lock-fill"></i> Jogo encerrado. Esta sala não pode ser reaberta.
+                            @elseif ($salaStatus === 1 || $salaStatus == 4)
+                                <form action="{{ route('sala.comecar', $sala->id) }}" method="POST"> @csrf
+                                    <div class="alert alert-info py-2 px-3 mb-3 d-inline-block shadow-sm rounded-pill">
+                                        <i class="bi bi-info-circle-fill"></i> A sala está aberta. Aguarde os alunos entrarem!
                                     </div>
-                                    <a href="{{ route('sala.results', $sala->id) }}" class="btn btn-dark px-5 mt-2 shadow-sm rounded-pill fw-bold">
-                                        <i class="bi bi-bar-chart-fill"></i> Ver Resultados
-                                    </a>
-                                @endif
+                                    <br>
+                                    <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill fw-bold">
+                                        <i class="bi bi-play-fill"></i> Começar Jogo
+                                    </button>
+                                </form>
+                                
+                            @elseif ($salaStatus === 2 || $salaStatus === 5)
+                                <form action="{{ route('sala.terminar', $sala->id) }}" method="POST"> @csrf
+                                    <button type="submit" class="btn btn-danger px-5 shadow-sm rounded-pill fw-bold">
+                                        <i class="bi bi-stop-fill"></i> Encerrar Jogo Manualmente
+                                    </button>
+                                </form>
+
+                            @elseif ($salaStatus === 3 || $salaStatus === 6)
+                                <div class="alert alert-warning mx-auto text-center shadow-sm" style="max-width: 400px; border-radius: 1rem;">
+                                    <i class="bi bi-lock-fill"></i> Jogo encerrado. Esta sala não pode ser reaberta.
+                                </div>
+                                <a href="{{ route('sala.results', $sala->id) }}" class="btn btn-dark px-5 mt-2 shadow-sm rounded-pill fw-bold">
+                                    <i class="bi bi-bar-chart-fill"></i> Ver Resultados
+                                </a>
+
+                            @endif
                             </div>
 
                         </div>

@@ -28,6 +28,16 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\Login;
 use App\Exceptions\ManyTempUsersException;
 
+enum SalaStatus: int {
+    case PADRAO_FECHADA = 0;
+    case PADRAO_EM_PREPARO = 1;
+    case PADRAO_ABERTA = 2;
+    case PADRAO_FINALIZADA = 3;
+    case DATA_FECHADA = 4;
+    case DATA_ABERTA = 5;
+    case DATA_FINALIZADA = 6;
+} 
+
 class SalaController extends Controller
 {
     private const BASE_URL = 'https://educaar.ceavi.udesc.br/party/public/';
@@ -112,7 +122,34 @@ class SalaController extends Controller
             return redirect()->back()->with('error', 'Sala não encontrada.');
         }
 
-        return view('pages.sala.enter', compact('sala'));
+        $salaStatus = $this->determineSalaStatus(Sala::find($salaId))->value;
+
+        return view('pages.sala.enter', compact('sala', 'salaStatus'));
+    }
+
+    private function determineSalaStatus(Sala $sala): SalaStatus {
+        $salaPadrao = $sala->regra->data_limite === null
+            ? true
+            : false;
+
+        if ($sala->aberta === false && $sala->started_at === null) {
+            return $salaPadrao
+                ? SalaStatus::PADRAO_FECHADA
+                : SalaStatus::DATA_FECHADA;
+
+        } elseif ($sala->aberta === true && $sala->started_at === null && $salaPadrao) {
+            return SalaStatus::PADRAO_EM_PREPARO;
+
+        } elseif ($sala->aberta === true && $sala->started_at !== null) {
+            return $salaPadrao
+                ? SalaStatus::PADRAO_ABERTA
+                : SalaStatus::DATA_ABERTA;
+
+        } else {
+            return $salaPadrao
+                ? SalaStatus::PADRAO_FINALIZADA
+                : SalaStatus::DATA_FINALIZADA;
+        }
     }
 
     public function show($salaId){
