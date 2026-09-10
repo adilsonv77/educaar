@@ -185,12 +185,12 @@
                             <span><i style="color:#ffffff;" class="bi bi-arrow-left"></i></span>
                         </button>
 
-                        @if($hintContent ?? false)
-                            <button id="hintButton" class="btn btn-warning mr-1 ml-1" style="width: 85%; height: 51.2px;" type="button" onclick="Livewire.emitTo('hint-button', 'showHint')">
-                                <span><i style="color:#ffffff;" class="bi bi-question"></i></span>
-                            </button>
-                        @endif
-                
+        @endif
+
+        @if($hintContent ?? false)
+            <button id="hintButton" class="btn btn-warning mr-1 ml-1" style="width: 85%; height: 51.2px;" type="button" onclick="Livewire.emitTo('hint-button', 'showHint')">
+                <span><i style="color:#ffffff;" class="bi bi-question"></i></span>
+            </button>
         @endif
 
                 @if ($showOthers ?? false)
