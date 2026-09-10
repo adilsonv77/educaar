@@ -363,7 +363,8 @@ class SalaController extends Controller
             'rota' => 'teste',
             'progress' => $progress,
             'isJogo' => $content->is_jogo,
-            'turmaAluno' => $turmaAluno
+            'turmaAluno' => $turmaAluno,
+            'showBack' => false
         ]);
     }
 }

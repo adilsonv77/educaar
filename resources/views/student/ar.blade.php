@@ -1,8 +1,12 @@
 @php
     $hintContent = $content->is_jogo;
+    $showBack = isset($showBack)
+        ? $showBack
+        : true;
+
 @endphp
 
-@extends('layouts.mobile', ['back' => $rota, 'showBack' => true, 'showOthers' => true, 'hintContent' => $hintContent])
+@extends('layouts.mobile', ['back' => $rota, 'showBack' => $showBack, 'showOthers' => true, 'hintContent' => $hintContent])
 
 <meta name = "csrf-token" content="{{ csrf_token() }}">
 
