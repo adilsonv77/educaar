@@ -51,9 +51,13 @@
 
                             @elseif ($salaStatus === 1 || $salaStatus == 4)
                                 <form action="{{ route('sala.comecar', $sala->id) }}" method="POST"> @csrf
-                                    <div class="alert alert-info py-2 px-3 mb-3 d-inline-block shadow-sm rounded-pill">
-                                        <i class="bi bi-info-circle-fill"></i> A sala está aberta. Aguarde os alunos entrarem!
-                                    </div>
+
+                                    @if ($salaStatus === 1)
+                                        <div class="alert alert-info py-2 px-3 mb-3 d-inline-block shadow-sm rounded-pill">
+                                            <i class="bi bi-info-circle-fill"></i> A sala está aberta. Aguarde os alunos entrarem!
+                                        </div>
+                                    @endif
+                                    
                                     <br>
                                     <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill fw-bold">
                                         <i class="bi bi-play-fill"></i> Começar Jogo
