@@ -84,11 +84,14 @@ class DeveloperController extends Controller
     public function listDevs(Request $request) { 
         $data = $request->input('content');
         $nomeDev = $request->input('nomeDev');
+        $authUser = Auth::user();
+        $school_id = $authUser->school_id;
 
         session()->put('content_id', $data);
 
         $sql = DB::table('users')
                 ->where('type', 'developer')
+                ->where('school_id', $school_id)
                 ->select('users.*')
                 ->selectRaw('exists (select 1 from content_developer where content_developer.developer_id = users.id and content_developer.content_id = ?) as selected_dev', [$data]);
 
